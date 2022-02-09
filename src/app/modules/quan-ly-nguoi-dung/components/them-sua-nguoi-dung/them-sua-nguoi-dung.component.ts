@@ -59,9 +59,6 @@ export class ThemSuaNguoiDung implements OnInit {
 
 
     form: FormGroup;
-    lstGenders = this.service.lstGender$;
-    lstEducations = this.service.lstEducation$;
-    lstCountries = this.service.lstCountry$;
 
 
     private unsubscribed$ = new Subject();
@@ -72,8 +69,6 @@ export class ThemSuaNguoiDung implements OnInit {
         .pipe(map(observer => (observer.matches ? 'yes' : 'no')));
 
     ngOnInit(): void {
-        this.service.getGeneralData().subscribe();
-        this.service.getCountryData().subscribe();
         this.matDialogRef.backdropClick().subscribe(async () => await this.closeDialog());
         if(this.data.userId == null || this.data.userId == '') {
             this.form = this.fb.group({

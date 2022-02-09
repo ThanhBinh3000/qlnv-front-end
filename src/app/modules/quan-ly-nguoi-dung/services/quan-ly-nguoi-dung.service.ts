@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 import { BehaviorSubject, EMPTY, Subject, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap, concatMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CustomEncoder, Education, Gender, General, Logger, UserInfo, UserInfoCollection } from '../../core';
+import { CustomEncoder } from '../../core';
 import { ApiConstant, CustomHttpErrorResponse, PaginateOptions } from '../../types';
 import { QL_Nguoi_Dung_API_TOKEN, NguoiDungModel } from '../types';
 
@@ -21,20 +21,11 @@ export class QuanLyNguoiDungService {
     private inactivateUserErrorsSub$ = new Subject<string[]>();
     inactivateUserErrors$ = this.inactivateUserErrorsSub$.asObservable();
 
-    private newUserSub$ = new Subject<UserInfo>();
+    private newUserSub$ = new Subject<any>();
     newUser$ = this.newUserSub$.asObservable();
 
-    private userCollectionSub$ = new BehaviorSubject<UserInfoCollection>({ users: [], userCount: 0 });
+    private userCollectionSub$ = new BehaviorSubject<any>({ users: [], userCount: 0 });
     userCollection$ = this.userCollectionSub$.asObservable();
-
-    private lstGenderSub$ = new BehaviorSubject<Gender[]>([]);
-    lstGender$ = this.lstGenderSub$.asObservable();
-
-    private lstEducationSub$ = new BehaviorSubject<Gender[]>([]);
-    lstEducation$ = this.lstEducationSub$.asObservable();
-
-    private lstCountrySub$ = new BehaviorSubject<Gender[]>([]);
-    lstCountry$ = this.lstCountrySub$.asObservable();
 
     private paginateByUserRole(
         options: PaginateOptions,
@@ -55,10 +46,10 @@ export class QuanLyNguoiDungService {
         }
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: transactionName });
         return this.httpClient
-            .get<UserInfoCollection>(`${this.apiConstant.endpoint}/user/get-all-nurse`, { params, headers })
+            .get<any>(`${this.apiConstant.endpoint}/user/get-all-nurse`, { params, headers })
             .pipe(
-                tap(({ users, userCount }: UserInfoCollection) => {
-                    const localUsers: UserInfo[] = users.map(u => {
+                tap(({ users, userCount }: any) => {
+                    const localUsers: any[] = users.map(u => {
                         const strLastLoginTime = u.lastLoginTime
                             ? format(new Date(u.lastLoginTime), 'dd MMM, yyyy HH:mm:ss')
                             : '';
@@ -85,7 +76,7 @@ export class QuanLyNguoiDungService {
     deleteEmployee(userId: string, pageSize: number): Promise<any> {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Delete user' });
         return this.httpClient
-            .delete<UserInfo>(`${this.urlDefault}/user/${userId}`, { headers })
+            .delete<any>(`${this.urlDefault}/user/${userId}`, { headers })
             .pipe(
                 tap(() => {
                     this.inactivateUserErrorsSub$.next([]);
@@ -115,7 +106,6 @@ export class QuanLyNguoiDungService {
         return this.httpClient.get(`${this.apiConstant.endpoint}/user/isEmailUnique`, { params, headers, responseType: 'text' }).pipe(
             map(value => value === 'true'),
             catchError(err => {
-                Logger.log(err);
                 return EMPTY;
             }),
         );
@@ -128,7 +118,6 @@ export class QuanLyNguoiDungService {
         return this.httpClient.get(`${this.apiConstant.endpoint}/user/isUsernameUnique`, { params, headers, responseType: 'text' }).pipe(
             map(value => value === 'true'),
             catchError(err => {
-                Logger.log(err);
                 return EMPTY;
             }),
         );
@@ -138,7 +127,7 @@ export class QuanLyNguoiDungService {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Create new User' });
         const { username, email, firstname, lastname, dob, genderId, phoneNumber, countryId, address, educationId } = input;
         return this.httpClient
-            .post<UserInfo>(
+            .post<any>(
                 `${this.apiConstant.endpoint}/user/create-user`,
                 {
                     username: username,
@@ -155,7 +144,7 @@ export class QuanLyNguoiDungService {
                 { headers },
             )
             .pipe(
-                tap((newUser: UserInfo) => {
+                tap((newUser: any) => {
                     this.newUserSub$.next(newUser);
                     this.errorsSub$.next([]);
                 }),
@@ -180,7 +169,7 @@ export class QuanLyNguoiDungService {
             status: status === '1' ? '0' : '1',
         };
         return this.httpClient
-            .put<UserInfo>(`${this.apiConstant.endpoint}/user/${userId}/status`, body, { headers })
+            .put<any>(`${this.apiConstant.endpoint}/user/${userId}/status`, body, { headers })
             .pipe(
                 tap(() => {
                     this.inactivateUserErrorsSub$.next([]);
@@ -206,7 +195,7 @@ export class QuanLyNguoiDungService {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Update User' });
         const { username, email, firstname, lastname, dob, genderId, phoneNumber, countryId, address, educationId } = input;
         return this.httpClient
-            .put<UserInfo>(
+            .put<any>(
                 `${this.apiConstant.endpoint}/user/update-user`,
                 {
                     username: username,
@@ -224,7 +213,7 @@ export class QuanLyNguoiDungService {
                 { headers },
             )
             .pipe(
-                tap((newUser: UserInfo) => {
+                tap((newUser: any) => {
                     this.newUserSub$.next(newUser);
                     this.errorsSub$.next([]);
                 }),
@@ -239,45 +228,6 @@ export class QuanLyNguoiDungService {
                         errorMessage = err.message;
                     }
                     return throwError(errorMessage);
-                }),
-            );
-    }
-
-    getGeneralData() {
-        return this.httpClient
-            .get<General[]>(`${this.apiConstant.endpoint}/general`)
-            .pipe(
-                tap((reponses) => {
-                    const genders: Gender[] = [];
-                    const educations: Education[] = [];
-                    const genderParent = reponses.find(x => x.parentId === "" && x.name === "gender");
-                    reponses.map(respone => {
-                        if(respone.parentId !== "") {
-                            if(respone.parentId === genderParent.id) {
-                                genders.push(respone)
-                            }else {
-                                educations.push(respone)
-                            }
-                        }
-                    });
-                    this.lstGenderSub$.next(genders);
-                    this.lstEducationSub$.next(educations);
-                }),
-                catchError(() => {
-                    return EMPTY;
-                }),
-            );
-    }
-
-    getCountryData() {
-        return this.httpClient
-            .get<General[]>(`${this.apiConstant.endpoint}/countries`)
-            .pipe(
-                tap((reponses) => {
-                    this.lstCountrySub$.next(reponses);
-                }),
-                catchError(() => {
-                    return EMPTY;
                 }),
             );
     }

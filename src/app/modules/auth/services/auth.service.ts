@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { BehaviorSubject, EMPTY, Observable, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CustomEncoder, Logger, UserInfo, Login } from '../../core';
+import { CustomEncoder, Logger, Login } from '../../core';
 import { ApiConstant, CustomHttpErrorResponse, PaginateOptions } from '../../types';
 import { API_TOKEN, AuthenticateInfo, NotificationResult, TokenPayload } from '../types';
 
@@ -18,7 +18,7 @@ export class AuthService {
     private isLoginSub$ = new BehaviorSubject(this.isLogin());
     isLogin$ = this.isLoginSub$.asObservable();
 
-    private userSub$ = new BehaviorSubject<UserInfo | null>(this.getUser());
+    private userSub$ = new BehaviorSubject<any | null>(this.getUser());
     user$ = this.userSub$.asObservable();
 
     private loginErrorSub$ = new Subject<string[]>();
@@ -135,7 +135,7 @@ export class AuthService {
         }
     }
 
-    getUser(): UserInfo | null {
+    getUser(): any | null {
         const jwt = this.getJWT();
         if (!jwt) {
             return null;

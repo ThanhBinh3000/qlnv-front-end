@@ -8,18 +8,18 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuard implements CanActivate {
     private checkLogin(url: string) {
-        // if (this.authService.isLogin()) {
-        //     if (url === '/login') {
-        //         this.router.navigate(['/']);
-        //     }
-        //     return true;
-        // }
+        if (this.authService.isLogin()) {
+            if (url === '/login') {
+                this.router.navigate(['/']);
+            }
+            return true;
+        }
 
-        // if (url !== '/login') {
-        //     this.authService.redirectUrl = url;
-        //     this.router.navigate(['/login']);
-        //     return false;
-        // }
+        if (url !== '/login') {
+            this.authService.redirectUrl = url;
+            this.router.navigate(['/login']);
+            return false;
+        }
         return true;
     }
 

@@ -16,9 +16,8 @@ import { Sort } from '@angular/material/sort';
 import format from 'date-fns/format';
 import { Observable, Subject } from 'rxjs';
 import { filter, pluck, shareReplay, takeUntil } from 'rxjs/operators';
-import { UserInfoCollection } from 'src/app/modules';
 import { AuthService } from 'src/app/modules/auth';
-import { HttpPaginatedDataSource, UserInfo } from 'src/app/modules/core';
+import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
 import { ThemSuaNguoiDung } from '../them-sua-nguoi-dung/them-sua-nguoi-dung.component';
@@ -31,7 +30,7 @@ import { ThemSuaNguoiDung } from '../them-sua-nguoi-dung/them-sua-nguoi-dung.com
 })
 export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     @Input()
-    userCollection: UserInfoCollection;
+    userCollection: any;
 
     @Input()
     pageSize = 10;
@@ -80,9 +79,6 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
     @Output()
     createUserEvent = new EventEmitter<{}>();
 
-    displayedColumns: string[] = ['firstname', 'lastname', 'email', 'lastLoginTime', 'status', 'brand', 'delete'];
-    detailsColumns: string[] = ['rowDetails'];
-    userDataSource: HttpPaginatedDataSource<UserInfo>;
     currentUserId$: Observable<string>;
     currentUserId: string;
     nextClicked$ = new Subject();
@@ -92,7 +88,7 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
         .pipe(pluck<BreakpointState, boolean>('matches'), takeUntil(this.unsubscribe$), shareReplay(1));
-    config: DataTableConfig<UserInfo>;
+    config: DataTableConfig<any>;
 
     constructor(
         private breakpointObserver: BreakpointObserver,
@@ -127,57 +123,12 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         this.unsubscribe$.complete();
     }
 
-    deleteUser($event: Event, element: UserInfo) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        this.inactivateAdmin.emit({
-            username: element.username,
-            email: element.email,
-            userId: element.id,
-        });
-        this.currentUserId$ = this.authService.user$.pipe(
-            filter(user => !!user),
-            pluck('id'),
-        );
-        this.currentUserId$.subscribe((userId: string) => {
-            this.currentUserId = userId;
-        });
-    }
-
-    editUser($event: Event, element: UserInfo) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        this.editUserEvent.emit({
-            userId: element.id,
-            username: element.username,
-            email: element.email,
-            firstname: element.firstname,
-            lastname: element.lastname,
-            genderId: element.genderId,
-            countryId: element.countryId,
-            educationId: element.educationId,
-            address: element.address,
-            dob: element.dob,
-            phoneNumber: element.phoneNumber,
-        });
-    }
-
-    activeOrInactiveUser($event: Event, element: UserInfo) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        this.inactivateUser.emit({
-            status: element.status,
-            email: element.email,
-            userId: element.id,
-        });
-    }
-
-    createUser(){
+    delete(element) {
         const termDialog = this.dialog.open(ThemSuaNguoiDung, {
-            width: '47.5rem',
-            height: '45rem',
+            width: '30vw',
+            height: '80vh',
             data: {
-                title: 'Add New User',
+                title: 'Xóa đơn vị',
             },
         });
 
@@ -186,189 +137,35 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         });
     }
 
-    initDatatable(data: UserInfo[], count: number, startAtPage?: { pageIndex: number }) {
-        data = [{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        },{
-            address: "",
-            countryId: "e308faa7-79d2-4a5e-bf85-ae7d9ccb5e0a",
-            countryName: "Singapore",
-            dob: null,
-            educationId: "6810f825-deb1-4aa8-88d6-0d2ae35ad5e9",
-            educationName: "university",
-            email: "tuwz@fls4.gleeze.com",
-            firstname: "AgnesKoh",
-            genderId: "58fc5398-c097-4527-b5db-93698cddfb2a",
-            genderName: "female",
-            id: "dfeb640f-7e20-4bac-b766-396aed9e9028",
-            lastLoginTime: "2021-12-30T03:02:05.386Z",
-            lastname: "MinQi",
-            phoneNumber: "1800-200-6868",
-            role: "user",
-            status: "1",
-            username: "AgnesKohMinQi"
-        }];
-        count = 10
+    edit(element) {
+        const termDialog = this.dialog.open(ThemSuaNguoiDung, {
+            width: '30vw',
+            height: '80vh',
+            data: {
+                title: 'Cập nhật đơn vị',
+            },
+        });
+
+        termDialog.afterClosed().subscribe(res => {
+            console.log(res);
+        });
+    }
+
+    create(){
+        const termDialog = this.dialog.open(ThemSuaNguoiDung, {
+            width: '30vw',
+            height: '80vh',
+            data: {
+                title: 'Thêm mới đơn vị',
+            },
+        });
+
+        termDialog.afterClosed().subscribe(res => {
+            console.log(res);
+        });
+    }
+
+    initDatatable(data: any, count: number, startAtPage?: { pageIndex: number }) {
         if (!data) {
             return;
         }
@@ -405,22 +202,6 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
                     label: 'email',
                     fieldName: 'email',
                     style: { flex: 2 },
-                    sortable: false,
-                },
-                {
-                    text: 'Status',
-                    label: 'user status',
-                    fieldName: 'status',
-                    valueFunction: element => this.activeOrDeactiveAction(element.status),
-                    templateFunction: element => {
-                        if(element.status == '1'){
-                            return `<div class="active-status">Active</div>`;
-                        }
-                        else {
-                            return `<div class="deactive-status">Deactive</div>`;
-                        }
-                    },
-                    style: { flex: 1 },
                     sortable: false,
                 },
                 {
@@ -464,16 +245,5 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
     selectPageSizeValue(index: number) {
         this.pageSize = index;
         this.paginate.emit({ pageIndex: 0, pageSize: index });
-    }
-
-    activeOrDeactiveAction(status: string): string {
-        switch (status) {
-            case '0':
-                return 'Active';
-            case '1':
-                return 'Deactive';
-            default:
-                return 'Deactive';
-        }
     }
 }

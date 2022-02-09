@@ -3,7 +3,6 @@ import { Inject, Injectable } from "@angular/core";
 import { EMPTY, Subject } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { UserInfo } from "../../core";
 import { ApiConstant, CustomHttpErrorResponse } from "../../types";
 import { ADMIN_API_TOKEN, ChangePasswordInfo } from "../admin-type";
 
@@ -17,7 +16,7 @@ export class AdminService {
     private errorsSub$ = new Subject<string[]>();
     errors$ = this.errorsSub$.asObservable();
 
-    private successSub$ = new Subject<UserInfo>();
+    private successSub$ = new Subject<any>();
     success$ = this.successSub$.asObservable();
 
     constructor(@Inject(ADMIN_API_TOKEN) private apiConstant: ApiConstant, private httpClient: HttpClient) {}
@@ -25,7 +24,7 @@ export class AdminService {
     async updatePassword(input: ChangePasswordInfo): Promise<any> {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Change user password' });
         return this.httpClient
-            .put<UserInfo>(`${this.adminUrl}/change-password`, input, { headers })
+            .put<any>(`${this.adminUrl}/change-password`, input, { headers })
             .pipe(
                 tap((response) => {
                     this.successSub$.next(response)
