@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     hmr: false,
     api: {
-        endpoint: 'http://192.168.1.62:8762/qlnv-gateway', 
+        endpoint: '', 
         socketServer: 'http://192.168.1.62:8762/qlnv-gateway',
     },
     elasticAPM: {

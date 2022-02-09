@@ -8,6 +8,7 @@ import {
     AuthModule,
     CoreModule,
     EmployeeModule,
+    QuanLyDanhMucHangDTQGModule,
     QuanLyNguoiDungModule
 } from './modules';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,7 +20,6 @@ import { AdminModule } from './modules/admin';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ChartsModule } from 'ng2-charts';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
-
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -35,10 +35,11 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
         AdminModule.forRoot(environment.api),
         DashboardModule.forRoot(environment.api),
         QuanLyNguoiDungModule.forRoot(environment.api),
+        QuanLyDanhMucHangDTQGModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
         MDBBootstrapModule.forRoot(),
-        ChartsModule,
+        ChartsModule
     ],
     bootstrap: [AppComponent],
 })

@@ -47,6 +47,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/quan-ly-nguoi-dung/quan-ly-nguoi-dung-routing.module').then(m => m.QuanLyNguoiDungRoutingModule),
     },
+    {
+        path: 'danh-muc-hang-dtqg',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/quan-ly-danh-muc-hang-dtqg/quan-ly-danh-muc-hang-dtqg-routing.module').then(m => m.QuanLyDanhMucHangDTQGRoutingModule),
+    },
 ];
 
 @NgModule({
