@@ -1,0 +1,36 @@
+:host {
+    display: block;
+}
+::ng-deep {
+    .mat-dialog-container {
+        overflow: hidden !important;
+    }
+
+    .container-form-field {
+        .mat-form-field-infix {
+            margin-top: 4px;
+            margin-left: 2px;
+        }
+    }
+}
+
+mat-card {
+    padding: 23px 30px 0px 30px !important;
+    .mat-card-header {
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 32px;
+        ::ng-deep .mat-card-header-text {
+            margin: unset !important;
+        }
+        mat-card-title {
+            color: #203665;
+            font-family: "Roboto", Serif, Sans-serif, Cursive, fantasy, Monospace;
+            text-align: left;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 32px;
+            line-height: 40px;
+        }
+    }
+}

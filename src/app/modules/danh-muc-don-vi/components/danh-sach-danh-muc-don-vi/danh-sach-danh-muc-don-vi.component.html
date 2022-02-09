@@ -1,0 +1,151 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="title-table">
+            <!-- <mat-icon>arrow_circle_left</mat-icon> -->
+            <span class="maintitle">
+                Danh sách danh mục đơn vị
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="filter-data">
+            <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Tìm kiếm
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Tên đơn vị
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field appearance="fill">
+                                <select matNativeControl required>
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã đơn vị
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <input matInput placeholder="" value="">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã đơn vị QHNS
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <input matInput placeholder="" value="">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Đơn vị cấp trên
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <input matInput placeholder="" value="">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Cấp
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field appearance="fill">
+                                <select matNativeControl required>
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã cha
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field appearance="fill">
+                                <select matNativeControl required>
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Trạng thái
+                        </div>
+                        <div class="input-field">
+                            <mat-form-field appearance="fill">
+                                <select matNativeControl required>
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+                <div class="row btn-search">
+                    <button type="button" class="btn btn-primary btn-sm">
+                        Tìm kiếm
+                    </button>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+    <div class="row">
+        <div class="list-data">
+            <app-datatable *ngIf="config" [config]="config" (sortChange)="sortChangeValue($event)"
+                (filterChange)="filterChangeValue($event)" (selectedPageAt)="selectedPageAtValue($event)"
+                (selectedPageSize)="selectPageSizeValue($event)">
+            </app-datatable>
+        </div>
+    </div>
+    <div class="row">
+        <div class="function-table d-flex">
+            <button type="button" class="btn-function" (click)="create()">
+                Thêm
+            </button>
+            <button type="button" class="btn-function">
+                Xem
+            </button>
+            <button type="button" class="btn-function">
+                Sửa
+            </button>
+            <button type="button" class="btn-function">
+                Xóa
+            </button>
+        </div>
+    </div>
+</div>

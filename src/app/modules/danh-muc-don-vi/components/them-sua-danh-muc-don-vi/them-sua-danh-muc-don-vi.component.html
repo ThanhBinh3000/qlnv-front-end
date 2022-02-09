@@ -1,0 +1,52 @@
+<form (ngSubmit)="submitForm()" #f="ngForm" novalidate>
+    <ng-container *ngIf="smallScreen$ | async as smallScreen">
+        <mat-card class="mat-elevation-z-p-r6" [ngClass]="'mat-elevation-z0'">
+            <mat-card-header>
+                <mat-card-title> {{ data.title }} </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="content-container">
+                <ng-container *ngIf="smallScreen === 'no'" [formGroup]="form">
+                    <div class="container-form-field">
+                        <div class="row">
+                            <div class="col-md-4 label-form-field">
+                                Mã cha
+                            </div>
+                            <div class="col-md-8 input-form-field">
+                                <mat-form-field appearance="fill">
+                                    <input matInput type="text" placeholder="Mã cha"
+                                        formControlName="maDviCha" autocomplete="off"
+                                        [(ngModel)]="data.maDviCha" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 label-form-field">
+                                Mã đơn vị
+                            </div>
+                            <div class="col-md-8 input-form-field">
+                                <mat-form-field appearance="fill">
+                                    <input matInput type="text" placeholder="Mã cha"
+                                        formControlName="maDvi" autocomplete="off"
+                                        [(ngModel)]="data.maDvi" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <app-error-box [errorMessages]="errorMessages"></app-error-box>
+            </mat-card-content>
+        </mat-card>
+        <div class="button-group">
+            <button mat-button color="primary" type="submit" [mat-dialog-close]="true"
+                [attr.aria-label]="'Confirm navigation'" class="confirm"
+                [class]="form.valid ? 'btn-add-active' : ''" [disabled]="form.invalid">
+                Lưu
+            </button>
+            <button  type="button" class="cancel" [mat-dialog-close]="false"
+                [attr.aria-label]="'cancel navigation'" *ngIf="!data.hideCancelButton"
+                (click)="closePopup()">
+                Đóng
+            </button>
+        </div>
+    </ng-container>
+</form>

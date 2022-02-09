@@ -30,6 +30,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-don-vi/danh-muc-don-vi-routing.module').then(m => m.DanhMucDonViRoutingModule),
     },
+    {
+        path: 'danh-muc-hang-dtqg',
+        component: MasterLayoutComponent,
+        // canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/quan-ly-danh-muc-hang-dtqg/quan-ly-danh-muc-hang-dtqg-routing.module').then(m => m.QuanLyDanhMucHangDTQGRoutingModule),
+    },
 ];
 
 @NgModule({

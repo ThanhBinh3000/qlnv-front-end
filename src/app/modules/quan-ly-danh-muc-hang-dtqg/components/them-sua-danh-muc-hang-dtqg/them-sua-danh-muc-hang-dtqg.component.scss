@@ -1,0 +1,131 @@
+:host {
+    display: block;
+}
+::ng-deep .mat-dialog-container {
+    overflow: hidden !important;
+}
+.page-section-title {
+    text-align: left;
+    font-family: 'Roboto', Serif, Sans-serif, Cursive, fantasy, Monospace;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    color: #203665;
+    line-height: 40px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    .user-form-wrapper {
+        display: flex;
+        flex-direction: column;
+        mat-form-field {
+            width: 330px;
+            input {
+                margin-left: 1rem;
+                margin-top: 3px;
+                width: 95%;
+            }
+
+            mat-select {
+                margin-left: 1rem;
+                ::ng-deep .mat-select-value {
+                    width: 93.8% !important;
+                }
+            }
+        }
+        .form-field-label {
+            text-transform: unset;
+            justify-content: unset;
+            padding-left: 0.25rem;
+            margin-bottom: 0px;
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1rem;
+            color: #34404B;
+        }
+    }
+
+    ::ng-deep .mat-form-field-appearance-outline {
+        .mat-form-field-outline {
+            height: 40px !important;
+        }
+    }
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 80px;
+    background: #f4f7f9;
+    padding-top: 16px;
+    justify-content: right;
+    margin-top: 75px;
+
+    .confirm {
+        width: auto;
+    }
+
+    .mat-slim {
+        margin-right: 32px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        padding: 6px 43px 6px 43px;
+    }
+
+    .cancel {
+        border: 1px solid #9aa0a5;
+        background-color: #9aa0a5 !important;
+        color: #fff;
+        border-radius: 12px;
+        &:hover,
+        &:focus {
+            background-color: #9aa0a5 !important;
+        }
+    }
+
+    .btn-add-active {
+        background: #0957de;
+        border-color: #0957de;
+        opacity: 1 !important;
+    }
+}
+
+mat-card {
+    padding: 23px 30px 0px 30px !important;
+    .mat-card-header {
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 32px;
+        ::ng-deep .mat-card-header-text {
+            margin: unset !important;
+        }
+        mat-card-title {
+            color: #203665;
+            font-family: 'Roboto', Serif, Sans-serif, Cursive, fantasy, Monospace;
+            text-align: left;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 32px;
+            line-height: 40px;
+        }
+    }
+    .container-create-user {
+        display: flex;
+        flex-direction: row !important;
+    }
+}
+
+::ng-deep .mat-datepicker-popup {
+    left: 975.5px !important;
+
+    .mat-datepicker-content .mat-calendar {
+        width: 326px !important;
+        height: 385px !important;
+    }
+}
