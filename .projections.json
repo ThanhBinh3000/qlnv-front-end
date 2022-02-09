@@ -1,0 +1,34 @@
+{
+    "src/*.component.html": {
+        "type": "component-ts",
+        "alternate": "src/{}.component.ts"
+    },
+    "src/*.component.ts": {
+        "type": "component-html",
+        "alternate": "src/{}.component.html"
+    },
+    "src/*.component.scss": {
+        "type": "component-scss",
+        "alternate": "src/{}.component.scss"
+    },
+    "src/*.component.sandbox.ts": {
+        "type": "component-sandbox",
+        "alternate": "src/{}.component.ts"
+    },
+    "src/*.container.html": {
+        "type": "container-html",
+        "alternate": "src/{}.container.ts"
+    },
+    "src/*.container.ts": {
+        "type": "container-ts",
+        "alternate": "src/{}.container.html"
+    },
+    "src/*.container.scss": {
+        "type": "container-scss",
+        "alternate": "src/{}.container.scss"
+    },
+    "src/*.container.sandbox.ts": {
+        "type": "container-sandbox",
+        "alternate": "src/{}.container.ts"
+    }
+}

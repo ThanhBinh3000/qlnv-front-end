@@ -1,0 +1,43 @@
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+ @import "./assets/scss/core/variables/";
+ @import "./assets/scss/core/mixins";
+ @import "~bootstrap/scss/bootstrap";
+
+
+ // Core Components
+ @import "./assets/scss/core/buttons";
+ @import "./assets/scss/core/checkboxes";
+ @import "./assets/scss/core/radios";
+ @import "./assets/scss/core/forms";
+ @import "./assets/scss/core/input-group";
+ @import "./assets/scss/core/images";
+ @import "./assets/scss/core/navbar";
+ @import "./assets/scss/core/alerts";
+ @import "./assets/scss/core/type";
+ @import "./assets/scss/core/tabs";
+ @import "./assets/scss/core/tooltip";
+ @import "./assets/scss/core/popover";
+ @import "./assets/scss/core/dropdown";
+ @import "./assets/scss/core/togglebutton";
+ @import "./assets/scss/core/ripples";
+ @import "./assets/scss/core/footers";
+ @import "./assets/scss/core/sidebar-and-main-panel";
+ @import "./assets/scss/core/fixed-plugin";
+ @import "./assets/scss/core/tables";
+ @import "./assets/scss/core/misc";
+
+@import "./assets/scss/core/cards";
+@import "./assets/scss/core/cards/card-stats";
+@import "./assets/scss/core/cards/card-profile";
+@import "./assets/scss/core/cards/card-plain";
+
+ //plugin scss
+ @import "./assets/scss/core/plugins/animate";
+ @import "./assets/scss/core/plugins/chartist";
+ @import "./assets/scss/core/plugins/perfect-scrollbar";
+
+ @import "./assets/scss/core/responsive";
+
+@import "./assets/scss/core/angular-modal.scss";

@@ -1,0 +1,23 @@
+<div class="items-booking">
+    <div class="title-chart">
+        <p>Bookings</p>
+        <div class="button-filter" (click)="showPopupFilter()">
+            <img src="assets\img\date-booking.png" />
+            <span>{{ dataTime }}</span>
+        </div>
+    </div>
+    <canvas
+        mdbChart
+        height="12vh" 
+        width="80vw"
+        [chartType]="chartType"
+        [datasets]="chartDatasets"
+        [labels]="chartLabels"
+        [colors]="chartColors"
+        [options]="chartOptions"
+        [legend]="false"
+        (chartHover)="chartHovered($event)"
+        (chartClick)="chartClicked($event)"
+    >
+    </canvas>
+</div>

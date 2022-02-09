@@ -1,0 +1,49 @@
+:host {
+    display: block;
+}
+
+.mat-card {
+    height: 100%;
+    padding: 0px !important;
+    background: transparent;
+}
+
+.card-title{
+    font-weight: 700;
+    font-style: normal;
+    font-size: 2rem;
+    line-height: 40px;
+    color: #34404B;
+}
+
+@media only screen and (max-width: 600px) {
+    .mat {
+        &-card-title {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.create-new-user {
+    width: 188px;
+    height: 48px;
+    color: #fff;
+    align-items: flex-end;
+    background-color: #0957DE;
+    border-radius: 12px;
+    border-color: #fff;
+    font-size: 16px;
+    position: absolute;
+    text-transform: uppercase;
+    right: 15px;
+    top: 20px;
+
+    .material-icons {
+        margin-right: 25px;
+    }
+}
+.layout-user-list {
+    padding: 0px;
+    border-radius: 8px;
+    overflow: hidden;
+}

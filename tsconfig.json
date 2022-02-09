@@ -1,0 +1,21 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "downlevelIteration": true,
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es5",
+        "typeRoots": ["node_modules/@types", "src/typings.d.ts"],
+        "lib": ["es2018", "dom"]
+    },
+    "angularCompilerOptions": {
+        "enableIvy": false,
+        "allowEmptyCodegenFiles": true
+      }
+}

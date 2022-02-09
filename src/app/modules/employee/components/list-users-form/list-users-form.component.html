@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <p class="card-title">Manager Nurse Accounts Table</p>
+                <p class="card-category">Here is a subtitle for this table</p>
+                <button (click)="createUser()" mat-button class="create-new-user">
+                    <i class="material-icons">person_add</i>
+                    Create User
+                </button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="layout-user-list">
+                            <mat-card class="mat-elevation-z-p-r6" [ngClass]="'mat-elevation-z0'">
+                                <mat-card-content class="content-container">
+                                    <app-datatable-mobile [config]="config" *ngIf="smallScreen$ | async; else web">
+                                    </app-datatable-mobile>
+                                    <app-error-box [errorMessages]="errorMessages"></app-error-box>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <ng-template #web>
+                            <app-datatable
+                                *ngIf="config"
+                                [config]="config"
+                                (sortChange)="sortChangeValue($event)"
+                                (filterChange)="filterChangeValue($event)"
+                                (selectedPageAt)="selectedPageAtValue($event)"
+                                (selectedPageSize)="selectPageSizeValue($event)"
+                            ></app-datatable>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

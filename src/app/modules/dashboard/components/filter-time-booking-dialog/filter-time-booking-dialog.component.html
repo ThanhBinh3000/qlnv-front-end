@@ -1,0 +1,55 @@
+<div class="iom-container">
+    <div>
+        <p><b>From</b>: {{ fromSelected | date }}</p>
+        <mat-card class="demo-inline-calendar-card mat-elevation-z0 outline">
+            <mat-calendar [headerComponent]="exampleHeader" (selectedChange)="fromSelected = $event"></mat-calendar>
+        </mat-card>
+    </div>
+    <div>
+        <p><b>To</b>: {{ toSelected | date }}</p>
+        <mat-card class="demo-inline-calendar-card mat-elevation-z0 outline">
+            <mat-calendar [headerComponent]="exampleHeader" (selectedChange)="toSelected = $event"></mat-calendar>
+        </mat-card>
+    </div>
+    <div class="date-option">
+        <mat-selection-list [multiple]="false">
+            <mat-list-option> Today </mat-list-option>
+            <mat-list-option> Yesterday </mat-list-option>
+            <mat-list-option> This week </mat-list-option>
+            <mat-list-option> This month </mat-list-option>
+            <mat-list-option> Custom Range </mat-list-option>
+        </mat-selection-list>
+
+        <div class="date-button">
+            <button
+            style="float: right"
+            mat-button
+            type="button"
+            class="mat-slim cancel"
+            [mat-dialog-close]="false"
+            [attr.aria-label]="'cancel navigation'"
+            (click)="closePopup()"
+        >
+            Cancel
+        </button>
+        <button
+            style="
+                float: right;
+                background-color: #0957de;
+                color: #fff;
+                border-color: #0957de;
+                border-radius: 12px;
+                margin-left: 10px;
+            "
+            mat-button
+            type="submit"
+            [mat-dialog-close]="true"
+            [attr.aria-label]="'Confirm navigation'"
+            class="mat-slim confirm"
+            (click)="submitData()"
+        >
+            Apply
+        </button>
+        </div>
+    </div>
+</div>

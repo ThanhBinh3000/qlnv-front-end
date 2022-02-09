@@ -1,0 +1,5 @@
+package.json
+dist
+src/assets/*
+node_modules/*
+coverage

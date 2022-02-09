@@ -1,0 +1,113 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z0" role="grid" matSort>
+    <mat-header-row *matHeaderRowDef="displayedColumns"
+        [class]="config?.columns.length >= 2 && config?.columns[0].text !== '' ? '' : 'hide-header-row'">
+    </mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <ng-container *ngFor="let column of config?.columns" [matColumnDef]="column?.fieldName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortable" (click)="sortColumn()">{{
+            column.text
+            }}</mat-header-cell>
+        <mat-cell *matCellDef="let element" class="wrap-text">
+            <span [attr.arial-label]="column.label"
+                *ngIf="!column.templateFunction && !column.actionFunction && !column.styleClassFunction && column.label !== 'FULL NAME'">
+                {{ column.valueFunction ? column.valueFunction(element) : element[column.fieldName] }}
+            </span>
+            <span [attr.arial-label]="column.label"
+                *ngIf="!column.templateFunction && !column.actionFunction && column.styleClassFunction"
+                [ngClass]="column.styleClassFunction(element)">
+                {{ column.valueFunction ? column.valueFunction(element) : element[column.fieldName] }}
+            </span>
+            <span [attr.arial-label]="column.label" *ngIf="column.templateFunction"
+                [innerHTML]="column.templateFunction(element)">
+            </span>
+            <a [attr.arial-label]="column.label" href="#" (click)="column.actionFunction($event, element)"
+                *ngIf="column.actionFunction">
+                {{ element[column.fieldName] || column.label }}
+            </a>
+        </mat-cell>
+    </ng-container>
+    <!-- Single action column -->
+    <ng-container *ngIf="config.mergeActionColumns">
+        <ng-container [matColumnDef]="'action_col'">
+            <mat-header-cell *matHeaderCellDef [class]="'action-header'"></mat-header-cell>
+            <mat-cell *matCellDef="let element" class="wrap-text menu-action-col">
+                <button
+                    *ngIf="shouldDisplayActions(config.actions, element) && diplayActionColum(config.actions, element)"
+                    mat-icon-button [matMenuTriggerFor]="menu" aria-label="actions" class="menu-btn">
+                    <img src="../../../../assets//img/more_action.png" alt="logo" />
+                </button>
+                <div class="table-menu">
+                    <mat-menu #menu="matMenu" class="menu-action-table">
+                        <ng-container *ngFor="let action of config.actions">
+                            <button class="action-group" mat-menu-item 
+                                *ngIf="(!action.condition || action.condition(element)) && shouldDisplayAction(action, element)" 
+                                (click)="action.actionFunction($event, element)"
+                                [class]="action.label === 'Delete' ? 'delete-action' : ''"
+                            >
+                                <img src="{{action.iconValue}}" alt="icon" *ngIf="action.displayIcon && !action.iconFunction" class="action-icon" />
+                                <img src="{{action.iconFunction(element)}}" alt="icon" *ngIf="action.displayIcon && action.iconFunction" class="action-icon" />
+                                <span style="line-height: 25px; text-transform: capitalize;" *ngIf="!action.valueFunction">
+                                    {{ action.label }}
+                                </span>
+                                <span style="line-height: 25px; text-transform: capitalize;" *ngIf="action.valueFunction">
+                                    {{ action.valueFunction(element) }}
+                                </span>
+                            </button>
+                        </ng-container>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container>
+    </ng-container>
+    <!-- Multiple action columns -->
+    <ng-container *ngIf="!config.mergeActionColumns">
+        <ng-container [matColumnDef]="action?.fieldName" *ngFor="let action of config?.actions">
+            <mat-header-cell *matHeaderCellDef>{{ action.text }}</mat-header-cell>
+            <mat-cell *matCellDef="let element" class="wrap-text">
+                <a name="delete" [attr.arial-label]="action.label" href="#"
+                    (click)="action.actionFunction($event, element)"
+                    *ngIf="action.condition(element) && !action.valueFunction">
+                    {{ action.label }}
+                </a>
+                <a [attr.arial-label]="action.label" href="#" style="line-height: 25px; text-transform: uppercase"
+                    (click)="action.actionFunction($event, element)"
+                    *ngIf="action.condition(element) && action.valueFunction">
+                    {{ action.valueFunction(element) }}
+                </a>
+            </mat-cell>
+        </ng-container>
+    </ng-container>
+</mat-table>
+<div class="number-paginator">
+    <div class="sub-paginator" *ngIf="numberOfPages > 1">
+        <button style="margin-right: 20px;" (click)="viewFirst()" mat-button [disabled]="pageSelected === 1 ? true : false"
+            *ngIf="numberOfPages > 1">
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+        </button>
+        <button style="margin-right: 20px;" (click)="back()" mat-button [disabled]="pageSelected === 1 ? true : false"
+            *ngIf="numberOfPages > 1">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <div [class]="pageSelected.toString() === page ? 'sub-paginator-item-selected' : 'sub-paginator-item'"
+            *ngFor="let page of dataPaginator; let i = index">
+            <button style="width: 100%; height: 100%;border: 0;"
+                *ngIf="page !== '...'" (click)="selecPageAt(page)"><span class="span-page">{{page}}</span></button>
+            <div style="width: 100%; display: flex; margin-top: 5px;"><span style="width: 100%;" class="span-page"
+                    *ngIf="page === '...'">{{page}}</span></div>
+        </div>
+        <button style="margin-left: 20px;" (click)="next()" mat-button [disabled]="pageSelected === numberOfPages ? true : false" *ngIf="numberOfPages > 1">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+        <button style="margin-right: 20px;" (click)="viewLast()" mat-button [disabled]="pageSelected === numberOfPages ? true : false"
+            *ngIf="numberOfPages > 1">
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
+        </button>
+    </div>
+    <!-- <div class="select-items-page">
+        <mat-select [(ngModel)]="pageSize" (selectionChange)="selectPageSize($event.value)">
+            <mat-option *ngFor="let page of lstPageSize" [value]="page">
+                {{ page }}
+            </mat-option>
+        </mat-select>
+    </div> -->
+</div>

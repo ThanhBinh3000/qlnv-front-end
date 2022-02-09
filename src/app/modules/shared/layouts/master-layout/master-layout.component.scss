@@ -1,0 +1,50 @@
+.main-panel {
+    background-color: #f5f5f5;
+    z-index: 2;
+    position: fixed;
+    left: 333px;
+    right: 0;
+    top: 0;
+    transition: left 0.3s;
+}
+.main-panel.active {
+    left: 0;
+    width: 100%;
+    // transition: all 0.3s;
+}
+.wrapper.active {
+    left: -333px;
+    transition: all 0.3s;
+}
+.wrapper {
+    position: fixed;
+    height: 100%;
+    left: 0;
+    background: #17202a;
+    transition: left 0.3s;
+    display: flex;
+    width: 100%;
+}
+.icon-open-menu {
+    cursor: pointer;
+    color: #BDBDBD;
+    &:hover {
+        color: #f9380a;
+    }
+}
+.navbar-wrapper {
+    .active {
+        transform: rotate(180deg);
+    }
+    .navbar-brand {
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+}
+.navbar {
+    padding: 0px;
+}
+.container-fluid {
+    background-color: #ffffff;
+}

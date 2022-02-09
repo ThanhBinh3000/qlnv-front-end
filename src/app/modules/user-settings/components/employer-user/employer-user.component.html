@@ -1,0 +1,185 @@
+<div class="user-info">
+    <form novalidate role="form" [formGroup]="form" *ngIf="form">
+        <ng-container>
+            <mat-card class="mat-elevation-z0">
+                <mat-card-content class="content-container">
+                    <div fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div class="form-field-label">User Name</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                            formControlName="username"
+                                            [attr.disabled]="'disabled'"
+                                            readonly
+                                            placeholder="User Name"
+                                            />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="form-field-label">Email</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                            <input matInput
+                                            formControlName="email"
+                                            [attr.disabled]="'disabled'"
+                                            readonly
+                                            placeholder="Email"
+                                            />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div class="form-field-label">First Name</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                        formControlName="firstname"
+                                        [attr.disabled]="'disabled'"
+                                        readonly
+                                        placeholder="First Name"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="form-field-label">Last Name</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                        formControlName="lastname"
+                                        [attr.disabled]="'disabled'"
+                                        readonly
+                                        placeholder="Last Name"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div class="form-field-label">Phone Number</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                            <input matInput
+                                            formControlName="phoneNumber"
+                                            [attr.disabled]="'disabled'"
+                                            readonly
+                                            placeholder="Phone Number"
+                                            />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="form-field-label">Address</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                            <input matInput
+                                            formControlName="address"
+                                            [attr.disabled]="'disabled'"
+                                            readonly
+                                            placeholder="Address"
+                                            />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div class="form-field-label">Gender</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                        formControlName="genderId"
+                                        [attr.disabled]="'disabled'"
+                                        readonly
+                                        placeholder="Gender"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="user-item">
+                                <div class="form-field-label">Date of birth</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                            <input matInput
+                                            formControlName="dob"
+                                            [attr.disabled]="'disabled'"
+                                            readonly
+                                            placeholder="Date of birth"
+                                            />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div class="form-field-label">Country</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                        formControlName="countryId"
+                                        [attr.disabled]="'disabled'"
+                                        readonly
+                                        placeholder="Country"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="user-item">
+                                <div class="form-field-label">Education</div>
+                                <div class="mat-form-field-read-only">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                        formControlName="educationId"
+                                        [attr.disabled]="'disabled'"
+                                        readonly
+                                        placeholder="Education"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="200px">
+                            <div class="user-item">
+                                <div>
+                                    <mat-card-actions class="item-button">
+                                        <button mat-icon-button type="button" matSuffix
+                                            (click)="changeInfo()"
+                                            [attr.aria-label]="'Hide confirm password'"
+                                            [attr.aria-pressed]="hideReEnterPassword">
+                                            Change Info
+                                        </button>
+                                    </mat-card-actions>
+                                </div>
+                            </div>
+
+                            <div class="user-item">
+                                <div>
+                                    <mat-card-actions class="item-button">
+                                        <button mat-icon-button type="button" matSuffix
+                                            (click)="popupChangePassword()"
+                                            [attr.aria-label]="'Hide confirm password'"
+                                            [attr.aria-pressed]="hideReEnterPassword">
+                                            Change Password
+                                        </button>
+                                    </mat-card-actions>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </ng-container>
+    </form>
+</div>

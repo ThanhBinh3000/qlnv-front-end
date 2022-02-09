@@ -1,0 +1,19 @@
+<div class="items-patient">
+    <div>
+        <p>
+            New Patient
+        </p>
+    </div>
+    <canvas mdbChart
+        height="10vh" 
+        width="30vw"
+        [chartType]="chartType"
+        [datasets]="chartDatasets"
+        [labels]="chartLabels"
+        [colors]="chartColors"
+        [options]="chartOptions"
+        [legend]="false"
+        (chartHover)="chartHovered($event)"
+        (chartClick)="chartClicked($event)">
+    </canvas>
+  </div>
