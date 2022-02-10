@@ -23,8 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // const jwt = this.authService.getJWT();
-        const jwt = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IjEiLCJleHAiOjE2NDQ1MTM2ODV9.vLSFu-Mc9PkCqMjVFOQ__cD-NNWViRVgiz4j1ESEqKV8nCxA_dYHkGfO7NjWILN2WXe8UM9qBSTeIIYNVWXm6A'
+        const jwt = this.authService.getJWT();
         const isPersisMission = req.body?.isPersisMission;
         if (!jwt) {
             return next

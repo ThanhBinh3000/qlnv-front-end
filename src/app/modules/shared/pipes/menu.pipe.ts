@@ -6,13 +6,13 @@ export class MenuFilter implements PipeTransform {
         if (!items || !filter) {
             return items;
         }
-        return items.filter(item => item.parentId === filter.id);
+        return items.filter(item => item.parent_id === filter.id);
     }
 }
 
 @Pipe({ name: 'menuChild' })
 export class MenuHasChild implements PipeTransform {
     transform(items: any[]): any {
-        return items.filter(item => items.filter(x => x.parentId === item.id).length > 0);
+        return items.filter(item => items.filter(x => x.parent_id === item.id).length > 0);
     }
 }

@@ -81,7 +81,9 @@ export class AuthLoginContainer implements OnInit, OnDestroy{
         this.login$
         .pipe(
             tap(() => this.spinner.show()),
-            exhaustMap(loginValues => this.authService.login(loginValues)),
+            exhaustMap(
+                loginValues => this.authService.login(loginValues)
+            ),
             takeUntil(this.unsubscribe$),
         )
         .subscribe(() => this.spinner.hide());

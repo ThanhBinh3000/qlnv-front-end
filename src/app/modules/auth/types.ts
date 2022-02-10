@@ -10,27 +10,15 @@ export interface AuthenticateInfo {
     isPersisMission?: boolean;
 }
 
-export interface TokenPayload {
-    id: string;
-    username: string;
-    firstname: string;
-    lastname: string;
-    fullname?: string;
+export interface AuthenticateModel {
     email: string;
-    role: string;
-    lastLoginTime: string;
-    status: string;
-    iat: number;
+    password: string;
+}
+
+export interface TokenPayload {
+    sub: string;
     exp: number;
-    genderId: string;
-    genderName: string;
-    countryId: string;
-    countryName: string;
-    educationId: string;
-    educationName: string;
-    address: string;
-    dob: string;
-    phoneNumber: string;
+    iss: string;
 }
 export interface NotificationResult {
     notifications: [Notification];

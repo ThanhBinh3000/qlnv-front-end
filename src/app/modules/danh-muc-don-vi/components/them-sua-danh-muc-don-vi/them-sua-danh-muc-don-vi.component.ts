@@ -36,6 +36,8 @@ export class ThemSuaDanhMucDonVi implements OnInit {
         private cdr: ChangeDetectorRef,
         @Inject(MAT_DIALOG_DATA)
         public data: {
+            title: string,
+            isView: boolean,
             capDvi: string,
             diaChi: string,
             ghiChu: string,

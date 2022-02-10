@@ -43,20 +43,20 @@
                                 <mat-error *ngIf="password.errors && password.errors['required']" >
                                     Please input your password.
                                 </mat-error>
-                                <mat-error *ngIf="password.errors && !password.errors['required'] && form.invalid" >
+                                <!-- <mat-error *ngIf="password.errors && !password.errors['required'] && form.invalid" >
                                     Please input valid password.
-                                </mat-error>
+                                </mat-error> -->
                             </div>
                         </div>
                         <div class="error-box" *ngIf="form.valid && errorMessages != null && errorMessages.length > 0">
                             <app-error-box  *ngIf="form.valid && errorMessages" [errorMessages]="errorMessages" class="error-mess-box"></app-error-box>
                         </div>
-                        <div class="forget-password">
+                        <!-- <div class="forget-password">
                             <button mat-button class="mat-underline forgot-btn" type="button"
                                 (click)="forgetPasswordClicked.emit()">
                                 Forgot Password?
                             </button>
-                        </div>
+                        </div> -->
                         <div fxLayout="column" fxLayoutAlign="space-around center" style="width: 100%;">
                             <button type="submit" mat-button aria-label="login" [attr.aria-label]="'Login'"
                                 class="login-btn" [class]="form.touched && form.invalid ? '' : 'btn-active'" [disabled]="form.invalid"

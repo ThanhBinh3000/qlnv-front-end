@@ -37,12 +37,12 @@
             </mat-card-content>
         </mat-card>
         <div class="button-group">
-            <button *ngIf="!data.isView" mat-button color="primary" type="submit" [mat-dialog-close]="true"
-                [attr.aria-label]="'Confirm navigation'" class="confirm"
+            <button *ngIf="!data.isView" mat-button type="submit" [mat-dialog-close]="true"
+                [attr.aria-label]="'Confirm navigation'" class="btn confirm"
                 [class]="form.valid ? 'btn-add-active' : ''" [disabled]="form.invalid">
                 Lưu
             </button>
-            <button  type="button" class="cancel" [mat-dialog-close]="false"
+            <button  type="button" class="btn cancel" [mat-dialog-close]="false"
                 [attr.aria-label]="'cancel navigation'" *ngIf="!data.hideCancelButton"
                 (click)="closePopup()">
                 Đóng

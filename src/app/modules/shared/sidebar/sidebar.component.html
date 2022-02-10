@@ -31,7 +31,7 @@
                     <mat-panel-title>
                         <!-- <img src="{{ menuItem.icon }}" class="menu-icon" alt="menu"/>
                     <img src="{{ menuItem.activeIcon }}" class="menu-icon-active" alt="menu-active"/> -->
-                        <p>{{menuItem.displayName}}</p>
+                        <p>{{menuItem.name}}</p>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngFor="let child of menuItems | menuFilter: menuItem" class="sub-menu">
@@ -39,34 +39,16 @@
                         [class]="'content-valid'">
                         <!-- <img src="{{ child.icon }}" class="menu-icon" alt="menu"/>
                     <img src="{{ child.activeIcon }}" class="menu-icon-active" alt="menu-active"/> -->
-                        <p>{{child.displayName}}</p>
+                        <p>{{child.name}}</p>
                     </a>
                 </div>
             </mat-expansion-panel>
-            <div *ngIf="menuItem.menuName !== 'logout' && !menuItem.hasChild && menuItem.menuName !== 'inbox'"
+            <div *ngIf="!menuItem.hasChild"
                 class="menu-item normal-item" [class]="''">
                 <a mat-list-item class="nav-link" routerLink="{{ menuItem.url }}" routerLinkActive="active">
                     <!-- <img src="{{ menuItem.icon }}" class="menu-icon" alt="menu"/>
                 <img src="{{ menuItem.activeIcon }}" class="menu-icon-active" alt="menu-active"/> -->
-                    <p>{{menuItem.displayName}}</p>
-                </a>
-            </div>
-            <div *ngIf="menuItem.menuName === 'inbox'" class="menu-item normal-item" [class]="''">
-                <a mat-list-item class="nav-link" routerLink="{{ menuItem.url }}" routerLinkActive="active">
-                    <!-- <img src="{{ menuItem.icon }}" class="menu-icon" alt="menu"/>
-                <img src="{{ menuItem.activeIcon }}" class="menu-icon-active" alt="menu-active"/> -->
-                    <p>
-                        {{menuItem.displayName}}
-                    </p>
-                    <div class="unread-message" *ngIf="numberUnread != 0">{{numberUnread}}</div>
-                </a>
-            </div>
-            <div *ngIf="menuItem.menuName === 'logout'" class="menu-item normal-item logout"
-                [class]="'menu-item-logout'">
-                <a mat-list-item class="nav-link" routerLinkActive="active" (click)="logout()">
-                    <!-- <img src="{{ menuItem.icon }}" class="menu-icon" alt="menu"/>
-                <img src="{{ menuItem.activeIcon }}" class="menu-icon-active" alt="menu-active"/> -->
-                    <p>{{menuItem.displayName}}</p>
+                    <p>{{menuItem.name}}</p>
                 </a>
             </div>
         </div>

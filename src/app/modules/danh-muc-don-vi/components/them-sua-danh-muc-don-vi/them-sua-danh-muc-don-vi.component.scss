@@ -2,10 +2,12 @@
     display: block;
 }
 ::ng-deep {
+    .mat-dialog-container > .ng-star-inserted {
+        height: 100%;
+    }
     .mat-dialog-container {
         overflow: hidden !important;
     }
-
     .container-form-field {
         .mat-form-field-infix {
             margin-top: 4px;
@@ -14,8 +16,13 @@
     }
 }
 
+form {
+    height: 100%;
+}
+
 mat-card {
     padding: 23px 30px 0px 30px !important;
+    height: calc(100% - 46px);
     .mat-card-header {
         align-items: center;
         justify-content: flex-start;
@@ -32,5 +39,38 @@ mat-card {
             font-size: 32px;
             line-height: 40px;
         }
+    }
+}
+
+.button-group {
+    text-align: center;
+    .cancel {
+        height: 24px;
+        font-size: 15px;
+        padding: 0 16px;
+        text-transform: none;
+        border: 1px solid #d8dde6;
+        background: #fff;
+        border-radius: 4px;
+        padding: 0 16px;
+        color: #000;
+    }
+    
+    .confirm {
+        height: 24px;
+        font-size: 15px;
+        padding: 0 16px;
+        text-transform: none;
+        opacity: 0.6;
+        border: none;
+        background: #587cad;
+        border-radius: 4px;
+        padding: 0 16px;
+        color: #fff;
+        margin-right: 16px;
+    }
+    
+    .btn-add-active {
+        opacity: 1;
     }
 }

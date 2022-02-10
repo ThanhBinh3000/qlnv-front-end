@@ -49,7 +49,7 @@ export class AuthLoginFormComponent {
             password: new FormControl('', {
                 validators: [
                     Validators.required,
-                    Validators.pattern(/^(?=.{8,}$)(?=.*[a-z])(?!.*[\s])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/),
+                    // Validators.pattern(/^(?=.{8,}$)(?=.*[a-z])(?!.*[\s])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/),
                 ]
             }),
         });

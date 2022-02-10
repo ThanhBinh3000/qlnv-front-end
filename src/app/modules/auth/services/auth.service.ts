@@ -7,18 +7,18 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CustomEncoder, Logger, Login } from '../../core';
 import { ApiConstant, CustomHttpErrorResponse, PaginateOptions } from '../../types';
-import { API_TOKEN, AuthenticateInfo, NotificationResult, TokenPayload } from '../types';
+import { API_TOKEN, AuthenticateInfo, AuthenticateModel, NotificationResult, TokenPayload } from '../types';
 
 const TRANSACTION_NAME = environment.elasticAPM.transactionName;
 
 @Injectable()
 export class AuthService {
-    authUrl = `${this.apiConstants.endpoint}/auth`;
+    authUrl = `${this.apiConstants.endpoint}`;
 
     private isLoginSub$ = new BehaviorSubject(this.isLogin());
     isLogin$ = this.isLoginSub$.asObservable();
 
-    private userSub$ = new BehaviorSubject<any | null>(this.getUser());
+    private userSub$ = new BehaviorSubject<any | null>(null);
     user$ = this.userSub$.asObservable();
 
     private loginErrorSub$ = new Subject<string[]>();
@@ -64,27 +64,24 @@ export class AuthService {
         return this.checkAccessSub$.asObservable();
     }
 
-    login(input: AuthenticateInfo) {
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Login' });
-        input.isPersisMission = true;
+    login(input: AuthenticateModel) {
+        const headers = new HttpHeaders();
         return this.httpClient
-            .post<Login>(`${this.authUrl}/login`, input, {
-                responseType: 'json',
-                headers,
-            })
+            .post<any>(`${this.authUrl}/qlnv-security/login`, 
+                {
+                    "username": input.email,
+	                "password": input.password
+                },
+                { headers }
+            )
             .pipe(
-                tap(({ response }: Login) => {
-                    localStorage.setItem('jwt', response.accessToken);
-                    const user = this.getUser();
-                    this.userSub$.next(user);
-                    this.isLoginSub$.next(true);
-                    switch (user?.role) {
-                        case 'user':
-                        case 'admin':
-                            this.router.navigateByUrl('/Dashboard');
-                            break;
-                        default:
-                            this.router.navigateByUrl('/not-found');
+                tap(response => {
+                    if(response && response.data){
+                        localStorage.setItem('jwt', response.data.token);
+                        const user = response.data;
+                        this.userSub$.next(user);
+                        this.isLoginSub$.next(true);
+                        this.router.navigateByUrl('/');
                     }
                 }),
                 catchError((err: CustomHttpErrorResponse) => {
@@ -135,55 +132,6 @@ export class AuthService {
         }
     }
 
-    getUser(): any | null {
-        const jwt = this.getJWT();
-        if (!jwt) {
-            return null;
-        }
-
-        const {
-            id,
-            username,
-            firstname,
-            lastname,
-            fullname,
-            email,
-            role,
-            lastLoginTime,
-            status,
-            genderId,
-            genderName,
-            countryId,
-            countryName,
-            educationId,
-            educationName,
-            address,
-            dob,
-            phoneNumber,
-        } = jwt_decode<TokenPayload>(jwt);
-
-        return {
-            id,
-            username,
-            firstname,
-            lastname,
-            fullname,
-            email,
-            role,
-            lastLoginTime,
-            status,
-            genderId,
-            genderName,
-            countryId,
-            countryName,
-            educationId,
-            educationName,
-            address,
-            dob,
-            phoneNumber,
-        };
-    }
-
     checkAccess(url: string) {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Check access right' });
         const params = new HttpParams({ encoder: new CustomEncoder() }).set('url', url);
@@ -221,6 +169,7 @@ export class AuthService {
             )
             .subscribe();
     }
+
     getNotification(options: PaginateOptions): Observable<NotificationResult> {
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Get all notification' });
         let params = new HttpParams();
@@ -236,24 +185,6 @@ export class AuthService {
                     }
                 }),
             );
-    }
-
-    updateUserLanguage(userId: string, currentLanguageCode?: string) {
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'update user language' });
-        const userI = { userId, languageCode: currentLanguageCode };
-        return this.httpClient
-            .post(`${this.authUrl}/update-user-language`, userI, {
-                headers,
-                responseType: 'text',
-            })
-            .pipe(
-                tap((jwt: any) => {
-                    localStorage.setItem('jwt', jwt);
-                    const user = this.getUser();
-                    this.userSub$.next(user);
-                }),
-            )
-            .subscribe();
     }
 
     getNumberOfNewNotification(): Observable<any> {
@@ -278,11 +209,11 @@ export class AuthService {
     }
 
     getMenu() {
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Get items Menu' });
-        return this.httpClient.get<any>(`${this.apiConstants.endpoint}/menu/get-menu`, { headers }).pipe(
+        const headers = new HttpHeaders();
+        return this.httpClient.post<any>(`${this.apiConstants.endpoint}/qlnv-system/role/findByUser`, { headers }).pipe(
             tap(result => {
                 if (result) {
-                    this.menuSub$.next(result?.response?.menus);
+                    this.menuSub$.next(result?.data);
                 }
             }),
         );

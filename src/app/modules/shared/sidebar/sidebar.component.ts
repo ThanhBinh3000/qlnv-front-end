@@ -68,35 +68,7 @@ export class SidebarComponent implements OnInit {
     panelOpenState = false;
 
     @Output() logoutAccount = new EventEmitter<any>();
-    menuItems: any = [
-        { "panelOpenState": false, "id": 1, "parentId": 0, "menuName": "trang-chu", "displayName": "Trang chủ", "url": "/trang-chu", "role": "", "hasChild": false, "icon": "", "activeIcon": "", "position": 1 }, 
-        { "panelOpenState": false, "id": 2, "parentId": 0, "menuName": "quan-tri-he-thong", "displayName": "Quản trị hệ thống", "url": "/quan-tri-he-thong", "role": "admin", "hasChild": true, "icon": "", "activeIcon": "", "position": 2 }, 
-        { "panelOpenState": false, "id": 3, "parentId": 0, "menuName": "quan-ly-nhap-xuat-hang-dtqg", "displayName": "Quản lý nhập, xuất hàng DTQG", "url": "/quan-ly-nhap-xuat-hang-dtqg", "role": "admin", "hasChild": true, "icon": "", "activeIcon": "", "position": 3 }, 
-        { "panelOpenState": false, "id": 4, "parentId": 0, "menuName": "quan-ly-ke-hoach", "displayName": "Quản lý kế hoạch", "url": "/quan-ly-ke-hoach", "role": "admin", "hasChild": true, "icon": "", "activeIcon": "", "position": 4 }, 
-        { "panelOpenState": false, "id": 5, "parentId": 0, "menuName": "danh-muc-he-thong", "displayName": "Danh mục hệ thống", "url": "/danh-muc-he-thong", "role": "", "hasChild": true, "icon": "", "activeIcon": "", "position": 5 }, 
-        { "panelOpenState": false, "id": 6, "parentId": 2, "menuName": "quan-ly-nguoi-dung", "displayName": "Quản lý người dùng", "url": "/quan-ly-nguoi-dung", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 6 },
-        { "panelOpenState": false, "id": 7, "parentId": 2, "menuName": "quan-ly-nhom-nsd", "displayName": "Quản lý nhóm NSD", "url": "/quan-ly-nhom-nsd", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 7 },
-        { "panelOpenState": false, "id": 8, "parentId": 2, "menuName": "quan-ly-phan-quyen", "displayName": "Quản lý phân quyền", "url": "/quan-ly-phan-quyen", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 8 },
-        { "panelOpenState": false, "id": 9, "parentId": 2, "menuName": "quan-ly-tham-so-he-thong", "displayName": "Quản lý tham số hệ thống", "url": "/quan-ly-tham-so-he-thong", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 10, "parentId": 2, "menuName": "quan-ly-lich-su-truy-cap", "displayName": "Quản lý lịch sử truy cập", "url": "/quan-ly-lich-su-truy-cap", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 11, "parentId": 2, "menuName": "quan-ly-cau-hinh-he-thong", "displayName": "Quản lý cấu hình hệ thống", "url": "/quan-ly-cau-hinh-he-thong", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 12, "parentId": 3, "menuName": "quan-ly-thong-tin-nhap-xuat-hang-du-tru-quoc-gia", "displayName": "Quản lý thông tin nhập, xuất hàng dự trữ quốc gia", "url": "/quan-ly-thong-tin-nhap-xuat-hang-du-tru-quoc-gia", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 13, "parentId": 3, "menuName": "tong-hop-bao-cao-nhap-xuat-ton-gui-tcdt", "displayName": "Tổng hợp báo cáo nhập, xuất, tồn gửi TCDT", "url": "/tong-hop-bao-cao-nhap-xuat-ton-gui-tcdt", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 14, "parentId": 4, "menuName": "quan-ly-ke-hoach-tong-hop-nhap-xuat-hang-dtqg", "displayName": "Quản lý Kế hoạch tổng hợp nhập, xuất hàng DTQG", "url": "/quan-ly-ke-hoach-tong-hop-nhap-xuat-hang-dtqg", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 15, "parentId": 4, "menuName": "nhan-thong-tin-cac-danh-muc", "displayName": "Nhận thông tin các danh mục", "url": "/nhan-thong-tin-cac-danh-muc", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 16, "parentId": 4, "menuName": "quan-ly-chi-tieu-ke-hoach-nam-ve-hang-dtqg", "displayName": "Quản lý chỉ tiêu kế hoạch năm về hàng DTQG ( Tăng, giảm, luân phiên đổi hàng, Cứu trợ cứu nạn )", "url": "/quan-ly-chi-tieu-ke-hoach-nam-ve-hang-dtqg", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 17, "parentId": 4, "menuName": "ket-xuat-ke-hoach-nhap-xuat-hang-dtqg-gui-tcdt", "displayName": "Kết xuất kế hoạch nhập, xuất hàng DTQG gửi TCDT", "url": "/ket-xuat-ke-hoach-nhap-xuat-hang-dtqg-gui-tcdt", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 18, "parentId": 4, "menuName": "ket-xuat-chi-tieu-ke-hoach-nam-ve-hang-dtqg-gui-tcdt", "displayName": "Kết xuất chỉ tiêu kế hoạch năm về hàng DTQG gửi TCDT", "url": "/ket-xuat-chi-tieu-ke-hoach-nam-ve-hang-dtqg-gui-tcdt", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 19, "parentId": 5, "menuName": "danh-muc-don-vi", "displayName": "Danh mục đơn vị", "url": "/danh-muc-don-vi", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 20, "parentId": 5, "menuName": "danh-muc-vat-tu-hang-hoa", "displayName": "Danh mục vật tư hàng hóa", "url": "/danh-muc-vat-tu-hang-hoa", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 21, "parentId": 5, "menuName": "danh-muc-kho", "displayName": "Danh mục kho", "url": "/danh-muc-kho", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 22, "parentId": 5, "menuName": "danh-muc-hang-dtqg", "displayName": "Danh mục hàng DTQG", "url": "/danh-muc-hang-dtqg", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 23, "parentId": 5, "menuName": "danh-muc-don-vi-nhan-cuu-tro-hang-dtqg", "displayName": "Danh mục đơn vị nhận cứu trợ hàng DTQG", "url": "/danh-muc-don-vi-nhan-cuu-tro-hang-dtqg", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 24, "parentId": 5, "menuName": "danh-muc-don-vi-tinh", "displayName": "Danh mục đơn vị tính", "url": "/danh-muc-don-vi-tinh", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 25, "parentId": 5, "menuName": "danh-muc-nuoc-san-xuat", "displayName": "Danh mục nước sản xuất", "url": "/danh-muc-nuoc-san-xuat", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 26, "parentId": 5, "menuName": "danh-muc-cong-cu-bao-quan", "displayName": "Danh mục công cụ bảo quản", "url": "/danh-muc-cong-cu-bao-quan", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-        { "panelOpenState": false, "id": 27, "parentId": 5, "menuName": "danh-muc-dbhc", "displayName": "Danh mục ĐBHC", "url": "/danh-muc-dbhc", "role": "admin", "hasChild": false, "icon": "", "activeIcon": "", "position": 9 },
-    ]
+    menuItems: any = []
     numberUnread: number = 0
 
     breadcrumbItems$ = this.breadcrumbService.breadcrumbItems$;
@@ -115,12 +87,26 @@ export class SidebarComponent implements OnInit {
         private breadcrumbService: BreadcrumbService,
         private dialog: MatDialog,
     ) {
-        // this.authService.getMenu().subscribe(x => {
-        //     if (x){
-        //         this.menuItems = x.response?.menus;
-        //         this.numberUnread = x.response?.numberUnread;
-        //     }
-        // });
+        this.authService.getMenu().subscribe(x => {
+            if (x){
+                this.menuItems = x.data;
+                for(let i = 0; i < this.menuItems.length; i++) {
+                    if(this.menuItems[i].parent_id == null){
+                        this.menuItems[i].parent_id = 0;
+                        let findChid = this.menuItems.filter(x => x.parent_id == this.menuItems[i].id);
+                        if(findChid != null && findChid.length > 0){
+                            this.menuItems[i].hasChild = true;
+                        }
+                        else {
+                            this.menuItems[i].hasChild = false;
+                        }
+                    }
+                    else {
+                        this.menuItems[i].hasChild = false;
+                    }
+                }
+            }
+        });
     }
 
     public onRouterOutletActivate(event: any) {
