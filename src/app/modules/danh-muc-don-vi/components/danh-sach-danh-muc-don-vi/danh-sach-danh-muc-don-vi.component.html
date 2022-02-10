@@ -126,9 +126,13 @@
     </div>
     <div class="row">
         <div class="list-data">
-            <app-datatable *ngIf="config" [config]="config" (sortChange)="sortChangeValue($event)"
-                (filterChange)="filterChangeValue($event)" (selectedPageAt)="selectedPageAtValue($event)"
-                (selectedPageSize)="selectPageSizeValue($event)">
+            <app-datatable 
+                *ngIf="config" 
+                [config]="config" 
+                (selectedPageAt)="selectedPageAtValue($event)"
+                (selectedPageSize)="selectPageSizeValue($event)" 
+                (selectElement)="selectElementValue($event)"
+            >
             </app-datatable>
         </div>
     </div>
@@ -137,13 +141,13 @@
             <button type="button" class="btn-function" (click)="create()">
                 Thêm
             </button>
-            <button type="button" class="btn-function">
+            <button type="button" class="btn-function" (click)="edit(true)">
                 Xem
             </button>
-            <button type="button" class="btn-function">
+            <button type="button" class="btn-function" (click)="edit(false)">
                 Sửa
             </button>
-            <button type="button" class="btn-function">
+            <button type="button" class="btn-function" (click)="delete()">
                 Xóa
             </button>
         </div>

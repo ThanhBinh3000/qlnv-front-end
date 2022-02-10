@@ -45,6 +45,9 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
 
     @Output()
     selectedPageSize = new EventEmitter<number>();
+    
+    @Output()
+    selectElement = new EventEmitter<any>();
 
     modelChanged: Subject<string> = new Subject<string>();
 
@@ -117,13 +120,6 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     init() {
-        // if (this.config.meta.startAtPage) {
-        //     const { pageIndex } = this.config.meta.startAtPage;
-        //     if (this.paginator.pageIndex !== pageIndex) {
-        //         this.paginator.pageIndex = pageIndex;
-        //     }
-        // }
-
         this.dataSource = new HttpPaginatedDataSource(
             this.config.data,
             this.config.tableName || '',
@@ -141,10 +137,12 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
             .concat(actionColumns);
         this.dataSource.totalElements = this.config.meta.rowsNumber;
         this.dataSource.paginator = this.paginator;
-        // this.paginator.page.subscribe(this.config.pageChange);
         this.setStyle();
     }
 
+    selectElementRow(element: any){
+        this.selectElement.emit(element);
+    }
     setStyle() {
         setTimeout(() => {
             let columns = this.config.columns.map(item => ({ fieldName: item.fieldName, style: item.style }));
@@ -170,53 +168,43 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
             });
         }, 0);
     }
-
     applyFilter(filterValue: string) {
         this.filterChange.emit(filterValue);
         this.setStyle();
     }
-
     sortColumn() {
         this.sortChange.emit(this.sort);
     }
-
     shouldDisplayActions(actionCols: DataTableConfigColumn<any>[], element: any) {
         return (actionCols || []).some(col => this.shouldDisplayAction(col, element));
     }
     shouldDisplayAction(col: DataTableConfigColumn<any>, element: any): boolean {
         return (!col.valueFunction) ||  (!!col.valueFunction && !!col.valueFunction(element));
     }
-
     diplayActionColum(actionCols: DataTableConfigColumn<any>[], element: any) {
         return (actionCols || []).some(action => (!action.condition || action.condition(element)) && this.shouldDisplayAction(action, element));
     }
-
     selecPageAt(index: string) {
         let indexNumber = +index
         this.pageSelected = indexNumber;
         this.selectedPageAt.emit(indexNumber - 1)
     }
-
     next() {
         this.pageSelected = this.pageSelected + 1;
         this.selectedPageAt.emit(this.pageSelected - 1)
     }
-
     back() {
         this.pageSelected = this.pageSelected - 1;
         this.selectedPageAt.emit(this.pageSelected - 1)
     }
-
     viewFirst() {
         this.pageSelected = 1;
         this.selectedPageAt.emit(this.pageSelected - 1)
     }
-
     viewLast() {
         this.pageSelected = this.numberOfPages;
         this.selectedPageAt.emit(this.pageSelected - 1)
     }
-
     selectPageSize(value){
         this.selectedPageSize.emit(value);
     }

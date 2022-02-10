@@ -14,12 +14,14 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import format from 'date-fns/format';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable, Subject } from 'rxjs';
 import { filter, pluck, shareReplay, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
-import { DataTableConfig } from 'src/app/modules/shared';
+import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
+import { DanhMucDonViService } from '../../services/danh-muc-don-vi.service';
 import { ThemSuaDanhMucDonVi } from '../them-sua-danh-muc-don-vi/them-sua-danh-muc-don-vi.component'
 
 @Component({
@@ -41,49 +43,12 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     @Output()
     paginate = new EventEmitter<PaginateOptions>();
 
-    @Output()
-    filterUser = new EventEmitter<string>();
-
-    @Output()
-    sortChange = new EventEmitter<Sort>();
-
-    @Output()
-    inactivateAdmin = new EventEmitter<{
-        userId: string;
-        username: string;
-        email: string;
-    }>();
-
-    @Output()
-    inactivateUser = new EventEmitter<{
-        status: string;
-        email: string;
-        userId: string;
-    }>();
-
-    @Output()
-    editUserEvent = new EventEmitter<{
-        userId: string;
-        username: string;
-        email: string;
-        firstname: string;
-        lastname: string;
-        genderId: string;
-        countryId: string;
-        educationId: string;
-        address: string;
-        dob: string;
-        phoneNumber: string;
-    }>();
-
-    @Output()
-    createUserEvent = new EventEmitter<{}>();
-
     currentUserId$: Observable<string>;
     currentUserId: string;
     nextClicked$ = new Subject();
     unsubscribe$ = new Subject();
     panelOpenState = true;
+    elementSeleted: any;
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -94,7 +59,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        ) { }
+        private service: DanhMucDonViService,
+        private spinner: NgxSpinnerService,
+    ) { }
 
     ngOnInit() {
         this.currentUserId$ = this.authService.user$.pipe(
@@ -123,26 +90,62 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         this.unsubscribe$.complete();
     }
 
-    delete(element) {
-        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
-            width: '30vw',
-            height: '80vh',
+    delete() {
+        let dialogRef = this.dialog.open(ConfirmCancelDialog, {
+            width: '546px',
             data: {
-                title: 'Xóa đơn vị',
+                title: `Xóa danh mục đơn vị`,
+                subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị?`,
+                message: `Khi xóa dữ liệu, các dữ liệu liên quan đến danh mục đơn vị sẽ bị xóa đi.`,
+                cancelButtonText: 'Hủy',
+                confirmButtonText: 'Xóa',
+                hideCancelButton: false,
             },
         });
 
-        termDialog.afterClosed().subscribe(res => {
-            console.log(res);
-        });
+        dialogRef
+            .afterClosed()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(async result => {
+                if (result) {
+                    this.spinner.show();
+                    const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
+                    if (deleteResult) {
+                        this.spinner.hide();
+                        this.dialog.open(ConfirmationDialog, {
+                            width: '546px',
+                            data: {
+                                title: `Xóa dữ liệu thành công!`,
+                                message: `Danh mục đơn vị đã được xóa thành công.`,
+                                closeButtonText: 'Đóng',
+                            },
+                        });
+                    }
+                }
+            });
     }
 
-    edit(element) {
+    edit(isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
             height: '80vh',
             data: {
                 title: 'Cập nhật đơn vị',
+                isView: isView,
+                id: this.elementSeleted.id,
+                capDvi: this.elementSeleted.capDvi,
+                diaChi: this.elementSeleted.diaChi,
+                ghiChu: this.elementSeleted.ghiChu,
+                kieuDvi: this.elementSeleted.kieuDvi,
+                loaiDvi: this.elementSeleted.loaiDvi,
+                maDvi: this.elementSeleted.maDvi,
+                maDviCha: this.elementSeleted.maDviCha,
+                maHchinh: this.elementSeleted.maHchinh,
+                maPhuong: this.elementSeleted.maPhuong,
+                maQuan: this.elementSeleted.maQuan,
+                maTinh: this.elementSeleted.maTinh,
+                tenDvi: this.elementSeleted.tenDvi,
+                trangThai: this.elementSeleted.trangThai,
             },
         });
 
@@ -151,12 +154,27 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         });
     }
 
-    create(){
+    create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
             height: '80vh',
             data: {
                 title: 'Thêm mới đơn vị',
+                isView: false,
+                id: 0,
+                capDvi: '',
+                diaChi: '',
+                ghiChu: '',
+                kieuDvi: '',
+                loaiDvi: '',
+                maDvi: '',
+                maDviCha: '',
+                maHchinh: '',
+                maPhuong: '',
+                maQuan: '',
+                maTinh: '',
+                tenDvi: '',
+                trangThai: '',
             },
         });
 
@@ -166,7 +184,6 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     }
 
     initDatatable(data: any, count: number, startAtPage?: { pageIndex: number }) {
-        console.log(data)
         if (!data) {
             return;
         }
@@ -232,16 +249,6 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         };
     }
 
-    filterChangeValue(filterValue: string) {
-        this.paginate.emit({ pageIndex: 0, pageSize: this.pageSize });
-        this.filterUser.emit(filterValue.trim());
-    }
-
-    sortChangeValue(sort: Sort) {
-        this.paginate.emit({ pageIndex: 0, pageSize: this.pageSize });
-        this.sortChange.emit(sort);
-    }
-
     selectedPageAtValue(index: number) {
         this.paginate.emit({ pageIndex: index, pageSize: this.pageSize });
     }
@@ -249,5 +256,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     selectPageSizeValue(index: number) {
         this.pageSize = index;
         this.paginate.emit({ pageIndex: 0, pageSize: index });
+    }
+
+    selectElementValue(element: any) {
+        this.elementSeleted = element;
     }
 }

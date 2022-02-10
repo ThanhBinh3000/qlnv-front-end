@@ -76,9 +76,6 @@ export class DanhSachDanhMucHangDTQG implements OnInit, OnDestroy, OnChanges, Af
         phoneNumber: string;
     }>();
 
-    @Output()
-    createUserEvent = new EventEmitter<{}>();
-
     displayedColumns: string[] = ['firstname', 'lastname', 'email', 'lastLoginTime', 'status', 'brand', 'delete'];
     detailsColumns: string[] = ['rowDetails'];
     userDataSource: HttpPaginatedDataSource<any>;

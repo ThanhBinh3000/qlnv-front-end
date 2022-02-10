@@ -18,10 +18,6 @@ import { DanhMucDonViService } from '../services';
                 [pageSize]="pageSize"
                 [userCollection]="userCollection$ | async"
                 (paginate)="paginateUsers$.next($event)"
-                (inactivateAdmin)="openDialog($event)"
-                (filterUser)="filter$.next($event)"
-                (sortChange)="sorter$.next($event)"
-                (editUserEvent)="openEditUser($event)"
             >
             </danh-sach-danh-muc-don-vi>
         </div>
@@ -89,110 +85,25 @@ export class DanhMucDonViContainer implements OnInit, OnDestroy {
 
     private unsubscribe$ = new Subject();
     paginateUsers$ = new BehaviorSubject<PaginateOptions>({ pageIndex: 0, pageSize: this.pageSize });
-    inactivateAdmin$ = new Subject<any>();
-    inactivateUser$ = new Subject<any>();
-    filter$ = new BehaviorSubject<string>('');
-    sorter$ = new BehaviorSubject<Sort>({ active: 'fullName', direction: 'asc' });
     userCollection$ = this.service.listDonVi$;
     errors$ = this.service.errors$;
-    lstCaseManager$: any;
-
-    newUserData$: any;
 
     constructor(private service: DanhMucDonViService, private dialog: MatDialog, private spinner: NgxSpinnerService,) { }
 
     ngOnInit() {
-        combineLatest([this.paginateUsers$, this.filter$, this.sorter$])
+        combineLatest([this.paginateUsers$])
             .pipe(
                 debounceTime(300),
-                switchMap(([pagination, filter, sorter]) => {
-                    let orderBy = '';
-                    if (sorter && sorter.active) {
-                        orderBy = `${sorter.active} ${sorter.direction}`;
-                    }
+                switchMap(([pagination]) => {
                     this.spinner.show();
                     return this.service.paginteAdmins(pagination);
                 }),
                 takeUntil(this.unsubscribe$),
             )
             .subscribe();
-        this.inactivateAdmin$
-            .pipe(
-                delay(0),
-                exhaustMap(res => this.service.delete(res.userId, this.pageSize)),
-                takeUntil(this.unsubscribe$),
-            )
-            .subscribe();
         this.userCollection$.subscribe(() => {
             this.spinner.hide();
         })
-    }
-
-    openEditUser(data: { userId: string; username: string; email: string; firstname: string; lastname: string; genderId: string; countryId: string; educationId: string; address: string; dob: string; phoneNumber: string; }) {
-        const {userId, username, email, firstname, lastname, genderId, countryId, educationId, address, dob, phoneNumber} = data
-        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
-            width: '47.5rem',
-            height: '44.9rem',
-            data: {
-                title: 'Edit New User',
-                userId: userId,
-                username: username,
-                email: email,
-                firstname: firstname,
-                lastname: lastname,
-                genderId: genderId,
-                countryId: countryId,
-                educationId: educationId,
-                address: address,
-                dob: dob,
-                phoneNumber: phoneNumber
-             },
-        });
-
-        termDialog.afterClosed().subscribe(res => {
-            console.log(res);
-        });
-    }
-
-    openDialog(data: { username: string; userId: string }) {
-        const { userId } = data;
-        let dialogRef = this.dialog.open(ConfirmCancelDialog, {
-            width: '546px',
-            data: {
-                title: `Delete Nurse Account`,
-                subTitle: `Are you sure you want to delete account?`,
-                message: `
-                        When delete, this user cannot work on Quoc Gia platform. Their information,
-                        activities will be deleted.
-                    `,
-                cancelButtonText: 'Discard',
-                confirmButtonText: 'Delete Account',
-                hideCancelButton: false,
-            },
-        });
-
-        dialogRef
-            .afterClosed()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(async result => {
-                if (result) {
-                    this.spinner.show();
-                    const deleteResult = await this.service.delete(userId, this.pageSize);
-                    if (deleteResult) {
-                        this.spinner.hide();
-                        this.dialog.open(ConfirmationDialog, {
-                            width: '546px',
-                            data: {
-                                title: `Delete Successfully!`,
-                                message: `
-                                    User was successfully deleted from Quoc Gia platform.
-                                    `,
-                                closeButtonText: 'Close',
-                            },
-                        });
-                    }
-                }
-            });
     }
 
     ngOnDestroy() {

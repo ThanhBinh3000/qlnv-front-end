@@ -76,9 +76,6 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         phoneNumber: string;
     }>();
 
-    @Output()
-    createUserEvent = new EventEmitter<{}>();
-
     currentUserId$: Observable<string>;
     currentUserId: string;
     nextClicked$ = new Subject();

@@ -97,9 +97,6 @@ export class QuanLyNguoiDungContainer implements OnInit, OnDestroy {
     userCollection$ = this.service.userCollection$;
     errors$ = this.service.errors$;
     inactivateUserErrors$ = this.service.inactivateUserErrors$;
-    lstCaseManager$: any;
-
-    newUserData$: any;
 
     constructor(private service: QuanLyNguoiDungService, private dialog: MatDialog, private spinner: NgxSpinnerService,) { }
 
