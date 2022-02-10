@@ -18,20 +18,13 @@
                         person
                     </mat-icon>
                     <button mat-button >Nguyễn Văn A</button>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item>Item 1</button>
-                        <button mat-menu-item>Item 2</button>
+                    <mat-menu #menu="matMenu" backdropClass="custom__menu">
+                        <button mat-menu-item (click)="logout()">Đăng xuất</button>
                     </mat-menu>
                     <mat-icon>
                         arrow_drop_down
                     </mat-icon>
                 </div>
-                <!-- <button mat-raised-button class="navbar-toggler" type="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="navbar-toggler-icon icon-bar"></span>
-                    <span class="navbar-toggler-icon icon-bar"></span>
-                    <span class="navbar-toggler-icon icon-bar"></span>
-                </button> -->
             </div>
             <div class="border-bottom"></div>
         </nav>

@@ -6,7 +6,7 @@ mat-card {
     padding: 0 !important;
     border-radius: 16px;
     border-color: #187da0;
-    height: 500px;
+    height: 320px;
 }
 
 .content-container {
@@ -24,7 +24,7 @@ mat-card {
             flex-direction: column;
             align-items: center;
             .login-box {
-                padding-top: 56px;
+                padding-top: 16px;
                 .input-container {
                     width: 100%;
 
@@ -121,28 +121,29 @@ mat-card {
             border-top-left-radius: 16px;
             border-bottom-left-radius: 16px;
             .logo {
-                margin-top: 20px;
+                margin-top: 0px;
                 width: 65%;
                 text-align: left;
             }
             mat-form-field {
                 width: 100%;
                 input.mat-input-element {
-                    margin-top: 0px;
                     background: #fff;
                     background-color: #fff !important;
-                    font-size: 16px;
+                    font-size: 14px;
+                    margin: 4px 0px 4px 0px
                 }
                 input:-webkit-autofill::first-line {
-                    font-size: 16px;
-                    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                    font-size: 14px;
+                    margin: 4px 0px 4px 0px
                 }
             }
             .form-field-label {
                 display: flex;
                 padding-left: 0.25rem;
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: 400;
+                padding-bottom: 6px;
             }
             .login-btn {
                 margin: 0 auto !important;

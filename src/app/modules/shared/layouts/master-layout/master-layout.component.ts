@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import PerfectScrollbar from 'perfect-scrollbar';
 import * as $ from 'jquery';
 import { ROUTES } from '../../sidebar/sidebar.component';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 @Component({
     selector: 'master-layout',
@@ -13,27 +14,35 @@ import { ROUTES } from '../../sidebar/sidebar.component';
     styleUrls: ['./master-layout.component.scss'],
 })
 export class MasterLayoutComponent implements OnInit {
-    constructor(public location: Location, private router: Router) {}
-    toggle:boolean = false;
+    constructor(
+        public location: Location, 
+        private router: Router,
+        private authService: AuthService,
+    ) { }
+    toggle: boolean = false;
     private listTitles: any[];
     ngOnInit() {
         this.listTitles = ROUTES.filter(listTitle => listTitle);
     }
-    toggleSidebar(){
+    toggleSidebar() {
         this.toggle = !this.toggle;
     }
 
-    getTitle(){
+    getTitle() {
         var titlee = this.location.prepareExternalUrl(this.location.path());
-        if(titlee.charAt(0) === '#'){
-            titlee = titlee.slice( 1 );
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
         }
-  
-        for(var item = 0; item < this.listTitles.length; item++){
-            if(this.listTitles[item].path === titlee){
+
+        for (var item = 0; item < this.listTitles.length; item++) {
+            if (this.listTitles[item].path === titlee) {
                 return this.listTitles[item].title;
             }
         }
         return 'Dashboard';
-      }
+    }
+
+    logout(){
+        this.authService.logout();
+    }
 }

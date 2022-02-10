@@ -101,7 +101,7 @@ export class AuthService {
     }
 
     invalidateSession() {
-        localStorage.removeItem('jwt');
+        localStorage.clear();
         this.isLoginSub$.next(false);
         this.loginErrorSub$.next([]);
         this.userSub$.next(null);

@@ -48,3 +48,8 @@
 .container-fluid {
     background-color: #ffffff;
 }
+::ng-deep {
+    .custom__menu + * .cdk-overlay-pane > div.mat-menu-panel {
+        min-width: 152px !important;
+    }
+}
