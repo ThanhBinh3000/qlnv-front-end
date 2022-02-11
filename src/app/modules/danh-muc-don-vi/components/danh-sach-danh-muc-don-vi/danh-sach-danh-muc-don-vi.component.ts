@@ -62,13 +62,13 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     listCapDonVi = [
         {
-            value: 1,
+            value: "1",
             text: "Tổng cục"
         },{
-            value: 2,
+            value: "2",
             text: "Cục"
         },{
-            value: 3,
+            value: "3",
             text: "Chi cục"
         },
     ]
@@ -104,15 +104,17 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         },
     ]
 
-    capDvi = "";
-    kieuDvi = "";
-    loaiDvi = "";
-    maDvi = "";
-    maPhuong = "";
-    maQuan = "";
-    maTinh = "";
-    tenDvi = "";
-    trangThai = "";
+    optionSearch = {
+        capDvi : "",
+        kieuDvi : "",
+        loaiDvi : "",
+        maDvi : "",
+        maPhuong : "",
+        maQuan : "",
+        maTinh : "",
+        tenDvi : "",
+        trangThai : "",
+    }
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -151,18 +153,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     search() {
         this.spinner.show();
-        let optionSearch = {
-            capDvi: this.capDvi,
-            kieuDvi: this.kieuDvi,
-            loaiDvi: this.loaiDvi,
-            maDvi: this.maDvi,
-            maPhuong: this.maPhuong,
-            maQuan: this.maQuan,
-            maTinh: this.maTinh,
-            tenDvi: this.tenDvi,
-            trangThai: this.trangThai,
-        }
-        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize, }, optionSearch)
+        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize, }, this.optionSearch)
         .subscribe(data => {
                 this.spinner.hide();
                 console.log(data);
@@ -198,7 +189,17 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                         this.spinner.show();
                         const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
                         if (deleteResult) {
-                            this.spinner.hide();
+                            this.optionSearch = {
+                                capDvi : "",
+                                kieuDvi : "",
+                                loaiDvi : "",
+                                maDvi : "",
+                                maPhuong : "",
+                                maQuan : "",
+                                maTinh : "",
+                                tenDvi : "",
+                                trangThai : "",
+                            }
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
                                 data: {
@@ -238,7 +239,19 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         });
 
         termDialog.afterClosed().subscribe(res => {
-            console.log(res);
+            if(res){
+                this.optionSearch = {
+                    capDvi : "",
+                    kieuDvi : "",
+                    loaiDvi : "",
+                    maDvi : "",
+                    maPhuong : "",
+                    maQuan : "",
+                    maTinh : "",
+                    tenDvi : "",
+                    trangThai : "",
+                }
+            }
         });
     }
 
@@ -267,7 +280,19 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         });
 
         termDialog.afterClosed().subscribe(res => {
-            console.log(res);
+            if(res){
+                this.optionSearch = {
+                    capDvi : "",
+                    kieuDvi : "",
+                    loaiDvi : "",
+                    maDvi : "",
+                    maPhuong : "",
+                    maQuan : "",
+                    maTinh : "",
+                    tenDvi : "",
+                    trangThai : "",
+                }
+            }
         });
     }
 

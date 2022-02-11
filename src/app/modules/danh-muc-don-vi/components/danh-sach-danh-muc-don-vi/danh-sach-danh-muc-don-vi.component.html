@@ -22,7 +22,7 @@
                             Cấp đơn vị
                         </div>
                         <div class="input-field">
-                            <ng-select [(ngModel)]="capDvi" appendTo="body">
+                            <ng-select [(ngModel)]="optionSearch.capDvi" appendTo="body">
                                 <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
                             </ng-select>
                         </div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Mã đơn vị" [(ngModel)]="maDvi">
+                                <input matInput placeholder="Mã đơn vị" [(ngModel)]="optionSearch.maDvi">
                             </mat-form-field>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                             Loại đơn vị
                         </div>
                         <div class="input-field">
-                            <ng-select [(ngModel)]="loaiDvi" appendTo="body">
+                            <ng-select [(ngModel)]="optionSearch.loaiDvi" appendTo="body">
                                 <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
                             </ng-select>
                         </div>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Tên đơn vị" [(ngModel)]="tenDvi">
+                                <input matInput placeholder="Tên đơn vị" [(ngModel)]="optionSearch.tenDvi">
                             </mat-form-field>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                             Trạng thái
                         </div>
                         <div class="input-field">
-                            <ng-select [(ngModel)]="trangThai" appendTo="body">
+                            <ng-select [(ngModel)]="optionSearch.trangThai" appendTo="body">
                                 <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
                             </ng-select>
                         </div>

@@ -73,13 +73,13 @@ export class ThemSuaDanhMucDonVi implements OnInit {
 
     listCapDonVi = [
         {
-            value: 1,
+            value: "1",
             text: "Tổng cục"
         },{
-            value: 2,
+            value: "2",
             text: "Cục"
         },{
-            value: 3,
+            value: "3",
             text: "Chi cục"
         },
     ]
@@ -115,6 +115,8 @@ export class ThemSuaDanhMucDonVi implements OnInit {
         },
     ]
 
+    listDonViCha = [];
+
     private unsubscribed$ = new Subject();
 
     smallScreen$ = this.breakpointObserver
@@ -122,6 +124,19 @@ export class ThemSuaDanhMucDonVi implements OnInit {
         .pipe(map(observer => (observer.matches ? 'yes' : 'no')));
 
     ngOnInit(): void {
+        this.service.getAll().subscribe(x => {
+            this.listDonViCha = [];
+            if(x && x.data && x.data.length > 0) {
+                for(let i = 0; i < x.data.length; i++) {
+                    let itemDvi = {
+                        value: x.data[i].id,
+                        text: x.data[i].tenDvi
+                    }
+                    this.listDonViCha.push(itemDvi);
+                    console.log(this.listDonViCha)
+                }
+            }
+        });
         this.matDialogRef.backdropClick().subscribe(async () => await this.closeDialog());
         if(this.data.id == null || this.data.id > 0) {
             this.form = this.fb.group({

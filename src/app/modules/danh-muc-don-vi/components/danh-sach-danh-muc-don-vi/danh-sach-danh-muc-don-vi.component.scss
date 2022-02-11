@@ -149,23 +149,3 @@
         }
     }
 }
-
-::ng-deep {
-    ng-select.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-untouched.ng-pristine.ng-valid.ng-select-opened.ng-select-bottom {
-        height: 24px;
-    }
-    .ng-select-container {
-        height: 24px !important;
-        min-height: 24px !important;
-        border-radius: 0px !important;
-        padding-top: 7px !important;
-    }
-    .ng-option.ng-star-inserted {
-        height: 24px;
-        display: flex !important;
-        align-items: center !important;
-        span.ng-option-label.ng-star-inserted {
-            font-size: 14px;
-        }
-    }
-}

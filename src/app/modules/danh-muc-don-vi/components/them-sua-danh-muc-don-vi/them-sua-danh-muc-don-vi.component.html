@@ -7,17 +7,17 @@
             <mat-card-content class="content-container">
                 <ng-container *ngIf="smallScreen === 'no'" [formGroup]="form">
                     <div class="container-form-field">
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Cấp đơn vị
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.capDvi" appendTo="body">
+                                <ng-select [(ngModel)]="data.capDvi" appendTo="body" formControlName="capDvi">
                                     <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Địa chỉ
                             </div>
@@ -27,7 +27,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Ghi chú
                             </div>
@@ -49,18 +49,18 @@
                                 </mat-form-field>
                             </div>
                         </div> -->
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Loại đơn vị
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.loaiDvi" appendTo="body">
+                                <ng-select [(ngModel)]="data.loaiDvi" appendTo="body" formControlName="loaiDvi">
                                     <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>
                         </div>
                         
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Mã đơn vị
                             </div>
@@ -70,16 +70,14 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Mã đơn vị cha
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="maDviCha" autocomplete="off"
-                                        [(ngModel)]="data.maDviCha" />
-                                </mat-form-field>
+                                <ng-select [(ngModel)]="data.maDviCha" appendTo="body" formControlName="maDviCha">
+                                    <ng-option *ngFor="let item of listDonViCha" [value]="item.value">{{item.text}}</ng-option>
+                                </ng-select>
                             </div>
                         </div>
                         <!-- <div class="row">
@@ -130,7 +128,7 @@
                                 </mat-form-field>
                             </div>
                         </div> -->
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Tên đơn vị
                             </div>
@@ -140,12 +138,12 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-field">
                             <div class="col-md-4 label-form-field">
                                 Trạng thái
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.trangThai" appendTo="body">
+                                <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai">
                                     <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>

@@ -55,7 +55,7 @@ export class DanhMucDonViService {
             )
             .pipe(
                 tap(response => {
-                    if(response && response.data && response.data.content && response.data.content.length > 0) {
+                    if(response && response.data && response.data.content) {
                         this.listDonViSub$.next({ data: response.data.content, count: response.data.totalElements, startAtPage: { pageIndex } });
                     }
                 }),
@@ -78,7 +78,7 @@ export class DanhMucDonViService {
     }
 
     delete(id: string, pageSize: number): Promise<any> {
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Delete user' });
+        const headers = new HttpHeaders();
         return this.httpClient
             .get<any>(`${this.urlDefault}/qlnv-category/dmuc-donvi/xoa/${id}`, { headers })
             .pipe(
@@ -101,11 +101,11 @@ export class DanhMucDonViService {
     }
 
     create(input: DonViModel, options: PaginateOptions){
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Create new' });
+        const headers = new HttpHeaders();
         const { capDvi, diaChi, ghiChu, id, kieuDvi, loaiDvi, maDvi, maDviCha, maHchinh, maPhuong, maQuan, maTinh, tenDvi, trangThai} = input;
         return this.httpClient
             .post<any>(
-                `${this.apiConstant.endpoint}/user/create-user`,
+                `${this.apiConstant.endpoint}/qlnv-category/dmuc-donvi/them-moi`,
                 {
                     capDvi, diaChi, ghiChu, id, kieuDvi, loaiDvi, maDvi, maDviCha, maHchinh, maPhuong, maQuan, maTinh, tenDvi, trangThai
                 },
@@ -132,11 +132,11 @@ export class DanhMucDonViService {
     }
 
     update(input: DonViModel, options: PaginateOptions){
-        const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Update' });
+        const headers = new HttpHeaders();
         const { capDvi, diaChi, ghiChu, id, kieuDvi, loaiDvi, maDvi, maDviCha, maHchinh, maPhuong, maQuan, maTinh, tenDvi, trangThai} = input;
         return this.httpClient
-            .put<any>(
-                `${this.apiConstant.endpoint}/user/update-user`,
+            .post<any>(
+                `${this.apiConstant.endpoint}/qlnv-category/dmuc-donvi/sua`,
                 {
                     capDvi, diaChi, ghiChu, id, kieuDvi, loaiDvi, maDvi, maDviCha, maHchinh, maPhuong, maQuan, maTinh, tenDvi, trangThai
                 },
@@ -160,5 +160,12 @@ export class DanhMucDonViService {
                     return throwError(errorMessage);
                 }),
             );
+    }
+
+    getAll(){
+        const headers = new HttpHeaders();
+        return this.httpClient.get<any>(`${this.urlDefault}/qlnv-category/dmuc-donvi/danh-sach/tat-ca`, { headers }).pipe(
+            tap(result => {}),
+        );
     }
 }
