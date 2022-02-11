@@ -21,12 +21,12 @@ form {
 }
 
 mat-card {
-    padding: 23px 30px 0px 30px !important;
+    padding: 23px 0px 0px 24px !important;
     height: calc(100% - 46px);
     .mat-card-header {
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: 32px;
+        margin-bottom: 8px;
         ::ng-deep .mat-card-header-text {
             margin: unset !important;
         }
@@ -36,8 +36,16 @@ mat-card {
             text-align: left;
             font-style: normal;
             font-weight: 700;
-            font-size: 32px;
+            font-size: 24px;
             line-height: 40px;
+        }
+    }
+    ::ng-deep {
+        mat-card-content {
+            height: calc(100% - 62px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 16px;
         }
     }
 }

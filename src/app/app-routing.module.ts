@@ -24,7 +24,7 @@ const routes: Routes = [
             import('./modules/quan-ly-nguoi-dung/quan-ly-nguoi-dung-routing.module').then(m => m.QuanLyNguoiDungRoutingModule),
     },
     {
-        path: 'danh-muc-don-vi',
+        path: 'dmuc-donvi',
         component: MasterLayoutComponent,
         canActivate: [AuthGuard],
         loadChildren: () =>

@@ -5,18 +5,19 @@ mat-dialog-content {
 
 .dialog-header {
     display: flex;
-    padding-top: 47px !important;
-    padding-left: 40px !important;
+    padding-top: 24px !important;
+    padding-left: 24px !important;
     mat-icon {
         cursor: pointer;
     }
 
     .mat-dialog-title {
         font-family: "Roboto", Serif, Sans-serif, Cursive, fantasy, Monospace;
-        font-weight: bold;
-        font-size: 32px;
-        color: #34404B;
-        padding-right: 40px;
+        font-weight: 700;
+        font-size: 24px;
+        color: #34404b;
+        padding-right: 24px;
+        margin-bottom: 16px;
     }
 }
 
@@ -24,35 +25,36 @@ mat-dialog-content {
     font-family: Arial, Serif, Sans-serif, cursive, fantasy, Monospace;
     font-weight: 400;
     font-style: normal;
-    font-size: 16px;
+    font-size: 14px;
     color: #34404B;
     text-align: left;
-    padding-left: 40px !important;
-    padding-right: 40px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
 }
 .button-group {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    height: 80px;
-    background: #F4F7F9;
-    padding-top: 16px;
-    justify-content: right;
+    height: 48px;
+    background: #f4f7f9;
+    padding-top: 12px;
+    justify-content: center;
 
     .mat-slim{
-        min-width: 130px;
-        margin-right: 32px;
+        margin-right: 8px;
         font-size: 14px;
         font-style: normal;
         font-weight: 600;
-        padding: 6px 17px 6px 17px;
-        border: 1px solid #0957DE;
-        background-color: #0957DE !important;
+        padding: 0 16px;
+        height: 24px;
+        line-height: 24px;
+        border: 1px solid #587cad;
+        background-color: #587cad !important;
         color: #fff;
-        border-radius: 12px;
+        border-radius: 8px;
         &:hover,
         &:focus {
-            background-color: #0957DE !important;
+            background-color: #587cad !important;
         }
     }
 }

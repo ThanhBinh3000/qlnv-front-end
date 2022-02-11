@@ -1,21 +1,17 @@
 .dialog-header {
     display: flex;
-    padding-top: 47px !important;
-    padding-left: 40px !important;
-
-    // mat-icon {
-    //     cursor: pointer;
-    // }
+    padding-top: 24px !important;
+    padding-left: 24px !important;
 
     .mat-dialog-title {
         font-family: "Roboto", Serif, Sans-serif, Cursive, fantasy, Monospace;
         font-weight: 700;
-        font-size: 32px;
-        color: #34404B;
-        padding-right: 40px;
+        font-size: 24px;
+        color: #34404b;
+        padding-right: 24px;
+        margin-bottom: 16px;
     }
 }
-
 
 mat-dialog-content {
     margin-top: 0px;
@@ -25,22 +21,22 @@ mat-dialog-content {
         font-family: Arial, Serif, Sans-serif, cursive, fantasy, Monospace;
         font-weight: 600;
         font-style: normal;
-        font-size: 16px;
-        color: #34404B;
+        font-size: 14px;
+        color: #34404b;
         text-align: left;
-        padding-left: 40px !important;
+        padding-left: 24px !important;
     }
 
-    .firstMessage{
+    .firstMessage {
         font-family: Arial, Serif, Sans-serif, cursive, fantasy, Monospace;
         font-weight: 400;
         font-style: normal;
-        font-size: 16px;
-        color: #34404B;
+        font-size: 14px;
+        color: #34404b;
         text-align: left;
         margin-top: 8px;
         margin-bottom: 0px;
-        padding-left: 40px !important;
+        padding-left: 24px !important;
         padding-right: 10px;
     }
 
@@ -48,79 +44,79 @@ mat-dialog-content {
         font-family: Arial, Serif, Sans-serif, cursive, fantasy, Monospace;
         font-weight: normal;
         font-style: normal;
-        font-size: 16px;
-        color: #34404B;
+        font-size: 14px;
+        color: #34404b;
         text-align: left;
         margin-top: 8px;
         margin-bottom: 0px;
-        padding-left: 40px !important;
+        padding-left: 24px !important;
     }
-
 }
 
 .button-group {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    height: 80px;
-    background: #F4F7F9;
-    padding-top: 16px;
-    justify-content: right;
+    height: 48px;
+    background: #f4f7f9;
+    padding-top: 12px;
+    justify-content: center;
 
-    .confirm{
-        width: auto ;
+    .confirm {
+        width: auto;
     }
 
-    .mat-slim{
-        margin-right: 32px;
+    .mat-slim {
+        margin-right: 8px;
         font-size: 14px;
         font-style: normal;
         font-weight: 600;
-        padding: 6px 17px 6px 17px;
-        min-width: 130px;
+        padding: 0 16px;
+        height: 24px;
+        line-height: 24px;
     }
 
     .delete {
-        border: 1px solid #FF4A4A;
-        background-color: #FF4A4A;
+        border: 1px solid #587cad;
+        background-color: #587cad;
         color: #ffffff;
-        border-radius: 12px;
+        border-radius: 4px;
         &:hover,
         &:focus {
-            background-color: #FF4A4A !important;
+            background-color: #587cad !important;
         }
     }
 
     .cancel {
-        border: 1px solid #9AA0A5;
-        background-color: #9AA0A5 !important;
-        color: #fff;
-        border-radius: 12px;
+        border: 1px solid #d8dde6;
+        background-color: #ffffff !important;
+        color: #000;
+        border-radius: 4px;
         &:hover,
         &:focus {
-            background-color: #9AA0A5 !important;
+            background-color: #ffffff !important;
         }
     }
 
     .active {
-        border: 1px solid #0957DE;
-        background-color: #0957DE;
+        border: 1px solid #587cad;
+        background-color: #587cad;
         color: #ffffff;
-        border-radius: 12px;
+        border-radius: 4px;
         &:hover,
         &:focus {
-            background-color: #0957DE !important;
+            background-color: #587cad !important;
         }
     }
 
     .deactive {
-        border: 1px solid #0957DE;
-        background-color: #0957DE;
+        border: 1px solid #587cad;
+        background-color: #587cad;
         color: #ffffff;
-        border-radius: 12px;
+        border-radius: 4px;
         &:hover,
         &:focus {
-            background-color: #0957DE !important;
+            background-color: #587cad !important;
         }
     }
 }
@@ -171,7 +167,7 @@ mat-dialog-content {
             width: 70%;
             & > a {
                 cursor: pointer;
-                color: #1DBAA9;
+                color: #1dbaa9;
                 font-family: Arial, Serif, Sans-serif, cursive, fantasy, Monospace;
                 font-style: normal;
                 font-weight: normal;
@@ -179,5 +175,4 @@ mat-dialog-content {
             }
         }
     }
-
 }

@@ -26,6 +26,7 @@ export class DanhMucDonViService {
 
     private paginateByUserRole(
         options: PaginateOptions,
+        optionSearch?: any
     ) {
         let params;
         params = new HttpParams({ encoder: new CustomEncoder() })
@@ -35,20 +36,20 @@ export class DanhMucDonViService {
             .post<any>(
                 `${this.apiConstant.endpoint}/qlnv-category/dmuc-donvi/danh-sach`, 
                 {
-                    "capDvi": "",
-                    "kieuDvi": "",
-                    "loaiDvi": "",
-                    "maDvi": "",
-                    "maPhuong": "",
-                    "maQuan": "",
-                    "maTinh": "",
+                    "capDvi": optionSearch ? optionSearch.capDvi : "",
+                    "kieuDvi": optionSearch ? optionSearch.kieuDvi : "",
+                    "loaiDvi": optionSearch ? optionSearch.loaiDvi : "",
+                    "maDvi": optionSearch ? optionSearch.maDvi : "",
+                    "maPhuong": optionSearch ? optionSearch.maPhuong : "",
+                    "maQuan": optionSearch ? optionSearch.maQuan : "",
+                    "maTinh": optionSearch ? optionSearch.maTinh : "",
                     "paggingReq": {
                         "limit": pageSize,
                         "page": pageIndex + 1
                     },
                     "str": "",
-                    "tenDvi": "",
-                    "trangThai": ""
+                    "tenDvi": optionSearch ? optionSearch.tenDvi : "",
+                    "trangThai": optionSearch ? optionSearch.trangThai : ""
                 },
                 { headers },
             )
@@ -72,8 +73,8 @@ export class DanhMucDonViService {
 
     constructor(@Inject(Danh_Muc_Don_Vi_API_TOKEN) private apiConstant: ApiConstant, private httpClient: HttpClient) { }
 
-    paginteAdmins(options: PaginateOptions) {
-        return this.paginateByUserRole(options);
+    paginteAdmins(options: PaginateOptions, optionSearch?: any) {
+        return this.paginateByUserRole(options, optionSearch);
     }
 
     delete(id: string, pageSize: number): Promise<any> {
@@ -98,7 +99,7 @@ export class DanhMucDonViService {
             )
             .toPromise();
     }
-F
+
     create(input: DonViModel, options: PaginateOptions){
         const headers = new HttpHeaders({ [TRANSACTION_NAME]: 'Create new' });
         const { capDvi, diaChi, ghiChu, id, kieuDvi, loaiDvi, maDvi, maDviCha, maHchinh, maPhuong, maQuan, maTinh, tenDvi, trangThai} = input;

@@ -32,7 +32,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
                 [attr.aria-label]="'Confirm navigation'"
                 [class]="(data.confirmButtonText === 'Deactivate account') ? 'deactive' :
                 (data.confirmButtonText === 'Activate account') ? 'active' :
-                (data.confirmButtonText === 'Delete' || data.confirmButtonText === 'Delete Account') ? 'delete' : ''"
+                (data.confirmButtonText === 'Xóa') ? 'delete' : ''"
                 class="mat-slim confirm"
             >
                 {{ data.confirmButtonText || 'Confirm' }}

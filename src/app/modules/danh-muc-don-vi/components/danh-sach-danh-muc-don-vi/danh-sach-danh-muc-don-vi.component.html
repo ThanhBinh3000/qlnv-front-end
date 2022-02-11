@@ -19,17 +19,12 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="label-field">
-                            Tên đơn vị
+                            Cấp đơn vị
                         </div>
                         <div class="input-field">
-                            <mat-form-field appearance="fill">
-                                <select matNativeControl required>
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </mat-form-field>
+                            <ng-select [(ngModel)]="capDvi" appendTo="body">
+                                <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
+                            </ng-select>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -38,86 +33,83 @@
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="" value="">
+                                <input matInput placeholder="Mã đơn vị" [(ngModel)]="maDvi">
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="label-field">
-                            Mã đơn vị QHNS
+                            Loại đơn vị
                         </div>
                         <div class="input-field">
-                            <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="" value="">
-                            </mat-form-field>
+                            <ng-select [(ngModel)]="loaiDvi" appendTo="body">
+                                <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
+                            </ng-select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="label-field">
-                            Đơn vị cấp trên
+                            Tên đơn vị
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="" value="">
+                                <input matInput placeholder="Tên đơn vị" [(ngModel)]="tenDvi">
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="label-field">
-                            Cấp
-                        </div>
-                        <div class="input-field">
-                            <mat-form-field appearance="fill">
-                                <select matNativeControl required>
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="label-field">
-                            Mã cha
-                        </div>
-                        <div class="input-field">
-                            <mat-form-field appearance="fill">
-                                <select matNativeControl required>
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-4">
                         <div class="label-field">
                             Trạng thái
                         </div>
                         <div class="input-field">
-                            <mat-form-field appearance="fill">
-                                <select matNativeControl required>
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </mat-form-field>
+                            <ng-select [(ngModel)]="trangThai" appendTo="body">
+                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
+                            </ng-select>
                         </div>
                     </div>
                     <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
+                        <!-- <div class="label-field">
+                            Mã tỉnh
+                        </div>
+                        <div class="input-field">
+                            <ng-select [(ngModel)]="maTinh" appendTo="body">
+                            </ng-select>
+                        </div> -->
                     </div>
                 </div>
+                <!-- <div class="row">
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Kiểu đơn vị
+                        </div>
+                        <div class="input-field">
+                            <ng-select [(ngModel)]="kieuDvi" appendTo="body">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã phường
+                        </div>
+                        <div class="input-field">
+                            <ng-select [(ngModel)]="maPhuong" appendTo="body">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã quận
+                        </div>
+                        <div class="input-field">
+                            <ng-select [(ngModel)]="maQuan" appendTo="body">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div> -->
                 <div class="row btn-search">
-                    <button type="button" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="search()">
                         Tìm kiếm
                     </button>
                 </div>

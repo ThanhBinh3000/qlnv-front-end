@@ -61,6 +61,60 @@ export class ThemSuaDanhMucDonVi implements OnInit {
     errorMessages: string[];
     form: FormGroup;
 
+    listTrangThai = [
+        {
+            value: "00",
+            text: "Ẩn"
+        }, {
+            value: "01",
+            text: "Hiện"
+        }, 
+    ]
+
+    listCapDonVi = [
+        {
+            value: 1,
+            text: "Tổng cục"
+        },{
+            value: 2,
+            text: "Cục"
+        },{
+            value: 3,
+            text: "Chi cục"
+        },
+    ]
+
+    listLoaiDonVi = [
+        {
+            value: "TCDT",
+            text: "Tổng cục Dự trữ"
+        },{
+            value: "BCA",
+            text: "Bộ công an"
+        },{
+            value: "BQP",
+            text: "Bộ quốc phòng"
+        },{
+            value: "BNN",
+            text: "Bộ nông nghiệp"
+        },{
+            value: "BCT",
+            text: "Bộ công thương"
+        },{
+            value: "DPT",
+            text: "Đài phát thanh VN"
+        },{
+            value: "BGT",
+            text: "Bộ giao thông"
+        },{
+            value: "BYT",
+            text: "Bộ y tế"
+        },{
+            value: "DTH",
+            text: "Đài truyền hình VN"
+        },
+    ]
+
     private unsubscribed$ = new Subject();
 
     smallScreen$ = this.breakpointObserver
