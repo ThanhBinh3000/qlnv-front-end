@@ -8,6 +8,7 @@ import {
     AuthModule,
     CoreModule,
     DanhMucDonViModule,
+    DanhMucDonViTinhModule,
     QuanLyDanhMucHangDTQGModule,
     QuanLyNguoiDungModule
 } from './modules';
@@ -29,6 +30,7 @@ import { ChartsModule } from 'ng2-charts';
         AdminModule.forRoot(environment.api),
         QuanLyNguoiDungModule.forRoot(environment.api),
         DanhMucDonViModule.forRoot(environment.api),
+        DanhMucDonViTinhModule.forRoot(environment.api),
         QuanLyDanhMucHangDTQGModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
