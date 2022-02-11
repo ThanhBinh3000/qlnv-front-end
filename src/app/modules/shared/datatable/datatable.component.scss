@@ -37,20 +37,23 @@
 // }
 
 .mat-header-cell {
-    line-height: 21px;
-    background-color: #ffffff;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    color: #34404B;
-    font-size: 16px;
+    line-height: 26px;
+    background-color: #e7f1ff;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    color: #587cad;
+    font-size: 14px;
     font-weight: 500;
     border-top-width: 0;
     border-bottom-width: 1px;
+    height: 26px;
+    padding: 2px 8px;
+    min-height: 26px;
 }
 .mat-cell,
 .mat-footer-cell {
     line-height: 21px;
     font-weight: 400;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     color: #212529;
     font-size: 0.875rem;
 }
@@ -68,7 +71,7 @@
 }
 
 .action-header {
-    flex: 0 0 4% !important;
+    // flex: 0 0 4% !important;
 }
 
 .hide-header-row {
@@ -83,7 +86,7 @@
     display: none;
 }
 
-:host ::ng-deep.mat-paginator .mat-paginator-container{
+:host ::ng-deep.mat-paginator .mat-paginator-container {
     justify-content: center;
 }
 
@@ -113,7 +116,7 @@
 }
 
 .sub-paginator-item span {
-    color: #D6D9DB;
+    color: #d6d9db;
     font-size: 16px;
 }
 
@@ -155,7 +158,8 @@
 }
 
 @media screen and (max-width: 1440px) {
-    .menu-action-col, .action-header {
+    .menu-action-col,
+    .action-header {
         flex: 0 0 7% !important;
     }
 }
@@ -165,7 +169,7 @@
 }
 
 .sub-paginator-item-selected span {
-    color: #34404B;
+    color: #34404b;
     font-size: 16px;
 }
 
@@ -177,7 +181,7 @@
         font-size: 2rem;
     }
 
-    .mat-input-element{
+    .mat-input-element {
         margin-top: 8px;
         font-size: 16px;
         font-weight: 500;
@@ -186,7 +190,7 @@
 
 .select-items-page {
     width: 70px;
-    border: 1px solid #DCDFEA;
+    border: 1px solid #dcdfea;
     padding: 4px 8px 4px 8px;
     font-size: 16px;
     border-radius: 8px;
@@ -194,8 +198,8 @@
     right: 15px;
 }
 
-::ng-deep{
-    .number-paginator .material-icons{
+::ng-deep {
+    .number-paginator .material-icons {
         font-size: 16px !important;
     }
 
@@ -218,5 +222,29 @@
 
     .number-paginator .mat-select-value {
         padding-left: 8px;
+    }
+    .mat-header-row {
+        height: 26px !important;
+        min-height: 26px !important;
+        .mat-sort-header-content {
+            padding-top: 3px;
+        }
+    }
+    .mat-row {
+        padding: 3px 0px !important;
+        height: unset !important;
+        min-height: unset !important;
+        &:hover {
+            background-color: #f3f3f3;
+        }
+    }
+    .cdk-column-maDviCha {
+        flex: 2 1 0% !important;
+    }
+    .cdk-column-tenDvi {
+        flex: 2 1 6% !important;
+    }
+    .cdk-column-diaChi {
+        flex: 2 1 4% !important;
     }
 }

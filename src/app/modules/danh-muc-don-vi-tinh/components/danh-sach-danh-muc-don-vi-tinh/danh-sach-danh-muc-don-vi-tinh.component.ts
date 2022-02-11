@@ -63,11 +63,11 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
     listDonViDo = []
 
     optionSearch = {
-        dviDo: "",
+        dviDo: null,
         kyHieu: "",
         maDviTinh: "",
         tenDviTinh: "",
-        trangThai: "",
+        trangThai: null,
     }
 
     smallScreen$ = this.breakpointObserver
@@ -144,11 +144,11 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
                         const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
-                                dviDo: "",
+                                dviDo: null,
                                 kyHieu: "",
                                 maDviTinh: "",
                                 tenDviTinh: "",
-                                trangThai: "",
+                                trangThai: null,
                             }
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
@@ -167,7 +167,7 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
     edit(isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonViTinh, {
             width: '30vw',
-            height: '80vh',
+            height: '55vh',
             data: {
                 title: 'Cập nhật đơn vị tính',
                 isView: isView,
@@ -183,11 +183,11 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
         termDialog.afterClosed().subscribe(res => {
             if (res) {
                 this.optionSearch = {
-                    dviDo: "",
+                    dviDo: null,
                     kyHieu: "",
                     maDviTinh: "",
                     tenDviTinh: "",
-                    trangThai: "",
+                    trangThai: null,
                 }
             }
         });
@@ -196,27 +196,27 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonViTinh, {
             width: '30vw',
-            height: '80vh',
+            height: '55vh',
             data: {
                 title: 'Thêm mới đơn vị tính',
                 isView: false,
-                maDviTinh: '',
-                tenDviTinh: '',
-                kyHieu: '',
+                maDviTinh: "",
+                tenDviTinh: "",
+                kyHieu: "",
                 id: 0,
-                dviDo: '',
-                trangThai: '',
+                dviDo: null,
+                trangThai: null,
             },
         });
 
         termDialog.afterClosed().subscribe(res => {
             if (res) {
                 this.optionSearch = {
-                    dviDo: "",
+                    dviDo: null,
                     kyHieu: "",
                     maDviTinh: "",
                     tenDviTinh: "",
-                    trangThai: "",
+                    trangThai: null,
                 }
             }
         });

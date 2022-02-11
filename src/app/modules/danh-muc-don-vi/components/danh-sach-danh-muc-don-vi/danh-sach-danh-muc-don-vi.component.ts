@@ -105,15 +105,15 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     ]
 
     optionSearch = {
-        capDvi : "",
+        capDvi : null,
         kieuDvi : "",
-        loaiDvi : "",
+        loaiDvi : null,
         maDvi : "",
         maPhuong : "",
         maQuan : "",
         maTinh : "",
         tenDvi : "",
-        trangThai : "",
+        trangThai : null,
     }
 
     smallScreen$ = this.breakpointObserver
@@ -190,15 +190,15 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                         const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
-                                capDvi : "",
+                                capDvi : null,
                                 kieuDvi : "",
-                                loaiDvi : "",
+                                loaiDvi : null,
                                 maDvi : "",
                                 maPhuong : "",
                                 maQuan : "",
                                 maTinh : "",
                                 tenDvi : "",
-                                trangThai : "",
+                                trangThai : null,
                             }
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
@@ -217,7 +217,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     edit(isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
-            height: '80vh',
+            height: '70vh',
             data: {
                 title: 'Cập nhật đơn vị',
                 isView: isView,
@@ -241,15 +241,15 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         termDialog.afterClosed().subscribe(res => {
             if(res){
                 this.optionSearch = {
-                    capDvi : "",
+                    capDvi : null,
                     kieuDvi : "",
-                    loaiDvi : "",
+                    loaiDvi : null,
                     maDvi : "",
                     maPhuong : "",
                     maQuan : "",
                     maTinh : "",
                     tenDvi : "",
-                    trangThai : "",
+                    trangThai : null,
                 }
             }
         });
@@ -258,39 +258,39 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
-            height: '80vh',
+            height: '70vh',
             data: {
                 title: 'Thêm mới đơn vị',
                 isView: false,
                 id: 0,
-                capDvi: '',
+                capDvi: null,
                 diaChi: '',
                 ghiChu: '',
                 kieuDvi: '',
-                loaiDvi: '',
+                loaiDvi: null,
                 maDvi: '',
-                maDviCha: '',
+                maDviCha: null,
                 maHchinh: '',
                 maPhuong: '',
                 maQuan: '',
                 maTinh: '',
                 tenDvi: '',
-                trangThai: '',
+                trangThai: null,
             },
         });
 
         termDialog.afterClosed().subscribe(res => {
             if(res){
                 this.optionSearch = {
-                    capDvi : "",
+                    capDvi : null,
                     kieuDvi : "",
-                    loaiDvi : "",
+                    loaiDvi : null,
                     maDvi : "",
                     maPhuong : "",
                     maQuan : "",
                     maTinh : "",
                     tenDvi : "",
-                    trangThai : "",
+                    trangThai : null,
                 }
             }
         });
@@ -338,7 +338,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     text: 'Mã cha',
                     label: 'Mã cha',
                     fieldName: 'maDviCha',
-                    style: { flex: 1 },
+                    style: { flex: 2 },
                     sortable: false,
                 },
                 {
@@ -346,7 +346,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     label: 'Trạng thái',
                     fieldName: 'trangThai',
                     valueFunction: element => this.textStatus(element.trangThai),
-                    style: { flex: 2 },
+                    style: { flex: 1 },
                     sortable: false,
                 },
             ],
