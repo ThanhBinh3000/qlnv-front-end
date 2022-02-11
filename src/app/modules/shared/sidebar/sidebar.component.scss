@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import '../../../../styles/variables';
 
 .logout {
     position: absolute;
@@ -52,13 +52,13 @@ $toolbar-height: 64px;
 .sidenav-container {
     grid-area: content;
     background: transparent;
-    background-color: #1159BB;
+    background-color: #1159bb;
 }
 
 mat-sidenav-content {
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: #1159BB;
+    background-color: #1159bb;
 }
 
 app-breadcrumb {
@@ -119,7 +119,7 @@ footer {
     mat-nav-list {
         .nav-item {
             height: 4rem;
-            font-family: "Montserrat", sans-serif;
+            font-family: 'Montserrat', sans-serif;
             white-space: nowrap;
         }
     }
@@ -169,7 +169,7 @@ mat-panel-title span {
     height: 20px;
     background-color: #d22630;
     position: absolute;
-    content: "!";
+    content: '!';
     font-size: 12px;
     color: white;
     border-radius: 50%;
@@ -492,7 +492,7 @@ router-outlet {
     box-shadow: none;
     p {
         color: #fff;
-        border-right: 2px solid #ffffff;
+        // border-right: 2px solid #ffffff;
     }
 }
 
@@ -544,5 +544,35 @@ router-outlet {
     .ps__rail-x,
     .ps__rail-y {
         display: none;
+    }
+    .sidebar-wrapper {
+        mat-expansion-panel-header::after {
+            content: '';
+            border-bottom: dashed 1px rgb(255 255 255 / 10%);
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+        }
+        a.mat-list-item.mat-focus-indicator.nav-link.content-valid::after {
+            content: '';
+            border-bottom: dashed 1px rgb(255 255 255 / 10%);
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+        }
+        .menu-item .mat-expansion-panel-header:hover {
+            background: #e5f0ff !important;
+        }
+        .menu-item .mat-expansion-panel-header:hover p {
+            color: #2d3748 !important;
+        }
+        .sub-menu:hover > .mat-list-item {
+            background-color: #e5f0ff !important;
+        }
+        .sub-menu:hover > .mat-list-item p {
+            color: #2d3748 !important;
+        }
     }
 }
