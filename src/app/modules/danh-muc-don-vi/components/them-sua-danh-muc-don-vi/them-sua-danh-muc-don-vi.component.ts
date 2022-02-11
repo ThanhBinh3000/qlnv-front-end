@@ -16,6 +16,7 @@ import * as myGlobals from '../../../../globals';
 import { PaginateOptions } from 'src/app/modules/types';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfirmationDialog } from 'src/app/modules/shared/dialogs';
+import { leadingComment } from '@angular/compiler';
 
 @Component({
     selector: 'them-sua-danh-muc-don-vi',
@@ -150,10 +151,11 @@ export class ThemSuaDanhMucDonVi implements OnInit {
 
     submitForm() {
         if (this.form.valid) {
-            const data = this.form.getRawValue();
+            let data = this.form.getRawValue();
             const options:PaginateOptions = {pageIndex: 0, pageSize: 10};
             this.spinner.show();
             if(this.data.id != null && this.data.id > 0){
+                data.id = this.data.id;
                 this.service.update(data, options).subscribe(() => {
                     this.spinner.hide();
                     this.closeDialog();
@@ -170,6 +172,7 @@ export class ThemSuaDanhMucDonVi implements OnInit {
                 });
             }
             else {
+                data.id = 0;
                 this.service.create(data, options).subscribe(() => {
                     this.spinner.hide();
                     this.closeDialog();

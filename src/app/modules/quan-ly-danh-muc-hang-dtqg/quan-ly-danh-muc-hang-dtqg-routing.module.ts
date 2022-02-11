@@ -7,7 +7,7 @@ import { QuanLyDanhMucHangDTQGLazyModule } from './quan-ly-danh-muc-hang-dtqg-la
 const routes: Routes = [
     {
         path: '',
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         data: {
             pageTitle: 'Maintaining Nurse Accounts',
         },

@@ -7,7 +7,7 @@ import { DanhMucDonViLazyModule } from './danh-muc-don-vi-lazy.module';
 const routes: Routes = [
     {
         path: '',
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         data: {
             pageTitle: 'Maintaining Nurse Accounts',
         },

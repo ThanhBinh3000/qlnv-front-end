@@ -19,21 +19,21 @@ const routes: Routes = [
     {
         path: 'quan-ly-nguoi-dung',
         component: MasterLayoutComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         loadChildren: () =>
             import('./modules/quan-ly-nguoi-dung/quan-ly-nguoi-dung-routing.module').then(m => m.QuanLyNguoiDungRoutingModule),
     },
     {
         path: 'danh-muc-don-vi',
         component: MasterLayoutComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         loadChildren: () =>
             import('./modules/danh-muc-don-vi/danh-muc-don-vi-routing.module').then(m => m.DanhMucDonViRoutingModule),
     },
     {
         path: 'danh-muc-hang-dtqg',
         component: MasterLayoutComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         loadChildren: () =>
             import('./modules/quan-ly-danh-muc-hang-dtqg/quan-ly-danh-muc-hang-dtqg-routing.module').then(m => m.QuanLyDanhMucHangDTQGRoutingModule),
     },

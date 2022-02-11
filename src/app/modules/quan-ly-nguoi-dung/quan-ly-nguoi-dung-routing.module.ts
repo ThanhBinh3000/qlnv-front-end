@@ -7,7 +7,7 @@ import { QuanLyNguoiDungLazyModule } from './quan-ly-nguoi-dung-lazy.module';
 const routes: Routes = [
     {
         path: '',
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         data: {
             pageTitle: 'Maintaining Nurse Accounts',
         },
