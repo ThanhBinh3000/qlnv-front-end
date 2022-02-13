@@ -225,7 +225,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     edit(isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
-            height: '70vh',
+            // height: '70vh',
             data: {
                 title: isView ? 'Thông tin đơn vị' : 'Cập nhât đơn vị',
                 isView: isView,
