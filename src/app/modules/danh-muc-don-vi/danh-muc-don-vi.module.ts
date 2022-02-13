@@ -6,7 +6,7 @@ import { DanhMucDonViService } from './services';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-    imports: [DanhMucDonViLazyModule, FlexLayoutModule,],
+    imports: [DanhMucDonViLazyModule, FlexLayoutModule],
     exports: [DanhMucDonViLazyModule, FlexLayoutModule,],
 })
 export class DanhMucDonViModule {

@@ -22,7 +22,7 @@ import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
 import { DanhMucDonViService } from '../../services/danh-muc-don-vi.service';
-import { ThemSuaDanhMucDonVi } from '../them-sua-danh-muc-don-vi/them-sua-danh-muc-don-vi.component'
+import { ThemSuaDanhMucDonVi } from '../them-sua-danh-muc-don-vi/them-sua-danh-muc-don-vi.component';
 
 @Component({
     selector: 'danh-sach-danh-muc-don-vi',
@@ -52,69 +52,80 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     listTrangThai = [
         {
-            value: "00",
-            text: "Ẩn"
-        }, {
-            value: "01",
-            text: "Hiện"
-        }, 
-    ]
+            value: '00',
+            text: 'Ẩn',
+        },
+        {
+            value: '01',
+            text: 'Hiện',
+        },
+    ];
 
     listCapDonVi = [
         {
-            value: "1",
-            text: "Tổng cục"
-        },{
-            value: "2",
-            text: "Cục"
-        },{
-            value: "3",
-            text: "Chi cục"
+            value: '1',
+            text: 'Tổng cục',
         },
-    ]
+        {
+            value: '2',
+            text: 'Cục',
+        },
+        {
+            value: '3',
+            text: 'Chi cục',
+        },
+    ];
 
     listLoaiDonVi = [
         {
-            value: "TCDT",
-            text: "Tổng cục Dự trữ"
-        },{
-            value: "BCA",
-            text: "Bộ công an"
-        },{
-            value: "BQP",
-            text: "Bộ quốc phòng"
-        },{
-            value: "BNN",
-            text: "Bộ nông nghiệp"
-        },{
-            value: "BCT",
-            text: "Bộ công thương"
-        },{
-            value: "DPT",
-            text: "Đài phát thanh VN"
-        },{
-            value: "BGT",
-            text: "Bộ giao thông"
-        },{
-            value: "BYT",
-            text: "Bộ y tế"
-        },{
-            value: "DTH",
-            text: "Đài truyền hình VN"
+            value: 'TCDT',
+            text: 'Tổng cục Dự trữ',
         },
-    ]
+        {
+            value: 'BCA',
+            text: 'Bộ công an',
+        },
+        {
+            value: 'BQP',
+            text: 'Bộ quốc phòng',
+        },
+        {
+            value: 'BNN',
+            text: 'Bộ nông nghiệp',
+        },
+        {
+            value: 'BCT',
+            text: 'Bộ công thương',
+        },
+        {
+            value: 'DPT',
+            text: 'Đài phát thanh VN',
+        },
+        {
+            value: 'BGT',
+            text: 'Bộ giao thông',
+        },
+        {
+            value: 'BYT',
+            text: 'Bộ y tế',
+        },
+        {
+            value: 'DTH',
+            text: 'Đài truyền hình VN',
+        },
+    ];
 
     optionSearch = {
-        capDvi : null,
-        kieuDvi : "",
-        loaiDvi : null,
-        maDvi : "",
-        maPhuong : "",
-        maQuan : "",
-        maTinh : "",
-        tenDvi : "",
-        trangThai : null,
-    }
+        capDvi: null,
+        kieuDvi: '',
+        loaiDvi: null,
+        maDvi: '',
+        maPhuong: '',
+        maQuan: '',
+        maTinh: '',
+        tenDvi: '',
+        trangThai: null,
+    };
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -127,7 +138,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         private dialog: MatDialog,
         private service: DanhMucDonViService,
         private spinner: NgxSpinnerService,
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.currentUserId$ = this.authService.user$.pipe(
@@ -153,13 +164,10 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     search() {
         this.spinner.show();
-        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize, }, this.optionSearch)
-        .subscribe(data => {
-                this.spinner.hide();
-                console.log(data);
-            }
-        );
-        
+        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize }, this.optionSearch).subscribe(data => {
+            this.spinner.hide();
+            console.log(data);
+        });
     }
 
     ngOnDestroy() {
@@ -190,16 +198,16 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                         const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
-                                capDvi : null,
-                                kieuDvi : "",
-                                loaiDvi : null,
-                                maDvi : "",
-                                maPhuong : "",
-                                maQuan : "",
-                                maTinh : "",
-                                tenDvi : "",
-                                trangThai : null,
-                            }
+                                capDvi: null,
+                                kieuDvi: '',
+                                loaiDvi: null,
+                                maDvi: '',
+                                maPhuong: '',
+                                maQuan: '',
+                                maTinh: '',
+                                tenDvi: '',
+                                trangThai: null,
+                            };
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
                                 data: {
@@ -239,32 +247,32 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         });
 
         termDialog.afterClosed().subscribe(res => {
-            if(res){
+            if (res) {
                 this.optionSearch = {
-                    capDvi : null,
-                    kieuDvi : "",
-                    loaiDvi : null,
-                    maDvi : "",
-                    maPhuong : "",
-                    maQuan : "",
-                    maTinh : "",
-                    tenDvi : "",
-                    trangThai : null,
-                }
+                    capDvi: null,
+                    kieuDvi: '',
+                    loaiDvi: null,
+                    maDvi: '',
+                    maPhuong: '',
+                    maQuan: '',
+                    maTinh: '',
+                    tenDvi: '',
+                    trangThai: null,
+                };
             }
         });
     }
 
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
-            width: '30vw',
-            height: '70vh',
+            width: '600px',
+            // height: '70vh',
             data: {
                 title: 'Thêm mới đơn vị',
                 isView: false,
                 id: 0,
                 capDvi: null,
-                diaChi: '',
+                diaChi: '', 
                 ghiChu: '',
                 kieuDvi: '',
                 loaiDvi: null,
@@ -280,18 +288,18 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         });
 
         termDialog.afterClosed().subscribe(res => {
-            if(res){
+            if (res) {
                 this.optionSearch = {
-                    capDvi : null,
-                    kieuDvi : "",
-                    loaiDvi : null,
-                    maDvi : "",
-                    maPhuong : "",
-                    maQuan : "",
-                    maTinh : "",
-                    tenDvi : "",
-                    trangThai : null,
-                }
+                    capDvi: null,
+                    kieuDvi: '',
+                    loaiDvi: null,
+                    maDvi: '',
+                    maPhuong: '',
+                    maQuan: '',
+                    maTinh: '',
+                    tenDvi: '',
+                    trangThai: null,
+                };
             }
         });
     }
@@ -350,8 +358,61 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     sortable: false,
                 },
             ],
-            mergeActionColumns: false,
-            actions: [],
+            mergeActionColumns: true,
+            actions: [
+                {
+                    text: 'Xem',
+                    label: 'xem',
+                    fieldName: 'xem',
+                    // style: { flex: 1 },
+                    actionFunction: this.edit.bind(this),
+                    condition: element => {
+                        return this.currentUserId !== element.id;
+                    },
+                    displayIcon: true,
+                    iconValue: '../../../../assets/img/edit.png',
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xem-chi-tiet">
+                        <i class="fas fa-eye"></i>
+                    </a>`;
+                    },
+                },
+                {
+                    text: 'Sửa',
+                    label: 'Sửa',
+                    fieldName: 'sua',
+                    // style: { flex: 1 },
+                    actionFunction: this.edit.bind(this),
+                    condition: element => {
+                        return this.currentUserId !== element.id;
+                    },
+                    displayIcon: true,
+                    iconValue: '../../../../assets/img/edit.png',
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm chinhsua">
+                            <i class="fas fa-edit"></i>
+                        </a>`;
+                    },
+                },
+
+                {
+                    text: 'Xóa',
+                    label: 'xoa',
+                    fieldName: 'xoa',
+                    // style: { flex: 1 },
+                    actionFunction: this.delete.bind(this),
+                    condition: element => {
+                        return this.currentUserId !== element.id;
+                    },
+                    displayIcon: true,
+                    iconValue: '../../../../assets/img/delete.png',
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xoa">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>`;
+                    },
+                },
+            ],
             meta: {
                 pageSize: this.pageSize,
                 rowsNumber: count,
@@ -375,7 +436,6 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     selectElementValue(element: any) {
         this.elementSeleted = element;
         console.log(this.elementSeleted);
-        
     }
 
     textStatus(status: string): string {

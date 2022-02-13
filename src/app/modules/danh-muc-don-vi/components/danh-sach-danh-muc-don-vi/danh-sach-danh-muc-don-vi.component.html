@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="title-table">
-            <!-- <mat-icon>arrow_circle_left</mat-icon> -->
+            <mat-icon>arrow_circle_left</mat-icon>
             <span class="maintitle">
                 Danh sách danh mục đơn vị
             </span>
@@ -23,7 +23,8 @@
                         </div>
                         <div class="input-field">
                             <ng-select [(ngModel)]="optionSearch.capDvi" appendTo="body">
-                                <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
+                                <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}
+                                </ng-option>
                             </ng-select>
                         </div>
                     </div>
@@ -35,6 +36,7 @@
                             <mat-form-field class="example-full-width" appearance="fill">
                                 <input matInput placeholder="Mã đơn vị" [(ngModel)]="optionSearch.maDvi">
                             </mat-form-field>
+                            <!-- <input nz-input placeholder="Mã đơn vị" class="full-width" [(ngModel)]="optionSearch.maDvi" /> -->
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -43,12 +45,17 @@
                         </div>
                         <div class="input-field">
                             <ng-select [(ngModel)]="optionSearch.loaiDvi" appendTo="body">
-                                <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
+                                <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}
+                                </ng-option>
                             </ng-select>
+                            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person"
+                                [(ngModel)]="optionSearch.loaiDvi">
+                                <nz-option [nzLabel]="item.value" [nzValue]="item.value" *ngFor="let item of listLoaiDonVi"></nz-option>
+                            </nz-select> -->
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3" >
+                <div class="row mt-3">
                     <div class="col-md-4">
                         <div class="label-field">
                             Tên đơn vị
@@ -65,7 +72,8 @@
                         </div>
                         <div class="input-field">
                             <ng-select [(ngModel)]="optionSearch.trangThai" appendTo="body">
-                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
+                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}
+                                </ng-option>
                             </ng-select>
                         </div>
                     </div>
@@ -118,17 +126,20 @@
     </div>
     <div class="row">
         <div class="list-data">
-            <app-datatable 
-                *ngIf="config" 
-                [config]="config" 
-                (selectedPageAt)="selectedPageAtValue($event)"
-                (selectedPageSize)="selectPageSizeValue($event)" 
-                (selectElement)="selectElementValue($event)"
-            >
+            <div class="title-list-table">
+                <span>Thông tin đơn vị</span>
+                <a class="btn-them-moi" (click)="create()">
+                    <mat-icon>add</mat-icon>
+                    Thêm mới
+                </a>
+            </div>
+            <app-datatable *ngIf="config" [config]="config" (selectedPageAt)="selectedPageAtValue($event)"
+                (selectedPageSize)="selectPageSizeValue($event)" (selectElement)="selectElementValue($event)"
+                style="margin-top: 8px;">
             </app-datatable>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="function-table d-flex">
             <button type="button" class="btn-function" (click)="create()">
                 Thêm
@@ -143,5 +154,5 @@
                 Xóa
             </button>
         </div>
-    </div>
+    </div> -->
 </div>

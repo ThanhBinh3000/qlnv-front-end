@@ -40,6 +40,7 @@ export interface DataTableConfigACtion<T> {
     displayIcon?: boolean;
     iconValue?: string;
     iconFunction?: (element: T) => string;
+    templateFunction?: (element: T) => string;
 }
 
 export interface DataTableConfigMeta {

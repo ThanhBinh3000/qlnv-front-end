@@ -469,8 +469,8 @@ form .ng-valid {
 
 .mat-form-field-appearance-fill .mat-form-field-flex {
     height: 24px;
-    border: 1px solid #dcdfea;
-    border-radius: 0px !important;
+    border: 1px solid #ced4da;
+    border-radius: 4px !important;
     background: #fff;
     padding: 0 !important;
 }
@@ -498,5 +498,14 @@ form .ng-valid {
 }
 
 .layout-user-list .mat-form-field {
-	height: 100% !important;
+    height: 100% !important;
+}
+
+.form-text-area {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    
+}
+.button-group {
+    padding: 15px;
 }

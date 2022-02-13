@@ -1,3 +1,4 @@
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
@@ -11,7 +12,8 @@ import {
     DanhMucDonViTinhModule,
     QuanLyNguoiDungModule,
     DanhMucHangDtqgModule,
-    TrangChuModule
+    TrangChuModule,
+    DanhMucCongCuDungCuModule
 } from './modules';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -35,11 +37,13 @@ import { ToastrModule } from 'ngx-toastr';
         DanhMucDonViTinhModule.forRoot(environment.api),
         TrangChuModule.forRoot(environment.api),
         DanhMucHangDtqgModule.forRoot(environment.api),
+        DanhMucCongCuDungCuModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
         MDBBootstrapModule.forRoot(),
         ToastrModule.forRoot(),
-        ChartsModule
+        ChartsModule,
+        NzButtonModule
     ],
     bootstrap: [AppComponent],
 })

@@ -5,9 +5,9 @@ $toolbar-height: 64px;
 }
 
 ::ng-deep {
-    ng-select.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-untouched.ng-pristine.ng-valid.ng-select-opened.ng-select-bottom {
-        height: 24px;
-    }
+    // ng-select.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-untouched.ng-pristine.ng-valid.ng-select-opened.ng-select-bottom {
+    //     height: 24px;
+    // }
     .ng-select-container {
         height: 24px !important;
         min-height: 24px !important;
@@ -22,8 +22,16 @@ $toolbar-height: 64px;
             font-size: 14px; 
         }
     }
+    .ng-select .ng-select-container {
+        border-radius: 4px !important;
+        border: 1px solid #ced4da;
+    }
+    .mat-input-element {
+        padding-left: 8px !important;
+    }
 }
 .btn.btn-primary {
     background-color: #F9380A !important;
     border-color: #F9380A !important;
 }
+

@@ -7,164 +7,104 @@
             <mat-card-content class="content-container">
                 <ng-container *ngIf="smallScreen === 'no'" [formGroup]="form">
                     <div class="container-form-field">
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Cấp đơn vị
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Cấp đơn vị
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <ng-select [(ngModel)]="data.capDvi" appendTo="body" formControlName="capDvi"
+                                        [readonly]="data.isView">
+                                        <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
                             </div>
-                            <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.capDvi" appendTo="body" formControlName="capDvi" [readonly]="data.isView">
-                                    <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
-                                </ng-select>
-                            </div>
-                        </div>
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Địa chỉ
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Địa chỉ" 
-                                    formControlName="diaChi" 
-                                    autocomplete="off" 
-                                    [(ngModel)]="data.diaChi"
-                                    [readonly]="data.isView" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Ghi chú
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" 
-                                    placeholder="Ghi chú" 
-                                    formControlName="ghiChu" 
-                                    autocomplete="off" 
-                                    [(ngModel)]="data.ghiChu"
-                                    [readonly]="data.isView"/>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
-                            <div class="col-md-4 label-form-field">
-                                Kiểu đơn vị
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="kieuDvi" autocomplete="off"
-                                        [(ngModel)]="data.kieuDvi" />
-                                </mat-form-field>
-                            </div>
-                        </div> -->
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Loại đơn vị
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.loaiDvi" appendTo="body" formControlName="loaiDvi" [readonly]="data.isView">
-                                    <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
-                                </ng-select>
-                            </div>
-                        </div>
-                        
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Mã đơn vị
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" 
-                                    placeholder="Mã đơn vị" 
-                                    formControlName="maDvi" 
-                                    autocomplete="off" 
-                                    [(ngModel)]="data.maDvi"
-                                    [readonly]="data.isView" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Mã đơn vị cha
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.maDviCha" appendTo="body" formControlName="maDviCha" [readonly]="data.isView">
-                                    <ng-option *ngFor="let item of listDonViCha" [value]="item.value">{{item.text}}</ng-option>
-                                </ng-select>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
-                            <div class="col-md-4 label-form-field">
-                                Mã hành chính
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="maHchinh" autocomplete="off"
-                                        [(ngModel)]="data.maHchinh" />
-                                </mat-form-field>
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Địa chỉ
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput type="text" placeholder="Địa chỉ" formControlName="diaChi"
+                                            autocomplete="off" [(ngModel)]="data.diaChi" [readonly]="data.isView" />
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 label-form-field">
-                                Mã phường
+                            <div class="col-md-6 col-sm-6  form-field">
+                                <div class="label-form-field">
+                                    Loại đơn vị
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <ng-select [(ngModel)]="data.loaiDvi" appendTo="body" formControlName="loaiDvi"
+                                        [readonly]="data.isView">
+                                        <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
                             </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="maPhuong" autocomplete="off"
-                                        [(ngModel)]="data.maPhuong" />
-                                </mat-form-field>
+
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Mã đơn vị
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput type="text" placeholder="Mã đơn vị" formControlName="maDvi"
+                                            autocomplete="off" [(ngModel)]="data.maDvi" [readonly]="data.isView" />
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 label-form-field">
-                                Mã quận
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Mã đơn vị cha
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <ng-select [(ngModel)]="data.maDviCha" appendTo="body" formControlName="maDviCha"
+                                        [readonly]="data.isView">
+                                        <ng-option *ngFor="let item of listDonViCha" [value]="item.value">{{item.text}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
                             </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="maQuan" autocomplete="off"
-                                        [(ngModel)]="data.maQuan" />
-                                </mat-form-field>
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Tên đơn vị
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput type="text" placeholder="Tên đơn vị" formControlName="tenDvi"
+                                            autocomplete="off" [(ngModel)]="data.tenDvi" [readonly]="data.isView" />
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 label-form-field">
-                                Mã tỉnh
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Trạng thái
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai"
+                                        [readonly]="data.isView">
+                                        <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
                             </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã cha"
-                                        formControlName="maTinh" autocomplete="off"
-                                        [(ngModel)]="data.maTinh" />
-                                </mat-form-field>
-                            </div>
-                        </div> -->
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Tên đơn vị
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <mat-form-field appearance="fill">
-                                    <input matInput type="text" 
-                                    placeholder="Tên đơn vị" 
-                                    formControlName="tenDvi" 
-                                    autocomplete="off" 
-                                    [(ngModel)]="data.tenDvi"
-                                    [readonly]="data.isView" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row form-field">
-                            <div class="col-md-4 label-form-field">
-                                Trạng thái
-                            </div>
-                            <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai" [readonly]="data.isView">
-                                    <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
-                                </ng-select>
+                            <div class="col-md-6 col-sm-6 form-field">
+                                <div class="label-form-field">
+                                    Ghi chú
+                                </div>
+                                <div class="input-form-field mt-1">
+                                    <textarea matInput type="text" placeholder="Ghi chú" formControlName="ghiChu"
+                                        autocomplete="off" [(ngModel)]="data.ghiChu" class="form-text-area"
+                                        [readonly]="data.isView"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,9 +118,8 @@
                 [class]="form.valid ? 'btn-add-active' : ''" [disabled]="form.invalid">
                 Lưu
             </button>
-            <button  type="button" class="btn cancel" [mat-dialog-close]="false"
-                [attr.aria-label]="'cancel navigation'" *ngIf="!data.hideCancelButton"
-                (click)="closePopup()">
+            <button type="button" class="btn cancel" [mat-dialog-close]="false" [attr.aria-label]="'cancel navigation'"
+                *ngIf="!data.hideCancelButton" (click)="closePopup()">
                 Đóng
             </button>
         </div>

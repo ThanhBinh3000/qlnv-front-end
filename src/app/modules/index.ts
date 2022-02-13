@@ -6,3 +6,4 @@ export * from './danh-muc-don-vi';
 export * from './danh-muc-don-vi-tinh';
 export * from './trang-chu';
 export * from './danh-muc-hang-dtqg';
+export * from './danh-muc-cong-cu-dung-cu';
