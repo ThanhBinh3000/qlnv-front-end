@@ -405,11 +405,11 @@ router-outlet {
 
 .menu-item,
 .menu-item .sub-menu {
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 }
 
 .menu-item .sub-menu:first-child {
-    margin-top: 20px;
+    margin-top: 7px;
 }
 
 .menu-item img {
@@ -437,7 +437,7 @@ router-outlet {
 }
 
 .menu-item a {
-    padding: 18px 15px 18px 19px;
+    padding: 15px;
     border-radius: 12px;
 }
 
@@ -456,7 +456,7 @@ router-outlet {
 
 ::ng-deep {
     .menu-item .mat-expansion-panel-header {
-        padding: 18px 15px 18px 19px !important;
+        padding: 15px !important;
     }
 
     .sidebar .sidebar-wrapper {
@@ -488,10 +488,10 @@ router-outlet {
 }
 
 .menu-item a.active {
-    background-color: #0957de !important;
+    background-color: #E5F0FF !important;
     box-shadow: none;
     p {
-        color: #fff;
+        color: #2D3748;
         // border-right: 2px solid #ffffff;
     }
 }
@@ -572,6 +572,15 @@ router-outlet {
             background-color: #e5f0ff !important;
         }
         .sub-menu:hover > .mat-list-item p {
+            color: #2d3748 !important;
+        }
+        .mat-expansion-panel-header:hover .mat-expansion-indicator::after {
+            color: #2d3748 !important;
+        }
+        .menu-item:hover > .mat-list-item {
+            background: #e5f0ff !important;
+        }
+        .menu-item:hover > .mat-list-item p {
             color: #2d3748 !important;
         }
     }

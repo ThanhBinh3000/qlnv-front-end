@@ -2,7 +2,8 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"
         [class]="config?.columns.length >= 2 && config?.columns[0].text !== '' ? '' : 'hide-header-row'">
     </mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"
+    (click)="selectedRow = selectedRow === row ? null : row" [ngClass]="{ 'selected': row === selectedRow }"></mat-row>
     <ng-container *ngFor="let column of config?.columns" [matColumnDef]="column?.fieldName">
         <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortable" (click)="sortColumn()">{{
             column.text
@@ -80,7 +81,7 @@
 </mat-table>
 <div class="number-paginator">
     <div class="sub-paginator" *ngIf="numberOfPages > 1">
-        <button style="margin-right: 20px;" (click)="viewFirst()" mat-button [disabled]="pageSelected === 1 ? true : false"
+        <button (click)="viewFirst()" mat-button [disabled]="pageSelected === 1 ? true : false"
             *ngIf="numberOfPages > 1">
             <mat-icon>keyboard_double_arrow_left</mat-icon>
         </button>
@@ -103,11 +104,11 @@
             <mat-icon>keyboard_double_arrow_right</mat-icon>
         </button>
     </div>
-    <!-- <div class="select-items-page">
+    <div class="select-items-page">
         <mat-select [(ngModel)]="pageSize" (selectionChange)="selectPageSize($event.value)">
             <mat-option *ngFor="let page of lstPageSize" [value]="page">
                 {{ page }}
             </mat-option>
         </mat-select>
-    </div> -->
+    </div>
 </div>

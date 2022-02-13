@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import format from 'date-fns/format';
 import { Observable, Subject } from 'rxjs';
-import { filter, pluck, shareReplay, takeUntil } from 'rxjs/operators';
+import { filter, map, pluck, shareReplay, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { DataTableConfig } from 'src/app/modules/shared';
@@ -76,8 +76,8 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         phoneNumber: string;
     }>();
 
-    currentUserId$: Observable<string>;
-    currentUserId: string;
+    roleUser$: Observable<string>;
+    roleUser: any;
     nextClicked$ = new Subject();
     unsubscribe$ = new Subject();
     panelOpenState = true;
@@ -91,15 +91,19 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        ) { }
+    ) {}
 
     ngOnInit() {
-        this.currentUserId$ = this.authService.user$.pipe(
+        console.log(this.authService.user$);
+        
+        this.roleUser$ = this.authService.user$.pipe(
             filter(user => !!user),
-            pluck('id'),
+            map(user => (user && user.roles ? user.roles : [])),
         );
-        this.currentUserId$.subscribe((userId: string) => {
-            this.currentUserId = userId;
+
+        this.roleUser$.subscribe(value => {
+            this.roleUser = value;
+            console.log(this.roleUser);
         });
     }
 
@@ -148,7 +152,7 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
         });
     }
 
-    create(){
+    create() {
         const termDialog = this.dialog.open(ThemSuaNguoiDung, {
             width: '30vw',
             height: '80vh',
@@ -206,7 +210,9 @@ export class DanhSachNguoiDung implements OnInit, OnDestroy, OnChanges, AfterVie
                     label: 'Last Activity',
                     fieldName: 'lastLoginTime',
                     valueFunction: element => {
-                        return element.lastLoginTime ? format(new Date(element.lastLoginTime), 'dd/MM/yyyy hh:mm a') : '-';
+                        return element.lastLoginTime
+                            ? format(new Date(element.lastLoginTime), 'dd/MM/yyyy hh:mm a')
+                            : '-';
                     },
                     style: { flex: 2 },
                     sortable: false,

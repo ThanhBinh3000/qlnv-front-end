@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Location, PopStateEvent } from '@angular/common';
+import { Location } from '@angular/common';
 import 'rxjs/add/operator/filter';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-import PerfectScrollbar from 'perfect-scrollbar';
-import * as $ from 'jquery';
+import { Router } from '@angular/router';
 import { ROUTES } from '../../sidebar/sidebar.component';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
@@ -39,7 +36,7 @@ export class MasterLayoutComponent implements OnInit {
                 return this.listTitles[item].name;
             }
         }
-        return 'Dashboard';
+        return 'Trang Chủ';
     }
 
     logout(){

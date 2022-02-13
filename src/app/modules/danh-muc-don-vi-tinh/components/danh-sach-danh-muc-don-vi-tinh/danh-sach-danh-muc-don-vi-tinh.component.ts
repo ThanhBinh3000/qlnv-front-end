@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
     AfterViewInit,
@@ -16,7 +17,7 @@ import { Sort } from '@angular/material/sort';
 import format from 'date-fns/format';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable, Subject } from 'rxjs';
-import { filter, pluck, shareReplay, takeUntil } from 'rxjs/operators';
+import { filter, map, pluck, shareReplay, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
@@ -43,8 +44,8 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
     @Output()
     paginate = new EventEmitter<PaginateOptions>();
 
-    currentUserId$: Observable<string>;
-    currentUserId: string;
+    roleUser$: Observable<string>;
+    roleUser: any;
     nextClicked$ = new Subject();
     unsubscribe$ = new Subject();
     panelOpenState = true;
@@ -81,15 +82,19 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
         private dialog: MatDialog,
         private service: DanhMucDonViTinhService,
         private spinner: NgxSpinnerService,
+        private router: Router,
     ) { }
 
     ngOnInit() {
-        this.currentUserId$ = this.authService.user$.pipe(
+        this.roleUser$ = this.authService.user$.pipe(
             filter(user => !!user),
-            pluck('id'),
+            map(user => (user && user.roles ? user.roles : [])),
         );
-        this.currentUserId$.subscribe((userId: string) => {
-            this.currentUserId = userId;
+        this.roleUser$.subscribe((roles: string) => {
+            this.roleUser = roles;
+            if(this.roleUser.indexOf('DM_DVT') != -1){
+                this.router.navigate(["/trang-chu"])
+            }
         });
     }
 

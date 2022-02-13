@@ -1,25 +1,39 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { EMPTY, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { EMPTY, Observable, Subject, throwError } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
+import { ConfirmationDialog } from '../../shared/dialogs/confirmation-dialog';
 import { augmentErrorResponse } from './auth-interceptor-helper';
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private authService: AuthService, private spinner: NgxSpinnerService) {}
-
+    constructor(
+        private authService: AuthService,
+        private spinner: NgxSpinnerService, 
+        private dialog: MatDialog,
+        private toastr: ToastrService) {}
+    private unsubscribe$ = new Subject();
     private handleError(error: HttpErrorResponse, isPersisMission: boolean = false) {
-        if (error.status === 401 || error.status === 403) {
-            this.authService.logout();
-            this.spinner.hide();
-            if (!isPersisMission) {
-                return EMPTY;
-            }
+        switch (error.status) {
+            case 401:
+            case 403:
+                this.authService.logout();
+                this.spinner.hide();
+                if (!isPersisMission) {
+                    this.spinner.hide();
+                    this.toastr.success('Lỗi thực thi', error.message || 'Có lỗi trong quá trình thực thi.');
+                }
+                break;
+            default:
+                this.toastr.success('Lỗi thực thi', error.message || 'Có lỗi trong quá trình thực thi.');
+                break;
         }
-        const errorResponse = augmentErrorResponse(error);
-        return throwError(errorResponse);
+
+        return throwError(error);
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

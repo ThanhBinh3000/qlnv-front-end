@@ -21,16 +21,16 @@ import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
-import { DanhMucDonViService } from '../../services/danh-muc-don-vi.service';
-import { ThemSuaDanhMucDonVi } from '../them-sua-danh-muc-don-vi/them-sua-danh-muc-don-vi.component'
+import { DanhMucHangDtqgService } from '../../services/danh-muc-hang-dtqg.service';
+import { ThemSuaDanhMucHangDtqg } from '../them-sua-danh-muc-hang-dtqg/them-sua-danh-muc-hang-dtqg.component';
 
 @Component({
-    selector: 'danh-sach-danh-muc-don-vi',
-    templateUrl: './danh-sach-danh-muc-don-vi.component.html',
-    styleUrls: ['./danh-sach-danh-muc-don-vi.component.scss'],
+    selector: 'danh-sach-danh-muc-hang-dtqg',
+    templateUrl: './danh-sach-danh-muc-hang-dtqg.component.html',
+    styleUrls: ['./danh-sach-danh-muc-hang-dtqg.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     @Input()
     userCollection: any;
 
@@ -52,69 +52,20 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     listTrangThai = [
         {
-            value: "00",
-            text: "Ẩn"
-        }, {
-            value: "01",
-            text: "Hiện"
-        }, 
-    ]
-
-    listCapDonVi = [
-        {
-            value: "1",
-            text: "Tổng cục"
-        },{
-            value: "2",
-            text: "Cục"
-        },{
-            value: "3",
-            text: "Chi cục"
+            value: '00',
+            text: 'Ẩn',
         },
-    ]
-
-    listLoaiDonVi = [
         {
-            value: "TCDT",
-            text: "Tổng cục Dự trữ"
-        },{
-            value: "BCA",
-            text: "Bộ công an"
-        },{
-            value: "BQP",
-            text: "Bộ quốc phòng"
-        },{
-            value: "BNN",
-            text: "Bộ nông nghiệp"
-        },{
-            value: "BCT",
-            text: "Bộ công thương"
-        },{
-            value: "DPT",
-            text: "Đài phát thanh VN"
-        },{
-            value: "BGT",
-            text: "Bộ giao thông"
-        },{
-            value: "BYT",
-            text: "Bộ y tế"
-        },{
-            value: "DTH",
-            text: "Đài truyền hình VN"
+            value: '01',
+            text: 'Hiện',
         },
-    ]
+    ];
 
     optionSearch = {
-        capDvi : null,
-        kieuDvi : "",
-        loaiDvi : null,
-        maDvi : "",
-        maPhuong : "",
-        maQuan : "",
-        maTinh : "",
-        tenDvi : "",
-        trangThai : null,
-    }
+        ma: '',
+        ten: '',
+        trangThai: null,
+    };
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -125,9 +76,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        private service: DanhMucDonViService,
+        private service: DanhMucHangDtqgService,
         private spinner: NgxSpinnerService,
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.currentUserId$ = this.authService.user$.pipe(
@@ -153,13 +104,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     search() {
         this.spinner.show();
-        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize, }, this.optionSearch)
-        .subscribe(data => {
-                this.spinner.hide();
-                console.log(data);
-            }
-        );
-        
+        this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize }, this.optionSearch).subscribe(data => {
+            this.spinner.hide();
+        });
     }
 
     ngOnDestroy() {
@@ -172,9 +119,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
-                    title: `Xóa danh mục đơn vị`,
-                    subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị "${this.elementSeleted.tenDvi}" sẽ bị xóa đi.`,
+                    title: `Xóa danh mục hàng DTQG`,
+                    subTitle: `Bạn có chắc chắn muốn xóa danh mục hàng DTQG?`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến hàng DTQG "${this.elementSeleted.ten}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -190,21 +137,15 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                         const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
-                                capDvi : null,
-                                kieuDvi : "",
-                                loaiDvi : null,
-                                maDvi : "",
-                                maPhuong : "",
-                                maQuan : "",
-                                maTinh : "",
-                                tenDvi : "",
-                                trangThai : null,
-                            }
+                                ma: '',
+                                ten: '',
+                                trangThai: null,
+                            };
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
                                 data: {
                                     title: `Xóa dữ liệu thành công!`,
-                                    message: `Danh mục đơn vị đã được xóa thành công.`,
+                                    message: `Danh mục hàng DTQG đã được xóa thành công.`,
                                     closeButtonText: 'Đóng',
                                 },
                             });
@@ -215,83 +156,57 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     }
 
     edit(isView: boolean) {
-        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
+        console.log(this.elementSeleted);
+        
+        const termDialog = this.dialog.open(ThemSuaDanhMucHangDtqg, {
             width: '30vw',
             height: '70vh',
             data: {
-                title: isView ? 'Thông tin đơn vị' : 'Cập nhât đơn vị',
+                title: isView ? 'Thông tin hàng DTQG' : 'Cập nhật hàng DTQG',
                 isView: isView,
                 id: this.elementSeleted.id,
-                capDvi: this.elementSeleted.capDvi,
-                diaChi: this.elementSeleted.diaChi,
+                ten: this.elementSeleted.ten,
+                ma: this.elementSeleted.ma,
                 ghiChu: this.elementSeleted.ghiChu,
-                kieuDvi: this.elementSeleted.kieuDvi,
-                loaiDvi: this.elementSeleted.loaiDvi,
-                maDvi: this.elementSeleted.maDvi,
-                maDviCha: this.elementSeleted.maDviCha,
-                maHchinh: this.elementSeleted.maHchinh,
-                maPhuong: this.elementSeleted.maPhuong,
-                maQuan: this.elementSeleted.maQuan,
-                maTinh: this.elementSeleted.maTinh,
-                tenDvi: this.elementSeleted.tenDvi,
+                maCha: this.elementSeleted.maCha,
                 trangThai: this.elementSeleted.trangThai,
             },
         });
 
         termDialog.afterClosed().subscribe(res => {
-            if(res){
+            if (res) {
                 this.optionSearch = {
-                    capDvi : null,
-                    kieuDvi : "",
-                    loaiDvi : null,
-                    maDvi : "",
-                    maPhuong : "",
-                    maQuan : "",
-                    maTinh : "",
-                    tenDvi : "",
-                    trangThai : null,
-                }
+                    ma: '',
+                    ten: '',
+                    trangThai: null,
+                };
             }
         });
     }
 
     create() {
-        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
+        const termDialog = this.dialog.open(ThemSuaDanhMucHangDtqg, {
             width: '30vw',
             height: '70vh',
             data: {
-                title: 'Thêm mới đơn vị',
+                title: 'Thêm mới hàng DTQG',
                 isView: false,
                 id: 0,
-                capDvi: null,
-                diaChi: '',
+                ten: '',
+                ma: '',
                 ghiChu: '',
-                kieuDvi: '',
-                loaiDvi: null,
-                maDvi: '',
-                maDviCha: null,
-                maHchinh: '',
-                maPhuong: '',
-                maQuan: '',
-                maTinh: '',
-                tenDvi: '',
+                maCha: '',
                 trangThai: null,
             },
         });
 
         termDialog.afterClosed().subscribe(res => {
-            if(res){
+            if (res) {
                 this.optionSearch = {
-                    capDvi : null,
-                    kieuDvi : "",
-                    loaiDvi : null,
-                    maDvi : "",
-                    maPhuong : "",
-                    maQuan : "",
-                    maTinh : "",
-                    tenDvi : "",
-                    trangThai : null,
-                }
+                    ma: '',
+                    ten: '',
+                    trangThai: null,
+                };
             }
         });
     }
@@ -303,42 +218,28 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         this.config = {
             data,
             tableName: 'pra-users',
-            filterKeys: ['tenDvi', 'maDvi', 'diaChi', 'capDvi', 'maDviCha', 'trangThai'],
+            filterKeys: ['ten', 'ma', 'ghiChu', 'trangThai'],
             hideFilter: false,
             columns: [
                 {
-                    text: 'Tên đơn vị',
-                    label: 'Tên đơn vị',
-                    fieldName: 'tenDvi',
+                    text: 'Tên hàng',
+                    label: 'Tên hàng',
+                    fieldName: 'ten',
+                    style: { flex: 4 },
+                    sortable: false,
+                },
+                {
+                    text: 'Mã hàng',
+                    label: 'Mã hàng',
+                    fieldName: 'ma',
                     style: { flex: 2 },
                     sortable: false,
                 },
                 {
-                    text: 'Mã đơn vị',
-                    label: 'Mã đơn vị',
-                    fieldName: 'maDvi',
-                    style: { flex: 1 },
-                    sortable: false,
-                },
-                {
-                    text: 'Địa chỉ',
-                    label: 'Địa chỉ',
-                    fieldName: 'diaChi',
-                    style: { flex: 2 },
-                    sortable: false,
-                },
-                {
-                    text: 'Cấp',
-                    label: 'Cấp',
-                    fieldName: 'capDvi',
-                    style: { flex: 1 },
-                    sortable: false,
-                },
-                {
-                    text: 'Mã cha',
-                    label: 'Mã cha',
-                    fieldName: 'maDviCha',
-                    style: { flex: 2 },
+                    text: 'Ghi Chú',
+                    label: 'Ghi Chú',
+                    fieldName: 'ghiChu',
+                    style: { flex: 3 },
                     sortable: false,
                 },
                 {
@@ -374,15 +275,13 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
 
     selectElementValue(element: any) {
         this.elementSeleted = element;
-        console.log(this.elementSeleted);
-        
     }
 
     textStatus(status: string): string {
         switch (status) {
             case '00':
                 return 'Ẩn';
-            case '1':
+            case '01':
                 return 'Hiện';
             default:
                 return '';

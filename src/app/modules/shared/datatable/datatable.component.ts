@@ -56,7 +56,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
     numberOfPages = 1;
     pageSize: number = 10;
     lstPageSize: number[] = [10, 20, 30, 40, 50];
-
+    selectedRow: any;
     constructor() {
         this.modelChanged.pipe(debounceTime(1000)).subscribe(x => {
             this.applyFilter(x);

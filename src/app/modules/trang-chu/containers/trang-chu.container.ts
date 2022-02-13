@@ -1,25 +1,20 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Sort } from '@angular/material/sort';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
-import { debounceTime, delay, exhaustMap, switchMap, takeUntil } from 'rxjs/operators';
-import { ConfirmationDialog, ConfirmCancelDialog } from '../../shared';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { PaginateOptions } from '../../types';
-import { DanhSachDanhMucDonVi, ThemSuaDanhMucDonVi } from '../components';
-import { DanhMucDonViService } from '../services';
+import { TrangChu } from '../components';
+import { TrangChuService } from '../services';
 
 @Component({
-    selector: 'danh-muc-don-vi-dashboard',
+    selector: 'trang-chu-dasboard',
     template: `
         <div class="grid-container1 main-content">
-            <danh-sach-danh-muc-don-vi
+            <trang-chu
                 class="list-users-form"
-                [pageSize]="pageSize"
-                [userCollection]="userCollection$ | async"
-                (paginate)="paginateUsers$.next($event)"
             >
-            </danh-sach-danh-muc-don-vi>
+            </trang-chu>
         </div>
     `,
     styles: [
@@ -77,18 +72,18 @@ import { DanhMucDonViService } from '../services';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DanhMucDonViContainer implements OnInit, OnDestroy {
+export class TrangChuContainer implements OnInit, OnDestroy {
     pageSize = 10;
 
-    @ViewChild(DanhSachDanhMucDonVi, { static: true })
-    listUserForm: DanhSachDanhMucDonVi;
+    @ViewChild(TrangChu, { static: true })
+    listUserForm: TrangChu;
 
     private unsubscribe$ = new Subject();
     paginateUsers$ = new BehaviorSubject<PaginateOptions>({ pageIndex: 0, pageSize: this.pageSize });
     userCollection$ = this.service.listDonVi$;
     errors$ = this.service.errors$;
 
-    constructor(private service: DanhMucDonViService, private dialog: MatDialog, private spinner: NgxSpinnerService) {}
+    constructor(private service: TrangChuService, private dialog: MatDialog, private spinner: NgxSpinnerService,) { }
 
     ngOnInit() {
         combineLatest([this.paginateUsers$])
@@ -103,7 +98,7 @@ export class DanhMucDonViContainer implements OnInit, OnDestroy {
             .subscribe();
         this.userCollection$.subscribe(() => {
             this.spinner.hide();
-        });
+        })
     }
 
     ngOnDestroy() {

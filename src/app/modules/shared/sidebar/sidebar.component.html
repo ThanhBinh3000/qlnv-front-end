@@ -24,6 +24,7 @@
                 </span>
             </form>
         </div>
+        
         <div *ngFor="let menuItem of menuItems | menuFilter: { id: 0, code: '', name: '' }">
             <mat-expansion-panel (opened)="menuItem.panelOpenState = true" (closed)="menuItem.panelOpenState = false"
                 [expanded]="menuItem.panelOpenState" class="menu-item expand-item" *ngIf="menuItem.hasChild">

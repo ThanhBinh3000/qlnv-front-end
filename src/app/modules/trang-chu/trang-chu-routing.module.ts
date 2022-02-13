@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth';
-import { QuanLyDanhMucHangDTQGContainer } from './containers';
-import { QuanLyDanhMucHangDTQGLazyModule } from './quan-ly-danh-muc-hang-dtqg-lazy.module';
+import { TrangChuContainer } from './containers';
+import { TrangChuLazyModule } from './trang-chu-lazy.module';
 
 const routes: Routes = [
     {
@@ -14,14 +14,14 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                component: QuanLyDanhMucHangDTQGContainer,
+                component: TrangChuContainer,
             },
         ],
     },
 ];
 
 @NgModule({
-    imports: [QuanLyDanhMucHangDTQGLazyModule, RouterModule.forChild(routes)],
+    imports: [TrangChuLazyModule, RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class QuanLyDanhMucHangDTQGRoutingModule {}
+export class TrangChuRoutingModule {}

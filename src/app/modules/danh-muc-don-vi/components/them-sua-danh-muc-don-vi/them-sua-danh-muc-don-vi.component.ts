@@ -133,9 +133,9 @@ export class ThemSuaDanhMucDonVi implements OnInit {
                         text: x.data[i].tenDvi
                     }
                     this.listDonViCha.push(itemDvi);
-                    console.log(this.listDonViCha)
                 }
             }
+            console.log(this.listDonViCha)
         });
         this.matDialogRef.backdropClick().subscribe(async () => await this.closeDialog());
         if(this.data.id == null || this.data.id > 0) {

@@ -12,7 +12,7 @@
                                 Cấp đơn vị
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.capDvi" appendTo="body" formControlName="capDvi">
+                                <ng-select [(ngModel)]="data.capDvi" appendTo="body" formControlName="capDvi" [readonly]="data.isView">
                                     <ng-option *ngFor="let item of listCapDonVi" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>
@@ -23,7 +23,11 @@
                             </div>
                             <div class="col-md-8 input-form-field">
                                 <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Địa chỉ" formControlName="diaChi" autocomplete="off" [(ngModel)]="data.diaChi" />
+                                    <input matInput type="text" placeholder="Địa chỉ" 
+                                    formControlName="diaChi" 
+                                    autocomplete="off" 
+                                    [(ngModel)]="data.diaChi"
+                                    [readonly]="data.isView" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -33,7 +37,12 @@
                             </div>
                             <div class="col-md-8 input-form-field">
                                 <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Ghi chú" formControlName="ghiChu" autocomplete="off" [(ngModel)]="data.ghiChu" />
+                                    <input matInput type="text" 
+                                    placeholder="Ghi chú" 
+                                    formControlName="ghiChu" 
+                                    autocomplete="off" 
+                                    [(ngModel)]="data.ghiChu"
+                                    [readonly]="data.isView"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -54,7 +63,7 @@
                                 Loại đơn vị
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.loaiDvi" appendTo="body" formControlName="loaiDvi">
+                                <ng-select [(ngModel)]="data.loaiDvi" appendTo="body" formControlName="loaiDvi" [readonly]="data.isView">
                                     <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>
@@ -66,7 +75,12 @@
                             </div>
                             <div class="col-md-8 input-form-field">
                                 <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Mã đơn vị" formControlName="maDvi" autocomplete="off" [(ngModel)]="data.maDvi" />
+                                    <input matInput type="text" 
+                                    placeholder="Mã đơn vị" 
+                                    formControlName="maDvi" 
+                                    autocomplete="off" 
+                                    [(ngModel)]="data.maDvi"
+                                    [readonly]="data.isView" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -75,7 +89,7 @@
                                 Mã đơn vị cha
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.maDviCha" appendTo="body" formControlName="maDviCha">
+                                <ng-select [(ngModel)]="data.maDviCha" appendTo="body" formControlName="maDviCha" [readonly]="data.isView">
                                     <ng-option *ngFor="let item of listDonViCha" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>
@@ -134,7 +148,12 @@
                             </div>
                             <div class="col-md-8 input-form-field">
                                 <mat-form-field appearance="fill">
-                                    <input matInput type="text" placeholder="Tên đơn vị" formControlName="tenDvi" autocomplete="off" [(ngModel)]="data.tenDvi" />
+                                    <input matInput type="text" 
+                                    placeholder="Tên đơn vị" 
+                                    formControlName="tenDvi" 
+                                    autocomplete="off" 
+                                    [(ngModel)]="data.tenDvi"
+                                    [readonly]="data.isView" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -143,7 +162,7 @@
                                 Trạng thái
                             </div>
                             <div class="col-md-8 input-form-field">
-                                <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai">
+                                <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai" [readonly]="data.isView">
                                     <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
                                 </ng-select>
                             </div>

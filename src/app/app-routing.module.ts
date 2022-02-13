@@ -8,7 +8,9 @@ const routes: Routes = [
     {
         path: '',
         component: MasterLayoutComponent,
-        loadChildren: () => import('./modules/landing-page/landing-page.module').then(m => m.LandingPageModule),
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+        import('./modules/trang-chu/trang-chu-routing.module').then(m => m.TrangChuRoutingModule),
     },
     {
         path: 'login',
@@ -31,18 +33,25 @@ const routes: Routes = [
             import('./modules/danh-muc-don-vi/danh-muc-don-vi-routing.module').then(m => m.DanhMucDonViRoutingModule),
     },
     {
-        path: 'danh-muc-hang-dtqg',
-        component: MasterLayoutComponent,
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-            import('./modules/quan-ly-danh-muc-hang-dtqg/quan-ly-danh-muc-hang-dtqg-routing.module').then(m => m.QuanLyDanhMucHangDTQGRoutingModule),
-    },
-    {
         path: 'dmuc-dvi-tinh',
         component: MasterLayoutComponent,
         canActivate: [AuthGuard],
         loadChildren: () =>
             import('./modules/danh-muc-don-vi-tinh/danh-muc-don-vi-tinh-routing.module').then(m => m.DanhMucDonViTinhRoutingModule),
+    },
+    {
+        path: 'trang-chu',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/trang-chu/trang-chu-routing.module').then(m => m.TrangChuRoutingModule),
+    },
+    {
+        path: 'dmuc-hang', 
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-hang-dtqg/danh-muc-hang-dtqg-routing.module').then(m => m.DanhMucHangDtqgRoutingModule),
     },
 ];
 
