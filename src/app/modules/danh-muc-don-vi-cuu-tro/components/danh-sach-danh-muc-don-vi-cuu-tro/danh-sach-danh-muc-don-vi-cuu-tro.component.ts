@@ -21,16 +21,16 @@ import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
-import { DanhMucCongCuDungCuService } from '../../services/danh-muc-cong-cu-dung-cu.service';
-import { ThemSuaDanhMucCongCuDungCu } from '../them-sua-danh-muc-cong-cu-dung-cu/them-sua-danh-muc-cong-cu-dung-cu.component';
+import { ThemSuaDanhMucDonViCuutro } from '..';
+import { DanhMucDonViCuuTroService } from '../../services/danh-muc-don-vi-cuu-tro.service';
 
 @Component({
-    selector: 'danh-sach-danh-muc-cong-cu-dung-cu',
-    templateUrl: './danh-sach-danh-muc-cong-cu-dung-cu.component.html',
-    styleUrls: ['./danh-sach-danh-muc-cong-cu-dung-cu.component.scss'],
+    selector: 'danh-sach-danh-muc-don-vi-cuu-tro',
+    templateUrl: './danh-sach-danh-muc-don-vi-cuu-tro.component.html',
+    styleUrls: ['./danh-sach-danh-muc-don-vi-cuu-tro.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class DanhSachDanhMucDonViCuuTro implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     @Input()
     userCollection: any;
 
@@ -62,8 +62,8 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
     ];
 
     optionSearch = {
-        maCcu: null,
-        tenCcu: '',
+        maDviCuutro: '',
+        tenDviCuutro: '',
         trangThai: null,
     };
 
@@ -76,7 +76,7 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        private service: DanhMucCongCuDungCuService,
+        private service: DanhMucDonViCuuTroService,
         private spinner: NgxSpinnerService,
     ) {}
 
@@ -115,14 +115,14 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
         this.unsubscribe$.complete();
     }
 
-    delete(event: any,element: any) {
+    delete(event: any, element: any) {
         if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
-                    title: `Xóa danh mục công cụ bảo quản`,
-                    subTitle: `Bạn có chắc chắn muốn xóa danh mục công cụ bảo quản?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến công cụ bảo quản "${element.tenCcu}" sẽ bị xóa đi.`,
+                    title: `Xóa danh mục đơn vị cứu trợ`,
+                    subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị cứu trợ?`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị cứ trợ "${element.tenDviCuutro}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -138,15 +138,15 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
                         const deleteResult = await this.service.delete(element.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
-                                maCcu: null,
-                                tenCcu: '',
+                                maDviCuutro: '',
+                                tenDviCuutro: '',
                                 trangThai: null,
                             };
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
                                 data: {
                                     title: `Xóa dữ liệu thành công!`,
-                                    message: `Danh mục công cụ bảo quản đã được xóa thành công.`,
+                                    message: `Danh mục đơn vị cứu trợ đã được xóa thành công.`,
                                     closeButtonText: 'Đóng',
                                 },
                             });
@@ -156,31 +156,6 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
         }
     }
 
-    commonFunc(element: any, isView: boolean) {
-        const termDialog = this.dialog.open(ThemSuaDanhMucCongCuDungCu, {
-            width: '450px',
-            data: {
-                title: isView ? 'Thông tin công cụ bảo quản' : 'Cập nhật công cụ bảo quản',
-                isView: isView,
-                id: element.id,
-                maCcu: element.maCcu,
-                maDviTinh: element.maDviTinh,
-                tenCcu: element.tenCcu,
-                ghiChu: element.ghiChu,
-                trangThai: element.trangThai,
-            },
-        });
-
-        termDialog.afterClosed().subscribe(res => {
-            if (res) {
-                this.optionSearch = {
-                    maCcu: null,
-                    tenCcu: '',
-                    trangThai: null,
-                };
-            }
-        });
-    }
     edit(event: any, element: any) {
         this.commonFunc(element, false);
     }
@@ -188,17 +163,39 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
     view(event: any, element: any) {
         this.commonFunc(element, true);
     }
-    create() {
-        const termDialog = this.dialog.open(ThemSuaDanhMucCongCuDungCu, {
+
+    commonFunc(element: any, isView: boolean) {
+        const termDialog = this.dialog.open(ThemSuaDanhMucDonViCuutro, {
             width: '450px',
             data: {
-                title: 'Thêm mới công cụ bảo quản',
+                title: isView ? 'Thông tin đơn vị cứu trợ' : 'Cập nhật đơn vị cứu trợ',
+                isView: isView,
+                id: element.id,
+                maDviCuutro: element.maDviCuutro,
+                tenDviCuutro: element.tenDviCuutro,
+                trangThai: element.trangThai,
+            },
+        });
+
+        termDialog.afterClosed().subscribe(res => {
+            if (res) {
+                this.optionSearch = {
+                    maDviCuutro: '',
+                    tenDviCuutro: '',
+                    trangThai: null,
+                };
+            }
+        });
+    }
+    create() {
+        const termDialog = this.dialog.open(ThemSuaDanhMucDonViCuutro, {
+            width: '450px',
+            data: {
+                title: 'Thêm mới đơn vị cứu trợ',
                 isView: false,
                 id: 0,
-                maCcu: null,
-                maDviTinh: '',
-                tenCcu: '',
-                ghiChu: '',
+                maDviCuutro: '',
+                tenDviCuutro: '',
                 trangThai: null,
             },
         });
@@ -206,8 +203,8 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
         termDialog.afterClosed().subscribe(res => {
             if (res) {
                 this.optionSearch = {
-                    maCcu: null,
-                    tenCcu: '',
+                    maDviCuutro: '',
+                    tenDviCuutro: '',
                     trangThai: null,
                 };
             }
@@ -221,27 +218,21 @@ export class DanhSachDanhMucCongCuDungCu implements OnInit, OnDestroy, OnChanges
         this.config = {
             data,
             tableName: 'pra-users',
-            filterKeys: ['id','tenCcu', 'ghiChu', 'trangThai'],
+            filterKeys: ['maDviCuutro', 'tenDviCuutro', 'trangThai'],
             hideFilter: false,
             columns: [
+                
                 {
-                    text: 'Mã công cụ',
-                    label: 'Mã công cụ',
-                    fieldName: 'id',
+                    text: 'Mã đơn vị cứu trợ',
+                    label: 'Mã đơn vị cứu trợ',
+                    fieldName: 'maDviCuutro',
                     style: { flex: 1 },
                     sortable: false,
                 },
                 {
-                    text: 'Tên công cụ',
-                    label: 'Tên công cụ',
-                    fieldName: 'tenCcu',
-                    style: { flex: 2 },
-                    sortable: false,
-                },
-                {
-                    text: 'Ghi chú',
-                    label: 'Ghi chú',
-                    fieldName: 'ghiChu',
+                    text: 'Tên đơn vị cứu trợ',
+                    label: 'Tên đơn vị cứu trợ',
+                    fieldName: 'tenDviCuutro',
                     style: { flex: 2 },
                     sortable: false,
                 },

@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="title-table">
-            <!-- <mat-icon>arrow_circle_left</mat-icon> -->
+            <mat-icon>arrow_circle_left</mat-icon>
             <span class="maintitle">
-                Danh sách danh mục công cụ bảo quản
+                Danh sách danh mục đơn vị cứu trợ hàng DTQG
             </span>
         </div>
     </div>
@@ -19,21 +19,21 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="label-field">
-                            Mã công cụ
+                            Mã đơn vị cứu trợ
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Mã đơn vị" [(ngModel)]="optionSearch.maCcu">
+                                <input matInput placeholder="Mã đơn vị cứu trợ" [(ngModel)]="optionSearch.maDviCuutro">
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="label-field">
-                            Tên công cụ
+                            Tên đơn vị cứu trợ
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Mã đơn vị" [(ngModel)]="optionSearch.tenCcu">
+                                <input matInput placeholder="Tên đơn vị cứu trợ" [(ngModel)]="optionSearch.tenDviCuutro">
                             </mat-form-field>
                         </div>
                     </div>
@@ -43,7 +43,8 @@
                         </div>
                         <div class="input-field">
                             <ng-select [(ngModel)]="optionSearch.trangThai" appendTo="body">
-                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
+                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}
+                                </ng-option>
                             </ng-select>
                         </div>
                     </div>
@@ -58,12 +59,19 @@
     </div>
     <div class="row">
         <div class="list-data">
+            <div class="title-list-table">
+                <span>Thông tin đơn vị cứu trợ hàng DTQG</span>
+                <a class="btn-them-moi" (click)="create()">
+                    <mat-icon>add</mat-icon>
+                    Thêm mới
+                </a>
+            </div>
             <app-datatable 
                 *ngIf="config" 
                 [config]="config" 
                 (selectedPageAt)="selectedPageAtValue($event)"
                 (selectedPageSize)="selectPageSizeValue($event)" 
-            >
+                style="margin-top: 8px;">
             </app-datatable>
         </div>
     </div>

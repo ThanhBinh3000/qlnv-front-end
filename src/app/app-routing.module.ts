@@ -60,6 +60,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-cong-cu-dung-cu/danh-muc-cong-cu-dung-cu-routing.module').then(m => m.DanhMucCongCuDungCuRoutingModule),
     },
+    {
+        path: 'dmuc-donvi-cuu-tro',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-don-vi-cuu-tro/danh-muc-don-vi-cuu-tro-routing.module').then(m => m.DanhMucDonViCuuTroRoutingModule),
+    },
 ];
 
 @NgModule({

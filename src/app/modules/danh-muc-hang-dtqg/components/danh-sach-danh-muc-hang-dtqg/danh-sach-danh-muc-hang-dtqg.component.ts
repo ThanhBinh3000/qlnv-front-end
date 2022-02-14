@@ -114,14 +114,14 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
         this.unsubscribe$.complete();
     }
 
-    delete() {
-        if (this.elementSeleted && this.elementSeleted.id > 0) {
+    delete(event: any,element: any) {
+        if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
                     title: `Xóa danh mục hàng DTQG`,
                     subTitle: `Bạn có chắc chắn muốn xóa danh mục hàng DTQG?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến hàng DTQG "${this.elementSeleted.ten}" sẽ bị xóa đi.`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến hàng DTQG "${element.ten}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -134,7 +134,7 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
                 .subscribe(async result => {
                     if (result) {
                         this.spinner.show();
-                        const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
+                        const deleteResult = await this.service.delete(element.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
                                 ma: '',
@@ -155,21 +155,18 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
         }
     }
 
-    edit(isView: boolean) {
-        console.log(this.elementSeleted);
-        
+    commonFunc(element: any, isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucHangDtqg, {
-            width: '30vw',
-            height: '70vh',
+            width: '450px',
             data: {
                 title: isView ? 'Thông tin hàng DTQG' : 'Cập nhật hàng DTQG',
                 isView: isView,
-                id: this.elementSeleted.id,
-                ten: this.elementSeleted.ten,
-                ma: this.elementSeleted.ma,
-                ghiChu: this.elementSeleted.ghiChu,
-                maCha: this.elementSeleted.maCha,
-                trangThai: this.elementSeleted.trangThai,
+                id: element.id,
+                ten: element.ten,
+                ma: element.ma,
+                ghiChu: element.ghiChu,
+                maCha: element.maCha,
+                trangThai: element.trangThai,
             },
         });
 
@@ -184,10 +181,18 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
         });
     }
 
+    edit(event: any, element: any) {
+        this.commonFunc(element, false);
+    }
+
+    view(event: any, element: any) {
+        this.commonFunc(element, true);
+    }
+
+
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucHangDtqg, {
-            width: '30vw',
-            height: '70vh',
+            width: '450px',
             data: {
                 title: 'Thêm mới hàng DTQG',
                 isView: false,
@@ -251,8 +256,43 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
                     sortable: false,
                 },
             ],
-            mergeActionColumns: false,
-            actions: [],
+            mergeActionColumns: true,
+            actions: [
+                {
+                    text: 'Xem',
+                    label: 'xem',
+                    fieldName: 'xem',
+                    actionFunction: this.view.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xem-chi-tiet">
+                                    <i class="fas fa-eye"></i>
+                                </a>`;
+                    },
+                },
+                {
+                    text: 'Sửa',
+                    label: 'Sửa',
+                    fieldName: 'sua',
+                    actionFunction: this.edit.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm chinhsua">
+                                    <i class="fas fa-edit"></i>
+                                </a>`;
+                    },
+                },
+
+                {
+                    text: 'Xóa',
+                    label: 'xoa',
+                    fieldName: 'xoa',
+                    actionFunction: this.delete.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xoa">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>`;
+                    },
+                },
+            ],
             meta: {
                 pageSize: this.pageSize,
                 rowsNumber: count,

@@ -175,7 +175,9 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         this.unsubscribe$.complete();
     }
 
-    delete(element) {
+    delete(event: any,element: any) {
+        // $event.preventDefault();
+        // $event.stopPropagation();
         if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
@@ -222,15 +224,21 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         }
     }
 
-    edit($event: Event, element: any) {
-        $event.preventDefault();
-        $event.stopPropagation();
+    edit(event: any, element: any) {
+        this.commonFunc(element, false);
+    }
+
+    view(event: any, element: any) {
+        this.commonFunc(element, true);
+    }
+
+    commonFunc(element: any, isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
-            width: '30vw',
+            width: '600px',
             // height: '70vh',
             data: {
-                title: 'Cập nhât đơn vị',
-                isView: false,
+                title: isView ? 'Thông tin đơn vị' : 'Cập nhật đơn vị',
+                isView: isView,
                 id: element.id,
                 capDvi: element.capDvi,
                 diaChi: element.diaChi,
@@ -264,50 +272,6 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
             }
         });
     }
-
-    view($event: Event, element: any) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
-            width: '30vw',
-            // height: '70vh',
-            data: {
-                title: 'Thông tin đơn vị',
-                isView: true,
-                id: element.id,
-                capDvi: element.capDvi,
-                diaChi: element.diaChi,
-                ghiChu: element.ghiChu,
-                kieuDvi: element.kieuDvi,
-                loaiDvi: element.loaiDvi,
-                maDvi: element.maDvi,
-                maDviCha: element.maDviCha,
-                maHchinh: element.maHchinh,
-                maPhuong: element.maPhuong,
-                maQuan: element.maQuan,
-                maTinh: element.maTinh,
-                tenDvi: element.tenDvi,
-                trangThai: element.trangThai,
-            },
-        });
-
-        termDialog.afterClosed().subscribe(res => {
-            if (res) {
-                this.optionSearch = {
-                    capDvi: null,
-                    kieuDvi: '',
-                    loaiDvi: null,
-                    maDvi: '',
-                    maPhuong: '',
-                    maQuan: '',
-                    maTinh: '',
-                    tenDvi: '',
-                    trangThai: null,
-                };
-            }
-        });
-    }
-
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '600px',
@@ -432,7 +396,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     text: 'Xóa',
                     label: 'xoa',
                     fieldName: 'xoa',
-                    actionFunction: element => this.delete.bind(element),
+                    actionFunction: this.delete.bind(this),
                     templateFunction: () => {
                         return `<a class="rounded-circle rounded-sm xoa">
                                     <i class="fas fa-trash-alt"></i>

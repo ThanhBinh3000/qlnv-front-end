@@ -126,14 +126,14 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
         this.unsubscribe$.complete();
     }
 
-    delete() {
-        if (this.elementSeleted && this.elementSeleted.id > 0) {
+    delete(event: any,element: any) {
+        if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
                     title: `Xóa danh mục đơn vị tính`,
                     subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị tính?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị tính "${this.elementSeleted.tenDviTinh}" sẽ bị xóa đi.`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị tính "${element.tenDviTinh}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -146,7 +146,7 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
                 .subscribe(async result => {
                     if (result) {
                         this.spinner.show();
-                        const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
+                        const deleteResult = await this.service.delete(element.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
                                 dviDo: null,
@@ -169,19 +169,18 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
         }
     }
 
-    edit(isView: boolean) {
+    commonFunc(element: any, isView: boolean) {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonViTinh, {
-            width: '30vw',
-            height: '55vh',
+            width: '450px',
             data: {
-                title: 'Cập nhật đơn vị tính',
+                title: isView ? 'Thông tin đơn vị tính' : 'Cập nhật đơn vị tính',
                 isView: isView,
-                maDviTinh: this.elementSeleted.maDviTinh,
-                tenDviTinh: this.elementSeleted.tenDviTinh,
-                kyHieu: this.elementSeleted.kyHieu,
-                id: this.elementSeleted.id,
-                dviDo: this.elementSeleted.dviDo,
-                trangThai: this.elementSeleted.trangThai,
+                maDviTinh: element.maDviTinh,
+                tenDviTinh: element.tenDviTinh,
+                kyHieu: element.kyHieu,
+                id: element.id,
+                dviDo: element.dviDo,
+                trangThai: element.trangThai,
             },
         });
 
@@ -198,10 +197,16 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
         });
     }
 
+    edit(event: any, element: any) {
+        this.commonFunc(element, false);
+    }
+
+    view(event: any, element: any) {
+        this.commonFunc(element, true);
+    }
     create() {
         const termDialog = this.dialog.open(ThemSuaDanhMucDonViTinh, {
-            width: '30vw',
-            height: '55vh',
+            width: '450px',
             data: {
                 title: 'Thêm mới đơn vị tính',
                 isView: false,
@@ -274,8 +279,43 @@ export class DanhSachDanhMucDonViTinh implements OnInit, OnDestroy, OnChanges, A
                     sortable: false,
                 },
             ],
-            mergeActionColumns: false,
-            actions: [],
+            mergeActionColumns: true,
+            actions: [
+                {
+                    text: 'Xem',
+                    label: 'xem',
+                    fieldName: 'xem',
+                    actionFunction: this.view.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xem-chi-tiet">
+                                    <i class="fas fa-eye"></i>
+                                </a>`;
+                    },
+                },
+                {
+                    text: 'Sửa',
+                    label: 'Sửa',
+                    fieldName: 'sua',
+                    actionFunction: this.edit.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm chinhsua">
+                                    <i class="fas fa-edit"></i>
+                                </a>`;
+                    },
+                },
+
+                {
+                    text: 'Xóa',
+                    label: 'xoa',
+                    fieldName: 'xoa',
+                    actionFunction: this.delete.bind(this),
+                    templateFunction: () => {
+                        return `<a class="rounded-circle rounded-sm xoa">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>`;
+                    },
+                },
+            ],
             meta: {
                 pageSize: this.pageSize,
                 rowsNumber: count,
