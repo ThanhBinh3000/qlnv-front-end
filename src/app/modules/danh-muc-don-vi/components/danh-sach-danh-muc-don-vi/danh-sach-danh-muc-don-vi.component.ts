@@ -175,14 +175,14 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         this.unsubscribe$.complete();
     }
 
-    delete() {
-        if (this.elementSeleted && this.elementSeleted.id > 0) {
+    delete(element) {
+        if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
                     title: `Xóa danh mục đơn vị`,
                     subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị "${this.elementSeleted.tenDvi}" sẽ bị xóa đi.`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị "${element.tenDvi}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -195,7 +195,7 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                 .subscribe(async result => {
                     if (result) {
                         this.spinner.show();
-                        const deleteResult = await this.service.delete(this.elementSeleted.id, this.pageSize);
+                        const deleteResult = await this.service.delete(element.id, this.pageSize);
                         if (deleteResult) {
                             this.optionSearch = {
                                 capDvi: null,
@@ -222,27 +222,72 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
         }
     }
 
-    edit(isView: boolean) {
+    edit($event: Event, element: any) {
+        $event.preventDefault();
+        $event.stopPropagation();
         const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
             width: '30vw',
             // height: '70vh',
             data: {
-                title: isView ? 'Thông tin đơn vị' : 'Cập nhât đơn vị',
-                isView: isView,
-                id: this.elementSeleted.id,
-                capDvi: this.elementSeleted.capDvi,
-                diaChi: this.elementSeleted.diaChi,
-                ghiChu: this.elementSeleted.ghiChu,
-                kieuDvi: this.elementSeleted.kieuDvi,
-                loaiDvi: this.elementSeleted.loaiDvi,
-                maDvi: this.elementSeleted.maDvi,
-                maDviCha: this.elementSeleted.maDviCha,
-                maHchinh: this.elementSeleted.maHchinh,
-                maPhuong: this.elementSeleted.maPhuong,
-                maQuan: this.elementSeleted.maQuan,
-                maTinh: this.elementSeleted.maTinh,
-                tenDvi: this.elementSeleted.tenDvi,
-                trangThai: this.elementSeleted.trangThai,
+                title: 'Cập nhât đơn vị',
+                isView: false,
+                id: element.id,
+                capDvi: element.capDvi,
+                diaChi: element.diaChi,
+                ghiChu: element.ghiChu,
+                kieuDvi: element.kieuDvi,
+                loaiDvi: element.loaiDvi,
+                maDvi: element.maDvi,
+                maDviCha: element.maDviCha,
+                maHchinh: element.maHchinh,
+                maPhuong: element.maPhuong,
+                maQuan: element.maQuan,
+                maTinh: element.maTinh,
+                tenDvi: element.tenDvi,
+                trangThai: element.trangThai,
+            },
+        });
+
+        termDialog.afterClosed().subscribe(res => {
+            if (res) {
+                this.optionSearch = {
+                    capDvi: null,
+                    kieuDvi: '',
+                    loaiDvi: null,
+                    maDvi: '',
+                    maPhuong: '',
+                    maQuan: '',
+                    maTinh: '',
+                    tenDvi: '',
+                    trangThai: null,
+                };
+            }
+        });
+    }
+
+    view($event: Event, element: any) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        const termDialog = this.dialog.open(ThemSuaDanhMucDonVi, {
+            width: '30vw',
+            // height: '70vh',
+            data: {
+                title: 'Thông tin đơn vị',
+                isView: true,
+                id: element.id,
+                capDvi: element.capDvi,
+                diaChi: element.diaChi,
+                ghiChu: element.ghiChu,
+                kieuDvi: element.kieuDvi,
+                loaiDvi: element.loaiDvi,
+                maDvi: element.maDvi,
+                maDviCha: element.maDviCha,
+                maHchinh: element.maHchinh,
+                maPhuong: element.maPhuong,
+                maQuan: element.maQuan,
+                maTinh: element.maTinh,
+                tenDvi: element.tenDvi,
+                trangThai: element.trangThai,
             },
         });
 
@@ -364,34 +409,22 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     text: 'Xem',
                     label: 'xem',
                     fieldName: 'xem',
-                    // style: { flex: 1 },
-                    actionFunction: this.edit.bind(this),
-                    condition: element => {
-                        return this.currentUserId !== element.id;
-                    },
-                    displayIcon: true,
-                    iconValue: '../../../../assets/img/edit.png',
+                    actionFunction: this.view.bind(this),
                     templateFunction: () => {
                         return `<a class="rounded-circle rounded-sm xem-chi-tiet">
-                        <i class="fas fa-eye"></i>
-                    </a>`;
+                                    <i class="fas fa-eye"></i>
+                                </a>`;
                     },
                 },
                 {
                     text: 'Sửa',
                     label: 'Sửa',
                     fieldName: 'sua',
-                    // style: { flex: 1 },
                     actionFunction: this.edit.bind(this),
-                    condition: element => {
-                        return this.currentUserId !== element.id;
-                    },
-                    displayIcon: true,
-                    iconValue: '../../../../assets/img/edit.png',
                     templateFunction: () => {
                         return `<a class="rounded-circle rounded-sm chinhsua">
-                            <i class="fas fa-edit"></i>
-                        </a>`;
+                                    <i class="fas fa-edit"></i>
+                                </a>`;
                     },
                 },
 
@@ -399,17 +432,11 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
                     text: 'Xóa',
                     label: 'xoa',
                     fieldName: 'xoa',
-                    // style: { flex: 1 },
-                    actionFunction: this.delete.bind(this),
-                    condition: element => {
-                        return this.currentUserId !== element.id;
-                    },
-                    displayIcon: true,
-                    iconValue: '../../../../assets/img/delete.png',
+                    actionFunction: element => this.delete.bind(element),
                     templateFunction: () => {
                         return `<a class="rounded-circle rounded-sm xoa">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>`;
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>`;
                     },
                 },
             ],
@@ -431,11 +458,6 @@ export class DanhSachDanhMucDonVi implements OnInit, OnDestroy, OnChanges, After
     selectPageSizeValue(index: number) {
         this.pageSize = index;
         this.paginate.emit({ pageIndex: 0, pageSize: index });
-    }
-
-    selectElementValue(element: any) {
-        this.elementSeleted = element;
-        console.log(this.elementSeleted);
     }
 
     textStatus(status: string): string {

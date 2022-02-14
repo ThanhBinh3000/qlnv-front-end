@@ -45,9 +45,6 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
 
     @Output()
     selectedPageSize = new EventEmitter<number>();
-    
-    @Output()
-    selectElement = new EventEmitter<any>();
 
     modelChanged: Subject<string> = new Subject<string>();
 
@@ -140,9 +137,6 @@ export class DatatableComponent implements OnInit, AfterViewInit, OnChanges {
         this.setStyle();
     }
 
-    selectElementRow(element: any){
-        this.selectElement.emit(element);
-    }
     setStyle() {
         setTimeout(() => {
             let columns = this.config.columns.map(item => ({ fieldName: item.fieldName, style: item.style }));

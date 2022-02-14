@@ -133,8 +133,11 @@
                     Thêm mới
                 </a>
             </div>
-            <app-datatable *ngIf="config" [config]="config" (selectedPageAt)="selectedPageAtValue($event)"
-                (selectedPageSize)="selectPageSizeValue($event)" (selectElement)="selectElementValue($event)"
+            <app-datatable 
+                *ngIf="config" 
+                [config]="config" 
+                (selectedPageAt)="selectedPageAtValue($event)"
+                (selectedPageSize)="selectPageSizeValue($event)" 
                 style="margin-top: 8px;">
             </app-datatable>
         </div>

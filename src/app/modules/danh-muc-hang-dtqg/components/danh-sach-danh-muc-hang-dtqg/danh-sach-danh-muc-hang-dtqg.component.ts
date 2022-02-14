@@ -273,10 +273,6 @@ export class DanhSachDanhMucHangDtqg implements OnInit, OnDestroy, OnChanges, Af
         this.paginate.emit({ pageIndex: 0, pageSize: index });
     }
 
-    selectElementValue(element: any) {
-        this.elementSeleted = element;
-    }
-
     textStatus(status: string): string {
         switch (status) {
             case '00':

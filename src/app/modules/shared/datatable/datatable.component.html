@@ -8,7 +8,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortable" (click)="sortColumn()">{{
             column.text
             }}</mat-header-cell>
-        <mat-cell *matCellDef="let element" class="wrap-text" (click)="selectElementRow(element)">
+        <mat-cell *matCellDef="let element" class="wrap-text">
             <span [attr.arial-label]="column.label"
                 *ngIf="!column.templateFunction && !column.actionFunction && !column.styleClassFunction && column.label !== 'FULL NAME'">
                 {{ column.valueFunction ? column.valueFunction(element) : element[column.fieldName] }}
