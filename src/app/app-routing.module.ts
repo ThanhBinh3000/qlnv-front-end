@@ -74,6 +74,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-ke-lot/danh-muc-ke-lot-routing.module').then(m => m.DanhMucKeLotRoutingModule),
     },
+    {
+        path: 'dmuc-nhapxuat',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-loai-hinh-nhap-xuat/danh-muc-loai-hinh-nhap-xuat-routing.module').then(m => m.DanhMucLoaiHinhNhapXuatRoutingModule),
+    },
 ];
 
 @NgModule({

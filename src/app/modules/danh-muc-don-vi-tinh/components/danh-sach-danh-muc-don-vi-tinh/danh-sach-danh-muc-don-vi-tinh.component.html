@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="title-table">
-            <!-- <mat-icon>arrow_circle_left</mat-icon> -->
+            <mat-icon>arrow_circle_left</mat-icon>
             <span class="maintitle">
                 Danh sách danh mục đơn vị tính
             </span>
@@ -82,6 +82,13 @@
     </div>
     <div class="row">
         <div class="list-data">
+            <div class="title-list-table">
+                <span>Thông tin đơn vị tính</span>
+                <a class="btn-them-moi" (click)="create()">
+                    <mat-icon>add</mat-icon>
+                    Thêm mới
+                </a>
+            </div>
             <app-datatable 
                 *ngIf="config" 
                 [config]="config" 
@@ -91,20 +98,4 @@
             </app-datatable>
         </div>
     </div>
-    <!-- <div class="row">
-        <div class="function-table d-flex">
-            <button type="button" class="btn-function" (click)="create()">
-                Thêm
-            </button>
-            <button type="button" class="btn-function" (click)="edit(true)">
-                Xem
-            </button>
-            <button type="button" class="btn-function" (click)="edit(false)">
-                Sửa
-            </button>
-            <button type="button" class="btn-function" (click)="delete()">
-                Xóa
-            </button>
-        </div>
-    </div> -->
 </div>

@@ -3,7 +3,7 @@
         <div class="title-table">
             <mat-icon>arrow_circle_left</mat-icon>
             <span class="maintitle">
-                Danh sách danh mục hàng DTQG
+                Danh sách danh mục loại hình nhập xuất
             </span>
         </div>
     </div>
@@ -19,21 +19,21 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="label-field">
-                            Mã hàng
+                            Mã loại hình nhập xuất
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Mã hàng" [(ngModel)]="optionSearch.ma">
+                                <input matInput placeholder="Mã loại hình nhập xuất" [(ngModel)]="optionSearch.maLhinh">
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="label-field">
-                            Tên hàng
+                            Tên loại hình nhập xuất
                         </div>
                         <div class="input-field">
                             <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Tên hàng" [(ngModel)]="optionSearch.ten">
+                                <input matInput placeholder="Mã loại hình nhập xuất" [(ngModel)]="optionSearch.tenLhinh">
                             </mat-form-field>
                         </div>
                     </div>
@@ -43,7 +43,8 @@
                         </div>
                         <div class="input-field">
                             <ng-select [(ngModel)]="optionSearch.trangThai" appendTo="body">
-                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
+                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}
+                                </ng-option>
                             </ng-select>
                         </div>
                     </div>
@@ -59,7 +60,7 @@
     <div class="row">
         <div class="list-data">
             <div class="title-list-table">
-                <span>Thông tin danh mục hàng DTQG</span>
+                <span>Thông tin loại hình nhập xuất</span>
                 <a class="btn-them-moi" (click)="create()">
                     <mat-icon>add</mat-icon>
                     Thêm mới
@@ -70,7 +71,7 @@
                 [config]="config" 
                 (selectedPageAt)="selectedPageAtValue($event)"
                 (selectedPageSize)="selectPageSizeValue($event)" 
-            >
+                style="margin-top: 8px;">
             </app-datatable>
         </div>
     </div>

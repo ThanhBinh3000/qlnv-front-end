@@ -36,7 +36,6 @@
                             <mat-form-field class="example-full-width" appearance="fill">
                                 <input matInput placeholder="Mã đơn vị" [(ngModel)]="optionSearch.maDvi">
                             </mat-form-field>
-                            <!-- <input nz-input placeholder="Mã đơn vị" class="full-width" [(ngModel)]="optionSearch.maDvi" /> -->
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -48,10 +47,6 @@
                                 <ng-option *ngFor="let item of listLoaiDonVi" [value]="item.value">{{item.text}}
                                 </ng-option>
                             </ng-select>
-                            <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person"
-                                [(ngModel)]="optionSearch.loaiDvi">
-                                <nz-option [nzLabel]="item.value" [nzValue]="item.value" *ngFor="let item of listLoaiDonVi"></nz-option>
-                            </nz-select> -->
                         </div>
                     </div>
                 </div>
@@ -77,45 +72,7 @@
                             </ng-select>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <!-- <div class="label-field">
-                            Mã tỉnh
-                        </div>
-                        <div class="input-field">
-                            <ng-select [(ngModel)]="maTinh" appendTo="body">
-                            </ng-select>
-                        </div> -->
-                    </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-md-4">
-                        <div class="label-field">
-                            Kiểu đơn vị
-                        </div>
-                        <div class="input-field">
-                            <ng-select [(ngModel)]="kieuDvi" appendTo="body">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="label-field">
-                            Mã phường
-                        </div>
-                        <div class="input-field">
-                            <ng-select [(ngModel)]="maPhuong" appendTo="body">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="label-field">
-                            Mã quận
-                        </div>
-                        <div class="input-field">
-                            <ng-select [(ngModel)]="maQuan" appendTo="body">
-                            </ng-select>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="row btn-search">
                     <button type="button" class="btn btn-primary btn-sm" (click)="search()">
                         Tìm kiếm
@@ -137,25 +94,8 @@
                 *ngIf="config" 
                 [config]="config" 
                 (selectedPageAt)="selectedPageAtValue($event)"
-                (selectedPageSize)="selectPageSizeValue($event)" 
-                style="margin-top: 8px;">
+                (selectedPageSize)="selectPageSizeValue($event)">
             </app-datatable>
         </div>
     </div>
-    <!-- <div class="row">
-        <div class="function-table d-flex">
-            <button type="button" class="btn-function" (click)="create()">
-                Thêm
-            </button>
-            <button type="button" class="btn-function" (click)="edit(true)">
-                Xem
-            </button>
-            <button type="button" class="btn-function" (click)="edit(false)">
-                Sửa
-            </button>
-            <button type="button" class="btn-function" (click)="delete()">
-                Xóa
-            </button>
-        </div>
-    </div> -->
 </div>
