@@ -9,4 +9,5 @@ export * from './danh-muc-hang-dtqg';
 export * from './danh-muc-cong-cu-dung-cu';
 export * from './danh-muc-don-vi-cuu-tro';
 export * from './danh-muc-ke-lot';
+export * from './danh-muc-loai-hinh-kho-tang';
 export * from './danh-muc-loai-hinh-nhap-xuat';

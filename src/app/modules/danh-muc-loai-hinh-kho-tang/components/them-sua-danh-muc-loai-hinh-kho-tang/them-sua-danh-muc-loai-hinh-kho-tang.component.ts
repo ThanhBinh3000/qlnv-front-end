@@ -13,38 +13,33 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { DanhMucKeLotService } from '../../services';
+import { DanhMucLoaiHinhKhoTangService } from '../../services';
 import * as myGlobals from '../../../../globals';
 import { PaginateOptions } from 'src/app/modules/types';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfirmationDialog } from 'src/app/modules/shared/dialogs';
 import { leadingComment } from '@angular/compiler';
+import { LoaiHinhKhoTangModel } from '../..';
 
 @Component({
-    selector: 'them-sua-danh-muc-ke-lot',
-    templateUrl: './them-sua-danh-muc-ke-lot.component.html',
-    styleUrls: ['./them-sua-danh-muc-ke-lot.component.scss'],
+    selector: 'them-sua-danh-muc-loai-hinh-kho-tang',
+    templateUrl: './them-sua-danh-muc-loai-hinh-kho-tang.component.html',
+    styleUrls: ['./them-sua-danh-muc-loai-hinh-kho-tang.component.scss'],
 })
-export class ThemSuaDanhMucKeLot implements OnInit {
+export class ThemSuaDanhMucLoaiHinhKhoTang implements OnInit {
     @ViewChild('f', { static: true })
     formDirective: NgForm;
 
     constructor(
         private fb: FormBuilder,
-        private matDialogRef: MatDialogRef<ThemSuaDanhMucKeLot>,
+        private matDialogRef: MatDialogRef<ThemSuaDanhMucLoaiHinhKhoTang>,
         private breakpointObserver: BreakpointObserver,
-        private service: DanhMucKeLotService,
+        private service: DanhMucLoaiHinhKhoTangService,
         private spinner: NgxSpinnerService,
         private dialog: MatDialog,
         private cdr: ChangeDetectorRef,
         @Inject(MAT_DIALOG_DATA)
-        public data: {
-            id: number,
-            maKieuKelot: string,
-            tenKieuKelot: string,
-            ghiChu: string,
-            trangThai: string
-        },
+        public data: LoaiHinhKhoTangModel,
     ) {
     }
     donViTinhList: Array<DonViTinhModel>;
@@ -72,26 +67,31 @@ export class ThemSuaDanhMucKeLot implements OnInit {
         this.matDialogRef.backdropClick().subscribe(async () => await this.closeDialog());
         if(this.data.id == null || this.data.id > 0) {
             this.form = this.fb.group({
-                maKieuKelot: new FormControl('', {}),
-                tenKieuKelot: new FormControl('', {}),
+                maLhKho: new FormControl('', {}),
+                tenLhKho: new FormControl('', {}),
+                kyHieu: new FormControl('', {}),
                 ghiChu: new FormControl('', {}),
                 trangThai: new FormControl('', {}),
             });
         }
         else {
             this.form = this.fb.group({
-                maKieuKelot: new FormControl(this.data.maKieuKelot),
-                tenKieuKelot: new FormControl(this.data.tenKieuKelot),
+                maLhKho: new FormControl(this.data.maLhKho),
+                tenLhKho: new FormControl(this.data.tenLhKho),
+                kyHieu: new FormControl(this.data.kyHieu),
                 ghiChu: new FormControl(this.data.ghiChu),
                 trangThai: new FormControl(this.data.trangThai)
             });
         }
     }
-    get maKieuKelot() {
-        return this.form.controls.maKieuKelot as FormControl;
+    get maLhKho() {
+        return this.form.controls.maLhKho as FormControl;
     }
-    get tenKieuKelot() {
-        return this.form.controls.tenKieuKelot as FormControl;
+    get tenLhKho() {
+        return this.form.controls.tenLhKho as FormControl;
+    }
+    get kyHieu() {
+        return this.form.controls.kyHieu as FormControl;
     }
     get ghiChu() {
         return this.form.controls.ghiChu as FormControl;
