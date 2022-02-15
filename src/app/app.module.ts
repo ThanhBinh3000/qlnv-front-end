@@ -14,7 +14,8 @@ import {
     DanhMucHangDtqgModule,
     TrangChuModule,
     DanhMucCongCuDungCuModule,
-    DanhMucDonViCuuTroModule
+    DanhMucDonViCuuTroModule,
+    DanhMucKeLotModule
 } from './modules';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,6 +41,7 @@ import { ToastrModule } from 'ngx-toastr';
         DanhMucHangDtqgModule.forRoot(environment.api),
         DanhMucCongCuDungCuModule.forRoot(environment.api),
         DanhMucDonViCuuTroModule.forRoot(environment.api),
+        DanhMucKeLotModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
         MDBBootstrapModule.forRoot(),

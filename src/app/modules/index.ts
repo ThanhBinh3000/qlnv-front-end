@@ -8,3 +8,4 @@ export * from './trang-chu';
 export * from './danh-muc-hang-dtqg';
 export * from './danh-muc-cong-cu-dung-cu';
 export * from './danh-muc-don-vi-cuu-tro';
+export * from './danh-muc-ke-lot';
