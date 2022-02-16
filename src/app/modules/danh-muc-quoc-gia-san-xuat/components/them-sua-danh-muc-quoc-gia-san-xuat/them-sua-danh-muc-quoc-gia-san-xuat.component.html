@@ -13,14 +13,12 @@
                                     Mã nước sản xuất
                                 </div>
                                 <div class="mt-1 input-form-field">
-                                    <mat-form-field appearance="fill">
-                                        <input matInput type="text" 
-                                        placeholder="Mã nước sản xuất" 
-                                        formControlName="maQgia"
-                                        autocomplete="off" 
-                                        [(ngModel)]="data.maQgia"
-                                        [readonly]="data.isView"/>
-                                    </mat-form-field>
+                                    <input nz-input 
+                                    nzSize="small" 
+                                    placeholder="Mã nước sản xuất" 
+                                    formControlName="maQgia" 
+                                    [(ngModel)]="data.maQgia"
+                                    [readonly]="data.isView" />
                                 </div>
                             </div>
                         </div>
@@ -30,14 +28,13 @@
                                     Tên nước sản xuất
                                 </div>
                                 <div class="mt-1 input-form-field">
-                                    <mat-form-field appearance="fill">
-                                        <input matInput type="text" 
+                                        <input nz-input
+                                        nzSize="small"
                                         placeholder="Tên nước sản xuất" 
                                         formControlName="tenQgia" 
                                         autocomplete="off" 
                                         [(ngModel)]="data.tenQgia"
                                         [readonly]="data.isView"/>
-                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>
@@ -47,9 +44,9 @@
                                     Trạng thái
                                 </div>
                                 <div class="mt-1 input-form-field">
-                                    <ng-select [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai" [readonly]="data.isView">
-                                        <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
-                                    </ng-select>
+                                    <nz-select class="w-full" nzSize="small" [(ngModel)]="data.trangThai" appendTo="body" formControlName="trangThai" [nzDisabled]="data.isView">
+                                        <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.text" [nzValue]="item.value"></nz-option>
+                                    </nz-select>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +56,7 @@
                                     Ghi chú
                                 </div>
                                 <div class="mt-1 input-form-field">
-                                    <textarea matInput type="text" placeholder="Ghi chú" formControlName="ghiChu"
+                                    <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 3 }" type="text" placeholder="Ghi chú" formControlName="ghiChu"
                                     autocomplete="off" [(ngModel)]="data.ghiChu" class="form-text-area"
                                     [readonly]="data.isView"></textarea>
                                 </div>

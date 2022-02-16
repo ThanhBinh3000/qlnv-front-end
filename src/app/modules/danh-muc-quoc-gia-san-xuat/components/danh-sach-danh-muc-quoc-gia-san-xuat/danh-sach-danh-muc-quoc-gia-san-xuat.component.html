@@ -22,9 +22,7 @@
                             Mã nước sản xuất
                         </div>
                         <div class="input-field">
-                            <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Mã nước sản xuất" [(ngModel)]="optionSearch.maQgia">
-                            </mat-form-field>
+                            <input nz-input nzSize="small" placeholder="Mã nước sản xuất" [(ngModel)]="optionSearch.maQgia">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -32,9 +30,7 @@
                             Tên nước sản xuất
                         </div>
                         <div class="input-field">
-                            <mat-form-field class="example-full-width" appearance="fill">
-                                <input matInput placeholder="Tên nước sản xuất" [(ngModel)]="optionSearch.tenQgia">
-                            </mat-form-field>
+                            <input nz-input nzSize="small" placeholder="Tên nước sản xuất" [(ngModel)]="optionSearch.tenQgia">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -42,9 +38,9 @@
                             Trạng thái
                         </div>
                         <div class="input-field">
-                            <ng-select [(ngModel)]="optionSearch.trangThai" appendTo="body">
-                                <ng-option *ngFor="let item of listTrangThai" [value]="item.value">{{item.text}}</ng-option>
-                            </ng-select>
+                            <nz-select class="w-full" [(ngModel)]="optionSearch.trangThai" nzSize="small">
+                                <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.text" [nzValue]="item.value"></nz-option>
+                            </nz-select>
                         </div>
                     </div>
                 </div>

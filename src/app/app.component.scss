@@ -19,17 +19,15 @@ $toolbar-height: 64px;
         display: flex !important;
         align-items: center !important;
         span.ng-option-label.ng-star-inserted {
-            font-size: 14px; 
+            font-size: 14px;
         }
     }
     .ng-select .ng-select-container {
         border-radius: 4px !important;
         border: 1px solid #ced4da;
     }
-    
 }
 .btn.btn-primary {
-    background-color: #F9380A !important;
-    border-color: #F9380A !important;
+    background-color: #f9380a !important;
+    border-color: #f9380a !important;
 }
-

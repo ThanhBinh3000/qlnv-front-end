@@ -17,6 +17,8 @@ import { BlankLayoutComponent } from './layouts';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @NgModule({
     imports: [
@@ -41,6 +43,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MenuFilter,
         MenuHasChild,
         FlexLayoutModule,
+        NzInputModule,
+        NzSelectModule,
     ],
     declarations: [
         CountryCodePipe,
