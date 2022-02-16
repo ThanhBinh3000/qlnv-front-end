@@ -11,3 +11,4 @@ export * from './danh-muc-don-vi-cuu-tro';
 export * from './danh-muc-ke-lot';
 export * from './danh-muc-loai-hinh-kho-tang';
 export * from './danh-muc-loai-hinh-nhap-xuat';
+export * from './danh-muc-ky-bao-quan';
