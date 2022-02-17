@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import {
     AuthModule,
     CoreModule,
-    DanhMucDonViModule,
     DanhMucDonViTinhModule,
     QuanLyNguoiDungModule,
     DanhMucHangDtqgModule,
@@ -18,7 +17,9 @@ import {
     DanhMucKeLotModule,
     DanhMucLoaiHinhKhoTangModule,
 	DanhMucLoaiHinhNHapXuatModule,
-    DanhMucKyBaoQuanModule
+    DanhMucKyBaoQuanModule,
+    DanhMucDiaBanHanhChinhModule,
+    DanhMucPhuongThucBaoQuanModule
 } from './modules';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,7 +39,7 @@ import { ToastrModule } from 'ngx-toastr';
         NgxsModule.forRoot([], { developmentMode: !environment.production }),
         AdminModule.forRoot(environment.api),
         QuanLyNguoiDungModule.forRoot(environment.api),
-        DanhMucDonViModule.forRoot(environment.api),
+        DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
         DanhMucDonViTinhModule.forRoot(environment.api),
         TrangChuModule.forRoot(environment.api),
         DanhMucHangDtqgModule.forRoot(environment.api),
@@ -48,6 +49,8 @@ import { ToastrModule } from 'ngx-toastr';
         DanhMucLoaiHinhKhoTangModule.forRoot(environment.api),
         DanhMucLoaiHinhNHapXuatModule.forRoot(environment.api),
         DanhMucKyBaoQuanModule.forRoot(environment.api),
+        DanhMucDiaBanHanhChinhModule.forRoot(environment.api),
+        DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
         MDBBootstrapModule.forRoot(),

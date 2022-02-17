@@ -23,8 +23,10 @@ export interface DataTableConfigColumn<T> {
     condition?: (element: T) => boolean;
     valueFunction?: (element: T) => string;
     templateFunction?: (element: T) => string;
+    templateFunction2?: (element: T) => string;
     style?: { [key: string]: any };
     actionFunction?: ($event: Event, element: T) => void;
+    actionFunction2?: ($event: Event, element: T) => void;
     styleClassFunction?: (element: T) => string;
     sortable?: boolean;
 }

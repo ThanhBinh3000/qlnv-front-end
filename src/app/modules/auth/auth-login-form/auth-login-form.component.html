@@ -4,11 +4,11 @@
             <div class="login-wrapper align-items-center justify-content-center">
                 <div class="left-login login-box-item">
                     <div class="logo">
-                        <h1 style="margin-bottom: 1rem;font-size: 40px;font-weight: bold;">Login</h1>
+                        <h1 style="margin-bottom: 1rem;font-size: 40px;font-weight: bold;">Đăng nhập</h1>
                     </div>
                     <div class="login-box" fxLayout="column" fxLayoutAlign="space-around center" style="width: 65%;">
                         <div class="input-container">
-                            <div class="form-field-label">Account</div>
+                            <div class="form-field-label">Tài khoản</div>
                             <div class="item-group">
                                 <mat-form-field appearance="fill" class="mat-headline">
                                     <input matInput [attr.aria-label]="'email'" placeholder="Account"
@@ -18,13 +18,13 @@
                                 </mat-form-field>
                             </div>
                             <div class="error-box" *ngIf="checkError && ((email.errors && email.errors['required']) || (email.errors && email.errors['email']))">
-                                <mat-error *ngIf="email.errors && email.errors['required']" >Please input your account.</mat-error>
-                                <mat-error *ngIf="email.errors && email.errors['email']" >Please input valid email.</mat-error>
+                                <mat-error *ngIf="email.errors && email.errors['required']" >Vui lòng nhập tài khoản của bạn.</mat-error>
+                                <mat-error *ngIf="email.errors && email.errors['email']" >Vui lòng nhập email hợp lệ.</mat-error>
                             </div>
                         </div>
                         <div class="input-container">
                             <div class="form-field-label">
-                                Password
+                                Mật khẩu
                             </div>
                             <div class="item-group">
                                 <mat-form-field appearance="fill" class="item-password">
@@ -41,7 +41,7 @@
                             </div>
                             <div class="error-box" *ngIf="checkError && password.errors && (password.errors['required'] || (!password.errors['required'] && form.invalid))">
                                 <mat-error *ngIf="password.errors && password.errors['required']" >
-                                    Please input your password.
+                                    Vui lòng nhập mật khẩu.
                                 </mat-error>
                                 <!-- <mat-error *ngIf="password.errors && !password.errors['required'] && form.invalid" >
                                     Please input valid password.

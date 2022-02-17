@@ -95,6 +95,20 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-ky-bao-quan/danh-muc-ky-bao-quan-routing.module').then(m => m.DanhMucKyBaoQuanRoutingModule),
     },
+    {
+        path: 'dmuc-dia-ban-hanh-chinh',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-dia-ban-hanh-chinh/danh-muc-dia-ban-hanh-chinh-routing.module').then(m => m.DanhMucDiaBanHanhChinhRoutingModule),
+    },
+    {
+        path: 'dmuc-phuong-thuc-bao-quan',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-phuong-thuc-bao-quan/danh-muc-phuong-thuc-bao-quan-routing.module').then(m => m.DanhMucPhuongThucBaoQuanRoutingModule),
+    },
 ];
 
 @NgModule({

@@ -9,21 +9,25 @@
             column.text
             }}</mat-header-cell>
         <mat-cell *matCellDef="let element" class="wrap-text">
-            <span [attr.arial-label]="column.label"
-                *ngIf="!column.templateFunction && !column.actionFunction && !column.styleClassFunction && column.label !== 'FULL NAME'">
+            <span [attr.arial-label]="column.label" *ngIf="!column.templateFunction && !column.actionFunction 
+                && !column.templateFunction2 && !column.actionFunction2 
+                && !column.styleClassFunction && column.label !== 'FULL NAME'">
                 {{ column.valueFunction ? column.valueFunction(element) : element[column.fieldName] }}
             </span>
-            <span [attr.arial-label]="column.label"
-                *ngIf="!column.templateFunction && !column.actionFunction && column.styleClassFunction"
-                [ngClass]="column.styleClassFunction(element)">
+            <span [attr.arial-label]="column.label" *ngIf="!column.templateFunction && !column.actionFunction 
+                && !column.templateFunction2 && !column.actionFunction2 
+                && column.styleClassFunction" [ngClass]="column.styleClassFunction(element)">
                 {{ column.valueFunction ? column.valueFunction(element) : element[column.fieldName] }}
             </span>
             <span [attr.arial-label]="column.label" *ngIf="column.templateFunction"
                 [innerHTML]="column.templateFunction(element)">
             </span>
-            <a [attr.arial-label]="column.label" href="#" (click)="column.actionFunction($event, element)"
+            <a [attr.arial-label]="column.label" (click)="column.actionFunction($event, element)"
                 *ngIf="column.actionFunction">
                 {{ element[column.fieldName] || column.label }}
+            </a>
+            <a (click)="column.actionFunction2($event, element)"
+                *ngIf="column.actionFunction2" [innerHTML]="column.templateFunction2(element)">
             </a>
         </mat-cell>
     </ng-container>

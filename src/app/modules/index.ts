@@ -12,3 +12,5 @@ export * from './danh-muc-ke-lot';
 export * from './danh-muc-loai-hinh-kho-tang';
 export * from './danh-muc-loai-hinh-nhap-xuat';
 export * from './danh-muc-ky-bao-quan';
+export * from './danh-muc-dia-ban-hanh-chinh';
+export * from './danh-muc-phuong-thuc-bao-quan';
