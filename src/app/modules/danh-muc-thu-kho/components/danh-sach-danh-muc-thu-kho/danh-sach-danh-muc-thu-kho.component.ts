@@ -21,18 +21,18 @@ import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
-import { QuocGiaSanXuatDataModel } from '../..';
+import { ThuKhoDataModel } from '../..';
 import { DEFAULT_OPTION_SEARCH } from '../../constants';
-import { DanhMucQuocGiaSanXuatService } from '../../services/danh-muc-quoc-gia-san-xuat.service';
-import { ThemSuaDanhMucQuocGiaSanXuat } from '../them-sua-danh-muc-quoc-gia-san-xuat/them-sua-danh-muc-quoc-gia-san-xuat.component';
+import { DanhMucThuKhoService } from '../../services/danh-muc-thu-kho.service';
+import { ThemSuaDanhMucThuKho } from '../them-sua-danh-muc-thu-kho/them-sua-danh-muc-thu-kho.component';
 
 @Component({
-    selector: 'danh-sach-danh-muc-quoc-gia-san-xuat',
-    templateUrl: './danh-sach-danh-muc-quoc-gia-san-xuat.component.html',
-    styleUrls: ['./danh-sach-danh-muc-quoc-gia-san-xuat.component.scss'],
+    selector: 'danh-sach-danh-muc-thu-kho',
+    templateUrl: './danh-sach-danh-muc-thu-kho.component.html',
+    styleUrls: ['./danh-sach-danh-muc-thu-kho.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class DanhSachDanhMucThuKho implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     @Input()
     userCollection: any;
 
@@ -63,7 +63,7 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
         },
     ];
 
-    optionSearch: QuocGiaSanXuatDataModel = DEFAULT_OPTION_SEARCH;
+    optionSearch: ThuKhoDataModel = DEFAULT_OPTION_SEARCH;
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -74,7 +74,7 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        private service: DanhMucQuocGiaSanXuatService,
+        private service: DanhMucThuKhoService,
         private spinner: NgxSpinnerService,
     ) {}
 
@@ -119,9 +119,9 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
-                    title: `Xóa danh mục nước sản xuất`,
-                    subTitle: `Bạn có chắc chắn muốn xóa danh mục nước sản xuất?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến nước sản xuất "${element.tenQgia}" sẽ bị xóa đi.`,
+                    title: `Xóa danh mục thủ kho`,
+                    subTitle: `Bạn có chắc chắn muốn xóa danh mục thủ kho?`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến thủ kho "${element.tenThukho}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -141,7 +141,7 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
                                 width: '546px',
                                 data: {
                                     title: `Xóa dữ liệu thành công!`,
-                                    message: `Danh mục nước sản xuất đã được xóa thành công.`,
+                                    message: `Danh mục thủ kho đã được xóa thành công.`,
                                     closeButtonText: 'Đóng',
                                 },
                             });
@@ -152,14 +152,14 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
     }
 
     commonFunc(element: any, isView: boolean) {
-        const termDialog = this.dialog.open(ThemSuaDanhMucQuocGiaSanXuat, {
+        const termDialog = this.dialog.open(ThemSuaDanhMucThuKho, {
             width: '450px',
             data: {
-                title: isView ? 'Thông tin nước sản xuất' : 'Cập nhật nước sản xuất',
+                title: isView ? 'Thông tin thủ kho' : 'Cập nhật thủ kho',
                 isView: isView,
                 id: element.id,
-                maQgia: element.maQgia,
-                tenQgia: element.tenQgia,
+                maThukho: element.maThukho,
+                tenThukho: element.tenThukho,
                 ghiChu: element.ghiChu,
                 trangThai: element.trangThai,
             },
@@ -178,14 +178,14 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
         this.commonFunc(element, true);
     }
     create() {
-        const termDialog = this.dialog.open(ThemSuaDanhMucQuocGiaSanXuat, {
+        const termDialog = this.dialog.open(ThemSuaDanhMucThuKho, {
             width: '450px',
             data: {
-                title: 'Thêm mới nước sản xuất',
+                title: 'Thêm mới thủ kho',
                 isView: false,
                 id: 0,
-                maQgia: null,
-                tenQgia: '',
+                maThukho: null,
+                tenThukho: '',
                 ghiChu: '',
                 trangThai: null,
             },
@@ -204,20 +204,20 @@ export class DanhSachDanhMucQuocGiaSanXuat implements OnInit, OnDestroy, OnChang
         this.config = {
             data,
             tableName: 'pra-users',
-            filterKeys: ['maQgia','tenQgia', 'ghiChu', 'trangThai'],
+            filterKeys: ['maThukho','tenThukho', 'ghiChu', 'trangThai'],
             hideFilter: false,
             columns: [
                 {
-                    text: 'Mã nước sản xuất',
-                    label: 'Mã nước sản xuất',
-                    fieldName: 'maQgia',
+                    text: 'Mã thủ kho',
+                    label: 'Mã thủ kho',
+                    fieldName: 'maThukho',
                     style: { flex: 2 },
                     sortable: false,
                 },
                 {
-                    text: 'Tên nước sản xuất',
-                    label: 'Tên nước sản xuất',
-                    fieldName: 'tenQgia',
+                    text: 'Tên thủ kho',
+                    label: 'Tên thủ kho',
+                    fieldName: 'tenThukho',
                     style: { flex: 2 },
                     sortable: false,
                 },

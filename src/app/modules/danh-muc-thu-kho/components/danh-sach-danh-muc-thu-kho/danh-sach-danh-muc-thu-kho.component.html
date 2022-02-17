@@ -1,0 +1,73 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="title-table">
+            <mat-icon>arrow_circle_left</mat-icon>
+            <span class="maintitle">
+                Danh sách danh mục thủ kho
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="filter-data">
+            <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Tìm kiếm
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Mã thủ kho
+                        </div>
+                        <div class="input-field">
+                            <input nz-input nzSize="small" placeholder="Mã thủ kho" [(ngModel)]="optionSearch.maThukho">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Tên thủ kho
+                        </div>
+                        <div class="input-field">
+                            <input nz-input nzSize="small" placeholder="Tên thủ kho" [(ngModel)]="optionSearch.tenThukho">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="label-field">
+                            Trạng thái
+                        </div>
+                        <div class="input-field">
+                            <nz-select class="w-full" [(ngModel)]="optionSearch.trangThai" nzSize="small">
+                                <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.text" [nzValue]="item.value"></nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row btn-search">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="search()">
+                        Tìm kiếm
+                    </button>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+    <div class="row">
+        <div class="list-data">
+            <div class="title-list-table">
+                <span>Thông tin danh mục thủ kho</span>
+                <a class="btn-them-moi" (click)="create()">
+                    <mat-icon>add</mat-icon>
+                    Thêm mới
+                </a>
+            </div>
+            <app-datatable 
+                *ngIf="config" 
+                [config]="config" 
+                (selectedPageAt)="selectedPageAtValue($event)"
+                (selectedPageSize)="selectPageSizeValue($event)" 
+            >
+            </app-datatable>
+        </div>
+    </div>
+</div>
