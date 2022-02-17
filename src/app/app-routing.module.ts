@@ -98,9 +98,16 @@ const routes: Routes = [
     {
         path: 'dmuc-quoc-gia-san-xuat',
         component: MasterLayoutComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         loadChildren: () =>
             import('./modules/danh-muc-quoc-gia-san-xuat/danh-muc-quoc-gia-san-xuat-routing.module').then(m => m.DanhMucQuocGiaSanXuatRoutingModule),
+    },
+    {
+        path: 'dmuc-phuong-thuc-dau-thau',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-phuong-thuc-dau-thau/danh-muc-phuong-thuc-dau-thau-routing.module').then(m => m.DanhMucPhuongThucDauThauRoutingModule),
     },
 ];
 
