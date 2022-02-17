@@ -18,6 +18,8 @@ import {
     DanhMucLoaiHinhKhoTangModule,
 	DanhMucLoaiHinhNHapXuatModule,
     DanhMucKyBaoQuanModule,
+	DanhMucQuocGiaSanXuatModule,
+    DanhMucPhuongThucDauThauModule,
     DanhMucDiaBanHanhChinhModule,
     DanhMucPhuongThucBaoQuanModule
 } from './modules';
@@ -28,6 +30,7 @@ import { AdminModule } from './modules/admin';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ChartsModule } from 'ng2-charts';
 import { ToastrModule } from 'ngx-toastr';
+import { DanhMucThuKhoModule } from './modules/danh-muc-thu-kho';
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -49,6 +52,9 @@ import { ToastrModule } from 'ngx-toastr';
         DanhMucLoaiHinhKhoTangModule.forRoot(environment.api),
         DanhMucLoaiHinhNHapXuatModule.forRoot(environment.api),
         DanhMucKyBaoQuanModule.forRoot(environment.api),
+        DanhMucQuocGiaSanXuatModule.forRoot(environment.api),
+        DanhMucPhuongThucDauThauModule.forRoot(environment.api),
+        DanhMucThuKhoModule.forRoot(environment.api),
         DanhMucDiaBanHanhChinhModule.forRoot(environment.api),
         DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
         HttpClientModule,
