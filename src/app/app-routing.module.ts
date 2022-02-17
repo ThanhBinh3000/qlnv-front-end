@@ -130,6 +130,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-phuong-thuc-bao-quan/danh-muc-phuong-thuc-bao-quan-routing.module').then(m => m.DanhMucPhuongThucBaoQuanRoutingModule),
     },
+    {
+        path: 'dmuc-loai-hinh-bao-quan',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-loai-hinh-bao-quan/danh-muc-loai-hinh-bao-quan-routing.module').then(m => m.DanhMucLoaiHinhBaoQuanRoutingModule),
+    },
 ];
 
 @NgModule({

@@ -16,3 +16,4 @@ export * from './danh-muc-quoc-gia-san-xuat';
 export * from './danh-muc-phuong-thuc-dau-thau';
 export * from './danh-muc-dia-ban-hanh-chinh';
 export * from './danh-muc-phuong-thuc-bao-quan';
+export * from './danh-muc-loai-hinh-bao-quan';
