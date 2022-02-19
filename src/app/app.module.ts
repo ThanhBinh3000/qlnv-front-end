@@ -22,7 +22,10 @@ import {
     DanhMucPhuongThucDauThauModule,
     DanhMucDiaBanHanhChinhModule,
     DanhMucPhuongThucBaoQuanModule,
-    DanhMucLoaiHinhBaoQuanModule
+    DanhMucLoaiHinhBaoQuanModule,
+    DanhMucTinhTrangGoiThauModule,
+    DanhMucDonViLienQuanModule,
+    DanhMucHinhThucBaoQuanModule,
 } from './modules';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -59,6 +62,9 @@ import { DanhMucThuKhoModule } from './modules/danh-muc-thu-kho';
         DanhMucDiaBanHanhChinhModule.forRoot(environment.api),
         DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
         DanhMucLoaiHinhBaoQuanModule.forRoot(environment.api),
+        DanhMucTinhTrangGoiThauModule.forRoot(environment.api),
+        DanhMucDonViLienQuanModule.forRoot(environment.api),
+        DanhMucHinhThucBaoQuanModule.forRoot(environment.api),
         HttpClientModule,
         BrowserAnimationsModule,
         MDBBootstrapModule.forRoot(),

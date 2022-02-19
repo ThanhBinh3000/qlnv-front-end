@@ -105,7 +105,7 @@ export class DanhMucPhuongThucBaoQuanService {
         const { maPthuc, tenPthuc, ghiChu, id, trangThai} = input;
         return this.httpClient
             .post<any>(
-                `${this.apiConstant.endpoint}/qlnv-category/dmuc-donvi/them-moi`,
+                `${this.apiConstant.endpoint}/qlnv-category/dmuc-pthuc-bquan/them-moi`,
                 {
                     maPthuc, tenPthuc, ghiChu, id, trangThai
                 },

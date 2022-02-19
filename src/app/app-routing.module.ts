@@ -137,6 +137,27 @@ const routes: Routes = [
         loadChildren: () =>
             import('./modules/danh-muc-loai-hinh-bao-quan/danh-muc-loai-hinh-bao-quan-routing.module').then(m => m.DanhMucLoaiHinhBaoQuanRoutingModule),
     },
+    {
+        path: 'dmuc-tinh-trang-goi-thau',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-tinh-trang-goi-thau/danh-muc-tinh-trang-goi-thau-routing.module').then(m => m.DanhMucTinhTrangGoiThauRoutingModule),
+    },
+    {
+        path: 'dmuc-dvi-lien-quan',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-don-vi-lien-quan/danh-muc-don-vi-lien-quan-routing.module').then(m => m.DanhMucDonViLienQuanRoutingModule),
+    },
+    {
+        path: 'dmuc-hthuc-bquan',
+        component: MasterLayoutComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+            import('./modules/danh-muc-hinh-thuc-bao-quan/danh-muc-hinh-thuc-bao-quan-routing.module').then(m => m.DanhMucHinhThucBaoQuanRoutingModule),
+    },
 ];
 
 @NgModule({

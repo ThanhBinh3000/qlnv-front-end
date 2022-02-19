@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
     AfterViewInit,
@@ -22,16 +21,18 @@ import { AuthService } from 'src/app/modules/auth';
 import { HttpPaginatedDataSource } from 'src/app/modules/core';
 import { ConfirmationDialog, ConfirmCancelDialog, DataTableConfig } from 'src/app/modules/shared';
 import { PaginateOptions } from 'src/app/modules/types';
-import { DanhMucDiaBanHanhChinhService } from '../../services/danh-muc-dia-ban-hanh-chinh.service';
-import { ThemSuaDanhMucDiaBanHanhChinh } from '../them-sua-danh-muc-dia-ban-hanh-chinh/them-sua-danh-muc-dia-ban-hanh-chinh.component';
+import { DonViLienQuanDataModel } from '../..';
+import { DEFAULT_OPTION_SEARCH } from '../../constants';
+import { DanhMucDonViLienQuanService } from '../../services/danh-muc-don-vi-lien-quan.service';
+import { ThemSuaDanhMucDonViLienQuan } from '../them-sua-danh-muc-don-vi-lien-quan/them-sua-danh-muc-don-vi-lien-quan.component';
 
 @Component({
-    selector: 'danh-sach-danh-muc-dia-ban-hanh-chinh',
-    templateUrl: './danh-sach-danh-muc-dia-ban-hanh-chinh.component.html',
-    styleUrls: ['./danh-sach-danh-muc-dia-ban-hanh-chinh.component.scss'],
+    selector: 'danh-sach-danh-muc-don-vi-lien-quan',
+    templateUrl: './danh-sach-danh-muc-don-vi-lien-quan.component.html',
+    styleUrls: ['./danh-sach-danh-muc-don-vi-lien-quan.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class DanhSachDanhMucDonViLienQuan implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     @Input()
     userCollection: any;
 
@@ -57,16 +58,12 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
             text: 'Ẩn',
         },
         {
-            value: '1',
+            value: '01',
             text: 'Hiện',
         },
     ];
 
-    optionSearch = {
-        maDbhc: '',
-        tenDbhc: '',
-        trangThai: null,
-    };
+    optionSearch: DonViLienQuanDataModel = DEFAULT_OPTION_SEARCH;
 
     smallScreen$ = this.breakpointObserver
         .observe(['(max-width: 600px)'])
@@ -77,16 +74,11 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
         private breakpointObserver: BreakpointObserver,
         private authService: AuthService,
         private dialog: MatDialog,
-        private service: DanhMucDiaBanHanhChinhService,
+        private service: DanhMucDonViLienQuanService,
         private spinner: NgxSpinnerService,
-        private router: Router
     ) {}
 
     ngOnInit() {
-        this.service.getCap().subscribe(a=>{
-            console.log(a);
-            
-        })
         this.currentUserId$ = this.authService.user$.pipe(
             filter(user => !!user),
             pluck('id'),
@@ -109,6 +101,7 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
     }
 
     search() {
+        
         this.spinner.show();
         this.service.paginteAdmins({ pageIndex: 0, pageSize: this.pageSize }, this.optionSearch).subscribe(data => {
             this.spinner.hide();
@@ -121,14 +114,14 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
         this.unsubscribe$.complete();
     }
 
-    delete(event: any, element: any) {
+    delete(event: any,element: any) {
         if (element && element.id > 0) {
             let dialogRef = this.dialog.open(ConfirmCancelDialog, {
                 width: '546px',
                 data: {
-                    title: `Xóa danh mục địa bàn hành chính`,
-                    subTitle: `Bạn có chắc chắn muốn xóa danh mục địa bàn hành chính?`,
-                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến địa bàn hành chính "${element.tenDbhc}" sẽ bị xóa đi.`,
+                    title: `Xóa danh mục đơn vị liên quan`,
+                    subTitle: `Bạn có chắc chắn muốn xóa danh mục đơn vị liên quan?`,
+                    message: `Khi xóa dữ liệu, các dữ liệu liên quan đến đơn vị liên quan "${element.tenDvi}" sẽ bị xóa đi.`,
                     cancelButtonText: 'Hủy',
                     confirmButtonText: 'Xóa',
                     hideCancelButton: false,
@@ -143,16 +136,12 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
                         this.spinner.show();
                         const deleteResult = await this.service.delete(element.id, this.pageSize);
                         if (deleteResult) {
-                            this.optionSearch = {
-                                maDbhc: '',
-                                tenDbhc: '',
-                                trangThai: null,
-                            };
+                            this.optionSearch = DEFAULT_OPTION_SEARCH;
                             this.dialog.open(ConfirmationDialog, {
                                 width: '546px',
                                 data: {
                                     title: `Xóa dữ liệu thành công!`,
-                                    message: `Danh mục địa bàn hành chính đã được xóa thành công.`,
+                                    message: `Danh mục đơn vị liên quan đã được xóa thành công.`,
                                     closeButtonText: 'Đóng',
                                 },
                             });
@@ -162,6 +151,26 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
         }
     }
 
+    commonFunc(element: any, isView: boolean) {
+        const termDialog = this.dialog.open(ThemSuaDanhMucDonViLienQuan, {
+            width: '450px',
+            data: {
+                title: isView ? 'Thông tin đơn vị liên quan' : 'Cập nhật đơn vị liên quan',
+                isView: isView,
+                id: element.id,
+                maDvi: element.maDvi,
+                tenDvi: element.tenDvi,
+                maHchinh: element.maHchinh,
+                diaChi: element.diaChi,
+                trangThai: element.trangThai,
+            },
+        });
+
+        termDialog.afterClosed().subscribe(res => {
+            if(!res) return;
+            this.optionSearch = DEFAULT_OPTION_SEARCH;
+        });
+    }
     edit(event: any, element: any) {
         this.commonFunc(element, false);
     }
@@ -169,57 +178,23 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
     view(event: any, element: any) {
         this.commonFunc(element, true);
     }
-
-    commonFunc(element: any, isView: boolean) {
-        const termDialog = this.dialog.open(ThemSuaDanhMucDiaBanHanhChinh, {
-            width: '450px',
-            data: {
-                title: isView ? 'Thông tin địa bàn hành chính' : 'Cập nhật địa bàn hành chính',
-                isView: isView,
-                id: element.id,
-                cap: element.cap,
-                maCha: element.maCha,
-                maDbhc: element.maDbhc,
-                maHchinh: element.maHchinh,
-                tenDbhc: element.tenDbhc,
-                trangThai: element.trangThai,
-            },
-        });
-
-        termDialog.afterClosed().subscribe(res => {
-            if (res) {
-                this.optionSearch = {
-                    maDbhc: '',
-                    tenDbhc: '',
-                    trangThai: null,
-                };
-            }
-        });
-    }
     create() {
-        const termDialog = this.dialog.open(ThemSuaDanhMucDiaBanHanhChinh, {
+        const termDialog = this.dialog.open(ThemSuaDanhMucDonViLienQuan, {
             width: '450px',
             data: {
-                title: 'Thêm mới địa bàn hành chính',
+                title: 'Thêm mới đơn vị liên quan',
                 isView: false,
                 id: 0,
-                cap: null,
-                maCha: '',
-                maDbhc: '',
-                maHchinh: '',
-                tenDbhc: null,
+                maTtrang: null,
+                tenTtrang: '',
+                ghiChu: '',
                 trangThai: null,
             },
         });
 
         termDialog.afterClosed().subscribe(res => {
-            if (res) {
-                this.optionSearch = {
-                    maDbhc: '',
-                    tenDbhc: '',
-                    trangThai: null,
-                };
-            }
+            if(!res) return;
+            this.optionSearch = DEFAULT_OPTION_SEARCH;
         });
     }
 
@@ -230,20 +205,20 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
         this.config = {
             data,
             tableName: 'pra-users',
-            filterKeys: ['maDbhc', 'tenDbhc', 'maHchinh', 'trangThai', 'cap'],
+            filterKeys: ['maDvi','tenDvi','maHchinh', 'diaChi', 'trangThai'],
             hideFilter: false,
             columns: [
                 {
-                    text: 'Mã tỉnh thành',
-                    label: 'Mã tỉnh thành',
-                    fieldName: 'maDbhc',
-                    style: { flex: 1 },
+                    text: 'Mã đơn vị liên quan',
+                    label: 'Mã đơn vị liên quan',
+                    fieldName: 'maDvi',
+                    style: { flex: 2 },
                     sortable: false,
                 },
                 {
-                    text: 'Tên tỉnh thành',
-                    label: 'Tên tỉnh thành',
-                    fieldName: 'tenDbhc',
+                    text: 'Tên đơn vị liên quan',
+                    label: 'Tên đơn vị liên quan',
+                    fieldName: 'tenDvi',
                     style: { flex: 2 },
                     sortable: false,
                 },
@@ -251,7 +226,14 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
                     text: 'Mã hành chính',
                     label: 'Mã hành chính',
                     fieldName: 'maHchinh',
-                    style: { flex: 1 },
+                    style: { flex: 2 },
+                    sortable: false,
+                },
+                {
+                    text: 'Địa chỉ',
+                    label: 'Địa chỉ',
+                    fieldName: 'diaChi',
+                    style: { flex: 2 },
                     sortable: false,
                 },
                 {
@@ -259,19 +241,6 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
                     label: 'Trạng thái',
                     fieldName: 'trangThai',
                     valueFunction: element => this.textStatus(element.trangThai),
-                    style: { flex: 1 },
-                    sortable: false,
-                },
-                {
-                    text: 'Quận huyện',
-                    label: 'Quận huyện',
-                    fieldName: 'cap',
-                    actionFunction2: this.getQuanHuyen.bind(this),
-                    templateFunction2: () => {
-                        return `<a class="view-chi-tiet">
-                                    Chi tiết
-                                </a>`;
-                    },
                     style: { flex: 1 },
                     sortable: false,
                 },
@@ -337,17 +306,10 @@ export class DanhSachDanhMucDiaBanHanhChinh implements OnInit, OnDestroy, OnChan
         switch (status) {
             case '00':
                 return 'Ẩn';
-            case '1':
+            case '01':
                 return 'Hiện';
             default:
                 return '';
         }
-    }
-    getQuanHuyen(event: any, element: any) {
-        this.router.navigate(["dmuc-dia-ban-hanh-chinh/dmuc-quan-huyen",element.maDbhc]);
-        this.service.getHuyen().subscribe(huyens => {
-            console.log(huyens);
-            
-        })
     }
 }

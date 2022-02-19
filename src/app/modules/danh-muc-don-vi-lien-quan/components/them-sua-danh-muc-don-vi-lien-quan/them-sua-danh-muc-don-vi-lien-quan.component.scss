@@ -1,0 +1,91 @@
+:host {
+    display: block;
+}
+::ng-deep {
+    .mat-dialog-container > .ng-star-inserted {
+        height: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden !important;
+    }
+    .container-form-field {
+        .mat-form-field-infix {
+            margin-top: 4px;
+            margin-left: 2px;
+        }
+    }
+}
+
+form {
+    height: 100%;
+}
+
+mat-card {
+    padding: 23px 0px 0px 24px !important;
+    height: calc(100% - 46px);
+    .mat-card-header {
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 8px;
+        ::ng-deep .mat-card-header-text {
+            margin: unset !important;
+        }
+        mat-card-title {
+            color: #203665;
+            font-family: 'Roboto', Serif, Sans-serif, Cursive, fantasy, Monospace;
+            text-align: left;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 40px;
+        }
+    }
+    ::ng-deep {
+        mat-card-content {
+            height: calc(100% - 62px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 16px;
+        }
+    }
+    .form-field {
+        padding-bottom: 16px;
+    }
+}
+
+.button-group {
+    text-align: center;
+    .cancel {
+        height: 24px;
+        font-size: 15px;
+        padding: 0 16px;
+        text-transform: none;
+        border: 1px solid #d8dde6;
+        background: #fff;
+        border-radius: 4px;
+        padding: 0 16px;
+        color: #000;
+    }
+
+    .confirm {
+        height: 24px;
+        font-size: 15px;
+        padding: 0 16px;
+        text-transform: none;
+        opacity: 0.6;
+        border: none;
+        background: #587cad;
+        border-radius: 4px;
+        padding: 0 16px;
+        color: #fff;
+        margin-right: 16px;
+    }
+
+    .btn-add-active {
+        opacity: 1;
+    }
+}
+
+.w-full {
+    width: 100%;
+}
