@@ -7,23 +7,15 @@ import { IndexComponent } from '../../pages/index/index.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HeaderComponent } from './header/header.component';
 import { MainRouterComponent } from './main-router/main-router.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
     MainComponent,
     IndexComponent,
     HeaderComponent,
-    MainRouterComponent
+    MainRouterComponent,
   ],
-  imports: [
-    CommonModule,
-    MainRoutingModule,
-    ComponentsModule,
-    NgApexchartsModule
-  ],
-  exports: [
-    MainRouterComponent
-  ]
+  imports: [CommonModule, MainRoutingModule, ComponentsModule],
+  exports: [MainRouterComponent],
 })
-export class MainModule { }
+export class MainModule {}

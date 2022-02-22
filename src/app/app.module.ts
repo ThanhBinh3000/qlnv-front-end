@@ -15,20 +15,16 @@ import { registerLocaleData } from '@angular/common';
 import vi from '@angular/common/locales/vi';
 import { ObservableService } from './services/observable.service';
 import { DirectivesModule } from './directives/directives.module';
-import { NgApexchartsModule } from 'ng-apexcharts';
 
 registerLocaleData(vi);
 
 const ngZorroConfig: NzConfig = {
   notification: { nzMaxStack: 1 },
-  modal: { nzMaskClosable: false }
+  modal: { nzMaskClosable: false },
 };
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-  ],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -37,9 +33,6 @@ const ngZorroConfig: NzConfig = {
     HttpClientModule,
     ComponentsModule,
     DirectivesModule,
-    NgApexchartsModule
-
-    // FormsModule,
   ],
   providers: [
     {
@@ -49,8 +42,8 @@ const ngZorroConfig: NzConfig = {
     },
     { provide: NZ_I18N, useValue: vi_VN },
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
-    ObservableService
+    ObservableService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

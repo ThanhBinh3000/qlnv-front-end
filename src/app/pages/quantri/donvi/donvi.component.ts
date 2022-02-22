@@ -11,26 +11,23 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NewDonViComponent } from './new-don-vi/new-don-vi.component';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
 
-
 @Component({
   selector: 'app-donvi',
   templateUrl: './donvi.component.html',
-  styleUrls: ['./donvi.component.scss']
+  styleUrls: ['./donvi.component.scss'],
 })
-
-
 export class DonviComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
+  @ViewChild('nzTreeComponent', { static: false })
+  nzTreeComponent!: NzTreeComponent;
   visible = false;
   nodes: any = [];
   nodeDetail: any;
   listDonViDuoi = [];
   cureentNodeParent: any = [];
-  datasNguoiDung: any = []
-  nodeSelected: any = []
-  listHTDV: any = []
-  listKPB: any = []
+  datasNguoiDung: any = [];
+  nodeSelected: any = [];
+  listHTDV: any = [];
+  listKPB: any = [];
   detailDonVi: FormGroup;
   noParent = true;
   searchValue = '';
@@ -40,35 +37,36 @@ export class DonviComponent implements OnInit {
     private helperService: HelperService,
     private _modalService: NzModalService,
     private notification: NzNotificationService,
-    private nguoidungService: NguoiDungService
-  ) {
-  }
+    private nguoidungService: NguoiDungService,
+  ) {}
 
   ngOnInit(): void {
-    this.initForm()
-    this.layTatCaDonViTheoTree()
-    this.layDonViPhongBan()
+    this.initForm();
+    this.layTatCaDonViTheoTree();
+    this.layDonViPhongBan();
   }
 
   layDonViPhongBan() {
-    this.helperService.initDMChung('hinhthucdonvi;kieuphongban').then((res: OldResponseData) => {
-      if (res.success && res.data) {
-        this.listHTDV = res.data.hinhthucdonvi
-        this.listKPB = res.data.kieuphongban
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.error);
-      }
-    })
+    this.helperService
+      .initDMChung('hinhthucdonvi;kieuphongban')
+      .then((res: OldResponseData) => {
+        if (res.success && res.data) {
+          this.listHTDV = res.data.hinhthucdonvi;
+          this.listKPB = res.data.kieuphongban;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
+        }
+      });
   }
 
   showDetailDonVi(id?: any) {
     if (id) {
-      this.danhSachNguoiDung(id)
+      this.danhSachNguoiDung(id);
 
       this.donviService.TimTheoId(id).then((res: OldResponseData) => {
         if (res.success) {
           this.nodeDetail = res.data;
-          if (res.data.parentId == "00000000-0000-0000-0000-000000000000") {
+          if (res.data.parentId == '00000000-0000-0000-0000-000000000000') {
             this.nodeDetail.parentId = null;
           }
           // gán giá trị vào form
@@ -87,72 +85,65 @@ export class DonviComponent implements OnInit {
             isActive: res.data.isActive,
             index: res.data.index,
             deptType: String(res.data.deptType),
-            type: String(res.data.type)
-          })
-
+            type: String(res.data.type),
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
-      })
-
+      });
     }
   }
 
   initForm() {
     this.detailDonVi = this.fb.group({
       name: ['', Validators.required],
-      code: ['',Validators.required],
+      code: ['', Validators.required],
       deptType: ['0', Validators.required],
       nameShort: [''],
       fax: [''],
       nameEng: [''],
       address: [''],
-      taxCode: ['',Validators.required],
+      taxCode: ['', Validators.required],
       phoneNumber: [''],
       email: [''],
       parentId: [''],
       type: ['0', Validators.required],
       // identifyCode: [''],
       isActive: [true],
-      index: []
-    })
+      index: [],
+    });
   }
 
-
   /**
-* bắt đầu sử lý phân trang
-*/
+   * bắt đầu sử lý phân trang
+   */
   pageNguoiDung: number = 1;
   pageSizeNguoiDung: number = PAGE_SIZE_DEFAULT;
   totalRecordNguoiDung: number = 0;
   changePageSizeNguoiDung(event) {
     this.pageSizeNguoiDung = event;
-    this.danhSachNguoiDung(this.cureentNodeParent)
+    this.danhSachNguoiDung(this.cureentNodeParent);
   }
   changePageIndexNguoiDung(event) {
     this.pageNguoiDung = event;
-    this.danhSachNguoiDung(this.cureentNodeParent)
+    this.danhSachNguoiDung(this.cureentNodeParent);
   }
-
 
   pageDonVi: number = 1;
   pageSizeDonVi: number = PAGE_SIZE_DEFAULT;
   totalRecordDonVi: number = 0;
   changePageSizeDonVi(event) {
     this.pageSizeDonVi = event;
-    this.showDetailDonVi(this.nodeSelected)
+    this.showDetailDonVi(this.nodeSelected);
   }
   changePageIndexDonVi(event) {
     this.pageDonVi = event;
-    this.showDetailDonVi(this.nodeSelected)
+    this.showDetailDonVi(this.nodeSelected);
   }
 
   /**
    * kết thúc sử lý phân trang
    */
-
-
-
 
   /**
    * call api init
@@ -163,28 +154,26 @@ export class DonviComponent implements OnInit {
       if (res.success) {
         this.nodes = res.data;
         //  lúc đầu mắc định lấy node gốc to nhất
-        this.nodeSelected = this.nodes[0].key
+        this.nodeSelected = this.nodes[0].key;
 
         // lấy detail đon vị hiện tại
-        this.showDetailDonVi(res.data[0].key)
-
+        this.showDetailDonVi(res.data[0].key);
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
-    })
+    });
   }
-
 
   danhSachNguoiDung(DepartmentId) {
     let body = {
-      "page": this.pageNguoiDung,
-      "pageSize": this.pageSizeNguoiDung,
-      "searchKey": "",
-      "searchUnitId": "",
-      "searchDepartmentId": DepartmentId,
-      "searchPositionId": "",
-      "searchPhone": ""
-    }
+      page: this.pageNguoiDung,
+      pageSize: this.pageSizeNguoiDung,
+      searchKey: '',
+      searchUnitId: '',
+      searchDepartmentId: DepartmentId,
+      searchPositionId: '',
+      searchPhone: '',
+    };
 
     this.nguoidungService.danhSach(body).subscribe((res: OldResponseData) => {
       if (res.success) {
@@ -193,9 +182,8 @@ export class DonviComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
-    })
+    });
   }
-
 
   /**
    * Xử lý tree
@@ -206,10 +194,9 @@ export class DonviComponent implements OnInit {
     if (event.keys.length > 0) {
       this.nodeSelected = event.keys[0];
       // this.selectedKeys = event.node.origin.data;
-      this.parentNodeSelected = event?.parentNode?.origin
-      this.showDetailDonVi(event.keys[0])
+      this.parentNodeSelected = event?.parentNode?.origin;
+      this.showDetailDonVi(event.keys[0]);
     }
-
   }
 
   nzCheck(event: NzFormatEmitEvent): void {
@@ -218,16 +205,13 @@ export class DonviComponent implements OnInit {
     // this.showDetailDonVi()
   }
 
-
-
   /**
    * thêm sửa mới nhóm quyền
    */
 
   themmoi(data?) {
-
     var nodesTree = this.nodes;
-    var cureentNodeParent = this.cureentNodeParent
+    var cureentNodeParent = this.cureentNodeParent;
     let modal = this._modalService.create({
       nzTitle: 'Thêm mới đơn vị',
       nzContent: NewDonViComponent,
@@ -237,9 +221,9 @@ export class DonviComponent implements OnInit {
       nzWidth: 600,
       nzComponentParams: { data, nodesTree, cureentNodeParent },
     });
-    modal.afterClose.subscribe(res => {
+    modal.afterClose.subscribe((res) => {
       if (res) {
-        this.layTatCaDonViTheoTree()
+        this.layTatCaDonViTheoTree();
       }
     });
   }
@@ -249,30 +233,37 @@ export class DonviComponent implements OnInit {
    */
 
   xoa() {
-
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn xóa?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
-      nzOkDanger: true, 
+      nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
-          if (res.success) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // xét node về không
-            this.nodeSelected = []
-            this.layTatCaDonViTheoTree()
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.error);
-          }
-        })
-      }
+        this.donviService
+          .delete(
+            this.nodeSelected?.id == undefined
+              ? this.nodeSelected
+              : this.nodeSelected?.id,
+          )
+          .then((res: OldResponseData) => {
+            if (res.success) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              // xét node về không
+              this.nodeSelected = [];
+              this.layTatCaDonViTheoTree();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.error);
+            }
+          });
+      },
     });
   }
-
 
   sua() {
     this.helperService.markFormGroupTouched(this.detailDonVi);
@@ -284,14 +275,14 @@ export class DonviComponent implements OnInit {
       id: this.nodeSelected,
       deptType: Number(this.detailDonVi.value.deptType),
       type: Number(this.detailDonVi.value.type),
-    }
+    };
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn sửa?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
-      nzOkDanger: true, 
+      nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
         this.donviService.update(body).then((res: OldResponseData) => {
@@ -301,13 +292,8 @@ export class DonviComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, res.error);
           }
-        })
-      }
+        });
+      },
     });
-
-
   }
-
-
 }
-

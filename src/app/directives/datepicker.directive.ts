@@ -2,15 +2,10 @@ import { Directive, ElementRef, HostListener, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appDatepicker]'
+  selector: '[appDatepicker]',
 })
 export class DatepickerDirective {
-
-  constructor(
-    private el: ElementRef,
-    private ngControl: NgControl
-
-  ) { }
+  constructor(private el: ElementRef, private ngControl: NgControl) {}
   @HostListener('input', ['$event']) onInputChange(event) {
     let value = this.el.nativeElement.value;
     let newValue = this.formatDate(value);
@@ -20,18 +15,18 @@ export class DatepickerDirective {
 
   formatDate(input) {
     let result;
-    if(input.indexOf("/") > -1) {
-        result = input.substr(0, 10);
+    if (input.indexOf('/') > -1) {
+      result = input.substr(0, 10);
+    } else {
+      if (input.length >= 8) {
+        const day = input.substring(0, 2);
+        const month = input.substring(2, 4);
+        const year = input.substring(4, 8);
+        result = `${day}/${month}/${year}`;
       } else {
-        if (input.length >= 8 ) {
-          const day = input.substring(0, 2);
-          const month = input.substring(2, 4);
-          const year = input.substring(4, 8);
-          result = `${day}/${month}/${year}`
-        } else {
-          result = input
-        }
+        result = input;
       }
-    return result
+    }
+    return result;
   }
 }

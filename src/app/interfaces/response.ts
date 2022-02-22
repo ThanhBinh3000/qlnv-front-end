@@ -4,7 +4,7 @@ export interface OldResponseData {
   error?: string;
   data?: any;
   message?: string;
-  totalRecord?: number
+  totalRecord?: number;
 }
 export type ResponseData<T> = {
   success: boolean;
@@ -12,5 +12,5 @@ export type ResponseData<T> = {
   error?: string;
   data?: T;
   message?: string;
-  totalRecord?: number
-}
+  totalRecord?: number;
+};

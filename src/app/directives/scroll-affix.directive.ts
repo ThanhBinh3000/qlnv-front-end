@@ -1,20 +1,22 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
-declare var $
+declare var $;
 @Directive({
-  selector: '[appScrollAffix]'
+  selector: '[appScrollAffix]',
 })
 export class ScrollAffixDirective {
+  constructor() {}
 
-  constructor() { }
-
-  @HostListener("wheel", ["$event"])
+  @HostListener('wheel', ['$event'])
   public onScroll(event: WheelEvent) {
-    if(($('body').get(0).scrollHeight - $('body').height())<=58){
-      $('nz-affix > div').addClass( 'fix' );
-    } else{
+    if ($('body').get(0).scrollHeight - $('body').height() <= 58) {
+      $('nz-affix > div').addClass('fix');
+    } else {
       $('nz-affix > div').removeClass('fix');
     }
-    if (50 < ($('body').get(0).scrollHeight - $('body').height()) && ($('body').get(0).scrollHeight - $('body').height()) < 100) {
+    if (
+      50 < $('body').get(0).scrollHeight - $('body').height() &&
+      $('body').get(0).scrollHeight - $('body').height() < 100
+    ) {
       $('body').addClass('affix-fix');
     } else if ($('body').get(0).scrollHeight == $('body').height()) {
       $('nz-affix,nz-affix > div').removeAttr('style').removeClass('ant-affix');
@@ -25,7 +27,7 @@ export class ScrollAffixDirective {
   @HostListener('window:resize', ['$event'])
   public onResize(event) {
     $('nz-affix,nz-affix > div').removeAttr('style').removeClass('ant-affix');
-      $('body').removeClass('affix-fix');
-      $('nz-affix > div').removeClass('fix');
+    $('body').removeClass('affix-fix');
+    $('nz-affix > div').removeClass('fix');
   }
 }

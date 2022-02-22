@@ -7,15 +7,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { MainModule } from 'src/app/layout/main/main.module';
 
 @NgModule({
-  declarations: [
-    QuantriComponent,
-  
-  ],
-  imports: [
-    CommonModule,
-    QuantriRoutingModule,
-    ComponentsModule,
-    MainModule,
-  ]
+  declarations: [QuantriComponent],
+  imports: [CommonModule, QuantriRoutingModule, ComponentsModule, MainModule],
 })
-export class QuantriModule { }
+export class QuantriModule {}

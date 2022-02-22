@@ -13,7 +13,7 @@ declare var vgcapluginObject: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   public formLogin: FormGroup;
@@ -25,20 +25,19 @@ export class LoginComponent implements OnInit {
     private notification: NzNotificationService,
     private apiService: ApiService,
     private authService: AuthService,
-    public router: Router
-  ) { }
+    public router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
-    
   }
 
   initForm() {
     this.formLogin = this.fb.group({
       UserName: ['', Validators.required],
       Password: ['', Validators.required],
-      rememberMe: ['']
-    })
+      rememberMe: [''],
+    });
   }
 
   login(form) {
@@ -50,8 +49,8 @@ export class LoginComponent implements OnInit {
     try {
       const user = {
         UserName: form.UserName,
-        Password: form.Password
-      }    
+        Password: form.Password,
+      };
       this.apiService.login(user).subscribe((res: OldResponseData) => {
         if (res.success) {
           this.authService.saveToken(res.data.token);
@@ -60,11 +59,10 @@ export class LoginComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
         this.spinner.hide();
-      })
-    } catch(err) {
+      });
+    } catch (err) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
 }

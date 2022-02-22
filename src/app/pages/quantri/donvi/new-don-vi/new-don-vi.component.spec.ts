@@ -8,9 +8,8 @@ describe('NewDonViComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewDonViComponent ]
-    })
-    .compileComponents();
+      declarations: [NewDonViComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

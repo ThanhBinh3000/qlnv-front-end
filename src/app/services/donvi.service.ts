@@ -5,15 +5,11 @@ import { BaseService } from './base.service';
 import { OldResponseData } from '../interfaces/response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class DonviService extends BaseService {
-  constructor(
-    public httpClient: HttpClient
-
-  ) {
-    super(httpClient, "Donvi")
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'Donvi');
   }
 
   layDanhMucDonvi() {
@@ -88,11 +84,11 @@ export class DonviService extends BaseService {
 
   layCapDuoiDeXuat(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}api/DonVi/LayCapDuoiDeXuat`;
-    return this.httpClient.post<OldResponseData>(url,body).toPromise();
+    return this.httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   layNguoiXuLyTiepTheoVBDen(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}api/DonVi/LayNguoiXuLyTiepTheoVBDen`;
-    return this.httpClient.post<OldResponseData>(url,body).toPromise();
+    return this.httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

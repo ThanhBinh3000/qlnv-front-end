@@ -1,41 +1,63 @@
 <nz-affix class="menu-lv3 menu-timkiem bnt-themmoi" [nzOffsetTop]="43">
   <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
+    <div
+      class="tab-pane fade show active justify-content-between"
+      id="banhanh"
+      role="tabpanel"
+      aria-labelledby="banhanh-tab"
+    >
       <div class="col-6 col-lg-4 trai hide-mobile">
         <!-- <h3 class="title">Danh sách chức vụ</h3> -->
       </div>
       <div class="col-6 col-lg-8 phai justify-content-end">
-          <div class="input-group timkiem">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </span>
-            </div>
-            <input type="text" class="form-control" [(ngModel)]="keywordSearch" placeholder=""
-            (keyup.enter)="searchKey()">
+        <div class="input-group timkiem">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
           </div>
-        <div class="group-btn ">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="keywordSearch"
+            placeholder=""
+            (keyup.enter)="searchKey()"
+          />
+        </div>
+        <div class="group-btn">
           <span class="input-group-btn btn-timkiem2">
-            <button class="btn btn-outline-grey btn-sm waves-effect waves-light btn-timkiem" type="button" 
-            nz-dropdown nzTrigger="click"
-            [nzDropdownMenu]="timkiem" 
-            [nzOverlayClassName]="'contentTimkiem'">
+            <button
+              class="btn btn-outline-grey btn-sm waves-effect waves-light btn-timkiem"
+              type="button"
+              nz-dropdown
+              nzTrigger="click"
+              [nzDropdownMenu]="timkiem"
+              [nzOverlayClassName]="'contentTimkiem'"
+            >
               <i aria-hidden="true" class="fa fa-search"></i>
             </button>
             <!-- Tìm kiếm nâng cao 2 -->
-              <nz-dropdown-menu #timkiem="nzDropdownMenu">
-                <form nz-form [nzLayout]="'vertical'">
+            <nz-dropdown-menu #timkiem="nzDropdownMenu">
+              <form nz-form [nzLayout]="'vertical'">
                 <div class="dropdown-menu-right">
-                  <h3 class="title mobile">Tìm kiếm nâng cao
-                    <button type="button" nz-button nzType="text" nz-menu-item (click)="visible = false">
+                  <h3 class="title mobile">
+                    Tìm kiếm nâng cao
+                    <button
+                      type="button"
+                      nz-button
+                      nzType="text"
+                      nz-menu-item
+                      (click)="visible = false"
+                    >
                       <span class="icon htvbdh_line-x"></span>
                     </button>
                   </h3>
                   <div nz-row [nzGutter]="24">
                     <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                       <nz-form-item>
-                        <nz-form-label nzFor="searchKyHieuVanBan">Ký hiệu văn bản</nz-form-label>
+                        <nz-form-label nzFor="searchKyHieuVanBan"
+                          >Ký hiệu văn bản</nz-form-label
+                        >
                         <nz-form-control>
                           <input type="text" nz-input id="searchKyHieuVanBan" />
                         </nz-form-control>
@@ -43,11 +65,19 @@
                     </div>
                     <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                       <nz-form-item>
-                        <nz-form-label nzFor="searchLoaiVanBan">Loại văn bản</nz-form-label>
+                        <nz-form-label nzFor="searchLoaiVanBan"
+                          >Loại văn bản</nz-form-label
+                        >
                         <nz-form-control>
                           <nz-select nzShowSearch>
-                            <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
-                            <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+                            <nz-option
+                              nzValue="jack"
+                              nzLabel="Jack"
+                            ></nz-option>
+                            <nz-option
+                              nzValue="lucy"
+                              nzLabel="Lucy"
+                            ></nz-option>
                           </nz-select>
                         </nz-form-control>
                       </nz-form-item>
@@ -56,17 +86,27 @@
                   <div nz-row [nzGutter]="24">
                     <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                       <nz-form-item>
-                        <nz-form-label nzFor="searchStartDate">Từ ngày</nz-form-label>
+                        <nz-form-label nzFor="searchStartDate"
+                          >Từ ngày</nz-form-label
+                        >
                         <nz-form-control>
-                          <nz-date-picker [nzAllowClear]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>  
+                          <nz-date-picker
+                            [nzAllowClear]="true"
+                            nzFormat="dd/MM/yyyy"
+                          ></nz-date-picker>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
                     <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                       <nz-form-item>
-                        <nz-form-label nzFor="searchEndDate">Đến ngày</nz-form-label>
+                        <nz-form-label nzFor="searchEndDate"
+                          >Đến ngày</nz-form-label
+                        >
                         <nz-form-control>
-                          <nz-date-picker [nzAllowClear]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>  
+                          <nz-date-picker
+                            [nzAllowClear]="true"
+                            nzFormat="dd/MM/yyyy"
+                          ></nz-date-picker>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -74,42 +114,51 @@
                   <div nz-row [nzGutter]="24">
                     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
                       <nz-form-item>
-                        <nz-form-label nzFor="searchTrichYeu">Trích yếu</nz-form-label>
-                        <nz-form-control >
+                        <nz-form-label nzFor="searchTrichYeu"
+                          >Trích yếu</nz-form-label
+                        >
+                        <nz-form-control>
                           <textarea rows="2" nz-input></textarea>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
                   </div>
-                
+
                   <div class="row">
                     <div class="col-12 col-lg-12">
                       <div class="group-btn mt_search justify-content-end">
-                        <button type="button" class="btn btn-create" >
+                        <button type="button" class="btn btn-create">
                           <i class="fa fa-search" aria-hidden="true"></i>
                           <span>Tìm</span>
                         </button>
-                        <button type="button" class="btn btn-create xam" >
+                        <button type="button" class="btn btn-create xam">
                           <span class="icon htvbdh_lammoi"></span>
                           <span>Nhập lại</span>
                         </button>
-                        <button type="button" class="btn btn-create xam" nz-menu-item (click)="visible = false">
+                        <button
+                          type="button"
+                          class="btn btn-create xam"
+                          nz-menu-item
+                          (click)="visible = false"
+                        >
                           <i class="fa fa-times" aria-hidden="true"></i>
-                         <span>Đóng</span>
+                          <span>Đóng</span>
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </form>
-              </nz-dropdown-menu>
-           
-            
+            </nz-dropdown-menu>
+
             <!-- Tìm kiếm nâng cao 2 -->
           </span>
         </div>
 
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="themmoi()">
+        <a
+          class="btn btn-outline-grey btn-sm waves-effect waves-light"
+          (click)="themmoi()"
+        >
           <i class="fa fa-plus" aria-hidden="true"></i>
           <span>Thêm mới</span>
         </a>
@@ -119,65 +168,91 @@
 </nz-affix>
 <div class="contentBor">
   <div class="contentDetail">
-    <nz-card nzTitle="Danh sách chức vụ" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
-      <div *ngIf="addclass3 == 'showcard'; then cardDTVB else tableDTVB"></div>
+    <nz-card
+      nzTitle="Danh sách chức vụ"
+      [nzExtra]="tableCard1"
+      class="mt16 flex-card p-lr16"
+    >
+      <div *ngIf="addclass3 == 'showcard'; then cardDTVB; else tableDTVB"></div>
       <ng-template #cardDTVB>
         <div nz-row [nzGutter]="24">
-          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="8" nzXl="6" *ngFor="let data of datas; let i = index">
+          <div
+            nz-col
+            nzXs="24"
+            nzSm="24"
+            nzMd="12"
+            nzLg="8"
+            nzXl="6"
+            *ngFor="let data of datas; let i = index"
+          >
             <div class="card-content">
               <div class="tren">
-                  <div class="sokyhieu">
-                    <div class="trai allowClick">
-                      <span class="secondary">
-                        Chức vụ
-                      </span>
-                      <span class="text-lg noidungtrong">
-                        <span>{{data.name}}</span>
-                      </span>
-                    </div>
-                    <div class="phai">
-                      <!--khung hanh dong........................ -->
-                        <button nz-button nzType="default" nzShape="circle" (click)="chiTiet(data)" 
-                        nz-tooltip nzTooltipTitle="Chi tiết">
-                         <i class="fa fa-info theodoi"></i> 
-                        </button>
-                        <button nz-button nzType="default" nzShape="circle" (click)="themmoi(data)"
-                        nz-tooltip nzTooltipTitle="Chỉnh sửa">
-                         <i class="fa fa-pencil cam" ></i> 
-                        </button>
-                        <button nz-button nzType="default" nzShape="circle" (click)="xoa(data)"
-                        nz-tooltip nzTooltipTitle="Xóa">
-                         <i class="fa fa-trash-o do" ></i> 
-                        </button>
-                      <!--khung hanh dong........................ -->
-                    </div>
+                <div class="sokyhieu">
+                  <div class="trai allowClick">
+                    <span class="secondary"> Chức vụ </span>
+                    <span class="text-lg noidungtrong">
+                      <span>{{ data.name }}</span>
+                    </span>
                   </div>
-           
-                    <div class="secondary bgxam text-sm">
-                      <span>
-                        Mã chức vụ: 
-                      </span>
-                      <span>{{data?.code}}</span>
-                    </div>
-                    
-                  <!-- </ng-template> -->
+                  <div class="phai">
+                    <!--khung hanh dong........................ -->
+                    <button
+                      nz-button
+                      nzType="default"
+                      nzShape="circle"
+                      (click)="chiTiet(data)"
+                      nz-tooltip
+                      nzTooltipTitle="Chi tiết"
+                    >
+                      <i class="fa fa-info theodoi"></i>
+                    </button>
+                    <button
+                      nz-button
+                      nzType="default"
+                      nzShape="circle"
+                      (click)="themmoi(data)"
+                      nz-tooltip
+                      nzTooltipTitle="Chỉnh sửa"
+                    >
+                      <i class="fa fa-pencil cam"></i>
+                    </button>
+                    <button
+                      nz-button
+                      nzType="default"
+                      nzShape="circle"
+                      (click)="xoa(data)"
+                      nz-tooltip
+                      nzTooltipTitle="Xóa"
+                    >
+                      <i class="fa fa-trash-o do"></i>
+                    </button>
+                    <!--khung hanh dong........................ -->
+                  </div>
+                </div>
+
+                <div class="secondary bgxam text-sm">
+                  <span> Mã chức vụ: </span>
+                  <span>{{ data?.code }}</span>
+                </div>
+
+                <!-- </ng-template> -->
                 <div class="trichyeu">
                   <span>
-                    {{data?.description}}
+                    {{ data?.description }}
                   </span>
                 </div>
               </div>
               <div class="duoi">
                 <!-- hr -->
                 <span class="stt">
-                  {{(page-1) * pageSize + i + 1}}
+                  {{ (page - 1) * pageSize + i + 1 }}
                 </span>
               </div>
             </div>
           </div>
         </div>
       </ng-template>
-  <!-- danh sách chức vụ  -->
+      <!-- danh sách chức vụ  -->
       <ng-template #tableDTVB>
         <nz-table #basicTable [nzData]="datas" class="nowrap">
           <thead>
@@ -190,25 +265,44 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of datas, let i = index">
+            <tr *ngFor="let data of datas; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ data.name }}</td>
-              <td>{{data?.code}}</td>
-              <td>{{data?.description}}</td>
-              <td class="text-center nowrap"> 
-                <i class="fa fa-info theodoi" nzTheme="outline" (click)="chiTiet(data)" nz-tooltip nzTooltipTitle="Chi tiết"></i> 
-                <i class="fa fa-pencil cam" aria-hidden="true" (click)="themmoi(data)" nz-tooltip nzTooltipTitle="Chỉnh sửa"></i>
-                <i class="fa fa-trash-o do" (click)="xoa(data)" nz-tooltip nzTooltipTitle="Xóa"></i>
+              <td>{{ data?.code }}</td>
+              <td>{{ data?.description }}</td>
+              <td class="text-center nowrap">
+                <i
+                  class="fa fa-info theodoi"
+                  nzTheme="outline"
+                  (click)="chiTiet(data)"
+                  nz-tooltip
+                  nzTooltipTitle="Chi tiết"
+                ></i>
+                <i
+                  class="fa fa-pencil cam"
+                  aria-hidden="true"
+                  (click)="themmoi(data)"
+                  nz-tooltip
+                  nzTooltipTitle="Chỉnh sửa"
+                ></i>
+                <i
+                  class="fa fa-trash-o do"
+                  (click)="xoa(data)"
+                  nz-tooltip
+                  nzTooltipTitle="Xóa"
+                ></i>
               </td>
-
             </tr>
           </tbody>
         </nz-table>
       </ng-template>
-      
     </nz-card>
     <ng-template #tableCard1>
-      <nz-radio-group [(ngModel)]="addclass3" nzButtonStyle="solid" nzSize="small">
+      <nz-radio-group
+        [(ngModel)]="addclass3"
+        nzButtonStyle="solid"
+        nzSize="small"
+      >
         <label nz-radio-button nzValue="showcard">
           <i class="fa fa-th-large" aria-hidden="true"></i>
         </label>
@@ -217,28 +311,31 @@
         </label>
       </nz-radio-group>
     </ng-template>
-     
- <nz-affix class="menu-lv4" [nzOffsetBottom]="0">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between">
-      <div class="trai">
 
+    <nz-affix class="menu-lv4" [nzOffsetBottom]="0">
+      <div class="tab-content tab-menu" id="myTabContent">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai"></div>
+          <div class="canphai">
+            <!-- begin phân trang  -->
+            <nz-pagination
+              class="pagination-card"
+              [nzPageIndex]="page"
+              [nzTotal]="totalRecord"
+              nzShowSizeChanger
+              [nzPageSize]="pageSize"
+              [nzShowTotal]="rangeTemplate"
+              (nzPageIndexChange)="changePageIndex($event)"
+              (nzPageSizeChange)="changePageSize($event)"
+            >
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              </ng-template>
+            </nz-pagination>
+            <!-- end phân trang  -->
+          </div>
+        </div>
       </div>
-      <div class="canphai">
-        <!-- begin phân trang  -->
-     <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-     [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-     (nzPageIndexChange)="changePageIndex($event)"
-     (nzPageSizeChange)="changePageSize($event)">
-     <ng-template #rangeTemplate let-range="range" let-total>
-         {{ range[0] }}-{{ range[1] }} of {{ total }} items
-     </ng-template>
- </nz-pagination>
- <!-- end phân trang  -->
-      </div>
-    </div>
-  </div>
-</nz-affix>
-
+    </nz-affix>
   </div>
 </div>

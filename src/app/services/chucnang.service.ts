@@ -5,19 +5,15 @@ import { BaseService } from './base.service';
 import { OldResponseData } from '../interfaces/response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ChucNangService extends BaseService {
-  constructor(
-    public httpClient: HttpClient
-  ) {
-    super(httpClient, "ChucNang")
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'ChucNang');
   }
 
   LayTatCaTheoTree() {
     const url = `${environment.SERVICE_API}api/ChucNang/LayTatCaTheoTree`;
     return this.httpClient.get<OldResponseData>(url).toPromise();
   }
-
 }

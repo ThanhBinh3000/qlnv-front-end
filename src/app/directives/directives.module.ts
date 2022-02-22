@@ -4,21 +4,13 @@ import { DatepickerDirective } from './datepicker.directive';
 import { NumberOnlyDirective } from './number-only.directive';
 import { ScrollAffixDirective } from './scroll-affix.directive';
 
-
-
 @NgModule({
   declarations: [
     DatepickerDirective,
     NumberOnlyDirective,
-    ScrollAffixDirective
+    ScrollAffixDirective,
   ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    DatepickerDirective,
-    NumberOnlyDirective,
-    ScrollAffixDirective
-  ]
+  imports: [CommonModule],
+  exports: [DatepickerDirective, NumberOnlyDirective, ScrollAffixDirective],
 })
-export class DirectivesModule { }
+export class DirectivesModule {}

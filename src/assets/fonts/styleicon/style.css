@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?6t4dbi');
-  src:  url('fonts/htvbdh.eot?6t4dbi#iefix') format('embedded-opentype'),
+  src: url('fonts/htvbdh.eot?6t4dbi');
+  src: url('fonts/htvbdh.eot?6t4dbi#iefix') format('embedded-opentype'),
     url('fonts/htvbdh.ttf?6t4dbi') format('truetype'),
     url('fonts/htvbdh.woff?6t4dbi') format('woff'),
     url('fonts/htvbdh.svg?6t4dbi#htvbdh') format('svg');
@@ -25,1473 +25,1470 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< HEAD
-.htvbdh_scan:before {
-  content: "\eabe";
+<<<<<<< HEAD .htvbdh_scan:before {
+  content: '\eabe';
 }
-=======
-.htvbdh_chuyentheolo:before {
-  content: "\eabe";
+======= .htvbdh_chuyentheolo:before {
+  content: '\eabe';
 }
 .htvbdh_tepvanban:before {
-  content: "\eae7";
+  content: '\eae7';
 }
->>>>>>> a6a34235db311d1420613643b417b20a6cb5ef00
-.htvbdh_dangkyxe:before {
-  content: "\eaa9";
+>>>>>>>a6a34235db311d1420613643b417b20a6cb5ef00 .htvbdh_dangkyxe:before {
+  content: '\eaa9';
 }
 .htvbdh_dangkyxe2:before {
-  content: "\eaaa";
+  content: '\eaaa';
 }
 .htvbdh_capnhattepnoidung:before {
-  content: "\ea87";
+  content: '\ea87';
 }
 .htvbdh_capnhattepnoidung2:before {
-  content: "\eaa1";
+  content: '\eaa1';
 }
 .htvbdh_totrinh:before {
-  content: "\e9bf";
+  content: '\e9bf';
 }
 .htvbdh_lichsuchuyendonvi:before {
-  content: "\eae6";
+  content: '\eae6';
 }
 .htvbdh_lichsuchuyendonvi2:before {
-  content: "\eae4";
+  content: '\eae4';
 }
 .htvbdh_lichsuchuyendonvi1:before {
-  content: "\eae5";
+  content: '\eae5';
 }
 .htvbdh_lichsuphathanh:before {
-  content: "\eade";
+  content: '\eade';
 }
 .htvbdh_phathanh:before {
-  content: "\eadc";
+  content: '\eadc';
 }
 .htvbdh_phathanh2:before {
-  content: "\eadd";
+  content: '\eadd';
 }
 .htvbdh_chophathanh:before {
-  content: "\eadb";
+  content: '\eadb';
 }
 .htvbdh_dakychocapso:before {
-  content: "\eada";
+  content: '\eada';
 }
 .htvbdh_quanly-controller:before {
-  content: "\ead9";
+  content: '\ead9';
 }
 .htvbdh_vanbantrinhky:before {
-  content: "\ead8";
+  content: '\ead8';
 }
 .htvbdh_da-xu-ly:before {
-  content: "\ead6";
+  content: '\ead6';
 }
 .htvbdh_da-xu-ly1:before {
-  content: "\ead7";
+  content: '\ead7';
 }
 .htvbdh_trinh:before {
-  content: "\ea6d";
+  content: '\ea6d';
 }
 .htvbdh_trinh3:before {
-  content: "\ead4";
+  content: '\ead4';
 }
 .htvbdh_tu-choi1:before {
-  content: "\ead5";
+  content: '\ead5';
 }
 .htvbdh_chuyenvanthu:before {
-  content: "\ea27";
+  content: '\ea27';
 }
 .htvbdh_danhmuc:before {
-  content: "\eaa8";
+  content: '\eaa8';
 }
 .htvbdh_applicant:before {
-  content: "\ea2a";
+  content: '\ea2a';
 }
 .htvbdh_bosungfile:before {
-  content: "\ea2b";
+  content: '\ea2b';
 }
 .htvbdh_checkbox:before {
-  content: "\ea61";
+  content: '\ea61';
 }
 .htvbdh_checkfile:before {
-  content: "\ea62";
+  content: '\ea62';
 }
 .htvbdh_checkfile2:before {
-  content: "\ea63";
+  content: '\ea63';
 }
 .htvbdh_connected:before {
-  content: "\ea68";
+  content: '\ea68';
 }
 .htvbdh_duyet:before {
-  content: "\ea73";
+  content: '\ea73';
 }
 .htvbdh_foyou:before {
-  content: "\eaaf";
+  content: '\eaaf';
 }
 .htvbdh_baocao2:before {
-  content: "\eab0";
+  content: '\eab0';
 }
 .htvbdh_Leave:before {
-  content: "\eab1";
+  content: '\eab1';
 }
 .htvbdh_projectsetup:before {
-  content: "\eab2";
+  content: '\eab2';
 }
 .htvbdh_richtextconverter:before {
-  content: "\eab3";
+  content: '\eab3';
 }
 .htvbdh_shareddocument:before {
-  content: "\eab4";
+  content: '\eab4';
 }
 .htvbdh_splitfiles:before {
-  content: "\eab5";
+  content: '\eab5';
 }
 .htvbdh_startmenu:before {
-  content: "\eab6";
+  content: '\eab6';
 }
 .htvbdh_symlinkfile:before {
-  content: "\eab7";
+  content: '\eab7';
 }
 .htvbdh_updatefile:before {
-  content: "\eab8";
+  content: '\eab8';
 }
 .htvbdh_nhomdanhmuc:before {
-  content: "\eaa7";
+  content: '\eaa7';
 }
 .htvbdh_vanbannoibo:before {
-  content: "\ea94";
+  content: '\ea94';
 }
 .htvbdh_tu-choi:before {
-  content: "\ead3";
+  content: '\ead3';
 }
 .htvbdh_thuhoi:before {
-  content: "\ead2";
+  content: '\ead2';
 }
 .htvbdh_baocao1:before {
-  content: "\ead0";
+  content: '\ead0';
 }
 .htvbdh_baocao:before {
-  content: "\ead1";
+  content: '\ead1';
 }
 .htvbdh_capso:before {
-  content: "\eace";
+  content: '\eace';
 }
 .htvbdh_dacapso:before {
-  content: "\eacf";
+  content: '\eacf';
 }
 .htvbdh_dakyduyet:before {
-  content: "\e9ff";
+  content: '\e9ff';
 }
 .htvbdh_bosungfile1:before {
-  content: "\eabf";
+  content: '\eabf';
 }
 .htvbdh_bosungfile-1:before {
-  content: "\eac0";
+  content: '\eac0';
 }
 .htvbdh_bosungfile2:before {
-  content: "\eac1";
+  content: '\eac1';
 }
 .htvbdh_bosungfile-2:before {
-  content: "\eac2";
+  content: '\eac2';
 }
 .htvbdh_bosungfile2-1:before {
-  content: "\eac3";
+  content: '\eac3';
 }
 .htvbdh_bosungfile-3:before {
-  content: "\eac4";
+  content: '\eac4';
 }
 .htvbdh_boxungfile:before {
-  content: "\eac5";
+  content: '\eac5';
 }
 .htvbdh_Buildings:before {
-  content: "\eac6";
+  content: '\eac6';
 }
 .htvbdh_Buildings2:before {
-  content: "\eac7";
+  content: '\eac7';
 }
 .htvbdh_chuyencap:before {
-  content: "\eac8";
+  content: '\eac8';
 }
 .htvbdh_clipboardapprove:before {
-  content: "\eac9";
+  content: '\eac9';
 }
 .htvbdh_duthao:before {
-  content: "\eaca";
+  content: '\eaca';
 }
 .htvbdh_manager:before {
-  content: "\eacb";
+  content: '\eacb';
 }
 .htvbdh_Reserve:before {
-  content: "\eacc";
+  content: '\eacc';
 }
 .htvbdh_soanthao:before {
-  content: "\eacd";
+  content: '\eacd';
 }
 .htvbdh_kyfile:before {
-  content: "\eab9";
+  content: '\eab9';
 }
 .htvbdh_kynhay2:before {
-  content: "\eaba";
+  content: '\eaba';
 }
 .htvbdh_kyso1:before {
-  content: "\eabb";
+  content: '\eabb';
 }
 .htvbdh_kyso2:before {
-  content: "\eabc";
+  content: '\eabc';
 }
 .htvbdh_Leave1:before {
-  content: "\eabd";
+  content: '\eabd';
 }
 .htvbdh_xemthem:before {
-  content: "\ea28";
+  content: '\ea28';
 }
 .htvbdh_ketthuc:before {
-  content: "\eaac";
+  content: '\eaac';
 }
 .htvbdh_phieugiaoviec:before {
-  content: "\eaad";
+  content: '\eaad';
 }
 .htvbdh_phieugiaoviec2:before {
-  content: "\eaae";
+  content: '\eaae';
 }
 .htvbdh_laixe:before {
-  content: "\eaab";
+  content: '\eaab';
 }
 .htvbdh_atask:before {
-  content: "\ea99";
+  content: '\ea99';
 }
 .htvbdh_change:before {
-  content: "\ea9a";
+  content: '\ea9a';
 }
 .htvbdh_currency-exchange:before {
-  content: "\ea9b";
+  content: '\ea9b';
 }
 .htvbdh_Homeadvisor:before {
-  content: "\ea9c";
+  content: '\ea9c';
 }
 .htvbdh_journal:before {
-  content: "\ea9d";
+  content: '\ea9d';
 }
 .htvbdh_loadresume:before {
-  content: "\ea9e";
+  content: '\ea9e';
 }
 .htvbdh_loaivanban:before {
-  content: "\ea9f";
+  content: '\ea9f';
 }
 .htvbdh_online-payment:before {
-  content: "\eaa0";
+  content: '\eaa0';
 }
 .htvbdh_profiles:before {
-  content: "\eaa2";
+  content: '\eaa2';
 }
 .htvbdh_setas:before {
-  content: "\eaa3";
+  content: '\eaa3';
 }
 .htvbdh_submit:before {
-  content: "\eaa4";
+  content: '\eaa4';
 }
 .htvbdh_tiepnhan3:before {
-  content: "\eaa5";
+  content: '\eaa5';
 }
 .htvbdh_vantay:before {
-  content: "\eaa6";
+  content: '\eaa6';
 }
 .htvbdh_meetingroom:before {
-  content: "\ea95";
+  content: '\ea95';
 }
 .htvbdh_nhomquyen:before {
-  content: "\ea96";
+  content: '\ea96';
 }
 .htvbdh_nhomquyen2:before {
-  content: "\ea97";
+  content: '\ea97';
 }
 .htvbdh_phanquyen1:before {
-  content: "\ea98";
+  content: '\ea98';
 }
 .htvbdh_chuyencapso1:before {
-  content: "\ea6f";
+  content: '\ea6f';
 }
 .htvbdh_vanbanden:before {
-  content: "\ea92";
+  content: '\ea92';
 }
 .htvbdh_vanbandi:before {
-  content: "\ea93";
+  content: '\ea93';
 }
 .htvbdh_vanbandi1:before {
-  content: "\e9dc";
+  content: '\e9dc';
 }
 .htvbdh_chuyencapso:before {
-  content: "\ea91";
+  content: '\ea91';
 }
 .htvbdh_luuvadangky:before {
-  content: "\ea90";
+  content: '\ea90';
 }
 .htvbdh_khongduyet:before {
-  content: "\ea8f";
+  content: '\ea8f';
 }
 .htvbdh_canhandonvi2:before {
-  content: "\ea8d";
+  content: '\ea8d';
 }
 .htvbdh_canhandonvi:before {
-  content: "\ea8e";
+  content: '\ea8e';
 }
 .htvbdh_timsao:before {
-  content: "\ea8c";
+  content: '\ea8c';
 }
 .htvbdh_dcuyquyen:before {
-  content: "\ea8b";
+  content: '\ea8b';
 }
 .htvbdh_dachoykien:before {
-  content: "\ea8a";
+  content: '\ea8a';
 }
 .htvbdh_paperclip1:before {
-  content: "\e9b3";
+  content: '\e9b3';
 }
 .htvbdh_quay-lai1:before {
-  content: "\ea58";
+  content: '\ea58';
 }
 .htvbdh_sua1:before {
-  content: "\ea5c";
+  content: '\ea5c';
 }
 .htvbdh_table3:before {
-  content: "\ea5d";
+  content: '\ea5d';
 }
 .htvbdh_thang-nay:before {
-  content: "\ea5e";
+  content: '\ea5e';
 }
 .htvbdh_them-moi1:before {
-  content: "\ea5f";
+  content: '\ea5f';
 }
 .htvbdh_theo-doi:before {
-  content: "\ea60";
+  content: '\ea60';
 }
 .htvbdh_tiep-nhan-van-ban-21:before {
-  content: "\ea64";
+  content: '\ea64';
 }
 .htvbdh_tiep-nhan-van-ban-31:before {
-  content: "\ea65";
+  content: '\ea65';
 }
 .htvbdh_phan-luong2:before {
-  content: "\ea66";
+  content: '\ea66';
 }
 .htvbdh_tiep-nhan:before {
-  content: "\ea67";
+  content: '\ea67';
 }
 .htvbdh_timkiem1:before {
-  content: "\ea69";
+  content: '\ea69';
 }
 .htvbdh_tra-cuu-van-ban1:before {
-  content: "\ea6a";
+  content: '\ea6a';
 }
 .htvbdh_transfer1:before {
-  content: "\ea6b";
+  content: '\ea6b';
 }
 .htvbdh_trinh-ky1:before {
-  content: "\ea6c";
+  content: '\ea6c';
 }
 .htvbdh_tuan-nay1:before {
-  content: "\ea6e";
+  content: '\ea6e';
 }
 .htvbdh_upload4:before {
-  content: "\ea74";
+  content: '\ea74';
 }
 .htvbdh_use-21:before {
-  content: "\ea75";
+  content: '\ea75';
 }
 .htvbdh_use1:before {
-  content: "\ea76";
+  content: '\ea76';
 }
 .htvbdh_uy-quyen1:before {
-  content: "\ea82";
+  content: '\ea82';
 }
 .htvbdh_vai-tro1:before {
-  content: "\ea83";
+  content: '\ea83';
 }
 .htvbdh_vao-so1:before {
-  content: "\ea84";
+  content: '\ea84';
 }
 .htvbdh_Vector1:before {
-  content: "\ea85";
+  content: '\ea85';
 }
 .htvbdh_xac-nhan1:before {
-  content: "\ea86";
+  content: '\ea86';
 }
 .htvbdh_xin-y-kien1:before {
-  content: "\ea88";
+  content: '\ea88';
 }
 .htvbdh_xoa1:before {
-  content: "\ea89";
+  content: '\ea89';
 }
 .htvbdh_ky1:before {
-  content: "\ea1a";
+  content: '\ea1a';
 }
 .htvbdh_lich-su1:before {
-  content: "\ea1b";
+  content: '\ea1b';
 }
 .htvbdh_lich-icon1:before {
-  content: "\ea26";
+  content: '\ea26';
 }
 .htvbdh_luu-thanh-cong1:before {
-  content: "\ea29";
+  content: '\ea29';
 }
 .htvbdh_mail1:before {
-  content: "\ea2c";
+  content: '\ea2c';
 }
 .htvbdh_mo-khoa1:before {
-  content: "\ea2d";
+  content: '\ea2d';
 }
 .htvbdh_nam-nay1:before {
-  content: "\ea2e";
+  content: '\ea2e';
 }
 .htvbdh_ngoai-nganh1:before {
-  content: "\ea2f";
+  content: '\ea2f';
 }
 .htvbdh_ngon-ngu1:before {
-  content: "\ea30";
+  content: '\ea30';
 }
 .htvbdh_nhac-nho1:before {
-  content: "\ea4e";
+  content: '\ea4e';
 }
 .htvbdh_nhan-de-biet1:before {
-  content: "\ea50";
+  content: '\ea50';
 }
 .htvbdh_nhap-lai1:before {
-  content: "\ea51";
+  content: '\ea51';
 }
 .htvbdh_cog1:before {
-  content: "\e9f9";
+  content: '\e9f9';
 }
 .htvbdh_collapse:before {
-  content: "\e9fa";
+  content: '\e9fa';
 }
 .htvbdh_cong-bo:before {
-  content: "\e9fb";
+  content: '\e9fb';
 }
 .htvbdh_coppy:before {
-  content: "\e9fc";
+  content: '\e9fc';
 }
 .htvbdh_da-cho-y-kien:before {
-  content: "\e9fd";
+  content: '\e9fd';
 }
 .htvbdh_da-xu-ly2:before {
-  content: "\e9fe";
+  content: '\e9fe';
 }
 .htvbdh_dang-xu-ly:before {
-  content: "\ea00";
+  content: '\ea00';
 }
 .htvbdh_dau-cong:before {
-  content: "\ea01";
+  content: '\ea01';
 }
 .htvbdh_dau-cong2:before {
-  content: "\ea02";
+  content: '\ea02';
 }
 .htvbdh_dau-x:before {
-  content: "\ea04";
+  content: '\ea04';
 }
 .htvbdh_dau-x2:before {
-  content: "\ea05";
+  content: '\ea05';
 }
 .htvbdh_don-vi-ngoai-nganh:before {
-  content: "\ea06";
+  content: '\ea06';
 }
 .htvbdh_duoc-uy-quyen:before {
-  content: "\ea07";
+  content: '\ea07';
 }
 .htvbdh_duplicate:before {
-  content: "\ea08";
+  content: '\ea08';
 }
 .htvbdh_edit:before {
-  content: "\ea09";
+  content: '\ea09';
 }
 .htvbdh_expand:before {
-  content: "\ea0c";
+  content: '\ea0c';
 }
 .htvbdh_file:before {
-  content: "\ea0d";
+  content: '\ea0d';
 }
 .htvbdh_file-alt:before {
-  content: "\ea15";
+  content: '\ea15';
 }
 .htvbdh_file-signature:before {
-  content: "\ea16";
+  content: '\ea16';
 }
 .htvbdh_Guarantee:before {
-  content: "\ea17";
+  content: '\ea17';
 }
 .htvbdh_gui-xu-ly:before {
-  content: "\ea18";
+  content: '\ea18';
 }
 .htvbdh_hom-nay:before {
-  content: "\ea19";
+  content: '\ea19';
 }
 .htvbdh_bao-cao-in-so:before {
-  content: "\e9e9";
+  content: '\e9e9';
 }
 .htvbdh_bao-cao-thong-ke:before {
-  content: "\e9ea";
+  content: '\e9ea';
 }
 .htvbdh_building:before {
-  content: "\e9eb";
+  content: '\e9eb';
 }
 .htvbdh_cap-nhat-van-ban:before {
-  content: "\e9ec";
+  content: '\e9ec';
 }
 .htvbdh_card:before {
-  content: "\e9ed";
+  content: '\e9ed';
 }
 .htvbdh_cau-hoi:before {
-  content: "\e9ee";
+  content: '\e9ee';
 }
 .htvbdh_check-use:before {
-  content: "\e9ef";
+  content: '\e9ef';
 }
 .htvbdh_chi-tiet-2:before {
-  content: "\e9f0";
+  content: '\e9f0';
 }
 .htvbdh_chi-tiet:before {
-  content: "\e9f1";
+  content: '\e9f1';
 }
 .htvbdh_cho-cho-y-kien:before {
-  content: "\e9f2";
+  content: '\e9f2';
 }
 .htvbdh_cho-xu-ly:before {
-  content: "\e9f3";
+  content: '\e9f3';
 }
 .htvbdh_chon:before {
-  content: "\e9f4";
+  content: '\e9f4';
 }
 .htvbdh_chuyen-tra:before {
-  content: "\e9f5";
+  content: '\e9f5';
 }
 .htvbdh_chuyen-vao-thu-vien:before {
-  content: "\e9f6";
+  content: '\e9f6';
 }
 .htvbdh_chuyen-xu-ly:before {
-  content: "\e9f7";
+  content: '\e9f7';
 }
 .htvbdh_city_buildings:before {
-  content: "\e9f8";
+  content: '\e9f8';
 }
 .htvbdh_ky:before {
-  content: "\e99b";
+  content: '\e99b';
 }
 .htvbdh_lich-su:before {
-  content: "\e99d";
+  content: '\e99d';
 }
 .htvbdh_lich-icon:before {
-  content: "\e99e";
+  content: '\e99e';
 }
 .htvbdh_luu-sao-them-moi:before {
-  content: "\e99f";
+  content: '\e99f';
 }
 .htvbdh_luu-sao:before {
-  content: "\e9a0";
+  content: '\e9a0';
 }
 .htvbdh_luu-thanh-cong:before {
-  content: "\e9a1";
+  content: '\e9a1';
 }
 .htvbdh_luu-them-moi:before {
-  content: "\e9a2";
+  content: '\e9a2';
 }
 .htvbdh_luu:before {
-  content: "\e9a3";
+  content: '\e9a3';
 }
 .htvbdh_mail:before {
-  content: "\e9a4";
+  content: '\e9a4';
 }
 .htvbdh_mo-khoa:before {
-  content: "\e9a5";
+  content: '\e9a5';
 }
 .htvbdh_nm-nay:before {
-  content: "\e9a6";
+  content: '\e9a6';
 }
 .htvbdh_ngoai-nganh:before {
-  content: "\e9a7";
+  content: '\e9a7';
 }
 .htvbdh_ngon-ngu:before {
-  content: "\e9a8";
+  content: '\e9a8';
 }
 .htvbdh_nhac-nho:before {
-  content: "\e9a9";
+  content: '\e9a9';
 }
 .htvbdh_nhan-de-biet:before {
-  content: "\e9aa";
+  content: '\e9aa';
 }
 .htvbdh_nhap-lai:before {
-  content: "\e9ab";
+  content: '\e9ab';
 }
 .htvbdh_paperclip:before {
-  content: "\e9ac";
+  content: '\e9ac';
 }
 .htvbdh_quay-lai:before {
-  content: "\e9ad";
+  content: '\e9ad';
 }
 .htvbdh_select-icon:before {
-  content: "\e9ae";
+  content: '\e9ae';
 }
 .htvbdh_sua:before {
-  content: "\e9af";
+  content: '\e9af';
 }
 .htvbdh_table:before {
-  content: "\e9b0";
+  content: '\e9b0';
 }
 .htvbdh_thang-nay2:before {
-  content: "\e9b1";
+  content: '\e9b1';
 }
 .htvbdh_them-moi:before {
-  content: "\e9b2";
+  content: '\e9b2';
 }
 .htvbdh_thoat-2:before {
-  content: "\e9b4";
+  content: '\e9b4';
 }
 .htvbdh_thoat:before {
-  content: "\e9b5";
+  content: '\e9b5';
 }
 .htvbdh_thu-hoi:before {
-  content: "\e9b7";
+  content: '\e9b7';
 }
 .htvbdh_tiep-nhan-van-ban-2:before {
-  content: "\e9bd";
+  content: '\e9bd';
 }
 .htvbdh_tiep-nhan-van-ban-3:before {
-  content: "\e9be";
+  content: '\e9be';
 }
 .htvbdh_tiep-nhan-van-ban:before {
-  content: "\e9c0";
+  content: '\e9c0';
 }
 .htvbdh_tim-sao:before {
-  content: "\e9ca";
+  content: '\e9ca';
 }
 .htvbdh_timkiem:before {
-  content: "\e9cc";
+  content: '\e9cc';
 }
 .htvbdh_tra-cuu-van-ban:before {
-  content: "\e9d4";
+  content: '\e9d4';
 }
 .htvbdh_transfer:before {
-  content: "\e9d5";
+  content: '\e9d5';
 }
 .htvbdh_trinh-ky:before {
-  content: "\e9d6";
+  content: '\e9d6';
 }
 .htvbdh_trinh1:before {
-  content: "\e9da";
+  content: '\e9da';
 }
 .htvbdh_tuan-nay:before {
-  content: "\e9db";
+  content: '\e9db';
 }
 .htvbdh_tu-choi2:before {
-  content: "\e9dd";
+  content: '\e9dd';
 }
 .htvbdh_upload:before {
-  content: "\e9de";
+  content: '\e9de';
 }
 .htvbdh_use-2:before {
-  content: "\e9df";
+  content: '\e9df';
 }
 .htvbdh_use:before {
-  content: "\e9e0";
+  content: '\e9e0';
 }
 .htvbdh_uy-quyen:before {
-  content: "\e9e1";
+  content: '\e9e1';
 }
 .htvbdh_vai-tro:before {
-  content: "\e9e2";
+  content: '\e9e2';
 }
 .htvbdh_vao-so:before {
-  content: "\e9e3";
+  content: '\e9e3';
 }
 .htvbdh_Vector:before {
-  content: "\e9e4";
+  content: '\e9e4';
 }
 .htvbdh_xac-nhan:before {
-  content: "\e9e5";
+  content: '\e9e5';
 }
 .htvbdh_xem-luong:before {
-  content: "\e9e6";
+  content: '\e9e6';
 }
 .htvbdh_xin-y-kien:before {
-  content: "\e9e7";
+  content: '\e9e7';
 }
 .htvbdh_xoa:before {
-  content: "\e9e8";
+  content: '\e9e8';
 }
 .htvbdh_Vectorky:before {
-  content: "\e999";
+  content: '\e999';
 }
 .htvbdh_kyso:before {
-  content: "\e91e";
+  content: '\e91e';
 }
 .htvbdh_kyduyet:before {
-  content: "\e98f";
+  content: '\e98f';
 }
 .htvbdh_kynhay:before {
-  content: "\e998";
+  content: '\e998';
 }
 .htvbdh_icon_vb--20:before {
-  content: "\e997";
+  content: '\e997';
 }
 .htvbdh_icon_date:before {
-  content: "\e98d";
+  content: '\e98d';
 }
 .htvbdh_icon_bd:before {
-  content: "\e982";
+  content: '\e982';
 }
 .htvbdh_hoso:before {
-  content: "\e981";
+  content: '\e981';
 }
 .htvbdh_lich:before {
-  content: "\e97a";
+  content: '\e97a';
 }
 .htvbdh_thoat1:before {
-  content: "\e97d";
+  content: '\e97d';
 }
 .htvbdh_icon_pre:before {
-  content: "\e97e";
+  content: '\e97e';
 }
 .htvbdh_icon_see:before {
-  content: "\e97f";
+  content: '\e97f';
 }
 .htvbdh_icon_xoa:before {
-  content: "\e979";
+  content: '\e979';
 }
 .htvbdh_ands:before {
-  content: "\e97b";
+  content: '\e97b';
 }
 .htvbdh_hiends:before {
-  content: "\e97c";
+  content: '\e97c';
 }
 .htvbdh_admin:before {
-  content: "\e983";
+  content: '\e983';
 }
 .htvbdh_doimk:before {
-  content: "\e984";
+  content: '\e984';
 }
 .htvbdh_phanvaitro:before {
-  content: "\e985";
+  content: '\e985';
 }
 .htvbdh_phanquyen:before {
-  content: "\e98e";
+  content: '\e98e';
 }
 .htvbdh_icon_edit:before {
-  content: "\e991";
+  content: '\e991';
 }
 .htvbdh_xemad:before {
-  content: "\e996";
+  content: '\e996';
 }
 .htvbdh_motat:before {
-  content: "\e977";
+  content: '\e977';
 }
 .htvbdh_dongtat:before {
-  content: "\e978";
+  content: '\e978';
 }
 .htvbdh_icon_bar:before {
-  content: "\e980";
+  content: '\e980';
 }
 .htvbdh_icon_list:before {
-  content: "\e94a";
+  content: '\e94a';
 }
 .htvbdh_use2:before {
-  content: "\e90c";
+  content: '\e90c';
 }
 .htvbdh_xuat-excel:before {
-  content: "\e900";
+  content: '\e900';
 }
 .htvbdh_nhap-excel:before {
-  content: "\e901";
+  content: '\e901';
 }
 .htvbdh_excel:before {
-  content: "\e902";
+  content: '\e902';
 }
 .htvbdh_tra-cuu:before {
-  content: "\e903";
+  content: '\e903';
 }
 .htvbdh_lammoi:before {
-  content: "\e904";
+  content: '\e904';
 }
 .htvbdh_tracuu2:before {
-  content: "\e905";
+  content: '\e905';
 }
 .htvbdh_bieu-mau:before {
-  content: "\e906";
+  content: '\e906';
 }
 .htvbdh_file-import:before {
-  content: "\e96f";
+  content: '\e96f';
 }
 .htvbdh_user-plus2:before {
-  content: "\e970";
+  content: '\e970';
 }
 .htvbdh_favorite:before {
-  content: "\e94b";
+  content: '\e94b';
 }
 .htvbdh_line-3-cham-doc:before {
-  content: "\e94c";
+  content: '\e94c';
 }
 .htvbdh_line-3-cham-ngang:before {
-  content: "\e94f";
+  content: '\e94f';
 }
 .htvbdh_ine-4-hinhvuong:before {
-  content: "\e952";
+  content: '\e952';
 }
 .htvbdh_line-360:before {
-  content: "\e959";
+  content: '\e959';
 }
 .htvbdh_line-dow:before {
-  content: "\e95a";
+  content: '\e95a';
 }
 .htvbdh_Untitled-1_line-left:before {
-  content: "\e95b";
+  content: '\e95b';
 }
 .htvbdh_Untitled-1_line-plus:before {
-  content: "\e95c";
+  content: '\e95c';
 }
 .htvbdh_Untitled-1_line-up:before {
-  content: "\e95d";
+  content: '\e95d';
 }
 .htvbdh_line-x:before {
-  content: "\e962";
+  content: '\e962';
 }
 .htvbdh_line-dautru:before {
-  content: "\e963";
+  content: '\e963';
 }
 .htvbdh_line-daucham:before {
-  content: "\e964";
+  content: '\e964';
 }
 .htvbdh_line-uptop:before {
-  content: "\e96b";
+  content: '\e96b';
 }
 .htvbdh_line-infore:before {
-  content: "\e96e";
+  content: '\e96e';
 }
 .htvbdh_desk-chair:before {
-  content: "\e91c";
+  content: '\e91c';
 }
 .htvbdh_chair-2:before {
-  content: "\e912";
+  content: '\e912';
 }
 .htvbdh_seat-8:before {
-  content: "\e913";
+  content: '\e913';
 }
 .htvbdh_chair-3:before {
-  content: "\e914";
+  content: '\e914';
 }
 .htvbdh_chair:before {
-  content: "\e915";
+  content: '\e915';
 }
 .htvbdh_chair-4:before {
-  content: "\e916";
+  content: '\e916';
 }
 .htvbdh_chair-5:before {
-  content: "\e917";
+  content: '\e917';
 }
 .htvbdh_chair-7:before {
-  content: "\e918";
+  content: '\e918';
 }
 .htvbdh_chair-1:before {
-  content: "\e919";
+  content: '\e919';
 }
 .htvbdh_use21:before {
-  content: "\e90d";
+  content: '\e90d';
 }
 .htvbdh_xuat-excel1:before {
-  content: "\e907";
+  content: '\e907';
 }
 .htvbdh_nhap-excel1:before {
-  content: "\e908";
+  content: '\e908';
 }
 .htvbdh_excel1:before {
-  content: "\e909";
+  content: '\e909';
 }
 .htvbdh_tra-cuu1:before {
-  content: "\e90a";
+  content: '\e90a';
 }
 .htvbdh_lammoi1:before {
-  content: "\e90b";
+  content: '\e90b';
 }
 .htvbdh_tracuu21:before {
-  content: "\e90e";
+  content: '\e90e';
 }
 .htvbdh_bieu-mau1:before {
-  content: "\e90f";
+  content: '\e90f';
 }
 .htvbdh_dau-tru:before {
-  content: "\ea03";
+  content: '\ea03';
 }
 .htvbdh_home:before {
-  content: "\e910";
+  content: '\e910';
 }
 .htvbdh_home3:before {
-  content: "\e911";
+  content: '\e911';
 }
 .htvbdh_office:before {
-  content: "\e91a";
+  content: '\e91a';
 }
 .htvbdh_newspaper:before {
-  content: "\e91b";
+  content: '\e91b';
 }
 .htvbdh_pencil:before {
-  content: "\e91d";
+  content: '\e91d';
 }
 .htvbdh_image:before {
-  content: "\e91f";
+  content: '\e91f';
 }
 .htvbdh_images:before {
-  content: "\e920";
+  content: '\e920';
 }
 .htvbdh_camera:before {
-  content: "\e921";
+  content: '\e921';
 }
 .htvbdh_headphones:before {
-  content: "\e922";
+  content: '\e922';
 }
 .htvbdh_music:before {
-  content: "\e923";
+  content: '\e923';
 }
 .htvbdh_bullhorn:before {
-  content: "\e924";
+  content: '\e924';
 }
 .htvbdh_connection:before {
-  content: "\e925";
+  content: '\e925';
 }
 .htvbdh_book:before {
-  content: "\e926";
+  content: '\e926';
 }
 .htvbdh_books:before {
-  content: "\e927";
+  content: '\e927';
 }
 .htvbdh_library:before {
-  content: "\e928";
+  content: '\e928';
 }
 .htvbdh_file-text:before {
-  content: "\e929";
+  content: '\e929';
 }
 .htvbdh_profile:before {
-  content: "\e92a";
+  content: '\e92a';
 }
 .htvbdh_files-empty:before {
-  content: "\e92b";
+  content: '\e92b';
 }
 .htvbdh_file-text2:before {
-  content: "\e92c";
+  content: '\e92c';
 }
 .htvbdh_file-picture:before {
-  content: "\e92d";
+  content: '\e92d';
 }
 .htvbdh_file-music:before {
-  content: "\e92e";
+  content: '\e92e';
 }
 .htvbdh_file-play:before {
-  content: "\e92f";
+  content: '\e92f';
 }
 .htvbdh_file-video:before {
-  content: "\e930";
+  content: '\e930';
 }
 .htvbdh_file-zip:before {
-  content: "\e931";
+  content: '\e931';
 }
 .htvbdh_copy:before {
-  content: "\e932";
+  content: '\e932';
 }
 .htvbdh_paste:before {
-  content: "\e933";
+  content: '\e933';
 }
 .htvbdh_stack:before {
-  content: "\e934";
+  content: '\e934';
 }
 .htvbdh_folder:before {
-  content: "\e935";
+  content: '\e935';
 }
 .htvbdh_folder-open:before {
-  content: "\e936";
+  content: '\e936';
 }
 .htvbdh_folder-plus:before {
-  content: "\e937";
+  content: '\e937';
 }
 .htvbdh_folder-minus:before {
-  content: "\e938";
+  content: '\e938';
 }
 .htvbdh_folder-download:before {
-  content: "\e939";
+  content: '\e939';
 }
 .htvbdh_folder-upload:before {
-  content: "\e93a";
+  content: '\e93a';
 }
 .htvbdh_price-tags:before {
-  content: "\e93b";
+  content: '\e93b';
 }
 .htvbdh_barcode:before {
-  content: "\e93c";
+  content: '\e93c';
 }
 .htvbdh_qrcode:before {
-  content: "\e93d";
+  content: '\e93d';
 }
 .htvbdh_ticket:before {
-  content: "\e93e";
+  content: '\e93e';
 }
 .htvbdh_coin-dollar:before {
-  content: "\e93f";
+  content: '\e93f';
 }
 .htvbdh_coin-euro:before {
-  content: "\e940";
+  content: '\e940';
 }
 .htvbdh_coin-pound:before {
-  content: "\e941";
+  content: '\e941';
 }
 .htvbdh_coin-yen:before {
-  content: "\e942";
+  content: '\e942';
 }
 .htvbdh_credit-card:before {
-  content: "\e943";
+  content: '\e943';
 }
 .htvbdh_calculator:before {
-  content: "\e944";
+  content: '\e944';
 }
 .htvbdh_lifebuoy:before {
-  content: "\e945";
+  content: '\e945';
 }
 .htvbdh_phone:before {
-  content: "\e946";
+  content: '\e946';
 }
 .htvbdh_address-book:before {
-  content: "\e947";
+  content: '\e947';
 }
 .htvbdh_location:before {
-  content: "\e948";
+  content: '\e948';
 }
 .htvbdh_location2:before {
-  content: "\e949";
+  content: '\e949';
 }
 .htvbdh_history:before {
-  content: "\e94d";
+  content: '\e94d';
 }
 .htvbdh_clock:before {
-  content: "\e94e";
+  content: '\e94e';
 }
 .htvbdh_alarm:before {
-  content: "\e950";
+  content: '\e950';
 }
 .htvbdh_bell:before {
-  content: "\e951";
+  content: '\e951';
 }
 .htvbdh_calendar:before {
-  content: "\e953";
+  content: '\e953';
 }
 .htvbdh_printer:before {
-  content: "\e954";
+  content: '\e954';
 }
 .htvbdh_keyboard:before {
-  content: "\e955";
+  content: '\e955';
 }
 .htvbdh_display:before {
-  content: "\e956";
+  content: '\e956';
 }
 .htvbdh_laptop:before {
-  content: "\e957";
+  content: '\e957';
 }
 .htvbdh_mobile:before {
-  content: "\e958";
+  content: '\e958';
 }
 .htvbdh_box-add:before {
-  content: "\e95e";
+  content: '\e95e';
 }
 .htvbdh_box-remove:before {
-  content: "\e95f";
+  content: '\e95f';
 }
 .htvbdh_download:before {
-  content: "\e960";
+  content: '\e960';
 }
 .htvbdh_upload1:before {
-  content: "\e961";
+  content: '\e961';
 }
 .htvbdh_undo:before {
-  content: "\e965";
+  content: '\e965';
 }
 .htvbdh_redo:before {
-  content: "\e966";
+  content: '\e966';
 }
 .htvbdh_undo2:before {
-  content: "\e967";
+  content: '\e967';
 }
 .htvbdh_redo2:before {
-  content: "\e968";
+  content: '\e968';
 }
 .htvbdh_forward:before {
-  content: "\e969";
+  content: '\e969';
 }
 .htvbdh_reply:before {
-  content: "\e96a";
+  content: '\e96a';
 }
 .htvbdh_bubbles:before {
-  content: "\e96c";
+  content: '\e96c';
 }
 .htvbdh_bubbles2:before {
-  content: "\e96d";
+  content: '\e96d';
 }
 .htvbdh_user:before {
-  content: "\e971";
+  content: '\e971';
 }
 .htvbdh_users:before {
-  content: "\e972";
+  content: '\e972';
 }
 .htvbdh_user-plus:before {
-  content: "\e973";
+  content: '\e973';
 }
 .htvbdh_user-minus:before {
-  content: "\e974";
+  content: '\e974';
 }
 .htvbdh_user-check:before {
-  content: "\e975";
+  content: '\e975';
 }
 .htvbdh_user-tie:before {
-  content: "\e976";
+  content: '\e976';
 }
 .htvbdh_search:before {
-  content: "\e986";
+  content: '\e986';
 }
 .htvbdh_zoom-in:before {
-  content: "\e987";
+  content: '\e987';
 }
 .htvbdh_zoom-out:before {
-  content: "\e988";
+  content: '\e988';
 }
 .htvbdh_enlarge:before {
-  content: "\e989";
+  content: '\e989';
 }
 .htvbdh_shrink:before {
-  content: "\e98a";
+  content: '\e98a';
 }
 .htvbdh_enlarge2:before {
-  content: "\e98b";
+  content: '\e98b';
 }
 .htvbdh_shrink2:before {
-  content: "\e98c";
+  content: '\e98c';
 }
 .htvbdh_unlocked:before {
-  content: "\e990";
+  content: '\e990';
 }
 .htvbdh_equalizer:before {
-  content: "\e992";
+  content: '\e992';
 }
 .htvbdh_equalizer2:before {
-  content: "\e993";
+  content: '\e993';
 }
 .htvbdh_cog:before {
-  content: "\e994";
+  content: '\e994';
 }
 .htvbdh_cogs:before {
-  content: "\e995";
+  content: '\e995';
 }
 .htvbdh_pie-chart:before {
-  content: "\e99a";
+  content: '\e99a';
 }
 .htvbdh_stats-bars:before {
-  content: "\e99c";
+  content: '\e99c';
 }
 .htvbdh_switch:before {
-  content: "\e9b6";
+  content: '\e9b6';
 }
 .htvbdh_clipboard:before {
-  content: "\e9b8";
+  content: '\e9b8';
 }
 .htvbdh_list-numbered:before {
-  content: "\e9b9";
+  content: '\e9b9';
 }
 .htvbdh_list:before {
-  content: "\e9ba";
+  content: '\e9ba';
 }
 .htvbdh_list2:before {
-  content: "\e9bb";
+  content: '\e9bb';
 }
 .htvbdh_tree:before {
-  content: "\e9bc";
+  content: '\e9bc';
 }
 .htvbdh_cloud:before {
-  content: "\e9c1";
+  content: '\e9c1';
 }
 .htvbdh_cloud-download:before {
-  content: "\e9c2";
+  content: '\e9c2';
 }
 .htvbdh_cloud-upload:before {
-  content: "\e9c3";
+  content: '\e9c3';
 }
 .htvbdh_cloud-check:before {
-  content: "\e9c4";
+  content: '\e9c4';
 }
 .htvbdh_download2:before {
-  content: "\e9c5";
+  content: '\e9c5';
 }
 .htvbdh_upload2:before {
-  content: "\e9c6";
+  content: '\e9c6';
 }
 .htvbdh_download3:before {
-  content: "\e9c7";
+  content: '\e9c7';
 }
 .htvbdh_upload3:before {
-  content: "\e9c8";
+  content: '\e9c8';
 }
 .htvbdh_sphere:before {
-  content: "\e9c9";
+  content: '\e9c9';
 }
 .htvbdh_link:before {
-  content: "\e9cb";
+  content: '\e9cb';
 }
 .htvbdh_attachment:before {
-  content: "\e9cd";
+  content: '\e9cd';
 }
 .htvbdh_eye:before {
-  content: "\e9ce";
+  content: '\e9ce';
 }
 .htvbdh_eye-plus:before {
-  content: "\e9cf";
+  content: '\e9cf';
 }
 .htvbdh_eye-minus:before {
-  content: "\e9d0";
+  content: '\e9d0';
 }
 .htvbdh_eye-blocked:before {
-  content: "\e9d1";
+  content: '\e9d1';
 }
 .htvbdh_bookmark:before {
-  content: "\e9d2";
+  content: '\e9d2';
 }
 .htvbdh_bookmarks:before {
-  content: "\e9d3";
+  content: '\e9d3';
 }
 .htvbdh_star-empty:before {
-  content: "\e9d7";
+  content: '\e9d7';
 }
 .htvbdh_star-half:before {
-  content: "\e9d8";
+  content: '\e9d8';
 }
 .htvbdh_star-full:before {
-  content: "\e9d9";
+  content: '\e9d9';
 }
 .htvbdh_plus:before {
-  content: "\ea0a";
+  content: '\ea0a';
 }
 .htvbdh_minus:before {
-  content: "\ea0b";
+  content: '\ea0b';
 }
 .htvbdh_blocked:before {
-  content: "\ea0e";
+  content: '\ea0e';
 }
 .htvbdh_cross:before {
-  content: "\ea0f";
+  content: '\ea0f';
 }
 .htvbdh_checkmark:before {
-  content: "\ea10";
+  content: '\ea10';
 }
 .htvbdh_checkmark2:before {
-  content: "\ea11";
+  content: '\ea11';
 }
 .htvbdh_spell-check:before {
-  content: "\ea12";
+  content: '\ea12';
 }
 .htvbdh_enter:before {
-  content: "\ea13";
+  content: '\ea13';
 }
 .htvbdh_exit:before {
-  content: "\ea14";
+  content: '\ea14';
 }
 .htvbdh_play3:before {
-  content: "\ea1c";
+  content: '\ea1c';
 }
 .htvbdh_pause2:before {
-  content: "\ea1d";
+  content: '\ea1d';
 }
 .htvbdh_stop2:before {
-  content: "\ea1e";
+  content: '\ea1e';
 }
 .htvbdh_backward2:before {
-  content: "\ea1f";
+  content: '\ea1f';
 }
 .htvbdh_forward3:before {
-  content: "\ea20";
+  content: '\ea20';
 }
 .htvbdh_first:before {
-  content: "\ea21";
+  content: '\ea21';
 }
 .htvbdh_last:before {
-  content: "\ea22";
+  content: '\ea22';
 }
 .htvbdh_previous2:before {
-  content: "\ea23";
+  content: '\ea23';
 }
 .htvbdh_next2:before {
-  content: "\ea24";
+  content: '\ea24';
 }
 .htvbdh_eject:before {
-  content: "\ea25";
+  content: '\ea25';
 }
 .htvbdh_arrow-up-left:before {
-  content: "\ea31";
+  content: '\ea31';
 }
 .htvbdh_arrow-up:before {
-  content: "\ea32";
+  content: '\ea32';
 }
 .htvbdh_arrow-up-right:before {
-  content: "\ea33";
+  content: '\ea33';
 }
 .htvbdh_arrow-right:before {
-  content: "\ea34";
+  content: '\ea34';
 }
 .htvbdh_arrow-down-right:before {
-  content: "\ea35";
+  content: '\ea35';
 }
 .htvbdh_arrow-down:before {
-  content: "\ea36";
+  content: '\ea36';
 }
 .htvbdh_arrow-down-left:before {
-  content: "\ea37";
+  content: '\ea37';
 }
 .htvbdh_arrow-left:before {
-  content: "\ea38";
+  content: '\ea38';
 }
 .htvbdh_arrow-up-left2:before {
-  content: "\ea39";
+  content: '\ea39';
 }
 .htvbdh_arrow-up2:before {
-  content: "\ea3a";
+  content: '\ea3a';
 }
 .htvbdh_arrow-up-right2:before {
-  content: "\ea3b";
+  content: '\ea3b';
 }
 .htvbdh_arrow-right2:before {
-  content: "\ea3c";
+  content: '\ea3c';
 }
 .htvbdh_arrow-down-right2:before {
-  content: "\ea3d";
+  content: '\ea3d';
 }
 .htvbdh_arrow-down2:before {
-  content: "\ea3e";
+  content: '\ea3e';
 }
 .htvbdh_arrow-down-left2:before {
-  content: "\ea3f";
+  content: '\ea3f';
 }
 .htvbdh_arrow-left2:before {
-  content: "\ea40";
+  content: '\ea40';
 }
 .htvbdh_circle-up:before {
-  content: "\ea41";
+  content: '\ea41';
 }
 .htvbdh_circle-right:before {
-  content: "\ea42";
+  content: '\ea42';
 }
 .htvbdh_circle-down:before {
-  content: "\ea43";
+  content: '\ea43';
 }
 .htvbdh_circle-left:before {
-  content: "\ea44";
+  content: '\ea44';
 }
 .htvbdh_tab:before {
-  content: "\ea45";
+  content: '\ea45';
 }
 .htvbdh_move-up:before {
-  content: "\ea46";
+  content: '\ea46';
 }
 .htvbdh_move-down:before {
-  content: "\ea47";
+  content: '\ea47';
 }
 .htvbdh_sort-alpha-asc:before {
-  content: "\ea48";
+  content: '\ea48';
 }
 .htvbdh_sort-alpha-desc:before {
-  content: "\ea49";
+  content: '\ea49';
 }
 .htvbdh_sort-numeric-asc:before {
-  content: "\ea4a";
+  content: '\ea4a';
 }
 .htvbdh_sort-numberic-desc:before {
-  content: "\ea4b";
+  content: '\ea4b';
 }
 .htvbdh_sort-amount-asc:before {
-  content: "\ea4c";
+  content: '\ea4c';
 }
 .htvbdh_sort-amount-desc:before {
-  content: "\ea4d";
+  content: '\ea4d';
 }
 .htvbdh_shift:before {
-  content: "\ea4f";
+  content: '\ea4f';
 }
 .htvbdh_checkbox-checked:before {
-  content: "\ea52";
+  content: '\ea52';
 }
 .htvbdh_checkbox-unchecked:before {
-  content: "\ea53";
+  content: '\ea53';
 }
 .htvbdh_radio-checked:before {
-  content: "\ea54";
+  content: '\ea54';
 }
 .htvbdh_radio-checked2:before {
-  content: "\ea55";
+  content: '\ea55';
 }
 .htvbdh_radio-unchecked:before {
-  content: "\ea56";
+  content: '\ea56';
 }
 .htvbdh_crop:before {
-  content: "\ea57";
+  content: '\ea57';
 }
 .htvbdh_ungroup:before {
-  content: "\ea59";
+  content: '\ea59';
 }
 .htvbdh_scissors:before {
-  content: "\ea5a";
+  content: '\ea5a';
 }
 .htvbdh_filter:before {
-  content: "\ea5b";
+  content: '\ea5b';
 }
 .htvbdh_table1:before {
-  content: "\ea70";
+  content: '\ea70';
 }
 .htvbdh_table2:before {
-  content: "\ea71";
+  content: '\ea71';
 }
 .htvbdh_insert-template:before {
-  content: "\ea72";
+  content: '\ea72';
 }
 .htvbdh_paragraph-left:before {
-  content: "\ea77";
+  content: '\ea77';
 }
 .htvbdh_paragraph-center:before {
-  content: "\ea78";
+  content: '\ea78';
 }
 .htvbdh_paragraph-right:before {
-  content: "\ea79";
+  content: '\ea79';
 }
 .htvbdh_paragraph-justify:before {
-  content: "\ea7a";
+  content: '\ea7a';
 }
 .htvbdh_indent-increase:before {
-  content: "\ea7b";
+  content: '\ea7b';
 }
 .htvbdh_indent-decrease:before {
-  content: "\ea7c";
+  content: '\ea7c';
 }
 .htvbdh_share:before {
-  content: "\ea7d";
+  content: '\ea7d';
 }
 .htvbdh_new-tab:before {
-  content: "\ea7e";
+  content: '\ea7e';
 }
 .htvbdh_embed:before {
-  content: "\ea7f";
+  content: '\ea7f';
 }
 .htvbdh_embed2:before {
-  content: "\ea80";
+  content: '\ea80';
 }
 .htvbdh_terminal:before {
-  content: "\ea81";
+  content: '\ea81';
 }
 .htvbdh_file-pdf:before {
-  content: "\eadf";
+  content: '\eadf';
 }
 .htvbdh_file-openoffice:before {
-  content: "\eae0";
+  content: '\eae0';
 }
 .htvbdh_file-word:before {
-  content: "\eae1";
+  content: '\eae1';
 }
 .htvbdh_file-excel:before {
-  content: "\eae2";
+  content: '\eae2';
 }
 .htvbdh_libreoffice:before {
-  content: "\eae3";
+  content: '\eae3';
 }

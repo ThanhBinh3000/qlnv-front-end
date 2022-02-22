@@ -8,9 +8,8 @@ describe('QuantriComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuantriComponent ]
-    })
-    .compileComponents();
+      declarations: [QuantriComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

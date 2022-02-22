@@ -6,16 +6,8 @@ import { ChucvuComponent } from './chucvu.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ThemchucvuComponent } from './themchucvu/themchucvu.component';
 
-
 @NgModule({
-  declarations: [
-    ChucvuComponent,
-    ThemchucvuComponent
-  ],
-  imports: [
-    CommonModule,
-    ChucvuRoutingModule,
-    ComponentsModule
-  ]
+  declarations: [ChucvuComponent, ThemchucvuComponent],
+  imports: [CommonModule, ChucvuRoutingModule, ComponentsModule],
 })
-export class ChucvuModule { }
+export class ChucvuModule {}

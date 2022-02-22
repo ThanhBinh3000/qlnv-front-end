@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -10,7 +10,7 @@ import { ThemchucvuComponent } from './themchucvu/themchucvu.component';
 @Component({
   selector: 'app-chucvu',
   templateUrl: './chucvu.component.html',
-  styleUrls: ['./chucvu.component.scss']
+  styleUrls: ['./chucvu.component.scss'],
 })
 export class ChucvuComponent implements OnInit {
   addclass3 = 'hidecard';
@@ -19,58 +19,56 @@ export class ChucvuComponent implements OnInit {
   datas = [];
   nodeSelected: any;
   cureentNodeParent: any;
-  listdanhmuchoso: any
+  listdanhmuchoso: any;
   constructor(
     private fb: FormBuilder,
     private _modalService: NzModalService,
     private notification: NzNotificationService,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
-     this.timtheodieukien()
+    this.timtheodieukien();
   }
 
- /**
- * bắt đầu sử lý phân trang
- */
+  /**
+   * bắt đầu sử lý phân trang
+   */
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   changePageSize(event) {
     this.pageSize = event;
-    this.timtheodieukien()
+    this.timtheodieukien();
   }
   changePageIndex(event) {
     this.page = event;
-    this.timtheodieukien()
+    this.timtheodieukien();
   }
 
-/**
- * kết thúc sử lý phân trang
- */
+  /**
+   * kết thúc sử lý phân trang
+   */
 
   timtheodieukien(data?: any) {
     let body = {
-      "pageInfo": {
-        "page": this.page,
-        "pageSize": this.pageSize
+      pageInfo: {
+        page: this.page,
+        pageSize: this.pageSize,
       },
-      "sorts": [
+      sorts: [
         {
-          "field": "",
-          "dir": 0
-        }
+          field: '',
+          dir: 0,
+        },
       ],
-      "filters": [
+      filters: [
         {
-          "field": "",
-          "value": ""
-        }
+          field: '',
+          value: '',
+        },
       ],
-      "keyword": this.keywordSearch ?? "",
-    }
+      keyword: this.keywordSearch ?? '',
+    };
 
     // this.chucvuService.timTheoDieuKien(body).then((res: OldResponseData) => {
     //   if (res.success) {
@@ -82,14 +80,11 @@ export class ChucvuComponent implements OnInit {
     // })
   }
 
-
-  
   /**
    * thêm sửa mới nhóm quyền
    */
 
   themmoi(data?) {
-
     let modal = this._modalService.create({
       nzTitle: 'Thêm mới chức vụ',
       nzContent: ThemchucvuComponent,
@@ -99,15 +94,15 @@ export class ChucvuComponent implements OnInit {
       nzWidth: 450,
       nzComponentParams: { data },
     });
-    modal.afterClose.subscribe(res => {
+    modal.afterClose.subscribe((res) => {
       if (res) {
-        this.timtheodieukien()
+        this.timtheodieukien();
       }
     });
   }
 
   /**
-   * xoa đơn vị 
+   * xoa đơn vị
    */
 
   xoa(data: any) {
@@ -117,7 +112,7 @@ export class ChucvuComponent implements OnInit {
       nzContent: 'Bạn có chắc chắn muốn thực hiện hành động này?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
-      nzOkDanger: true, 
+      nzOkDanger: true,
       nzWidth: 440,
       nzOnOk: () => {
         // this.chucvuService.delete(data.id).then((res: OldResponseData) => {
@@ -128,7 +123,7 @@ export class ChucvuComponent implements OnInit {
         //     this.notification.error(MESSAGE.ERROR, res.error);
         //   }
         // })
-      }
+      },
     });
   }
 
@@ -142,20 +137,12 @@ export class ChucvuComponent implements OnInit {
       nzWidth: 450,
       nzComponentParams: { dataDetail },
     });
-    modal.afterClose.subscribe(b => {
-
-
-    });
+    modal.afterClose.subscribe((b) => {});
   }
 
-
-
-
-  
   //  search text
   keywordSearch: any;
-  searchKey(){
-    this.timtheodieukien()
+  searchKey() {
+    this.timtheodieukien();
   }
 }
-

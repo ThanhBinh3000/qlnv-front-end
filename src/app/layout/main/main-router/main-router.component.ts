@@ -7,7 +7,7 @@ import { ObservableService } from 'src/app/services/observable.service';
 @Component({
   selector: 'app-main-router',
   templateUrl: './main-router.component.html',
-  styleUrls: ['./main-router.component.scss']
+  styleUrls: ['./main-router.component.scss'],
 })
 export class MainRouterComponent implements OnInit {
   lstRouter = [];
@@ -15,14 +15,14 @@ export class MainRouterComponent implements OnInit {
   constructor(
     private nhomQuyenService: NhomQuyenService,
     private notification: NzNotificationService,
-    private observableService: ObservableService
+    private observableService: ObservableService,
   ) {
     this.lstPage = [
       {
-        title: "Quản trị",
-        route: "/quantri"
+        title: 'Quản trị',
+        route: '/quantri',
       },
-    ]
+    ];
   }
 
   ngOnInit(): void {
@@ -30,17 +30,22 @@ export class MainRouterComponent implements OnInit {
   }
 
   layTatCaChucNangUser() {
-    this.nhomQuyenService.layTatCaChucNangUser().then(res => {
+    this.nhomQuyenService.layTatCaChucNangUser().then((res) => {
       if (res.success) {
         this.lstRouter = res.data;
         this.observableService.routerSubject.next(this.lstRouter);
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
-    })
+    });
   }
 
   checkRouter(router) {
-    return this.lstRouter.includes(router) || router === "/index" || router === "/qly-phonghop" || router === "/qly-dangkyxe"
+    return (
+      this.lstRouter.includes(router) ||
+      router === '/index' ||
+      router === '/qly-phonghop' ||
+      router === '/qly-dangkyxe'
+    );
   }
 }

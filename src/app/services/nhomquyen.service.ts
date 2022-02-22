@@ -5,14 +5,11 @@ import { BaseService } from './base.service';
 import { OldResponseData } from '../interfaces/response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
-export class NhomQuyenService extends BaseService{
-  constructor(
-    public httpClient: HttpClient
-  ) {
-    super(httpClient, "DmQuyen");
+export class NhomQuyenService extends BaseService {
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'DmQuyen');
   }
 
   capNhatHanhDong(body): Promise<OldResponseData> {
@@ -34,5 +31,4 @@ export class NhomQuyenService extends BaseService{
     const url = `${environment.SERVICE_API}api/DmQuyen/LayQuyenChucNangUser?controller=${controller}`;
     return this.httpClient.get<OldResponseData>(url).toPromise();
   }
-
 }

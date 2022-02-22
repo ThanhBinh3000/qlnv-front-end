@@ -6,22 +6,23 @@ import { LoginComponent } from './pages/login/login.component';
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: '',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./layout/main/main.module').then(m => m.MainModule)
+    loadChildren: () =>
+      import('./layout/main/main.module').then((m) => m.MainModule),
   },
   {
     path: '**',
     redirectTo: '',
-    pathMatch: 'full'
-  }
-]
+    pathMatch: 'full',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

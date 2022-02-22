@@ -1,23 +1,34 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { NhomQuyenService } from '../services/nhomquyen.service';
 import { ObservableService } from '../services/observable.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RouterGuard implements CanActivate {
   lstRouter = [];
   constructor(
     private nhomQuyenService: NhomQuyenService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return true
+    state: RouterStateSnapshot,
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    return true;
     //   return new Promise(res => {
     //     this.nhomQuyenService.layTatCaChucNangUser().then(
     //         (rs) => {
@@ -38,5 +49,5 @@ export class RouterGuard implements CanActivate {
     //         }
     //     );
     // });
-    }  
+  }
 }

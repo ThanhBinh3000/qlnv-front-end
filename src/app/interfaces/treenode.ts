@@ -8,6 +8,6 @@ export interface TreeNodeInterface {
   children?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
   check?: boolean;
-  disabled?: boolean,
-  isPerson?: boolean
+  disabled?: boolean;
+  isPerson?: boolean;
 }

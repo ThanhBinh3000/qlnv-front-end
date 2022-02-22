@@ -10,18 +10,21 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'nguoi-dung',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'don-vi',
-        loadChildren: () => import('../../pages/quantri/donvi/donvi.module').then(m => m.DonviModule)
+        loadChildren: () =>
+          import('../../pages/quantri/donvi/donvi.module').then(
+            (m) => m.DonviModule,
+          ),
       },
-    ]
-  }
-]
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class QuantriRoutingModule { }
+export class QuantriRoutingModule {}

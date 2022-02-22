@@ -12,7 +12,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'quantri',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'quantri',
@@ -20,14 +20,17 @@ const routes: Routes = [
       },
       {
         path: 'quantri',
-        loadChildren: () => import('../../pages/quantri/quantri.module').then(m => m.QuantriModule)
+        loadChildren: () =>
+          import('../../pages/quantri/quantri.module').then(
+            (m) => m.QuantriModule,
+          ),
       },
-    ]
-  }
-]
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class MainRoutingModule { }
+export class MainRoutingModule {}

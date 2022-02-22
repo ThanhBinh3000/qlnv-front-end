@@ -8,9 +8,8 @@ describe('ThemchucvuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ThemchucvuComponent ]
-    })
-    .compileComponents();
+      declarations: [ThemchucvuComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

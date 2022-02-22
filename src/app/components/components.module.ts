@@ -110,10 +110,9 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
     NzTagModule,
     TecaTreeSelectModule,
     NzAlertModule,
-    DragDropModule
+    DragDropModule,
   ],
   exports: [
-
     FormsModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
@@ -163,8 +162,8 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
     NzTagModule,
     TecaTreeSelectModule,
     FilterPipe,
-    NzAlertModule
+    NzAlertModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

@@ -38,15 +38,8 @@
                 "output": "/assets/"
               }
             ],
-            "styles": [
-              "src/theme.less",
-              "src/styles.scss"
-            ],
-            "scripts": [
-              "src/assets/js/flow.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js",
-              "src/assets/js/vgcaplugin.js"
-            ]
+            "styles": ["src/theme.less", "src/styles.scss"],
+            "scripts": ["src/assets/js/flow.js", "src/assets/js/vgcaplugin.js"]
           },
           "configurations": {
             "production": {
@@ -107,13 +100,8 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }

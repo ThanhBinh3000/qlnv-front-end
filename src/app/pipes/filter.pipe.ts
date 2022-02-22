@@ -2,17 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'filter',
-  pure: false
+  pure: false,
 })
 export class FilterPipe implements PipeTransform {
-
   transform(items: any[], filter: any): any {
     if (!items || !filter) {
-        return items;
+      return items;
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    return items.filter(item => !filter.includes(item.field));
-}
-
+    return items.filter((item) => !filter.includes(item.field));
+  }
 }

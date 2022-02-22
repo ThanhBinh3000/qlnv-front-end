@@ -24,9 +24,9 @@ import { TecaTreeSelectComponent } from './tree-select.component';
     NzIconModule,
     NzEmptyModule,
     NzOverlayModule,
-    NzNoAnimationModule
+    NzNoAnimationModule,
   ],
   declarations: [TecaTreeSelectComponent],
-  exports: [TecaTreeSelectComponent]
+  exports: [TecaTreeSelectComponent],
 })
 export class TecaTreeSelectModule {}

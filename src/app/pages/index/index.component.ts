@@ -27,7 +27,7 @@ export class IndexComponent implements OnInit {
   constructor(
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
   ) {
     this.slvbctc();
     this.cvtdv();
@@ -496,7 +496,7 @@ export class IndexComponent implements OnInit {
       return array.reduce((result, currentValue) => {
         // If an array already present for key, push it to the array. Else create an array and push the object
         (result[currentValue[key]] = result[currentValue[key]] || []).push(
-          currentValue
+          currentValue,
         );
         // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
         return result;
@@ -532,7 +532,7 @@ export class IndexComponent implements OnInit {
     //     let datas = res.data;
     //     datas.forEach((element) => {
     //       element.countDay = 'day' + i.toString();
-              
+
     //     });
     //     this.congtacGroupedByDay = groupBy(datas, 'countDay');
     //     this.totalRecord = res.totalRecord;

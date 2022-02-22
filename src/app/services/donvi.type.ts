@@ -1,4 +1,1 @@
-export type DonViResponse = {
-    
-}
-
+export type DonViResponse = {};

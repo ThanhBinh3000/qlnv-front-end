@@ -4,14 +4,10 @@ import { StorageService } from '../services/storage.service';
 import { STORAGE_KEY } from '../constants/config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class AuthService {
-  constructor(
-    private router: Router,
-    private storageService: StorageService,
-  ) { }
+  constructor(private router: Router, private storageService: StorageService) {}
 
   saveToken(token: string) {
     return this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, token);
@@ -37,9 +33,8 @@ export class AuthService {
     return this.storageService.get(STORAGE_KEY.ROLE);
   }
 
-
-  logout(){
+  logout() {
     localStorage.clear();
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
   }
 }

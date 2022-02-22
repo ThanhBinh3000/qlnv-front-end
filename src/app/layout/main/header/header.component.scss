@@ -1,10 +1,10 @@
-@import "../../../../assets/scss/default.scss";
+@import '../../../../assets/scss/default.scss';
 
-@mixin background($imgpath,$position:0 0,$repeat: no-repeat) {
+@mixin background($imgpath, $position: 0 0, $repeat: no-repeat) {
   background: {
-      image: url($imgpath);
-      position: $position;
-      repeat: $repeat;
+    image: url($imgpath);
+    position: $position;
+    repeat: $repeat;
   }
 }
 .ant-layout-header .justify-content-between {
@@ -26,11 +26,11 @@
 @media (max-width: 767px) {
   .logo {
     @include background('#{$img-path}logo.svg');
-        // background-size: auto 38px !important;
-        background-position: 0px 4px;
-        background-repeat: no-repeat;
-        background-size: auto 35px !important;
-    }
+    // background-size: auto 38px !important;
+    background-position: 0px 4px;
+    background-repeat: no-repeat;
+    background-size: auto 35px !important;
+  }
 }
 ::ng-deep {
   .tenvachucvu {
@@ -49,38 +49,37 @@
         /* text-align: center; */
         /* border: solid 1px rgb(255 255 255 / 60%); */
         color: rgb(255 255 255 / 60%);
+      }
     }
   }
 
-}
-
-a.ant-dropdown-link.ant-dropdown-trigger.user {
-   border: solid 1px rgb(255 255 255 / 30%);
-   padding: 1px 4px;
-   border-radius: 2px;
-}
-
-.menuphai .ant-dropdown-link {
-    bottom: 0 !important;
-}
-@media (min-width: 991px) and (max-width: 1366px) {
-  .tenvachucvu {
-    font-size: 11px;
-    line-height: 1.1;
-    span + span {
-      font-size: 9px;
+  a.ant-dropdown-link.ant-dropdown-trigger.user {
+    border: solid 1px rgb(255 255 255 / 30%);
+    padding: 1px 4px;
+    border-radius: 2px;
   }
-}
-.menuphai .ant-dropdown-link {
-    bottom: -2px !important;
-}
-}
+
+  .menuphai .ant-dropdown-link {
+    bottom: 0 !important;
+  }
+  @media (min-width: 991px) and (max-width: 1366px) {
+    .tenvachucvu {
+      font-size: 11px;
+      line-height: 1.1;
+      span + span {
+        font-size: 9px;
+      }
+    }
+    .menuphai .ant-dropdown-link {
+      bottom: -2px !important;
+    }
+  }
   .ant-menu-dark.ant-menu-horizontal,
   .ant-layout-header {
-      height: auto;
-      line-height: normal;
-      display: flex;
-      align-items: center;
+    height: auto;
+    line-height: normal;
+    display: flex;
+    align-items: center;
   }
   .ant-layout-header {
     box-shadow: -2px -1px 6px rgb(0 0 0 / 30%);
@@ -94,37 +93,37 @@ a.ant-dropdown-link.ant-dropdown-trigger.user {
     }
   }
 
-  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item, 
-  .ant-menu-dark.ant-menu-horizontal>.ant-menu-submenu {
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item,
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
     border-radius: 4px;
     padding: 1px 0px;
     font-size: $font-size14;
-  //   @media(max-width: 1366px){
-  //     font-size: $font-size13;
-  //  }
+    //   @media(max-width: 1366px){
+    //     font-size: $font-size13;
+    //  }
     font-weight: 500;
     background: transparent;
   }
   .ant-menu.ant-menu-dark {
     background: transparent;
   }
-  
-  .ant-menu-dark .ant-menu-item>a {
+
+  .ant-menu-dark .ant-menu-item > a {
     color: $color-a;
     padding: 2px 10px;
   }
-  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item:hover{
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
     background: transparent !important;
   }
-  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a:hover{
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item a:hover {
     background-color: $bgmenu-active;
   }
-  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item.active a {
-      background-color: $maincolor;
-      color: #fff;
-      border-radius: 3px;
-      padding-top: 0;
-      padding-bottom: 2px
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item.active a {
+    background-color: $maincolor;
+    color: #fff;
+    border-radius: 3px;
+    padding-top: 0;
+    padding-bottom: 2px;
   }
 }
 
@@ -141,7 +140,7 @@ nz-header.ant-layout-header {
 .ant-avatar.ant-avatar-icon {
   top: -3px;
 }
-.ant-btn>.anticon {
+.ant-btn > .anticon {
   position: relative;
   top: -3px;
 }
@@ -157,6 +156,7 @@ nz-header.ant-layout-header {
   font-size: $font-size11;
   line-height: 18px;
 }
-.ant-scroll-number-only, .ant-scroll-number-only>p.ant-scroll-number-only-unit{
+.ant-scroll-number-only,
+.ant-scroll-number-only > p.ant-scroll-number-only-unit {
   height: 18px;
 }

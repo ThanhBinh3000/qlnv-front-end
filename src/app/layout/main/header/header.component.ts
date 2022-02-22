@@ -10,12 +10,12 @@ import { UserLogin } from 'src/app/models/userlogin';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  thongbaomoi: number = 0
-  listNoti: []
-  userInfo: UserLogin
+  thongbaomoi: number = 0;
+  listNoti: [];
+  userInfo: UserLogin;
 
   constructor(
     private modal: NzModalService,
@@ -25,13 +25,13 @@ export class HeaderComponent implements OnInit {
     private notification: NzNotificationService,
     private _modalService: NzModalService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
     console.log(this.userInfo);
-    this.timTheoDieuKien()
-    this.thongBaoMoi()
+    this.timTheoDieuKien();
+    this.thongBaoMoi();
   }
 
   thongBaoMoi() {
@@ -48,10 +48,10 @@ export class HeaderComponent implements OnInit {
     const body = {
       pageInfo: {
         page: 1,
-        pageSize: 6
+        pageSize: 6,
       },
-      sorts: []
-    }
+      sorts: [],
+    };
     // this._notificationService.timTheoDieuKien(body).then(res => {
     //   if (res.success) {
     //     this.listNoti = res.data
@@ -73,9 +73,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onItemNoti(data) {
-    this.docThognBao(data.id)
-    if (data.url)
-      this.router.navigate([data.url]);
+    this.docThognBao(data.id);
+    if (data.url) this.router.navigate([data.url]);
   }
 
   xoaThongBao(id) {
@@ -96,39 +95,34 @@ export class HeaderComponent implements OnInit {
         //     this.notification.error(MESSAGE.ERROR, res.error);
         //   }
         // })
-      }
+      },
     });
-
   }
 
   showModalDoiVaiTro() {
     let modal = this._modalService.create({
       // nzContent: ModalDoiVaiTroComponent,
-      nzComponentParams: {
-      },
+      nzComponentParams: {},
       // nzClosable: false,
       nzTitle: 'Đổi vai trò',
       nzFooter: null,
       nzStyle: { top: '50px' },
       nzWidth: 600,
-    })
-    modal.afterClose.subscribe(b => {
     });
+    modal.afterClose.subscribe((b) => {});
   }
 
   showModalThongTinCaNhan() {
     let modal = this._modalService.create({
       // nzContent: ModalThongTinCaNhanComponent,
-      nzComponentParams: {
-      },
+      nzComponentParams: {},
       // nzClosable: false,
       nzTitle: 'Thông tin cá nhân',
       nzFooter: null,
       nzStyle: { top: '50px' },
       nzWidth: 800,
-    })
-    modal.afterClose.subscribe(b => {
     });
+    modal.afterClose.subscribe((b) => {});
   }
 
   logOut() {
@@ -141,7 +135,7 @@ export class HeaderComponent implements OnInit {
       nzWidth: '350px',
       nzOnOk: () => {
         this.authService.logout();
-      }
+      },
     });
   }
 }
