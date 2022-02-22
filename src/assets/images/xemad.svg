@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-xemad">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="xemad" clip-path="url(#clip-xemad)">
+    <g id="Group_8147" data-name="Group 8147" transform="translate(-5982 -5673)">
+      <g id="magnifying-glass-search" transform="translate(5987.929 5679.417)">
+        <path id="Path_30364" data-name="Path 30364" d="M13.747,11.571,10.524,8.24C10.292,8,10,7.906,9.878,8.028s-.415.026-.646-.213l-.046-.048a4.829,4.829,0,1,0-.833.859l.02.021c.231.239.317.531.191.652s-.04.414.191.652l3.222,3.332a.6.6,0,0,0,.851.014l.9-.875A.6.6,0,0,0,13.747,11.571ZM7.692,7.2a3.338,3.338,0,1,1,0-4.72A3.342,3.342,0,0,1,7.692,7.2Z" transform="translate(0 0)" fill="#4d4e4e"/>
+      </g>
+      <path id="Path_30216" data-name="Path 30216" d="M13,0A13,13,0,1,0,26,13,13.014,13.014,0,0,0,13,0m0,24.375A11.375,11.375,0,1,1,24.375,13,11.388,11.388,0,0,1,13,24.375" transform="translate(5982 5673)" fill="#636363"/>
+    </g>
+  </g>
+</svg>

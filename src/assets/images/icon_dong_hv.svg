@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip-icon_dong_hv">
+      <rect width="20" height="20"/>
+    </clipPath>
+  </defs>
+  <g id="icon_dong_hv" clip-path="url(#clip-icon_dong_hv)">
+    <g id="Group_8137" data-name="Group 8137" transform="translate(1846.758 -1351.317)">
+      <g id="Group_8083" data-name="Group 8083">
+        <g id="Group_8082" data-name="Group 8082">
+          <path id="Path_30487" data-name="Path 30487" d="M-1843.346,1370.931a.216.216,0,0,0,.152.057h.228a.309.309,0,0,0,.21-.1.273.273,0,0,0-.019-.4,3.248,3.248,0,0,1-1.123-3.7,4.6,4.6,0,0,1,4.395-2.419v3.25a.3.3,0,0,0,.057.17.3.3,0,0,0,.4.057l8.466-6.046.057-.057a.274.274,0,0,0-.057-.4l-8.466-6.084a.307.307,0,0,0-.172-.056.291.291,0,0,0-.285.283v3.268a7.2,7.2,0,0,0-6.983,4.761C-1847.342,1366.246-1846.143,1369.1-1843.346,1370.931Z" fill="#fff"/>
+        </g>
+      </g>
+      <path id="Path_30488" data-name="Path 30488" d="M-1839.447,1352.356" fill="#fff" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_30489" data-name="Path 30489" d="M-1839.863,1371.191" fill="#fff" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_30490" data-name="Path 30490" d="M-1839.4,1371.317a.589.589,0,0,1-.475-.24.58.58,0,0,1,.13-.814l11.842-8.539-11.457-9.378a.579.579,0,0,1-.075-.82.588.588,0,0,1,.825-.074l11.433,9.444a1.091,1.091,0,0,1,.422.881,1.1,1.1,0,0,1-.456.887l-11.846,8.542A.589.589,0,0,1-1839.4,1371.317Z" fill="#fff"/>
+    </g>
+  </g>
+</svg>

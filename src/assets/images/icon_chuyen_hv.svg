@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip-icon_chuyen_hv">
+      <rect width="20" height="20"/>
+    </clipPath>
+  </defs>
+  <g id="icon_chuyen_hv" clip-path="url(#clip-icon_chuyen_hv)">
+    <g id="Group_8136" data-name="Group 8136" transform="translate(1846.757 -1312.477)">
+      <path id="Path_30486" data-name="Path 30486" d="M-1844.379,1324.488a.772.772,0,0,1-.159-.015.61.61,0,0,1-.563-.538v-1.127c0-4.039,4.214-7.326,9.394-7.326h.241v-2.441a.585.585,0,0,1,.453-.523.871.871,0,0,1,.79.132l6.263,5.071a.479.479,0,0,1,0,.782l-6.263,5.071a.875.875,0,0,1-.79.132.585.585,0,0,1-.453-.523v-2.442h-1.144a8.361,8.361,0,0,0-7.11,3.427A.786.786,0,0,1-1844.379,1324.488Zm8.672-7.879c-4.046,0-7.4,2.371-7.888,5.425a10.677,10.677,0,0,1,6.985-2.419h1.867a.658.658,0,0,1,.723.563v1.608l4.537-3.674-4.537-3.674v1.608a.658.658,0,0,1-.723.563Z" fill="#fff"/>
+      <rect id="Rectangle_4382" data-name="Rectangle 4382" width="2.792" height="6.674" rx="1.102" transform="translate(-1845.757 1325.803)" fill="#fff"/>
+      <rect id="Rectangle_4383" data-name="Rectangle 4383" width="2.792" height="9.221" rx="1.102" transform="translate(-1841.47 1323.256)" fill="#fff"/>
+      <rect id="Rectangle_4384" data-name="Rectangle 4384" width="2.792" height="6.38" rx="1.102" transform="translate(-1836.872 1326.097)" fill="#fff"/>
+      <rect id="Rectangle_4385" data-name="Rectangle 4385" width="2.792" height="9.654" rx="1.102" transform="translate(-1832.275 1322.823)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

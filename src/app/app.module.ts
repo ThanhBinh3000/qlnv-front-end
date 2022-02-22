@@ -1,77 +1,56 @@
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgxsModule } from '@ngxs/store';
-import { environment } from 'src/environments/environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import {
-    AuthModule,
-    CoreModule,
-    DanhMucDonViTinhModule,
-    QuanLyNguoiDungModule,
-    DanhMucHangDtqgModule,
-    TrangChuModule,
-    DanhMucCongCuDungCuModule,
-    DanhMucDonViCuuTroModule,
-    DanhMucKeLotModule,
-    DanhMucLoaiHinhKhoTangModule,
-	DanhMucLoaiHinhNHapXuatModule,
-    DanhMucKyBaoQuanModule,
-	DanhMucQuocGiaSanXuatModule,
-    DanhMucPhuongThucDauThauModule,
-    DanhMucDiaBanHanhChinhModule,
-    DanhMucPhuongThucBaoQuanModule,
-    DanhMucLoaiHinhBaoQuanModule,
-    DanhMucTinhTrangGoiThauModule,
-    DanhMucDonViLienQuanModule,
-    DanhMucHinhThucBaoQuanModule,
-} from './modules';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { AdminModule } from './modules/admin';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { ChartsModule } from 'ng2-charts';
-import { ToastrModule } from 'ngx-toastr';
-import { DanhMucThuKhoModule } from './modules/danh-muc-thu-kho';
+import { BrowserModule } from '@angular/platform-browser';
+import { ComponentsModule } from './components/components.module';
+import { AppRoutingModule } from './app-routing.module';
+
+import { AppComponent } from './app.component';
+import { LoginComponent } from './pages/login/login.component';
+
+import { CommonInterceptor } from './interceptor/common.interceptor';
+import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import vi from '@angular/common/locales/vi';
+import { ObservableService } from './services/observable.service';
+import { DirectivesModule } from './directives/directives.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
+
+registerLocaleData(vi);
+
+const ngZorroConfig: NzConfig = {
+  notification: { nzMaxStack: 1 },
+  modal: { nzMaskClosable: false }
+};
+
 @NgModule({
-    declarations: [AppComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        CoreModule,
-        NgxSpinnerModule,
-        AuthModule.forRoot(environment.api),
-        NgxsModule.forRoot([], { developmentMode: !environment.production }),
-        AdminModule.forRoot(environment.api),
-        QuanLyNguoiDungModule.forRoot(environment.api),
-        DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
-        DanhMucDonViTinhModule.forRoot(environment.api),
-        TrangChuModule.forRoot(environment.api),
-        DanhMucHangDtqgModule.forRoot(environment.api),
-        DanhMucCongCuDungCuModule.forRoot(environment.api),
-        DanhMucDonViCuuTroModule.forRoot(environment.api),
-        DanhMucKeLotModule.forRoot(environment.api),
-        DanhMucLoaiHinhKhoTangModule.forRoot(environment.api),
-        DanhMucLoaiHinhNHapXuatModule.forRoot(environment.api),
-        DanhMucKyBaoQuanModule.forRoot(environment.api),
-        DanhMucQuocGiaSanXuatModule.forRoot(environment.api),
-        DanhMucPhuongThucDauThauModule.forRoot(environment.api),
-        DanhMucThuKhoModule.forRoot(environment.api),
-        DanhMucDiaBanHanhChinhModule.forRoot(environment.api),
-        DanhMucPhuongThucBaoQuanModule.forRoot(environment.api),
-        DanhMucLoaiHinhBaoQuanModule.forRoot(environment.api),
-        DanhMucTinhTrangGoiThauModule.forRoot(environment.api),
-        DanhMucDonViLienQuanModule.forRoot(environment.api),
-        DanhMucHinhThucBaoQuanModule.forRoot(environment.api),
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MDBBootstrapModule.forRoot(),
-        ToastrModule.forRoot(),
-        ChartsModule,
-        NzButtonModule
-    ],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ComponentsModule,
+    HttpClientModule,
+    ComponentsModule,
+    DirectivesModule,
+    NgApexchartsModule
+
+    // FormsModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: CommonInterceptor,
+    },
+    { provide: NZ_I18N, useValue: vi_VN },
+    { provide: NZ_CONFIG, useValue: ngZorroConfig },
+    ObservableService
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

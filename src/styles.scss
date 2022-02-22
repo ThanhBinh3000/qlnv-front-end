@@ -1,58 +1,10 @@
-@import "~@ng-select/ng-select/themes/default.theme.css";
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~ng-zorro-antd/style/index.min.css";
-@import "~ng-zorro-antd/button/style/index.min.css";
+/* You can add global styles to this file, and also import other style files */
 @import "~ng-zorro-antd/ng-zorro-antd.min.css";
 
-@import "./assets/scss/core/variables/";
-@import "./assets/scss/core/mixins";
-@import "~bootstrap/scss/bootstrap";
-// regular style toast
-@import '~ngx-toastr/toastr';
+@import "assets/scss/default";
+@import "assets/scss/test";
+@import "assets/scss/main";
+@import "assets/scss/main-mobile";
+@import "assets/scss/tecapro-scan";
 
-// bootstrap style toast
-// or import a bootstrap 4 alert styled design (SASS ONLY)
-// should be after your bootstrap imports, it uses bs4 variables, mixins, functions
-@import '~ngx-toastr/toastr-bs4-alert';
 
-// if you'd like to use it without importing all of bootstrap it requires
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~ngx-toastr/toastr-bs4-alert';
-
- // Core Components
- @import "./assets/scss/core/buttons";
- @import "./assets/scss/core/checkboxes";
- @import "./assets/scss/core/radios";
- @import "./assets/scss/core/forms";
- @import "./assets/scss/core/input-group";
- @import "./assets/scss/core/images";
- @import "./assets/scss/core/navbar";
- @import "./assets/scss/core/alerts";
- @import "./assets/scss/core/type";
- @import "./assets/scss/core/tabs";
- @import "./assets/scss/core/tooltip";
- @import "./assets/scss/core/popover";
- @import "./assets/scss/core/dropdown";
- @import "./assets/scss/core/togglebutton";
- @import "./assets/scss/core/ripples";
- @import "./assets/scss/core/footers";
- @import "./assets/scss/core/sidebar-and-main-panel";
- @import "./assets/scss/core/fixed-plugin";
- @import "./assets/scss/core/tables";
- @import "./assets/scss/core/misc";
-
-@import "./assets/scss/core/cards";
-@import "./assets/scss/core/cards/card-stats";
-@import "./assets/scss/core/cards/card-profile";
-@import "./assets/scss/core/cards/card-plain";
-
- //plugin scss
- @import "./assets/scss/core/plugins/animate";
- @import "./assets/scss/core/plugins/chartist";
- @import "./assets/scss/core/plugins/perfect-scrollbar";
-
- @import "./assets/scss/core/responsive";
-
-@import "./assets/scss/core/angular-modal.scss";

@@ -1,0 +1,230 @@
+
+
+<!-- <div > -->
+  <form nz-form [formGroup]="formDonVi" [nzLayout]="'vertical'">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+          <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+            <input type="text" nz-input formControlName="name" [readonly]="!!dataDetail" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Mã định danh</nz-form-label>
+          <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
+            <input type="text" nz-input formControlName="code"  [readonly]="!!dataDetail"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Mã định danh</nz-form-label>
+          <nz-form-control nzErrorTip="Mã định là bắt buộc!">
+            <input type="text" nz-input formControlName="identifyCode" [readonly]="!!dataDetail"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div> -->
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Email</nz-form-label>
+          <input type="text" nz-input formControlName="email" [readonly]="!!dataDetail" />
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Tên viết tắt</nz-form-label>
+          <input type="text" nz-input formControlName="nameShort" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Tên tiếng anh</nz-form-label>
+          <input type="text" nz-input formControlName="nameEng" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Fax</nz-form-label>
+          <input type="text" nz-input formControlName="fax" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label>Số điện thoại</nz-form-label>
+          <input type="text" nz-input formControlName="phoneNumber" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label nzRequired>Đơn vị cấp trên</nz-form-label>
+          <nz-form-control nzErrorTip="Đơn vị cấp trên là bắt buộc!">
+            <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true" [nzDefaultExpandAll]="true" 
+              nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="parentId" >
+            </nz-tree-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Loại đơn vị</nz-form-label>
+          <nz-form-control nzErrorTip="Loại đơn vị là bắt buộc!">
+            <nz-select nzShowSearch nzAllowClear formControlName="type" >
+            <nz-option *ngFor="let o of nodesTreeTypeDonVi" [nzLabel]="o.name" [nzValue]="o.id" >
+            </nz-option>
+          </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
+            <nz-form-label nzRequired>Mã số thuế </nz-form-label>
+            <input nz-input formControlName="taxCode" [readonly]="!!dataDetail"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label>Địa chỉ </nz-form-label>
+          <input nz-input formControlName="address" [readonly]="!!dataDetail"/>
+        </nz-form-item>
+      </div>
+  
+    </div>
+  </form>
+  
+  <div class="m-footer" *ngIf="!dataDetail">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+          <div *ngIf="data">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 
+            <span>Sửa</span>
+          </div>
+          <div *ngIf="!data">
+            <i class="htvbdh_them-moi1 icon" aria-hidden="true"></i> 
+            Thêm 
+          </div>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+  </div>
+<!-- </div> -->
+<!-- 
+<div *ngIf="dataDetail">
+
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label >Tên đơn vị</nz-form-label>
+          <input type="text" nz-input [value] = "data?.name" />
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label >Mã đơn vị</nz-form-label>
+          <input type="text" nz-input [value] = "data?.code" />
+      </nz-form-item>
+    </div>
+
+  </div>
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label >Mã định danh</nz-form-label>
+          <input type="text" nz-input [value] = "data?.identifyCode" />
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Email</nz-form-label>
+        <input type="text" nz-input [value] = "data?.email" />
+      </nz-form-item>
+    </div>
+  </div>
+
+
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Tên viết tắt</nz-form-label>
+        <input type="text" nz-input [value] = "data?.nameShort" />
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Tên tiếng anh</nz-form-label>
+        <input type="text" nz-input [value] = "data?.nameEng" />
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Fax</nz-form-label>
+        <input type="text" nz-input [value] = "data?.fax" />
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Số điện thoại</nz-form-label>
+        <input type="text" nz-input [value] = "data?.phoneNumber" />
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Đơn vị cấp trên</nz-form-label>
+        <nz-form-control nzErrorTip="Đơn vị cấp trên là bắt buộc!">
+          <nz-tree-select #treeSelect style="width: 250px" [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
+            nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" >
+          </nz-tree-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Loại đơn vị</nz-form-label>
+        <nz-form-control nzErrorTip="Loại đơn vị là bắt buộc!">
+          <nz-select nzShowSearch nzAllowClear [(ngModel)]="data.type">
+          <nz-option *ngFor="let o of nodesTreeTypeDonVi" [nzLabel]="o.name" [nzValue]="o.id" >
+          </nz-option>
+        </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
+          <nz-form-label nzRequired>Mã số thuế </nz-form-label>
+          <input nz-input [value] = "data?.taxCode" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Địa chỉ </nz-form-label>
+        <input nz-input [value] = "data?.address" />
+      </nz-form-item>
+    </div>
+
+  </div>
+
+</div> -->

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="15" viewBox="0 0 15 15">
+  <defs>
+    <clipPath id="clip-icon_see">
+      <rect width="15" height="15"/>
+    </clipPath>
+  </defs>
+  <g id="icon_see" clip-path="url(#clip-icon_see)">
+    <g id="Exit-Out-Arrow-Arrows-Direction-User_Interface" data-name="Exit-Out-Arrow-Arrows-Direction-User Interface" transform="translate(-3.006 -3)">
+      <path id="Path_26150" data-name="Path 26150" d="M35,3.5V7.025a.755.755,0,0,1-1.51,0V5.576l-5.963,5.963a.755.755,0,0,1-1.067-1.067L32.42,4.51H30.971a.755.755,0,1,1,0-1.51h3.522a.5.5,0,0,1,.5.5Z" transform="translate(-17.4)" fill="#fff"/>
+      <path id="Path_26151" data-name="Path 26151" d="M17.554,11.183c0,.028,0,.055-.005.086A7.3,7.3,0,1,1,9.455,3.175a.758.758,0,0,1,.657,1.253.75.75,0,0,1-.476.247,5.787,5.787,0,1,0,6.413,6.413.749.749,0,0,1,.747-.664A.759.759,0,0,1,17.554,11.183Z" transform="translate(0 -0.127)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

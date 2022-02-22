@@ -1,0 +1,53 @@
+<form nz-form [formGroup]="formInput" [nzLayout]="'vertical'">
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Tên chức vụ</nz-form-label>
+        <nz-form-control nzErrorTip="Tên chức vụ là bắt buộc!">
+          <input type="text" nz-input formControlName="name" [readonly]="!!dataDetail"/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Mã chức vụ</nz-form-label>
+        <nz-form-control nzErrorTip="Mã chức vụ là bắt buộc!">
+          <input type="text" nz-input formControlName="code"  [readonly]="!!dataDetail"/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label >Mô tả</nz-form-label>
+          <input type="text" nz-input formControlName="description" [readonly]="!!dataDetail"/>
+      </nz-form-item>
+    </div>
+    
+  </div>
+
+
+  <div class="m-footer" *ngIf="!dataDetail">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="add()">
+          <div *ngIf="data">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 
+            <span>Sửa</span>
+          </div>
+          <div *ngIf="!data">
+            <i class="fa fa-plus" aria-hidden="true"></i> 
+            Thêm 
+          </div>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+  </div>

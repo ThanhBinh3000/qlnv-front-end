@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="14" viewBox="0 0 15 14">
+  <defs>
+    <clipPath id="clip-icon_bar_">
+      <rect width="15" height="14"/>
+    </clipPath>
+  </defs>
+  <g id="icon_bar_" data-name="icon_bar " clip-path="url(#clip-icon_bar_)">
+    <g id="Group_7531" data-name="Group 7531" transform="translate(-11.701 -66.519)">
+      <path id="Path_468" data-name="Path 468" d="M25.826,823.269H12.576a.875.875,0,1,1,0-1.75h13.25a.875.875,0,0,1,0,1.75" transform="translate(0 -755)" fill="#666"/>
+      <path id="Path_469" data-name="Path 469" d="M25.826,829.394H12.576a.875.875,0,1,1,0-1.75h13.25a.875.875,0,0,1,0,1.75" transform="translate(0 -755)" fill="#666"/>
+      <path id="Path_470" data-name="Path 470" d="M25.826,835.519H12.576a.875.875,0,1,1,0-1.75h13.25a.875.875,0,0,1,0,1.75" transform="translate(0 -755)" fill="#666"/>
+    </g>
+  </g>
+</svg>

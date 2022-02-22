@@ -1,2 +1,0 @@
-Frontend version: 1.0.0
-Backend version: 1.0.0

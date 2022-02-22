@@ -1,0 +1,302 @@
+<nz-affix class="menu-lv3 menu-timkiem bnt-themmoi" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="col-6 col-lg-4 trai hide-mobile">
+        <!-- <h3 class="title">Quản lý đơn vị</h3> -->
+      </div>
+      <div class="col-6 col-lg-8 phai justify-content-end">
+        <div class="input-group timkiem">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+          </div>
+          <input type="text" class="form-control" placeholder="">
+        </div>
+        <div class="group-btn ">
+          <span class="input-group-btn btn-timkiem2">
+            <button class="btn btn-outline-grey btn-sm waves-effect waves-light btn-timkiem" type="button" nz-dropdown
+              nzTrigger="click" [nzDropdownMenu]="timkiem" [nzOverlayClassName]="'contentTimkiem'">
+              <i aria-hidden="true" class="fa fa-search"></i>
+            </button>
+            <!-- Tìm kiếm nâng cao 2 -->
+            <nz-dropdown-menu #timkiem="nzDropdownMenu">
+              <form nz-form [nzLayout]="'vertical'">
+                <div class="dropdown-menu-right">
+                  <h3 class="title mobile">Tìm kiếm nâng cao
+                    <button type="button" nz-button nzType="text" nz-menu-item (click)="visible = false">
+                      <span class="icon htvbdh_line-x"></span>
+                    </button>
+                  </h3>
+                  <div nz-row [nzGutter]="24">
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label nzFor="">Ký hiệu văn bản</nz-form-label>
+                        <nz-form-control>
+                          <input type="text" nz-input />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label nzFor="">Loại văn bản</nz-form-label>
+                        <nz-form-control>
+                          <nz-select nzShowSearch>
+                            <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+                            <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-row [nzGutter]="24">
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label nzFor="">Từ ngày</nz-form-label>
+                        <nz-form-control>
+                          <nz-date-picker [nzAllowClear]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                        <nz-form-control>
+                          <nz-date-picker [nzAllowClear]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-lg-12">
+                      <div class="group-btn mt_search justify-content-end">
+                        <button type="button" class="btn btn-create">
+                          <i class="fa fa-search" aria-hidden="true"></i>
+                          <span>Tìm</span>
+                        </button>
+                        <button type="button" class="btn btn-create xam">
+                          <span class="icon htvbdh_lammoi"></span>
+                          <span>Nhập lại</span>
+                        </button>
+                        <button type="button" class="btn btn-create xam" nz-menu-item (click)="visible = false">
+                          <i class="fa fa-times" aria-hidden="true"></i>
+                          <span>Đóng</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </nz-dropdown-menu>
+            <!-- Tìm kiếm nâng cao 2 -->
+          </span>
+        </div>
+
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="themmoi()">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          <span>Thêm mới</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="contentBor">
+  <div class="contentDetail">
+    <div class="main-content">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+          <nz-card nzTitle="Đơn vị" class="card-tree">
+            <nz-input-group [nzSuffix]="suffixIcon">
+              <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <!--có Search: https://ng.ant.design/components/tree-view/en -->
+            <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+              [nzSearchValue]="searchValue"
+              (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
+              (nzExpandChange)="nzCheck($event)">
+            </nz-tree>
+          </nz-card>
+        </div>
+        <!-- Thông tin đơn vị  -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+          <nz-collapse >
+            <nz-collapse-panel [nzHeader]="'Thông tin đơn vị'" [nzActive]="true" [nzShowArrow]="false"
+            [nzExtra]="edit">
+              <form nz-form [formGroup]="detailDonVi"  [nzLayout]="'vertical'">
+                <div nz-row [nzGutter]="24">
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+                      <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+                        <input nz-input formControlName="name" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Tên Ngắn</nz-form-label>
+                      <input nz-input formControlName="nameShort" />
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Mã định danh</nz-form-label>
+                      <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
+                        <input nz-input formControlName="code" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                    <nz-form-item>
+                      <nz-form-label>Tên tiếng anh</nz-form-label>
+                      <nz-form-control nzErrorTip="Tên Tiếng anh là bắt buộc!">
+                        <input nz-input formControlName="nameEng" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Mã số thuế</nz-form-label>
+                      <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
+                        <input nz-input formControlName="taxCode" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Email</nz-form-label>
+                      <input nz-input formControlName="email" />
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                    <nz-form-item>
+                      <nz-form-label>Địa chỉ</nz-form-label>
+                      <input nz-input formControlName="address" />
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Số điện thoại</nz-form-label>
+                      <input nz-input formControlName="phoneNumber" />
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Fax</nz-form-label>
+                      <input nz-input formControlName="fax" />
+                    </nz-form-item>
+                  </div>
+                </div>
+                <div nz-row [nzGutter]="24">
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngIf="nodeDetail?.parentId">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Chọn đơn vị cha</nz-form-label>
+                      <nz-tree-select [nzNodes]="nodes" [nzDefaultExpandAll]="true" [nzDropdownMatchSelectWidth]="true"
+                        nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="parentId">
+                      </nz-tree-select>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Hình thức đơn vị</nz-form-label>
+                      <nz-form-control nzErrorTip="Hình thức đơn vị là bắt buộc!">
+                        <nz-select nzShowSearch formControlName="deptType">
+                          <nz-option *ngFor="let o of listHTDV" [nzLabel]="o.name" [nzValue]="o.id">
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label nzRequired>Kiểu phòng ban</nz-form-label>
+                      <nz-form-control nzErrorTip="Kiểu phòng ban là bắt buộc!">
+                        <nz-select nzShowSearch formControlName="type">
+                          <nz-option *ngFor="let o of listKPB" [nzLabel]="o.name" [nzValue]="o.id">
+                          </nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Thứ tự </nz-form-label>
+                      <nz-form-control>
+                        <input nz-input type="number" formControlName="index" />
+                      </nz-form-control>
+    
+                    </nz-form-item>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                    <nz-form-item>
+                      <nz-form-label>Trạng thái</nz-form-label>
+                      <label nz-checkbox formControlName="isActive">hoạt động/không hoạt động</label>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </form>
+            </nz-collapse-panel>
+          </nz-collapse>
+          
+          <nz-collapse >
+            <nz-collapse-panel [nzHeader]="'Danh sách người dùng'" [nzActive]="true" [nzShowArrow]="false">
+              <nz-table #basicTable [nzData]="datasNguoiDung" class="nowrap">
+                <thead>
+                  <tr>
+                    <th>Tên đăng nhập</th>
+                    <th>Họ và tên</th>
+                    <th>Chức vụ</th>
+                    <th>Số điện thoại</th>
+                    <th>Thư điện tử</th>
+                    <th width="140px" class="text-center">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of datasNguoiDung, let i = index">
+                    <td>{{ data?.userName }}</td>
+                    <td>{{ data?.fullName }}</td>
+                    <td>{{ data?.positionName }}</td>
+                    <td>{{data?.phoneNumber}}</td>
+                    <td>{{data?.email}}</td>
+                    <td class="text-center">
+                      <div *ngIf="data?.isActive == true" class="secondary hoatdong text-sm">
+                        Hoạt động
+                      </div>
+                      <div *ngIf="data?.isActive == false" class="secondary khonghoatdong text-sm">
+                        Không hoạt động
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+              <!-- begin phân trang  -->
+              <nz-pagination [nzPageIndex]="pageNguoiDung" [nzTotal]="totalRecordNguoiDung" nzShowSizeChanger
+                [nzPageSize]="pageSizeNguoiDung" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="changePageIndexNguoiDung($event)" (nzPageSizeChange)="changePageSizeNguoiDung($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </nz-collapse-panel>
+          </nz-collapse>
+          <ng-template #edit>
+            <button nz-button class="btn btn-create" (click)="sua()">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              Sửa
+            </button>
+            <button nz-button class="btn btn-create" (click)="xoa()">
+              <i class="icon htvbdh_xoa"></i>
+              Xóa
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
