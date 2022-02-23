@@ -1,13 +1,8 @@
 <ul nz-menu nzTheme="dark" nzMode="horizontal">
   <ng-container *ngFor="let item of lstPage">
-    <li
-      nz-menu-item
-      [nzMatchRouter]="true"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: false }"
-      *ngIf="checkRouter(item.route)"
-    >
-      <a routerLink="{{ item.route }}">{{ item.title }}</a>
+    <li nz-menu-item [nzMatchRouter]="true" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+      *ngIf="checkRouter(item.route)">
+      <a [routerLink]="item.route">{{ item.title }}</a>
     </li>
   </ng-container>
 </ul>

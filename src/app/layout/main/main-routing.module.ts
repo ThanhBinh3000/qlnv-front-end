@@ -25,6 +25,11 @@ const routes: Routes = [
             (m) => m.QuantriModule,
           ),
       },
+      {
+        path: 'nhap',
+        loadChildren: () =>
+          import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
+      },
     ],
   },
 ];

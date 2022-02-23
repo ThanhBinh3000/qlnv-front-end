@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QuantriComponent } from './quantri.component';
+import { NhapComponent } from './nhap.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: QuantriComponent,
+    component: NhapComponent,
     children: [
       {
         path: '',
@@ -13,10 +13,10 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'don-vi',
+        path: 'dau-thau',
         loadChildren: () =>
-          import('../../pages/quantri/donvi/donvi.module').then(
-            (m) => m.KeHoachModule,
+          import('../nhap/dau-thau/dau-thau.module').then(
+            (m) => m.DauThauModule,
           ),
       },
     ],
@@ -27,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class QuantriRoutingModule {}
+export class NhapRoutingModule {}
