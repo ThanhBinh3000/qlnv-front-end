@@ -3,6 +3,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NhomQuyenService } from 'src/app/services/nhomquyen.service';
 import { ObservableService } from 'src/app/services/observable.service';
+import { LIST_PAGES } from '../main-routing.constant';
 
 @Component({
   selector: 'app-main-router',
@@ -17,12 +18,7 @@ export class MainRouterComponent implements OnInit {
     private notification: NzNotificationService,
     private observableService: ObservableService,
   ) {
-    this.lstPage = [
-      {
-        title: 'Quản trị',
-        route: '/quantri',
-      },
-    ];
+    this.lstPage = LIST_PAGES;
   }
 
   ngOnInit(): void {
@@ -38,14 +34,5 @@ export class MainRouterComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
     });
-  }
-
-  checkRouter(router) {
-    return (
-      this.lstRouter.includes(router) ||
-      router === '/index' ||
-      router === '/qly-phonghop' ||
-      router === '/qly-dangkyxe'
-    );
   }
 }

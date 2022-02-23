@@ -1,39 +1,39 @@
-import { DauThau } from './dau-thau.type';
+import { DauGia } from './dau-gia.type';
 
-export const DAU_THAU_LIST: DauThau[] = [
+export const DAU_GIA_LIST: DauGia[] = [
   {
     icon: 'htvbdh_office',
-    title: 'QĐ PHÊ DUYỆT KH LCNT',
+    title: 'QĐ phê duyệt KH đấu giá',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'QĐ điều chỉnh phê duyệt KH LCNT',
+    title: 'Thông tin đấu giá',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Thông tin đấu thầu',
+    title: 'QĐ phê duyệt kết quả bán đấu giá',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'QĐ phê duyệt kết quả LCNT',
+    title: 'Hợp đồng bán',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Hợp đồng mua',
+    title: 'Lệnh xuất',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Biên bản giao nhận',
+    title: 'Phiếu kiểm nghiệm chất lượng hàng DTQG',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
@@ -45,32 +45,32 @@ export const DAU_THAU_LIST: DauThau[] = [
   },
   {
     icon: 'htvbdh_office',
-    title: 'Lệnh nhập',
+    title: 'Phiếu xuất kho',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Biên bản chuẩn bị kho',
+    title: 'Biên bản tịnh kho khi xuất dốc kho',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     isDisabled: true,
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
+    title: 'Biên bản xuất dốc kho vật tư',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
+    title: 'Biên bản xác định hao dôi lương thực',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
   {
     icon: 'htvbdh_office',
-    title: 'Phiếu nhập điều chỉnh',
+    title: 'Phiếu xuất điều chỉnh',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },

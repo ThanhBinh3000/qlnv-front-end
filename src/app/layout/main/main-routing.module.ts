@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from 'src/app/pages/index/index.component';
 import { QuantriComponent } from 'src/app/pages/quantri/quantri.component';
+import { MAIN_ROUTES } from './main-routing.constant';
 import { MainComponent } from './main.component';
 
 const routes: Routes = [
@@ -15,7 +16,27 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'quantri',
+        path: MAIN_ROUTES.quantri,
+        component: QuantriComponent,
+      },
+      {
+        path: MAIN_ROUTES.kehoach,
+        component: QuantriComponent,
+      },
+      {
+        path: MAIN_ROUTES.tacVuThuongXuyen,
+        component: QuantriComponent,
+      },
+      {
+        path: MAIN_ROUTES.baoCaoNghiepVu,
+        component: QuantriComponent,
+      },
+      {
+        path: MAIN_ROUTES.heThong,
+        component: QuantriComponent,
+      },
+      {
+        path: MAIN_ROUTES.danhMuc,
         component: QuantriComponent,
       },
       {
@@ -26,9 +47,14 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'nhap',
+        path: MAIN_ROUTES.nhap,
         loadChildren: () =>
           import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
+      },
+      {
+        path: MAIN_ROUTES.xuat,
+        loadChildren: () =>
+          import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
       },
     ],
   },

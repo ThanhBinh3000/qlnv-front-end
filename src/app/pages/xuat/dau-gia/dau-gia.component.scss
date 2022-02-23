@@ -1,0 +1,45 @@
+@import '../../../../assets/scss/default.scss';
+::ng-deep {
+  .main-content {
+    .card-tree {
+      cursor: pointer;
+    }
+    .content-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .htvbdh_office {
+        color: $maincolor;
+        font-size: $font-size42;
+      }
+      &-title {
+        font-size: $font-size14;
+        line-height: $font-size16;
+        color: $maincolor;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: 18px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+      }
+      &-description {
+        font-size: $font-size12;
+        color: $color-label;
+        margin-top: 6px;
+        font-weight: normal;
+        font-size: $font-size12;
+        line-height: $font-size14;
+        text-align: center;
+      }
+    }
+    .ant-card .ant-card-body {
+      padding: 32px 16px 0px 16px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+}

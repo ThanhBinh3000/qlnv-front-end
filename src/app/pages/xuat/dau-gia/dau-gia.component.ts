@@ -9,14 +9,14 @@ import { OldResponseData } from 'src/app/interfaces/response';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
-import { DAU_THAU_LIST } from './dau-thau.constant';
+import { DAU_GIA_LIST } from './dau-gia.constant';
 
 @Component({
-  selector: 'app-dau-thau',
-  templateUrl: './dau-thau.component.html',
-  styleUrls: ['./dau-thau.component.scss'],
+  selector: 'app-dau-gia',
+  templateUrl: './dau-gia.component.html',
+  styleUrls: ['./dau-gia.component.scss'],
 })
-export class DauThauComponent implements OnInit {
+export class DauGiaComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   visible = false;
@@ -31,7 +31,7 @@ export class DauThauComponent implements OnInit {
   detailDonVi: FormGroup;
   noParent = true;
   searchValue = '';
-  dauThauList = DAU_THAU_LIST;
+  dauThauList = DAU_GIA_LIST;
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,

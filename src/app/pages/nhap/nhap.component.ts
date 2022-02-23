@@ -5,9 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { ROUTE_LIST } from './nhap.constant';
+import { NHAP_ROUTE_LIST } from './nhap.constant';
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -15,15 +13,10 @@ import { ROUTE_LIST } from './nhap.constant';
 })
 export class NhapComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
-  userLogin: UserLogin;
-  routes = ROUTE_LIST;
-  constructor(private userService: UserService) {}
+  routes = NHAP_ROUTE_LIST;
+  constructor() {}
 
-  ngOnInit(): void {
-    this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     if (

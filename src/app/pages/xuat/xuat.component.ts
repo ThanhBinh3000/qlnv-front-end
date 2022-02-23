@@ -1,4 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
 import {
   AfterViewInit,
   Component,
@@ -6,27 +5,18 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { QUANTRI_CHILD_PAGES } from './quantri.constant';
+import { NHAP_ROUTE_LIST } from './nhap.constant';
 @Component({
-  selector: 'app-quantri',
-  templateUrl: './quantri.component.html',
-  styleUrls: ['./quantri.component.scss'],
+  selector: 'app-xuat',
+  templateUrl: './xuat.component.html',
+  styleUrls: ['./xuat.component.scss'],
 })
-export class QuantriComponent implements OnInit, AfterViewInit {
+export class XuatComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
-  userLogin: UserLogin;
-  childPages = QUANTRI_CHILD_PAGES;
-  selectedPage = QUANTRI_CHILD_PAGES[0];
+  routes = NHAP_ROUTE_LIST;
+  constructor() {}
 
-  constructor(private userService: UserService) {}
-
-  ngOnInit(): void {
-    this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     if (
