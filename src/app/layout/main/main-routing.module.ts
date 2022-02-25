@@ -20,10 +20,6 @@ const routes: Routes = [
         component: QuantriComponent,
       },
       {
-        path: MAIN_ROUTES.kehoach,
-        component: QuantriComponent,
-      },
-      {
         path: MAIN_ROUTES.tacVuThuongXuyen,
         component: QuantriComponent,
       },
@@ -55,6 +51,13 @@ const routes: Routes = [
         path: MAIN_ROUTES.xuat,
         loadChildren: () =>
           import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
+      },
+      {
+        path: MAIN_ROUTES.kehoach,
+        loadChildren: () =>
+          import('../../pages/ke-hoach/ke-hoach.module').then(
+            (m) => m.KeHoachModule,
+          ),
       },
     ],
   },

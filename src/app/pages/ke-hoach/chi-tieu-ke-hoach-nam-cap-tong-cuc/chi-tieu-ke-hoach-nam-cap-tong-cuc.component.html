@@ -1,0 +1,101 @@
+<div class="contentBor">
+  <div class="contentDetail">
+    <div class="main-content">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+          <nz-card nzTitle="Danh mục" class="card-tree" nzType="inner">
+            <!-- <nz-input-group [nzSuffix]="suffixIcon">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search"
+                [(ngModel)]="searchValue"
+              />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template> -->
+            <!--có Search: https://ng.ant.design/components/tree-view/en -->
+            <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)" [nzSearchValue]="searchValue"
+              (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
+              (nzExpandChange)="nzCheck($event)">
+            </nz-tree>
+          </nz-card>
+        </div>
+        <!-- Thông tin đơn vị  -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+          <nz-tabset nzType="card">
+            <nz-tab [nzTitle]="'Thông tin chung'">
+              <nz-card nzTitle="Cục DTNNKV Vĩnh Phú" class="" nzType="inner">
+                <div nz-row [nzGutter]="24">
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Mã</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Quận</span>
+                    <input type="text" nz-input formControlName="quan" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Sổ chi cục</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Sổ điểm kho</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Sổ nhà kho</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Sổ ngăn kho</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Tổng tích lượng thiết kế (tấn kho)</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" class="row-input">
+                    <span class="tt-title">Tổng tích lượng đã sử dụng (tấn kho)</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="row-input">
+                    <span class="tt-title-full">Tổng tích lượng khả dụng (tấn kho)</span>
+                    <input type="text" nz-input formControlName="ma" nzSize="small" class="tt-input-full" />
+                  </div>
+                  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="row-input">
+                    <span class="tt-title-full">Mô tả</span>
+                    <textarea nz-input class="tt-input-full"></textarea>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Vật tư'">
+              <nz-card nzTitle="Thông tin chung" class="mt16 flex-card p-lr16">
+                <nz-table #basicTable [nzData]="" class="nowrap">
+                  <thead>
+                    <tr>
+                      <th>Tên vật tư</th>
+                      <th width="10%">Số lượng</th>
+                      <th width="10%">Đơn vị</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01</td>
+                      <td>190</td>
+                      <td>Tấn</td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Thông tin quy hoạch'">Content of Tab Pane</nz-tab>
+            <nz-tab [nzTitle]="'Đầu tu cải tạo'">Content of Tab Pane</nz-tab>
+          </nz-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

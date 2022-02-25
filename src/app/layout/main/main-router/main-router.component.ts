@@ -22,6 +22,8 @@ export class MainRouterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.lstPage);
+
     this.layTatCaChucNangUser();
   }
 

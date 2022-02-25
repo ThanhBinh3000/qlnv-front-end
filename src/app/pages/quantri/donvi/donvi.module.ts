@@ -10,4 +10,4 @@ import { NewDonViComponent } from './new-don-vi/new-don-vi.component';
   declarations: [DonviComponent, NewDonViComponent],
   imports: [CommonModule, DonviRoutingModule, ComponentsModule],
 })
-export class KeHoachModule {}
+export class DonViModule {}

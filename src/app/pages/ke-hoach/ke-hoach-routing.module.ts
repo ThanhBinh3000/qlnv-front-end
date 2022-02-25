@@ -1,12 +1,11 @@
-import { QuantriModule } from './quantri.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QuantriComponent } from './quantri.component';
+import { KeHoachComponent } from './ke-hoach.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: QuantriComponent,
+    component: KeHoachComponent,
     children: [
       {
         path: '',
@@ -14,11 +13,11 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'don-vi',
+        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
         loadChildren: () =>
-          import('../../pages/quantri/donvi/donvi.module').then(
-            (m) => m.DonViModule,
-          ),
+          import(
+            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
+          ).then((m) => m.ChiTieuKeHoachNamModule),
       },
     ],
   },
@@ -28,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class QuantriRoutingModule {}
+export class KeHoachRoutingModule {}

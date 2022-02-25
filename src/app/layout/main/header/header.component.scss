@@ -12,8 +12,11 @@
   // width: calc(100% - 326px);
   width: 100%;
 }
+.logo-tcdt {
+  width: 46px;
+}
 .logo {
-  @include background('#{$img-path}logo.svg');
+  @include background('#{$img-path}logo-tcdt.svg');
   width: 40px;
   padding: 0;
   margin: 0px 0px 0px 10px;
@@ -25,7 +28,7 @@
 }
 @media (max-width: 767px) {
   .logo {
-    @include background('#{$img-path}logo.svg');
+    @include background('#{$img-path}logo-tcdt.svg');
     // background-size: auto 38px !important;
     background-position: 0px 4px;
     background-repeat: no-repeat;
