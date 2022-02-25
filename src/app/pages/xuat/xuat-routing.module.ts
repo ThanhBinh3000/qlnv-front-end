@@ -8,11 +8,6 @@ const routes: Routes = [
     component: XuatComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'nguoi-dung',
-        pathMatch: 'full',
-      },
-      {
         path: 'dau-gia',
         loadChildren: () =>
           import('./dau-gia/dau-gia.module').then((m) => m.DauGiaModule),

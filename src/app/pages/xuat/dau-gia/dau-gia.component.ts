@@ -41,6 +41,11 @@ export class DauGiaComponent implements OnInit {
     private nguoidungService: NguoiDungService,
   ) {}
 
+  //search
+  searchFilter = {
+    soQD: '',
+  };
+
   ngOnInit(): void {
     this.initForm();
     this.layTatCaDonViTheoTree();

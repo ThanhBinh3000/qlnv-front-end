@@ -1869,3 +1869,10 @@ a.btn.btn-disabled {
   border-bottom-right-radius: 0;
 }
 // nzAddOnAfter select option
+
+svg {
+  vertical-align: baseline;
+}
+
+@import './common/tab.scss';
+@import './common/search.scss';

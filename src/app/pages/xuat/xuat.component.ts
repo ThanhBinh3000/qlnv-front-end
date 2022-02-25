@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { NHAP_ROUTE_LIST } from './nhap.constant';
+import { NHAP_ROUTE_LIST } from './xuat.constant';
 @Component({
   selector: 'app-xuat',
   templateUrl: './xuat.component.html',

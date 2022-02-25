@@ -3613,11 +3613,6 @@ td {
   color: $maincolor;
 }
 
-.dot.thongtinxlvb {
-  border-radius: 3px !important;
-  border-bottom: solid 1px #f0f0f0;
-}
-
 .cauhinh.canphai .btn.btn-create {
   border-radius: 50%;
   padding: 0;
@@ -4272,11 +4267,5 @@ td nz-upload .upload-content .card-content {
   .fix.collapse > div.ant-affix .nav-tabs,
   .fix.collapse > div.ant-affix .nav-tabs .nav-link {
     padding: 5px 15px;
-  }
-
-  .hanhdong.ant-dropdown-menu .ant-dropdown-menu-item a .fa,
-  .hanhdong.ant-dropdown-menu .ant-dropdown-menu-item a i,
-  .hanhdong.ant-dropdown-menu .ant-dropdown-menu-item a .icon {
-    font-size: 10px;
   }
 }
