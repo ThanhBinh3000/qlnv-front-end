@@ -1,0 +1,16 @@
+@import '../shared/colors.scss';
+.modal__title {
+  color: $maincolor;
+}
+
+.modal__button--save {
+  background-color: $maincolor;
+  color: white;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.modal__button--cancel {
+  background-color: $subcolor;
+  font-weight: 500;
+}
