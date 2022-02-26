@@ -32,6 +32,15 @@ export class DauGiaComponent implements OnInit {
   noParent = true;
   searchValue = '';
   dauThauList = DAU_GIA_LIST;
+
+  // search
+  searchFilter = {
+    soQD: '',
+  };
+  // modal
+  isVisible = false;
+  isVisible2 = false;
+
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
@@ -41,16 +50,39 @@ export class DauGiaComponent implements OnInit {
     private nguoidungService: NguoiDungService,
   ) {}
 
-  //search
-  searchFilter = {
-    soQD: '',
-  };
-
   ngOnInit(): void {
     this.initForm();
     this.layTatCaDonViTheoTree();
     this.layDonViPhongBan();
   }
+
+  // modal func
+  showModal(): void {
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+  }
+  //
+  // modal func
+  showModal2(): void {
+    this.isVisible2 = true;
+  }
+
+  handleOk2(): void {
+    this.isVisible2 = false;
+  }
+
+  handleCancel2(isVisible): void {
+    this.isVisible2 = isVisible;
+    console.log('handleOk => this.isVisible', this.isVisible2);
+  }
+  //
 
   layDonViPhongBan() {
     this.helperService

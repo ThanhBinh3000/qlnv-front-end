@@ -1,21 +1,34 @@
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
   <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
+    <div
+      class="tab-pane fade show active justify-content-between"
+      id="banhanh"
+      role="tabpanel"
+      aria-labelledby="banhanh-tab"
+    >
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+        <a
+          class="btn btn-outline-grey btn-sm waves-effect waves-light"
+          (click)="redirectChiTieuKeHoachNam()"
+        >
           <i class="fa fa-arrow-circle-left"></i>
         </a>
       </div>
       <div class="canphai phai">
-        <a class="btn btn-main btn-sm waves-effect waves-light">
+        <button
+          (click)="handleOpenModal('thongTinLuongThuc')"
+          class="btn btn-main btn-sm waves-effect waves-light"
+        >
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
-        </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        </button>
+        <button
+          (click)="handleOpenModal('luaChonIn')"
+          class="btn btn-outline-grey btn-sm waves-effect waves-light"
+        >
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
-        </a>
+        </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
@@ -36,9 +49,15 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
+      <nz-card
+        nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao"
+        class="mt16 flex-card p-lr16"
+      >
         <div class="widget-body">
-          <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+          <nz-descriptions
+            [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+            [nzColon]="false"
+          >
             <nz-descriptions-item nzTitle="Số QĐ">
               100/QĐ-TCDT
             </nz-descriptions-item>
@@ -55,7 +74,9 @@
               Chỉ tiêu kế hoạch năm
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Tài liệu đính kèm" [nzSpan]="4">
-              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+              <nz-upload
+                nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              >
                 <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
                   <i class="icon htvbdh_tcdt_tep"></i>
                 </a>
@@ -63,19 +84,21 @@
               Chỉ tiêu kế hoạch năm.docx
             </nz-descriptions-item>
           </nz-descriptions>
-
         </div>
       </nz-card>
       <nz-tabset nzType="card" class="tab__container">
         <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
-          <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+          <nz-table
+            #groupingTable
+            [nzData]="listOfData"
+            nzBordered
+            class="table__body"
+          >
             <thead>
               <tr>
                 <th rowspan="4">STT</th>
                 <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                <th colspan="8">
-                  Tồn kho đầu năm (1) <br>( 01/01/2021)
-                </th>
+                <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
                 <th colspan="3">Nhập trong năm (2)</th>
                 <th colspan="8">Xuât trong năm (3)</th>
                 <th colspan="3">Tồn kho cuối năm (4)
@@ -86,18 +109,21 @@
                 <th rowspan="4">Hành động</th>
               </tr>
               <tr>
-                <th rowspan="3">Tổng số
-                  <br>
+                <th rowspan="3">
+                  Tổng số
+                  <br />
                   (quy thóc)
                 </th>
                 <th colspan="7">Trong đó</th>
-                <th rowspan="3">Tổng số
-                  <br>
+                <th rowspan="3">
+                  Tổng số
+                  <br />
                   (quy thóc)
                 </th>
                 <th colspan="2">Trong đó</th>
-                <th rowspan="3">Tổng số
-                  <br>
+                <th rowspan="3">
+                  Tổng số
+                  <br />
                   (quy thóc)
                 </th>
                 <th colspan="7">Trong đó</th>
@@ -173,9 +199,18 @@
             </tbody>
           </nz-table>
         </nz-tab>
-        <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'">Content of Tab Pane</nz-tab>
-        <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'">Content of Tab Pane</nz-tab>
+        <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'"
+          >Content of Tab Pane</nz-tab
+        >
+        <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'"
+          >Content of Tab Pane</nz-tab
+        >
       </nz-tabset>
     </div>
   </div>
 </div>
+<!-- modal -->
+<app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
+<app-thong-tin-luong-thuc
+  [(isVisible)]="modals.thongTinLuongThuc"
+></app-thong-tin-luong-thuc>

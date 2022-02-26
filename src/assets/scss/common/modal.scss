@@ -1,6 +1,12 @@
-@import '../shared/colors.scss';
+.modal__content {
+  display: flex;
+  flex-direction: column;
+}
+
 .modal__title {
   color: $maincolor;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .modal__button--save {
