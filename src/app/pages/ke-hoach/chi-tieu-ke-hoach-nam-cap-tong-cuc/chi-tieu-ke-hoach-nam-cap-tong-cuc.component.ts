@@ -9,6 +9,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -40,6 +41,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private _modalService: NzModalService,
     private notification: NzNotificationService,
     private nguoidungService: NguoiDungService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -297,5 +299,12 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         });
       },
     });
+  }
+
+  redirectThongTinChiTieuKeHoachNam() {
+    this.router.navigate([
+      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      1,
+    ]);
   }
 }

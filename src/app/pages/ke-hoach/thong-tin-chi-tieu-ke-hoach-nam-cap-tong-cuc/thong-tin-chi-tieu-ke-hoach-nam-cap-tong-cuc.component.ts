@@ -9,7 +9,17 @@ import { OldResponseData } from 'src/app/interfaces/response';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
-
+import { Router } from '@angular/router';
+interface DataItem {
+  name: string;
+  age: number;
+  street: string;
+  building: string;
+  number: number;
+  companyAddress: string;
+  companyName: string;
+  gender: string;
+}
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -30,6 +40,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   detailDonVi: FormGroup;
   noParent = true;
   searchValue = '';
+  ////////
+  listOfData: DataItem[] = [];
+  sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
+  nameFilterFn = (list: string[], item: DataItem): boolean =>
+    list.some((name) => item.name.indexOf(name) !== -1);
+  filterName = [
+    { text: 'Joe', value: 'Joe' },
+    { text: 'John', value: 'John' },
+  ];
+  /////////
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
@@ -37,9 +57,26 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private _modalService: NzModalService,
     private notification: NzNotificationService,
     private nguoidungService: NguoiDungService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
+    /////////
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        name: 'John Brown',
+        age: i + 1,
+        street: 'Lake Park',
+        building: 'C',
+        number: 2035,
+        companyAddress: 'Lake Street 42',
+        companyName: 'SoftLake Co',
+        gender: 'M',
+      });
+    }
+    this.listOfData = data;
+    //////////////
     this.initForm();
     this.layTatCaDonViTheoTree();
     this.layDonViPhongBan();
@@ -294,5 +331,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         });
       },
     });
+  }
+  redirectChiTieuKeHoachNam() {
+    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
   }
 }

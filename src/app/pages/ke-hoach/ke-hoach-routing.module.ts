@@ -19,6 +19,13 @@ const routes: Routes = [
             '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
           ).then((m) => m.ChiTieuKeHoachNamModule),
       },
+      {
+        path: 'thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
+          ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
+      },
     ],
   },
 ];

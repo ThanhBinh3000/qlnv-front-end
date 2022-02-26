@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src: url('fonts/htvbdh.eot?6t4dbi');
-  src: url('fonts/htvbdh.eot?6t4dbi#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?6t4dbi') format('truetype'),
-    url('fonts/htvbdh.woff?6t4dbi') format('woff'),
-    url('fonts/htvbdh.svg?6t4dbi#htvbdh') format('svg');
+  src: url('fonts/htvbdh.eot?88yj4f');
+  src: url('fonts/htvbdh.eot?88yj4f#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?88yj4f') format('truetype'),
+    url('fonts/htvbdh.woff?88yj4f') format('woff'),
+    url('fonts/htvbdh.svg?88yj4f#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_pheduyet:before {
+  content: '\eae8';
+}
+.htvbdh_tcdt_delete:before {
+  content: '\eae9';
+}
+.htvbdh_tcdt_import:before {
+  content: '\eaea';
+}
+.htvbdh_tcdt_print:before {
+  content: '\eaeb';
+}
+.htvbdh_tcdt_save:before {
+  content: '\eaec';
+}
+.htvbdh_tcdt_tep:before {
+  content: '\eaed';
+}
+.htvbdh_tcdt_tuchoi:before {
+  content: '\eaee';
+}
+.htvbdh_tcdt_guiduyet:before {
+  content: '\eaef';
+}
 .htvbdh_chuyentheolo:before {
   content: '\eabe';
 }
