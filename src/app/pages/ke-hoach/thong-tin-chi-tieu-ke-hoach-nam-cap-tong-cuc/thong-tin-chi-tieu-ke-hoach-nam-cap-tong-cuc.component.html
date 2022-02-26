@@ -77,7 +77,13 @@
                   Tồn kho đầu năm (1) <br>( 01/01/2021)
                 </th>
                 <th colspan="3">Nhập trong năm (2)</th>
-                <th colspan="5">Xuât trong năm (3)</th>
+                <th colspan="8">Xuât trong năm (3)</th>
+                <th colspan="3">Tồn kho cuối năm (4)
+                  <br>
+                  ( 31/12/2021)
+                </th>
+                <th rowspan="4">Trạng thái</th>
+                <th rowspan="4">Hành động</th>
               </tr>
               <tr>
                 <th rowspan="3">Tổng số
@@ -94,7 +100,12 @@
                   <br>
                   (quy thóc)
                 </th>
-                <th colspan="4">Trong đó</th>
+                <th colspan="7">Trong đó</th>
+                <th rowspan="3">Tổng số
+                  <br>
+                  (quy thóc)
+                </th>
+                <th colspan="2">Trong đó</th>
               </tr>
               <tr>
                 <th colspan="4">Thóc</th>
@@ -102,19 +113,25 @@
                 <th rowspan="2">Thóc</th>
                 <th rowspan="2">Gạo</th>
                 <th colspan="4">Thóc</th>
+                <th colspan="3">Gạo</th>
+                <th rowspan="2">Thóc</th>
+                <th rowspan="2">Gạo</th>
               </tr>
               <tr>
-                <th>Thóc</th>
-                <th>Gạo</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
-                <th>Thóc</th>
-                <th>Gạo</th>
-                <th>Thóc</th>
+                <th>Tổng</th>
+                <th>Nhập <br> 2017</th>
+                <th>Nhập <br> 2018</th>
+                <th>Nhập <br> 2019</th>
+                <th>Tổng</th>
+                <th>Nhập <br> 2018</th>
+                <th>Nhập <br> 2019</th>
+                <th>Tổng</th>
+                <th>Nhập <br> 2017</th>
+                <th>Nhập <br> 2018</th>
+                <th>Nhập <br> 2019</th>
+                <th>Tổng</th>
+                <th>Nhập <br> 2018</th>
+                <th>Nhập <br> 2019</th>
               </tr>
             </thead>
             <tbody>
@@ -137,6 +154,21 @@
                 <td nzRight>{{ data.gender }}</td>
                 <td>{{ data.companyName }}</td>
                 <td>{{ data.gender }}</td>
+                <td>{{ data.companyName }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ data.companyName }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ data.companyName }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ data.companyName }}</td>
+                <td>
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
               </tr>
             </tbody>
           </nz-table>
