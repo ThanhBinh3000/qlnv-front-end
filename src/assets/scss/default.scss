@@ -622,7 +622,7 @@ app-danh-sach-file.hidecard,
 
   button,
   .ant-radio-group {
-    @extend %btn-create;
+    // @extend %btn-create;
     line-height: $input-h;
     height: $input-h $i;
   }
@@ -768,7 +768,7 @@ app-danh-sach-file.hidecard,
   border: none;
   background: transparent;
   box-shadow: unset;
-  margin-bottom: 24px;
+  // margin-bottom: 24px;
 
   .card-content {
     box-shadow: 1px 1px 4px -2px #00000033;
@@ -1873,6 +1873,3 @@ a.btn.btn-disabled {
 svg {
   vertical-align: baseline;
 }
-
-@import './common/tab.scss';
-@import './common/search.scss';

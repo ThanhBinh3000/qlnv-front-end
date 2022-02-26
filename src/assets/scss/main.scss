@@ -1,4 +1,7 @@
 @import './default.scss';
+@import '../scss/common/button.scss';
+@import './common/tab.scss';
+@import './common/search.scss';
 %status {
   padding: 2px 8px;
   border-radius: 3px;
@@ -1946,7 +1949,7 @@ li.nav-item.prev {
 .ant-card {
   border: none;
   box-shadow: unset;
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
 
   .ant-card-body,
   .ant-card-head {
@@ -3650,7 +3653,7 @@ td {
 }
 
 .pagination-card {
-  margin-top: 16px;
+  // margin-top: 16px;
 }
 
 // main........................................

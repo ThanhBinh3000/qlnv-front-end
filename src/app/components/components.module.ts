@@ -64,7 +64,7 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
     FormsModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
-
+    NzAffixModule,
     NzNotificationModule,
     NzBreadCrumbModule,
     NzLayoutModule,

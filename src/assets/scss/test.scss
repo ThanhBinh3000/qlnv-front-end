@@ -231,7 +231,7 @@ th {
 
 .canphai,
 .cantrai {
-  display: inline-flex;
+  display: flex;
   align-items: center;
 }
 
@@ -1155,7 +1155,7 @@ $cxl-h: 31px;
 
 .ant-pagination {
   display: flex;
-  padding: 10px 15px;
+  // padding: 10px 15px;
 }
 
 .ant-pagination
@@ -1193,7 +1193,7 @@ $cxl-h: 31px;
 
 .ant-pagination li.ant-pagination-total-text,
 .ant-pagination-total-text {
-  order: 3;
+  // order: 3;
 }
 
 .ant-table-pagination.ant-pagination {

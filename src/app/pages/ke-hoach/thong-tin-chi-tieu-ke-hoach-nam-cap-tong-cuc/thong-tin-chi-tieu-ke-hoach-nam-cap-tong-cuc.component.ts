@@ -11,11 +11,11 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
 
 @Component({
-  selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+  templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
+  styleUrls: ['./thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
 })
-export class ChiTieuKeHoachNamComponent implements OnInit {
+export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   visible = false;
@@ -30,9 +30,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   detailDonVi: FormGroup;
   noParent = true;
   searchValue = '';
-  searchFilter = {
-    soQD: '',
-  };
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
