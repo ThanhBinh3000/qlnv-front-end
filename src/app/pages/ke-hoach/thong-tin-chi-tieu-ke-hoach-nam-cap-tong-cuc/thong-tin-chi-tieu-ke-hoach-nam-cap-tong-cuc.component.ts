@@ -20,6 +20,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   modals = {
     luaChonIn: false,
     thongTinLuongThuc: false,
+    thongTinVatTuTrongNam: false,
   };
   xuongCaoTocCacLoais = new Array(4);
   constructor(private router: Router) {}

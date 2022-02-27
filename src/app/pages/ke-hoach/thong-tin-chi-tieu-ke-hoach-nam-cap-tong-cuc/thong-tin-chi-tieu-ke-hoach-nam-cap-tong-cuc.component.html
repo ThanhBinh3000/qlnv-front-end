@@ -16,10 +16,13 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button
+          (click)="handleOpenModal('thongTinVatTuTrongNam')"
+          class="btn btn-outline-grey btn-sm waves-effect waves-light"
+        >
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
-        </a>
+        </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
@@ -387,4 +390,11 @@
 </div>
 <!-- modal -->
 <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-<app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
+
+<app-thong-tin-luong-thuc
+  [(isVisible)]="modals.thongTinLuongThuc"
+></app-thong-tin-luong-thuc>
+
+<app-thong-tin-vat-tu-trong-nam
+  [(isVisible)]="modals.thongTinVatTuTrongNam"
+></app-thong-tin-vat-tu-trong-nam>

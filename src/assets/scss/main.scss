@@ -4,6 +4,8 @@
 @import './common/tab.scss';
 @import './common/search.scss';
 @import './common/modal.scss';
+@import './common/form.scss';
+@import './common/dropdown.scss';
 
 %status {
   padding: 2px 8px;
@@ -17,77 +19,6 @@
   font-size: 12px;
 }
 $statusBGnum: 100%;
-@keyframes swing {
-  20% {
-    -webkit-transform: rotate3d(0, 0, 1, 15deg);
-    transform: rotate3d(0, 0, 1, 15deg);
-  }
-
-  40% {
-    -webkit-transform: rotate3d(0, 0, 1, -10deg);
-    transform: rotate3d(0, 0, 1, -10deg);
-  }
-
-  60% {
-    -webkit-transform: rotate3d(0, 0, 1, 5deg);
-    transform: rotate3d(0, 0, 1, 5deg);
-  }
-
-  80% {
-    -webkit-transform: rotate3d(0, 0, 1, -5deg);
-    transform: rotate3d(0, 0, 1, -5deg);
-  }
-
-  to {
-    -webkit-transform: rotate3d(0, 0, 1, 0deg);
-    transform: rotate3d(0, 0, 1, 0deg);
-  }
-}
-
-@keyframes tada {
-  from {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-
-  10%,
-  20% {
-    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
-    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
-  }
-
-  30%,
-  50%,
-  70%,
-  90% {
-    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-  }
-
-  40%,
-  60%,
-  80% {
-    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-  }
-
-  to {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-.animate__tada {
-  -webkit-animation-name: tada;
-  animation-name: tada;
-}
-
-.animate__swing {
-  -webkit-transform-origin: top center;
-  transform-origin: top center;
-  -webkit-animation-name: swing;
-  animation-name: swing;
-}
 
 .flex-card.ant-card .sokyhieu button.ant-btn.ant-btn-circle:hover i,
 .flex-card.ant-card .sokyhieu button.ant-btn.ant-btn-circle:hover .icon,
@@ -273,15 +204,6 @@ textarea.ant-input {
   line-height: 18px;
 }
 
-.ant-carousel .slick-dots {
-  // border-bottom: solid 1px $bordercolor;
-  height: 0px;
-}
-
-.ant-carousel .slick-dots li button {
-  margin-top: -1px;
-}
-
 .ant-card-body {
   padding: 10px 15px;
 
@@ -342,20 +264,6 @@ textarea.ant-input {
 
 .ant-col {
   margin-bottom: 15px;
-}
-
-.input-group-btn.btn-timkiem + .input-group-btn.btn-timkiem2 {
-  margin-left: 2px !important;
-}
-
-.ant-avatar.ant-avatar-icon {
-  top: -7px !important;
-}
-
-.ant-badge .ant-scroll-number-custom-component,
-.ant-badge-count,
-.ant-badge-dot {
-  top: 3px;
 }
 
 .contentDetail > .title {
@@ -421,18 +329,8 @@ input.form-control {
   width: 25%;
 }
 
-.ant-select-show-search.ant-select:not(.ant-select-customize-input)
-  .ant-select-selector
-  input {
-  height: 24px;
-}
-
 .ant-picker-input > input {
   height: 24px;
-}
-
-.ant-input-group-addon .ant-btn {
-  padding: 0 6px;
 }
 
 .color-dot {
@@ -3553,31 +3451,6 @@ nz-upload {
   }
 }
 
-.ant-collapse
-  > .ant-collapse-item.ant-collapse-no-arrow
-  > .ant-collapse-header[aria-expanded='false']
-  + .ant-collapse-content {
-  margin-top: 0;
-}
-
-.tree-modal2 {
-  .btn.btn-create.full {
-    margin-top: 4px;
-    background: $color-f9;
-    border-radius: 16px;
-    padding-left: 16px;
-
-    .xoa {
-      margin-top: -3px;
-      padding-right: 8px;
-    }
-  }
-}
-
-.ant-timeline.ant-timeline-label .ant-timeline-item-label {
-  font-size: $font-size12;
-}
-
 .card-content ul.ant-timeline {
   padding-left: 8px;
 }
@@ -3655,10 +3528,6 @@ td {
   padding: 0 16px;
 }
 
-.pagination-card {
-  // margin-top: 16px;
-}
-
 // main........................................
 td textarea.ant-input {
   height: $input-h;
@@ -3703,11 +3572,6 @@ td textarea:focus.ant-input {
 .ant-card-head-wrapper {
   background: $bg-nhat;
 }
-
-// .ant-card-head-wrapper {
-//   margin-right: -16px;
-//   padding-right: 8px;
-// }
 
 .ant-checkbox-disabled + span {
   color: rgba(0, 0, 0, 0.5);
@@ -4002,10 +3866,6 @@ td .ant-btn-link {
     margin-right: 6px;
     color: $color-icon-xam;
   }
-}
-.ant-menu {
-  font-weight: 500;
-  color: #444;
 }
 ul.events {
   list-style: none;
