@@ -632,26 +632,6 @@ app-danh-sach-file.hidecard,
   }
 }
 
-.contentTimkiem {
-  width: 900px;
-
-  &.w1000 {
-    width: 1000px;
-  }
-
-  &.w1200 {
-    width: 1000px;
-  }
-
-  &.w1600 {
-    width: 1000px;
-  }
-
-  .dropdown-menu-right {
-    min-width: auto;
-  }
-}
-
 ::ng-deep .ant-modal {
   .ant-tabs-content-holder {
     // max-height: calc(100vh - 332px);
@@ -1375,20 +1355,6 @@ app-danh-sach-file.hidecard,
       justify-content: center;
     }
   }
-}
-
-.ant-input-group-addon {
-  border-radius: 3px;
-}
-
-.ant-input-group-addon .ant-btn {
-  border: none;
-  height: auto !important;
-  border-radius: 0;
-}
-
-.ant-input-group-addon .ant-btn + .ant-btn {
-  border-left: solid 1px #ccc;
 }
 
 .date-picker-custom {
