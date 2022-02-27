@@ -76,6 +76,5 @@ export class DauGiaComponent implements OnInit {
 
   handleCancel2(isVisible): void {
     this.isVisible2 = isVisible;
-    console.log('handleOk => this.isVisible', this.isVisible2);
   }
 }

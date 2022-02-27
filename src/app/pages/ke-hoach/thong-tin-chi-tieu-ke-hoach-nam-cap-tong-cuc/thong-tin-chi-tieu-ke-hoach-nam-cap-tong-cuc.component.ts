@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 interface DataItem {
   name: string;
   age: number;
@@ -24,19 +25,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   };
   xuongCaoTocCacLoais = new Array(4);
   id: number;
+  tabSelected: string = TAB_SELECTED.luongThuc;
   detail = {
     soQD: null,
     ngayKy: null,
     ngayHieuLuc: null,
     namKeHoach: null,
     trichYeu: null,
-  }
-
-
-  constructor(
-    private router: Router,
-    private routerActive: ActivatedRoute,
-  ) { }
+  };
+  tab = TAB_SELECTED;
+  constructor(private router: Router, private routerActive: ActivatedRoute) {}
 
   ngOnInit(): void {
     const data = [];
@@ -54,6 +52,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
     this.listOfData = data;
     this.id = +this.routerActive.snapshot.paramMap.get('id');
+  }
+
+  themMoi() {
+    if (this.tabSelected == TAB_SELECTED.luongThuc) {
+      this.handleOpenModal('thongTinLuongThuc');
+    } else if (this.tabSelected == TAB_SELECTED.vatTu) {
+      this.handleOpenModal('thongTinVatTuTrongNam');
+    }
   }
 
   handleOpenModal(modalName: string) {

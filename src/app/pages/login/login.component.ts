@@ -52,8 +52,6 @@ export class LoginComponent implements OnInit {
         password: form.Password,
       };
       this.apiService.login(user).subscribe((res: OldResponseData) => {
-        console.log(res);
-
         if (res.data) {
           this.authService.saveToken(res.data.token);
           this.router.navigate(['/']);
