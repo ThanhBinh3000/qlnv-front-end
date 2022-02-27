@@ -1,7 +1,6 @@
 import { RouteInfo } from './main-routing.type';
 
 export const MAIN_ROUTES = {
-  quantri: 'quantri',
   kehoach: 'kehoach',
   nhap: 'nhap',
   xuat: 'xuat',
@@ -12,10 +11,6 @@ export const MAIN_ROUTES = {
 };
 
 export const LIST_PAGES: RouteInfo[] = [
-  {
-    title: 'Quản trị',
-    route: MAIN_ROUTES.quantri,
-  },
   {
     title: 'Kế hoạch',
     route: MAIN_ROUTES.kehoach,

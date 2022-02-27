@@ -22,8 +22,6 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    console.log(this.routes);
-
     this.userLogin = this.userService.getUserLogin();
     this.isSuperAdmin = this.userLogin.userName == 'adminteca';
   }
