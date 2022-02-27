@@ -1,6 +1,6 @@
-@import '../../../../assets/scss/default.scss';
+@import "../../../../assets/scss/default.scss";
 ::ng-deep {
-  .main-content {
+  .main-content-dau-thau {
     padding: unset !important;
     .card-tree {
       cursor: pointer;
@@ -38,6 +38,20 @@
     }
     .ant-card .ant-card-body {
       padding: 32px 16px 0px 16px;
+    }
+  }
+  .dau-thau {
+    .ant-tabs-tabpane {
+      background-color: rgb(251 251 251);
+    }
+    .vat-tu,
+    .muoi {
+      padding: 15px;
+      padding-top: 24px;
+      background-color: #e3f9f9;
+    }
+    .action-top {
+      padding-right: 48px;
     }
   }
 }

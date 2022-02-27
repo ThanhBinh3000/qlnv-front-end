@@ -7,7 +7,6 @@
     margin-top: 11px !important;
   }
   nz-tabset.ant-tabs.ant-tabs-card.ant-tabs-top.ant-tabs-default {
-    box-shadow: 0px 2px 12px rgb(0 0 0 / 25%) !important;
     border-radius: 0px 0px 6px 6px !important;
   }
   .ant-tabs-content-holder {
@@ -51,7 +50,7 @@
     background-color: #e3f9f9 !important;
   }
   .ant-tabs-content-holder {
-    padding-top: 24px !important;
+    padding: 0px !important;
     background: #e3f9f9 !important;
   }
 }

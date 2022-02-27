@@ -10,6 +10,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { DAU_THAU_LIST } from './dau-thau.constant';
+import { Router } from '@angular/router';
 interface DataItem {
   name: string;
   age: number;
@@ -41,7 +42,9 @@ export class DauThauComponent implements OnInit {
   noParent = true;
   searchValue = '';
   dauThauList = DAU_THAU_LIST;
-
+  searchFilter = {
+    soDeXuat: '',
+  };
   ////////
   listOfData: DataItem[] = [];
   sortAgeFn = (a: DataItem, b: DataItem): number => a.age - b.age;
@@ -60,6 +63,7 @@ export class DauThauComponent implements OnInit {
     private _modalService: NzModalService,
     private notification: NzNotificationService,
     private nguoidungService: NguoiDungService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -310,5 +314,12 @@ export class DauThauComponent implements OnInit {
         });
       },
     });
+  }
+
+  redirectThongTinChiTieuKeHoachNam() {
+    this.router.navigate([
+      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      1,
+    ]);
   }
 }
