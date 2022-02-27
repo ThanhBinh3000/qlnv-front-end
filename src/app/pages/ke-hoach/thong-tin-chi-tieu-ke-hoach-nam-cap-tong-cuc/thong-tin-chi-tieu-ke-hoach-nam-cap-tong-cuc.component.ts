@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 interface DataItem {
   name: string;
   age: number;
@@ -21,8 +21,20 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     luaChonIn: false,
     thongTinLuongThuc: false,
   };
+  id: number;
+  detail = {
+    soQD: null,
+    ngayKy: null,
+    ngayHieuLuc: null,
+    namKeHoach: null,
+    trichYeu: null,
+  }
 
-  constructor(private router: Router) {}
+
+  constructor(
+    private router: Router,
+    private routerActive: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
     const data = [];
@@ -39,6 +51,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
     }
     this.listOfData = data;
+    this.id = +this.routerActive.snapshot.paramMap.get('id');
   }
 
   handleOpenModal(modalName: string) {

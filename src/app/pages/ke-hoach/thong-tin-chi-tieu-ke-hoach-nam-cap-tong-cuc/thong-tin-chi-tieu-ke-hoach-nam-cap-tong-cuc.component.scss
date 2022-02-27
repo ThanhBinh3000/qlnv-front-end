@@ -14,4 +14,25 @@
   .tab__container {
     margin-top: 12px;
   }
+  .star {
+    color: #ff4d4f;
+  }
+  .input-so-qd {
+    width: calc(100% - 70px);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .code-so-qd {
+    width: 70px;
+    background: #f8f9fa;
+    border: 1px solid #c4c9cc;
+    border-left: none;
+    font-size: 12px;
+    height: 24px;
+    float: right;
+    line-height: 24px;
+    text-align: center;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
 }
