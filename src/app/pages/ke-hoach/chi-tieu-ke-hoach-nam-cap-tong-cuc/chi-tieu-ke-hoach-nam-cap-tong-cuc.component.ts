@@ -49,7 +49,14 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   redirectThongTinChiTieuKeHoachNam() {
     this.router.navigate([
       '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      1,
+      0,
+    ]);
+  }
+
+  redirectSuaThongTinChiTieuKeHoachNam(id) {
+    this.router.navigate([
+      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      id,
     ]);
   }
 }
