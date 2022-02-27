@@ -41,12 +41,12 @@ export class UserService {
   }
 
   layTatCaVaiTro(): Promise<OldResponseData> {
-    const url = `${environment.ACCOUNT_API}api/Account/LayTatCaVaiTro`;
+    const url = `${environment.SERVICE_API}api/Account/LayTatCaVaiTro`;
     return this.httpClient.get<OldResponseData>(url).toPromise();
   }
 
   chuyenVaiTro(idVaiTro): Promise<OldResponseData> {
-    const url = `${environment.ACCOUNT_API}api/Account/ChuyenVaiTro/${idVaiTro}`;
+    const url = `${environment.SERVICE_API}api/Account/ChuyenVaiTro/${idVaiTro}`;
     return this.httpClient.post<OldResponseData>(url, {}).toPromise();
   }
 

@@ -48,11 +48,13 @@ export class LoginComponent implements OnInit {
     this.spinner.show();
     try {
       const user = {
-        UserName: form.UserName,
-        Password: form.Password,
+        username: form.UserName,
+        password: form.Password,
       };
       this.apiService.login(user).subscribe((res: OldResponseData) => {
-        if (res.success) {
+        console.log(res);
+
+        if (res.data) {
           this.authService.saveToken(res.data.token);
           this.router.navigate(['/']);
         } else {

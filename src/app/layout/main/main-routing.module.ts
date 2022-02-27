@@ -1,7 +1,7 @@
+import { KeHoachModule } from './../../pages/ke-hoach/ke-hoach.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from 'src/app/pages/index/index.component';
-import { QuantriComponent } from 'src/app/pages/quantri/quantri.component';
 import { MAIN_ROUTES } from './main-routing.constant';
 import { MainComponent } from './main.component';
 
@@ -12,35 +12,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'quantri',
+        redirectTo: 'kehoach',
         pathMatch: 'full',
-      },
-      {
-        path: MAIN_ROUTES.quantri,
-        component: QuantriComponent,
-      },
-      {
-        path: MAIN_ROUTES.tacVuThuongXuyen,
-        component: QuantriComponent,
-      },
-      {
-        path: MAIN_ROUTES.baoCaoNghiepVu,
-        component: QuantriComponent,
-      },
-      {
-        path: MAIN_ROUTES.heThong,
-        component: QuantriComponent,
-      },
-      {
-        path: MAIN_ROUTES.danhMuc,
-        component: QuantriComponent,
-      },
-      {
-        path: 'quantri',
-        loadChildren: () =>
-          import('../../pages/quantri/quantri.module').then(
-            (m) => m.QuantriModule,
-          ),
       },
       {
         path: MAIN_ROUTES.nhap,

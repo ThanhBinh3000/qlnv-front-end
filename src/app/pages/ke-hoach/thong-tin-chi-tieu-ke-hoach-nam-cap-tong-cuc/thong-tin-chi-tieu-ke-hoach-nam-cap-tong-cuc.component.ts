@@ -21,7 +21,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     luaChonIn: false,
     thongTinLuongThuc: false,
   };
-
+  xuongCaoTocCacLoais = new Array(4);
   constructor(private router: Router) {}
 
   ngOnInit(): void {

@@ -6,8 +6,7 @@ export const environment = {
   production: false,
   // ACCOUNT_API: 'http://192.168.1.75:85/',
   // SERVICE_API: 'http://192.168.1.75:81/',
-  ACCOUNT_API: 'http://192.168.1.73:85/',
-  SERVICE_API: 'http://192.168.1.73:81/',
+  SERVICE_API: 'http://192.168.1.62:8762/qlnv-gateway',
   //  SERVICE_API: 'http://localhost:31859/'
 };
 

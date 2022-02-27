@@ -1,17 +1,44 @@
-.chi-tieu__body {
-  .flex-card.ant-card {
-    border: 1px solid #ececec !important;
-    background: transparent;
-    box-shadow: unset;
-    margin-bottom: 0px !important;
-    margin-top: 11px !important;
-    border-radius: 6px;
-  }
-  .table__body {
-    margin: 12px 0px 0px 0px !important;
-    overflow: scroll;
-  }
-  .tab__container {
-    margin-top: 12px;
+::ng-deep {
+  .chi-tieu__body {
+    .flex-card.ant-card {
+      border: 1px solid #ececec !important;
+      background: transparent;
+      box-shadow: unset;
+      margin-bottom: 0px !important;
+      margin-top: 11px !important;
+      border-radius: 6px;
+    }
+    .table__body {
+      margin: 12px 0px 0px 0px !important;
+      overflow: scroll;
+    }
+    .tab__container {
+      margin-top: 12px;
+    }
+    .ghi-chu {
+      .ant-form-item-no-colon {
+        margin-bottom: 0px !important;
+      }
+      ul {
+        padding-left: 25px !important;
+      }
+      .ghi-chu__item {
+        font-style: italic;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 200%;
+      }
+    }
+    tr.table__header-vat-tu.ant-table-row > td {
+      background: #f1f1f1;
+    }
+    .tab__container {
+      position: relative;
+    }
+    .action {
+      position: absolute;
+      right: 25px;
+      top: 0;
+    }
   }
 }
