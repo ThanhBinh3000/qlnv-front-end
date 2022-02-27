@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?88yj4f');
-  src:  url('fonts/htvbdh.eot?88yj4f#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?88yj4f') format('truetype'),
-    url('fonts/htvbdh.woff?88yj4f') format('woff'),
-    url('fonts/htvbdh.svg?88yj4f#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?nq6l5t');
+  src:  url('fonts/htvbdh.eot?nq6l5t#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?nq6l5t') format('truetype'),
+    url('fonts/htvbdh.woff?nq6l5t') format('woff'),
+    url('fonts/htvbdh.svg?nq6l5t#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_icon-common:before {
+  content: "\eaf0";
+}
 .htvbdh_tcdt_pheduyet:before {
   content: "\eae8";
 }
