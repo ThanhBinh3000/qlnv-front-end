@@ -1,0 +1,48 @@
+<div class="dropdown__container">
+  <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
+  <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
+  <div style="margin-bottom: 6px">
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+      <input type="text" nz-input />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+      <button nz-button nzSearch>
+        <i nz-icon nzType="search"></i>
+      </button>
+    </ng-template>
+  </div>
+
+  <nz-table #expandTable [nzData]="listOfMapData">
+    <thead>
+      <tr>
+        <th>Tên vật tư</th>
+        <th>Mã vật tư</th>
+        <th>Chọn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of expandTable.data">
+        <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+            <td
+              [nzIndentSize]="item.level! * 20"
+              [nzShowExpand]="!!item.children"
+              [(nzExpand)]="item.expand"
+              (nzExpandChange)="
+                collapse(mapOfExpandedData[data.key], item, $event)
+              "
+            >
+              {{ item.tenVatTu }}
+            </td>
+            <td>{{ item.maVatTu }}</td>
+            <td style="text-align: center">
+              <div *ngIf="!item.children">
+                <i nz-icon nzType="plus" nzTheme="outline" nzColo></i>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</div>

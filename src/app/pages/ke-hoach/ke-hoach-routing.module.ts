@@ -26,6 +26,13 @@ const routes: Routes = [
             '../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
           ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
       },
+      {
+        path: 'dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
+          ).then((m) => m.DieuChinhThongTinChiTieuKeHoachNamModule),
+      },
     ],
   },
 ];
@@ -34,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class KeHoachRoutingModule {}
+export class KeHoachRoutingModule { }

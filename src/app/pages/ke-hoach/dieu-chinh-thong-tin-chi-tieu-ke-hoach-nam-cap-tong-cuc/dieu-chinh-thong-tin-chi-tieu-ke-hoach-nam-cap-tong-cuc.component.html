@@ -1,0 +1,431 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Gửi duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Phê duyệt</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_delete"></i>
+          <span>Hủy bỏ</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+          <div *ngIf="id == 0">
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+              <nz-descriptions-item nzTitle="Số QĐ">
+                100/QĐ-TCDT
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Ngày ký">
+                17/02/2022
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Ngày hiệu lực">
+                17/02/2022
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Năm kế hoạch">
+                2022
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Trích yếu" [nzSpan]="4">
+                Chỉ tiêu kế hoạch năm
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Tài liệu đính kèm" [nzSpan]="4">
+                <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+                  <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                    <i class="icon htvbdh_tcdt_tep"></i>
+                  </a>
+                </nz-upload>
+                Chỉ tiêu kế hoạch năm.docx
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </div>
+          <div class="search__body" nz-row [nzGutter]="[18, 12]" *ngIf="id > 0">
+            <div nz-col nzSpan="6">
+              <label class="search__label"><span class="star">*</span> Số QĐ</label>
+              <div>
+                <input class="search__input input-so-qd" nz-input [(ngModel)]="detail.soQD" />
+                <div class="code-so-qd">/QĐ-TCDT</div>
+              </div>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label"><span class="star">*</span> Ngày ký</label>
+              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayKy"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label"><span class="star">*</span> Ngày hiệu lực</label>
+              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayHieuLuc"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label"><span class="star">*</span> Năm kế hoạch</label>
+              <input class="search__input" nz-input [(ngModel)]="detail.namKeHoach" />
+            </div>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Trích yếu</label>
+              <textarea rows="3" class="search__input" nz-input [(ngModel)]="detail.trichYeu"></textarea>
+            </div>
+            <div nz-col nzSpan="6">
+              <button class="btn btn-tep btn-sm waves-effect waves-light">
+                <i class="icon htvbdh_tcdt_tep"></i>
+                <span>Tài liệu đính kèm</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nz-card>
+      <div class="tab__container">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
+            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="4">STT</th>
+                  <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                  <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                  <th colspan="3">Nhập trong năm (2)</th>
+                  <th colspan="8">Xuât trong năm (3)</th>
+                  <th colspan="3">Tồn kho cuối năm (4)
+                    <br>
+                    ( 31/12/2021)
+                  </th>
+                  <th rowspan="4">Trạng thái</th>
+                  <th rowspan="4">Hành động</th>
+                </tr>
+                <tr>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="7">Trong đó</th>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="2">Trong đó</th>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="7">Trong đó</th>
+                  <th rowspan="3">Tổng số
+                    <br>
+                    (quy thóc)
+                  </th>
+                  <th colspan="2">Trong đó</th>
+                </tr>
+                <tr>
+                  <th colspan="4">Thóc</th>
+                  <th colspan="3">Gạo</th>
+                  <th rowspan="2">Thóc</th>
+                  <th rowspan="2">Gạo</th>
+                  <th colspan="4">Thóc</th>
+                  <th colspan="3">Gạo</th>
+                  <th rowspan="2">Thóc</th>
+                  <th rowspan="2">Gạo</th>
+                </tr>
+                <tr>
+                  <th>Tổng</th>
+                  <th>Nhập <br> 2017</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> 2017</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of groupingTable.data">
+                  <td>1</td>
+                  <td>Hà Nội</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3,000</td>
+                  <td>3,000</td>
+                  <td>4,158</td>
+                  <td></td>
+                  <td>4,158</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td>4,158</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3,000</td>
+                  <td>3,000</td>
+                  <td>4,158</td>
+                  <td></td>
+                  <td>4,158</td>
+                  <td>14,316 </td>
+                  <td>6000</td>
+                  <td>4,158</td>
+                  <td>Đã duyệt</td>
+                  <td>
+                    <a>
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi">
+            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="4">STT</th>
+                  <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                  <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                  <th>Nhập trong năm (2)</th>
+                  <th colspan="4 ">Xuât trong năm (3)</th>
+                  <th>Tồn kho cuối năm (4)
+                    <br>
+                    ( 31/12/2021)
+                  </th>
+                  <th rowspan="3">Trạng thái</th>
+                  <th rowspan="3">Hành động</th>
+                </tr>
+                <tr>
+                  <th rowspan="2">
+                    Tổng số
+                  </th>
+                  <th colspan="3">Trong đó</th>
+                  <th rowspan="2">
+                    Tổng số
+                  </th>
+                  <th rowspan="2">
+                    Tổng số
+                  </th>
+                  <th colspan="3">Trong đó</th>
+                  <th rowspan="2">
+                    Tổng số
+                  </th>
+                </tr>
+                <tr>
+                  <th>Nhập <br> 2017</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> 2017</th>
+                  <th>Nhập <br> 2018</th>
+                  <th>Nhập <br> 2019</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of groupingTable.data">
+                  <td>1</td>
+                  <td>Hà Nội</td>
+                  <td>14,316</td>
+                  <td></td>
+                  <td>3,000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                  <td>14,316</td>
+                  <td></td>
+                  <td>3,000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                  <td>Đã duyệt</td>
+                  <td>
+                    <a>
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
+            (nzClick)="tabSelected = tab.vatTu">
+            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="3">STT</th>
+                  <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                  <th rowspan="3">MẶT HÀNG</th>
+                  <th rowspan="3">ĐƠN VỊ TÍNH</th>
+                  <th colspan="6">CHỈ TIÊU NHẬP NĂM 2020</th>
+                </tr>
+                <tr>
+                  <th rowspan="2">
+                    Tổng số
+                  </th>
+                  <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
+                  <th rowspan="2">
+                    Kế hoạch 2020
+                  </th>
+                </tr>
+                <tr>
+                  <th>Tổng</th>
+                  <th>Kế hoạch <br> 2017</th>
+                  <th>Kế hoạch <br> 2018</th>
+                  <th>Kế hoạch <br> 2019</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="11">1</td>
+                  <td rowspan="11">Hà Nội</td>
+                </tr>
+                <tr class="table__header-vat-tu">
+                  <td>Xuồng cao tốc các loại</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                </tr>
+                <tr *ngFor="let item of xuongCaoTocCacLoais">
+                  <td>+ loại DT1</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                </tr>
+                <tr class="table__header-vat-tu">
+                  <td>Máy phát điện</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                </tr>
+                <tr *ngFor="let item of xuongCaoTocCacLoais">
+                  <td>+ loại 30-40 KVL</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                </tr>
+                <tr>
+                  <td rowspan="6">2</td>
+                  <td rowspan="6">Tây Bắc</td>
+                </tr>
+                <tr class="table__header-vat-tu">
+                  <td>Xuồng cao tốc các loại</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                <tr *ngFor="let item of xuongCaoTocCacLoais">
+                  <td>+ loại DT1</td>
+                  <td>Bộ</td>
+                  <td>14,316</td>
+                  <td>6000</td>
+                  <td></td>
+                  <td>3000</td>
+                  <td>3,000</td>
+                  <td>14,316</td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+        </nz-tabset>
+        <div class="tep" *ngIf="id > 0">
+          <i class="icon htvbdh_tcdt_tep"></i>
+          <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
+        </div>
+        <div class="action">
+          <button type="button" class="btn btn-main" (click)="themMoi()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Import</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+        </div>
+      </div>
+      <div class="ghi-chu">
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <ul>
+          <li class="ghi-chu__item">
+            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
+            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+            dựng CSDL về Tài chính
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal -->
+<app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
+
+<app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
+
+<app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam>
