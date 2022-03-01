@@ -11,7 +11,7 @@ export class ThongTinLuongThucComponent implements OnInit {
   @Output() isVisibleChange = new EventEmitter<boolean>();
 
   formData: FormGroup;
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.formData = this.fb.group({
@@ -26,18 +26,47 @@ export class ThongTinLuongThucComponent implements OnInit {
       slGao2: [null],
       slGao3: [null],
       tongSoQuyThocNhapTrongNam: [null],
-      slThocNhap: [null],
-      slGaoNhap: [null],
+      slThocTruocDieuChinh: [null],
+      slThocGiam: [null],
+      slThocTang: [null],
+      slThocSauDieuChinh: [null],
+      slGaoTruocDieuChinh: [null],
+      slGaoGiam: [null],
+      slGaoTang: [null],
+      slGaoSauDieuChinh: [null],
       tongSoQuyThocXuatTrongNam: [null],
-      xuatSlThoc1: [null],
-      xuatSlThoc2: [null],
-      xuatSlThoc3: [null],
-      xuatSlGao1: [null],
-      xuatSlGao2: [null],
-      xuatSlGao3: [null],
-      tongSoQuyThocTonKhoCuoiNam: [null],
-      slThocTonKho: [null],
-      slGaoTonKho: [null],
+      xuatTongSLThoc: [null],
+      xuatSlThocTruocDieuChinh1: [null],
+      xuatSlThocGiam1: [null],
+      xuatSlThocTang1: [null],
+      xuatSlThocSauDieuChinh1: [null],
+      xuatSlThocTruocDieuChinh2: [null],
+      xuatSlThocGiam2: [null],
+      xuatSlThocTang2: [null],
+      xuatSlThocSauDieuChinh2: [null],
+      xuatSlThocTruocDieuChinh3: [null],
+      xuatSlThocGiam3: [null],
+      xuatSlThocTang3: [null],
+      xuatSlThocSauDieuChinh3: [null],
+      xuatSlGaoTruocDieuChinh1: [null],
+      xuatTongSLGao: [null],
+      xuatSlGaoGiam1: [null],
+      xuatSlGaoTang1: [null],
+      xuatSlGaoSauDieuChinh1: [null],
+      xuatSlGaoTruocDieuChinh2: [null],
+      xuatSlGaoGiam2: [null],
+      xuatSlGaoTang2: [null],
+      xuatSlGaoSauDieuChinh2: [null],
+      xuatSlGaoTruocDieuChinh3: [null],
+      xuatSlGaoGiam3: [null],
+      xuatSlGaoTang3: [null],
+      xuatSlGaoSauDieuChinh3: [null],
+      tongSoQuyThocTruocTonKhoCuoiNam: [null],
+      slThocTruocTonKho: [null],
+      slGaoTruocTonKho: [null],
+      tongSoQuyThocSauTonKhoCuoiNam: [null],
+      slThocSauTonKho: [null],
+      slGaoSauTonKho: [null],
     });
   }
 
