@@ -53,6 +53,8 @@ export class UserService {
   getUserLogin(): UserLogin {
     var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
     var decoded = jwt_decode(token);
+    console.log(decoded);
+
     if (decoded && decoded['userinfo']) {
       var userInfo = decodeURIComponent(
         escape(window.atob(decoded['userinfo'])),

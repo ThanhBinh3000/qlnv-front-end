@@ -52,10 +52,12 @@ import { TecaTreeSelectModule } from './tree-select/tree-select.module';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { UploadComponent } from './dialog/dialog-upload/upload.component';
 
 @NgModule({
   declarations: [
     // components
+    UploadComponent,
     //pipes
     FilterPipe,
   ],

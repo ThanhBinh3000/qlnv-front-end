@@ -112,7 +112,7 @@ $inputLabel-text: 500;
 $mb: $input-h/2;
 
 .ant-upload.ant-upload-select {
-  margin-top: $label-padding;
+  // margin-top: $label-padding;
 }
 
 $tab-h: 9px;
@@ -1785,4 +1785,7 @@ a.btn.btn-disabled {
 
 svg {
   vertical-align: baseline;
+}
+td.action.ant-table-cell {
+  text-align: right;
 }

@@ -1,0 +1,34 @@
+<form nz-form>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="7">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tên tài liệu </nz-form-label>
+        <input nz-input formControlName="slThoc1" />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="17">
+      <nz-form-label nzRequired [nzNoColon]="true"> Chọn file </nz-form-label>
+      <nz-upload nzAction="">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light chon-file">
+          ...
+        </a>
+      </nz-upload>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </a>
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </a>
+    </div>
+  </div>
+</div>
