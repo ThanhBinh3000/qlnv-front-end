@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { khluongthuc } from 'src/app/models/khluongthuc';
+import { khMuoi } from 'src/app/models/khMuoi';
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 interface DataItem {
   name: string;
@@ -17,7 +19,9 @@ interface DataItem {
   styleUrls: ['./thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
 })
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
-  listOfData: DataItem[] = [];
+  listThoc: khluongthuc[] = [];
+  listMuoi: khMuoi[] = [];
+  listVatTu = [];
   modals = {
     luaChonIn: false,
     thongTinLuongThuc: false,
@@ -34,23 +38,260 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: null,
   };
   tab = TAB_SELECTED;
-  constructor(private router: Router, private routerActive: ActivatedRoute) {}
+  yearNow = 2022;
+  constructor(private router: Router, private routerActive: ActivatedRoute) { }
 
   ngOnInit(): void {
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        name: 'John Brown',
-        age: i + 1,
-        street: 'Lake Park',
-        building: 'C',
-        number: 2035,
-        companyAddress: 'Lake Street 42',
-        companyName: 'SoftLake Co',
-        gender: 'M',
-      });
-    }
-    this.listOfData = data;
+    const data =
+    {
+      "data": {
+        "khluongthuc": [
+          {
+            "stt": 1,
+            "cucId": null,
+            "cucDTNNKhuVuc": "Hà Nội",
+            "tkdnTongSoQuyThoc": 14316,
+            "tkdnTongThoc": 6000,
+            "tkdnTongGao": null,
+            "tkdnThoc": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 3000,
+                "vatTuId": null
+              }
+            ],
+            "tkdnGao": [
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 4158,
+                "vatTuId": null
+              }
+            ],
+            "ntnTongSoQuyThoc": 21000,
+            "ntnThoc": 3000,
+            "ntnGao": 9000,
+            "xtnTongSoQuyThoc": 11316,
+            "xtnTongThoc": 3000,
+            "xtnTongGao": 4158,
+            "xtnThoc": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 0,
+                "vatTuId": null
+              }
+            ],
+            "xtnGao": [
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 4158,
+                "vatTuId": null
+              }
+            ],
+            "tkcnTongSoQuyThoc": 24000,
+            "tkcnTongThoc": 6000,
+            "tkcnTongGao": 9000
+          },
+          {
+            "stt": null,
+            "cucId": null,
+            "cucDTNNKhuVuc": "Cộng",
+            "tkdnTongSoQuyThoc": 14316,
+            "tkdnTongThoc": 6000,
+            "tkdnTongGao": null,
+            "tkdnThoc": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 3000,
+                "vatTuId": null
+              }
+            ],
+            "tkdnGao": [
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 4158,
+                "vatTuId": null
+              }
+            ],
+            "ntnTongSoQuyThoc": 21000,
+            "ntnThoc": 3000,
+            "ntnGao": 9000,
+            "xtnTongSoQuyThoc": 11316,
+            "xtnTongThoc": 3000,
+            "xtnTongGao": 4158,
+            "xtnThoc": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 0,
+                "vatTuId": null
+              }
+            ],
+            "xtnGao": [
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 4158,
+                "vatTuId": null
+              }
+            ],
+            "tkcnTongSoQuyThoc": 24000,
+            "tkcnTongThoc": 6000,
+            "tkcnTongGao": 9000
+          }
+        ],
+        "khMuoi": [
+          {
+            "stt": 1,
+            "cucId": null,
+            "cucDTNNKhuVuc": "Hà Nội",
+            "tkdnTongSoMuoi": 14316,
+            "tkdnMuoi": [
+              {
+                "nam": 2019,
+                "soLuong": 6000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 3000,
+                "vatTuId": null
+              }
+            ],
+            "ntnTongSoMuoi": 21000,
+            "xtnTongSoMuoi": 11316,
+            "xtnMuoi": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 0,
+                "vatTuId": null
+              }
+            ],
+            "tkcnTongSoMuoi": 24000
+          },
+          {
+            "stt": null,
+            "cucId": null,
+            "cucDTNNKhuVuc": "Cộng",
+            "tkdnTongSoMuoi": 14316,
+            "tkdnMuoi": [
+              {
+                "nam": 2019,
+                "soLuong": 6000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 3000,
+                "vatTuId": null
+              }
+            ],
+            "ntnTongSoMuoi": 21000,
+            "xtnTongSoMuoi": 11316,
+            "xtnMuoi": [
+              {
+                "nam": 2019,
+                "soLuong": 0,
+                "vatTuId": null
+              },
+              {
+                "nam": 2020,
+                "soLuong": 3000,
+                "vatTuId": null
+              },
+              {
+                "nam": 2021,
+                "soLuong": 0,
+                "vatTuId": null
+              }
+            ],
+            "tkcnTongSoMuoi": 24000
+          }
+        ]
+      },
+      "statusCode": 0,
+      "msg": "Thành công",
+      "included": null
+    };
+    this.listThoc = data.data.khluongthuc;
+    this.listMuoi = data.data.khMuoi;
     this.id = +this.routerActive.snapshot.paramMap.get('id');
   }
 

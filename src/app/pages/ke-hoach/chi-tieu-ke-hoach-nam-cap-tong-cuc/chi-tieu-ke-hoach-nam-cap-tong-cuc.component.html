@@ -21,7 +21,9 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Mã đơn vị</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+            <nz-input-group nzAddOnAfterIcon="folder-open">
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+            </nz-input-group>
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Tên đơn vị</label>
