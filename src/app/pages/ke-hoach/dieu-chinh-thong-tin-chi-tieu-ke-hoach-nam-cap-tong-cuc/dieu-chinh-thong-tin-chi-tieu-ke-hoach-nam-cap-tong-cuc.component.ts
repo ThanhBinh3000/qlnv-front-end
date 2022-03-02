@@ -22,6 +22,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     luaChonIn: false,
     thongTinLuongThuc: false,
     thongTinVatTuTrongNam: false,
+    thongTinMuoi: false,
   };
   xuongCaoTocCacLoais = new Array(4);
   id: number;
@@ -59,6 +60,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.handleOpenModal('thongTinLuongThuc');
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
       this.handleOpenModal('thongTinVatTuTrongNam');
+    } else if (this.tabSelected == TAB_SELECTED.muoi) {
+      this.handleOpenModal('thongTinMuoi');
     }
   }
 

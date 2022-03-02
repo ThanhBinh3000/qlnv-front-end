@@ -1,12 +1,5 @@
-<nz-modal
-  [(nzVisible)]="isVisible"
-  nzTitle="The first Modal"
-  (nzOnOk)="(handleOk)"
-  (nzOnCancel)="(handleCancel)"
-  nzClosable="false"
-  [nzWidth]="800"
-  nzCentered
->
+<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnOk)="(handleOk)" (nzOnCancel)="(handleCancel)"
+  nzClosable="false" [nzWidth]="800" nzCentered>
   <div *nzModalTitle>
     <span class="modal__title"> Thông tin vật tư trong năm </span>
   </div>
@@ -38,11 +31,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Mã hàng hóa
             </nz-form-label>
-            <nz-form-control
-              nz-dropdown
-              [nzDropdownMenu]="menu"
-              nzTrigger="click"
-            >
+            <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
               <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input nz-input formControlName="maHangHoa" />
               </nz-input-group>
@@ -71,9 +60,33 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> SL trước điều chỉnh </nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="soLuong" />
+              <input nz-input formControlName="soLuongTruoc" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="soLuongGiam" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="soLuongTang" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> SL sau điều chỉnh </nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="soLuongSau" />
             </nz-form-control>
           </nz-form-item>
         </div>

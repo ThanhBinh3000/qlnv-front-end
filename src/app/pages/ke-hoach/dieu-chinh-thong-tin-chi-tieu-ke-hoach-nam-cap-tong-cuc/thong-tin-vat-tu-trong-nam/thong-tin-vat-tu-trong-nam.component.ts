@@ -12,7 +12,7 @@ export class ThongTinVatTuTrongNamComponent implements OnInit {
 
   formData: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.formData = this.fb.group({
@@ -21,7 +21,10 @@ export class ThongTinVatTuTrongNamComponent implements OnInit {
       maHangHoa: [{ value: null, disabled: true }, [Validators.required]],
       tenHangHoa: [null],
       donViTinh: [null],
-      soLuong: [null],
+      soLuongTruoc: [null],
+      soLuongGiam: [null],
+      soLuongTang: [null],
+      soLuongSau: [null],
       tongSo: [null],
       soLuongTheoNam1: [null],
       soLuongTheoNam2: [null],
