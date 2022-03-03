@@ -13,7 +13,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 
 interface ItemData {
   id: string;
@@ -32,32 +33,23 @@ interface ItemData {
 })
 export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
-  @Output()
-  messageEvent = new EventEmitter<boolean>();
-  nzTreeComponent!: NzTreeComponent;
   visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  detailDonVi: FormGroup;
-  noParent = true;
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
   };
-
+  id: number;
   formData: FormGroup;
-  constructor(private fb: FormBuilder, private modal: NzModalService) {}
+  constructor(
+    private fb: FormBuilder,
+    private modal: NzModalService,
+    private routerActive: ActivatedRoute,
+  ) {}
 
   i = 0;
   editId: string | null = null;
   listOfData: ItemData[] = [];
-
+  tabSelected: string = 'thongTinChung';
   startEdit(id: string): void {
     this.editId = id;
   }
@@ -101,6 +93,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
         bangChu: `Mười bảy tỷ ba trăm mười sáu trăm triệu`,
       },
     ];
+    this.id = +this.routerActive.snapshot.paramMap.get('id');
   }
 
   taiLieuDinhKem() {
@@ -117,7 +110,19 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       },
     });
   }
-  back(value: boolean) {
-    this.messageEvent.emit(value);
+
+  themMoiVatTu() {
+    this.modal.create({
+      nzTitle: 'Thông tin vật tư trong năm',
+      nzContent: DialogThemMoiVatTuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
   }
 }

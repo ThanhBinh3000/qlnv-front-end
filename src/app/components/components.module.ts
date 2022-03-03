@@ -53,11 +53,13 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { UploadComponent } from './dialog/dialog-upload/upload.component';
+import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 
 @NgModule({
   declarations: [
     // components
     UploadComponent,
+    DialogThemMoiVatTuComponent,
     //pipes
     FilterPipe,
   ],

@@ -8,6 +8,10 @@ const routes: Routes = [
     path: '',
     component: DauThauComponent,
   },
+  {
+    path: 'them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/:id',
+    component: ThemMoiDeXuatKeHoachLuaChonNhaThauComponent,
+  },
 ];
 
 @NgModule({

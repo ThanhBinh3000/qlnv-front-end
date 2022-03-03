@@ -163,7 +163,7 @@
                     </div>
                   </nz-card>
                   <ng-template #tableCard1>
-                    <button type="button" class="btn btn-main" (click)="isCreate = true">
+                    <button type="button" class="btn btn-main" (click)="redirectToThemMoi()">
                       <i class="icon htvbdh_dau-cong"></i>
                       <span>Thêm</span>
                     </button>
@@ -176,10 +176,10 @@
               </div>
             </div>
           </div>
-          <div class="luong-thuc__them-moi" *ngIf="isCreate">
+          <!-- <div class="luong-thuc__them-moi" *ngIf="isCreate">
             <them-moi-de-xuat-ke-hoach-lua-chon-nha-thau (messageEvent)="receiveMessage($event)">
             </them-moi-de-xuat-ke-hoach-lua-chon-nha-thau>
-          </div>
+          </div> -->
         </nz-tab>
         <nz-tab [nzTitle]="'Muối'">
           <div nz-row [nzGutter]="24" class="muoi">

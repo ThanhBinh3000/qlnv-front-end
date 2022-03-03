@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -17,11 +18,17 @@ export class DauThauComponent implements OnInit {
   };
   isCreate: boolean = false;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
   receiveMessage($event) {
     this.isCreate = $event;
     console.log(this.isCreate);
+  }
+  redirectToThemMoi() {
+    this.router.navigate([
+      '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+      1,
+    ]);
   }
 }
