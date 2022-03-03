@@ -32,6 +32,13 @@ const routes: Routes = [
             (m) => m.KeHoachModule,
           ),
       },
+      {
+        path: MAIN_ROUTES.danhmuc,
+        loadChildren: () =>
+          import('../../pages/danh-muc/danh-muc.module').then(
+            (m) => m.DanhMucModule,
+          ),
+      },
     ],
   },
 ];

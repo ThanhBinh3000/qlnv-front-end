@@ -12,11 +12,11 @@ import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-danh-muc-don-vi',
+  templateUrl: './danh-muc-don-vi.component.html',
+  styleUrls: ['./danh-muc-don-vi.component.scss'],
 })
-export class ChiTieuKeHoachNamComponent implements OnInit {
+export class DanhMucDonViComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   visible = false;
@@ -42,20 +42,20 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private nguoidungService: NguoiDungService,
     private router: Router,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  redirectThongTinChiTieuKeHoachNam() {
+  redirectThongTinDanhMucDonVi() {
     this.router.navigate([
-      '/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/kehoach/thong-tin-danh-muc-don-vi',
       0,
     ]);
   }
 
-  redirectSuaThongTinChiTieuKeHoachNam(id) {
+  redirectSuaThongTinDanhMucDonVi(id) {
     this.router.navigate([
-      '/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/kehoach/thong-tin-danh-muc-don-vi',
       id,
     ]);
   }

@@ -1,3 +1,22 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button nz-button class="search__button--search">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+        <button nz-button class="search__button--clear">
+          <i nz-icon nzType="close"></i>
+          Xóa điều kiện
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
@@ -21,24 +40,12 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Mã đơn vị</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open">
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
-            </nz-input-group>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Tên đơn vị</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
-        </div>
-        <div class="cangiua group-button-search">
-          <button nz-button class="search__button--search">
-            <i nz-icon nzType="search"></i>
-            Tìm kiếm
-          </button>
-          <button nz-button class="search__button--clear">
-            <i nz-icon nzType="close"></i>
-            Xóa điều kiện
-          </button>
         </div>
       </nz-card>
       <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM TỔNG CỤC GIAO" [nzExtra]="tableCard1"
@@ -70,12 +77,7 @@
               <td class="text-center">Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</td>
               <td class="text-center">Chưa duyệt</td>
               <td class="text-center">
-                <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
-                  <i class="fa fa-pencil"></i>
-                </a>
-                <a>
-                  <i class="fa fa-trash-o do"></i>
-                </a>
+
               </td>
             </tr>
             <tr>
@@ -89,7 +91,7 @@
               <td class="text-center">Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</td>
               <td class="text-center">Chưa duyệt</td>
               <td class="text-center">
-                <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                <a >
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a>
@@ -108,7 +110,7 @@
               <td class="text-center">Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</td>
               <td class="text-center">Chưa duyệt</td>
               <td class="text-center">
-                <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                <a >
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a>
@@ -137,7 +139,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam()">
+        <button type="button" class="btn btn-main" >
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

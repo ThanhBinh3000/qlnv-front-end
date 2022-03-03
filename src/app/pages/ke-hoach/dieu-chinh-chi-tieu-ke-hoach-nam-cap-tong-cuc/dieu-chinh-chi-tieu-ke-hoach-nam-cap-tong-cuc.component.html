@@ -3,12 +3,18 @@
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="6">
             <label class="search__label">Số QĐ</label>
+            <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+            </nz-input-group>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Năm kế hoạch</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ký từ ngày</label>
+            <label class="search__label">Từ ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.soQD"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
@@ -17,16 +23,6 @@
           </div>
           <div nz-col nzSpan="24">
             <label class="search__label">Trích yếu</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Mã đơn vị</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open">
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
-            </nz-input-group>
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Tên đơn vị</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
         </div>
@@ -41,7 +37,7 @@
           </button>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM TỔNG CỤC GIAO" [nzExtra]="tableCard1"
+      <nz-card nzTitle="Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap">
           <thead>
