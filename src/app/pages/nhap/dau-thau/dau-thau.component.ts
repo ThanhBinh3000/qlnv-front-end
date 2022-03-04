@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DAU_THAU_LIST } from './dau-thau.constant';
+import { DAU_THAU_LIST, LUONG_THUC_LIST } from './dau-thau.constant';
 @Component({
   selector: 'app-dau-thau',
   templateUrl: './dau-thau.component.html',
@@ -13,22 +13,20 @@ export class DauThauComponent implements OnInit {
   visible = false;
   searchValue = '';
   dauThauList = DAU_THAU_LIST;
+  luongThucList = LUONG_THUC_LIST;
   searchFilter = {
     soDeXuat: '',
   };
   isCreate: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   receiveMessage($event) {
     this.isCreate = $event;
     console.log(this.isCreate);
   }
-  redirectToThemMoi() {
-    this.router.navigate([
-      '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      1,
-    ]);
+  redirect(url: string) {
+    this.router.navigate([url]);
   }
 }

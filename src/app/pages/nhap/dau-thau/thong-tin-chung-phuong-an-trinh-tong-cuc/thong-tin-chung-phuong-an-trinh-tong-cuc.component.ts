@@ -14,6 +14,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { Router } from '@angular/router';
+import { DialogThongTinPhuLucKHLCNTComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
 
 interface ItemData {
   id: string;
@@ -107,5 +108,19 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
   back(id: string) {
     this.router.navigate([`/nhap/dau-thau/thong-tin-luong-dau-thau-gao/`, id])
+  }
+  openDialogThongTinPhuLucKLCNT() {
+    this.modal.create({
+      nzTitle: 'Thông tin phụ lục KH LCNT cho các Cục DTNN KV',
+      nzContent: DialogThongTinPhuLucKHLCNTComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
   }
 }

@@ -3643,7 +3643,7 @@ td textarea:focus.ant-input {
 }
 
 .ant-table table .ant-table-tbody > tr > td {
-  max-width: $maxTD-w;
+  // max-width: $maxTD-w;
   & > .antext > span,
   & > .antext > span > span,
   & > .antext {

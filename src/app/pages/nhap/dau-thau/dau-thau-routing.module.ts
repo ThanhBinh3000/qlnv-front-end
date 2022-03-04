@@ -1,9 +1,11 @@
+import { DanhSachDauThauComponent } from './danh-sach-dau-thau/danh-sach-dau-thau.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DauThauComponent } from './dau-thau.component';
 import { ThemMoiDeXuatKeHoachLuaChonNhaThauComponent } from './them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau.component';
 import { ThongTinLuongDauThauGaoComponent } from './thong-tin-luong-dau-thau-gao/thong-tin-luong-dau-thau-gao.component';
 import { ThongTinChungPhuongAnTrinhTongCucComponent } from './thong-tin-chung-phuong-an-trinh-tong-cuc/thong-tin-chung-phuong-an-trinh-tong-cuc.component';
+import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
 
 const routes: Routes = [
   {
@@ -21,6 +23,13 @@ const routes: Routes = [
   {
     path: 'thong-tin-chung-phuong-an-trinh-tong-cuc/:id',
     component: ThongTinChungPhuongAnTrinhTongCucComponent,
+  }, {
+    path: 'luong-dau-thau-gao',
+    component: LuongDauThauGaoComponent,
+  },
+  {
+    path: 'danh-sach-dau-thau',
+    component: DanhSachDauThauComponent,
   },
 ];
 

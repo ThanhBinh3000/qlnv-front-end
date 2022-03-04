@@ -44,6 +44,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     private fb: FormBuilder,
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
+    private router: Router,
   ) {}
 
   i = 0;
@@ -124,5 +125,8 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
         // date: event,
       },
     });
+  }
+  redirectToDanhSachDauThau() {
+    this.router.navigate(['nhap/dau-thau/danh-sach-dau-thau']);
   }
 }

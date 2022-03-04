@@ -109,7 +109,7 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
       },
     ];
   }
-  back(value: boolean) {
-    this.messageEvent.emit(value);
+  back() {
+    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
   }
 }
