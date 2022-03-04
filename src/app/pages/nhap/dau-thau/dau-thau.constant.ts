@@ -17,7 +17,7 @@ export const DAU_THAU_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thông tin đấu thầu',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'nhap/dau-thau/danh-sach-dau-thau',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',

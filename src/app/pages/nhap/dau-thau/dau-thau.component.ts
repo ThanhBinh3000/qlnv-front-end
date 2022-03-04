@@ -25,10 +25,7 @@ export class DauThauComponent implements OnInit {
     this.isCreate = $event;
     console.log(this.isCreate);
   }
-  redirectToThemMoi() {
-    this.router.navigate([
-      '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      1,
-    ]);
+  redirect(url: string) {
+    this.router.navigate([url]);
   }
 }

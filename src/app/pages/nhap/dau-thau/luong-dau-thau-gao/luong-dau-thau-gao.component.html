@@ -1,0 +1,287 @@
+<div class="contentBor luong-dau-thau-gao__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Loại hàng DTQG</label>
+            <nz-select>
+              <nz-option nzValue="Gạo/Thóc" nzLabel="Gạo/Thóc"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Từ ngày tạo phương án</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.soQD"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày tạo phương án</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.soQD"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label"> Năm kế hoạch </label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+          </div>
+        </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--search" (click)="openDialogThongTinPhuLucKLCNT()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+          <button nz-button class="search__button--clear">
+            <i nz-icon nzType="close"></i>
+            Xóa điều kiện
+          </button>
+        </div>
+      </nz-card>
+
+      <nz-tabset nzType="card" class="tab__container mt-16">
+        <nz-tab [nzTitle]="'Thông tin phương án tổng hợp KHLCNT trình Tổng cục'" class="tt-chung__container">
+          <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th>Ngày tạo phương án</th>
+                <th>Năm kế hoạch</th>
+                <th>Số QĐ PD CTKH</th>
+                <th>Hình thức LCNT</th>
+                <th>Phương thức LCNT</th>
+                <th>Loại hợp đồng</th>
+                <th>Nguồn vốn</th>
+                <th>Tiêu chuẩn chất lượng</th>
+                <th>Trạng thái</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>10/03/2022</td>
+                <td>2022</td>
+                <td>QDPD CTKH_01</td>
+                <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
+                <td>Một giai đoạn, Hai túi hồ sơ </td>
+                <td>
+                  Hợp đồng trọn gói
+                </td>
+                <td>NSNN </td>
+                <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
+                  tại nam bộ</td>
+                <td>Tổng cục đã duyệt</td>
+                <td>
+                  <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <!-- <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>10/03/2022</td>
+                <td>2022</td>
+                <td>QDPD CTKH_01</td>
+                <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
+                <td>Một giai đoạn, Hai túi hồ sơ </td>
+                <td>
+                  Hợp đồng trọn gói
+                </td>
+                <td>NSNN </td>
+                <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
+                  tại nam bộ</td>
+                <td>Tổng cục đã duyệt</td>
+                <td>
+                  <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr> -->
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                  [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    3-3 of 4 items
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp phương án'" class="tt-chung__container">
+          <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th>Cục DTNN KV</th>
+                <th>Số gói thầu</th>
+                <th>Số đề xuất</th>
+                <th>Ngày đề xuất</th>
+                <th>Tên dự án </th>
+                <th>Số lượng (Tấn)</th>
+                <th>Tổng tiền (Gồm thuế)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Cục DTNN KV Vĩnh phú</td>
+                <td>4</td>
+                <td>DX_KHCNT_01</td>
+                <td>10/03/2022</td>
+                <td>Mua gạo dự trữ A </td>
+                <td>
+                  2000
+                </td>
+                <td>42.000.000 </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>10/03/2022</td>
+                <td>2022</td>
+                <td>QDPD CTKH_01</td>
+                <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
+                <td>Một giai đoạn, Hai túi hồ sơ </td>
+                <td>
+                  Hợp đồng trọn gói
+                </td>
+                <td>NSNN </td>
+                <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
+                  tại nam bộ</td>
+                <td>Tổng cục đã duyệt</td>
+                <td>
+                  <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                  [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    3-3 of 4 items
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp phương án'" class="tt-chung__container">
+          <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th>Cục DTNN KV</th>
+                <th>Số gói thầu</th>
+                <th>Số đề xuất</th>
+                <th>Ngày đề xuất</th>
+                <th>Tên dự án </th>
+                <th>Số lượng (Tấn)</th>
+                <th>Tổng tiền (Gồm thuế)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Cục DTNN KV Vĩnh phú</td>
+                <td>4</td>
+                <td>DX_KHCNT_01</td>
+                <td>10/03/2022</td>
+                <td>Mua gạo dự trữ A </td>
+                <td>
+                  2000
+                </td>
+                <td>42.000.000 </td>
+              </tr>
+              <!-- <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>10/03/2022</td>
+                <td>2022</td>
+                <td>QDPD CTKH_01</td>
+                <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
+                <td>Một giai đoạn, Hai túi hồ sơ </td>
+                <td>
+                  Hợp đồng trọn gói
+                </td>
+                <td>NSNN </td>
+                <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
+                  tại nam bộ</td>
+                <td>Tổng cục đã duyệt</td>
+                <td>
+                  <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr> -->
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                  [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    3-3 of 4 items
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-tab>
+      </nz-tabset>
+      <ng-template #tableCard1>
+        <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+        <button type="button" class="btn btn-sub">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Export</span>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>
