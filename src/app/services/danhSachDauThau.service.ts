@@ -13,7 +13,7 @@ export class DanhSachDauThauService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    const url = `http://192.168.1.62:8762/qlnv-gateway/qlnv-hang/dx-kh/lcnt-gao/tra-cuu`;
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-service-hang/dx-kh/lcnt-gao/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 }

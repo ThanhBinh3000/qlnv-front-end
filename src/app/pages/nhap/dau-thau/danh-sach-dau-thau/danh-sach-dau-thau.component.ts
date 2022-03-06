@@ -30,6 +30,7 @@ export class DanhSachDauThauComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  dataTable: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -39,12 +40,12 @@ export class DanhSachDauThauComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show();
-    this.donViService.layTatCaDonVi().then(res => {
+    try {
+      let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == 'Thành công') {
-        this.spinner.hide();
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -55,8 +56,12 @@ export class DanhSachDauThauComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    });
-    this.search();
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
   }
 
   onInput(e: Event): void {
@@ -92,10 +97,10 @@ export class DanhSachDauThauComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToThemMoi() {
+  redirectToChiTiet(id: number) {
     this.router.navigate([
       '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      1,
+      id,
     ]);
   }
 
@@ -109,8 +114,9 @@ export class DanhSachDauThauComponent implements OnInit {
     this.inputDonVi = '';
   }
 
-  search() {
+  async search() {
     let maDonVi = null;
+    this.dataTable = [];
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(x => x.labelDonVi == this.inputDonVi);
       if (getDonVi && getDonVi.length > 0) {
@@ -133,18 +139,52 @@ export class DanhSachDauThauComponent implements OnInit {
       "tuNgayKy": this.startValue ? dayjs(this.startValue).format("DD/MM/YYYY") : null
     }
     this.totalRecord = 10;
-    this.danhSachDauThauService.timKiem(body).then(res => {
-      console.log('res', res);
-    });
+    let res = await this.danhSachDauThauService.timKiem(body);
+    if (res.msg == 'Thành công') {
+      let data = res.data;
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
+      }
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
-  changePageIndex(event) {
-    this.page = event;
-    this.search();
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
   }
 
-  changePageSize(event) {
-    this.pageSize = event;
-    this.search();
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
+  }
+
+  convertTrangThai(status: string) {
+    if (status == '01') {
+      return "Đã duyệt";
+    }
+    else {
+      return "Chưa duyệt";
+    }
+  }
+
+  xoaItem(item: any) {
+
   }
 }

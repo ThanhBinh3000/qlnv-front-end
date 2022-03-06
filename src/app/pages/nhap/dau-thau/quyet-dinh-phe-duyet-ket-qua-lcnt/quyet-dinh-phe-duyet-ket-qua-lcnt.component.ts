@@ -39,12 +39,12 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show();
-    this.donViService.layTatCaDonVi().then(res => {
+    try {
+      let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == 'Thành công') {
-        this.spinner.hide();
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -55,8 +55,12 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    });
-    this.search();
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
   }
 
   onInput(e: Event): void {
@@ -92,10 +96,10 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToThemMoi() {
+  redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      1,
+      '/nhap/dau-thau/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt',
+      id,
     ]);
   }
 
@@ -109,7 +113,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     this.inputDonVi = '';
   }
 
-  search() {
+  async search() {
     let maDonVi = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(x => x.labelDonVi == this.inputDonVi);
@@ -133,18 +137,35 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       "tuNgayKy": this.startValue ? dayjs(this.startValue).format("DD/MM/YYYY") : null
     }
     this.totalRecord = 10;
-    this.danhSachDauThauService.timKiem(body).then(res => {
-      console.log('res', res);
-    });
+    let res = await this.danhSachDauThauService.timKiem(body);
+    if (res.msg == 'Thành công') {
+
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
-  changePageIndex(event) {
-    this.page = event;
-    this.search();
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
   }
 
-  changePageSize(event) {
-    this.pageSize = event;
-    this.search();
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (err) {
+      this.spinner.hide();
+    }
   }
 }

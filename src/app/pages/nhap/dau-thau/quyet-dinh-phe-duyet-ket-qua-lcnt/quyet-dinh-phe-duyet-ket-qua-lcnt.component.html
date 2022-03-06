@@ -79,7 +79,7 @@
                 <th>Loại hàng DTQG</th>
                 <th>Tên đơn vị</th>
                 <th width="">Về việc</th>
-                <th width="170px" class="text-center"></th>
+                <th width="120px" class="text-center"></th>
               </tr>
             </thead>
             <tbody>
@@ -95,7 +95,7 @@
                 <td>Cục DTNNKV Tây Nam Bộ</td>
                 <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022 tại nam bộ</td>
                 <td>
-                  <a>
+                  <a (click)="redirectToChiTiet(1)">
                     <i class="fa fa-pencil den"></i>
                   </a>
                   <a>
@@ -128,7 +128,7 @@
           </div>
         </nz-card>
         <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToThemMoi()">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>

@@ -7,6 +7,7 @@ import { ThongTinLuongDauThauGaoComponent } from './thong-tin-luong-dau-thau-gao
 import { ThongTinChungPhuongAnTrinhTongCucComponent } from './thong-tin-chung-phuong-an-trinh-tong-cuc/thong-tin-chung-phuong-an-trinh-tong-cuc.component';
 import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
 import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
+import { ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent } from './thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
     component: QuyetDinhPheDuyetKetQuaLCNTComponent,
+  },
+  {
+    path: 'thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/:id',
+    component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
   },
 ];
 
