@@ -1,0 +1,160 @@
+<div class="luong-thuc__danh-sach">
+  <div class="menu-lv3">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div
+        class="tab-pane fade show active justify-content-between"
+        id="banhanh"
+        role="tabpanel"
+        aria-labelledby="banhanh-tab"
+      ></div>
+    </div>
+  </div>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="12">
+              <label class="search__label"
+                >Căn cứ quyết định phê duyệt nhà thầu</label
+              >
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Năm kế hoạch</label>
+              <nz-select nzPlaceHolder="Năm kế hoạch">
+                <nz-option nzValue="2019" nzLabel="2019"></nz-option>
+                <nz-option nzValue="2020" nzLabel="2020"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select nzPlaceHolder="Loại hàng hóa">
+                <nz-option nzValue="gao" nzLabel="Gạo"></nz-option>
+                <nz-option nzValue="muoi" nzLabel="Muối"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="24">
+              <label class="search__label"
+                >Tên thông tin lựa chọn nhà thầu</label
+              >
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Mã đơn vị</label>
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Tên đơn vị</label>
+              <input class="search__input" nz-input />
+            </div>
+          </div>
+          <div class="search-tools">
+            <button nz-button class="search__button--search">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <nz-card
+          nzTitle="DANH SÁCH THÔNG TIN ĐẤU THẦU"
+          [nzExtra]="tableCard1"
+          class="mt16 flex-card p-lr16"
+        >
+          <nz-table #basicTable class="nowrap">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th width="45px">
+                  <label nz-checkbox></label>
+                </th>
+                <th width="1198px">Tên</th>
+                <th width="130px">Số quyết định</th>
+                <th width="130px">Số gói thầu</th>
+                <th width="130px">Tổng giá trị</th>
+                <th width="130px" class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>Cục DTNNKV Đông Bắc, Cục DTNNKV Vĩnh Phú</td>
+                <td>11</td>
+                <td>2021</td>
+                <td>1,000,000,000</td>
+                <td class="text-center">
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <label nz-checkbox></label>
+                </td>
+                <td>Cục DTNNKV Đông Bắc, Cục DTNNKV Vĩnh Phú</td>
+                <td>11</td>
+                <td>2021</td>
+                <td>1,000,000,000</td>
+                <td class="text-center">
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai"></div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination
+                  class="pagination-card"
+                  [nzPageIndex]="1"
+                  [nzTotal]="12"
+                  nzShowSizeChanger
+                  [nzPageSize]="5"
+                  [nzShowTotal]="rangeTemplate"
+                >
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    3-3 of 4 items
+                  </ng-template>
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <button
+            type="button"
+            class="btn btn-main"
+            (click)="redirectToChiTiet()"
+          >
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
