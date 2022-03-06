@@ -36,20 +36,20 @@ export class DanhSachDauThauComponent implements OnInit {
     private donViService: DonviService,
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.spinner.show();
-    this.donViService.layTatCaDonVi().then(res => {
+    this.donViService.layTatCaDonVi().then((res) => {
       this.optionsDonVi = [];
       if (res.msg == 'Thành công') {
         this.spinner.hide();
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
-            labelDonVi: res.data[i].maDvi + " - " + res.data[i].tenDvi
-          }
+            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+          };
           this.optionsDonVi.push(item);
         }
       } else {
@@ -64,7 +64,9 @@ export class DanhSachDauThauComponent implements OnInit {
     if (!value || value.indexOf('@') >= 0) {
       this.options = [];
     } else {
-      this.options = this.optionsDonVi.filter(x => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1);
+      this.options = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
     }
   }
 
@@ -112,28 +114,34 @@ export class DanhSachDauThauComponent implements OnInit {
   search() {
     let maDonVi = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(x => x.labelDonVi == this.inputDonVi);
+      let getDonVi = this.optionsDonVi.filter(
+        (x) => x.labelDonVi == this.inputDonVi,
+      );
       if (getDonVi && getDonVi.length > 0) {
         maDonVi = getDonVi[0].maDvi;
       }
     }
     let body = {
-      "denNgayKy": this.endValue ? dayjs(this.endValue).format("DD/MM/YYYY") : null,
-      "id": 0,
-      "loaiVthh": "00",
-      "maDvi": maDonVi,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page
+      denNgayKy: this.endValue
+        ? dayjs(this.endValue).format('DD/MM/YYYY')
+        : null,
+      id: 0,
+      loaiVthh: '00',
+      maDvi: maDonVi,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page,
       },
-      "soDxuat": this.searchFilter.soDxuat,
-      "str": null,
-      "trangThai": "00",
-      "trichYeu": this.searchFilter.trichYeu,
-      "tuNgayKy": this.startValue ? dayjs(this.startValue).format("DD/MM/YYYY") : null
-    }
+      soDxuat: this.searchFilter.soDxuat,
+      str: null,
+      trangThai: '00',
+      trichYeu: this.searchFilter.trichYeu,
+      tuNgayKy: this.startValue
+        ? dayjs(this.startValue).format('DD/MM/YYYY')
+        : null,
+    };
     this.totalRecord = 10;
-    this.danhSachDauThauService.timKiem(body).then(res => {
+    this.danhSachDauThauService.timKiem(body).then((res) => {
       console.log('res', res);
     });
   }

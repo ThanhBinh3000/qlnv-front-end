@@ -8,6 +8,8 @@ import { ThongTinChungPhuongAnTrinhTongCucComponent } from './thong-tin-chung-ph
 import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
 import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 
+import { ThongTinDauThauComponent } from './thong-tin-dau-thau/thong-tin-dau-thau.component';
+import { ChiTietThongTinDauThauComponent } from './chi-tiet-thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau.component';
 
 const routes: Routes = [
   {
@@ -25,7 +27,8 @@ const routes: Routes = [
   {
     path: 'thong-tin-chung-phuong-an-trinh-tong-cuc/:id',
     component: ThongTinChungPhuongAnTrinhTongCucComponent,
-  }, {
+  },
+  {
     path: 'luong-dau-thau-gao',
     component: LuongDauThauGaoComponent,
   },
@@ -37,10 +40,18 @@ const routes: Routes = [
     path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
     component: QuyetDinhPheDuyetKetQuaLCNTComponent,
   },
+  {
+    path: 'thong-tin-dau-thau',
+    component: ThongTinDauThauComponent,
+  },
+  {
+    path: 'chi-tiet-thong-tin-dau-thau/:id',
+    component: ChiTietThongTinDauThauComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DauThauRoutingModule { }
+export class DauThauRoutingModule {}

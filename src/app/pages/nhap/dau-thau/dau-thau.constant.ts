@@ -87,7 +87,7 @@ export const LUONG_THUC_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt KH LCNT',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'nhap/dau-thau/thong-tin-dau-thau',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
