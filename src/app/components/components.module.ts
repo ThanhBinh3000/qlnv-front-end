@@ -61,7 +61,7 @@ import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dia
 
 @NgModule({
   declarations: [
-    // components
+    //components
     UploadComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,

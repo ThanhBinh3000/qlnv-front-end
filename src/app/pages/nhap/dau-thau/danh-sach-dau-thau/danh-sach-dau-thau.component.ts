@@ -8,6 +8,7 @@ import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'danh-sach-dau-thau',
@@ -31,6 +32,8 @@ export class DanhSachDauThauComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -38,11 +41,14 @@ export class DanhSachDauThauComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
     private router: Router,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.isVisibleChangeTab$.subscribe((value: boolean) => {
+        this.visibleTab = value;
+      });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == 'Thành công') {
@@ -193,6 +199,5 @@ export class DanhSachDauThauComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-
   }
 }

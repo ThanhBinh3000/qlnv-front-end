@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogThongTinPhuLucKHLCNTComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
+import { Subject } from 'rxjs';
 
 interface ItemData {
   id: string;
@@ -40,6 +41,8 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   i = 0;
   editId: string | null = null;
   listOfData: ItemData[] = [];
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -49,6 +52,9 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
     this.listOfData = [
       ...this.listOfData,
       {

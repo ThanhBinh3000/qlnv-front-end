@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'luong-dau-thau-gao',
+  selector: ' ',
   templateUrl: './luong-dau-thau-gao.component.html',
   styleUrls: ['./luong-dau-thau-gao.component.scss'],
 })
@@ -11,10 +12,17 @@ export class LuongDauThauGaoComponent implements OnInit {
   searchFilter = {
     soQD: '',
   };
-  tabSelected: string = 'phuong-an-tong-hop'
+  tabSelected: string = 'phuong-an-tong-hop';
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
+
   constructor(private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+  }
 
   redirectThongTinChiTieuKeHoachNam() {
     this.router.navigate([

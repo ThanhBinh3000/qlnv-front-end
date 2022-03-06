@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import { Subject } from 'rxjs';
 
 interface ItemData {
   id: string;
@@ -32,16 +33,19 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   };
   id: number;
   formData: FormGroup;
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
+  i = 0;
+  editId: string | null = null;
+  listOfData: ItemData[] = [];
+  tabSelected: string = 'thongTinChung';
+
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
     private router: Router,
   ) { }
 
-  i = 0;
-  editId: string | null = null;
-  listOfData: ItemData[] = [];
-  tabSelected: string = 'thongTinChung';
   startEdit(id: string): void {
     this.editId = id;
   }
@@ -72,6 +76,9 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
     this.listOfData = [
       ...this.listOfData,
       {

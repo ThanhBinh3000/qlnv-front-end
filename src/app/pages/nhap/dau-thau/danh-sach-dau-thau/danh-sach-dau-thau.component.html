@@ -1,4 +1,6 @@
-<div class="luong-thuc__danh-sach">
+<dau-thau-tab [isVisible]="visibleTab" (isVisibleChange)="isVisibleChangeTab$.next($event)">
+</dau-thau-tab>
+<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">

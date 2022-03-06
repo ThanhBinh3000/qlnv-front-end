@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { DialogThongTinPhuLucKHLCNTComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
+import { Subject } from 'rxjs';
 
 interface ItemData {
   id: string;
@@ -28,13 +29,14 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   searchFilter = {
     soDeXuat: '',
   };
-
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
   formData: FormGroup;
-  constructor(private modal: NzModalService, private router: Router) { }
-
   i = 0;
   editId: string | null = null;
   listOfData: ItemData[] = [];
+
+  constructor(private modal: NzModalService, private router: Router) { }
 
   startEdit(id: string): void {
     this.editId = id;
@@ -67,6 +69,9 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
     this.listOfData = [
       ...this.listOfData,
       {

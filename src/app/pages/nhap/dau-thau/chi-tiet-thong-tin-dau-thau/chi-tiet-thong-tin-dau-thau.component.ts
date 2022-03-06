@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'chi-tiet-thong-tin-dau-thau',
@@ -10,9 +11,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./chi-tiet-thong-tin-dau-thau.component.scss'],
 })
 export class ChiTietThongTinDauThauComponent implements OnInit {
-  constructor(private router: Router) {}
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
 
-  ngOnInit(): void {}
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+  }
 
   redirectToTTDT() {
     this.router.navigate(['/nhap/dau-thau/thong-tin-dau-thau']);

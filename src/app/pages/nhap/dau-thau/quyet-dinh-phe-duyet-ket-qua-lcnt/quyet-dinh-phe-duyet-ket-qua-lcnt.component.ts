@@ -8,6 +8,7 @@ import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
@@ -30,6 +31,8 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -42,6 +45,9 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.isVisibleChangeTab$.subscribe((value: boolean) => {
+        this.visibleTab = value;
+      });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == 'Thành công') {

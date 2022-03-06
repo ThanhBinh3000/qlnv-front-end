@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 interface ItemData {
   id: string;
@@ -26,13 +27,14 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   searchFilter = {
     soDeXuat: '',
   };
-
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
   formData: FormGroup;
-  constructor(private router: Router) { }
-
   i = 0;
   editId: string | null = null;
   listOfData: ItemData[] = [];
+
+  constructor(private router: Router) { }
 
   startEdit(id: string): void {
     this.editId = id;
@@ -69,6 +71,9 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
     this.listOfData = [
       ...this.listOfData,
       {

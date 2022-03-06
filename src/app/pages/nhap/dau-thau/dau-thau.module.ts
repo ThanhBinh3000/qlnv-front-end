@@ -13,6 +13,7 @@ import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket
 import { ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent } from './thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 import { ThongTinDauThauComponent } from './thong-tin-dau-thau/thong-tin-dau-thau.component';
 import { ChiTietThongTinDauThauComponent } from './chi-tiet-thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau.component';
+import { DauThauTabComponent } from './dau-thau-tab/dau-thau-tab.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ChiTietThongTinDauThauComponent } from './chi-tiet-thong-tin-dau-thau/c
     ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
     ThongTinDauThauComponent,
     ChiTietThongTinDauThauComponent,
+    DauThauTabComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })
-export class DauThauModule {}
+export class DauThauModule { }
