@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import * as uuid from "uuid";
-import { DanhMucService } from './../../../../services/danhMuc.service';
+import { DanhMucService } from '../../../../../services/danhMuc.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../Utility/utils";
+import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 export class ItemData {
   namHhanhN!: number;
   tranChiDuocTbN1!: number;
@@ -33,12 +31,12 @@ export class ItemData {
 }
 
 @Component({
-  selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-chi-thuong-xuyen-3-nam',
+  templateUrl: './chi-thuong-xuyen-3-nam.component.html',
+  styleUrls: ['./chi-thuong-xuyen-3-nam.component.scss'],
 })
 
-export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
+export class ChiThuongXuyen3NamComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
   noiDungs: any = [];                         // danh muc noi dung
@@ -82,6 +80,30 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   indeterminate = true;                       // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
+  fileList: NzUploadFile[] = [];
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
+
+  // upload file
+  addFile() {
+    const id = this.fileToUpload?.lastModified.toString();
+    this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
+    this.listFile.push(this.fileToUpload);
+  }
+
+  handleUpload(): void {
+    this.fileList.forEach((file: any) => {
+      const id = file?.lastModified.toString();
+      this.lstFile.push({ id: id, fileName: file?.name });
+      this.listFile.push(file);
+    });
+    this.fileList = [];
+  }
+
+
   constructor(private router: Router,
               private routerActive: ActivatedRoute,
               private spinner: NgxSpinnerService,
@@ -89,7 +111,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
               private nguoiDungSerivce: NguoiDungService,
-              private danhMucService: DanhMucService,) {
+              private danhMucService: DanhMucService,
+              ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
@@ -223,13 +246,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   //
   selectFile(files: FileList): void {
     this.fileToUpload = files.item(0);
-  }
-
-  // upload file
-  addFile() {
-    const id = this.fileToUpload?.lastModified.toString();
-    this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
-    this.listFile.push(this.fileToUpload);
   }
 
   // xoa

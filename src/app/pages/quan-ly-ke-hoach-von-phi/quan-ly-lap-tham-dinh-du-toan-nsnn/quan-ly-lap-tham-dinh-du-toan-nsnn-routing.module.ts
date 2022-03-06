@@ -25,17 +25,16 @@ const routes: Routes = [
     path: 'chi-thuong-xuyen-3-nam',
     loadChildren: () =>
       import(
-        './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-      ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
+        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
+      ).then((m) => m.ChiThuongXuyen3NamModule),
   },
   {
     path: 'chi-thuong-xuyen-3-nam/:id',
     loadChildren: () =>
       import(
-        './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-      ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
+        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
+      ).then((m) => m.ChiThuongXuyen3NamModule),
   },
-
 ];
 
 @NgModule({
