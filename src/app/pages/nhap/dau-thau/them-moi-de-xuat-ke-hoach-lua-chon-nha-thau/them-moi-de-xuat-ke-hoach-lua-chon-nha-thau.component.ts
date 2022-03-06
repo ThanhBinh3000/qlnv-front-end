@@ -1,3 +1,4 @@
+import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { UploadComponent } from './../../../../components/dialog/dialog-upload/upload.component';
 import {
   Component,
@@ -98,7 +99,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   }
 
   taiLieuDinhKem() {
-    this.modal.create({
+    const modal = this.modal.create({
       nzTitle: 'Thêm mới căn cứ xác định giá',
       nzContent: UploadComponent,
       nzMaskClosable: false,
@@ -106,9 +107,11 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        // totalRecord: this.totalRecord,
-        // date: event,
+        data: 'ssssssstttttt',
       },
+    });
+    modal.afterClose.subscribe((res) => {
+      console.log(res);
     });
   }
 
@@ -128,5 +131,20 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   }
   redirectToDanhSachDauThau() {
     this.router.navigate(['nhap/dau-thau/danh-sach-dau-thau']);
+  }
+
+  openDialogQuyetDinhGiaoChiTieu() {
+    this.modal.create({
+      nzTitle: 'Thông tin vật tư trong năm',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
   }
 }

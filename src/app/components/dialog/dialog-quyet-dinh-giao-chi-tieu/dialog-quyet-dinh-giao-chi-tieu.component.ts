@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'upload',
-  templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.scss'],
+  selector: 'dialog-quyet-dinh-giao-chi-tieu',
+  templateUrl: './dialog-quyet-dinh-giao-chi-tieu.component.html',
+  styleUrls: ['./dialog-quyet-dinh-giao-chi-tieu.component.scss'],
 })
-export class UploadComponent implements OnInit {
+export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
-  data: string;
+
   options = {
     luongThuc: false,
     muoi: false,
@@ -18,9 +18,7 @@ export class UploadComponent implements OnInit {
 
   constructor(private _modalRef: NzModalRef) {}
 
-  ngOnInit(): void {
-    console.log('data: ', this.data);
-  }
+  ngOnInit(): void {}
 
   handleOk() {
     this.isVisible = false;
@@ -33,9 +31,6 @@ export class UploadComponent implements OnInit {
   }
 
   onCancel() {
-    this._modalRef.destroy();
-  }
-  onSave() {
-    this._modalRef.close(this.data);
+    this._modalRef.close();
   }
 }

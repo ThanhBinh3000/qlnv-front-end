@@ -55,6 +55,7 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { UploadComponent } from './dialog/dialog-upload/upload.component';
 import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-p
     UploadComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
+    DialogQuyetDinhGiaoChiTieuComponent,
     //pipes
     FilterPipe,
   ],
