@@ -10,11 +10,11 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 
 @Component({
-  selector: 'danh-sach-dau-thau',
-  templateUrl: './danh-sach-dau-thau.component.html',
-  styleUrls: ['./danh-sach-dau-thau.component.scss'],
+  selector: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
+  templateUrl: './quyet-dinh-phe-duyet-ket-qua-lcnt.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-ket-qua-lcnt.component.scss'],
 })
-export class DanhSachDauThauComponent implements OnInit {
+export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {

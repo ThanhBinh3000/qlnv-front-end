@@ -9,6 +9,7 @@ import { DauThauComponent } from './dau-thau.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
 import { DanhSachDauThauComponent } from './danh-sach-dau-thau/danh-sach-dau-thau.component';
+import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { DanhSachDauThauComponent } from './danh-sach-dau-thau/danh-sach-dau-tha
     ThongTinChungPhuongAnTrinhTongCucComponent,
     LuongDauThauGaoComponent,
     DanhSachDauThauComponent,
+    QuyetDinhPheDuyetKetQuaLCNTComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })

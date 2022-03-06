@@ -42,6 +42,7 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 import { FilterPipe } from '../pipes/filter.pipe';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -114,6 +115,7 @@ import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-p
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
@@ -166,10 +168,11 @@ import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-p
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     FilterPipe,
     NzAlertModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

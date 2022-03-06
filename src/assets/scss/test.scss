@@ -1941,3 +1941,9 @@ i.icon.htvbdh_luu1 {
   font-size: 13px;
   font-weight: bold;
 }
+.autocomplete__input {
+  height: 24px;
+}
+.autocomplete__input.ant-input-affix-wrapper > input.ant-input {
+  height: 22px !important;
+}

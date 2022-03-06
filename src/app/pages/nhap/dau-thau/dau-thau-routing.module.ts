@@ -6,6 +6,8 @@ import { ThemMoiDeXuatKeHoachLuaChonNhaThauComponent } from './them-moi-de-xuat-
 import { ThongTinLuongDauThauGaoComponent } from './thong-tin-luong-dau-thau-gao/thong-tin-luong-dau-thau-gao.component';
 import { ThongTinChungPhuongAnTrinhTongCucComponent } from './thong-tin-chung-phuong-an-trinh-tong-cuc/thong-tin-chung-phuong-an-trinh-tong-cuc.component';
 import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
+import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
+
 
 const routes: Routes = [
   {
@@ -30,6 +32,10 @@ const routes: Routes = [
   {
     path: 'danh-sach-dau-thau',
     component: DanhSachDauThauComponent,
+  },
+  {
+    path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
+    component: QuyetDinhPheDuyetKetQuaLCNTComponent,
   },
 ];
 
