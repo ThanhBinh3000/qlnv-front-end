@@ -1,0 +1,31 @@
+::ng-deep {
+    .them-luong-thuc {
+        .form-multi-input {
+            border: 1px solid #f8f9fa;
+            border-radius: 4px;
+            margin-top: 8px !important;
+            margin-bottom: 0 !important;
+
+            .header-multi-input-form {
+                padding: 12px !important;
+                background: #fafafa;
+                border-bottom: 1px solid #f8f9fa;
+                border-radius: 4px;
+            }
+            .content-multi-input-form {
+                padding: 12px !important;
+            }
+        }
+        .ant-form-horizontal .ant-form-item-control {
+            flex: unset !important;
+        }
+        .ghi-chu {
+            padding-left: 16px;
+        }
+        .ghi-chu__item {
+            font-style: italic;
+            color: #444444;
+            font-size: 12px;
+        }
+    }
+}

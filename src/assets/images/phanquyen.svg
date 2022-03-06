@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-phanquyen">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="phanquyen" clip-path="url(#clip-phanquyen)">
+    <g id="Group_8148" data-name="Group 8148" transform="translate(-6046 -5750)">
+      <g id="share" transform="translate(6036 5756)">
+        <g id="Group_7953" data-name="Group 7953" transform="translate(16)">
+          <path id="Path_30354" data-name="Path 30354" d="M27.36,9.671a2.612,2.612,0,0,0-2.1,1.071L21.126,8.626a2.473,2.473,0,0,0-.077-1.712l4.324-2.6a2.607,2.607,0,1,0-.635-1.691,2.6,2.6,0,0,0,.182.943l-4.337,2.61a2.617,2.617,0,1,0,.165,3.241l4.118,2.109a2.586,2.586,0,0,0-.128.769A2.622,2.622,0,1,0,27.36,9.671Z" transform="translate(-16)" fill="#4d4e4e"/>
+        </g>
+      </g>
+      <path id="Path_640" data-name="Path 640" d="M13,0A13,13,0,1,0,26,13,13.014,13.014,0,0,0,13,0m0,24.375A11.375,11.375,0,1,1,24.375,13,11.388,11.388,0,0,1,13,24.375" transform="translate(6046 5750)" fill="#636363"/>
+    </g>
+  </g>
+</svg>
