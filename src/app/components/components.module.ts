@@ -56,6 +56,7 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { UploadComponent } from './dialog/dialog-upload/upload.component';
 import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
 
 @NgModule({
@@ -64,6 +65,7 @@ import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dia
     UploadComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
+    DialogQuyetDinhGiaoChiTieuComponent,
     DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent,
     //pipes
     FilterPipe,

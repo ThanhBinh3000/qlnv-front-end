@@ -42,7 +42,7 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content thong-tin-de-xuat-khlcnt">
-      <nz-card nzTitle="THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU" class="mt16 flex-card p-lr16 mb16">
+      <nz-card nzTitle="THÔNG TIN ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU" class="mt16 flex-card p-lr16 mb16">
         <div *ngIf="id == 0">
           <nz-descriptions [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
             <nz-descriptions-item nzTitle="Căn cứ">
@@ -65,11 +65,9 @@
             <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ </nz-form-label>
-                <nz-select>
-                  <nz-option nzValue="QĐ giao chỉ tiêu KH năm 2022" nzLabel="QĐ giao chỉ tiêu KH năm 2022"></nz-option>
-                  <nz-option nzValue="QĐ điều chỉnh giao chỉ tiêu KH năm 2022"
-                    nzLabel="QĐ điều chỉnh giao chỉ tiêu KH năm 2022"></nz-option>
-                </nz-select>
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input class="search__input" nz-input (click)="openDialogQuyetDinhGiaoChiTieu()" />
+                </nz-input-group>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="8">
