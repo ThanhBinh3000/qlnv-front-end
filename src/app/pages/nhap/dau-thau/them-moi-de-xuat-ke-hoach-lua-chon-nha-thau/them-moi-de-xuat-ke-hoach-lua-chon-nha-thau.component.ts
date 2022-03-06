@@ -2,18 +2,11 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../../components/di
 import { UploadComponent } from './../../../../components/dialog/dialog-upload/upload.component';
 import {
   Component,
-  EventEmitter,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 
@@ -33,8 +26,6 @@ interface ItemData {
   styleUrls: ['./them-moi-de-xuat-ke-hoach-lua-chon-nha-thau.component.scss'],
 })
 export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
-  @ViewChild('nzTreeComponent', { static: false })
-  visible = false;
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
@@ -42,11 +33,10 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   id: number;
   formData: FormGroup;
   constructor(
-    private fb: FormBuilder,
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   i = 0;
   editId: string | null = null;

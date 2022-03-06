@@ -10,11 +10,11 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 
 @Component({
-  selector: 'danh-sach-dau-thau',
-  templateUrl: './danh-sach-dau-thau.component.html',
-  styleUrls: ['./danh-sach-dau-thau.component.scss'],
+  selector: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
+  templateUrl: './quyet-dinh-phe-duyet-ket-qua-lcnt.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-ket-qua-lcnt.component.scss'],
 })
-export class DanhSachDauThauComponent implements OnInit {
+export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
@@ -30,15 +30,14 @@ export class DanhSachDauThauComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  dataTable: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
-    private router: Router,
-  ) {}
+    private router: Router
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -49,8 +48,8 @@ export class DanhSachDauThauComponent implements OnInit {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
+            labelDonVi: res.data[i].maDvi + " - " + res.data[i].tenDvi
+          }
           this.optionsDonVi.push(item);
         }
       } else {
@@ -69,9 +68,7 @@ export class DanhSachDauThauComponent implements OnInit {
     if (!value || value.indexOf('@') >= 0) {
       this.options = [];
     } else {
-      this.options = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
+      this.options = this.optionsDonVi.filter(x => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1);
     }
   }
 
@@ -101,7 +98,7 @@ export class DanhSachDauThauComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+      '/nhap/dau-thau/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt',
       id,
     ]);
   }
@@ -118,42 +115,31 @@ export class DanhSachDauThauComponent implements OnInit {
 
   async search() {
     let maDonVi = null;
-    this.dataTable = [];
     if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
+      let getDonVi = this.optionsDonVi.filter(x => x.labelDonVi == this.inputDonVi);
       if (getDonVi && getDonVi.length > 0) {
         maDonVi = getDonVi[0].maDvi;
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('DD/MM/YYYY')
-        : null,
-      id: 0,
-      loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
+      "denNgayKy": this.endValue ? dayjs(this.endValue).format("DD/MM/YYYY") : null,
+      "id": 0,
+      "loaiVthh": "00",
+      "maDvi": maDonVi,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trangThai: '00',
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('DD/MM/YYYY')
-        : null,
-    };
+      "soDxuat": this.searchFilter.soDxuat,
+      "str": null,
+      "trangThai": "00",
+      "trichYeu": this.searchFilter.trichYeu,
+      "tuNgayKy": this.startValue ? dayjs(this.startValue).format("DD/MM/YYYY") : null
+    }
     this.totalRecord = 10;
     let res = await this.danhSachDauThauService.timKiem(body);
     if (res.msg == 'Thành công') {
-      let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
-      this.totalRecord = data.totalElements;
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -181,18 +167,5 @@ export class DanhSachDauThauComponent implements OnInit {
     catch (err) {
       this.spinner.hide();
     }
-  }
-
-  convertTrangThai(status: string) {
-    if (status == '01') {
-      return "Đã duyệt";
-    }
-    else {
-      return "Chưa duyệt";
-    }
-  }
-
-  xoaItem(item: any) {
-
   }
 }

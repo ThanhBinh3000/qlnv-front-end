@@ -1,18 +1,9 @@
-import { UploadComponent } from './../../../../components/dialog/dialog-upload/upload.component';
 import {
   Component,
-  EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { Router } from '@angular/router';
 import { DialogThongTinPhuLucKHLCNTComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
 
@@ -33,28 +24,13 @@ interface ItemData {
   styleUrls: ['./thong-tin-chung-phuong-an-trinh-tong-cuc.component.scss'],
 })
 export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
-  @ViewChild('nzTreeComponent', { static: false })
-  @Output()
-  messageEvent = new EventEmitter<boolean>();
-  nzTreeComponent!: NzTreeComponent;
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  detailDonVi: FormGroup;
-  noParent = true;
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
   };
 
   formData: FormGroup;
-  constructor(private fb: FormBuilder, private modal: NzModalService, private router: Router) { }
+  constructor(private modal: NzModalService, private router: Router) { }
 
   i = 0;
   editId: string | null = null;

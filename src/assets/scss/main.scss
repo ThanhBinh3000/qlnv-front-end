@@ -6,6 +6,7 @@
 @import './common/modal.scss';
 @import './common/form.scss';
 @import './common/dropdown.scss';
+@import './common/detail.scss';
 
 %status {
   padding: 2px 8px;
@@ -915,6 +916,10 @@ cdk-virtual-scroll-viewport {
 
 .do {
   color: $red $i;
+}
+
+.den {
+  color: $color-text $i;
 }
 
 .cam {

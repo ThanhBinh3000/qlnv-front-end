@@ -9,6 +9,10 @@ import { DauThauComponent } from './dau-thau.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { LuongDauThauGaoComponent } from './luong-dau-thau-gao/luong-dau-thau-gao.component';
 import { DanhSachDauThauComponent } from './danh-sach-dau-thau/danh-sach-dau-thau.component';
+import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
+import { ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent } from './thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt.component';
+import { ThongTinDauThauComponent } from './thong-tin-dau-thau/thong-tin-dau-thau.component';
+import { ChiTietThongTinDauThauComponent } from './chi-tiet-thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,11 @@ import { DanhSachDauThauComponent } from './danh-sach-dau-thau/danh-sach-dau-tha
     ThongTinChungPhuongAnTrinhTongCucComponent,
     LuongDauThauGaoComponent,
     DanhSachDauThauComponent,
+    QuyetDinhPheDuyetKetQuaLCNTComponent,
+    ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
+    ThongTinDauThauComponent,
+    ChiTietThongTinDauThauComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })
-export class DauThauModule { }
+export class DauThauModule {}

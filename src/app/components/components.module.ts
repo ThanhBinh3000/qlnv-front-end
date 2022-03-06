@@ -42,6 +42,7 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 import { FilterPipe } from '../pipes/filter.pipe';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -56,6 +57,7 @@ import { UploadComponent } from './dialog/dialog-upload/upload.component';
 import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
 import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,7 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
     DialogQuyetDinhGiaoChiTieuComponent,
+    DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent,
     //pipes
     FilterPipe,
   ],
@@ -116,6 +119,7 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
@@ -168,10 +172,11 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     FilterPipe,
     NzAlertModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
