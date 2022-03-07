@@ -1,0 +1,22 @@
+.modal__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__title {
+  color: $maincolor;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.modal__button--save {
+  background-color: $maincolor;
+  color: white;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.modal__button--cancel {
+  background-color: $subcolor;
+  font-weight: 500;
+}

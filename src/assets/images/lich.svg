@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="16" viewBox="0 0 17 16">
+  <defs>
+    <clipPath id="clip-lich">
+      <rect width="17" height="16"/>
+    </clipPath>
+  </defs>
+  <g id="lich" clip-path="url(#clip-lich)">
+    <g id="Group_8130" data-name="Group 8130" transform="translate(-1308.034 -24.567)">
+      <path id="Path_26007" data-name="Path 26007" d="M4.557,43.519h.026a.482.482,0,0,0,.476-.488v-.975a.482.482,0,0,0-.476-.488H4.557a.482.482,0,0,0-.476.488v.975a.482.482,0,0,0,.476.488" transform="translate(1308.33 -17)" fill="#fff"/>
+      <path id="Path_26008" data-name="Path 26008" d="M11.823,43.519h.026a.482.482,0,0,0,.476-.488v-.975a.482.482,0,0,0-.476-.488h-.026a.482.482,0,0,0-.477.488v.975a.482.482,0,0,0,.477.488" transform="translate(1309.117 -17)" fill="#fff"/>
+      <path id="Path_26009" data-name="Path 26009" d="M15.036,43.49h-.709v.261a1.54,1.54,0,0,1-1.5,1.575h-.042a1.54,1.54,0,0,1-1.5-1.575V43.49H6.576v.261a1.54,1.54,0,0,1-1.5,1.575H5.034a1.54,1.54,0,0,1-1.5-1.575V43.49h-.5a2.051,2.051,0,0,0-2,2.1v10.5a2.051,2.051,0,0,0,2,2.1h12a2.05,2.05,0,0,0,2-2.1V45.59a2.05,2.05,0,0,0-2-2.1m1,12.6a1.027,1.027,0,0,1-1,1.049h-12a1.027,1.027,0,0,1-1-1.049v-8.4h14Z" transform="translate(1308 -17.62)" fill="#fff"/>
+      <path id="Path_26010" data-name="Path 26010" d="M5.193,49.351a.781.781,0,1,1-.781-.8.791.791,0,0,1,.781.8" transform="translate(1308.357 -16.252)" fill="#fff"/>
+      <path id="Path_26011" data-name="Path 26011" d="M8.942,49.351a.781.781,0,1,1-.78-.8.791.791,0,0,1,.78.8" transform="translate(1308.873 -16.252)" fill="#fff"/>
+      <path id="Path_26012" data-name="Path 26012" d="M12.693,49.351a.781.781,0,1,1-.781-.8.791.791,0,0,1,.781.8" transform="translate(1309.388 -16.252)" fill="#fff"/>
+      <path id="Path_26013" data-name="Path 26013" d="M5.193,53.193a.781.781,0,1,1-.781-.8.791.791,0,0,1,.781.8" transform="translate(1308.357 -14.903)" fill="#fff"/>
+      <path id="Path_26014" data-name="Path 26014" d="M8.942,53.193a.781.781,0,1,1-.78-.8.791.791,0,0,1,.78.8" transform="translate(1308.873 -14.903)" fill="#fff"/>
+      <path id="Path_26015" data-name="Path 26015" d="M12.693,53.193a.781.781,0,1,1-.781-.8.791.791,0,0,1,.781.8" transform="translate(1309.388 -14.903)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
