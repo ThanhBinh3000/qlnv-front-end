@@ -154,7 +154,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //get danh muc noi dung
-    this.danhMucService.dMNoiDung().subscribe(
+    this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.noiDungs = data.data?.content;
@@ -168,7 +168,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     );
 
     //get danh muc nhom chi
-    this.danhMucService.dMNhomChi().subscribe(
+    this.danhMucService.dMNhomChi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.nhomChis = data.data?.content;
@@ -182,7 +182,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     );
 
     //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().subscribe(
+    this.danhMucService.dMLoaiChi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.loaiChis = data.data?.content;
@@ -196,7 +196,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     );
 
     //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().subscribe(
+    this.danhMucService.dMLoaiChi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.loaiChis = data.data?.content;
@@ -459,7 +459,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   deleteById(id: any): void {
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
-      this.listIdDelete += id + ","
+      this.listIdDelete += id + ",";
     }
   }
 
@@ -534,7 +534,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
@@ -542,8 +542,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -551,10 +550,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   }
 
   updateEditCache(): void {
