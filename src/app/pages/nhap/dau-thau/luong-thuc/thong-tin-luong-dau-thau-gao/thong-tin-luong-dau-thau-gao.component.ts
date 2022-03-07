@@ -67,7 +67,7 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   }
 
   tongHopDeXuatTuCuc(id: string): void {
-    this.router.navigate([`/nhap/dau-thau/thong-tin-chung-phuong-an-trinh-tong-cuc/`, id])
+    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, id])
   }
 
   ngOnInit(): void {

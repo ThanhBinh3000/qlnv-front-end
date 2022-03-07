@@ -19,15 +19,15 @@ const routes: Routes = [
     component: DauThauComponent,
   },
   {
-    path: 'them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/:id',
+    path: 'danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/:id',
     component: ThemMoiDeXuatKeHoachLuaChonNhaThauComponent,
   },
   {
-    path: 'thong-tin-luong-dau-thau-gao/:id',
+    path: 'luong-dau-thau-gao/thong-tin-luong-dau-thau-gao/:id',
     component: ThongTinLuongDauThauGaoComponent,
   },
   {
-    path: 'thong-tin-chung-phuong-an-trinh-tong-cuc/:id',
+    path: 'luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/:id',
     component: ThongTinChungPhuongAnTrinhTongCucComponent,
   },
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
     component: QuyetDinhPheDuyetKetQuaLCNTComponent,
   },
   {
-    path: 'thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/:id',
+    path: 'quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/:id',
     component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
   },
   {
@@ -51,7 +51,7 @@ const routes: Routes = [
     component: ThongTinDauThauComponent,
   },
   {
-    path: 'chi-tiet-thong-tin-dau-thau/:id',
+    path: 'thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau/:id',
     component: ChiTietThongTinDauThauComponent,
   },
   {
