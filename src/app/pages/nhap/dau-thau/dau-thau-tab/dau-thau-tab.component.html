@@ -1,11 +1,12 @@
 <div class="contentBor dau-thau">
   <div class="contentDetail">
     <div class="main-content-dau-thau">
-      <nz-tabset nzType="card">
+      <nz-tabset nzType="card" [(nzSelectedIndex)]="selectedTabNow">
         <nz-tab [nzTitle]="'Lương thực'" (nzClick)="showDetailTab('luong-thuc')">
           <div nz-row [nzGutter]="24" class="vat-tu" *ngIf="isVisible">
             <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let luongThuc of luongThucList">
-              <nz-card class="card-tree" (click)="redirect(luongThuc.url)">
+              <nz-card class="card-tree" (click)="redirect(luongThuc.url)"
+                [ngClass]="luongThuc.url == routerUrl ? 'active-tab' : ''">
                 <div class="content-item">
                   <span class="icon" [ngClass]="luongThuc.icon"></span>
                   <div class="content-item-title">{{luongThuc.title}}</div>
@@ -17,12 +18,13 @@
         </nz-tab>
         <nz-tab [nzTitle]="'Muối'" (nzClick)="showDetailTab('muoi')">
           <div nz-row [nzGutter]="24" class="muoi" *ngIf="isVisible">
-            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let dauThau of dauThauList">
-              <nz-card class="card-tree">
+            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let muoi of muoiList">
+              <nz-card class="card-tree" (click)="redirect(muoi.url)"
+                [ngClass]="muoi.url == routerUrl ? 'active-tab' : ''">
                 <div class="content-item">
-                  <span class="icon" [ngClass]="dauThau.icon"></span>
-                  <div class="content-item-title">{{dauThau.title}}</div>
-                  <div class="content-item-description">{{dauThau.description}}</div>
+                  <span class="icon" [ngClass]="muoi.icon"></span>
+                  <div class="content-item-title">{{muoi.title}}</div>
+                  <div class="content-item-description">{{muoi.description}}</div>
                 </div>
               </nz-card>
             </div>
@@ -30,12 +32,13 @@
         </nz-tab>
         <nz-tab [nzTitle]="'Vật tư'" (nzClick)="showDetailTab('vat-tu')">
           <div nz-row [nzGutter]="24" class="vat-tu" *ngIf="isVisible">
-            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let dauThau of dauThauList">
-              <nz-card class="card-tree">
+            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let vatTu of vatTuList">
+              <nz-card class="card-tree" (click)="redirect(vatTu.url)"
+                [ngClass]="vatTu.url == routerUrl ? 'active-tab' : ''">
                 <div class="content-item">
-                  <span class="icon" [ngClass]="dauThau.icon"></span>
-                  <div class="content-item-title">{{dauThau.title}}</div>
-                  <div class="content-item-description">{{dauThau.description}}</div>
+                  <span class="icon" [ngClass]="vatTu.icon"></span>
+                  <div class="content-item-title">{{vatTu.title}}</div>
+                  <div class="content-item-description">{{vatTu.description}}</div>
                 </div>
               </nz-card>
             </div>

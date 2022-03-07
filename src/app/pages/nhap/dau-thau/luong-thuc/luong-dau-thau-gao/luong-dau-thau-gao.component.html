@@ -1,4 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" (isVisibleChange)="isVisibleChangeTab$.next($event)">
+<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
 </dau-thau-tab>
 <div class="contentBor luong-dau-thau-gao__body" *ngIf="!visibleTab">
   <div class="contentDetail">

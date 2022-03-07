@@ -1,5 +1,5 @@
-import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { UploadComponent } from './../../../../components/dialog/dialog-upload/upload.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { UploadComponent } from './../../../../../components/dialog/dialog-upload/upload.component';
 import {
   Component,
   OnInit,

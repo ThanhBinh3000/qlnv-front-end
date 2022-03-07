@@ -1,4 +1,4 @@
-@import '../../../../../assets/scss/default.scss';
+@import "../../../../../../assets/scss/default.scss";
 ::ng-deep {
   .thong-tin-de-xuat-khlcnt {
     .ant-form-item-no-colon {
@@ -19,11 +19,6 @@
       position: absolute;
       top: 0;
       right: 0;
-    }
-    .btn-them-goi-thau {
-      position: absolute;
-      top: 0;
-      right: 86px;
     }
     .tab__luong-thuc {
       position: relative;
@@ -92,9 +87,6 @@
       .ant-tabs-tabpane {
         background-color: #fff !important;
       }
-      .ant-descriptions-item-container .ant-descriptions-item-label {
-        min-width: 215px !important;
-      }
     }
     .ant-table-body {
       .ant-table-row {
@@ -103,40 +95,34 @@
         }
       }
     }
-    .title-tab {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 19px;
-      text-transform: uppercase;
-      margin: 16px;
-    }
-    .title-tab__edit {
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 19px;
-      text-transform: uppercase;
-      color: #828282;
-    }
-    .tab-description {
-      margin: 12px 0px;
-    }
-    .ghi-chu {
-      .ant-form-item-no-colon {
-        margin-bottom: 0px !important;
-      }
-      ul {
-        padding-left: 25px !important;
-      }
-      .ghi-chu__item {
-        font-style: italic;
-        font-weight: normal;
-        font-size: 12px;
-        line-height: 200%;
-      }
-    }
-    .mb16 {
-      margin-bottom: 16px;
-    }
+  }
+  .title-tab {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #828282;
+  }
+  .group-infonation {
+    border: 1px solid #f1f1f1;
+    box-sizing: border-box;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .left-group-info {
+    background: #fbfbfb;
+    margin-right: 6px;
+  }
+  .right-group-info {
+    background: #fff;
+    margin-left: 6px;
+  }
+  .chi-tieu__body .action {
+    position: absolute;
+    right: 25px;
+    top: 3px;
+  }
+  .tab__container {
+    position: relative;
   }
 }

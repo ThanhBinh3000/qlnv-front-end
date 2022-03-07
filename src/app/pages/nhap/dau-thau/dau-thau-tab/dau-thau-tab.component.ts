@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { DAU_THAU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-thau/dau-thau.constant';
+import { MUOI_LIST, VAT_TU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-thau/dau-thau.constant';
 
 @Component({
   selector: 'dau-thau-tab',
@@ -11,16 +11,22 @@ import { DAU_THAU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-thau/dau-
 export class DauThauTabComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
-  dauThauList = DAU_THAU_LIST;
+  muoiList = MUOI_LIST;
+  vatTuList = VAT_TU_LIST;
   luongThucList = LUONG_THUC_LIST;
   tabSelected: string = "luong-thuc";
+  @Input() selectedIndex: number = 0;
+  routerUrl: string = "";
+  selectedTabNow: number = 0;
 
   constructor(
     private router: Router,
-  ) { }
+  ) {
+    this.routerUrl = this.router.url;
+  }
 
   ngOnInit(): void {
-    console.log('isVisible', this.isVisible)
+    this.selectedTabNow = this.selectedIndex;
   }
 
   redirect(url: string) {
@@ -39,5 +45,8 @@ export class DauThauTabComponent implements OnInit {
       this.isVisibleChange.emit(this.isVisible);
     }
     this.tabSelected = tab;
+    if (!this.isVisible) {
+      this.selectedTabNow = this.selectedIndex;
+    }
   }
 }
