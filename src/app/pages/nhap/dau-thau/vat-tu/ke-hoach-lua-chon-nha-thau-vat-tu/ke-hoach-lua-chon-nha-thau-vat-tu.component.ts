@@ -107,7 +107,7 @@ export class KeHoachLuaChonNhaThauVatTuComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+      '/nhap/dau-thau/ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu',
       id,
     ]);
   }

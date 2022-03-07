@@ -24,7 +24,8 @@
             </div>
             <div nz-col nzSpan="24">
               <label class="search__label">Nội dung tờ trình</label>
-              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
+              <textarea rows="3" class="search__input" placeholder="Nội dung tờ trình" nz-input
+                [(ngModel)]="searchFilter.trichYeu"></textarea>
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -41,19 +42,19 @@
             <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
-        <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
+        <nz-card nzTitle="DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU - vẬT TƯ" [nzExtra]="tableCard1"
           class="mt16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable">
             <thead>
               <tr>
                 <th class="text-center" width="60px">STT</th>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
                 <th width="130px">Số đề xuất</th>
-                <th width="175px">Ngày ký</th>
-                <th width="175px">Đơn vị đề xuất</th>
-                <th width="">Trích yếu</th>
+                <th width="175px">Ngày đề xuất</th>
+                <th width="175px" class="text-center">Đơn vị đề xuất</th>
+                <th width="">Về việc</th>
+                <th width="175px">Loại vật tư</th>
+                <th width="175px">Năm kế hoạch</th>
+                <th width="175px">Số tờ trình</th>
                 <th width="175px">Trạng thái</th>
                 <th width="130px"></th>
               </tr>
@@ -61,13 +62,13 @@
             <tbody>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
                 <td>{{ data.soDxuat }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.trichYeu }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
