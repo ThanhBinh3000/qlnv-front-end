@@ -12,43 +12,36 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 export class ItemData {
-  maVtuTbi!: number;
-  sl!: number;
-  maDviVtuTbi!: number;
-  id!: any;
-  maBcao!: String;
-  stt!: String;
-  checked!:boolean;
+  checked!: boolean;
+  id: any;
+  stt!: string;
+  tenVban: string;
+  loaiVban: string;
+  tgianDuKien: string;
+  maDviChuTri: string;
+  dviPhoiHop: string;
+  dtoanKphi: number;
+  ccuLapDtoan: string
 }
 
-export class AllItemData {
-  luongXuatGaoVtro!: number;
-  luongXuatThocVtro!: number;
-  lstCTiet: ItemData[] = [];
-}
 
 @Component({
-  selector: 'app-nhu-cau-xuat-hang-vien-tro',
-  templateUrl: './nhu-cau-xuat-hang-vien-tro.component.html',
-  styleUrls: ['./nhu-cau-xuat-hang-vien-tro.component.scss']
+  selector: 'app-ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam',
+  templateUrl: './ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam.component.html',
+  styleUrls: ['./ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam.component.scss'],
 })
 
-
-export class NhuCauXuatHangVienTroComponent implements OnInit {
-
+export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
+  loaiVbans: any = [];
+  maDviChuTris: any = [];
+  donVis: any = [];                            // danh muc don vi
+  lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   userInfo: any;
   errorMessage!: String;                      //
-  chiTieus: any = [];           // danh muc chi tieu
-  donVis: any = [];             // danh muc don vi
-  lstCTietBCao: AllItemData[] = [];
-  lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
-  tongSo: number = 0;                            // tong kinh phi
-  luongXuatGaoVtro!: number;
-  luongXuatThocVtro!: number;
-  id!: any;                                   // id truyen tu router
+  id: any = null;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
-  status: boolean = false;                    // trang thai an/ hien cua trang thai
+  status: boolean = false;                     // trang thai an/ hien cua trang thai
   namBcao = new Date().getFullYear();         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
@@ -56,9 +49,9 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   maDonViTao!: any;                           // ma don vi tao
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
-  trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
+  trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
   maLoaiBaoCao: string = "26";                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: string = "";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -67,8 +60,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   listIdDelete: string = "";                  // list id delete
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-  statusBtnSave: boolean;                      // trang thai an/hien nut luu
-  statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
+  statusBtnSave: boolean = false;                      // trang thai an/hien nut luu
+  statusBtnApprove: boolean = false;                   // trang thai an/hien nut trinh duyet
   statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
@@ -106,16 +99,16 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
 
   constructor(private router: Router,
-              private routerActive: ActivatedRoute,
-              private spinner: NgxSpinnerService,
-              private quanLyVonPhiService: QuanLyVonPhiService,
-              private datePipe: DatePipe,
-              private sanitizer: DomSanitizer,
-              private nguoiDungSerivce: UserService,
-              private danhMucService: DanhMucService,
-              ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
-              }
+    private routerActive: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
+    private datePipe: DatePipe,
+    private sanitizer: DomSanitizer,
+    private nguoiDungSerivce: UserService,
+    private danhMucService: DanhMucService,
+  ) {
+    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+  }
 
 
   async ngOnInit() {
@@ -147,26 +140,13 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    //this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-    //get danh muc noi dung
-    this.danhMucService.dmchitieu().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.chiTieus = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
 
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
@@ -181,6 +161,37 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         this.errorMessage = "err.error.message";
       }
     );
+
+    this.danhMucService.dMHinhThucVanBan().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          console.log(data);
+          this.loaiVbans = data.data.content;
+          console.log(this.loaiVbans);
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.errorMessage = err.error.message;
+      }
+    );
+    this.danhMucService.dMDonviChuTri().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.maDviChuTris = data.data.content;
+          console.log(this.maDviChuTris);
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.errorMessage = err.error.message;
+      }
+    );
+
     this.spinner.hide();
   }
 
@@ -209,65 +220,49 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // xoa
   xoa() {
-    this.lstCTiet = [];
+    this.lstCTietBCao = [];
     this.lstFile = [];
     this.listFile = []
   }
 
-  // trinh duyet
+  // luu
   async luu() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
 
-    // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTiet.filter(item => {
+
+    this.lstCTietBCao.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
       }
     })
 
-    let object = {
-      luongXuatGaoVtro : this.luongXuatGaoVtro,
-      luongXuatThocVtro : this.luongXuatThocVtro,
-      lstCTiet : this.lstCTiet
-    }
-
-    this.lstCTietBCao.push(object);
-
-    console.log(object);
-
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
-      namHienHanh: this.namBaoCaoHienHanh,
+      maDvi: this.maDonViTao = "01",
+      maDviTien: this.maDviTien = "01",
+      maLoaiBcao: this.maLoaiBaoCao = "01",
       namBcao: this.namBaoCaoHienHanh,
+      namHienHanh: this.namBaoCaoHienHanh,
     };
-
-    //call service them moi
+    //console.log(this.lstCTietBCao);
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        data => {
-          if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
-          } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-          }
+        (data) => {
+          alert("trinh duyet thanh cong!");
+          console.log(data);
         },
-        err => {
-          alert('trinh duyet that bai!');
-          console.log(err);
-        },
-      );
+        (err) => {
+          alert("trinh duyet that bai!");
+          console.log();
+        })
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
@@ -277,13 +272,16 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         }
       })
     }
-    this.lstCTiet.filter(item => {
+
+    this.lstCTietBCao.filter(item => {
       if (!item.id) {
         item.id = uuid.v4();
       }
     });
+    this.updateEditCache();
     this.spinner.hide();
   }
+
 
   // chuc nang check role
   onSubmit(mcn: String) {
@@ -299,7 +297,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       }
     });
     this.spinner.hide();
-    this.updateEditCache();
   }
 
   //thay doi trang thai
@@ -310,7 +307,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -335,7 +332,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           } else {
             this.status = true;
           }
-
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -376,17 +372,19 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // them dong moi
   addLine(id: number): void {
-    let item : ItemData = {
-      maVtuTbi: 0,
-      sl: 0,
-      maDviVtuTbi: 0,
-      stt: "",
+    let item: ItemData = {
       id: uuid.v4(),
-      checked:false,
-      maBcao: "",
+      stt: '',
+      tenVban: '',
+      loaiVban: '',
+      tgianDuKien: '',
+      maDviChuTri: '',
+      dviPhoiHop: '',
+      dtoanKphi: 0,
+      ccuLapDtoan: '',
+      checked: false,
     }
-
-    this.lstCTiet.splice(id, 0, item);
+    this.lstCTietBCao.splice(id, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
@@ -395,7 +393,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
     }
@@ -404,13 +402,13 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   // xóa với checkbox
   deleteSelected() {
     // add list delete id
-    this.lstCTiet.filter(item => {
-      if(item.checked == true && typeof item.id == "number"){
+    this.lstCTietBCao.filter(item => {
+      if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTiet = this.lstCTiet.filter(item => item.checked != true )
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
   }
 
@@ -438,12 +436,12 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
-      this.lstCTiet = this.lstCTiet.map(item => ({
+      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.lstCTiet = this.lstCTiet.map(item => ({
+      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
         ...item,
         checked: false
       }));
@@ -451,10 +449,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.lstCTiet.every(item => !item.checked)) {
+    if (this.lstCTietBCao.every(item => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.lstCTiet.every(item => item.checked)) {
+    } else if (this.lstCTietBCao.every(item => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -466,13 +464,13 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
   }
 
-  getStatusName(){
+  getStatusName() {
     const utils = new Utils();
     return utils.getStatusName(this.trangThaiBanGhi);
   }
 
-  getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+  getUnitName() {
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
@@ -480,27 +478,29 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    const index = this.lstCTiet.findIndex(item => item.id === id);
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
-      data: { ...this.lstCTiet[index] },
+      data: { ...this.lstCTietBCao[index] },
       edit: false
     };
   }
 
   saveEdit(id: string): void {
-    const index = this.lstCTiet.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
-    Object.assign(this.lstCTiet[index], this.editCache[id].data);
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
+    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
     this.editCache[id].edit = false;
+    //console.log(this.lstCTietBCao);
   }
 
   updateEditCache(): void {
-    this.lstCTiet.forEach(item => {
+    this.lstCTietBCao.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
       };
     });
   }
+
 }
