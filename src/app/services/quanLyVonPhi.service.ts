@@ -66,4 +66,64 @@ export class QuanLyVonPhiService extends BaseService {
   updatelist(request:any):Observable<any>{
     return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',request)
   }
+
+  //get list don vi tao
+  dMDonVi(): Observable<any>{
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-donvi/danh-sach/tat-ca",
+    );
+  }
+
+  //get list danh muc loai bao cao
+  dMLoaiBaoCao(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/7",
+        {  "paggingReq": {
+                "limit": 1000,
+                "page": 1
+            },
+            "str": "",
+            "trangThai": ""
+        }
+    );
+  }
+
+  //tong hop
+  tongHop(request:any): Observable<any> {
+    return this.httpClient.post(
+        this.urlDefault + "/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop",
+        request
+    );
+  }
+
+  //danh muc ke hoach von
+  dMMaHthucVban(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/258",
+        {
+            "paggingReq": {
+                "limit": 1000,
+                "page": 1
+            },
+            "str": "",
+            "trangThai": "",
+        }
+    );
+  }
+
+  //danh muc ke hoach von
+  mDMaDviChuTri(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/85",
+        {
+            "paggingReq": {
+                "limit": 1000,
+                "page": 1
+            },
+            "str": "",
+            "trangThai": "",
+        }
+    );
+  }
+
 }
