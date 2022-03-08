@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.constant';
 import * as dayjs from 'dayjs';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 interface DataItem {
   name: string;
   age: number;
@@ -23,6 +25,7 @@ interface DataItem {
   ],
 })
 export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
+  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   listThoc: KeHoachLuongThuc[] = [];
   listMuoi: KeHoachMuoi[] = [];
   listVatTu = [];
@@ -47,8 +50,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   firstDayOfYear: string = "";
   lastDayOfYear: string = "";
   yearNow: number = 0;
+  startValue: Date | null = null;
+  endValue: Date | null = null;
+  formData: FormGroup;
+  errorInputRequired: string = "Dữ liệu không được để trống.";
 
-  constructor(private router: Router, private routerActive: ActivatedRoute) { }
+  constructor(
+    private router: Router,
+    private routerActive: ActivatedRoute,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
@@ -61,6 +72,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.firstDayOfYear = '01/01/' + (this.yearNow - 1).toString();
     this.lastDayOfYear = '31/12/' + (this.yearNow - 1).toString();
     this.id = +this.routerActive.snapshot.paramMap.get('id');
+    this.formData = this.fb.group({
+      soQD: [null, [Validators.required]],
+      ngayKy: [null, [Validators.required]],
+      ngayHieuLuc: [null, [Validators.required]],
+      namKeHoach: [null, [Validators.required]],
+      trichYeu: [null],
+    });
   }
 
   themMoi() {
@@ -81,5 +99,29 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.router.navigate([
       '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
     ]);
+  }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.controls['ngayHieuLuc'].value) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.controls['ngayHieuLuc'].value.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.controls['ngayKy'].value) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.controls['ngayKy'].value.getTime();
+  };
+
+  handleStartOpenChange(open: boolean): void {
+    if (!open) {
+      this.endDatePicker.open();
+    }
+  }
+
+  handleEndOpenChange(open: boolean): void {
+    console.log('handleEndOpenChange', open);
   }
 }

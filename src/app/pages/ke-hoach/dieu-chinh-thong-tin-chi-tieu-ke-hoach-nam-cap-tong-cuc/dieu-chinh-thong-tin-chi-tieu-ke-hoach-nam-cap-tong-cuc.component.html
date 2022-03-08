@@ -32,35 +32,80 @@
     </div>
   </div>
 </nz-affix>
-
 <div class="contentBor chi-tieu__body dieu-chinh__body">
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
-        <div class="widget-body">
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Số QĐ</label>
-              <div>
-                <input class="search__input input-so-qd" nz-input [(ngModel)]="detail.soQD" />
-                <div class="code-so-qd">/QĐ-TCDT</div>
-              </div>
+        <form nz-form [formGroup]="formData" class="mt-16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input nz-input />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="18">
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Số QĐ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+                  <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
+                    <input class="search__input" nz-input formControlName="soQD" />
+                  </nz-input-group>
+                  <ng-template #soQDError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Ngày ký</label>
-              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayKy"></nz-date-picker>
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ngày ký </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)">
+                  </nz-date-picker>
+                  <ng-template #ngayKyError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Ngày hiệu lực</label>
-              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayHieuLuc"></nz-date-picker>
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayHieuLucError">
+                  <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
+                    (nzOnOpenChange)="handleEndOpenChange($event)">
+                  </nz-date-picker>
+                  <ng-template #ngayHieuLucError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Năm kế hoạch</label>
-              <input class="search__input" nz-input [(ngModel)]="detail.namKeHoach" />
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKeHoachError">
+                  <nz-select formControlName="namKeHoach">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  </nz-select>
+                  <ng-template #namKeHoachError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
-              <label class="search__label">Trích yếu</label>
-              <textarea rows="3" class="search__input" nz-input [(ngModel)]="detail.trichYeu"></textarea>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
+                <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
               <button class="btn btn-tep btn-sm waves-effect waves-light">
@@ -69,7 +114,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
