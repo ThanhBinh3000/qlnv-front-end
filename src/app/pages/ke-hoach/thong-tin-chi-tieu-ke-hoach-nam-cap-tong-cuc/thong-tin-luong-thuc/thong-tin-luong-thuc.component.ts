@@ -7,8 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./thong-tin-luong-thuc.component.scss'],
 })
 export class ThongTinLuongThucComponent implements OnInit {
-  @Input() isVisible: boolean;
-  @Output() isVisibleChange = new EventEmitter<boolean>();
+  // @Input() isVisible: boolean;
+  // @Output() isVisibleChange = new EventEmitter<boolean>();
 
   formData: FormGroup;
   constructor(private fb: FormBuilder) {}
@@ -41,13 +41,13 @@ export class ThongTinLuongThucComponent implements OnInit {
     });
   }
 
-  handleOk() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-  }
+  // handleOk() {
+  //   this.isVisible = false;
+  //   this.isVisibleChange.emit(this.isVisible);
+  // }
 
-  handleCancel() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-  }
+  // handleCancel() {
+  //   this.isVisible = false;
+  //   this.isVisibleChange.emit(this.isVisible);
+  // }
 }
