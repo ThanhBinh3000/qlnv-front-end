@@ -15,6 +15,8 @@ import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-
 import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-quyet-dinh.component';
 import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
+import { QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
+import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 
 const routes: Routes = [
   {
@@ -72,6 +74,14 @@ const routes: Routes = [
   {
     path: 'ke-hoach-lua-chon-nha-thau-vat-tu/nhap-quyet-dinh/:id',
     component: NhapQuyetDinhComponent,
+  },
+  {
+    path: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
+    component: QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
+  },
+  {
+    path: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/:id',
+    component: ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
   },
 ];
 
