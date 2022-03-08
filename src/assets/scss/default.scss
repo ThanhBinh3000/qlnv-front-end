@@ -112,7 +112,7 @@ $inputLabel-text: 500;
 $mb: $input-h/2;
 
 .ant-upload.ant-upload-select {
-  margin-top: $label-padding;
+  // margin-top: $label-padding;
 }
 
 $tab-h: 9px;
@@ -692,7 +692,7 @@ app-danh-sach-file.hidecard,
 }
 
 ::ng-deep .flex-card.ant-card {
-  border: none;
+  // border: none;
   background: transparent;
   box-shadow: unset;
   // margin-bottom: 24px;
@@ -1785,4 +1785,24 @@ a.btn.btn-disabled {
 
 svg {
   vertical-align: baseline;
+}
+td.action.ant-table-cell {
+  text-align: right;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.bg-white {
+  background-color: white;
+}
+.search-tools {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  margin-top: 8px;
 }

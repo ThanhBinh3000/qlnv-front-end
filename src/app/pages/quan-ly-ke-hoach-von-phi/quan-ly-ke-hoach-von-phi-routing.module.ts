@@ -13,14 +13,28 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        path: 'quan-ly-lap-tham-dinh-du-toan-nsnn',
         loadChildren: () =>
-          import(
-            './quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/tim-kiem.module'
-          ).then((m) => m.TimKiemModule),
+          import('./quan-ly-lap-tham-dinh-du-toan-nsnn/quan-ly-lap-tham-dinh-du-toan-nsnn.module').then(
+            (m) => m.QuanLyLapThamDinhDuToanNSNNModule,
+          ),
       },
       {
-        path: 'quan-ly-lap-tham-dinh-du-toan-nsnn',
+        path: 'quan-ly-dieu-chinh-du-toan-chi-nsnn',
+        loadChildren: () =>
+          import('./quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
+            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          ),
+      },
+      {
+        path: 'quan-ly-giao-du-toan-chi-nsnn',
+        loadChildren: () =>
+          import('./quan-ly-lap-tham-dinh-du-toan-nsnn/quan-ly-lap-tham-dinh-du-toan-nsnn.module').then(
+            (m) => m.QuanLyLapThamDinhDuToanNSNNModule,
+          ),
+      },
+      {
+        path: 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg',
         loadChildren: () =>
           import('./quan-ly-lap-tham-dinh-du-toan-nsnn/quan-ly-lap-tham-dinh-du-toan-nsnn.module').then(
             (m) => m.QuanLyLapThamDinhDuToanNSNNModule,

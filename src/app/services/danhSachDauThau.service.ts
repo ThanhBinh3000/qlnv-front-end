@@ -7,13 +7,13 @@ import { OldResponseData } from '../interfaces/response';
 @Injectable({
   providedIn: 'root',
 })
-export class ChucNangService extends BaseService {
+export class DanhSachDauThauService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ChucNang');
+    super(httpClient, 'DanhSachDauThau');
   }
 
-  LayTatCaTheoTree() {
-    const url = `${environment.SERVICE_API}api/ChucNang/LayTatCaTheoTree`;
-    return this.httpClient.get<OldResponseData>(url).toPromise();
+  timKiem(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-service-hang/dx-kh/lcnt-gao/tra-cuu`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 }

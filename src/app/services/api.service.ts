@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   login(body) {
     const url = `${environment.SERVICE_API}/qlnv-security/login`;
@@ -14,7 +14,7 @@ export class ApiService {
   }
 
   refreshToken(body) {
-    const url = `${environment.SERVICE_API}api/Account/TokenRefresh`;
+    const url = `${environment.AUTHEN_API}/qlnv-gateway/TokenRefresh`;
     return this.httpClient.post(url, body);
   }
 }

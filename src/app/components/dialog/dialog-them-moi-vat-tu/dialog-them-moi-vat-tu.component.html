@@ -1,0 +1,62 @@
+<form nz-form>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Gói thầu </nz-form-label>
+        <nz-select>
+          <nz-option nzValue="1111" nzLabel="1111"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm nhập kho </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Bằng chữ </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </a>
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </a>
+    </div>
+  </div>
+</div>
