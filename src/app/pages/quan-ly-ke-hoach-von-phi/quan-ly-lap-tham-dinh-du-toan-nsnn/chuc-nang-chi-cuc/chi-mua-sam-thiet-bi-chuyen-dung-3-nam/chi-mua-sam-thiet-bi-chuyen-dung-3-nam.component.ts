@@ -69,7 +69,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   tong3: number = 0;
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-  statusBtnSave: boolean;                      // trang thai an/hien nut luu
+  statusBtnSave: boolean = false;                      // trang thai an/hien nut luu
   statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
   statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
@@ -121,7 +121,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -149,7 +149,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -223,6 +223,13 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     for (let i = 0; i < this.lstFile.length; i++) {
       idFileDinhKems += this.lstFile[i].id + ",";
     }
+
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -236,15 +243,32 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-      (data) => {
-        alert("trinh duyet thanh cong!");
-        console.log(data);
-      },
-      (err) => {
-        alert("trinh duyet that bai!");
-        console.log();
+    if (this.id == null) {
+      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+        (data) => {
+          alert("trinh duyet thanh cong!");
+          console.log(data);
+        },
+        (err) => {
+          alert("trinh duyet that bai!");
+          console.log();
+        })
+    } else {
+      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+        if (res.statusCode == 0) {
+          alert('trinh duyet thanh cong!');
+        } else {
+          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+        }
       })
+    }
+
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -429,7 +453,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if (item.checked == true){
+      if (item.checked == true) {
         this.tong1 -= item.n1;
         this.tong2 -= item.n2;
         this.tong3 -= item.n3;

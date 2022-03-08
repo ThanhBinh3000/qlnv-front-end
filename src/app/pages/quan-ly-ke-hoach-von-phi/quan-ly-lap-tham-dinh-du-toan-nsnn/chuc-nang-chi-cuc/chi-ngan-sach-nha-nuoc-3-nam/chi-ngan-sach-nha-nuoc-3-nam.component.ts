@@ -73,7 +73,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      listIdDelete: string = "";                  // list id delete
 
      statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-     statusBtnSave: boolean;                      // trang thai an/hien nut luu
+     statusBtnSave: boolean = false;                      // trang thai an/hien nut luu
      statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
      statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
      statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
@@ -125,7 +125,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
 
      async ngOnInit() {
-          this.id = +this.routerActive.snapshot.paramMap.get('id');
+          this.id = this.routerActive.snapshot.paramMap.get('id');
           let userName = localStorage.getItem('userName');
           let userInfo: any = await this.getUserInfo(userName); //get user info
           if (this.id) {
@@ -153,7 +153,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
           const utils = new Utils();
           this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+          //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -285,6 +285,12 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           for (let i = 0; i < this.lstFile.length; i++) {
                idFileDinhKems += this.lstFile[i].id + ",";
           }
+          // replace nhung ban ghi dc them moi id thanh null
+          this.lstCTietBCao.filter(item => {
+               if (typeof item.id != "number") {
+                    item.id = null;
+               }
+          })
           // gui du lieu trinh duyet len server
           let request = {
                id: this.id,
@@ -298,6 +304,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                namHienHanh: this.namBaoCaoHienHanh,
           };
           this.spinner.show();
+          if (this.id == null){
           this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
                (data) => {
                     alert("trinh duyet thanh cong!");
@@ -307,6 +314,22 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                     alert("trinh duyet that bai!");
                     console.log();
                })
+          } else {
+               this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+                    if (res.statusCode == 0) {
+                         alert('trinh duyet thanh cong!');
+                    } else {
+                         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+                    }
+               })
+          }
+
+          this.lstCTietBCao.filter(item => {
+               if (!item.id) {
+                    item.id = uuid.v4();
+               }
+          });
+          this.updateEditCache();
           this.spinner.hide();
      }
 
@@ -604,7 +627,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      //gia tri cac o input thay doi thi tinh toan lai
      changeModel(id: string): void {
           this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-          this.editCache[id].data.ssanhNcauNVoiN1 = this.editCache[id].data.ncauChiN1/this.editCache[id].data.uocThienN;
+          this.editCache[id].data.ssanhNcauNVoiN1 = this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN;
           this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
           this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
      }

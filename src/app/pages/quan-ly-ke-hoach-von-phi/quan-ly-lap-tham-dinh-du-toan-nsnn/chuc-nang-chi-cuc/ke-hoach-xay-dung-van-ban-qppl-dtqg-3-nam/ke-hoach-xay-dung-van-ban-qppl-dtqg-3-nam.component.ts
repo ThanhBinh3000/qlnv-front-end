@@ -38,7 +38,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   userInfo: any;
   errorMessage!: String;                      //
-  id!: any;                                   // id truyen tu router
+  id: any = null;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                     // trang thai an/ hien cua trang thai
@@ -60,8 +60,8 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   listIdDelete: string = "";                  // list id delete
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-  statusBtnSave: boolean;                      // trang thai an/hien nut luu
-  statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
+  statusBtnSave: boolean = false;                      // trang thai an/hien nut luu
+  statusBtnApprove: boolean = false;                   // trang thai an/hien nut trinh duyet
   statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
@@ -112,7 +112,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -140,8 +140,8 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    //this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -232,6 +232,13 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     for (let i = 0; i < this.lstFile.length; i++) {
       idFileDinhKems += this.lstFile[i].id + ",";
     }
+
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
+
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -244,17 +251,34 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
-    console.log(this.lstCTietBCao);
+    //console.log(this.lstCTietBCao);
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-      (data) => {
-        alert("trinh duyet thanh cong!");
-        console.log(data);
-      },
-      (err) => {
-        alert("trinh duyet that bai!");
-        console.log();
+    if (this.id == null) {
+      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+        (data) => {
+          alert("trinh duyet thanh cong!");
+          console.log(data);
+        },
+        (err) => {
+          alert("trinh duyet that bai!");
+          console.log();
+        })
+    } else {
+      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+        if (res.statusCode == 0) {
+          alert('trinh duyet thanh cong!');
+        } else {
+          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+        }
       })
+    }
+
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -272,6 +296,8 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         item.id = null;
       }
     })
+
+
 
     // gui du lieu trinh duyet len server
     let request = {
@@ -317,6 +343,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         item.id = uuid.v4();
       }
     });
+    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -498,7 +525,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   }
 
   getUnitName() {
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

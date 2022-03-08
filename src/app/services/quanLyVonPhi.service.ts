@@ -64,6 +64,6 @@ export class QuanLyVonPhiService extends BaseService {
 
   // upload list
   updatelist(request:any):Observable<any>{
-    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/lap-tham-dinh-du-toancap-nhat',request)
+    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',request)
   }
 }
