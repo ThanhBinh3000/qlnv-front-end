@@ -47,7 +47,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '26';
+  maLoaiBacao: string = '25';
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -113,7 +113,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '26';
+      this.maLoaiBacao = '25';
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -229,7 +229,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = "26";
+          this.maLoaiBacao = "25";
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;

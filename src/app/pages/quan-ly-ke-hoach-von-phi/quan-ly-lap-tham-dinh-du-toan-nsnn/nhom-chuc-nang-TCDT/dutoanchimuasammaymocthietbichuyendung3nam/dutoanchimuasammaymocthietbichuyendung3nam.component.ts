@@ -10,31 +10,23 @@ import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 
+
 export class ItemData {
   id!: any;
-  stt!: string;
-  tenDtaiDanNckh!: string;
-  maDvi!: string;
-  tgianBdau!: number;
-  tgianKthuc!: number;
-  kphiTongPhiDuocDuyet!: number;
-  kphiDaDuocBoTriDenTdiemN!: number;
-  kphiDaDuocThienDenTdiemBcao!: number;
-  kphiDkienBtriN1!: number;
-  kphiDkienBtriN2!: number;
-  kphiDkienBtriN3!: number;
-  kphiThuHoi!: number;
-  tgianThuHoi!: number;
-  checked:boolean;
+  stt!: number;
+  maVtuTbi!: String;
+  tcongN1!: number;
+  tcongN2!: number;
+  tcongN3!: number; 
+  checked!:boolean; 
 }
 
-
 @Component({
-  selector: 'app-thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam',
-  templateUrl: './thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.component.html',
-  styleUrls: ['./thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.component.scss']
+  selector: 'app-dutoanchimuasammaymocthietbichuyendung3nam',
+  templateUrl: './dutoanchimuasammaymocthietbichuyendung3nam.component.html',
+  styleUrls: ['./dutoanchimuasammaymocthietbichuyendung3nam.component.scss']
 })
-export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent implements OnInit {
+export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnInit {
 
 
   statusBtnDel: boolean; // trang thai an/hien nut xoa
@@ -49,7 +41,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '24';
+  maLoaiBacao: string = '27';
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -72,8 +64,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   allChecked = false; // check all checkbox
   indeterminate = true; // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
-  listHinhThucVanBan: any[] = [];
-  listDviChuTri: any[] = [];
+  listChitieu: any[] = [];
   listIdDelete: string = '';
   fileList: NzUploadFile[] = [];
   listFile: File[] = [];
@@ -94,6 +85,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   async ngOnInit() {
     let userName = localStorage.getItem('userName');
     let userInfor: any = await this.getUserInfo(userName); //get user info
+
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -114,7 +106,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '24';
+      this.maLoaiBacao = '27';
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -130,32 +122,21 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
         },
       );
     }
-    this.quanLyVonPhiService.dMMaHthucVban().subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.listHinhThucVanBan = res.data?.content;
-          console.log(this.listHinhThucVanBan);
-        } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
-        }
+    //get danh muc chi tiêu
+    this.quanLyVonPhiService.dMChiTieu().subscribe(
+      (data) => {
+          if (data.statusCode == 0) {
+              this.listChitieu = data.data?.content;
+              console.log(this.listChitieu);
+          } else {
+              this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          }
       },
       (err) => {
-        this.errorMessage = err.error.message;
-      },
-    );
-    this.quanLyVonPhiService.mDMaDviChuTri().subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.listDviChuTri = res.data?.content;
-          console.log(this.listDviChuTri);
-        } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      },
-    );
+          console.log(err);
+          this.errorMessage = err.error.message;
+      }
+  );
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -230,7 +211,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = "24";
+          this.maLoaiBacao = "27";
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -316,21 +297,13 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   // them dong moi
   addLine(id: number): void {
     let item: ItemData = {
-      id!: uuid.v4(),
-      stt!: '',
-      tenDtaiDanNckh!: '',
-      maDvi!: '',
-      tgianBdau!: 0,
-      tgianKthuc!: 0,
-      kphiTongPhiDuocDuyet!: 0,
-      kphiDaDuocThienDenTdiemBcao!: 0,
-      kphiDkienBtriN1!: 0,
-      kphiDkienBtriN2!: 0,
-      kphiDkienBtriN3!: 0,
-      kphiThuHoi!: 0,
-      tgianThuHoi!: 0,
-      kphiDaDuocBoTriDenTdiemN!: 0,
-      checked:false,
+      id:uuid.v4(),  
+      stt: 0,
+      maVtuTbi: '',
+      tcongN1: 0,
+      tcongN2: 0,
+      tcongN3: 0, 
+      checked: false,
     };
 
     this.lstCTietBCao.splice(id, 0, item);
@@ -565,4 +538,28 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     })
     this.spinner.show();
 }
+
+  
+  tinhtong1():number{
+    let tong1:number=0;
+    this.lstCTietBCao.forEach(e =>{
+      tong1+= Number(e.tcongN1);
+    })
+    return tong1;
+  }
+  tinhtong2():number{
+    let tong2:number=0;
+    this.lstCTietBCao.forEach(e =>{
+      tong2+= Number(e.tcongN2);
+    })
+    return tong2;
+  }
+  tinhtong3():number{
+    let tong3:number=0;
+    this.lstCTietBCao.forEach(e =>{
+      tong3+= Number(e.tcongN3);
+    })
+    return tong3;
+  }
+
 }

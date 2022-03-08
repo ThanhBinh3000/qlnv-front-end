@@ -99,21 +99,37 @@ export class TongHopComponent implements OnInit {
 
   //set url khi
   setUrl(){
-    debugger
     switch (this.loaiBaocao) {
-
         case 207:
-            this.url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/'
+            this.url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
             break;
         case 204:
-            this.url = '/quan-ly-dcdtc-nsnn/ke-hoach-bao-quan-hang-nam'
+            this.url = '/quan-ly-dcdtc-nsnn/ke-hoach-bao-quan-hang-nam';
             break;
         case 324:
-          this.url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam'
+          this.url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam';
             break;
         case 307:
-          this.url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam'
+          this.url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam';
             break;
+        case 325:
+          this.url ='/du-toan-chi-ung-dung-cntt-giai-doan-3nam';
+          break;
+        case 326:
+          this.url ='/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam';
+          break;
+        case 327:
+          this.url ='/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam';
+          break;
+        case 328:
+          this.url ='/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+          break;
+        case 329:
+          this.url ='/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+          break;
+        case 330:
+          this.url ='/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
+          break;
         default:
             break;
     }
