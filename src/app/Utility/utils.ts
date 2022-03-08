@@ -29,7 +29,7 @@ export class Utils {
     public static TT_BC_6 = "6"; // Lãnh đạo duyệt,
     public static TT_BC_7 = "7"; // Gửi ĐV cấp trên,
     public static TT_BC_8 = "8"; // ĐV cấp trên từ chối,
-    public static TT_BC_9 = "9"; // Đv cấp trên duyệt"
+    public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
 
     // Danh sach quyen
     public static LANH_DAO = 1;// "Lãnh Đạo";
@@ -57,7 +57,7 @@ export class Utils {
 
     //role trinh duyet
     public static btnRoleApprove = {
-        "status": ['1', '3', '5', '8'],
+        "status": ['1'],
         "unit": [1, 2],
         "role": [3],
     }

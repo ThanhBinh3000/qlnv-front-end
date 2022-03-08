@@ -42,6 +42,7 @@ import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 import { FilterPipe } from '../pipes/filter.pipe';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -52,11 +53,19 @@ import { TecaTreeSelectModule } from './tree-select/tree-select.module';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { UploadComponent } from './dialog/dialog-upload/upload.component';
+import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
+import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [
     // components
+    UploadComponent,
+    DialogThemMoiVatTuComponent,
+    DialogThongTinPhuLucKHLCNTComponent,
+    DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent,
     //pipes
     FilterPipe,
   ],
@@ -109,6 +118,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
@@ -162,6 +172,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     PdfViewerModule,
     NzDrawerModule,
     NzTagModule,
+    NzAutocompleteModule,
     TecaTreeSelectModule,
     FilterPipe,
     NzAlertModule,
@@ -169,4 +180,4 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

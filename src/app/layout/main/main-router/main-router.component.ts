@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { NhomQuyenService } from 'src/app/services/nhomquyen.service';
 import { ObservableService } from 'src/app/services/observable.service';
 import { LIST_PAGES } from '../main-routing.constant';
 
@@ -14,7 +13,6 @@ export class MainRouterComponent implements OnInit {
   lstRouter = [];
   lstPage = [];
   constructor(
-    private nhomQuyenService: NhomQuyenService,
     private notification: NzNotificationService,
     private observableService: ObservableService,
   ) {
@@ -26,13 +24,5 @@ export class MainRouterComponent implements OnInit {
   }
 
   layTatCaChucNangUser() {
-    this.nhomQuyenService.layTatCaChucNangUser().then((res) => {
-      if (res.success) {
-        this.lstRouter = res.data;
-        this.observableService.routerSubject.next(this.lstRouter);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.error);
-      }
-    });
   }
 }

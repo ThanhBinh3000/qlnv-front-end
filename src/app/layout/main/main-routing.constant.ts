@@ -7,7 +7,7 @@ export const MAIN_ROUTES = {
   tacVuThuongXuyen: 'tac-vu-thuong-xuyen',
   baoCaoNghiepVu: 'bao-cao-nghiep-vu',
   heThong: 'he-thong',
-  danhMuc: 'danh-muc',
+  danhmuc: 'danhmuc',
   qlkhVonPhi: 'qlkh-von-phi',
 };
 
@@ -38,7 +38,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Danh mục',
-    route: MAIN_ROUTES.danhMuc,
+    route: MAIN_ROUTES.danhmuc,
   },
   {
     title: 'Quản lý kế hoạch vốn phí',

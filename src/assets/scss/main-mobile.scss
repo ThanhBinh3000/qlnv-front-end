@@ -1,4 +1,4 @@
-@import '../../assets/scss/default.scss';
+@import "../../assets/scss/default.scss";
 @media (max-width: 991px) {
   .ant-layout {
     overflow: hidden;
@@ -31,8 +31,8 @@
   //     padding-bottom: 12px;
   // }
 
-  [ng-reflect-nz-width='20%'],
-  [ng-reflect-nz-width='15%'] {
+  [ng-reflect-nz-width="20%"],
+  [ng-reflect-nz-width="15%"] {
     min-width: 200px;
   }
   .fix,
@@ -93,8 +93,7 @@
   .tab-menu > div > div.trai {
     padding: 8px;
   }
-  .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal)
-    .ant-menu-item-selected,
+  .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected,
   .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected,
   .ant-menu.ant-menu-dark .ant-menu-item-selected {
     background: transparent;
@@ -210,10 +209,10 @@
       // position: fixed;
       // top: 9px;
       // right: 10px;
-      font-family: 'htvbdh' !important;
+      font-family: "htvbdh" !important;
       background-image: unset;
       &:before {
-        content: '\e980';
+        content: "\e980";
         color: #fff;
       }
     }
@@ -419,9 +418,9 @@
     display: block;
     &:before {
       margin-left: -15px;
-      content: '\f105';
+      content: "\f105";
       background: transparent;
-      font-family: 'FontAwesome';
+      font-family: "FontAwesome";
       line-height: 1;
       font-size: 18px;
       color: #999;
@@ -604,7 +603,7 @@
   }
 
   .contentTimkiem:before {
-    content: '';
+    content: "";
     background: rgb(255 255 255 / 0%);
     position: fixed;
     top: 0;
@@ -769,9 +768,7 @@
   .ant-table-body {
     min-height: 200px;
   }
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-no-arrow
-    > .ant-collapse-header,
+  .ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header,
   .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     flex-wrap: wrap;
     padding-top: 8px;
@@ -782,7 +779,7 @@
     .dot {
       background: transparent;
     }
-    &[aria-expanded='false'] button {
+    &[aria-expanded="false"] button {
       padding-top: 0 !important;
       margin-top: -5px;
     }
@@ -925,9 +922,7 @@
     width: 100%;
     padding: 8px 0;
   }
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-item-active
-    > .ant-collapse-header:before {
+  .ant-collapse > .ant-collapse-item.ant-collapse-item-active > .ant-collapse-header:before {
     top: 13px $i;
   }
   #collapsnav .nav-tabs {
@@ -997,8 +992,8 @@
         width: $input-h;
         min-width: auto;
         .fa-search:before {
-          content: '\e992';
-          font-family: 'htvbdh' !important;
+          content: "\e992";
+          font-family: "htvbdh" !important;
         }
       }
     }
@@ -1058,7 +1053,7 @@
       padding: 0;
     }
   }
-  [width='20%'] {
+  [width="20%"] {
     min-width: 200px;
   }
 
@@ -1248,34 +1243,21 @@
   .tab-menu.tab-content {
     padding: 8px;
   }
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-no-arrow
-    > .ant-collapse-header {
+  .ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header {
     flex-wrap: nowrap;
   }
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-no-arrow
-    > .ant-collapse-header
-    .ant-collapse-extra,
-  .ant-collapse
-    > .ant-collapse-item
-    > .ant-collapse-header
-    .ant-collapse-extra {
+  .ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header .ant-collapse-extra,
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-extra {
     white-space: nowrap;
   }
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-item-active
-    > .ant-collapse-header:before {
+  .ant-collapse > .ant-collapse-item.ant-collapse-item-active > .ant-collapse-header:before {
     top: 8px !important;
   }
   .menu-lv3:not(.menu-timkiem) .tab-menu > div > div.trai,
   .menu-lv3:not(.menu-timkiem) .tab-pane .phai {
     padding: 0 !important;
   }
-  .menu-lv3:not(.menu-timkiem)
-    .tab-menu.tab-content
-    .trai
-    .btn.btn-outline-grey:first-child {
+  .menu-lv3:not(.menu-timkiem) .tab-menu.tab-content .trai .btn.btn-outline-grey:first-child {
     max-width: 26px;
   }
   .menu-lv3:not(.menu-timkiem) .tab-menu > div > div.trai {
@@ -1321,9 +1303,9 @@
   }
   .ant-tabs > .ant-tabs-nav .ant-tabs-nav-more i:before,
   .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-more i:before {
-    content: '\f078';
+    content: "\f078";
     display: block;
-    font-family: 'FontAwesome';
+    font-family: "FontAwesome";
     font-size: 12px;
     color: #fff;
   }
@@ -1372,11 +1354,7 @@
   .ant-collapse > .ant-collapse-item > .ant-collapse-header:before {
     top: 5px !important;
   }
-  .ant-collapse
-    > .ant-collapse-item
-    > .ant-collapse-header
-    .ant-collapse-extra
-    button {
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-extra button {
     margin-top: -5px;
   }
   .main-content .ant-row .chitiet {

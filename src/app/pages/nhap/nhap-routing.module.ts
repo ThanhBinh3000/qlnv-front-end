@@ -8,11 +8,6 @@ const routes: Routes = [
     component: NhapComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'nguoi-dung',
-        pathMatch: 'full',
-      },
-      {
         path: 'dau-thau',
         loadChildren: () =>
           import('../nhap/dau-thau/dau-thau.module').then(
@@ -27,4 +22,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NhapRoutingModule {}
+export class NhapRoutingModule { }
