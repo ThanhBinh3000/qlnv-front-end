@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
@@ -87,7 +87,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   listFileUploaded: any = [];
 
   constructor(
-    private nguoiDungSerivce: NguoiDungService,
+    private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
     private spinner: NgxSpinnerService,
     private router: ActivatedRoute,
@@ -97,7 +97,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    let userName = localStorage.getItem('userName');
+    let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
 
     //check param dieu huong router

@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 
 @Component({
@@ -16,7 +17,7 @@ export class TongHopComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
     private datePipe: DatePipe,
-    private nguoiDungSerivce: NguoiDungService,
+    private nguoiDungSerivce: UserService,
   ) { }
 
   url:any;
@@ -32,7 +33,7 @@ export class TongHopComponent implements OnInit {
   loaiBaocao:any;
   async ngOnInit() {
 
-    let username = localStorage.getItem('userName');
+    let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
      //lay danh sach loai bao cao
      this.quanLyVonPhiService.dMLoaiBaoCao().subscribe(

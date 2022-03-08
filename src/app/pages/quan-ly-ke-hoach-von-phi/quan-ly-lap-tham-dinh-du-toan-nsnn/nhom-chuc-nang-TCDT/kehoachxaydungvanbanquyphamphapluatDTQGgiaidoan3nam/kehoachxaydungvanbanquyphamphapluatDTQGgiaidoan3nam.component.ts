@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -80,7 +80,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   listFileUploaded: any = [];
 
   constructor(
-    private nguoiDungSerivce: NguoiDungService,
+    private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
     private spinner: NgxSpinnerService,
     private router: ActivatedRoute,
@@ -90,7 +90,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   ) {}
 
   async ngOnInit() {
-    let userName = localStorage.getItem('userName');
+    let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
 
     //check param dieu huong router
