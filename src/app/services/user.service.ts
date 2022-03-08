@@ -9,6 +9,7 @@ import { OldResponseData } from '../interfaces/response';
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
   constructor(
     private httpClient: HttpClient,
