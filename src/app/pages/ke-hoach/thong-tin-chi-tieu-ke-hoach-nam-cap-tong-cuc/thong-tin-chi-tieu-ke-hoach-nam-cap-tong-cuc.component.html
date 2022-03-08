@@ -101,7 +101,7 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
-            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+            <nz-table #groupingTable [nzData]="listThoc" nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
@@ -153,49 +153,59 @@
                 </tr>
                 <tr>
                   <th>Tổng</th>
-                  <th>Nhập <br> 2017</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
                   <th>Tổng</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
                   <th>Tổng</th>
-                  <th>Nhập <br> 2017</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
                   <th>Tổng</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let data of groupingTable.data">
-                  <td>1</td>
-                  <td>Hà Nội</td>
-                  <td>14,316</td>
-                  <td>6000</td>
-                  <td></td>
-                  <td>3,000</td>
-                  <td>3,000</td>
-                  <td>4,158</td>
-                  <td></td>
-                  <td>4,158</td>
-                  <td>14,316</td>
-                  <td>6000</td>
-                  <td>4,158</td>
-                  <td>14,316</td>
-                  <td>6000</td>
-                  <td></td>
-                  <td>3,000</td>
-                  <td>3,000</td>
-                  <td>4,158</td>
-                  <td></td>
-                  <td>4,158</td>
-                  <td>14,316 </td>
-                  <td>6000</td>
-                  <td>4,158</td>
-                  <td>Đã duyệt</td>
-                  <td>
+                  <td *ngIf="data.stt">{{data.stt}}</td>
+                  <td *ngIf="data.stt">{{data.cucDTNNKhuVuc}}</td>
+                  <td *ngIf="data.stt == null" colspan="2" class="first-last-row-table background-last-row">
+                    {{data.cucDTNNKhuVuc}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongSoQuyThoc | number:
+                    '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongThoc | number: '1.0-1'}}
+                  </td>
+                  <td *ngFor="let item of data.tkdnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
+                    {{item.soLuong | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongGao | number: '1.0-1'}}
+                  </td>
+                  <td *ngFor="let item of data.tkdnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
+                    {{item.soLuong | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnTongSoQuyThoc | number:
+                    '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnThoc | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnGao | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongSoQuyThoc | number:
+                    '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongThoc | number: '1.0-1'}}
+                  </td>
+                  <td *ngFor="let item of data.xtnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
+                    {{item.soLuong | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongGao | number: '1.0-1'}}
+                  </td>
+                  <td *ngFor="let item of data.xtnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
+                    {{item.soLuong | number: '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongSoQuyThoc | number:
+                    '1.0-1'}}</td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongThoc | number: '1.0-1'}}
+                  </td>
+                  <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongGao | number: '1.0-1'}}
+                  </td>
+                  <td *ngIf="data.stt">Đã duyệt</td>
+                  <td *ngIf="data.stt">
                     <a>
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -203,12 +213,14 @@
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
+                  <td *ngIf="data.stt == null" class="background-last-row"></td>
+                  <td *ngIf="data.stt ==  null" class="background-last-row"></td>
                 </tr>
               </tbody>
             </nz-table>
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi">
-            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+            <nz-table #groupingTableMuoi [nzData]="listMuoi" nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
@@ -240,30 +252,36 @@
                   </th>
                 </tr>
                 <tr>
-                  <th>Nhập <br> 2017</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
-                  <th>Nhập <br> 2017</th>
-                  <th>Nhập <br> 2018</th>
-                  <th>Nhập <br> 2019</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let data of groupingTable.data">
-                  <td>1</td>
-                  <td>Hà Nội</td>
-                  <td>14,316</td>
-                  <td></td>
-                  <td>3,000</td>
-                  <td>3,000</td>
-                  <td>14,316</td>
-                  <td>14,316</td>
-                  <td></td>
-                  <td>3,000</td>
-                  <td>3,000</td>
-                  <td>14,316</td>
-                  <td>Đã duyệt</td>
-                  <td>
+                <tr *ngFor="let dataMuoi of groupingTableMuoi.data">
+                  <td *ngIf="dataMuoi.stt">{{dataMuoi.stt}}</td>
+                  <td *ngIf="dataMuoi.stt">{{dataMuoi.cucDTNNKhuVuc}}</td>
+                  <td *ngIf="dataMuoi.stt == null" colspan="2" class="first-last-row-table background-last-row">
+                    {{dataMuoi.cucDTNNKhuVuc}}</td>
+                  <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkdnTongSoMuoi | number:
+                    '1.0-1'}}</td>
+                  <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi"
+                    [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number: '1.0-1'}}
+                  </td>
+                  <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.ntnTongSoMuoi | number:
+                    '1.0-1'}}</td>
+                  <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.xtnTongSoMuoi | number:
+                    '1.0-1'}}</td>
+                  <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi"
+                    [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number: '1.0-1'}}
+                  </td>
+                  <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkcnTongSoMuoi | number:
+                    '1.0-1'}}</td>
+                  <td *ngIf="dataMuoi.stt">Đã duyệt</td>
+                  <td *ngIf="dataMuoi.stt">
                     <a>
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -271,13 +289,15 @@
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
+                  <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
+                  <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
                 </tr>
               </tbody>
             </nz-table>
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
             (nzClick)="tabSelected = tab.vatTu">
-            <nz-table #groupingTable [nzData]="listOfData" nzBordered class="table__body">
+            <nz-table #groupingTable [nzData]="listVatTu" nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="3">STT</th>
@@ -297,9 +317,9 @@
                 </tr>
                 <tr>
                   <th>Tổng</th>
-                  <th>Kế hoạch <br> 2017</th>
-                  <th>Kế hoạch <br> 2018</th>
-                  <th>Kế hoạch <br> 2019</th>
+                  <th>Kế hoạch <br> {{yearNow - 3}}</th>
+                  <th>Kế hoạch <br> {{yearNow - 2}}</th>
+                  <th>Kế hoạch <br> {{yearNow - 1}}</th>
                 </tr>
               </thead>
               <tbody>

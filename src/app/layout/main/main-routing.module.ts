@@ -33,6 +33,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: MAIN_ROUTES.danhmuc,
+        loadChildren: () =>
+          import('../../pages/danh-muc/danh-muc.module').then(
+            (m) => m.DanhMucModule,
+          ),
+      },
+      {
         path: MAIN_ROUTES.qlkhVonPhi,
         loadChildren: () =>
           import('../../pages/quan-ly-ke-hoach-von-phi/quan-ly-ke-hoach-von-phi.module').then(

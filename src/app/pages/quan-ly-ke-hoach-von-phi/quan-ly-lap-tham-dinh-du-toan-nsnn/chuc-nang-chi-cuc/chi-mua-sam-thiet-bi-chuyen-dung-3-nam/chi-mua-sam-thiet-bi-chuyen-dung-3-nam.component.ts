@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
 import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 export class ItemData {
@@ -113,7 +113,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private nguoiDungSerivce: NguoiDungService,
+    private userSerivce: UserService,
     private danhMucService: DanhMucService,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -188,7 +188,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
+    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
@@ -310,6 +310,16 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          if (
+            this.trangThaiBanGhi == '1' ||
+            this.trangThaiBanGhi == '3' ||
+            this.trangThaiBanGhi == '5' ||
+            this.trangThaiBanGhi == '8'
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
           this.lstCTietBCao.forEach(e => {
             this.tong1 += e.n1;
             this.tong2 += e.n2;

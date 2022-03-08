@@ -1,16 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMPTY_ID, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
-import { MESSAGE } from 'src/app/constants/message';
-import { OldResponseData } from 'src/app/interfaces/response';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
-import { QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST } from './quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST } from './quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 interface DataItem {
   name: string;
   age: number;
@@ -57,12 +49,6 @@ export class QuanLyLapThamDinhDuToanNSNNComponent implements OnInit {
   /////////
 
   constructor(
-    private fb: FormBuilder,
-    private donviService: DonviService,
-    private helperService: HelperService,
-    private _modalService: NzModalService,
-    private notification: NzNotificationService,
-    private nguoidungService: NguoiDungService,
     private router: Router,
   ) {}
 

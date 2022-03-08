@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
 import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { C } from '@angular/cdk/keycodes';
 
@@ -126,7 +126,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private nguoiDungSerivce: NguoiDungService,
+    private nguoiDungSerivce: UserService,
     private danhMucService: DanhMucService,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -320,6 +320,16 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          if (
+            this.trangThaiBanGhi == '1' ||
+            this.trangThaiBanGhi == '3' ||
+            this.trangThaiBanGhi == '5' ||
+            this.trangThaiBanGhi == '8'
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
 
           //tach thong tin trong bao cao
           for (var i = 0; i < this.chiTietBcaos[0].listCtiet.length; i++) {
