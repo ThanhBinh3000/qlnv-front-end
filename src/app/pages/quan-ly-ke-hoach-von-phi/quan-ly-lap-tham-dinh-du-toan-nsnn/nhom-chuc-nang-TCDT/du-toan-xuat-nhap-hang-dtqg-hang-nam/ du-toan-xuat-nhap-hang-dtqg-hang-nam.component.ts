@@ -8,43 +8,42 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
 import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { NguoiDungService } from 'src/app/services/nguoidung.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-
 export class ItemData {
-  maVtuTbi!: number;
-  sl!: number;
-  maDviVtuTbi!: number;
+  namHhanhN!: number;
+  tranChiDuocTbN1!: number;
+  ncauChiCuaDviN1!: number;
+  clechTranChiVsNcauN1: number;
+  tranChiDuocTbN2!: number;
+  ncauChiCuaDviN2!: number;
+  clechTranChiVsNcauN2: number;
+  tranChiDuocTbN3!: number;
+  ncauChiCuaDviN3!: number;
+  clechTranChiVsNcauN3: number;
+  maNoiDung!: string;
+  maNhomChi!: string;
+  maLoaiChi!: string;
   id!: any;
   maBcao!: String;
   stt!: String;
   checked!:boolean;
 }
 
-export class AllItemData {
-  luongXuatGaoVtro!: number;
-  luongXuatThocVtro!: number;
-  lstCTiet: ItemData[] = [];
-}
-
 @Component({
-  selector: 'app-nhu-cau-xuat-hang-vien-tro',
-  templateUrl: './nhu-cau-xuat-hang-vien-tro.component.html',
-  styleUrls: ['./nhu-cau-xuat-hang-vien-tro.component.scss']
+  selector: 'app-du-toan-xuat-nhap-hang-dtqg-hang-nam',
+  templateUrl: './du-toan-xuat-nhap-hang-dtqg-hang-nam.component.html',
+  styleUrls: ['./du-toan-xuat-nhap-hang-dtqg-hang-nam.component.scss'],
 })
 
-
-export class NhuCauXuatHangVienTroComponent implements OnInit {
-
+export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
-  chiTieus: any = [];           // danh muc chi tieu
-  donVis: any = [];             // danh muc don vi
-  lstCTietBCao: AllItemData[] = [];
-  lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
-  tongSo: number = 0;                            // tong kinh phi
-  luongXuatGaoVtro!: number;
-  luongXuatThocVtro!: number;
+  noiDungs: any = [];                         // danh muc noi dung
+  nhomChis:any = [];                          // danh muc nhom chi
+  loaiChis:any = [];                          // danh muc loai chi
+  donVis:any = [];                            // danh muc don vi
+  lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -111,7 +110,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private nguoiDungSerivce: UserService,
+              private nguoiDungSerivce: NguoiDungService,
               private danhMucService: DanhMucService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -119,7 +118,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.id = +this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -155,10 +154,52 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //get danh muc noi dung
-    this.danhMucService.dmchitieu().subscribe(
+    this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.chiTieus = data.data?.content;
+          this.noiDungs = data.data?.content;
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = err.error.message;
+      }
+    );
+
+    //get danh muc nhom chi
+    this.danhMucService.dMNhomChi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.nhomChis = data.data?.content;
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = err.error.message;
+      }
+    );
+
+    //get danh muc loai chi
+    this.danhMucService.dMLoaiChi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.loaiChis = data.data?.content;
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = err.error.message;
+      }
+    );
+
+    //get danh muc loai chi
+    this.danhMucService.dMLoaiChi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.loaiChis = data.data?.content;
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -209,34 +250,56 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // xoa
   xoa() {
-    this.lstCTiet = [];
+    this.lstCTietBCao = [];
     this.lstFile = [];
     this.listFile = []
   }
 
+  // luu
+  luu() {
+    // lay id file dinh kem
+    let idFileDinhKems = ""
+    for (let i = 0; i < this.lstFile.length; i++) {
+      idFileDinhKems += this.lstFile[i].id + ",";
+    }
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: this.chiTietBcaos.id,
+      idFileDinhKem: idFileDinhKems,
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: this.maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao,
+      namBcao: this.namBaoCaoHienHanh,
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      (data) => {
+        alert("trinh duyet thanh cong!");
+        console.log(data);
+      },
+      (err) => {
+        alert("trinh duyet that bai!");
+        console.log();
+      })
+    this.spinner.hide();
+  }
+
+
   // trinh duyet
-  async luu() {
+  async trinhduyet() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTiet.filter(item => {
+    this.lstCTietBCao.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
       }
     })
-
-    let object = {
-      luongXuatGaoVtro : this.luongXuatGaoVtro,
-      luongXuatThocVtro : this.luongXuatThocVtro,
-      lstCTiet : this.lstCTiet
-    }
-
-    this.lstCTietBCao.push(object);
-
-    console.log(object);
 
     // gui du lieu trinh duyet len server
     let request = {
@@ -277,11 +340,12 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         }
       })
     }
-    this.lstCTiet.filter(item => {
+    this.lstCTietBCao.filter(item => {
       if (!item.id) {
         item.id = uuid.v4();
       }
     });
+    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -299,7 +363,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       }
     });
     this.spinner.hide();
-    this.updateEditCache();
   }
 
   //thay doi trang thai
@@ -325,16 +388,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-          if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
-          ) {
-            this.status = false;
-          } else {
-            this.status = true;
-          }
 
           // set list id file ban dau
           this.lstFile.filter(item => {
@@ -377,16 +430,26 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      maVtuTbi: 0,
-      sl: 0,
-      maDviVtuTbi: 0,
+      namHhanhN!: 0,
+      tranChiDuocTbN1!: 0,
+      ncauChiCuaDviN1!: 0,
+      clechTranChiVsNcauN1: 0,
+      tranChiDuocTbN2!: 0,
+      ncauChiCuaDviN2!: 0,
+      clechTranChiVsNcauN2: 0,
+      tranChiDuocTbN3!: 0,
+      ncauChiCuaDviN3!: 0,
+      clechTranChiVsNcauN3: 0,
+      maNoiDung!: "",
+      maNhomChi!: "",
+      maLoaiChi!: "",
+      maBcao: "",
       stt: "",
       id: uuid.v4(),
       checked:false,
-      maBcao: "",
     }
 
-    this.lstCTiet.splice(id, 0, item);
+    this.lstCTietBCao.splice(id, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
@@ -395,22 +458,22 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
-      this.listIdDelete += id + ","
+      this.listIdDelete += id + ",";
     }
   }
 
   // xóa với checkbox
   deleteSelected() {
     // add list delete id
-    this.lstCTiet.filter(item => {
+    this.lstCTietBCao.filter(item => {
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTiet = this.lstCTiet.filter(item => item.checked != true )
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
     this.allChecked = false;
   }
 
@@ -435,29 +498,31 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     fileSaver.saveAs(blob, file.name);
   }
 
+  // click o checkbox all
   updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      this.lstCTiet = this.lstCTiet.map(item => ({
+    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
+    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.lstCTiet = this.lstCTiet.map(item => ({
+      this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
         ...item,
         checked: false
       }));
     }
   }
 
+  // click o checkbox single
   updateSingleChecked(): void {
-    if (this.lstCTiet.every(item => !item.checked)) {
+    if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.lstCTiet.every(item => item.checked)) {
+    } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
       this.allChecked = true;
       this.indeterminate = false;
-    } else {
+    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
       this.indeterminate = true;
     }
   }
@@ -466,41 +531,53 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
   }
 
+  // lay ten trang thai
   getStatusName(){
     const utils = new Utils();
     return utils.getStatusName(this.trangThaiBanGhi);
   }
 
+  // lay ten don vi tao
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
+  // start edit
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
 
+  // huy thay doi
   cancelEdit(id: string): void {
-    const index = this.lstCTiet.findIndex(item => item.id === id);
-
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
-      data: { ...this.lstCTiet[index] },
+      data: { ...this.lstCTietBCao[index] },
       edit: false
     };
   }
 
+  // luu thay doi
   saveEdit(id: string): void {
-    const index = this.lstCTiet.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
-    Object.assign(this.lstCTiet[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   }
 
+  // gan editCache.data == lstCTietBCao
   updateEditCache(): void {
-    this.lstCTiet.forEach(item => {
+    this.lstCTietBCao.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
       };
     });
+  }
+
+  //gia tri cac o input thay doi thi tinh toan lai
+  changeModel(id: string): void {
+    this.editCache[id].data.clechTranChiVsNcauN1 = this.editCache[id].data.ncauChiCuaDviN1 - this.editCache[id].data.tranChiDuocTbN1;
+    this.editCache[id].data.clechTranChiVsNcauN2 = this.editCache[id].data.ncauChiCuaDviN2 - this.editCache[id].data.tranChiDuocTbN2;
+    this.editCache[id].data.clechTranChiVsNcauN3 = this.editCache[id].data.ncauChiCuaDviN3 - this.editCache[id].data.tranChiDuocTbN3;
   }
 }
