@@ -114,7 +114,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -286,6 +286,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       }
     });
     this.spinner.hide();
+    this.updateEditCache()
   }
 
   // chuc nang check role
@@ -504,10 +505,4 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       };
     });
   }
-
-  // changeModel(id: string): void {
-  //   this.editCache[id].data.clechTranChiVsNcauN1 = this.editCache[id].data.ncauChiCuaDviN1 - this.editCache[id].data.tranChiDuocTbN1;
-  //   this.editCache[id].data.clechTranChiVsNcauN2 = this.editCache[id].data.ncauChiCuaDviN2 - this.editCache[id].data.tranChiDuocTbN2;
-  //   this.editCache[id].data.clechTranChiVsNcauN3 = this.editCache[id].data.ncauChiCuaDviN3 - this.editCache[id].data.tranChiDuocTbN3;
-  // }
 }

@@ -119,7 +119,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -202,40 +202,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.listFile = []
   }
 
-  // luu
-  luu() {
-    // lay id file dinh kem
-    let idFileDinhKems = ""
-    for (let i = 0; i < this.lstFile.length; i++) {
-      idFileDinhKems += this.lstFile[i].id + ",";
-    }
-    // gui du lieu trinh duyet len server
-    let request = {
-      id: this.chiTietBcaos.id,
-      idFileDinhKem: idFileDinhKems,
-      lstCTietBCao: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
-      namBcao: this.namBaoCaoHienHanh,
-    };
-    this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-      (data) => {
-        alert("trinh duyet thanh cong!");
-        console.log(data);
-      },
-      (err) => {
-        alert("trinh duyet that bai!");
-        console.log();
-      })
-    this.spinner.hide();
-  }
-
-
   // trinh duyet
-  async trinhduyet() {
+  async luu() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -293,6 +261,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       }
     });
     this.spinner.hide();
+    this.updateEditCache()
   }
 
   // chuc nang check role
