@@ -345,6 +345,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         item.id = uuid.v4();
       }
     });
+    this.updateEditCache();
     this.spinner.hide();
   }
 

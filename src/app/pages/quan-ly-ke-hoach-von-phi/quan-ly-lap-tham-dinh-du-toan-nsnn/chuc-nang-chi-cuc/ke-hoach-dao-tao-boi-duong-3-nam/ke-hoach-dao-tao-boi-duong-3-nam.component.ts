@@ -238,11 +238,10 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   // luu
-  luu() {
-    // lay id file dinh kem
-    let idFileDinhKems = ""
-    for (let i = 0; i < this.lstFile.length; i++) {
-      idFileDinhKems += this.lstFile[i].id + ",";
+  async luu() {
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
     }
 
     // replace nhung ban ghi dc them moi id thanh null
@@ -255,12 +254,12 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      idFileDinhKem: idFileDinhKems,
+      idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maDvi: this.maDonViTao = "01",
+      maDviTien: this.maDviTien = "01",
+      maLoaiBcao: this.maLoaiBaoCao = "01",
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
@@ -294,67 +293,6 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     this.spinner.hide();
   }
 
-
-  // trinh duyet
-  async trinhduyet() {
-    let listFile: any = [];
-    for (const iterator of this.listFile) {
-      listFile.push(await this.uploadFile(iterator));
-    }
-
-    // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
-    })
-
-    // gui du lieu trinh duyet len server
-    let request = {
-      id: this.id,
-      fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
-    };
-
-    //call service them moi
-    this.spinner.show();
-    if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        data => {
-          if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
-          } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-          }
-        },
-        err => {
-          alert('trinh duyet that bai!');
-          console.log(err);
-        },
-      );
-    } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-        if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
-        } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-        }
-      })
-    }
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-    this.spinner.hide();
-  }
 
   // chuc nang check role
   onSubmit(mcn: String) {

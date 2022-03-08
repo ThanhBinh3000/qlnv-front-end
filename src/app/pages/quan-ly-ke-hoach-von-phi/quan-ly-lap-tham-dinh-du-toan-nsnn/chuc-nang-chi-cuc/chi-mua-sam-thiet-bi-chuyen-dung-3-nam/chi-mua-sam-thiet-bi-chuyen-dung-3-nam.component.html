@@ -14,7 +14,7 @@
                          <i class="icon htvbdh_tcdt_save"></i>
                          <span>Lưu</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="trinhduyet()"
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
                          [hidden]="statusBtnApprove">
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
                          <span>Trình duyệt</span>
@@ -193,18 +193,18 @@
                                                   </td>
                                                   
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache[data.id].data.n1" 
                                                             (change)="changeModel1(data.id)"/>
                                                   </td>
 
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache[data.id].data.n2"
                                                             (change)="changeModel2(data.id)" />
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache[data.id].data.n3"
                                                             (change)="changeModel3(data.id)" />
                                                   </td>
