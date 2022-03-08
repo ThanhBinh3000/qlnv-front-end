@@ -199,10 +199,6 @@ const routes: Routes = [
     path:'thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
     .then((m)=> m.ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namModule),
-<<<<<<< HEAD
-  }
-//>>>>>>> 773303aecd27b8173b6e284f7910b6b9a4702b15
-=======
   },
   {
     path:'du-toan-chi-ung-dung-cntt-giai-doan-3nam',
@@ -430,7 +426,6 @@ const routes: Routes = [
 
 
 
->>>>>>> 75ad018f52a9cc96463b9fbc9e49bb19f7cd2165
 ];
 
 @NgModule({
