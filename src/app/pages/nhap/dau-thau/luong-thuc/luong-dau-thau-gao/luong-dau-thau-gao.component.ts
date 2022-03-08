@@ -26,14 +26,14 @@ export class LuongDauThauGaoComponent implements OnInit {
 
   redirectThongTinChiTieuKeHoachNam() {
     this.router.navigate([
-      '/nhap/dau-thau/thong-tin-luong-dau-thau-gao/',
+      '/nhap/dau-thau/luong-dau-thau-gao/thong-tin-luong-dau-thau-gao/',
       0,
     ]);
   }
 
   redirectSuaThongTinChiTieuKeHoachNam(id) {
     this.router.navigate([
-      '/nhap/dau-thau/thong-tin-luong-dau-thau-gao/',
+      '/nhap/dau-thau/luong-dau-thau-gao/thong-tin-luong-dau-thau-gao/',
       id,
     ]);
   }

@@ -15,6 +15,11 @@ import { ThongTinDauThauComponent } from './luong-thuc/thong-tin-dau-thau/thong-
 import { ChiTietThongTinDauThauComponent } from './luong-thuc/chi-tiet-thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau.component';
 import { DauThauTabComponent } from './dau-thau-tab/dau-thau-tab.component';
 import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu.component';
+import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu.component';
+import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-quyet-dinh.component';
+import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
+import { QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
+import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-
     ChiTietThongTinDauThauComponent,
     DauThauTabComponent,
     KeHoachLuaChonNhaThauVatTuComponent,
+    ThongTinKeHoachLuaChonNhaThauVatTuComponent,
+    DuThaoQuyetDinhComponent,
+    NhapQuyetDinhComponent,
+    QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
+    ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })

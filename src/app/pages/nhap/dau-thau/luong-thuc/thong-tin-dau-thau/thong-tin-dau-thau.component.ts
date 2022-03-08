@@ -23,6 +23,6 @@ export class ThongTinDauThauComponent implements OnInit {
   }
 
   redirectToChiTiet() {
-    this.router.navigate(['/nhap/dau-thau/chi-tiet-thong-tin-dau-thau', 1]);
+    this.router.navigate(['/nhap/dau-thau/thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau', 1]);
   }
 }

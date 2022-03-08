@@ -104,7 +104,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt',
+      '/nhap/dau-thau/quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt',
       id,
     ]);
   }

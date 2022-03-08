@@ -18,11 +18,14 @@ export class DauThauTabComponent implements OnInit {
   @Input() selectedIndex: number = 0;
   routerUrl: string = "";
   selectedTabNow: number = 0;
+  defaultUrl: string = '/nhap/dau-thau/'
 
   constructor(
     private router: Router,
   ) {
-    this.routerUrl = this.router.url;
+    if (this.router.url) {
+      this.routerUrl = this.router.url.replace(this.defaultUrl, '');
+    }
   }
 
   ngOnInit(): void {
@@ -32,7 +35,7 @@ export class DauThauTabComponent implements OnInit {
   redirect(url: string) {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
-    this.router.navigate([url]);
+    this.router.navigate([this.defaultUrl + url]);
   }
 
   showDetailTab(tab: string) {

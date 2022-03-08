@@ -4,7 +4,9 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subject } from 'rxjs';
+import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 
 interface ItemData {
   id: string;
@@ -18,11 +20,11 @@ interface ItemData {
   tongTien: string;
 }
 @Component({
-  selector: 'thong-tin-luong-dau-thau-gao',
-  templateUrl: './thong-tin-luong-dau-thau-gao.component.html',
-  styleUrls: ['./thong-tin-luong-dau-thau-gao.component.scss'],
+  selector: 'thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
+  templateUrl: './thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component.html',
+  styleUrls: ['./thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component.scss'],
 })
-export class ThongTinLuongDauThauGaoComponent implements OnInit {
+export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
@@ -34,7 +36,10 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   editId: string | null = null;
   listOfData: ItemData[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private modal: NzModalService,
+  ) { }
 
   startEdit(id: string): void {
     this.editId = id;
@@ -66,8 +71,19 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
     this.listOfData = this.listOfData.filter((d) => d.id !== id);
   }
 
-  tongHopDeXuatTuCuc(id: string): void {
-    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, id])
+  layThongTinPhuongAn(id: string): void {
+    this.modal.create({
+      nzTitle: 'Thông tin phụ lục KH LNCT cho các Cục DTNN KV',
+      nzContent: DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
   }
 
   ngOnInit(): void {

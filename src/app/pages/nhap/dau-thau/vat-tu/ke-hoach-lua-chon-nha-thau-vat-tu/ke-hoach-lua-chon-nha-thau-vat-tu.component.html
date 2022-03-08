@@ -7,13 +7,13 @@
         <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="12">
-              <label class="search__label">Số đề xuất</label>
-              <input class="search__input" placeholder="Số đề xuất" nz-input [(ngModel)]="searchFilter.soDxuat" />
+              <label class="search__label">Số tờ trình</label>
+              <input class="search__input" placeholder="Số tờ trình" nz-input />
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label">Ngày ký từ ngày</label>
+              <label class="search__label">Từ ngày</label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
+                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
@@ -22,23 +22,10 @@
                 [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Trích yếu</label>
-              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
-            </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Đơn vị</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Nội dung tờ trình</label>
+              <textarea rows="3" class="search__input" placeholder="Nội dung tờ trình" nz-input
+                [(ngModel)]="searchFilter.trichYeu"></textarea>
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -55,19 +42,19 @@
             <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
-        <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
+        <nz-card nzTitle="DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU - vẬT TƯ" [nzExtra]="tableCard1"
           class="mt16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable">
             <thead>
               <tr>
                 <th class="text-center" width="60px">STT</th>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
                 <th width="130px">Số đề xuất</th>
-                <th width="175px">Ngày ký</th>
-                <th width="175px">Đơn vị đề xuất</th>
-                <th width="">Trích yếu</th>
+                <th width="175px">Ngày đề xuất</th>
+                <th width="175px" class="text-center">Đơn vị đề xuất</th>
+                <th width="">Về việc</th>
+                <th width="175px">Loại vật tư</th>
+                <th width="175px">Năm kế hoạch</th>
+                <th width="175px">Số tờ trình</th>
                 <th width="175px">Trạng thái</th>
                 <th width="130px"></th>
               </tr>
@@ -75,13 +62,13 @@
             <tbody>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
                 <td>{{ data.soDxuat }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.trichYeu }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
