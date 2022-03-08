@@ -6,6 +6,7 @@
 @import './common/modal.scss';
 @import './common/form.scss';
 @import './common/dropdown.scss';
+@import './common/detail.scss';
 
 %status {
   padding: 2px 8px;
@@ -915,6 +916,10 @@ cdk-virtual-scroll-viewport {
 
 .do {
   color: $red $i;
+}
+
+.den {
+  color: $color-text $i;
 }
 
 .cam {
@@ -1848,7 +1853,7 @@ li.nav-item.prev {
 }
 
 .ant-card {
-  border: none;
+  // border: none;
   box-shadow: unset;
   // margin-bottom: 12px;
 
@@ -3643,7 +3648,7 @@ td textarea:focus.ant-input {
 }
 
 .ant-table table .ant-table-tbody > tr > td {
-  max-width: $maxTD-w;
+  // max-width: $maxTD-w;
   & > .antext > span,
   & > .antext > span > span,
   & > .antext {

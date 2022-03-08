@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?nq6l5t');
-  src:  url('fonts/htvbdh.eot?nq6l5t#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?nq6l5t') format('truetype'),
-    url('fonts/htvbdh.woff?nq6l5t') format('woff'),
-    url('fonts/htvbdh.svg?nq6l5t#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?cqcegt');
+  src:  url('fonts/htvbdh.eot?cqcegt#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?cqcegt') format('truetype'),
+    url('fonts/htvbdh.woff?cqcegt') format('woff'),
+    url('fonts/htvbdh.svg?cqcegt#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet:before {
+  content: "\eaf1";
+}
+.htvbdh_tcdt_tong-hop-de-xuat-tu-cuc:before {
+  content: "\eaf2";
+}
 .htvbdh_tcdt_icon-common:before {
   content: "\eaf0";
 }

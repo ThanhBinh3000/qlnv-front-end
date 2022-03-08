@@ -57,13 +57,13 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + "/qlnv-khoachphi/bao-cao/them-moi",
+      this.urlDefault + "/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi",
       request,
     )
   }
 
   // upload list
   updatelist(request:any):Observable<any>{
-    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/bao-cao/cap-nhat',request)
+    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',request)
   }
 }
