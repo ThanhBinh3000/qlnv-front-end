@@ -9,4 +9,5 @@ export class KeHoachMuoi {
   xtnTongSoMuoi: number;
   xtnMuoi: ItemDetail[];
   tkcnTongSoMuoi: number;
+  tenDonVi: string;
 }

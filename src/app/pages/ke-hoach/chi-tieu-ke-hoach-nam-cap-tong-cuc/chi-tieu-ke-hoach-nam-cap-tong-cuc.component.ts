@@ -113,8 +113,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    this.totalRecord = 10;
-    console.log(body);
+    this.totalRecord = 0;
 
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

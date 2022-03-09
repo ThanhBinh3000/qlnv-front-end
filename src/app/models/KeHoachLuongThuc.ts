@@ -20,4 +20,6 @@ export class KeHoachLuongThuc {
   tkcnTongSoQuyThoc: number;
   tkcnTongThoc: number;
   tkcnTongGao: number;
+  tenDonvi: string;
+  maDonvi: string;
 }

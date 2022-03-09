@@ -103,7 +103,8 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
-            <nz-table #groupingTable [nzData]="listThoc" nzBordered class="table__body" id="table-luong-thuc">
+            <nz-table #groupingTable [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body"
+              id="table-luong-thuc">
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
@@ -319,7 +320,8 @@
             </nz-table>
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi">
-            <nz-table #groupingTableMuoi [nzData]="listMuoi" nzBordered class="table__body" id="table-muoi">
+            <nz-table #groupingTableMuoi [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body"
+              id="table-muoi">
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
@@ -445,7 +447,8 @@
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
             (nzClick)="tabSelected = tab.vatTu">
-            <nz-table #groupingTable [nzData]="listVatTu" nzBordered class="table__body" id="table-vat-tu">
+            <nz-table #groupingTableVatTu [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body"
+              id="table-vat-tu">
               <thead>
                 <tr>
                   <th rowspan="3">STT</th>
@@ -471,31 +474,35 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td rowspan="11">1</td>
-                  <td rowspan="11">Hà Nội</td>
+                <tr *ngFor="let itemVatTu of groupingTableVatTu.data">
+                  <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.stt}}</td>
+                  <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.tenDonVi}}</td>
                 </tr>
-                <tr class="table__header-vat-tu">
-                  <td>Xuồng cao tốc các loại</td>
-                  <td>Bộ</td>
-                  <td>14,316</td>
-                  <td>6000</td>
-                  <td></td>
-                  <td>3000</td>
-                  <td>3,000</td>
-                  <td>14,316</td>
-                </tr>
-                <tr *ngFor="let item of xuongCaoTocCacLoais">
-                  <td>+ loại DT1</td>
-                  <td>Bộ</td>
-                  <td>14,316</td>
-                  <td>6000</td>
-                  <td></td>
-                  <td>3000</td>
-                  <td>3,000</td>
-                  <td>14,316</td>
-                </tr>
-                <tr class="table__header-vat-tu">
+                <ng-container *ngFor="let itemVatTu of groupingTableVatTu.data">
+                  <tr class="table__header-vat-tu" *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
+                    <td>{{itemNhomVatTu.tenVatTuCha}}</td>
+                    <td>{{itemNhomVatTu.donViTinh}}</td>
+                    <td>{{itemNhomVatTu.tongNhap}}</td>
+                    <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
+                    <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
+                    <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
+                    <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
+                    <td>{{itemNhomVatTu.nhapTrongNam}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngFor="let itemVatTu of groupingTableVatTu.data">
+                  <tr *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
+                    <td>+ loại DT1</td>
+                    <td>Bộ</td>
+                    <td>14,316</td>
+                    <td>6000</td>
+                    <td></td>
+                    <td>3000</td>
+                    <td>3,000</td>
+                    <td>14,316</td>
+                  </tr>
+                </ng-container>
+                <!-- <tr class="table__header-vat-tu">
                   <td>Máy phát điện</td>
                   <td>Bộ</td>
                   <td>14,316</td>
@@ -537,7 +544,7 @@
                   <td>3000</td>
                   <td>3,000</td>
                   <td>14,316</td>
-                </tr>
+                </tr> -->
               </tbody>
             </nz-table>
           </nz-tab>

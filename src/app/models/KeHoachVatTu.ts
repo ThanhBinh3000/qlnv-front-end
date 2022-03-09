@@ -1,14 +1,31 @@
-import { ItemDetail } from './ItemDetail';
 export class KeHoachVatTu {
-  namKeHoach: number;
-  ngayHieuLuc: string;
-  ngayKy: string;
-  soQuyetDinh: string;
-  tenTrangThai: string;
-  trangThai: string;
-  trichYeu: string;
+  id: number;
+  donViId: number;
+  maDonVi: string;
+  tenDonVi: string;
+  stt: number;
+  nhomVatTuThietBi: Array<NhomVatTuThietBi>;
 }
 
+export class NhomVatTuThietBi {
+  donViTinh: string;
+  maVatTuCha: string;
+  nhapTrongNam: number;
+  stt: number;
+  tenVatTuCha: string;
+  tongCacNamTruoc: number;
+  tongNhap: number;
+  vatTuChaId: number;
+  cacNamTruoc: Array<CacNamTruoc>;
+  vatTuThietBi: Array<VatTuThietBi>;
+}
+
+export class CacNamTruoc {
+  id: number;
+  nam: number;
+  soLuong: number;
+  vatTuId: number;
+}
 export class VatTuThietBi {
   donViTinh: string;
   maVatTu: string;
@@ -22,11 +39,4 @@ export class VatTuThietBi {
   vatTuChaId: number;
   vatTuId: number;
   cacNamTruoc: Array<CacNamTruoc>;
-}
-
-export class CacNamTruoc {
-  id: number;
-  nam: number;
-  soLuong: number;
-  vatTuId: number;
 }
