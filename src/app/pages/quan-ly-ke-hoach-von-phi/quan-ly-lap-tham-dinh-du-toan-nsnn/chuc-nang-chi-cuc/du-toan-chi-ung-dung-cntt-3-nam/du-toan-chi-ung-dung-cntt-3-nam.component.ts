@@ -83,7 +83,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-  statusBtnSave: boolean = false;                      // trang thai an/hien nut luu
+  statusBtnSave: boolean;                      // trang thai an/hien nut luu
   statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
   statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
@@ -127,7 +127,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private nguoiDungSerivce: UserService,
+    private userSerivce: UserService,
     private danhMucService: DanhMucService,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -136,7 +136,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = localStorage.getItem('userName');
+    let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();
@@ -163,7 +163,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -232,7 +232,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
+    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data

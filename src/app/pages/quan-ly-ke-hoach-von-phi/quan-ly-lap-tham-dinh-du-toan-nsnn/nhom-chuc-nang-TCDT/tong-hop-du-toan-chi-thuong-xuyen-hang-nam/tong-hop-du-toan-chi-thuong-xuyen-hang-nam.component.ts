@@ -43,6 +43,9 @@ export class ItemData {
 })
 
 export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
+  maDvi: any;
+  maLoaiBacao: string = '25';
+  nam: any;
   donVis: any = [];
   tong: ItemData = new ItemData();
   userInfo: any;
@@ -138,8 +141,19 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = localStorage.getItem('userName');
     let userInfo: any = await this.getUserInfo(userName); //get user info
+
+    //check prama dieu huong router
+    this.maDvi = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBacao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.nam = this.routerActive.snapshot.paramMap.get('nam');
     if (this.id) {
       this.getDetailReport();
+    } else if (
+      this.maDvi != null &&
+      this.maLoaiBacao != null &&
+      this.nam != null
+    ) {
+      this.calltonghop();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -163,7 +177,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    //this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -610,4 +624,38 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.tong.k341ChiTxKhongDmuc -= item.k341ChiTxKhongDmuc;
     this.tong.k341Tcong -= item.k341Tcong;
   }
+
+  //call tong hop
+  calltonghop(){
+    this.spinner.hide();
+    let objtonghop={
+        maDvi: this.maDvi,
+        maLoaiBcao: this.maLoaiBacao,
+        namHienTai: this.nam,
+    }
+    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
+        if(res.statusCode==0){
+            this.lstCTietBCao = res.data;
+            // this.namBaoCao = this.namBcao;
+            this.namBaoCaoHienHanh = new Date().getFullYear();
+            if(this.lstCTietBCao==null){
+                this.lstCTietBCao =[];
+            }
+            console.log(this.lstCTietBCao)
+            //this.namBcaohienhanh = this.namBcaohienhanh
+        }else{
+            alert('co loi trong qua trinh van tin');
+        }
+    },err =>{
+        alert(err.error.message);
+    });
+    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
+        if (res.statusCode == 0) {
+            this.maBaoCao = res.data;
+        } else {
+            this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+        }
+    })
+    this.spinner.show();
+}
 }
