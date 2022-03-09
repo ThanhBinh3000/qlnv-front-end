@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -10,6 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucService } from '../../../../../services/danhMuc.service';
 import { Utils } from "../../../../../Utility/utils";
+import { MESSAGE } from '../../../../../constants/message';
+
 export class ItemData {
   namHhanhN!: number;
   tranChiDuocTbN1!: number;
@@ -112,6 +115,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private danhMucService: DanhMucService,
               private userService: UserService,
+              private notification: NzNotificationService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -122,7 +126,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -133,17 +137,16 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
-
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -152,18 +155,18 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+    debugger
     //get danh muc noi dung
     this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.noiDungs = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -173,11 +176,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.nhomChis = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -187,11 +190,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.loaiChis = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -201,11 +204,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.loaiChis = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -215,11 +218,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.hide();
@@ -233,11 +236,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.userInfo = data?.data
           return data?.data;
         } else {
-
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     return userInfo;
@@ -289,23 +292,25 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           console.log(err);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
+      },err =>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
     this.lstCTietBCao.filter(item => {
@@ -316,68 +321,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.updateEditCache();
     this.spinner.hide();
   }
-
-
-  // trinh duyet
-  // async trinhduyet() {
-  //   let listFile: any = [];
-  //   for (const iterator of this.listFile) {
-  //     listFile.push(await this.uploadFile(iterator));
-  //   }
-
-  //   // replace nhung ban ghi dc them moi id thanh null
-  //   this.lstCTietBCao.filter(item => {
-  //     if (typeof item.id != "number") {
-  //       item.id = null;
-  //     }
-  //   })
-
-  //   // gui du lieu trinh duyet len server
-  //   let request = {
-  //     id: this.id,
-  //     fileDinhKems: listFile,
-  //     listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-  //     lstCTietBCao: this.lstCTietBCao,
-  //     maBcao: this.maBaoCao,
-  //     maDvi: this.maDonViTao,
-  //     maDviTien: this.maDviTien,
-  //     maLoaiBcao: this.maLoaiBaoCao,
-  //     namHienHanh: this.namBaoCaoHienHanh,
-  //     namBcao: this.namBaoCaoHienHanh,
-  //   };
-
-  //   //call service them moi
-  //   this.spinner.show();
-  //   if (this.id == null) {
-  //     this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-  //       data => {
-  //         if (data.statusCode == 0) {
-  //           alert('trinh duyet thanh cong!');
-  //         } else {
-  //           alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-  //         }
-  //       },
-  //       err => {
-  //         alert('trinh duyet that bai!');
-  //         console.log(err);
-  //       },
-  //     );
-  //   } else {
-  //     this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-  //       if (res.statusCode == 0) {
-  //         alert('trinh duyet thanh cong!');
-  //       } else {
-  //         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-  //       }
-  //     })
-  //   }
-  //   this.lstCTietBCao.filter(item => {
-  //     if (!item.id) {
-  //       item.id = uuid.v4();
-  //     }
-  //   });
-  //   this.spinner.hide();
-  // }
 
   // chuc nang check role
   onSubmit(mcn: String) {
@@ -391,7 +334,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }
@@ -402,9 +350,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -418,22 +366,28 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
+          debugger
           this.trangThaiBanGhi = data.data.trangThai;
 
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
           })
+
+          if (this.trangThaiBanGhi == '1' || this.trangThaiBanGhi == '3' || this.trangThaiBanGhi == '5' || this.trangThaiBanGhi == '8') {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file
@@ -452,7 +406,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         return objfile;
       },
       err => {
-        console.log('false :', err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     return temp;

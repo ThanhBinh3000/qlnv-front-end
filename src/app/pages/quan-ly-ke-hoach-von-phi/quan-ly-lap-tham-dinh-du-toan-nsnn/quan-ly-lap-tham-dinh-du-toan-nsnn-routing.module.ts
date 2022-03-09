@@ -36,7 +36,6 @@ const routes: Routes = [
       ).then((m) => m.ChiThuongXuyen3NamModule),
   },
   {
-//<<<<<<< HEAD
     path: 'ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam',
     loadChildren: () =>
       import(
@@ -138,14 +137,14 @@ const routes: Routes = [
     path:'ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-TCDT/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
+        './nhom-chuc-nang-TCDT/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-DTQG-giai-doan-3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
       ).then((m) => m.KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namModule),
   },
   {
     path:'ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/:id',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-TCDT/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
+        './nhom-chuc-nang-TCDT/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-DTQG-giai-doan-3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
       ).then((m) => m.KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namModule),
   },
 
@@ -240,132 +239,132 @@ const routes: Routes = [
     path:'ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-TCDT/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
+        './nhom-chuc-nang-TCDT/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-DTQG-giai-doan-3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
       ).then((m) => m.KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namModule),
   },
   {
     path:'thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
     .then((m)=> m.ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namModule),
   },
   {
     path:'thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
     .then((m)=> m.ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namModule),
   },
   {
     path:'thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/thuyetminhchicacdetai-duannghiencuukhoahocgiaidoan3nam.module')
     .then((m)=> m.ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namModule),
   },
   {
     path:'du-toan-chi-ung-dung-cntt-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchiungdungCNTTgiaidoan3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-ung-dung-CNTT-giai-doan-3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
     .then(m => m.DutoanchiungdungCNTTgiaidoan3namModule),
   },
   {
     path:'du-toan-chi-ung-dung-cntt-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchiungdungCNTTgiaidoan3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-ung-dung-CNTT-giai-doan-3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
     .then(m => m.DutoanchiungdungCNTTgiaidoan3namModule),
   },
   {
     path:'du-toan-chi-ung-dung-cntt-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchiungdungCNTTgiaidoan3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-ung-dung-CNTT-giai-doan-3nam/dutoanchiungdungCNTTgiaidoan3nam.module')
     .then(m => m.DutoanchiungdungCNTTgiaidoan3namModule),
   },
   {
     path:'du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchimuasammaymocthietbichuyendung3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-mua-sam-may-moc-thiet-bi-chuyen-dung-3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
     .then(m => m.Dutoanchimuasammaymocthietbichuyendung3namModule),
   },
   {
     path:'du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchimuasammaymocthietbichuyendung3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-mua-sam-may-moc-thiet-bi-chuyen-dung-3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
     .then(m => m.Dutoanchimuasammaymocthietbichuyendung3namModule),
   },
   {
     path:'du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/dutoanchimuasammaymocthietbichuyendung3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-mua-sam-may-moc-thiet-bi-chuyen-dung-3nam/dutoanchimuasammaymocthietbichuyendung3nam.module')
     .then(m => m.Dutoanchimuasammaymocthietbichuyendung3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchingansachnhanuocgiadoan3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
     .then(m => m.Tonghopnhucauchingansachnhanuocgiadoan3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchingansachnhanuocgiadoan3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
     .then(m => m.Tonghopnhucauchingansachnhanuocgiadoan3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchingansachnhanuocgiadoan3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/tonghopnhucauchingansachnhanuocgiadoan3nam.module')
     .then(m => m.Tonghopnhucauchingansachnhanuocgiadoan3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchithuongxuyengiaidoan3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Tonghopnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchithuongxuyengiaidoan3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Tonghopnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopnhucauchithuongxuyengiaidoan3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/tonghopnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Tonghopnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/chitietnhucauchithuongxuyengiaidoan3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Chitietnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/chitietnhucauchithuongxuyengiaidoan3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Chitietnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/chitietnhucauchithuongxuyengiaidoan3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/chitietnhucauchithuongxuyengiaidoan3nam.module')
     .then(m => m.Chitietnhucauchithuongxuyengiaidoan3namModule),
   },
   {
     path:'tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
     .then(m => m.Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namModule),
   },
   {
     path:'tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/:id',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
     .then(m => m.Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namModule),
   },
   {
     path:'tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/:maDvi/:maLoaiBacao/:nam',
-    loadChildren:() => import('./nhom-chuc-nang-TCDT/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3nam.module')
     .then(m => m.Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namModule),
   },
   {
     path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi',
-    loadChildren:() => import('./Phuongangiaosokiemtratranchi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
+    loadChildren:() => import('./Phuongangiaosokiemtratranchi/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-NSNN-cho-cac-don-vi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
   {
     path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:id',
-    loadChildren:() => import('./Phuongangiaosokiemtratranchi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
+    loadChildren:() => import('./Phuongangiaosokiemtratranchi/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-NSNN-cho-cac-don-vi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
   {
     path:'so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi',
-    loadChildren:() => import('./Phuongangiaosokiemtratranchi/sokiemtratranchiNSNNcuacacdonvi/sokiemtratranchiNSNNcuacacdonvi.module')
+    loadChildren:() => import('./Phuongangiaosokiemtratranchi/so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/sokiemtratranchiNSNNcuacacdonvi.module')
     .then(m => m.SokiemtratranchiNSNNcuacacdonviModule),
   },
   {
     path:'so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:id',
-    loadChildren:() => import('./Phuongangiaosokiemtratranchi/sokiemtratranchiNSNNcuacacdonvi/sokiemtratranchiNSNNcuacacdonvi.module')
+    loadChildren:() => import('./Phuongangiaosokiemtratranchi/so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/sokiemtratranchiNSNNcuacacdonvi.module')
     .then(m => m.SokiemtratranchiNSNNcuacacdonviModule),
   },
   {
@@ -480,8 +479,27 @@ const routes: Routes = [
         './chuc-nang-tong-cuc/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module'
       ).then((m) => m.NhuCauKeHoachDtxd3NamModule),
   },
-
-
+  {
+    path: 'tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn',
+    loadChildren: () =>
+      import(
+        './Phuongangiaosokiemtratranchi/tim-kiem-phuong-an-QDCV-giao-so-kiem-tra-NSNN/timkiemphuonganQDCVgiaosokiemtraNSNN.module'
+      ).then((m) => m.TimkiemphuonganQDCVgiaosokiemtraNSNNModule),
+  },
+  {
+    path: 'tim-kiem-so-kiem-tra-tran-chi-nsnn-cua-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './Phuongangiaosokiemtratranchi/tim-kiem-so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/timkiemsokiemtratranchiNSNNcuacacdonvi.module'
+      ).then((m) => m.TimkiemsokiemtratranchiNSNNcuacacdonviModule),
+  },
+  {
+    path: 'qd-cv-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './Phuongangiaosokiemtratranchi/QDCV-giao-so-kiem-tra-tran-chi-NSNN-cho-cac-don-vi/QDCVgiaosokiemtratranchiNSNNchocacdonvi.module'
+      ).then((m) => m.QDCVgiaosokiemtratranchiNSNNchocacdonviModule),
+  },
 
 
 ];
