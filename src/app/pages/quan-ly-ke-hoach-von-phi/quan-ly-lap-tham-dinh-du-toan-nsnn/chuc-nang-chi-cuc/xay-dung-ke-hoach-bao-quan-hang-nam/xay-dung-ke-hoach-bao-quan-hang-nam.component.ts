@@ -31,11 +31,11 @@ export class AllItemData {
 }
 
 @Component({
-  selector: 'app-ke-hoach-bao-quan-hang-nam',
-  templateUrl: './ke-hoach-bao-quan-hang-nam.component.html',
-  styleUrls: ['./ke-hoach-bao-quan-hang-nam.component.scss']
+  selector: 'app-xay-dung-ke-hoach-bao-quan-hang-nam',
+  templateUrl: './xay-dung-ke-hoach-bao-quan-hang-nam.component.html',
+  styleUrls: ['./xay-dung-ke-hoach-bao-quan-hang-nam.component.scss']
 })
-export class KeHoachBaoQuanHangNamComponent implements OnInit {
+export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
   nhoms: any = [];                            // danh muc nhom
@@ -123,7 +123,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = localStorage.getItem('userName');
+    let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();

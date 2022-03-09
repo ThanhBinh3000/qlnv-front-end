@@ -126,7 +126,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      async ngOnInit() {
           this.id = this.routerActive.snapshot.paramMap.get('id');
-          let userName = localStorage.getItem('userName');
+          let userName = this.nguoiDungSerivce.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
           if (this.id) {
                this.getDetailReport();

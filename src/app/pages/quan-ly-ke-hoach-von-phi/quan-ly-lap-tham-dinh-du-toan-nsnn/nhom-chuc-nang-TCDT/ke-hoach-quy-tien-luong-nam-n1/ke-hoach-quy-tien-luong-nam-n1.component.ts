@@ -8,61 +8,50 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
 import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { UserService } from 'src/app/services/user.service';
 export class ItemData {
-  tenDan!:string;
-  maLoaiKhoach!:string;
-  maKhoiDan!:string;
-  maDdiemXdung!:string;
-  ddiemMoTk!:string;
-  maSoDan!:string;
-  maNganhKte!:string;
-  nlucTke!:string;
-  namKcTte!:number;
-  namHtTte!:number;
-  qdDuyetDanDtuSongaythang!:string;
-  qdDuyetDanDtuTongVon!:number;
-  qdDchinhDanDtuSongaythang!:string;
-  qdDchinhDanDtuTongVon!:number;
-  qdDuyetTkDtoanSongaythang!:string;
-  qdDuyetTkDtoanTong!:number;
-  qdDuyetTkDtoanXl!:number;
-  qdDuyetTkDtoanTb!:number;
-  qdDuyetTkDtoanCx!:number;
-  klthCapDen3006Songaythang!:string;
-  klthCapDen3006Nstt!:number;
-  klthCapDen3006DtoanChiTx!:number;
-  klthCapDen3006Quykhac!:number;
-  klthCapDen3112Songaythang!:string;
-  klthCapDen3112Nstt!:number;
-  klthCapDen3112DtoanChiTx!:number;
-  klthCapDen3112Quykhac!:number;
-  ncauVonN1!:number;
-  ncauVonN2!:number;
-  ncauVonN3!:number;
-  ghiChu!:string;
+  maCucDtnnKvuc!:string;
+  bcheGia0N1!:number;
+  dkienCcvcCoMat0101n1!:number;
+  dkienHdongCoMat0101n1!:number;
+  ccvc0101n1Luong!:number;
+  ccvc0101n1Pcap!:number;
+  ccvc0101n1Ckdg!:number;
+  quyLuongTangThemDoNangBacLuongCcvc0101n1!:number;
+  bcheChuaSdungLuongHeSo234!:number;
+  bcheChuaSdungCkdg!:number;
+  quyLuongPcapCkdgTheoLuongHdld!:number;
 
+  // 14
+  bcheChuaSdungCong: number = this.bcheChuaSdungLuongHeSo234 + this.bcheChuaSdungCkdg
+  // 6
+  bcheChuaSdung: number = this.bcheGia0N1 - this.dkienCcvcCoMat0101n1;
+
+  // 9
+  ccvc0101n1Cong: number = this.ccvc0101n1Luong + this.ccvc0101n1Pcap + this.ccvc0101n1Ckdg;
+
+  // 8
+  tongSo: number = this.ccvc0101n1Cong + this.quyLuongTangThemDoNangBacLuongCcvc0101n1 + this.bcheChuaSdungCong;
+
+  // 7
+  tongQuyLuongPcapCkdgTheoLuongCcvcHdld: number = this.tongSo + this.ccvc0101n1Ckdg + this.quyLuongTangThemDoNangBacLuongCcvc0101n1 + this.bcheChuaSdungCkdg
   id!: any;
   maBcao!: String;
   stt!: String;
   checked!:boolean;
 }
+
 @Component({
-  selector: 'app-nhu-cau-ke-hoach-dtxd3-nam',
-  templateUrl: './nhu-cau-ke-hoach-dtxd3-nam.component.html',
-  styleUrls: ['./nhu-cau-ke-hoach-dtxd3-nam.component.scss']
+  selector: 'app-ke-hoach-quy-tien-luong-nam-n1',
+  templateUrl: './ke-hoach-quy-tien-luong-nam-n1.component.html',
+  styleUrls: ['./ke-hoach-quy-tien-luong-nam-n1.component.scss']
 })
 
-export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
+export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
-  maCucDtnnKvucs = [{ id: "", ten: "" }];
-  maLoaiKhoachs!:any;
-  maKhoiDans!:any;
-  maDdiemXdungs!:any;
-  maNganhKtes!:any;
-
+  maCucDtnnKvucs: any = [];     // ma cuc khu vuc
   donVis:any = [];                            // danh muc don vi
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
@@ -107,6 +96,12 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  maDvi: any;
+  maLoaiBacao: any;
+  nam: any;
+  namBcaohienhanh: any;
+  currentday: Date = new Date();
+  mabaocao: any;
 
   // upload file
   addFile() {
@@ -139,12 +134,24 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDvi = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBacao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.nam = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();
-    } else {
+    }
+    else if (
+      this.maDvi != null &&
+      this.maLoaiBacao != null &&
+      this.nam != null
+    ) {
+      this.calltonghop();
+    }
+    else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
       this.maDonViTao = userInfo?.dvql;
@@ -174,59 +181,16 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-    //get danh muc noi dung
-    this.danhMucService.dMLoaiKeHoach().subscribe(
+    this.danhMucService.dMMaCucDtnnKvucs().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.maLoaiKhoachs = data.data?.content;
+          this.maCucDtnnKvucs = data.data?.content;
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc nhom chi
-    this.danhMucService.dMKhoiDuAn().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maKhoiDans = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc loai chi
-    this.danhMucService.dMDiaDiemXayDung().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maDdiemXdungs = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc loai chi
-    this.danhMucService.dMMaNganhKinhTe().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maNganhKtes = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = "err.error.message";
       }
     );
 
@@ -278,6 +242,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // luu
   async luu() {
+    debugger
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -419,37 +384,22 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      tenDan:"",
-      maLoaiKhoach:"",
-      maKhoiDan:"",
-      maDdiemXdung:"",
-      ddiemMoTk:"",
-      maSoDan:"",
-      maNganhKte:"",
-      nlucTke:"",
-      namKcTte:0,
-      namHtTte:0,
-      qdDuyetDanDtuSongaythang:"",
-      qdDuyetDanDtuTongVon:0,
-      qdDchinhDanDtuSongaythang:"",
-      qdDchinhDanDtuTongVon:0,
-      qdDuyetTkDtoanSongaythang:"",
-      qdDuyetTkDtoanTong:0,
-      qdDuyetTkDtoanXl:0,
-      qdDuyetTkDtoanTb:0,
-      qdDuyetTkDtoanCx:0,
-      klthCapDen3006Songaythang:"",
-      klthCapDen3006Nstt:0,
-      klthCapDen3006DtoanChiTx:0,
-      klthCapDen3006Quykhac:0,
-      klthCapDen3112Songaythang:"",
-      klthCapDen3112Nstt:0,
-      klthCapDen3112DtoanChiTx:0,
-      klthCapDen3112Quykhac:0,
-      ncauVonN1:0,
-      ncauVonN2:0,
-      ncauVonN3:0,
-      ghiChu:"",
+      maCucDtnnKvuc!: '',
+      bcheGia0N1: 0,
+      dkienCcvcCoMat0101n1: 0,
+      dkienHdongCoMat0101n1: 0,
+      ccvc0101n1Luong: 0,
+      ccvc0101n1Pcap: 0,
+      ccvc0101n1Ckdg: 0,
+      quyLuongTangThemDoNangBacLuongCcvc0101n1: 0,
+      bcheChuaSdungLuongHeSo234: 0,
+      bcheChuaSdungCkdg: 0,
+      quyLuongPcapCkdgTheoLuongHdld: 0,
+      bcheChuaSdungCong: 0,
+      bcheChuaSdung: 0,
+      ccvc0101n1Cong: 0,
+      tongSo: 0,
+      tongQuyLuongPcapCkdgTheoLuongCcvcHdld: 0,
       maBcao: "",
       stt: "",
       id: uuid.v4(),
@@ -575,6 +525,44 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) +  Number(this.editCache[id].data.qdDuyetTkDtoanCx);
+    this.editCache[id].data.bcheChuaSdungCong = Number(this.editCache[id].data.bcheChuaSdungLuongHeSo234) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
+    this.editCache[id].data.bcheChuaSdung = Number(this.editCache[id].data.bcheGia0N1) - Number(this.editCache[id].data.dkienCcvcCoMat0101n1);
+    this.editCache[id].data.ccvc0101n1Cong = Number(this.editCache[id].data.ccvc0101n1Luong) + Number(this.editCache[id].data.ccvc0101n1Pcap) + Number(this.editCache[id].data.ccvc0101n1Ckdg);
+    this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvc0101n1Cong) + Number(this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1) + Number(this.editCache[id].data.bcheChuaSdungCong);
+    this.editCache[id].data.tongQuyLuongPcapCkdgTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvc0101n1Ckdg) + Number(this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
   }
+  //call tong hop
+  calltonghop(){
+    this.spinner.hide();
+    let objtonghop={
+        maDvi: this.maDvi,
+        maLoaiBcao: this.maLoaiBacao,
+        namHienTai: this.nam,
+    }
+    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
+        if(res.statusCode==0){
+            this.lstCTietBCao = res.data;
+            // this.namBaoCao = this.namBcao;
+            this.namBcaohienhanh = this.currentday.getFullYear();
+            if(this.lstCTietBCao==null){
+                this.lstCTietBCao =[];
+            }
+            console.log(this.lstCTietBCao)
+            this.namBcaohienhanh = this.namBcaohienhanh
+        }else{
+            alert('co loi trong qua trinh van tin');
+        }
+    },err =>{
+        alert(err.error.message);
+    });
+    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
+        if (res.statusCode == 0) {
+            this.mabaocao = res.data;
+        } else {
+            this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+        }
+    })
+    this.spinner.show();
 }
+}
+
