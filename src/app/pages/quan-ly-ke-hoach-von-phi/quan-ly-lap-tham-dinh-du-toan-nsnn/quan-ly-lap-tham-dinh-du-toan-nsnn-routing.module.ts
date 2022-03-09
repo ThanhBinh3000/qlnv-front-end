@@ -36,7 +36,6 @@ const routes: Routes = [
       ).then((m) => m.ChiThuongXuyen3NamModule),
   },
   {
-//<<<<<<< HEAD
     path: 'ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam',
     loadChildren: () =>
       import(
@@ -314,14 +313,14 @@ const routes: Routes = [
     path: 'xay-dung-ke-hoach-von-dau-tu',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/xay-dung-ke-hoach-von-dau-tu/xay-dung-ke-hoach-von-dau-tu.module'
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/xay-dung-ke-hoach-von-dau-tu.module'
       ).then((m) => m.XayDungKeHoachVonDauTuModule),
   },
   {
     path: 'xay-dung-ke-hoach-von-dau-tu/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/xay-dung-ke-hoach-von-dau-tu/xay-dung-ke-hoach-von-dau-tu.module'
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/xay-dung-ke-hoach-von-dau-tu.module'
       ).then((m) => m.XayDungKeHoachVonDauTuModule),
   },
   {
@@ -469,9 +468,6 @@ const routes: Routes = [
     loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-du-tru-quoc-gia-gd3-nam/du-toan-chi-du-tru-quoc-gia-gd3-nam.module')
     .then(m => m.DuToanChiDuTruQuocGiaGd3NamModule),
   },
-
-
-
 ];
 
 @NgModule({

@@ -60,6 +60,7 @@
     </div>
   </div>
 </nz-affix>
+
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
@@ -373,13 +374,13 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
                   <button nz-button>
                     <i nz-icon nzType="upload"></i>
                     Select File
                   </button>
                 </nz-upload>
-                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0" [hidden]="status"
+                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
                   style="margin-top: 16px">
                   Thêm vào danh sách
                 </button>
@@ -392,7 +393,7 @@
                   <th nzWidth="50">STT</th>
                   <th nzWidth="170px">Tên file</th>
                   <th nzWidth="150px"></th>
-                  <th nzWidth="150px" [hidden]="status"></th>
+                  <th nzWidth="150px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -411,15 +412,15 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub" [hidden]="status">
+          <button type="button" class="btn btn-sub">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
