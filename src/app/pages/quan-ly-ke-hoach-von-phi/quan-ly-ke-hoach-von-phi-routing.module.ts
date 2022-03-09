@@ -40,6 +40,13 @@ const routes: Routes = [
             (m) => m.QuanLyLapThamDinhDuToanNSNNModule,
           ),
       },
+      {
+        path: 'quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn',
+        loadChildren: () =>
+          import('./quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc.module').then(
+            (m) => m.QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucModule,
+          ),
+      },
     ],
   },
 ];
