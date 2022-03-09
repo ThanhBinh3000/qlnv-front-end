@@ -30,7 +30,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     this.formData = this.fb.group({
       maDonVi: [null, [Validators.required]],
       donViTinh: [null],
-      tenDonvi: [null],
+      tenDonvi: [null, [Validators.required]],
       tkdnTongSoQuyThoc: [null],
       tkdnThocSoLuong1: [null],
       tkdnThocSoLuong2: [null],

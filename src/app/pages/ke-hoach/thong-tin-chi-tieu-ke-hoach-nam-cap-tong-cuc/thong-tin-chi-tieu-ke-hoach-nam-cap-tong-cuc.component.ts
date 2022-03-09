@@ -74,121 +74,124 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         },
       });
       modalLuongThuc.afterClose.subscribe((luongThuc) => {
-        this.keHoachLuongThucDialog = new KeHoachLuongThuc();
-        this.keHoachLuongThucDialog.tenDonvi = luongThuc.value.tenDonvi;
-        this.keHoachLuongThucDialog.maDonvi = luongThuc.value.maDonVi;
-        this.keHoachLuongThucDialog.tkdnTongSoQuyThoc =
-          +luongThuc.value.tkdnTongSoQuyThoc;
-        this.keHoachLuongThucDialog.tkdnTongThoc =
-          +luongThuc.value.tkdnThocSoLuong1 +
-          +luongThuc.value.tkdnThocSoLuong2 +
-          +luongThuc.value.tkdnThocSoLuong3;
-        const tkdnThoc1 = {
-          id: null,
-          nam: 2019,
-          soLuong: +luongThuc.value.tkdnThocSoLuong1,
-          vatTuId: null,
-        };
-        const tkdnThoc2 = {
-          id: null,
-          nam: 2018,
-          soLuong: +luongThuc.value.tkdnThocSoLuong2,
-          vatTuId: null,
-        };
-        const tkdnThoc3 = {
-          id: null,
-          nam: 2017,
-          soLuong: +luongThuc.value.tkdnThocSoLuong3,
-          vatTuId: null,
-        };
-        this.keHoachLuongThucDialog.tkdnThoc = [
-          tkdnThoc1,
-          tkdnThoc2,
-          tkdnThoc3,
-        ];
+        if (luongThuc) {
+          this.keHoachLuongThucDialog = new KeHoachLuongThuc();
+          this.keHoachLuongThucDialog.tenDonvi = luongThuc.value.tenDonvi;
+          this.keHoachLuongThucDialog.maDonvi = luongThuc.value.maDonVi;
+          this.keHoachLuongThucDialog.tkdnTongSoQuyThoc =
+            +luongThuc.value.tkdnTongSoQuyThoc;
+          this.keHoachLuongThucDialog.tkdnTongThoc =
+            +luongThuc.value.tkdnThocSoLuong1 +
+            +luongThuc.value.tkdnThocSoLuong2 +
+            +luongThuc.value.tkdnThocSoLuong3;
+          const tkdnThoc1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +luongThuc.value.tkdnThocSoLuong1,
+            vatTuId: null,
+          };
+          const tkdnThoc2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +luongThuc.value.tkdnThocSoLuong2,
+            vatTuId: null,
+          };
+          const tkdnThoc3 = {
+            id: null,
+            nam: 2017,
+            soLuong: +luongThuc.value.tkdnThocSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.tkdnThoc = [
+            tkdnThoc1,
+            tkdnThoc2,
+            tkdnThoc3,
+          ];
 
-        this.keHoachLuongThucDialog.tkdnTongGao =
-          +luongThuc.value.tkdnGaoSoLuong1 + +luongThuc.value.tkdnGaoSoLuong2;
+          this.keHoachLuongThucDialog.tkdnTongGao =
+            +luongThuc.value.tkdnGaoSoLuong1 + +luongThuc.value.tkdnGaoSoLuong2;
 
-        const tkdnGao1 = {
-          id: null,
-          nam: 2019,
-          soLuong: +luongThuc.value.tkdnGaoSoLuong1,
-          vatTuId: null,
-        };
-        const tkdnGao2 = {
-          id: null,
-          nam: 2018,
-          soLuong: +luongThuc.value.tkdnGaoSoLuong2,
-          vatTuId: null,
-        };
-        this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2];
-        this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
-          +luongThuc.value.ntnTongSoQuyThoc;
-        this.keHoachLuongThucDialog.ntnThoc = +luongThuc.value.ntnThoc;
-        this.keHoachLuongThucDialog.ntnGao = +luongThuc.value.ntnGao;
+          const tkdnGao1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +luongThuc.value.tkdnGaoSoLuong1,
+            vatTuId: null,
+          };
+          const tkdnGao2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +luongThuc.value.tkdnGaoSoLuong2,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2];
+          this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
+            +luongThuc.value.ntnTongSoQuyThoc;
+          this.keHoachLuongThucDialog.ntnThoc = +luongThuc.value.ntnThoc;
+          this.keHoachLuongThucDialog.ntnGao = +luongThuc.value.ntnGao;
 
-        this.keHoachLuongThucDialog.xtnTongSoQuyThoc =
-          +luongThuc.value.xtnTongSoQuyThoc;
+          this.keHoachLuongThucDialog.xtnTongSoQuyThoc =
+            +luongThuc.value.xtnTongSoQuyThoc;
 
-        this.keHoachLuongThucDialog.xtnTongThoc =
-          +luongThuc.value.xtnThocSoLuong1 +
-          +luongThuc.value.xtnThocSoLuong2 +
-          +luongThuc.value.xtnThocSoLuong3;
+          this.keHoachLuongThucDialog.xtnTongThoc =
+            +luongThuc.value.xtnThocSoLuong1 +
+            +luongThuc.value.xtnThocSoLuong2 +
+            +luongThuc.value.xtnThocSoLuong3;
 
-        const xtnThoc1 = {
-          id: null,
-          nam: 2019,
-          soLuong: +luongThuc.value.xtnThocSoLuong1,
-          vatTuId: null,
-        };
-        const xtnThoc2 = {
-          id: null,
-          nam: 2018,
-          soLuong: +luongThuc.value.xtnThocSoLuong2,
-          vatTuId: null,
-        };
-        const xtnThoc3 = {
-          id: null,
-          nam: 2017,
-          soLuong: +luongThuc.value.xtnThocSoLuong3,
-          vatTuId: null,
-        };
-        this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
+          const xtnThoc1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +luongThuc.value.xtnThocSoLuong1,
+            vatTuId: null,
+          };
+          const xtnThoc2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +luongThuc.value.xtnThocSoLuong2,
+            vatTuId: null,
+          };
+          const xtnThoc3 = {
+            id: null,
+            nam: 2017,
+            soLuong: +luongThuc.value.xtnThocSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
 
-        this.keHoachLuongThucDialog.xtnTongGao =
-          +luongThuc.value.xtnGaoSoLuong1 + +luongThuc.value.xtnGaoSoLuong2;
-        const xtnGao1 = {
-          id: null,
-          nam: 2019,
-          soLuong: +luongThuc.value.xtnGaoSoLuong1,
-          vatTuId: null,
-        };
-        const xtnGao2 = {
-          id: null,
-          nam: 2018,
-          soLuong: +luongThuc.value.xtnGaoSoLuong2,
-          vatTuId: null,
-        };
-        this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2];
+          this.keHoachLuongThucDialog.xtnTongGao =
+            +luongThuc.value.xtnGaoSoLuong1 + +luongThuc.value.xtnGaoSoLuong2;
+          const xtnGao1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +luongThuc.value.xtnGaoSoLuong1,
+            vatTuId: null,
+          };
+          const xtnGao2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +luongThuc.value.xtnGaoSoLuong2,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2];
 
-        this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
-          +luongThuc.value.tkcnTongSoQuyThoc;
+          this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
+            +luongThuc.value.tkcnTongSoQuyThoc;
 
-        this.keHoachLuongThucDialog.tkcnTongThoc =
-          +luongThuc.value.tkcnTongThoc;
+          this.keHoachLuongThucDialog.tkcnTongThoc =
+            +luongThuc.value.tkcnTongThoc;
 
-        this.keHoachLuongThucDialog.tkcnTongGao = +luongThuc.value.tkcnTongGao;
+          this.keHoachLuongThucDialog.tkcnTongGao =
+            +luongThuc.value.tkcnTongGao;
 
-        this.keHoachLuongThucDialog.stt =
-          this.thongTinChiTieuKeHoachNam.khLuongThuc?.length + 1;
+          this.keHoachLuongThucDialog.stt =
+            this.thongTinChiTieuKeHoachNam.khLuongThuc?.length + 1;
 
-        this.thongTinChiTieuKeHoachNam.khLuongThuc = [
-          ...this.thongTinChiTieuKeHoachNam.khLuongThuc,
-          this.keHoachLuongThucDialog,
-        ];
+          this.thongTinChiTieuKeHoachNam.khLuongThuc = [
+            ...this.thongTinChiTieuKeHoachNam.khLuongThuc,
+            this.keHoachLuongThucDialog,
+          ];
 
-        console.log(this.thongTinChiTieuKeHoachNam.khLuongThuc);
+          console.log(this.thongTinChiTieuKeHoachNam.khLuongThuc);
+        }
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
       this.handleOpenModal('thongTinVatTuTrongNam');
