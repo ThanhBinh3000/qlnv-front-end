@@ -148,6 +148,7 @@ const routes: Routes = [
         './nhom-chuc-nang-TCDT/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam/kehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3nam.module'
       ).then((m) => m.KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namModule),
   },
+
   {
     path:'tong-hop-du-toan-chi-thuong-xuyen-hang-nam',
     loadChildren: () =>
@@ -157,6 +158,13 @@ const routes: Routes = [
   },
   {
     path:'tong-hop-du-toan-chi-thuong-xuyen-hang-nam/:id',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/tong-hop-du-toan-chi-thuong-xuyen-hang-nam.module'
+      ).then((m) => m.TongHopDuToanChiThuongXuyenHangNamModule),
+  },
+  {
+    path:'tong-hop-du-toan-chi-thuong-xuyen-hang-nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren: () =>
       import(
         './nhom-chuc-nang-TCDT/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/tong-hop-du-toan-chi-thuong-xuyen-hang-nam.module'
@@ -176,6 +184,56 @@ const routes: Routes = [
       import(
         './nhom-chuc-nang-TCDT/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct.module'
       ).then((m) => m.DuToanPhiNhapXuatDtqgHangNamVtctModule),
+  },
+  {
+    path:'du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct.module'
+      ).then((m) => m.DuToanPhiNhapXuatDtqgHangNamVtctModule),
+  },
+  {
+    path:'du-toan-xuat-nhap-hang-dtqg-hang-nam',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/du-toan-xuat-nhap-hang-dtqg-hang-nam/du-toan-xuat-nhap-hang-dtqg-hang-nam.module'
+      ).then((m) => m.DuToanXuatNhapHangDtqgHangNamModule),
+  },
+  {
+    path:'du-toan-xuat-nhap-hang-dtqg-hang-nam/:id',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/du-toan-xuat-nhap-hang-dtqg-hang-nam/du-toan-xuat-nhap-hang-dtqg-hang-nam.module'
+      ).then((m) => m.DuToanXuatNhapHangDtqgHangNamModule),
+  },
+  {
+    path:'du-toan-xuat-nhap-hang-dtqg-hang-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/du-toan-xuat-nhap-hang-dtqg-hang-nam/du-toan-xuat-nhap-hang-dtqg-hang-nam.module'
+      ).then((m) => m.DuToanXuatNhapHangDtqgHangNamModule),
+  },
+
+  {
+    path:'ke-hoach-bao-quan-hang-nam',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/ke-hoach-bao-quan-hang-nam/ke-hoach-bao-quan-hang-nam.module'
+      ).then((m) => m.KeHoachBaoQuanHangNamModule),
+  },
+  {
+    path:'ke-hoach-bao-quan-hang-nam/:id',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/ke-hoach-bao-quan-hang-nam/ke-hoach-bao-quan-hang-nam.module'
+      ).then((m) => m.KeHoachBaoQuanHangNamModule),
+  },
+  {
+    path:'ke-hoach-bao-quan-hang-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-TCDT/ke-hoach-bao-quan-hang-nam/ke-hoach-bao-quan-hang-nam.module'
+      ).then((m) => m.KeHoachBaoQuanHangNamModule),
   },
 
   {
