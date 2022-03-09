@@ -111,7 +111,7 @@
                   <th rowspan="4">CỤC DTNN KHU VỰC</th>
                   <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
                   <th colspan="3">Nhập trong năm (2)</th>
-                  <th colspan="8">Xuât trong năm (3)</th>
+                  <th colspan="8">Xuất trong năm (3)</th>
                   <th colspan="3">Tồn kho cuối năm (4)
                     <br>
                     ( 31/12/2021)
@@ -455,7 +455,7 @@
                   <th rowspan="3">CỤC DTNN KHU VỰC</th>
                   <th rowspan="3">MẶT HÀNG</th>
                   <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                  <th colspan="6">CHỈ TIÊU NHẬP NĂM 2020</th>
+                  <th colspan="6">CHỈ TIÊU NHẬP NĂM {{yearNow}}</th>
                 </tr>
                 <tr>
                   <th rowspan="2">
@@ -463,7 +463,7 @@
                   </th>
                   <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
                   <th rowspan="2">
-                    Kế hoạch 2020
+                    Kế hoạch {{yearNow}}
                   </th>
                 </tr>
                 <tr>
@@ -491,16 +491,18 @@
                   </tr>
                 </ng-container>
                 <ng-container *ngFor="let itemVatTu of groupingTableVatTu.data">
-                  <tr *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
-                    <td>+ loại DT1</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
+                  <ng-container *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
+                    <tr *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
+                      <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
+                      <td>{{itemVatTuThietBi.donViTinh}}</td>
+                      <td>{{itemVatTuThietBi.tongNhap}}</td>
+                      <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
+                      <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
+                      <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
+                      <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
+                      <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
+                    </tr>
+                  </ng-container>
                 </ng-container>
                 <!-- <tr class="table__header-vat-tu">
                   <td>Máy phát điện</td>
