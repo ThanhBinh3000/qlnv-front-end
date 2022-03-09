@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -193,6 +194,23 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
       this.handleOpenModal('thongTinVatTuTrongNam');
+    } else if (this.tabSelected == TAB_SELECTED.muoi) {
+      const modalMuoi = this.modal.create({
+        nzTitle: 'Thông tin muối',
+        nzContent: DialogThemThongTinMuoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          // totalRecord: this.totalRecord,
+          // date: event,
+        },
+      });
+      modalMuoi.afterClose.subscribe((muoi) => {
+        if (muoi) {
+        }
+      });
     }
   }
 
