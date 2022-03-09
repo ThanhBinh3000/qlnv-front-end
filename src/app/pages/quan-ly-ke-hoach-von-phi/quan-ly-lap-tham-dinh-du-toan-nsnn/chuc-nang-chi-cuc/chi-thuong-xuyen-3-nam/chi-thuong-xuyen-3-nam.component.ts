@@ -424,6 +424,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
           })
+
+          if (this.trangThaiBanGhi == '1' || this.trangThaiBanGhi == '3' || this.trangThaiBanGhi == '5' || this.trangThaiBanGhi == '8') {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
