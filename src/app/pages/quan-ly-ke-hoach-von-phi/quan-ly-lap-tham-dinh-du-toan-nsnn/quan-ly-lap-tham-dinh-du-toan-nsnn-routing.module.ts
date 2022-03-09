@@ -36,7 +36,6 @@ const routes: Routes = [
       ).then((m) => m.ChiThuongXuyen3NamModule),
   },
   {
-//<<<<<<< HEAD
     path: 'ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam',
     loadChildren: () =>
       import(
@@ -422,10 +421,6 @@ const routes: Routes = [
         './chuc-nang-tong-cuc/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module'
       ).then((m) => m.NhuCauKeHoachDtxd3NamModule),
   },
-
-
-
-
 ];
 
 @NgModule({
