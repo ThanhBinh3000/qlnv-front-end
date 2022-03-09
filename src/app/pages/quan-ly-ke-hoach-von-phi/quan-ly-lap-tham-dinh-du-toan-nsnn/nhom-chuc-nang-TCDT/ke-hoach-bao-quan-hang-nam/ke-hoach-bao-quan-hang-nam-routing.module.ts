@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DuToanXuatNhapHangDtqgHangNamComponent } from './du-toan-xuat-nhap-hang-dtqg-hang-nam.component';
+import { KeHoachBaoQuanHangNamComponent } from './ke-hoach-bao-quan-hang-nam.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DuToanXuatNhapHangDtqgHangNamComponent,
+    component: KeHoachBaoQuanHangNamComponent,
   },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DuToanXuatNhapHangDtqgHangNamRoutingModule {}
+export class KeHoachBaoQuanHangNamRoutingModule {}

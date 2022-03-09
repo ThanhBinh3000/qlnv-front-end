@@ -106,7 +106,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private nguoiDungSerivce: UserService,
+              private userSerivce: UserService,
               private danhMucService: DanhMucService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -115,7 +115,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = localStorage.getItem('userName');
+    let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();
@@ -167,7 +167,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
+    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
