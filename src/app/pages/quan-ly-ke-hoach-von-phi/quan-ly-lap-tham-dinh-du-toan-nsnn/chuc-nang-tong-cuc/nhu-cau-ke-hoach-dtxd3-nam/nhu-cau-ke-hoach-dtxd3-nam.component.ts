@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
 import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { NguoiDungService } from 'src/app/services/nguoidung.service';
+import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 export class ItemData {
   tenDan!:string;
@@ -131,7 +131,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private nguoiDungSerivce: NguoiDungService,
+              private nguoiDungSerivce: UserService,
               private danhMucService: DanhMucService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -140,7 +140,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = localStorage.getItem('userName');
+    let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();
