@@ -41,8 +41,8 @@
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input nz-input />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <input nz-input [readonly]="true" formControlName="canCu" />
                 </nz-input-group>
               </nz-form-item>
             </div>
@@ -780,10 +780,4 @@
   </div>
 </div>
 <!-- modal -->
-<app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-
-<app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-
-<app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam>
-
-<app-thong-tin-muoi [(isVisible)]="modals.thongTinMuoi"></app-thong-tin-muoi>
+<dieu-chinh-lua-chon-in [(isVisible)]="modals.luaChonIn"></dieu-chinh-lua-chon-in>

@@ -1,17 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'app-thong-tin-luong-thuc',
-  templateUrl: './thong-tin-luong-thuc.component.html',
-  styleUrls: ['./thong-tin-luong-thuc.component.scss'],
+  selector: 'dialog-dieu-chinh-them-thong-tin-luong-thuc',
+  templateUrl: './dialog-dieu-chinh-them-thong-tin-luong-thuc.component.html',
+  styleUrls: ['./dialog-dieu-chinh-them-thong-tin-luong-thuc.component.scss'],
 })
-export class ThongTinLuongThucComponent implements OnInit {
-  @Input() isVisible: boolean;
-  @Output() isVisibleChange = new EventEmitter<boolean>();
-
+export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   formData: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private _modalRef: NzModalRef) { }
 
   ngOnInit(): void {
     this.formData = this.fb.group({
@@ -71,12 +69,10 @@ export class ThongTinLuongThucComponent implements OnInit {
   }
 
   handleOk() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
+    this._modalRef.close();
   }
 
   handleCancel() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
+    this._modalRef.close();
   }
 }

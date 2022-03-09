@@ -6,6 +6,11 @@ import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.const
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { DialogDieuChinhThemThongTinLuongThucComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-luong-thuc/dialog-dieu-chinh-them-thong-tin-luong-thuc.component';
+import { DialogDieuChinhThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-muoi/dialog-dieu-chinh-them-thong-tin-muoi.component';
+import { DialogDieuChinhThemThongTinVatTuComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-vat-tu/dialog-dieu-chinh-them-thong-tin-vat-tu.component';
 interface DataItem {
   name: string;
   age: number;
@@ -54,11 +59,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   endValue: Date | null = null;
   formData: FormGroup;
   errorInputRequired: string = "Dữ liệu không được để trống.";
+  selectedCanCu: any = null;
 
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modal: NzModalService,
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +80,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.lastDayOfYear = '31/12/' + (this.yearNow - 1).toString();
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.formData = this.fb.group({
+      canCu: [null],
       soQD: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       ngayHieuLuc: [null, [Validators.required]],
@@ -83,11 +91,44 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   themMoi() {
     if (this.tabSelected == TAB_SELECTED.luongThuc) {
-      this.handleOpenModal('thongTinLuongThuc');
+      const modalLuongThuc = this.modal.create({
+        nzTitle: 'Thông tin lương thực',
+        nzContent: DialogDieuChinhThemThongTinLuongThucComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          // totalRecord: this.totalRecord,
+          // date: event,
+        },
+      });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
-      this.handleOpenModal('thongTinVatTuTrongNam');
+      const modalVatTu = this.modal.create({
+        nzTitle: 'Thông tin vật tư trong năm',
+        nzContent: DialogDieuChinhThemThongTinVatTuComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          // totalRecord: this.totalRecord,
+          // date: event,
+        },
+      });
     } else if (this.tabSelected == TAB_SELECTED.muoi) {
-      this.handleOpenModal('thongTinMuoi');
+      const modalMuoi = this.modal.create({
+        nzTitle: 'Thông tin muối',
+        nzContent: DialogDieuChinhThemThongTinMuoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          // totalRecord: this.totalRecord,
+          // date: event,
+        },
+      });
     }
   }
 
@@ -123,5 +164,26 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   handleEndOpenChange(open: boolean): void {
     console.log('handleEndOpenChange', open);
+  }
+
+  openDialogQuyetDinhGiaoChiTieu() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.formData.controls['canCu'].setValue(data.soQuyetDinh);
+        this.selectedCanCu = data;
+      }
+    })
   }
 }
