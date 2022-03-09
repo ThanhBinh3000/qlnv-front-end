@@ -22,6 +22,11 @@ export const ROUTE_LIST_KE_HOACH = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quy trình báo cáo kết quả thực hiện vốn, phí hàng DTQG tại tổng cục DTNN',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn`,
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
     title: 'Quy trình báo cáo thực hiện dự toán chi NSNN tại Tổng cục DTNN',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn`,
   },

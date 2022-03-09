@@ -266,4 +266,47 @@ export class QuanLyVonPhiService extends BaseService {
   getchitiettranchi(id:any):Observable<any>{
     return this.httpClient.get(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/ctiet-giao-so/'+id);
   }
+
+  //tim kiem so giao tran chi
+  timkiemphuongan(infoSearch:any):Observable<any>{
+    return this.httpClient.post(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/danh-sach',
+        infoSearch
+    )
+  }
+
+  //tim kiem so giao kiem tra tran chi
+  timkiemsokiemtratranchi(request:any):Observable<any>{
+    return this.httpClient.post(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/dsach-giao-so',request)
+  }
+
+  //lay danh sach don vi nhan
+  dmDonViNhan():Observable<any>{
+    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',
+    
+    {
+        "paggingReq": {
+            "limit": 1000,
+            "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+    })
+  }
+
+  //list danh sach phuong an da duoc duyet
+  danhsachphuonganduocduyet():Observable<any>{
+    return this.httpClient.get(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/danh-sach');
+  }
+
+
+  //xoa quyet dinh cong van
+  xoaquyetdinhcongvan(request:any):Observable<any>{
+    console.log(request);
+    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/xoa-qd-cv',request);
+  }
+
+  //nhap so QD-CV
+  nhapsoqdcv(req:any):Observable<any>{
+    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv',req)
+  }
 }
