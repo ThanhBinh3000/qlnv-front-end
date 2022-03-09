@@ -12,7 +12,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   }
 
   timKiem(param: any): Promise<any> {
-    let url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-khoachphi/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/`;
+    let url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-khoachphi/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     let tempUrl = "";
     if (param && param.pageSize) {
       tempUrl = tempUrl + "pageSize=" + param.pageSize + "&";

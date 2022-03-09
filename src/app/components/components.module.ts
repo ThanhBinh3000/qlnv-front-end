@@ -60,6 +60,10 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
 import { DialogThemMoiGoiThauComponent } from './dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from './dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
+import { DialogDieuChinhThemThongTinLuongThucComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-luong-thuc/dialog-dieu-chinh-them-thong-tin-luong-thuc.component';
+
+import { DialogDieuChinhThemThongTinMuoiComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-muoi/dialog-dieu-chinh-them-thong-tin-muoi.component';
+import { DialogDieuChinhThemThongTinVatTuComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-vat-tu/dialog-dieu-chinh-them-thong-tin-vat-tu.component';
 import { DialogThongTinLuongThucComponent } from './dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
 
 @NgModule({
@@ -72,6 +76,9 @@ import { DialogThongTinLuongThucComponent } from './dialog/dialog-thong-tin-luon
     DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent,
     DialogThemMoiGoiThauComponent,
     DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
+    DialogDieuChinhThemThongTinLuongThucComponent,
+    DialogDieuChinhThemThongTinMuoiComponent,
+    DialogDieuChinhThemThongTinVatTuComponent,
     DialogThongTinLuongThucComponent,
     //pipes
     FilterPipe,

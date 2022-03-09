@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-lua-chon-in',
-  templateUrl: './lua-chon-in.component.html',
-  styleUrls: ['./lua-chon-in.component.scss'],
+  selector: 'dieu-chinh-lua-chon-in',
+  templateUrl: './dieu-chinh-lua-chon-in.component.html',
+  styleUrls: ['./dieu-chinh-lua-chon-in.component.scss'],
 })
-export class LuaChonInComponent implements OnInit {
+export class DieuChinhLuaChonInComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
 
@@ -15,9 +15,9 @@ export class LuaChonInComponent implements OnInit {
     vatTu: false,
   };
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   handleOk() {
     this.isVisible = false;
