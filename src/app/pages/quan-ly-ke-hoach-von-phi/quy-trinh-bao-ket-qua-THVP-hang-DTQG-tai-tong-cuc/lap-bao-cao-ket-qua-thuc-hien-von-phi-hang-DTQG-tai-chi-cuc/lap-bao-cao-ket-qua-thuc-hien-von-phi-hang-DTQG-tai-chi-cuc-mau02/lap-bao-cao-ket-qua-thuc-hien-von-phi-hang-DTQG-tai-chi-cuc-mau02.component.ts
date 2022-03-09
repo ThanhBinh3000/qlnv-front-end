@@ -14,13 +14,18 @@ import * as fileSaver from 'file-saver';
 
 export class ItemData {
   id: any;
-  stt: number;
-  maNdung: string;
-  maNhomChi: string;
-  thienNamHhanhN: string;
-  ncauDtoanN1: number;
-  ncauDtoanN2: number;
-  ncauDtoanN3: number;
+  stt: any;
+  tenvattu: string;
+  dvt: string;
+  qdso: string;
+  soluong: number;
+  giatoida: number;
+  thanhtien: number;
+  th_soluong:any;
+  th_giatoida:any;
+  th_thanhtien:any;
+  ghichu:any;
+  parent:any;
   checked!: boolean;
 }
 
@@ -57,7 +62,42 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   dotbaocao:any;
 
   chiTietBcaos: any;
-  lstCTietBCao: ItemData[] = [];
+  lstCTietBCao: ItemData[] = [
+    {
+      id: 1,
+      stt: 'I',
+      tenvattu: 'Đơn vị mua',
+      dvt: '',
+      qdso: '',
+      soluong: null,
+      giatoida:null ,
+      thanhtien:null ,
+      th_soluong:null,
+      th_giatoida:null,
+      th_thanhtien:null,
+      ghichu:null,
+      parent:1,
+      checked: false,
+    },
+    {
+      id: 1,
+      stt: 'II',
+      tenvattu: 'Tổng cục mua',
+      dvt: '',
+      qdso: '',
+      soluong: null,
+      giatoida:null ,
+      thanhtien:null ,
+      th_soluong:null,
+      th_giatoida:null,
+      th_thanhtien:null,
+      ghichu:null,
+      parent:2,
+      checked: false,
+    }
+    
+
+  ];
   lstFile: any[] = [];
   listIdFiles: string;
   errorMessage: any;
@@ -204,6 +244,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
   }
 
+  t:any;
+  //fix cứng 2 row
+  addnewrow(){
+    this.addLine(1);
+  }
+  addrowchild(){
+    alert('hihi');
+  }
+
   //get user info
   async getUserInfo(username: string) {
     let userInfo = await this.nguoiDungSerivce
@@ -324,15 +373,21 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
 
   // them dong moi
   addLine(id: number): void {
+    
     let item: ItemData = {
       id: uuid.v4(),
-      stt: 0,
-      maNdung: '',
-      maNhomChi: '',
-      thienNamHhanhN: '',
-      ncauDtoanN1: 0,
-      ncauDtoanN2: 0,
-      ncauDtoanN3: 0,
+      stt: '',
+      tenvattu: '',
+      dvt: '',
+      qdso: '',
+      soluong: null,
+      giatoida:null ,
+      thanhtien:null ,
+      th_soluong:null,
+      th_giatoida:null,
+      th_thanhtien:null,
+      ghichu:null,
+      parent:this.lstCTietBCao[id-1].parent,
       checked: false,
     };
 
