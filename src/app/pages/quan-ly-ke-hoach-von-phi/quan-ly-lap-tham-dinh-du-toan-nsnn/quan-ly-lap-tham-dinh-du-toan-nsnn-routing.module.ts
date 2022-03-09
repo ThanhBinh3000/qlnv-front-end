@@ -421,7 +421,6 @@ const routes: Routes = [
         './chuc-nang-tong-cuc/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module'
       ).then((m) => m.NhuCauKeHoachDtxd3NamModule),
   },
-<<<<<<< HEAD
   {
     path: 'tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn',
     loadChildren: () =>
@@ -445,8 +444,6 @@ const routes: Routes = [
   },
 
 
-=======
->>>>>>> main
 ];
 
 @NgModule({
