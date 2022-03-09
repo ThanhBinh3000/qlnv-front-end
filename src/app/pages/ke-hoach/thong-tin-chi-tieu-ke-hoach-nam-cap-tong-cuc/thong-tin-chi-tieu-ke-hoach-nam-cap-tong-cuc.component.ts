@@ -13,6 +13,7 @@ import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -45,13 +46,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     new ThongTinChiTieuKeHoachNam();
   tableExist: boolean = false;
   keHoachLuongThucDialog: KeHoachLuongThuc;
+
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
@@ -233,6 +235,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       });
   }
+
   ngAfterViewChecked(): void {
     const table = document.getElementsByTagName('table');
     this.tableExist = table && table.length > 0 ? true : false;
@@ -279,5 +282,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
     });
     return rowspan;
+  }
+
+  exportData() {
+    var workbook = XLSX.utils.book_new();
+    const listTable = document.getElementsByTagName('table');
+    for (let i = 0; i < listTable.length; i++) {
+      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
+      sheet['!cols'] = [];
+      sheet['!cols'][24] = { hidden: true };
+      sheet['!cols'][25] = { hidden: true };
+      XLSX.utils.book_append_sheet(workbook, sheet, "Sheet" + (i + 1).toString());
+    }
+    XLSX.writeFile(workbook, "Report.xlsx");
   }
 }
