@@ -24,4 +24,6 @@ export const MESSAGE = {
   KY_THUALENH: 'Chuyển ký thừa lệnh thành công',
   KY_UYQUYEN: 'Chuyển ký ủy quyền thành công',
   MAXIMUM_FILE_UPLOAD: 'File đính kèm không vượt quá 20MB',
+  ERROR_CALL_SERVICE: 'Có lỗi trong quá trình vấn tin',
+  ERROR_APPROVE_SERVICE: 'Có lỗi trong quá trình ',
 };

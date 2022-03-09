@@ -55,7 +55,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   namBcao: any;
   loaiBaocao: any;
   dotbaocao:any;
-  
+
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];

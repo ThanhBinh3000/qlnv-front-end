@@ -1,6 +1,5 @@
 import { QuanLyLapThamDinhDuToanNSNN } from './quan-ly-lap-tham-dinh-du-toan-nsnn.type';
-export const MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI = 'qlkh-von-phi';
-export const MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN = 'quan-ly-lap-tham-dinh-du-toan-nsnn';
+import {MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN} from '../../../constants/routerUrl';
 
 export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] = [
   {
