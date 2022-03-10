@@ -45,6 +45,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     new ThongTinChiTieuKeHoachNam();
   tableExist: boolean = false;
   keHoachLuongThucDialog: KeHoachLuongThuc;
+  fileDinhKem: string = null;
 
   constructor(
     private router: Router,
@@ -194,12 +195,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
-      this.handleOpenModal('thongTinVatTuTrongNam');
-    }
-  }
 
-  handleOpenModal(modalName: string) {
-    this.modals[modalName] = true;
+    }
   }
 
   redirectChiTieuKeHoachNam() {
@@ -272,10 +269,41 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     for (let i = 0; i < listTable.length; i++) {
       let sheet = XLSX.utils.table_to_sheet(listTable[i]);
       sheet['!cols'] = [];
-      sheet['!cols'][24] = { hidden: true };
-      sheet['!cols'][25] = { hidden: true };
+      if (i == 0) {
+        sheet['!cols'][24] = { hidden: true };
+        sheet['!cols'][25] = { hidden: true };
+      }
+      else if (i == 1) {
+        sheet['!cols'][12] = { hidden: true };
+        sheet['!cols'][13] = { hidden: true };
+      }
       XLSX.utils.book_append_sheet(workbook, sheet, "Sheet" + (i + 1).toString());
     }
     XLSX.writeFile(workbook, "Report.xlsx");
+  }
+
+  selectFile(idElement: string) {
+    document.getElementById(idElement).click();
+  }
+
+  uploadFile(event: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if (fileList) {
+      this.fileDinhKem = fileList[0].name;
+    }
+  }
+
+  async importFileData(event: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if (fileList) {
+      let data = await this.chiTieuKeHoachNamService.importFile(fileList[0]);
+      console.log(data);
+    }
+  }
+
+  printTable() {
+
   }
 }

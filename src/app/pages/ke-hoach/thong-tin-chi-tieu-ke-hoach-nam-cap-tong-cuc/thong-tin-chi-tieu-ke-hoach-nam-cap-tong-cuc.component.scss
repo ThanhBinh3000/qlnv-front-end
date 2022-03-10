@@ -9,7 +9,6 @@
       border-radius: 6px;
     }
     .table__body {
-      margin: 12px 0px 0px 0px !important;
       overflow: scroll;
     }
     .tab__container {
@@ -77,6 +76,21 @@
     display: block;
   }
   .hide-table {
+    display: none;
+  }
+  .table-out-tab {
+    margin-top: 0px !important;
+    padding: 10px;
+    border: solid 1px #f0f0f0;
+    border-top: 0;
+    background: #fff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .ant-tabs-content-holder {
+    border-bottom: 0;
+  }
+  .file-not-show {
     display: none;
   }
 }
