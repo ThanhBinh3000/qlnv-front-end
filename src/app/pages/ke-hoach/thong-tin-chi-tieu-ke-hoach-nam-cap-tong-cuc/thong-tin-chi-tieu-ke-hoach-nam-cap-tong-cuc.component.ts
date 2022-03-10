@@ -17,6 +17,7 @@ import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialo
 import * as XLSX from 'xlsx';
 import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -58,6 +59,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -298,7 +300,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .subscribe((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
-          this.rowSpanVatTu();
         }
       });
   }
@@ -342,12 +343,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     return sumVal;
   }
 
-  rowSpanVatTu(): number {
+  rowSpanVatTu(data: any): number {
     let rowspan = 1;
-    this.thongTinChiTieuKeHoachNam?.khVatTu?.forEach((vatTu) => {
-      vatTu?.nhomVatTuThietBi?.forEach((nhomVatTuTb) => {
-        rowspan += nhomVatTuTb?.vatTuThietBi.length + 1;
-      });
+    data?.nhomVatTuThietBi?.forEach((nhomVatTuTb) => {
+      rowspan += nhomVatTuTb?.vatTuThietBi.length + 1;
     });
     return rowspan;
   }
@@ -412,11 +411,85 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async importFileData(event: any) {
-    const element = event.currentTarget as HTMLInputElement;
-    let fileList: FileList | null = element.files;
-    if (fileList) {
-      let data = await this.chiTieuKeHoachNamService.importFile(fileList[0]);
-      console.log(data);
+    this.spinner.show();
+    try {
+      const element = event.currentTarget as HTMLInputElement;
+      let fileList: FileList | null = element.files;
+      if (fileList) {
+        let res = await this.chiTieuKeHoachNamService.importFile(fileList[0]);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let temptData = res.data;
+          if (temptData) {
+            if (temptData.khluongthuc && temptData.khluongthuc.length > 0) {
+              for (let i = 0; i < temptData.khluongthuc.length; i++) {
+                this.checkDataExistLuongThuc(temptData.khluongthuc[i]);
+              }
+            }
+            if (temptData.khMuoi && temptData.khMuoi.length > 0) {
+              for (let i = 0; i < temptData.khMuoi.length; i++) {
+                this.checkDataExistMuoi(temptData.khMuoi[i]);
+              }
+            }
+            if (temptData.khVatTu && temptData.khVatTu.length > 0) {
+              for (let i = 0; i < temptData.khVatTu.length; i++) {
+                this.checkDataExistVatTu(temptData.khVatTu[i]);
+              }
+            }
+          }
+        }
+      }
+      this.spinner.hide();
+    }
+    catch (e) {
+      this.spinner.hide();
+    }
+  }
+
+  checkDataExistLuongThuc(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khLuongThuc) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khLuongThuc.findIndex(x => x.maDonvi == data.maDonVi);
+      if (indexExist != -1) {
+        this.thongTinChiTieuKeHoachNam.khLuongThuc[indexExist] = data;
+      }
+      else {
+        this.thongTinChiTieuKeHoachNam.khLuongThuc = [...this.thongTinChiTieuKeHoachNam.khLuongThuc, data];
+      }
+    }
+    else {
+      this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
+      this.thongTinChiTieuKeHoachNam.khLuongThuc = [...this.thongTinChiTieuKeHoachNam.khLuongThuc, data];
+    }
+  }
+
+  checkDataExistMuoi(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khMuoiDuTru) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khMuoiDuTru.findIndex(x => x.maDonVi == data.maDonVi);
+      if (indexExist != -1) {
+        this.thongTinChiTieuKeHoachNam.khMuoiDuTru[indexExist] = data;
+      }
+      else {
+        this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [...this.thongTinChiTieuKeHoachNam.khMuoiDuTru, data];
+      }
+    }
+    else {
+      this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
+      this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [...this.thongTinChiTieuKeHoachNam.khMuoiDuTru, data];
+    }
+  }
+
+  checkDataExistVatTu(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khVatTu) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khVatTu.findIndex(x => x.maDonVi == data.maDonVi);
+      if (indexExist != -1) {
+        this.thongTinChiTieuKeHoachNam.khVatTu[indexExist] = data;
+      }
+      else {
+        this.thongTinChiTieuKeHoachNam.khVatTu = [...this.thongTinChiTieuKeHoachNam.khVatTu, data];
+      }
+    }
+    else {
+      this.thongTinChiTieuKeHoachNam.khVatTu = [];
+      this.thongTinChiTieuKeHoachNam.khVatTu = [...this.thongTinChiTieuKeHoachNam.khVatTu, data];
     }
   }
 
@@ -429,21 +502,32 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzWidth: '600px',
       nzFooter: null,
       nzComponentParams: {
-        // totalRecord: this.totalRecord,
-        // date: event,
       },
     });
     modalIn.afterClose.subscribe((res) => {
       if (res) {
+        let WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
+        let printContent = "";
         if (res.luongThuc) {
-          document.getElementById('printLuongThuc').click();
+          printContent = printContent + "<div>";
+          printContent = printContent + document.getElementById("table-luong-thuc").innerHTML;
+          printContent = printContent + "</div>";
         }
         if (res.muoi) {
-          document.getElementById('printMuoi').click();
+          printContent = printContent + "<div>";
+          printContent = printContent + document.getElementById("table-muoi").innerHTML;
+          printContent = printContent + "</div>";
         }
         if (res.vatTu) {
-          document.getElementById('printVatTu').click();
+          printContent = printContent + "<div>";
+          printContent = printContent + document.getElementById("table-vat-tu").innerHTML;
+          printContent = printContent + "</div>";
         }
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
       }
     });
   }
