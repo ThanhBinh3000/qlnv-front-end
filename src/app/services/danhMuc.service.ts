@@ -208,7 +208,7 @@ export class DanhMucService extends BaseService {
         "trangThai": "",
       }
     )
-    
+
   }
 
 
@@ -391,4 +391,85 @@ export class DanhMucService extends BaseService {
       }
     );
   }
+  mDCQQD(): Observable<any> {
+    return this.httpClient.post(
+        this.urlDefault + "/qlnv-category/dmuc-khoachvon/143",
+        {
+            "paggingReq": {
+                "limit": 1000,
+                "page": 1
+            },
+            "str": "",
+            "trangThai": "",
+        }
+    );
+}
+
+mDCongTrinh(): Observable<any> {
+    return this.httpClient.post(
+        this.urlDefault + "/qlnv-category/dmuc-khoachvon/131",
+        {
+            "paggingReq": {
+                "limit": 1000,
+                "page": 1
+            },
+            "str": "",
+            "trangThai": "",
+        }
+    );
+}
+
+mDChiTiet(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/255",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+dMMaNdungChi(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/249",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+dMMaCucDtnnKvucs(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/244",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMTrangThai(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/382",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
 }
