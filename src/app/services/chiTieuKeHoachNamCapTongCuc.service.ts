@@ -7,10 +7,12 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
+  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'ChiTieuKeHoachNamCapTongCuc');
   }
-  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
     if (body.donViId)
@@ -37,5 +39,11 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   loadThongTinChiTieuKeHoachNam(id: number) {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
     return this.httpClient.get<any>(url_);
+  }
+
+  importFile(body: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', body);
+    return this.httpClient.post<any>(`${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`, formData).toPromise();
   }
 }

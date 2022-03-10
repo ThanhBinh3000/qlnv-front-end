@@ -7,10 +7,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { LuaChonInComponent } from './lua-chon-in/lua-chon-in.component';
 
 @NgModule({
-  declarations: [
-    ThongTinChiTieuKeHoachNamComponent,
-    LuaChonInComponent,
-  ],
+  declarations: [ThongTinChiTieuKeHoachNamComponent, LuaChonInComponent],
   imports: [
     CommonModule,
     ThongTinChiTieuKeHoachNamRoutingModule,
