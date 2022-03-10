@@ -28,12 +28,12 @@ export class ItemData {
 }
 
 @Component({
-     selector: 'app-lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
-     templateUrl: './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.html',
-     styleUrls: ['./lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.scss'],
+     selector: 'app-ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui',
+     templateUrl: './ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui.component.html',
+     styleUrls: ['./ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui.component.scss'],
 })
 
-export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
+export class KtraRsoatNdungBcaoDcdtNsnnDoChiCucGuiComponent implements OnInit {
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];

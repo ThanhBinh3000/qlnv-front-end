@@ -35,6 +35,13 @@ const routes: Routes = [
         './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
       ).then((m) => m.ChiThuongXuyen3NamModule),
   },
+  {
+    path: 'danh-sach-cap-von',
+    loadChildren: () =>
+      import(
+        './ghi-nhan-thong-tin-nhan-tien-von-tu-btc/danh-sach-cap-von/danh-sach-cap-von.module'
+      ).then((m) => m.DanhSachCapVonModule),
+  },
 ];
 
 @NgModule({
