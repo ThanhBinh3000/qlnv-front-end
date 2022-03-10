@@ -27,6 +27,17 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   ) {}
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
+    this.initForm();
+    this.spinner.show();
+    try {
+      await this.loadDonVi();
+      await this.loadDonViTinh();
+      this.spinner.hide();
+    } catch (err) {
+      this.spinner.hide();
+    }
+  }
+  initForm() {
     this.formData = this.fb.group({
       maDonVi: [null, [Validators.required]],
       donViTinh: [null],
@@ -50,8 +61,6 @@ export class DialogThongTinLuongThucComponent implements OnInit {
       tkcnTongThoc: [null],
       tkcnTongGao: [null],
     });
-    this.loadDonViTinh();
-    this.loadDonVi();
   }
   cancel() {
     this._modalRef.destroy();
@@ -61,7 +70,6 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   }
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
-    console.log(value);
     if (!value || value.indexOf('@') >= 0) {
       this.options = [];
     } else {
@@ -71,25 +79,17 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     }
   }
   selectDonVi(donVi) {
-    console.log(donVi);
-
     this.formData.patchValue({
       maDonVi: donVi.maDvi,
       tenDonvi: donVi.tenDvi,
     });
-    console.log(this.formData);
   }
 
   onInputDonViTinh(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
-    console.log(value);
-    console.log(this.optionsDonViTinh);
-
     if (!value || value.indexOf('@') >= 0) {
       this.optionsDVT = [];
     } else {
-      console.log(this.optionsDonViTinh);
-
       this.optionsDVT = this.optionsDonViTinh.filter(
         (x) => x.tenDviTinh.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );

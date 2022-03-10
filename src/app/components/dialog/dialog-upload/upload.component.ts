@@ -18,9 +18,7 @@ export class UploadComponent implements OnInit {
 
   constructor(private _modalRef: NzModalRef) {}
 
-  ngOnInit(): void {
-    console.log('data: ', this.data);
-  }
+  ngOnInit(): void {}
 
   handleOk() {
     this.isVisible = false;
