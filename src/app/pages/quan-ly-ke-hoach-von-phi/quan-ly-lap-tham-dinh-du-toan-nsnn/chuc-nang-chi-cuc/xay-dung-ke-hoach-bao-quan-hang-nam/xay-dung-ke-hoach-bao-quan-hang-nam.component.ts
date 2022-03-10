@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
@@ -10,61 +11,43 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-export class ItemData {
-  tenDan!:string;
-  maLoaiKhoach!:string;
-  maKhoiDan!:string;
-  maDdiemXdung!:string;
-  ddiemMoTk!:string;
-  maSoDan!:string;
-  maNganhKte!:string;
-  nlucTke!:string;
-  namKcTte!:number;
-  namHtTte!:number;
-  qdDuyetDanDtuSongaythang!:string;
-  qdDuyetDanDtuTongVon!:number;
-  qdDchinhDanDtuSongaythang!:string;
-  qdDchinhDanDtuTongVon!:number;
-  qdDuyetTkDtoanSongaythang!:string;
-  qdDuyetTkDtoanTong!:number;
-  qdDuyetTkDtoanXl!:number;
-  qdDuyetTkDtoanTb!:number;
-  qdDuyetTkDtoanCx!:number;
-  klthCapDen3006Songaythang!:string;
-  klthCapDen3006Nstt!:number;
-  klthCapDen3006DtoanChiTx!:number;
-  klthCapDen3006Quykhac!:number;
-  klthCapDen3112Songaythang!:string;
-  klthCapDen3112Nstt!:number;
-  klthCapDen3112DtoanChiTx!:number;
-  klthCapDen3112Quykhac!:number;
-  ncauVonN1!:number;
-  ncauVonN2!:number;
-  ncauVonN3!:number;
-  ghiChu!:string;
 
+export class ItemData {
+  maMatHang!: String;
+  maNhom!: String;
+  kphi!: number;
   id!: any;
   maBcao!: String;
   stt!: String;
   checked!:boolean;
 }
-@Component({
-  selector: 'app-nhu-cau-ke-hoach-dtxd3-nam',
-  templateUrl: './nhu-cau-ke-hoach-dtxd3-nam.component.html',
-  styleUrls: ['./nhu-cau-ke-hoach-dtxd3-nam.component.scss']
-})
 
-export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
+export class AllItemData {
+  kphiBquanThocTx!: number;                   // kinh phi bao quan thoc thuong xuyen
+  kphiBquanThocLd!: number;                   // kinh phi bao quan thoc lan dau
+  kphiBquanGaoTx!: number;                    // kinh phi bao quan gao thuong xuyen
+  kphiBquanGaoLd!: number;
+  lstCTiet: ItemData[] = [];
+}
+
+@Component({
+  selector: 'app-xay-dung-ke-hoach-bao-quan-hang-nam',
+  templateUrl: './xay-dung-ke-hoach-bao-quan-hang-nam.component.html',
+  styleUrls: ['./xay-dung-ke-hoach-bao-quan-hang-nam.component.scss']
+})
+export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
-  maCucDtnnKvucs = [{ id: "", ten: "" }];
-  maLoaiKhoachs!:any;
-  maKhoiDans!:any;
-  maDdiemXdungs!:any;
-  maNganhKtes!:any;
-
-  donVis:any = [];                            // danh muc don vi
-  lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
+  nhoms: any = [];                            // danh muc nhom
+  matHangs: any = [];                         // danh muc mat hang
+  lstCTietBCao: AllItemData[] = [];
+  lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
+  kphiBquanThocTx!: number;                   // kinh phi bao quan thoc thuong xuyen
+  kphiBquanThocLd!: number;                   // kinh phi bao quan thoc lan dau
+  kphiBquanGaoTx!: number;                    // kinh phi bao quan gao thuong xuyen
+  kphiBquanGaoLd!: number;                    // kinh phi bao quna gao lan dau
+  tongSo: number = 0;                            // tong kinh phi
+  donVis: any =[];
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -131,7 +114,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private nguoiDungSerivce: UserService,
+              private userSerivce: UserService,
               private danhMucService: DanhMucService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -140,7 +123,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = this.nguoiDungSerivce.getUserName();
+    let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       this.getDetailReport();
@@ -175,52 +158,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //get danh muc noi dung
-    this.danhMucService.dMLoaiKeHoach().subscribe(
+    this.danhMucService.dMNhom().subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.maLoaiKhoachs = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc nhom chi
-    this.danhMucService.dMKhoiDuAn().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maKhoiDans = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc loai chi
-    this.danhMucService.dMDiaDiemXayDung().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maDdiemXdungs = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-
-    //get danh muc loai chi
-    this.danhMucService.dMMaNganhKinhTe().subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maNganhKtes = data.data?.content;
+          this.nhoms = data.data?.content;
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -248,7 +189,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
+    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
@@ -271,12 +212,12 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // xoa
   xoa() {
-    this.lstCTietBCao = [];
+    this.lstCTiet = [];
     this.lstFile = [];
     this.listFile = []
   }
 
-  // luu
+  // trinh duyet
   async luu() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -284,11 +225,23 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
+    this.lstCTiet.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
       }
     })
+
+    let object = {
+      kphiBquanThocTx : this.kphiBquanThocTx,
+      kphiBquanThocLd : this.kphiBquanThocLd,
+      kphiBquanGaoTx : this.kphiBquanGaoTx,
+      kphiBquanGaoLd : this.kphiBquanGaoLd,
+      lstCTiet : this.lstCTiet
+    }
+
+    this.lstCTietBCao.push(object);
+
+    console.log(object);
 
     // gui du lieu trinh duyet len server
     let request = {
@@ -329,13 +282,12 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       })
     }
-    this.lstCTietBCao.filter(item => {
+    this.lstCTiet.filter(item => {
       if (!item.id) {
         item.id = uuid.v4();
       }
     });
     this.spinner.hide();
-    this.updateEditCache();
   }
 
   // chuc nang check role
@@ -352,6 +304,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       }
     });
     this.spinner.hide();
+    this.updateEditCache();
   }
 
   //thay doi trang thai
@@ -377,7 +330,16 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-
+          if (
+            this.trangThaiBanGhi == '1' ||
+            this.trangThaiBanGhi == '3' ||
+            this.trangThaiBanGhi == '5' ||
+            this.trangThaiBanGhi == '8'
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -419,44 +381,16 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      tenDan:"",
-      maLoaiKhoach:"",
-      maKhoiDan:"",
-      maDdiemXdung:"",
-      ddiemMoTk:"",
-      maSoDan:"",
-      maNganhKte:"",
-      nlucTke:"",
-      namKcTte:0,
-      namHtTte:0,
-      qdDuyetDanDtuSongaythang:"",
-      qdDuyetDanDtuTongVon:0,
-      qdDchinhDanDtuSongaythang:"",
-      qdDchinhDanDtuTongVon:0,
-      qdDuyetTkDtoanSongaythang:"",
-      qdDuyetTkDtoanTong:0,
-      qdDuyetTkDtoanXl:0,
-      qdDuyetTkDtoanTb:0,
-      qdDuyetTkDtoanCx:0,
-      klthCapDen3006Songaythang:"",
-      klthCapDen3006Nstt:0,
-      klthCapDen3006DtoanChiTx:0,
-      klthCapDen3006Quykhac:0,
-      klthCapDen3112Songaythang:"",
-      klthCapDen3112Nstt:0,
-      klthCapDen3112DtoanChiTx:0,
-      klthCapDen3112Quykhac:0,
-      ncauVonN1:0,
-      ncauVonN2:0,
-      ncauVonN3:0,
-      ghiChu:"",
-      maBcao: "",
+      maMatHang: "",
+      maNhom: "",
+      kphi: 0,
       stt: "",
       id: uuid.v4(),
       checked:false,
+      maBcao: "",
     }
 
-    this.lstCTietBCao.splice(id, 0, item);
+    this.lstCTiet.splice(id, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
@@ -465,7 +399,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+    this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
     }
@@ -474,13 +408,13 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   // xóa với checkbox
   deleteSelected() {
     // add list delete id
-    this.lstCTietBCao.filter(item => {
+    this.lstCTiet.filter(item => {
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
+    this.lstCTiet = this.lstCTiet.filter(item => item.checked != true )
     this.allChecked = false;
   }
 
@@ -508,12 +442,12 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+      this.lstCTiet = this.lstCTiet.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+      this.lstCTiet = this.lstCTiet.map(item => ({
         ...item,
         checked: false
       }));
@@ -521,10 +455,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   updateSingleChecked(): void {
-    if (this.lstCTietBCao.every(item => !item.checked)) {
+    if (this.lstCTiet.every(item => !item.checked)) {
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.lstCTietBCao.every(item => item.checked)) {
+    } else if (this.lstCTiet.every(item => item.checked)) {
       this.allChecked = true;
       this.indeterminate = false;
     } else {
@@ -550,23 +484,23 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
-      data: { ...this.lstCTietBCao[index] },
+      data: { ...this.lstCTiet[index] },
       edit: false
     };
   }
 
   saveEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
+    const index = this.lstCTiet.findIndex(item => item.id === id);
+    this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
+    Object.assign(this.lstCTiet[index], this.editCache[id].data);
     this.editCache[id].edit = false;
   }
 
   updateEditCache(): void {
-    this.lstCTietBCao.forEach(item => {
+    this.lstCTiet.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -575,6 +509,13 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) +  Number(this.editCache[id].data.qdDuyetTkDtoanCx);
+    // this.editCache[id].data.qdDuyetTkDtoanTong = this.editCache[id].data.qdDuyetTkDtoanXl + this.editCache[id].data.qdDuyetTkDtoanTb + this.editCache[id].data.qdDuyetTkDtoanCk;
   }
+   //tinh tong kinh phi
+   sum(){
+    this.tongSo = 0;
+    this.lstCTiet.forEach((element) => {
+        this.tongSo = this.tongSo + element.kphi;
+    });
+}
 }

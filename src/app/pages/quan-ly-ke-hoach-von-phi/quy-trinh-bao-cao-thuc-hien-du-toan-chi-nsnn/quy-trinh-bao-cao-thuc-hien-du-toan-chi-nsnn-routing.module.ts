@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QuanLyDieuChinhDuToanChiNSNNComponent } from './quan-ly-dieu-chinh-du-toan-chi-nsnn.component';
+import { QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent } from './quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: QuanLyDieuChinhDuToanChiNSNNComponent,
+    component: QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent,
   },
   {
     path: 'tim-kiem',
@@ -41,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class QuanLyDieuChinhDuToanChiNSNNRoutingModule {}
+export class QuyTrinhBaoCaoThucHienDuToanChiNSNNRoutingModule {}

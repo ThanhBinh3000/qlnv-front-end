@@ -43,6 +43,9 @@ export class TimKiemComponent implements OnInit {
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
+    namBaoCao: "",
+    thangBaoCao: "",
+    trangThai: "",
   };
   pages = {
     size: 10,
@@ -50,6 +53,7 @@ export class TimKiemComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
+  trangThais: any = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucService,
@@ -65,6 +69,22 @@ export class TimKiemComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      err => {
+        console.log(err);
+        this.errorMessage = "err.error.message";
+      }
+    );
+
+    //lay danh sach loai bao cao
+    this.danhMuc.dMTrangThai().toPromise().then(
+      data => {
+        console.log(data);
+        if (data.statusCode == 0) {
+          this.trangThais = data.data?.content;
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }

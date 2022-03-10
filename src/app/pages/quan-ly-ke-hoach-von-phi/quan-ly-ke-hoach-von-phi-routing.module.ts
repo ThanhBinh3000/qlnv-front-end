@@ -43,7 +43,7 @@ const routes: Routes = [
       {
         path: 'quy-trinh-bc-thuc-hien-du-toan-chi-nsnn',
         loadChildren: () =>
-          import('./quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
+          import('./quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn.module').then(
             (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
           ),
       },

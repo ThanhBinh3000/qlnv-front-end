@@ -371,14 +371,14 @@ const routes: Routes = [
     path: 'xay-dung-ke-hoach-von-dau-tu',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/xay-dung-ke-hoach-von-dau-tu/xay-dung-ke-hoach-von-dau-tu.module'
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/xay-dung-ke-hoach-von-dau-tu.module'
       ).then((m) => m.XayDungKeHoachVonDauTuModule),
   },
   {
     path: 'xay-dung-ke-hoach-von-dau-tu/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/xay-dung-ke-hoach-von-dau-tu/xay-dung-ke-hoach-von-dau-tu.module'
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/xay-dung-ke-hoach-von-dau-tu.module'
       ).then((m) => m.XayDungKeHoachVonDauTuModule),
   },
   {
@@ -396,18 +396,18 @@ const routes: Routes = [
       ).then((m) => m.XayDungNhuCauNhapXuatHangNamModule),
   },
   {
-    path: 'ke-hoach-bao-quan-hang-nam',
+    path: 'xay-dung-ke-hoach-bao-quan-hang-nam',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/ke-hoach-bao-quan-hang-nam/ke-hoach-bao-quan-hang-nam.module'
-      ).then((m) => m.KeHoachBaoQuanHangNamModule),
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-bao-quan-hang-nam/xay-dung-ke-hoach-bao-quan-hang-nam.module'
+      ).then((m) => m.XayDungKeHoachBaoQuanHangNamModule),
   },
   {
-    path: 'ke-hoach-bao-quan-hang-nam/:id',
+    path: 'xay-dung-ke-hoach-bao-quan-hang-nam/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/ke-hoach-bao-quan-hang-nam/ke-hoach-bao-quan-hang-nam.module'
-      ).then((m) => m.KeHoachBaoQuanHangNamModule),
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-bao-quan-hang-nam/xay-dung-ke-hoach-bao-quan-hang-nam.module'
+      ).then((m) => m.XayDungKeHoachBaoQuanHangNamModule),
   },
   {
     path: 'nhu-cau-xuat-hang-vien-tro',
@@ -466,18 +466,65 @@ const routes: Routes = [
       ).then((m) => m.ThuyetMinhChiDeTaiDuAnNghienCuuKhModule),
   },
   {
-    path: 'nhu-cau-ke-hoach-dtxd3-nam',
-    loadChildren: () =>
-      import(
-        './chuc-nang-tong-cuc/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module'
-      ).then((m) => m.NhuCauKeHoachDtxd3NamModule),
+    path:'nhu-cau-ke-hoach-dtxd3-nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module')
+    .then(m => m.NhuCauKeHoachDtxd3NamModule),
   },
   {
-    path: 'nhu-cau-ke-hoach-dtxd3-nam/:id',
-    loadChildren: () =>
-      import(
-        './chuc-nang-tong-cuc/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module'
-      ).then((m) => m.NhuCauKeHoachDtxd3NamModule),
+    path:'nhu-cau-ke-hoach-dtxd3-nam/:id',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module')
+    .then(m => m.NhuCauKeHoachDtxd3NamModule),
+  },
+  {
+    path:'nhu-cau-ke-hoach-dtxd3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/nhu-cau-ke-hoach-dtxd3-nam/nhu-cau-ke-hoach-dtxd3-nam.module')
+    .then(m => m.NhuCauKeHoachDtxd3NamModule),
+  },
+
+  {
+    path:'ke-hoach-quy-tien-luong-nam-n1',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-quy-tien-luong-nam-n1/ke-hoach-quy-tien-luong-nam-n1.module')
+    .then(m => m.KeHoachQuyTienLuongNamN1Module),
+  },
+  {
+    path:'ke-hoach-quy-tien-luong-nam-n1/:id',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-quy-tien-luong-nam-n1/ke-hoach-quy-tien-luong-nam-n1.module')
+    .then(m => m.KeHoachQuyTienLuongNamN1Module),
+  },
+  {
+    path:'ke-hoach-quy-tien-luong-nam-n1/:maDvi/:maLoaiBacao/:nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-quy-tien-luong-nam-n1/ke-hoach-quy-tien-luong-nam-n1.module')
+    .then(m => m.KeHoachQuyTienLuongNamN1Module),
+  },
+  {
+    path:'ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam.module')
+    .then(m => m.KeHoachDuToanCaiTaoSuaChuaHtKt3NamModule),
+  },
+  {
+    path:'ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/:id',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam.module')
+    .then(m => m.KeHoachDuToanCaiTaoSuaChuaHtKt3NamModule),
+  },
+  {
+    path:'ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam.module')
+    .then(m => m.KeHoachDuToanCaiTaoSuaChuaHtKt3NamModule),
+  },
+  {
+    path:'du-toan-chi-du-tru-quoc-gia-gd3-nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-du-tru-quoc-gia-gd3-nam/du-toan-chi-du-tru-quoc-gia-gd3-nam.module')
+    .then(m => m.DuToanChiDuTruQuocGiaGd3NamModule),
+  },
+  {
+    path:'du-toan-chi-du-tru-quoc-gia-gd3-nam/:id',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-du-tru-quoc-gia-gd3-nam/du-toan-chi-du-tru-quoc-gia-gd3-nam.module')
+    .then(m => m.DuToanChiDuTruQuocGiaGd3NamModule),
+  },
+  {
+    path:'du-toan-chi-du-tru-quoc-gia-gd3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/du-toan-chi-du-tru-quoc-gia-gd3-nam/du-toan-chi-du-tru-quoc-gia-gd3-nam.module')
+    .then(m => m.DuToanChiDuTruQuocGiaGd3NamModule),
   },
   {
     path: 'tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn',
