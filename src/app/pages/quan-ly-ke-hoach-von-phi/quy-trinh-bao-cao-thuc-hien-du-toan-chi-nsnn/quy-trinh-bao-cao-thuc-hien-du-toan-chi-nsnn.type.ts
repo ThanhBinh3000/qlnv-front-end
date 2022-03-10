@@ -1,4 +1,4 @@
-export type QuanLyDieuChinhDuToanChiNSNN = {
+export type QuyTrinhBaoCaoThucHienDuToanChiNSNN = {
   icon: string;
   title: string;
   description: string;
