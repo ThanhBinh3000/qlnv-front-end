@@ -7,6 +7,15 @@ export interface TreeNodeInterface<T> {
 }
 
 export interface VatTu extends TreeNodeInterface<VatTu> {
-  tenVatTu: string;
-  maVatTu: string;
+  id: number;
+  ten: string;
+  ma: string;
+  ghiChu: string;
+  maCha: string;
+  maDviTinh: string;
+  ngaySua: string;
+  ngayTao: string;
+  nguoiSua: string;
+  nguoiTao: string;
+  trangThai: string;
 }

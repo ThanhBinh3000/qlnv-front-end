@@ -16,7 +16,7 @@ import { VatTu } from '../dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-t
 export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   formData: FormGroup;
   //treeview
-  listOfMapData: VatTu[] = MOCK_LIST;
+  listOfMapData: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   yearNow: number = 0;
 

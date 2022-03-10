@@ -52,13 +52,12 @@
         </nz-form-control>
         <!-- dropdown -->
         <nz-dropdown-menu #menu="nzDropdownMenu">
-
           <div class="dropdown__container">
             <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
             <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
             <div style="margin-bottom: 6px">
               <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                <input type="text" nz-input />
+                <input type="text" nz-input (input)="search($event)" />
               </nz-input-group>
               <ng-template #suffixIconButton>
                 <button nz-button nzSearch>
@@ -66,8 +65,8 @@
                 </button>
               </ng-template>
             </div>
-
-            <nz-table #expandTable [nzData]="listOfMapData">
+            <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
+              class="table__container-vat-tu">
               <thead>
                 <tr>
                   <th>Tên vật tư</th>
@@ -76,18 +75,19 @@
                 </tr>
               </thead>
               <tbody>
-                <ng-container *ngFor="let data of expandTable.data">
-                  <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                <ng-container *ngFor="let data of expandTable.data, let i = index">
+                  <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
                     <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                      <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
-                        (nzExpandChange)="
-                              collapse(mapOfExpandedData[data.key], item, $event)
+                      <td [nzIndentSize]="item.level! * 20"
+                        [nzShowExpand]="!!item.children && item.children.length !== 0" [(nzExpand)]="item.expand"
+                        (nzExpandChange)=" 
+                              collapse(mapOfExpandedData[data.id], item, $event)
                             ">
-                        {{ item.tenVatTu }}
+                        {{ item.ten }}
                       </td>
-                      <td>{{ item.maVatTu }}</td>
+                      <td>{{ item.ma }}</td>
                       <td style="text-align: center">
-                        <div *ngIf="!item.children">
+                        <div *ngIf="item.children.length == 0">
                           <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item></i>
                         </div>
                       </td>
