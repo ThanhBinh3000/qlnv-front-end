@@ -14,6 +14,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 import * as XLSX from 'xlsx';
+import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -322,6 +323,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   printTable() {
-
+    const modalIn = this.modal.create({
+      nzTitle: 'Lựa chọn in',
+      nzContent: DialogLuaChonInComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '600px',
+      nzFooter: null,
+      nzComponentParams: {
+        // totalRecord: this.totalRecord,
+        // date: event,
+      },
+    });
   }
 }
