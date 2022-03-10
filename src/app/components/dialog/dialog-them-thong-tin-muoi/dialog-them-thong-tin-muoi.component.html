@@ -5,17 +5,17 @@
         <nz-form-label nzRequired [nzNoColon]="true">
           Đơn vị
         </nz-form-label>
-        <nz-form-control>
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-            <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input donvi__input">
+            <input placeholder="Đơn vị" nz-input formControlName="tenDonVi" (input)="onInput($event)"
               [nzAutocomplete]="auto" />
           </nz-input-group>
           <ng-template #suffixIcon>
             <i nz-icon nzType="search"></i>
           </ng-template>
           <nz-autocomplete #auto>
-            <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi">{{ option.labelDonVi
-              }}
+            <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi" (click)="selectDonVi(option)">
+              {{ option.labelDonVi }}
             </nz-auto-option>
           </nz-autocomplete>
         </nz-form-control>
@@ -24,20 +24,20 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-        <nz-form-control>
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon1" class="search__input autocomplete__input">
-            <input placeholder="Đơn vị tính" nz-input [(ngModel)]="inputDonViTinh" (input)="onInputDonViTinh($event)"
-              [nzAutocomplete]="auto1" />
-          </nz-input-group>
-          <ng-template #suffixIcon1>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-          <nz-autocomplete #auto1>
-            <nz-auto-option *ngFor="let option of optionsDonViTinhShow" [nzValue]="option.labelDonViTinh">{{
-              option.labelDonViTinh }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị tính" nz-input formControlName="donViTinh" (input)="onInputDonViTinh($event)"
+            [nzAutocomplete]="autoDVT" />
+        </nz-input-group>
+
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #autoDVT>
+          <nz-auto-option *ngFor="let option of optionsDVT" [nzValue]="option.labelDonViTinh"
+            (click)="selectDonViTinh(option)">{{
+            option.labelDonViTinh }}
+          </nz-auto-option>
+        </nz-autocomplete>
       </nz-form-item>
     </div>
     <!-- <div nz-col [nzSpan]="24">
@@ -56,7 +56,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoTonKho" />
+          <input nz-input formControlName="tkdnTongSo" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -65,7 +65,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="slMuoi1" />
+            <input nz-input formControlName="tkdnSoLuong1" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -75,7 +75,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="slMuoi2" />
+            <input nz-input formControlName="tkdnSoLuong2" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -85,7 +85,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="slMuoi3" />
+            <input nz-input formControlName="tkdnSoLuong3" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -98,7 +98,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocNhapTrongNam" />
+          <input nz-input formControlName="ntnTongSo" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -110,7 +110,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoXuat" />
+          <input nz-input formControlName="xtnTongSo" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -119,7 +119,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="slMuoi1" />
+            <input nz-input formControlName="xtnSoLuong1" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -129,7 +129,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="slMuoi2" />
+            <input nz-input formControlName="xtnSoLuong2" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -139,7 +139,7 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="slMuoi3" />
+            <input nz-input formControlName="xtnSoLuong3" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -152,7 +152,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control class="mb-16">
-          <input nz-input formControlName="tongTruocCuoiNam" />
+          <input nz-input formControlName="tkcnTongSo" />
         </nz-form-control>
       </nz-form-item>
     </div>

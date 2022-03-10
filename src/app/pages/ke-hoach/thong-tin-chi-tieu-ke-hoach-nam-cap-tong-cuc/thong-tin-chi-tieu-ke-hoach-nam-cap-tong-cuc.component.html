@@ -195,19 +195,15 @@
                 <td>0</td>
                 <td>0</td>
               </ng-container>
-              <td>{{data.tkdnTongGao | number: '1.0-1'}}
-              </td>
+              <td> {{data.tkdnTongGao | number: '1.0-1'}} </td>
               <ng-container *ngIf="data.tkdnGao.length > 0">
-                <td *ngFor="let item of data.tkdnGao">
-                  {{item.soLuong | number: '1.0-1'}}</td>
+                <td *ngFor="let item of data.tkdnGao"> {{item.soLuong | number: '1.0-1'}} </td>
               </ng-container>
               <ng-container *ngIf="data.tkdnGao.length == 0">
-                <td>0 </td>
-                <td>0</td>
+                <td> 0 </td>
+                <td> 0 </td>
               </ng-container>
-              <td class="tong-so-quy-thoc">
-                {{data.ntnTongSoQuyThoc | number:
-                '1.0-1'}}</td>
+              <td class="tong-so-quy-thoc"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
               <td>{{data.ntnThoc | number: '1.0-1'}}</td>
               <td>{{data.ntnGao | number: '1.0-1'}}</td>
               <td>{{data.xtnTongSoQuyThoc | number:
@@ -245,14 +241,14 @@
                 <a>
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a>
+                <a (click)="deleteKeHoachLuongThuc(data.stt)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
               <td *ngIf="data.stt == null" class="background-last-row"></td>
               <td *ngIf="data.stt ==  null" class="background-last-row"></td>
             </tr>
-            <tr>
+            <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
               <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
               <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 4, ',','table-luong-thuc') : 0 |
                 number: '1.0-1'}}
@@ -476,34 +472,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let itemVatTu of groupingTableVatTu.data">
-              <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.stt}}</td>
-              <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.tenDonVi}}</td>
-            </tr>
             <ng-container *ngFor="let itemVatTu of groupingTableVatTu.data">
-              <tr class="table__header-vat-tu" *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
-                <td>{{itemNhomVatTu.tenVatTuCha}}</td>
-                <td>{{itemNhomVatTu.donViTinh}}</td>
-                <td>{{itemNhomVatTu.tongNhap}}</td>
-                <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
-                <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
-                <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
-                <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
-                <td>{{itemNhomVatTu.nhapTrongNam}}</td>
+              <tr>
+                <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.stt}}</td>
+                <td [attr.rowspan]="rowSpanVatTu()">{{itemVatTu.tenDonVi}}</td>
               </tr>
-            </ng-container>
-            <ng-container *ngFor="let itemVatTu of groupingTableVatTu.data">
               <ng-container *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
-                <tr *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
-                  <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
-                  <td>{{itemVatTuThietBi.donViTinh}}</td>
-                  <td>{{itemVatTuThietBi.tongNhap}}</td>
-                  <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
-                  <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
-                  <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
-                  <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
-                  <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
+                <tr class="table__header-vat-tu">
+                  <td>{{itemNhomVatTu.tenVatTuCha}}</td>
+                  <td>{{itemNhomVatTu.donViTinh}}</td>
+                  <td>{{itemNhomVatTu.tongNhap}}</td>
+                  <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
+                  <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
+                  <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
+                  <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
+                  <td>{{itemNhomVatTu.nhapTrongNam}}</td>
                 </tr>
+                <ng-container *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
+                  <tr>
+                    <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
+                    <td>{{itemVatTuThietBi.donViTinh}}</td>
+                    <td>{{itemVatTuThietBi.tongNhap}}</td>
+                    <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
+                    <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
+                    <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
+                    <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
+                    <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
+                  </tr>
+                </ng-container>
               </ng-container>
             </ng-container>
           </tbody>
@@ -535,7 +531,7 @@
         <nz-form-label nzRequired [nzNoColon]="true">
           Ghi chú
         </nz-form-label>
-        <ul>
+        <ul *ngIf="id == 0">
           <li class="ghi-chu__item">
             Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
             chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
@@ -553,6 +549,8 @@
             2022
           </li>
         </ul>
+        <textarea rows="3" class="search__input" nz-input [(ngModel)]="thongTinChiTieuKeHoachNam.ghiChu"
+          *ngIf="id > 0"></textarea>
       </div>
     </div>
   </div>

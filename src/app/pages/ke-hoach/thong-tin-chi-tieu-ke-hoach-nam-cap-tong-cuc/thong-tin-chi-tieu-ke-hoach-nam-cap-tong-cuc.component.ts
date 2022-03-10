@@ -1,3 +1,4 @@
+import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { DialogThongTinLuongThucComponent } from './../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
 import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNam';
@@ -14,6 +15,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 import * as XLSX from 'xlsx';
+import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -46,6 +48,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     new ThongTinChiTieuKeHoachNam();
   tableExist: boolean = false;
   keHoachLuongThucDialog: KeHoachLuongThuc;
+  keHoachMuoiDialog: KeHoachMuoi;
 
   constructor(
     private router: Router,
@@ -53,7 +56,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
@@ -190,12 +193,25 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             ...this.thongTinChiTieuKeHoachNam.khLuongThuc,
             this.keHoachLuongThucDialog,
           ];
-
-          console.log(this.thongTinChiTieuKeHoachNam.khLuongThuc);
         }
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
-      this.handleOpenModal('thongTinVatTuTrongNam');
+      const modalVatTu = this.modal.create({
+        nzTitle: 'Thông tin vật tư trong năm',
+        nzContent: DialogThemThongTinVatTuTrongNamComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          // totalRecord: this.totalRecord,
+          // date: event,
+        },
+      });
+      modalVatTu.afterClose.subscribe((muoi) => {
+        if (muoi) {
+        }
+      });
     } else if (this.tabSelected == TAB_SELECTED.muoi) {
       const modalMuoi = this.modal.create({
         nzTitle: 'Thông tin muối',
@@ -211,6 +227,60 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
       modalMuoi.afterClose.subscribe((muoi) => {
         if (muoi) {
+          console.log(muoi);
+          this.keHoachMuoiDialog = new KeHoachMuoi();
+
+          this.keHoachMuoiDialog.maDonVi = muoi.value.maDonVi;
+          this.keHoachMuoiDialog.ntnTongSoMuoi = muoi.value.ntnTongSo;
+          this.keHoachMuoiDialog.tenDonVi = muoi.value.tenDonVi;
+          this.keHoachMuoiDialog.tkcnTongSoMuoi = +muoi.value.tkcnTongSo;
+          const tkdnMuoi1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +muoi.value.tkdnSoLuong1,
+            vatTuId: null,
+          };
+          const tkdnMuoi2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +muoi.value.tkdnSoLuong2,
+            vatTuId: null,
+          };
+          const tkdnMuoi3 = {
+            id: null,
+            nam: 2017,
+            soLuong: +muoi.value.tkdnSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachMuoiDialog.tkdnMuoi = [tkdnMuoi1, tkdnMuoi2, tkdnMuoi3];
+          this.keHoachMuoiDialog.tkdnTongSoMuoi = +muoi.value.tkdnTongSo;
+          const xtnMuoi1 = {
+            id: null,
+            nam: 2019,
+            soLuong: +muoi.value.xtnSoLuong1,
+            vatTuId: null,
+          };
+          const xtnMuoi2 = {
+            id: null,
+            nam: 2018,
+            soLuong: +muoi.value.xtnSoLuong2,
+            vatTuId: null,
+          };
+          const xtnMuoi3 = {
+            id: null,
+            nam: 2017,
+            soLuong: +muoi.value.xtnSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachMuoiDialog.xtnMuoi = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
+          this.keHoachMuoiDialog.xtnTongSoMuoi = +muoi.value.xtnTongSo;
+          this.keHoachMuoiDialog.stt =
+            this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length + 1;
+
+          this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [
+            ...this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+            this.keHoachMuoiDialog,
+          ];
         }
       });
     }
@@ -228,7 +298,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.chiTieuKeHoachNamService
       .loadThongTinChiTieuKeHoachNam(id)
       .subscribe((res) => {
-        console.log(res);
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
           this.rowSpanVatTu();
@@ -253,6 +322,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     const listTable = document
       .getElementById(idTable)
       ?.getElementsByTagName('table');
+
     if (listTable && listTable.length >= indexTable) {
       const table = listTable[indexTable];
       for (let i = indexRow; i < table.rows.length - 1; i++) {
@@ -292,8 +362,35 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       sheet['!cols'] = [];
       sheet['!cols'][24] = { hidden: true };
       sheet['!cols'][25] = { hidden: true };
-      XLSX.utils.book_append_sheet(workbook, sheet, "Sheet" + (i + 1).toString());
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheet,
+        'Sheet' + (i + 1).toString(),
+      );
     }
-    XLSX.writeFile(workbook, "Report.xlsx");
+    XLSX.writeFile(workbook, 'Report.xlsx');
+  }
+
+  deleteKeHoachLuongThuc(stt: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.thongTinChiTieuKeHoachNam.khLuongThuc =
+          this.thongTinChiTieuKeHoachNam.khLuongThuc.filter(
+            (khlt) => khlt.stt !== stt,
+          );
+        this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((lt, i) => {
+          if (i >= stt - 1) {
+            lt.stt = i + 1;
+          }
+        });
+      },
+    });
   }
 }

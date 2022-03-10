@@ -1,6 +1,7 @@
 import { ItemDetail } from './ItemDetail';
 
 export class KeHoachLuongThuc {
+  id: number;
   stt: number;
   cucId: number;
   cucDTNNKhuVuc: string;

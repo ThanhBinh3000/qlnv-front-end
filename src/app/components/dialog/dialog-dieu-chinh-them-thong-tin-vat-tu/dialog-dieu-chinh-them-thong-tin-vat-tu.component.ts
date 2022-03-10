@@ -4,9 +4,9 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { MOCK_LIST } from 'src/app/pages/ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa/danh-sach-vat-tu-hang-hoa.constant';
-import { VatTu } from 'src/app/pages/ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa/danh-sach-vat-tu-hang-hoa.type';
 import { DonviService } from 'src/app/services/donvi.service';
+import { MOCK_LIST } from '../dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.constant';
+import { VatTu } from '../dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 
 @Component({
   selector: 'dialog-dieu-chinh-them-thong-tin-vat-tu',
@@ -34,7 +34,7 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.formData = this.fb.group({
@@ -61,8 +61,7 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
       await this.loadDonVi();
       await this.loadDonViTinh();
       this.spinner.hide();
-    }
-    catch (err) {
+    } catch (err) {
       this.spinner.hide();
     }
   }
@@ -116,7 +115,8 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
       this.optionsDonViTinhShow = [];
     } else {
       this.optionsDonViTinhShow = this.optionsDonViTinh.filter(
-        (x) => x.labelDonViTinh.toLowerCase().indexOf(value.toLowerCase()) != -1,
+        (x) =>
+          x.labelDonViTinh.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
   }

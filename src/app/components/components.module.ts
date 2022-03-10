@@ -66,6 +66,7 @@ import { DialogDieuChinhThemThongTinMuoiComponent } from './dialog/dialog-dieu-c
 import { DialogDieuChinhThemThongTinVatTuComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-vat-tu/dialog-dieu-chinh-them-thong-tin-vat-tu.component';
 import { DialogThongTinLuongThucComponent } from './dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
 import { DialogThemThongTinMuoiComponent } from './dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
+import { DialogThemThongTinVatTuTrongNamComponent } from './dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { DialogThemThongTinMuoiComponent } from './dialog/dialog-them-thong-tin-
     DialogDieuChinhThemThongTinVatTuComponent,
     DialogThongTinLuongThucComponent,
     DialogThemThongTinMuoiComponent,
+    DialogThemThongTinVatTuTrongNamComponent,
     //pipes
     FilterPipe,
   ],
