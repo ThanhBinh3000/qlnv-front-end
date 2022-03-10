@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 
@@ -43,7 +43,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   importFile(body: any): Promise<any> {
     const formData = new FormData();
-    formData.append('file', body);
-    return this.httpClient.post<any>(`${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`, formData).toPromise();
+    formData.append('file', body, body.name);
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`
+    return this.httpClient.post(url, formData).toPromise();
   }
 }
