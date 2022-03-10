@@ -502,7 +502,22 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-sub" [useExistingCss]="true" printSectionId="table-luong-thuc" ngxPrint>
+          <button type="button" class="btn btn-sub" (click)="printTable()">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+          <button type="button" class="btn btn-sub file-not-show" id="printLuongThuc" [useExistingCss]="true"
+            printSectionId="table-luong-thuc" ngxPrint>
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+          <button type="button" class="btn btn-sub file-not-show" id="printVatTu" [useExistingCss]="true"
+            printSectionId="table-vat-tu" ngxPrint>
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+          <button type="button" class="btn btn-sub file-not-show" id="printMuoi" [useExistingCss]="true"
+            printSectionId="table-muoi" ngxPrint>
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
           </button>

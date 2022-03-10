@@ -22,7 +22,7 @@ export class DialogLuaChonInComponent implements OnInit {
   }
 
   handleOk() {
-    this._modalRef.close();
+    this._modalRef.close(this.options);
   }
 
   handleCancel() {

@@ -433,5 +433,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         // date: event,
       },
     });
+    modalIn.afterClose.subscribe((res) => {
+      if (res) {
+        if (res.luongThuc) {
+          document.getElementById('printLuongThuc').click();
+        }
+        if (res.muoi) {
+          document.getElementById('printMuoi').click();
+        }
+        if (res.vatTu) {
+          document.getElementById('printVatTu').click();
+        }
+      }
+    });
   }
 }
