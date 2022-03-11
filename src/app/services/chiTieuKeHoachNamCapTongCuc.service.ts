@@ -47,4 +47,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`
     return this.httpClient.post(url, formData).toPromise();
   }
+
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`
+    return this.httpClient.put(url, body).toPromise();
+  }
 }
