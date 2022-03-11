@@ -15,17 +15,19 @@ import * as fileSaver from 'file-saver';
 export class ItemData {
   id: any;
   stt: any;
-  tenvattu: string;
-  dvt: string;
-  qdso: string;
-  soluong: number;
-  giatoida: number;
-  thanhtien: number;
-  th_soluong:any;
-  th_giatoida:any;
-  th_thanhtien:any;
-  ghichu:any;
-  parent:any;
+  index:any;
+  maVtu: string;
+  maDviTinh: string;
+  soQd: string;
+  khSoLuong: number;
+  khGiaMuaTd: number;
+  khTtien: number;
+  thSoLuong:any;
+  thGiaMuaTd:any;
+  thTtien:any;
+  ghiChu:any;
+  maVtuParent:any;
+  loai:any;
   checked!: boolean;
 }
 
@@ -48,7 +50,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '30';
+  maLoaiBacao: string = '90';
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -62,42 +64,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   dotbaocao:any;
 
   chiTietBcaos: any;
-  lstCTietBCao: ItemData[] = [
-    {
-      id: 1,
-      stt: 'I',
-      tenvattu: 'Đơn vị mua',
-      dvt: '',
-      qdso: '',
-      soluong: null,
-      giatoida:null ,
-      thanhtien:null ,
-      th_soluong:null,
-      th_giatoida:null,
-      th_thanhtien:null,
-      ghichu:null,
-      parent:1,
-      checked: false,
-    },
-    {
-      id: 1,
-      stt: 'II',
-      tenvattu: 'Tổng cục mua',
-      dvt: '',
-      qdso: '',
-      soluong: null,
-      giatoida:null ,
-      thanhtien:null ,
-      th_soluong:null,
-      th_giatoida:null,
-      th_thanhtien:null,
-      ghichu:null,
-      parent:2,
-      checked: false,
-    }
-    
-
-  ];
+  lstCTietBCao: ItemData[] = [ ];
+  lstCTietBCao1: ItemData[] = [ ];
+  lstCTietBCao2: ItemData[] = [ ];
   lstFile: any[] = [];
   listIdFiles: string;
   errorMessage: any;
@@ -105,10 +74,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   donvitien: string;
 
   allChecked = false; // check all checkbox
-  indeterminate = true; // properties allCheckBox
-  editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
-  listNoidung: any[] = [];
-  listNhomchi: any[] = [];
+  allChecked1 = false;
+  allChecked2 = false;
+  indeterminate = true; 
+  indeterminate1 = true;
+  indeterminate2 = true;// properties allCheckBox
+  editCache1: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
+  editCache2: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
+  listVattu: any[] = [];
+  listDonvitinh: any[] = [];
   listIdDelete: string = '';
   fileList: NzUploadFile[] = [];
   listFile: File[] = [];
@@ -132,25 +106,20 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
 
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
-    this.maDvi = this.router.snapshot.paramMap.get('maDvi');
-    this.maLoaiBacao = this.router.snapshot.paramMap.get('maLoaiBacao');
-    this.nam = this.router.snapshot.paramMap.get('nam');
+    // this.maDvi = this.router.snapshot.paramMap.get('maDvi');
+    // this.maLoaiBacao = this.router.snapshot.paramMap.get('maLoaiBacao');
+    // this.nam = this.router.snapshot.paramMap.get('nam');
 
     if (this.id != null) {
       this.getDetailReport();
-    } else if (
-      this.maDvi != null &&
-      this.maLoaiBacao != null &&
-      this.nam != null
-    ) {
-      this.calltonghop();
+      // this.updateEditCache();
     } else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = userInfor?.username;
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '30';
+      this.maLoaiBacao = '90';
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -165,13 +134,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.errorMessage = err.error.message;
         },
       );
+      // this.updateEditCache();
     }
     //get danh muc noi dung
-    this.quanLyVonPhiService.dMNoiDung().subscribe(
+    this.quanLyVonPhiService.dmVattuhanghoa().subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.listNoidung = data.data?.content;
-          console.log(this.listNoidung);
+          this.listVattu = data.data?.content;
+          console.log(this.listVattu);
         } else {
           this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
         }
@@ -181,11 +151,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         this.errorMessage = err.error.message;
       },
     );
-    this.quanLyVonPhiService.dMNhomChi().subscribe(
+    this.quanLyVonPhiService.dmDonvitinh().subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.listNhomchi = data.data?.content;
-          console.log(this.listNhomchi);
+          this.listDonvitinh = data.data?.content;
+          console.log(data);
         } else {
           this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
         }
@@ -244,11 +214,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
   }
 
-  t:any;
-  //fix cứng 2 row
-  addnewrow(){
-    this.addLine(1);
-  }
+  
   addrowchild(){
     alert('hihi');
   }
@@ -276,14 +242,27 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
       (data) => {
+        console.log(data);
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
+          
+          var temparr = data.data.lstCTietBCao;
+          temparr.forEach(e => {
+            debugger
+            var idex = this.lstCTietBCao.findIndex(item => item.maVtuParent==Number(e.maVtuParent)+1)
+            console.log(idex);
+            if(idex==-1){
+              this.lstCTietBCao.push(e);
+            }else{
+              this.lstCTietBCao.splice(idex,0,e);
+            }
+            
+          })
+         // this.lstCTietBCao = data.data.lstCTietBCao;
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = '30';
+          this.maLoaiBacao = '90';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -305,6 +284,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
+          // this.updateEditCache();
         } else {
           this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
         }
@@ -342,16 +322,67 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.spinner.hide();
   }
 
+
   //check all input
   updateAllChecked(): void {
     this.indeterminate = false;
-    if (this.allChecked) {
-      this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
+    if (!this.allChecked1 && !this.allChecked2){
+      this.allChecked = true;
+    }
+    else {
+      this.allChecked = false;
+      
+    }
+    if(this.allChecked){
+    
+      this.lstCTietBCao1 = this.lstCTietBCao.map((item) => ({
+        ...item,
+        checked: true,
+      }));
+      this.lstCTietBCao2 = this.lstCTietBCao.map((item) => ({
+        ...item,
+        checked: true,
+      }));
+    }else{
+      this.lstCTietBCao1 = this.lstCTietBCao.map((item) => ({
+        ...item,
+        checked: false,
+      }));
+      this.lstCTietBCao2 = this.lstCTietBCao.map((item) => ({
+        ...item,
+        checked: false,
+      }));
+    }
+    this.updateAllChecked1();
+    this.updateAllChecked2();
+  }
+
+  //check all input
+  updateAllChecked1(): void {
+    this.indeterminate1 = false;
+    if (this.allChecked1) {
+      this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
         ...item,
         checked: true,
       }));
     } else {
-      this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
+      this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
+        ...item,
+        checked: false,
+      }));
+    }
+  }
+
+  //check all input
+  updateAllChecked2(): void {
+    this.indeterminate2 = false;
+    if (this.allChecked2) {
+      this.lstCTietBCao2 = this.lstCTietBCao2.map((item) => ({
+        ...item,
+        checked: true,
+      }));
+    } else {
+      this.lstCTietBCao2 = this.lstCTietBCao2.map((item) => ({
         ...item,
         checked: false,
       }));
@@ -359,44 +390,172 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   }
 
   // xoa dong
-  deleteById(id: any): void {
-    this.lstCTietBCao = this.lstCTietBCao.filter((item) => item.id != id);
-    if (typeof id == 'number') {
-      this.listIdDelete += id + ',';
-    }
-  }
-
-  //chọn row cần sửa và trỏ vào template
-  startEdit(id: string): void {
-    this.editCache[id].edit = true;
-  }
-
-  // them dong moi
-  addLine(id: number): void {
+  deleteById1(id: any): void {
+    console.log(typeof id);
+      this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item.id != id);
+      if (typeof id == 'number') {
+        this.listIdDelete += id + ',';
+      }
     
+    
+  }
+  //chọn row cần sửa và trỏ vào template
+  startEdit1(id: string): void {
+    this.editCache1[id].edit = true;
+  }
+
+  addLine1(idx:any): void {
+    // console.log(loai);
+    // var x;
+    // x =this.lstCTietBCao.find((element)=> {
+    //     element.loai ==loai
+    // } );
+    console.log(idx);
+
     let item: ItemData = {
       id: uuid.v4(),
-      stt: '',
-      tenvattu: '',
-      dvt: '',
-      qdso: '',
-      soluong: null,
-      giatoida:null ,
-      thanhtien:null ,
-      th_soluong:null,
-      th_giatoida:null,
-      th_thanhtien:null,
-      ghichu:null,
-      parent:this.lstCTietBCao[id-1].parent,
-      checked: false,
+      stt: 0,
+      index:0,
+      maVtu: '',
+      maDviTinh: null,
+      soQd: null,
+      khSoLuong: null,
+      khGiaMuaTd: null,
+      khTtien: null,
+      thSoLuong:null,
+      thGiaMuaTd:null,
+      thTtien:null,
+      ghiChu:null,
+      maVtuParent:1,
+      loai:'',
+      checked!: false,
     };
 
-    this.lstCTietBCao.splice(id, 0, item);
-    this.editCache[item.id] = {
+    this.lstCTietBCao1.splice(idx, 0, item);
+    this.editCache1[item.id] = {
       edit: true,
       data: { ...item },
     };
+    
   }
+
+   //update khi sửa
+   saveEdit1(id: string): void {
+    this.editCache1[id].data.checked = this.lstCTietBCao1.find(
+      (item) => item.id === id,
+    ).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBCao1[index], this.editCache1[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache1[id].edit = false; // CHUYEN VE DANG TEXT
+  }
+
+  //hủy thao tác sửa update lại giá trị ban đầu
+  cancelEdit1(id: string): void {
+    const index = this.lstCTietBCao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    this.editCache1[id] = {
+      data: { ...this.lstCTietBCao1[index] },
+      edit: false,
+    };
+  }
+
+  updateEditCache1(): void {
+    this.lstCTietBCao1.forEach((item) => {
+      this.editCache1[item.id] = {
+        edit: false,
+        data: { ...item },
+      };
+    });
+  }
+
+
+   // xoa dong
+   deleteById2(id: any): void {
+    console.log(typeof id);
+      this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item.id != id);
+      if (typeof id == 'number') {
+        this.listIdDelete += id + ',';
+      }
+    
+    
+  }
+
+  
+
+  //chọn row cần sửa và trỏ vào template
+  startEdit2(id: string): void {
+    this.editCache2[id].edit = true;
+  }
+
+
+  // them dong moi
+  addLine2(idx:any): void {
+    // console.log(loai);
+    // var x;
+    // x =this.lstCTietBCao.find((element)=> {
+    //     element.loai ==loai
+    // } );
+    console.log(idx);
+
+    let item: ItemData = {
+      id: uuid.v4(),
+      stt: 0,
+      index:0,
+      maVtu: '',
+      maDviTinh: null,
+      soQd: null,
+      khSoLuong: null,
+      khGiaMuaTd: null,
+      khTtien: null,
+      thSoLuong:null,
+      thGiaMuaTd:null,
+      thTtien:null,
+      ghiChu:null,
+      maVtuParent:2,
+      loai:'tc',
+      checked!: false,
+    };
+
+    this.lstCTietBCao2.splice(idx, 0, item);
+    this.editCache2[item.id] = {
+      edit: true,
+      data: { ...item },
+    };
+    
+  }
+
+   //update khi sửa
+   saveEdit2(id: string): void {
+    this.editCache2[id].data.checked = this.lstCTietBCao2.find(
+      (item) => item.id === id,
+    ).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBCao2[index], this.editCache2[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache2[id].edit = false; // CHUYEN VE DANG TEXT
+  }
+
+  //hủy thao tác sửa update lại giá trị ban đầu
+  cancelEdit2(id: string): void {
+    const index = this.lstCTietBCao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    this.editCache2[id] = {
+      data: { ...this.lstCTietBCao2[index] },
+      edit: false,
+    };
+  }
+
+  
+
+  updateEditCache2(): void {
+    this.lstCTietBCao2.forEach((item) => {
+      this.editCache2[item.id] = {
+        edit: false,
+        data: { ...item },
+      };
+    });
+  }
+
+
+  
+
 
   //checkox trên tùng row
   updateSingleChecked(): void {
@@ -411,24 +570,34 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     }
   }
 
-  //update khi sửa
-  saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(
-      (item) => item.id === id,
-    ).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+  updateSingleChecked1(): void {
+    if (this.lstCTietBCao1.every((item) => !item.checked)) {
+      this.allChecked1 = false;
+      this.indeterminate1 = false;
+    } else if (this.lstCTietBCao1.every((item) => item.checked)) {
+      this.allChecked1 = true;
+      this.indeterminate1 = false;
+    } else {
+      this.indeterminate1 = true;
+    }
   }
 
-  //hủy thao tác sửa update lại giá trị ban đầu
-  cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-    this.editCache[id] = {
-      data: { ...this.lstCTietBCao[index] },
-      edit: false,
-    };
+  updateSingleChecked2(): void {
+    if (this.lstCTietBCao2.every((item) => !item.checked)) {
+      this.allChecked2 = false;
+      this.indeterminate2 = false;
+    } else if (this.lstCTietBCao2.every((item) => item.checked)) {
+      this.allChecked2 = true;
+      this.indeterminate2 = false;
+    } else {
+      this.indeterminate2 = true;
+    }
   }
+
+ 
+
+
+ 
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -481,7 +650,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       }
     });
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(
+    this.lstCTietBCao1 = this.lstCTietBCao1.filter(
+      (item) => item.checked != true,
+    );
+    this.lstCTietBCao2 = this.lstCTietBCao2.filter(
       (item) => item.checked != true,
     );
     this.allChecked = false;
@@ -489,11 +661,28 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
 
   // luu
   async luu() {
-    this.lstCTietBCao.forEach((e) => {
+
+    debugger
+    this.lstCTietBCao =[];
+    this.lstCTietBCao1.forEach(e => {
+      this.lstCTietBCao.push(e);
+    })
+
+    this.lstCTietBCao2.forEach(e => {
+      this.lstCTietBCao.push(e);
+    })
+
+    this.lstCTietBCao.forEach((e,index) => {
+      if(e.id ==1 || e.id==2){
+        this.lstCTietBCao.splice(index,1);
+      }
+      
+    });
+    this.lstCTietBCao.forEach(e =>{
       if (typeof e.id != 'number') {
         e.id = null;
       }
-    });
+    })
     // donvi tien
     if (this.donvitien == undefined) {
       this.donvitien = '01';
@@ -514,15 +703,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      fileDinhKems: this.listFileUploaded,
+      fileDinhKems: listFileUploaded,
       listIdFiles: idFileDinhKems,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao ='235',
-      maDviTien: this.donvitien,
+      dotBcao: this.dotbaocao,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBcao.toString(),
-      namHienHanh: this.namBcao.toString(),
+      namBcao: this.namBcao,
+      trangThai: this.trangThaiBanGhi,
     };
     this.spinner.show();
     console.log(request);
@@ -536,7 +725,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         }
       });
     } else {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      this.quanLyVonPhiService.themmoibaocaomau02(request).subscribe(
         (data) => {
           alert('trinh duyet thanh cong!');
           console.log(data);
@@ -547,18 +736,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         },
       );
     }
-    this.updateEditCache();
+    // this.updateEditCache();
     this.spinner.hide();
   }
 
-  updateEditCache(): void {
-    this.lstCTietBCao.forEach((item) => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item },
-      };
-    });
-  }
+
+  
+
+ 
+
 
   //upload file
   async uploadFile(file: File) {
@@ -585,41 +771,129 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     return temp;
   }
 
-  //call tong hop
-  calltonghop() {
-    this.spinner.hide();
-    let objtonghop = {
-      maDvi: this.maDvi,
-      maLoaiBcao: this.maLoaiBacao,
-      namHienTai: this.nam,
-    };
-    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.lstCTietBCao = res.data;
-          // this.namBaoCao = this.namBcao;
-          this.namBcao = this.currentday.getFullYear();
-          if (this.lstCTietBCao == null) {
-            this.lstCTietBCao = [];
-          }
-          console.log(this.lstCTietBCao);
-          
-        } else {
-          alert('co loi trong qua trinh van tin');
-        }
-      },
-      (err) => {
-        alert(err.error.message);
-      },
-    );
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe((res) => {
-      if (res.statusCode == 0) {
-        this.mabaocao = res.data;
-      } else {
-        this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
-      }
-    });
-    this.spinner.show();
+  
+  changeModel1(id: string): void {
+    this.editCache1[id].data.khTtien = Number(this.editCache1[id].data.khSoLuong) * Number(this.editCache1[id].data.khGiaMuaTd);
+    this.editCache1[id].data.thTtien = Number(this.editCache1[id].data.thSoLuong) * Number(this.editCache1[id].data.thGiaMuaTd);
   }
 
+  changeModel2(id: string): void {
+    this.editCache2[id].data.khTtien = Number(this.editCache2[id].data.khSoLuong) * Number(this.editCache2[id].data.khGiaMuaTd);
+    this.editCache2[id].data.thTtien = Number(this.editCache2[id].data.thSoLuong) * Number(this.editCache2[id].data.thGiaMuaTd);
+  }
+
+  themdong1(dv:any){
+
+    // var parentid:any;
+    // if(dv=='dv'){
+    //   parentid =1;
+    // }else{
+    //   parentid=2
+    // }
+  
+    var a = this.lstCTietBCao1.filter(item => item.loai == dv);
+    console.log(a);
+
+  let item: ItemData = {
+  
+      id: uuid.v4(),
+      stt: 1,
+      index:0,
+      maVtu: '',
+      maDviTinh: null,
+      soQd: null,
+      khSoLuong: null,
+      khGiaMuaTd: null,
+      khTtien: null,
+      thSoLuong:null,
+      thGiaMuaTd:null,
+      thTtien:null,
+      ghiChu:null,
+      maVtuParent:1,
+      loai:dv,
+      checked!: false,
+    };
+
+    this.lstCTietBCao1.splice(a.length, 0, item);
+    this.editCache1[item.id] = {
+      edit: true,
+      data: { ...item },
+    };
+    console.log(this.lstCTietBCao)
+  }
+
+  themdong2(dv:any){
+
+  
+    var a = this.lstCTietBCao2.filter(item => item.loai == dv);
+    console.log(a);
+
+  let item: ItemData = {
+  
+      id: uuid.v4(),
+      stt: 1,
+      index:0,
+      maVtu: '',
+      maDviTinh: null,
+      soQd: null,
+      khSoLuong: null,
+      khGiaMuaTd: null,
+      khTtien: null,
+      thSoLuong:null,
+      thGiaMuaTd:null,
+      thTtien:null,
+      ghiChu:null,
+      maVtuParent:2,
+      loai:dv,
+      checked!: false,
+    };
+
+    this.lstCTietBCao2.splice(a.length, 0, item);
+    this.editCache2[item.id] = {
+      edit: true,
+      data: { ...item },
+    };
+    console.log(this.lstCTietBCao)
+  }
+
+
+  // themdong1(dv:any,stt:any){
+
+  //   var parentid:any;
+  //   if(dv=='dv'){
+  //     parentid =1;
+  //   }else{
+  //     parentid=2
+  //   }
+  
+  //   var a = this.lstCTietBCao.filter(item => item.loai == dv);
+  //   console.log(a);
+  //  var  _stt= this.lstCTietBCao.findIndex(e => e.stt==stt);
+  // let item: ItemData = {
+  
+  //     id: uuid.v4(),
+  //     stt: this.lstCTietBCao[_stt].stt+1,
+  //     index:0,
+  //     maVtu: '',
+  //     maDviTinh: null,
+  //     soQd: null,
+  //     khSoLuong: null,
+  //     khGiaMuaTd: null,
+  //     khTtien: null,
+  //     thSoLuong:null,
+  //     thGiaMuaTd:null,
+  //     thTtien:null,
+  //     ghiChu:null,
+  //     maVtuParent:parentid,
+  //     loai:dv,
+  //     checked!: false,
+  //   };
+
+  //   this.lstCTietBCao.splice(_stt+1, 0, item);
+  //   this.editCache[item.id] = {
+  //     edit: true,
+  //     data: { ...item },
+  //   };
+  //   console.log(this.lstCTietBCao)
+  // }
 }

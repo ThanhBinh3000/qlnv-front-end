@@ -108,7 +108,6 @@ export class Utils {
 
     //get role truong bo phan
     public getRoleTBP(status: any, unit: any, role: any) {
-        debugger
         var a = Utils.btnRoleTBP.status.includes(status);
         var b = (Utils.btnRoleTBP.status.includes(status) && Utils.btnRoleTBP.unit.includes(unit) && Utils.btnRoleTBP.role.includes(role));
         var c = !(Utils.btnRoleTBP.status.includes(status) && Utils.btnRoleTBP.unit.includes(unit) && Utils.btnRoleTBP.role.includes(role))

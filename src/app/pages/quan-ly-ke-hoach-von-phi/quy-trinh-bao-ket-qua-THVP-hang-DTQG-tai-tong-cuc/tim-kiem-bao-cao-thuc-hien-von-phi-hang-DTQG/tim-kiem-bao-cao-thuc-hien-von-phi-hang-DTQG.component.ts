@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucService } from 'src/app/services/danhMuc.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -35,16 +36,28 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   noParent = true;
   searchValue = '';
 
+
+  listBcaoKqua:any []=[];
+  lenght:any=0;
+
+
   searchFilter = {
-    donvitao:'',
-    ngaylap:'',
-    denngay:'',
-    trangthai:'',
-    mabaocao:'',
-    loaibaocao:'',
-    nambaocao:'',
-    dotbaocao:'',
+    maDvi:'235',
+    ngayTaoTu:'',
+    ngayTaoDen:'',
+    trangThai:'',
+    maBcao:'',
+    maLoaiBcao:'',
+    namBcao:'',
+    dotBcao:'',
+    paggingReq: {
+      limit: 20,
+      page: 1
+    },
+    str: "",
   };
+
+  
   pages = {
     size: 10,
     page: 1,
@@ -56,6 +69,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     private danhMuc: DanhMucService,
     private router: Router,
     private datePipe: DatePipe,
+    private notifi:NzNotificationService,
   ) {
   }
 
@@ -91,6 +105,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     );
   }
 
+  // lay ten don vi tao
+  getUnitName(dvitao:any){
+    return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
+  }
+
   redirectThongTinTimKiem() {
     this.router.navigate([
       '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -106,8 +125,20 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   }
 
   
-  taomoi(){
-
+  timkiem(){
+    console.log(this.searchFilter);
+    this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
+      if(res.statusCode==0){
+        this.notifi.success('Danh Sách Báo Cáo', 'Lấy thông tin thành công');
+        this.listBcaoKqua = res.data.content;
+        if(this.listBcaoKqua.length!=0){
+          this.lenght = this.listBcaoKqua.length;
+        }
+      }else{
+        this.notifi.error('Danh Sách Báo Cáo', 'Có lỗi trong quá trình vấn tin');
+      }
+      console.log(res);
+    })
   }
  
 
@@ -115,20 +146,20 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   setUrl(lbaocao:any) {
     
     switch (lbaocao) {
-      case '02':
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02'
+      case '90':
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
         break;
-      case '03':
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03'
+      case '91':
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
         break;
-      case '04a':
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a'
+      case '92':
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
         break;
-      case '04b':
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b'
+      case '93':
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
         break;
-      case '05':
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05'
+      case '94':
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
         break;
       default:
         this.url = null;
