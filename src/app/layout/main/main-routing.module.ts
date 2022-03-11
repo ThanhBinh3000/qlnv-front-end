@@ -46,6 +46,13 @@ const routes: Routes = [
             (m) => m.QuanLyKeHoachVonPhiModule,
           ),
       },
+      {
+        path: MAIN_ROUTES.qlcapVonPhi,
+        loadChildren: () => 
+          import('../../pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.module').then(
+            (m) => m.QuanLyKeHoachVonPhiHangModule,
+          ),
+      },
     ],
   },
 ];
