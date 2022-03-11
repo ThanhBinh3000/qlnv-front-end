@@ -1,3 +1,4 @@
+import { KeHoachMuoi } from './../../../models/KeHoachMuoi';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -20,7 +21,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
   optionsDonVi: any[] = [];
   optionsDVT: any[] = [];
   optionsDonViTinh: any[] = [];
-
+  thongTinMuoi: KeHoachMuoi;
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -31,21 +32,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
-    this.formData = this.fb.group({
-      maDonVi: [null, [Validators.required]],
-      donViTinh: [null],
-      tenDonVi: [null],
-      tkdnTongSo: [null],
-      tkdnSoLuong1: [null],
-      tkdnSoLuong2: [null],
-      tkdnSoLuong3: [null],
-      ntnTongSo: [null],
-      xtnTongSo: [null],
-      xtnSoLuong1: [null],
-      xtnSoLuong2: [null],
-      xtnSoLuong3: [null],
-      tkcnTongSo: [null],
-    });
+    this.oninitForm();
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -55,7 +42,38 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
       this.spinner.hide();
     }
   }
-
+  oninitForm() {
+    this.formData = this.fb.group({
+      maDonVi: [
+        this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null,
+        [Validators.required],
+      ],
+      donViTinh: [this.thongTinMuoi ? this.thongTinMuoi.donViTinh : null],
+      tenDonVi: [this.thongTinMuoi ? this.thongTinMuoi.tenDonVi : null],
+      tkdnTongSo: [this.thongTinMuoi ? this.thongTinMuoi.tkdnTongSoMuoi : null],
+      tkdnSoLuong1: [
+        this.thongTinMuoi ? this.thongTinMuoi.tkdnMuoi[0].soLuong : null,
+      ],
+      tkdnSoLuong2: [
+        this.thongTinMuoi ? this.thongTinMuoi.tkdnMuoi[1].soLuong : null,
+      ],
+      tkdnSoLuong3: [
+        this.thongTinMuoi ? this.thongTinMuoi.tkdnMuoi[2].soLuong : null,
+      ],
+      ntnTongSo: [this.thongTinMuoi ? this.thongTinMuoi.ntnTongSoMuoi : null],
+      xtnTongSo: [this.thongTinMuoi ? this.thongTinMuoi.xtnTongSoMuoi : null],
+      xtnSoLuong1: [
+        this.thongTinMuoi ? this.thongTinMuoi.xtnMuoi[0].soLuong : null,
+      ],
+      xtnSoLuong2: [
+        this.thongTinMuoi ? this.thongTinMuoi.xtnMuoi[1].soLuong : null,
+      ],
+      xtnSoLuong3: [
+        this.thongTinMuoi ? this.thongTinMuoi.xtnMuoi[2].soLuong : null,
+      ],
+      tkcnTongSo: [this.thongTinMuoi ? this.thongTinMuoi.tkcnTongSoMuoi : null],
+    });
+  }
   async loadDonViTinh() {
     try {
       const res = await this.donViService.loadDonViTinh();

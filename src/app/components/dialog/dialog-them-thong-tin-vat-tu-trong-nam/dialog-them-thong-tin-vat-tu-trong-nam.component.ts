@@ -41,7 +41,8 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     this.formData = this.fb.group({
       maDonVi: [null, [Validators.required]],
       tenDonVi: [null],
-      maHangHoa: [{ value: null, disabled: true }, [Validators.required]],
+      donViId: [null],
+      maHangHoa: [null, [Validators.required]],
       tenHangHoa: [null],
       donViTinh: [null],
       soLuong: [null],
@@ -49,6 +50,11 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       soLuongTheoNam1: [null],
       soLuongTheoNam2: [null],
       soLuongTheoNam3: [null],
+      tenVatTuCha: [null],
+      vatTuChaId: [null],
+      maVatTuCha: [null],
+      vatTuId: [null],
+      maVatTu: [null],
     });
     this.spinner.show();
     try {
@@ -62,7 +68,9 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   }
 
   //modal func
-  handleOk() {}
+  save() {
+    this._modalRef.close(this.formData);
+  }
 
   handleCancel() {
     this._modalRef.destroy();
@@ -119,10 +127,12 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       );
     }
   }
+
   selectDonVi(donVi) {
     this.formData.patchValue({
       maDonVi: donVi.maDvi,
       tenDonVi: donVi.tenDvi,
+      donViId: donVi.id,
     });
   }
 
@@ -136,11 +146,13 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       );
     }
   }
+
   selectDonViTinh(donViTinh) {
     this.formData.patchValue({
       donViTinh: donViTinh.tenDviTinh,
     });
   }
+
   loadDanhMucHang() {
     this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
@@ -161,10 +173,10 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
-      if (node.children) {
-        for (let i = node.children.length - 1; i >= 0; i--) {
+      if (node.child) {
+        for (let i = node.child.length - 1; i >= 0; i--) {
           stack.push({
-            ...node.children[i],
+            ...node.child[i],
             level: node.level! + 1,
             expand: false,
             parent: node,
@@ -174,6 +186,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     }
     return array;
   }
+
   visitNode(
     node: VatTu,
     hashMap: { [id: string]: boolean },
@@ -184,10 +197,11 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       array.push(node);
     }
   }
+
   collapse(array: VatTu[], data: VatTu, $event: boolean): void {
     if (!$event) {
-      if (data.children) {
-        data.children.forEach((d) => {
+      if (data.child) {
+        data.child.forEach((d) => {
           const target = array.find((a) => a.id === d.id)!;
           target.expand = false;
           this.collapse(array, target, false);
@@ -197,6 +211,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       }
     }
   }
+
   search(e: Event) {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
@@ -206,5 +221,25 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
+  }
+
+  selectHangHoa(vatTu: any) {
+    this.formData.patchValue({
+      tenHangHoa: vatTu.ten,
+      tenVatTuCha: vatTu.parent.ten,
+      vatTuChaId: vatTu.parent.id,
+      maVatTuCha: vatTu.parent.ma,
+      vatTuId: vatTu.id,
+      maVatTu: vatTu.ma,
+    });
+  }
+
+  calculatorTongVatTu() {
+    this.formData.patchValue({
+      tongSo:
+        +this.formData.get('soLuongTheoNam1').value +
+        +this.formData.get('soLuongTheoNam2').value +
+        +this.formData.get('soLuongTheoNam3').value,
+    });
   }
 }

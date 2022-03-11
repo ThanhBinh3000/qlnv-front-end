@@ -2,7 +2,7 @@ export interface TreeNodeInterface<T> {
   key: string;
   level?: number;
   expand?: boolean;
-  children?: T[];
+  child?: T[];
   parent?: T;
 }
 

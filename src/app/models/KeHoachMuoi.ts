@@ -11,4 +11,5 @@ export class KeHoachMuoi {
   tkcnTongSoMuoi: number;
   tenDonVi: string;
   maDonVi: string;
+  donViTinh: string;
 }

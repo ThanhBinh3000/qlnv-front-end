@@ -56,7 +56,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tkdnTongSo" />
+          <input nz-input formControlName="tkdnTongSo" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -65,7 +65,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="tkdnSoLuong1" />
+            <nz-input-number formControlName="tkdnSoLuong1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -75,7 +76,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="tkdnSoLuong2" />
+            <nz-input-number formControlName="tkdnSoLuong2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -85,7 +87,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="tkdnSoLuong3" />
+            <nz-input-number formControlName="tkdnSoLuong3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -98,7 +101,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="ntnTongSo" />
+          <nz-input-number formControlName="ntnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -110,7 +113,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="xtnTongSo" />
+          <input nz-input formControlName="xtnTongSo" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -119,7 +122,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="xtnSoLuong1" />
+            <nz-input-number formControlName="xtnSoLuong1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -129,7 +133,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="xtnSoLuong2" />
+            <nz-input-number formControlName="xtnSoLuong2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -139,7 +144,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="xtnSoLuong3" />
+            <nz-input-number formControlName="xtnSoLuong3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -152,7 +158,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control class="mb-16">
-          <input nz-input formControlName="tkcnTongSo" />
+          <nz-input-number formControlName="tkcnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>

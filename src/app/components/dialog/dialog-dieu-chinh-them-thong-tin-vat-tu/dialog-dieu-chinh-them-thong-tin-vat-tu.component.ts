@@ -130,10 +130,10 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
-      if (node.children) {
-        for (let i = node.children.length - 1; i >= 0; i--) {
+      if (node.child) {
+        for (let i = node.child.length - 1; i >= 0; i--) {
           stack.push({
-            ...node.children[i],
+            ...node.child[i],
             level: node.level! + 1,
             expand: false,
             parent: node,
@@ -157,8 +157,8 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
 
   collapse(array: VatTu[], data: VatTu, $event: boolean): void {
     if (!$event) {
-      if (data.children) {
-        data.children.forEach((d) => {
+      if (data.child) {
+        data.child.forEach((d) => {
           const target = array.find((a) => a.key === d.key)!;
           target.expand = false;
           this.collapse(array, target, false);

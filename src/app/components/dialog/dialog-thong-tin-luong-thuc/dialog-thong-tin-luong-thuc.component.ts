@@ -1,3 +1,4 @@
+import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { DonviService } from 'src/app/services/donvi.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,6 +19,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   optionsDVT: any[] = [];
   optionsDonViTinh: any[] = [];
   yearNow: number;
+  keHoachLuongThuc: KeHoachLuongThuc = new KeHoachLuongThuc();
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -38,28 +40,76 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     }
   }
   initForm() {
+    console.log(this.keHoachLuongThuc);
+
     this.formData = this.fb.group({
-      maDonVi: [null, [Validators.required]],
-      donViTinh: [null],
-      tenDonvi: [null, [Validators.required]],
-      tkdnTongSoQuyThoc: [null],
-      tkdnThocSoLuong1: [null],
-      tkdnThocSoLuong2: [null],
-      tkdnThocSoLuong3: [null],
-      tkdnGaoSoLuong1: [null],
-      tkdnGaoSoLuong2: [null],
-      ntnTongSoQuyThoc: [null],
-      ntnThoc: [null],
-      ntnGao: [null],
-      xtnTongSoQuyThoc: [null],
-      xtnThocSoLuong1: [null],
-      xtnThocSoLuong2: [null],
-      xtnThocSoLuong3: [null],
-      xtnGaoSoLuong1: [null],
-      xtnGaoSoLuong2: [null],
-      tkcnTongSoQuyThoc: [null],
-      tkcnTongThoc: [null],
-      tkcnTongGao: [null],
+      maDonVi: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.maDonVi : null,
+        [Validators.required],
+      ],
+      donViTinh: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.donViTinh : null,
+      ],
+      tenDonvi: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tenDonvi : null,
+        [Validators.required],
+      ],
+      tkdnTongSoQuyThoc: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkdnTongSoQuyThoc : null,
+      ],
+      tkdnThocSoLuong1: [
+        this.keHoachLuongThuc
+          ? this.keHoachLuongThuc.tkdnThoc[0].soLuong
+          : null,
+      ],
+      tkdnThocSoLuong2: [
+        this.keHoachLuongThuc
+          ? this.keHoachLuongThuc.tkdnThoc[1].soLuong
+          : null,
+      ],
+      tkdnThocSoLuong3: [
+        this.keHoachLuongThuc
+          ? this.keHoachLuongThuc.tkdnThoc[2].soLuong
+          : null,
+      ],
+      tkdnGaoSoLuong1: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkdnGao[0].soLuong : null,
+      ],
+      tkdnGaoSoLuong2: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkdnGao[1].soLuong : null,
+      ],
+      ntnTongSoQuyThoc: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.ntnTongSoQuyThoc : null,
+      ],
+      ntnThoc: [this.keHoachLuongThuc ? this.keHoachLuongThuc.ntnThoc : null],
+      ntnGao: [this.keHoachLuongThuc ? this.keHoachLuongThuc.ntnGao : null],
+      xtnTongSoQuyThoc: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnTongSoQuyThoc : null,
+      ],
+      xtnThocSoLuong1: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnThoc[0].soLuong : null,
+      ],
+      xtnThocSoLuong2: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnThoc[1].soLuong : null,
+      ],
+      xtnThocSoLuong3: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnThoc[2].soLuong : null,
+      ],
+      xtnGaoSoLuong1: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnGao[0].soLuong : null,
+      ],
+      xtnGaoSoLuong2: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.xtnGao[1].soLuong : null,
+      ],
+      tkcnTongSoQuyThoc: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkcnTongSoQuyThoc : null,
+      ],
+      tkcnTongThoc: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkcnTongThoc : null,
+      ],
+      tkcnTongGao: [
+        this.keHoachLuongThuc ? this.keHoachLuongThuc.tkcnTongGao : null,
+      ],
     });
   }
   cancel() {

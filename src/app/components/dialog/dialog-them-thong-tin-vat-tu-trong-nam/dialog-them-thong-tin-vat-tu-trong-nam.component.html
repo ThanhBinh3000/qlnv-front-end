@@ -43,11 +43,11 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true">
-          Mã hàng hóa
+          Hàng hóa
         </nz-form-label>
         <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
-          <nz-input-group nzAddOnAfterIcon="folder-open">
-            <input nz-input formControlName="maHangHoa" />
+          <nz-input-group nzAddOnAfterIcon="folder-open" class="ma-hang-hoa">
+            <input nz-input formControlName="tenHangHoa" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
         <!-- dropdown -->
@@ -79,16 +79,17 @@
                   <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
                     <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
                       <td [nzIndentSize]="item.level! * 20"
-                        [nzShowExpand]="!!item.children && item.children.length !== 0" [(nzExpand)]="item.expand"
-                        (nzExpandChange)=" 
+                        [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
+                        [(nzExpand)]="item.expand" (nzExpandChange)="
                               collapse(mapOfExpandedData[data.id], item, $event)
                             ">
                         {{ item.ten }}
                       </td>
                       <td>{{ item.ma }}</td>
                       <td style="text-align: center">
-                        <div *ngIf="item.children.length == 0">
-                          <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item></i>
+                        <div *ngIf="item?.child?.length == 0 || !item?.child">
+                          <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item
+                            (click)="selectHangHoa(item)"></i>
                         </div>
                       </td>
                     </tr>
@@ -122,7 +123,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Số lượng </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="soLuong" />
+          <nz-input-number formControlName="soLuong" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -137,7 +138,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSo" />
+          <input nz-input formControlName="tongSo" readonly />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -147,8 +148,10 @@
           Số lượng - VT1601
         </nz-form-label>
         <nz-form-control>
-          <nz-input-group nzAddOnAfter=" 2017 ">
-            <input nz-input formControlName="soLuongTheoNam1" />
+          <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
+            <nz-input-number formControlName="soLuongTheoNam1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              (input)="calculatorTongVatTu()">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -159,8 +162,10 @@
           Số lượng - VT1601
         </nz-form-label>
         <nz-form-control>
-          <nz-input-group nzAddOnAfter=" 2018 ">
-            <input nz-input formControlName="soLuongTheoNam2" />
+          <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
+            <nz-input-number formControlName="soLuongTheoNam2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              (input)="calculatorTongVatTu()">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -171,8 +176,10 @@
           Số lượng - VT1601
         </nz-form-label>
         <nz-form-control class="mb-16">
-          <nz-input-group nzAddOnAfter=" 2019 ">
-            <input nz-input formControlName="soLuongTheoNam3" />
+          <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
+            <nz-input-number formControlName="soLuongTheoNam3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              (input)="calculatorTongVatTu()">
+            </nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -184,7 +191,7 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="handleOk()" class="modal__button--save">
+      <button nz-button (click)="save()" class="modal__button--save">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
