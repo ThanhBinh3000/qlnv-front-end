@@ -22,5 +22,5 @@ export class KeHoachLuongThuc {
   tkcnTongThoc: number;
   tkcnTongGao: number;
   tenDonvi: string;
-  maDonvi: string;
+  maDonVi: string;
 }

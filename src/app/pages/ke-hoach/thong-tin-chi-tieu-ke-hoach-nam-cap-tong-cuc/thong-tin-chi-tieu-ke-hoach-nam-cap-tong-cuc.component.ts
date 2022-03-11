@@ -85,7 +85,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (luongThuc) {
           this.keHoachLuongThucDialog = new KeHoachLuongThuc();
           this.keHoachLuongThucDialog.tenDonvi = luongThuc.value.tenDonvi;
-          this.keHoachLuongThucDialog.maDonvi = luongThuc.value.maDonVi;
+          this.keHoachLuongThucDialog.maDonVi = luongThuc.value.maDonVi;
           this.keHoachLuongThucDialog.tkdnTongSoQuyThoc =
             +luongThuc.value.tkdnTongSoQuyThoc;
           this.keHoachLuongThucDialog.tkdnTongThoc =
@@ -447,50 +447,41 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   checkDataExistLuongThuc(data: any) {
     if (this.thongTinChiTieuKeHoachNam.khLuongThuc) {
-      let indexExist = this.thongTinChiTieuKeHoachNam.khLuongThuc.findIndex(x => x.maDonvi == data.maDonVi);
+      let indexExist = this.thongTinChiTieuKeHoachNam.khLuongThuc.findIndex(x => x.maDonVi == data.maDonVi);
       if (indexExist != -1) {
-        this.thongTinChiTieuKeHoachNam.khLuongThuc[indexExist] = data;
-      }
-      else {
-        this.thongTinChiTieuKeHoachNam.khLuongThuc = [...this.thongTinChiTieuKeHoachNam.khLuongThuc, data];
+        this.thongTinChiTieuKeHoachNam.khLuongThuc.splice(indexExist, 1);
       }
     }
     else {
       this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
-      this.thongTinChiTieuKeHoachNam.khLuongThuc = [...this.thongTinChiTieuKeHoachNam.khLuongThuc, data];
     }
+    this.thongTinChiTieuKeHoachNam.khLuongThuc = [...this.thongTinChiTieuKeHoachNam.khLuongThuc, data];
   }
 
   checkDataExistMuoi(data: any) {
     if (this.thongTinChiTieuKeHoachNam.khMuoiDuTru) {
       let indexExist = this.thongTinChiTieuKeHoachNam.khMuoiDuTru.findIndex(x => x.maDonVi == data.maDonVi);
       if (indexExist != -1) {
-        this.thongTinChiTieuKeHoachNam.khMuoiDuTru[indexExist] = data;
-      }
-      else {
-        this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [...this.thongTinChiTieuKeHoachNam.khMuoiDuTru, data];
+        this.thongTinChiTieuKeHoachNam.khMuoiDuTru.splice(indexExist, 1);
       }
     }
     else {
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
-      this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [...this.thongTinChiTieuKeHoachNam.khMuoiDuTru, data];
     }
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [...this.thongTinChiTieuKeHoachNam.khMuoiDuTru, data];
   }
 
   checkDataExistVatTu(data: any) {
     if (this.thongTinChiTieuKeHoachNam.khVatTu) {
       let indexExist = this.thongTinChiTieuKeHoachNam.khVatTu.findIndex(x => x.maDonVi == data.maDonVi);
       if (indexExist != -1) {
-        this.thongTinChiTieuKeHoachNam.khVatTu[indexExist] = data;
-      }
-      else {
-        this.thongTinChiTieuKeHoachNam.khVatTu = [...this.thongTinChiTieuKeHoachNam.khVatTu, data];
+        this.thongTinChiTieuKeHoachNam.khVatTu.splice(indexExist, 1);
       }
     }
     else {
       this.thongTinChiTieuKeHoachNam.khVatTu = [];
-      this.thongTinChiTieuKeHoachNam.khVatTu = [...this.thongTinChiTieuKeHoachNam.khVatTu, data];
     }
+    this.thongTinChiTieuKeHoachNam.khVatTu = [...this.thongTinChiTieuKeHoachNam.khVatTu, data];
   }
 
   printTable() {
