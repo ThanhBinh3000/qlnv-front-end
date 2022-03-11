@@ -309,4 +309,50 @@ export class QuanLyVonPhiService extends BaseService {
   nhapsoqdcv(req:any):Observable<any>{
     return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv',req)
   }
+
+
+  //tim kiem danh sach bao cao ket qua thuc hien von phi hang DTQG tại tong cuc DTNN
+  timkiemdanhsachketquathuchienvonphi(request:any):Observable<any>{
+    return this.httpClient.post('http://192.168.1.110:8094/bao-cao-ket-qua-thuc-hien-von-phi/danh-sach',request)
+  }
+
+
+  //lay danh sach vật tư hàng hóa
+  dmVattuhanghoa():Observable<any>{
+    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
+    
+    {
+        "paggingReq": {
+            "limit": 1000,
+            "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+    })
+  }
+
+  //dm đơn vị tính
+  dmDonvitinh():Observable<any>{
+    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-dvi-tinh/danh-sach',
+    {
+      "paggingReq": {
+          "limit": 1000,
+          "page": 1
+      },
+      "str": "",
+      "trangThai": "",
+    })
+  }
+
+  //thêm mới báo cáo mẫu 02
+  themmoibaocaomau02(request:any):Observable<any>{
+    return this.httpClient.post('http://192.168.1.110:8094/bao-cao-ket-qua-thuc-hien-von-phi/them-moi',request);
+  }
+  
+  //lay chi tiet cac mau bao cao 
+  chitietmaubaocao(id:any):Observable<any>{
+    return this.httpClient.get('http://192.168.1.110:8094/bao-cao-ket-qua-thuc-hien-von-phi/chi-tiet/'+id)
+  }
+
+
 }
