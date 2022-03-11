@@ -7,12 +7,14 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
+  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam');
   }
 
   timKiem(param: any): Promise<any> {
-    let url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-khoachphi/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     let tempUrl = "";
     if (param && param.pageSize) {
       tempUrl = tempUrl + "pageSize=" + param.pageSize + "&";
@@ -39,5 +41,12 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
       url = url + "?" + tempUrl;
     }
     return this.httpClient.get<any>(url).toPromise();
+  }
+
+  importFile(body: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', body, body.name);
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/import`
+    return this.httpClient.post(url, formData).toPromise();
   }
 }

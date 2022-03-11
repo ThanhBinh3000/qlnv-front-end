@@ -79,7 +79,7 @@
                 <a (click)="redirectSuaThongTinChiTieuKeHoachNam(data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a>
+                <a (click)="xoaItem(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
@@ -110,7 +110,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
-        <button type="button" class="btn btn-sub">
+        <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Export</span>
         </button>
