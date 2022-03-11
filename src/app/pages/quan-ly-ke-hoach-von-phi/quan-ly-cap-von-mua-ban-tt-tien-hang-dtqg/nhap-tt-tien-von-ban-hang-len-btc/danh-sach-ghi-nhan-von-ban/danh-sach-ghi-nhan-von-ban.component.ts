@@ -12,12 +12,12 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
-     selector: 'app-danh-sach-cap-von',
-     templateUrl: './danh-sach-cap-von.component.html',
-     styleUrls: ['./danh-sach-cap-von.component.scss'],
+     selector: 'app-danh-sach-ghi-nhan-von-ban',
+     templateUrl: './danh-sach-ghi-nhan-von-ban.component.html',
+     styleUrls: ['./danh-sach-ghi-nhan-von-ban.component.scss'],
 })
 
-export class DanhSachCapVonComponent implements OnInit {
+export class DanhSachGhiNhanVonBanComponent implements OnInit {
      donVis: any = [];
      khoachVons: any = [];
      maDvi!: string;

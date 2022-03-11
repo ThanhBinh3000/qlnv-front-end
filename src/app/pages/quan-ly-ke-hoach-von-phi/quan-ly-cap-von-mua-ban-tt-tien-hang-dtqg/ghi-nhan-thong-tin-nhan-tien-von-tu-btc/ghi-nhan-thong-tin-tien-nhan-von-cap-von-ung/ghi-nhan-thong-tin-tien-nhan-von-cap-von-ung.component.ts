@@ -1,65 +1,77 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
-import { DanhMucService } from '../../../../services/danhMuc.service';
+import { DanhMucService } from '../../../../../services/danhMuc.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../Utility/utils";
+import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
-     id: any;
-     stt!: string;
-     ngayLap!: any;
-     maDvi!: number;
-     nam!: number;
-     maKhoanMuc!: string;
-     maNoiDung!: string;
-     maNhomChi!: string;
-     soTienPhanBo!: number;
+     loaiVon!: string;
+     maVtu!: string;
+     sl!: number;
+     maDviTinh: string;
+     soTien!: number;
+     maDviTien!: number;
      ngayGhiNhan!: string;
-     dieuChinh!: string;
      ghiChu!: string;
+     id!: any;
+     stt!: String;
      checked!: boolean;
 }
 
 @Component({
-     selector: 'app-lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
-     templateUrl: './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.html',
-     styleUrls: ['./lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.scss'],
+     selector: 'app-ghi-nhan-thong-tin-tien-nhan-von-cap-von-ung',
+     templateUrl: './ghi-nhan-thong-tin-tien-nhan-von-cap-von-ung.component.html',
+     styleUrls: ['./ghi-nhan-thong-tin-tien-nhan-von-cap-von-ung.component.scss'],
 })
 
-export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
-     noiDungs: any = [];
-     nhomChis: any = [];
-     khoanChis: any = [];
-     phanBos: any = [];
+export class GhiNhanThongTinTienNhanVonCapVonUngComponent implements OnInit {
      donVis: any = [];
-     noiNhan: any;
+     vatTus: any = [];
+     loaiVons: any = [];
+     dviTinhs: any = [];
+     dviTiens: any = [
+          {
+               id: 1,
+               tenDm: "Trăm",
+          },
+          {
+               id: 2,
+               tenDm: "Nghìn",
+          },
+          {
+               id: 3,
+               tenDm: "Triệu",
+          },
+          {
+               id: 4,
+               tenDm: "Tỷ",
+          },
+     ];
+     noiLap!: string;
+     noiNhan!: string;
+     ngayNhap!: string;
+     nguoiNhap!: string;
+     soQd!: string;
+     ngayQd!: string;
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
      id!: any;                                   // id truyen tu router
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
      lstFile: any = [];                          // list File de day vao api
-     status: boolean = false;                     // trang thai an/ hien cua trang thai
-     namBcao = new Date().getFullYear();         // nam bao cao
+     status: boolean = false;
+     lyDoTuChoi!: string;
      userName: any;                              // ten nguoi dang nhap
-     ngayNhap!: any;                             // ngay nhap
-     nguoiNhap!: string;                         // nguoi nhap
-     maDonViTao!: any;                           // ma don vi tao
-     maBaoCao!: string;                          // ma bao cao
-     namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
-     trangThaiBanGhi: string = "1";
-     donViThucHien!: string;
-     soQd!: string;
-     ngayQd!: string;
-     phanBo!: string;
-     tenTrangThai!: string;
+     trangThaiBanGhi: string = "1";                   // trang thai cua ban gh
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
      listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -67,17 +79,14 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      fileUrl: any;                               // url
      listIdDelete: string = "";                  // list id delete
 
-     statusBtnDel: boolean;                       // trang thai an/hien nut xoa
      statusBtnSave: boolean;                      // trang thai an/hien nut luu
-     statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
-     statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
-     statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
-     statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
-     statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-
+     statusBtnDuyet: boolean;                       // trang thai an/hien nut duyet
+     statusBtnPheDuyet: boolean;                      // trang thai an/hien nut phe duyet
+     statusBtnTuChoi: boolean;                   // trang thai an/hien nut tu choi
      listIdFiles: string;                        // id file luc call chi tiet
 
-
+     allChecked = false;                         // check all checkbox
+     indeterminate = true;                       // properties allCheckBox
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
@@ -112,6 +121,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
           private danhMucService: DanhMucService,
+          private notification: NzNotificationService,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -121,84 +131,64 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.id = this.routerActive.snapshot.paramMap.get('id');
           let userName = this.userSerivce.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
+          console.log(userInfo);
           if (this.id) {
                this.getDetailReport();
           } else {
-               this.trangThaiBanGhi = "1";
+               //this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
-               this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
-                         }
-                    },
-                    (err) => {
-                         this.errorMessage = err.error.message;
-                    }
-               );
-               this.maBaoCao = '';
-               this.namBaoCaoHienHanh = new Date().getFullYear();
           }
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
+          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
+          this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
 
-          this.danhMucService.dMNoiDung().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.noiDungs = data.data?.content;
-                         console.log(this.noiDungs);
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
-          this.danhMucService.dMNhomChi().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.nhomChis = data.data?.content;
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
-          this.danhMucService.dMKhoanChi().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.khoanChis = data.data?.content;
-                         console.log(this.khoanChis);
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
+
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
+                    } else {
+                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                    }
+               },
+               (err) => {
+                    this.errorMessage = "err.error.message";
+               }
+          );
+          //lay danh sach danh muc don vi
+          this.danhMucService.dMLoaiKeHoach().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.loaiVons = data.data?.content;
+                    } else {
+                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                    }
+               },
+               (err) => {
+                    this.errorMessage = "err.error.message";
+               }
+          );
+          this.danhMucService.dMDviTinh().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.dviTinhs = data.data?.content;
+                    } else {
+                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                    }
+               },
+               (err) => {
+                    this.errorMessage = "err.error.message";
+               }
+          );
+          this.danhMucService.dMVatTu().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.vatTus = data.data?.content;
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
@@ -215,7 +205,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
                (data) => {
                     if (data?.statusCode == 0) {
-                         this.userInfo = data?.data
+                         this.userInfo = data?.data;
                          return data?.data;
                     } else {
 
@@ -242,58 +232,66 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
 
      // luu
      async luu() {
-          let listFile: any = [];
-          for (const iterator of this.listFile) {
-               listFile.push(await this.uploadFile(iterator));
-          }
+          // let listFile: any = [];
+          // for (const iterator of this.listFile) {
+          //      listFile.push(await this.uploadFile(iterator));
+          // }
 
-          // replace nhung ban ghi dc them moi id thanh null
-          this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
-                    item.id = null;
-               }
-          })
-          // gui du lieu trinh duyet len server
-          let request = {
-               id: this.id,
-               listIdFile: listFile,
-               chiNsnnCtietReqs: this.lstCTietBCao,
-               maDvi: this.maDonViTao = "01",
-               ngayqd: this.datePipe.transform(this.ngayQd, 'dd/MM/yyyy',),
-               phanBo: this.phanBo = "01",
-               soQd: this.soQd,
-               trangThai: this.trangThaiBanGhi = "01",
-               namHienHanh: this.namBaoCaoHienHanh,
-          };
-          console.log(request);
-          this.spinner.show();
-          if (this.id == null) {
-               this.quanLyVonPhiService.themmoi325(request).subscribe( res =>{
-                    console.log(res);
-                    if (res.statusCode == 0) {
-                         alert("trinh duyet thanh cong!");
-                    }else {
-                         alert("trinh duyet that bai!");
-                    }
-               })
-                    
-          } else {
-               this.quanLyVonPhiService.update325(request).subscribe(res => {
-                    if (res.statusCode == 0) {
-                         alert('trinh duyet thanh cong!');
-                    } else {
-                         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-                    }
-               })
-          }
+          // // replace nhung ban ghi dc them moi id thanh null
+          // this.lstCTietBCao.filter(item => {
+          //      if (typeof item.id != "number") {
+          //           item.id = null;
+          //      }
+          // })
 
-          this.lstCTietBCao.filter(item => {
-               if (!item.id) {
-                    item.id = uuid.v4();
-               }
-          });
-          this.updateEditCache();
-          this.spinner.hide();
+          // // gui du lieu trinh duyet len server
+          // let request = {
+          //      id: this.id,
+          //      fileDinhKems: listFile,
+          //      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+          //      lstCTietBCao: this.lstCTietBCao,
+          //      maBcao: this.maBaoCao,
+          //      maDvi: this.maDonViTao,
+          //      maDviTien: this.maDviTien,
+          //      maLoaiBcao: this.maLoaiBaoCao,
+          //      namHienHanh: this.namBaoCaoHienHanh,
+          //      namBcao: this.namBaoCaoHienHanh,
+          // };
+
+          // //call service them moi
+          // this.spinner.show();
+          // if (this.id == null) {
+          //      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+          //           data => {
+          //                if (data.statusCode == 0) {
+          //                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          //                } else {
+          //                     this.notification.error(MESSAGE.ERROR, data?.msg);
+          //                }
+          //           },
+          //           err => {
+          //                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          //                console.log(err);
+          //           },
+          //      );
+          // } else {
+          //      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+          //           if (res.statusCode == 0) {
+          //                this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          //           } else {
+          //                this.notification.error(MESSAGE.ERROR, res?.msg);
+          //           }
+          //      }, err => {
+          //           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          //      })
+          // }
+          // this.lstCTietBCao.filter(item => {
+          //      if (!item.id) {
+          //           item.id = uuid.v4();
+          //      }
+          // });
+          // this.updateEditCache();
+          // this.spinner.hide();
      }
 
      // chuc nang check role
@@ -312,31 +310,31 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.spinner.hide();
      }
 
-     //thay doi trang thai
-     changeStatus(status: boolean) {
-          this.status = status;
-     }
 
      // call chi tiet bao cao
      getDetailReport() {
           this.spinner.hide();
-          this.quanLyVonPhiService.chitiet325(this.id).subscribe(
+          this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.listCtiet;
-                         this.updateEditCache();
+                         this.lstCTietBCao = data.data.lstCTietBCao;
                          this.lstFile = data.data.lstFile;
 
                          // set thong tin chung bao cao
-                         this.ngayNhap = this.datePipe.transform(this.chiTietBcaos.ngayTao, 'dd-MM-yyyy',);
-                         this.nguoiNhap = this.chiTietBcaos.nguoiTao;
-                         this.maDonViTao = data.data.maDvi;
-                         this.namBaoCaoHienHanh = data.data.namHienHanh;
+                         this.ngayNhap = data.data.ngayTao;
+                         this.nguoiNhap = data.data.nguoiTao;
                          this.trangThaiBanGhi = data.data.trangThai;
-                         this.phanBo = this.chiTietBcaos.phanBo;
-                         this.soQd = this.chiTietBcaos.soQd;
-                         this.ngayQd = this.chiTietBcaos.ngayQuyetDinh;
+                         if (
+                              this.trangThaiBanGhi == '1' ||
+                              this.trangThaiBanGhi == '3' ||
+                              this.trangThaiBanGhi == '5' ||
+                              this.trangThaiBanGhi == '8'
+                         ) {
+                              this.status = false;
+                         } else {
+                              this.status = true;
+                         }
                          // set list id file ban dau
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
@@ -358,7 +356,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           // day file len server
           const upfile: FormData = new FormData();
           upfile.append('file', file);
-          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+          upfile.append('folder', this.soQd + '/' + this.noiLap + '/');
           let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
                (data) => {
                     let objfile = {
@@ -369,7 +367,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                     return objfile;
                },
                err => {
-                    console.log('false :', err);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                },
           );
           return temp;
@@ -378,18 +376,16 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      // them dong moi
      addLine(id: number): void {
           let item: ItemData = {
-               id: uuid.v4(),
-               stt: "",
-               ngayLap: this.ngayNhap,
-               maDvi: this.maDonViTao,
-               nam: this.namBcao,
-               maKhoanMuc: "",
-               maNoiDung: "",
-               maNhomChi: "",
-               soTienPhanBo: 0,
+               loaiVon: "",
+               maVtu: "",
+               sl: 0,
+               maDviTinh: "",
+               soTien: 0,
+               maDviTien: 0,
                ngayGhiNhan: "",
-               dieuChinh: "",
                ghiChu: "",
+               stt: "",
+               id: uuid.v4(),
                checked: false,
           }
 
@@ -400,13 +396,13 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           };
      }
 
-     // // xoa dong
-     // deleteById(id: any): void {
-     //      this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-     //      if (typeof id == "number") {
-     //           this.listIdDelete += id + ",";
-     //      }
-     // }
+     // xoa dong
+     deleteById(id: any): void {
+          this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+          if (typeof id == "number") {
+               this.listIdDelete += id + ",";
+          }
+     }
 
      // xóa với checkbox
      deleteSelected() {
@@ -418,6 +414,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           })
           // delete object have checked = true
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
+          this.allChecked = false;
      }
 
      // xoa file trong bang file
@@ -441,18 +438,34 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           fileSaver.saveAs(blob, file.name);
      }
 
-     // // click o checkbox single
-     // updateSingleChecked(): void {
-     //      if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
-     //           this.allChecked = false;
-     //           this.indeterminate = false;
-     //      } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-     //           this.allChecked = true;
-     //           this.indeterminate = false;
-     //      } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-     //           this.indeterminate = true;
-     //      }
-     // }
+     // click o checkbox all
+     updateAllChecked(): void {
+          this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
+          if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+               this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+                    ...item,
+                    checked: true
+               }));
+          } else {
+               this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+                    ...item,
+                    checked: false
+               }));
+          }
+     }
+
+     // click o checkbox single
+     updateSingleChecked(): void {
+          if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+               this.allChecked = false;
+               this.indeterminate = false;
+          } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+               this.allChecked = true;
+               this.indeterminate = false;
+          } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
+               this.indeterminate = true;
+          }
+     }
 
      redirectChiTieuKeHoachNam() {
           this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
@@ -464,10 +477,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           return utils.getStatusName(this.trangThaiBanGhi);
      }
 
-     // lay ten don vi tao
-     getUnitName() {
-          return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
-     }
 
      // start edit
      startEdit(id: string): void {
@@ -488,7 +497,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-          this.lstCTietBCao[index].ngayGhiNhan = this.datePipe.transform(this.lstCTietBCao[index].ngayGhiNhan, 'dd/MM/yyyy',);
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
      }
 
@@ -501,5 +509,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                };
           });
      }
+
 
 }
