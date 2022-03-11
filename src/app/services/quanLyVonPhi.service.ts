@@ -344,15 +344,18 @@ export class QuanLyVonPhiService extends BaseService {
     })
   }
 
-  //thêm mới báo cáo mẫu 02
-  themmoibaocaomau02(request:any):Observable<any>{
-    return this.httpClient.post('http://192.168.1.110:8094/bao-cao-ket-qua-thuc-hien-von-phi/them-moi',request);
+  //thêm mới báo cáo (dung chung cho cac mau bao cao 02-05)
+  themmoibaocaoketquathuchien(request:any):Observable<any>{
+    return this.httpClient.post('http://192.168.1.110:8094/bao-cao/them-moi',request);
   }
   
   //lay chi tiet cac mau bao cao 
   chitietmaubaocao(id:any):Observable<any>{
-    return this.httpClient.get('http://192.168.1.110:8094/bao-cao-ket-qua-thuc-hien-von-phi/chi-tiet/'+id)
+    return this.httpClient.get('http://192.168.1.110:8094/bao-cao/chi-tiet/'+id)
   }
 
-
+  //capnhat baocao (dung chung cho cac mau bao cao 02-05)
+  capnhatbaocao(request:any):Observable<any>{
+    return this.httpClient.put('http://192.168.1.110:8094/bao-cao/cap-nhat',request);
+  }
 }
