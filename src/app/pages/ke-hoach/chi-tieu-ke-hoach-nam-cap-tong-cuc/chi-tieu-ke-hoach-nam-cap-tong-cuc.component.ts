@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
+import { HelperService } from 'src/app/services/helper.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -36,7 +39,9 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private notification: NzNotificationService,
     private donViService: DonviService,
-  ) {}
+    private helperService: HelperService,
+    private modal: NzModalService,
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -74,6 +79,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       id,
     ]);
   }
+
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
@@ -84,6 +90,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       );
     }
   }
+
   async search() {
     let maDonVi = null;
     let tenDvi = null;
@@ -148,6 +155,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.spinner.hide();
     }
   }
+
   disabledStartDate = (startValue: Date): boolean => {
     if (!startValue || !this.endValue) {
       return false;
@@ -161,6 +169,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
     return endValue.getTime() <= this.startValue.getTime();
   };
+
   clearFilter() {
     this.searchFilter = {
       soQD: '',
@@ -172,11 +181,42 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.endValue = null;
     this.inputDonVi = '';
   }
+
   convertTrangThai(status: string) {
     if (status == '01') {
       return 'Đã duyệt';
     } else {
       return 'Chưa duyệt';
     }
+  }
+
+  xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+
+      },
+    });
+  }
+
+  exportData() {
+    var workbook = XLSX.utils.book_new();
+    const listTable = document.getElementsByTagName('table');
+    for (let i = 0; i < listTable.length; i++) {
+      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
+      this.helperService.delete_cols(sheet, 1, 0);
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheet,
+        'Sheet' + (i + 1).toString(),
+      );
+    }
+    XLSX.writeFile(workbook, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx');
   }
 }

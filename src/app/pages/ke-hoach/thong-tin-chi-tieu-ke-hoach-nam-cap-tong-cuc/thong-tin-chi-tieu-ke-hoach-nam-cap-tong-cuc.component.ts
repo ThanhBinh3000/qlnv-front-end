@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -67,7 +68,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
-  ) {}
+    private helperService: HelperService,
+  ) { }
 
   ngOnInit(): void {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
@@ -429,23 +431,37 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     var workbook = XLSX.utils.book_new();
     const listTable = document.getElementsByTagName('table');
     for (let i = 0; i < listTable.length; i++) {
-      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
-      sheet['!cols'] = [];
       if (i == 0) {
-        sheet['!cols'][24] = { hidden: true };
-        sheet['!cols'][25] = { hidden: true };
+        let sheet1 = XLSX.utils.table_to_sheet(listTable[i]);
+        sheet1['!cols'] = [];
+        sheet1['!cols'][24] = { hidden: true };
+        sheet1['!cols'][25] = { hidden: true };
+        XLSX.utils.book_append_sheet(
+          workbook,
+          sheet1,
+          'Sheet' + (i + 1).toString(),
+        );
       } else if (i == 1) {
-        sheet['!cols'][12] = { hidden: true };
-        sheet['!cols'][13] = { hidden: true };
-        sheet['!cols'][14] = { hidden: true };
+        let sheet2 = XLSX.utils.table_to_sheet(listTable[i]);
+        sheet2['!cols'][12] = { hidden: true };
+        sheet2['!cols'][13] = { hidden: true };
+        sheet2['!cols'][14] = { hidden: true };
+        XLSX.utils.book_append_sheet(
+          workbook,
+          sheet2,
+          'Sheet' + (i + 1).toString(),
+        );
       }
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheet,
-        'Sheet' + (i + 1).toString(),
-      );
+      else if (i == 2) {
+        let sheet3 = XLSX.utils.table_to_sheet(listTable[i]);
+        XLSX.utils.book_append_sheet(
+          workbook,
+          sheet3,
+          'Sheet' + (i + 1).toString(),
+        );
+      }
     }
-    XLSX.writeFile(workbook, 'Report.xlsx');
+    XLSX.writeFile(workbook, 'thong-tin-chi-tieu-ke-hoach-nam.xlsx');
   }
 
   deleteKeHoachLuongThuc(stt: number) {

@@ -7,6 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import * as XLSX from 'xlsx';
+import { HelperService } from 'src/app/services/helper.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -33,6 +36,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
+    private helperService: HelperService,
+    private modal: NzModalService,
   ) { }
 
   async ngOnInit() {
@@ -156,5 +161,32 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+
+      },
+    });
+  }
+
+  exportData() {
+    var workbook = XLSX.utils.book_new();
+    const listTable = document.getElementsByTagName('table');
+    for (let i = 0; i < listTable.length; i++) {
+      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
+      this.helperService.delete_cols(sheet, 1, 0);
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheet,
+        'Sheet' + (i + 1).toString(),
+      );
+    }
+    XLSX.writeFile(workbook, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx');
   }
 }
