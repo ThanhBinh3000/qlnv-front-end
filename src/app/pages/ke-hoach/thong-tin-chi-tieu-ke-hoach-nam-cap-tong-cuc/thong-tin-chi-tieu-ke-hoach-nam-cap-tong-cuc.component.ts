@@ -62,7 +62,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   keHoachMuoiDialog: KeHoachMuoi;
   keHoachVatTuDialog: KeHoachVatTu;
   fileDinhKem: string = null;
-
+  qdTCDT: string = MESSAGE.QD_TCDT;
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -70,9 +70,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
-    private helperService: HelperService,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
@@ -454,8 +453,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           sheet2,
           'Sheet' + (i + 1).toString(),
         );
-      }
-      else if (i == 2) {
+      } else if (i == 2) {
         let sheet3 = XLSX.utils.table_to_sheet(listTable[i]);
         XLSX.utils.book_append_sheet(
           workbook,
@@ -555,7 +553,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -724,15 +722,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": 0,
-            "lyDoTuChoi": null,
-            "trangThai": "01"
-          }
+            id: 0,
+            lyDoTuChoi: null,
+            trangThai: '01',
+          };
           await this.chiTieuKeHoachNamService.updateStatus(body);
           this.spinner.hide();
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -753,15 +750,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": 0,
-            "lyDoTuChoi": null,
-            "trangThai": "01"
-          }
+            id: 0,
+            lyDoTuChoi: null,
+            trangThai: '01',
+          };
           await this.chiTieuKeHoachNamService.updateStatus(body);
           this.spinner.hide();
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -777,23 +773,21 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {
-      },
+      nzComponentParams: {},
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
         this.spinner.show();
         try {
           let body = {
-            "id": 0,
-            "lyDoTuChoi": text,
-            "trangThai": "01"
-          }
+            id: 0,
+            lyDoTuChoi: text,
+            trangThai: '01',
+          };
           await this.chiTieuKeHoachNamService.updateStatus(body);
           this.spinner.hide();
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -814,5 +808,37 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
       },
     });
+  }
+  save() {
+    console.log(this.thongTinChiTieuKeHoachNam);
+    if (this.thongTinChiTieuKeHoachNam.id > 0) {
+      this.chiTieuKeHoachNamService
+        .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNam)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.error('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        .finally(() => {
+          this.spinner.hide();
+        });
+    } else {
+      this.thongTinChiTieuKeHoachNam.id = 0;
+      this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.thongTinChiTieuKeHoachNam.soQuyetDinh}${MESSAGE.QD_TCDT}`;
+      this.chiTieuKeHoachNamService
+        .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNam)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.error('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        .finally(() => {
+          this.spinner.hide();
+        });
+    }
   }
 }

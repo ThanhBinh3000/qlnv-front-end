@@ -26,7 +26,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private donViService: DonviService,
-  ) { }
+  ) {}
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     this.initForm();
@@ -37,10 +37,8 @@ export class DialogThongTinLuongThucComponent implements OnInit {
       await this.loadDonVi();
       await this.loadDonViTinh();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (err) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   initForm() {
@@ -167,10 +165,8 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (error) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   async loadDonVi() {
@@ -189,10 +185,8 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (error) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   calculatorTkdnTongQuyThoc() {
@@ -233,7 +227,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   }
   loadTonKhoDauNam() {
     this.formData.patchValue({
-      tkdnTongSoQuyThoc: 1000,
+      tkdnTongSoQuyThoc: 35,
       tkdnThocSoLuong1: 5,
       tkdnThocSoLuong2: 5,
       tkdnThocSoLuong3: 5,
@@ -247,16 +241,9 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         +this.formData.get('tkdnThocSoLuong1').value +
         +this.formData.get('tkdnThocSoLuong2').value +
         +this.formData.get('tkdnThocSoLuong3').value,
-      // +this.formData.get('ntnThoc').value -
-      // (+this.formData.get('xtnThocSoLuong1').value +
-      //   +this.formData.get('xtnThocSoLuong2').value +
-      //   +this.formData.get('xtnThocSoLuong3').value),
       tkcnTongGao:
         +this.formData.get('tkdnGaoSoLuong1').value +
         +this.formData.get('tkdnGaoSoLuong2').value,
-      // +this.formData.get('ntnGao').value -
-      // (+this.formData.get('xtnGaoSoLuong1').value +
-      //   +this.formData.get('xtnGaoSoLuong2').value),
     });
   }
   loadTonKhoCuoiNam() {

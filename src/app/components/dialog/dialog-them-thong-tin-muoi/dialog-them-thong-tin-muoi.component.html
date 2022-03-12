@@ -69,7 +69,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <nz-input-number formControlName="tkdnSoLuong1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="tkdnSoLuong1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -80,7 +81,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <nz-input-number formControlName="tkdnSoLuong2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="tkdnSoLuong2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -91,7 +93,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <nz-input-number formControlName="tkdnSoLuong3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="tkdnSoLuong3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              [nzDisabled]="true">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -105,7 +108,8 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control>
-          <nz-input-number formControlName="ntnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
+          <nz-input-number formControlName="ntnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+            (input)="calculatorTonKhoCuoiNam()"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -126,7 +130,9 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <nz-input-number formControlName="xtnSoLuong1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="xtnSoLuong1" [nzMin]="1"
+              [nzMax]="+this.formData.get('tkdnSoLuong1').value" [nzStep]="0.1" [nzSize]="'small'"
+              (input)="calculatorXtnTongSoMuoi()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -137,7 +143,9 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <nz-input-number formControlName="xtnSoLuong2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="xtnSoLuong2" [nzMin]="1"
+              [nzMax]="+this.formData.get('tkdnSoLuong2').value" [nzStep]="0.1" [nzSize]="'small'"
+              (input)="calculatorXtnTongSoMuoi()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -148,7 +156,8 @@
         <nz-form-label [nzNoColon]="true"> SL Muối </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <nz-input-number formControlName="xtnSoLuong3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'">
+            <nz-input-number formControlName="xtnSoLuong3" [nzMin]="1" [nzStep]="0.1"
+              [nzMax]="+this.formData.get('tkdnSoLuong3').value" [nzSize]="'small'" (input)="calculatorXtnTongSoMuoi()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -162,7 +171,8 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
         <nz-form-control class="mb-16">
-          <nz-input-number formControlName="tkcnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"></nz-input-number>
+          <nz-input-number formControlName="tkcnTongSo" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+            [nzDisabled]="true"></nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>

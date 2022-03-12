@@ -24,4 +24,5 @@ export const MESSAGE = {
   KY_THUALENH: 'Chuyển ký thừa lệnh thành công',
   KY_UYQUYEN: 'Chuyển ký ủy quyền thành công',
   MAXIMUM_FILE_UPLOAD: 'File đính kèm không vượt quá 20MB',
+  QD_TCDT: '/QD-TCDT',
 };

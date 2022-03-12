@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -39,11 +39,11 @@
         <div class="widget-body">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Số QĐ</label>
-              <div>
-                <input class="search__input input-so-qd" nz-input [(ngModel)]="thongTinChiTieuKeHoachNam.soQuyetDinh" />
-                <div class="code-so-qd">/QĐ-TCDT</div>
-              </div>
+              <label class="search__label"><span class="star">*</span> Số QĐ </label>
+              <nz-input-group nzAddOnAfter="{{qdTCDT}}">
+                <nz-input-number [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+                  [(ngModel)]="thongTinChiTieuKeHoachNam.soQuyetDinh"></nz-input-number>
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label"><span class="star">*</span> Ngày ký</label>
@@ -56,7 +56,8 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label"><span class="star">*</span> Năm kế hoạch</label>
-              <input class="search__input" nz-input [(ngModel)]="thongTinChiTieuKeHoachNam.namKeHoach" />
+              <nz-input-number [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+                [(ngModel)]="thongTinChiTieuKeHoachNam.namKeHoach"></nz-input-number>
             </div>
             <div nz-col nzSpan="24">
               <label class="search__label">Trích yếu</label>
@@ -160,20 +161,20 @@
                   '1.0-1'}}</td>
                 <td>{{data.tkdnTongThoc | number: '1.0-1'}}
                 </td>
-                <ng-container *ngIf="data.tkdnThoc.length > 0">
+                <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                   <td *ngFor="let item of data.tkdnThoc">
                     {{item.soLuong | number: '1.0-1'}}</td>
                 </ng-container>
-                <ng-container *ngIf="data.tkdnThoc.length == 0">
+                <ng-container *ngIf="data?.tkdnThoc?.length == 0">
                   <td>0</td>
                   <td>0</td>
                   <td>0</td>
                 </ng-container>
                 <td> {{data.tkdnTongGao | number: '1.0-1'}} </td>
-                <ng-container *ngIf="data.tkdnGao.length > 0">
+                <ng-container *ngIf="data?.tkdnGao?.length > 0">
                   <td *ngFor="let item of data.tkdnGao"> {{item.soLuong | number: '1.0-1'}} </td>
                 </ng-container>
-                <ng-container *ngIf="data.tkdnGao.length == 0">
+                <ng-container *ngIf="data?.tkdnGao?.length == 0">
                   <td> 0 </td>
                   <td> 0 </td>
                 </ng-container>
@@ -184,22 +185,22 @@
                   '1.0-1'}}</td>
                 <td>{{data.xtnTongThoc | number: '1.0-1'}}
                 </td>
-                <ng-container *ngIf="data.xtnThoc.length > 0">
+                <ng-container *ngIf="data?.xtnThoc?.length > 0">
                   <td *ngFor="let item of data.xtnThoc">
                     {{item.soLuong | number: '1.0-1'}}</td>
                 </ng-container>
-                <ng-container *ngIf="data.xtnThoc.length == 0">
+                <ng-container *ngIf="data?.xtnThoc?.length == 0">
                   <td>0 </td>
                   <td>0</td>
                   <td>0</td>
                 </ng-container>
                 <td>{{data.xtnTongGao | number: '1.0-1'}}
                 </td>
-                <ng-container *ngIf="data.xtnGao.length > 0">
+                <ng-container *ngIf="data?.xtnGao?.length > 0">
                   <td *ngFor="let item of data.xtnGao">
                     {{item.soLuong | number: '1.0-1'}}</td>
                 </ng-container>
-                <ng-container *ngIf="data.xtnGao.length == 0">
+                <ng-container *ngIf="data?.xtnGao?.length == 0">
                   <td>0 </td>
                   <td>0</td>
                   <td>0</td>
@@ -343,20 +344,20 @@
                 <td>{{dataMuoi.stt}}</td>
                 <td>{{dataMuoi.tenDonVi}}</td>
                 <td>{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>
-                <ng-container *ngIf="dataMuoi.tkdnMuoi.length > 0">
+                <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length > 0">
                   <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
                 </ng-container>
-                <ng-container *ngIf="dataMuoi.tkdnMuoi.length == 0">
+                <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length == 0">
                   <td>0</td>
                   <td>0</td>
                   <td>0</td>
                 </ng-container>
                 <td>{{dataMuoi.ntnTongSoMuoi | number: '1.0-1'}}</td>
                 <td>{{dataMuoi.xtnTongSoMuoi | number: '1.0-1'}}</td>
-                <ng-container *ngIf="dataMuoi.xtnMuoi.length > 0">
+                <ng-container *ngIf="dataMuoi?.xtnMuoi?.length > 0">
                   <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
                 </ng-container>
-                <ng-container *ngIf="dataMuoi.xtnMuoi.length == 0">
+                <ng-container *ngIf="dataMuoi?.xtnMuoi?.length == 0">
                   <td>0</td>
                   <td>0</td>
                   <td>0</td>
@@ -374,7 +375,7 @@
                 <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
                 <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
               </tr>
-              <tr *ngIf="thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0">
+              <tr *ngIf="thongTinChiTieuKeHoachNam?.khMuoiDuTru?.length > 0">
                 <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
                 <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi') : 0 |
                   number:

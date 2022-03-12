@@ -45,22 +45,30 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   importFile(body: any): Promise<any> {
     const formData = new FormData();
     formData.append('file', body, body.name);
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/import`;
     return this.httpClient.post(url, formData).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 
   exportList(): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
     return this.httpClient.post(url, null, { responseType: 'blob' });
   }
 
   deleteData(id: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
     return this.httpClient.delete(url).toPromise();
+  }
+  themMoiChiTieuKeHoach(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+  chinhSuaChiTieuKeHoach(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+    return this.httpClient.put(url, body).toPromise();
   }
 }

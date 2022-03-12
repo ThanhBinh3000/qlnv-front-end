@@ -28,20 +28,20 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     this.oninitForm();
+    this.loadTonKhoDauNam();
+    this.loadTonKhoCuoiNam();
     this.spinner.show();
     try {
       await this.loadDonVi();
       await this.loadDonViTinh();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (err) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   oninitForm() {
@@ -92,10 +92,8 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (error) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   async loadDonVi() {
@@ -114,10 +112,8 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e)
+    } catch (error) {
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -164,5 +160,41 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
 
   handleCancel() {
     this._modalRef.destroy();
+  }
+  loadTonKhoDauNam() {
+    this.formData.patchValue({
+      tkdnSoLuong1: 5,
+      tkdnSoLuong2: 5,
+      tkdnSoLuong3: 5,
+    });
+    this.formData.patchValue({
+      tkdnTongSo:
+        +this.formData.get('tkdnSoLuong1').value +
+        +this.formData.get('tkdnSoLuong2').value +
+        +this.formData.get('tkdnSoLuong3').value,
+    });
+  }
+  calculatorXtnTongSoMuoi() {
+    this.formData.patchValue({
+      xtnTongSo:
+        +this.formData.get('xtnSoLuong1').value +
+        +this.formData.get('xtnSoLuong2').value +
+        +this.formData.get('xtnSoLuong3').value,
+    });
+    this.calculatorTonKhoCuoiNam();
+  }
+  calculatorTonKhoCuoiNam() {
+    this.formData.patchValue({
+      tkcnTongSo:
+        +this.formData.get('tkdnTongSo').value +
+        +this.formData.get('ntnTongSo').value -
+        +this.formData.get('xtnTongSo').value,
+    });
+  }
+
+  loadTonKhoCuoiNam() {
+    this.formData.patchValue({
+      tkcnTongSo: +this.formData.get('tkdnTongSo').value,
+    });
   }
 }
