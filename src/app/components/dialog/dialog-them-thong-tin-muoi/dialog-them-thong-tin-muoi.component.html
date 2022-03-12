@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="formData">
+<form nz-form [formGroup]="formData" class="form__thong-tin-muoi">
   <div nz-row [nzGutter]="[16, 24]">
     <div nz-col [nzSpan]="16">
       <nz-form-item>
@@ -22,7 +22,7 @@
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
-      <nz-form-item>
+      <!-- <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
           <input placeholder="Đơn vị tính" nz-input formControlName="donViTinh" (input)="onInputDonViTinh($event)"
@@ -38,6 +38,10 @@
             option.labelDonViTinh }}
           </nz-auto-option>
         </nz-autocomplete>
+      </nz-form-item> -->
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <input nz-input formControlName="donViTinh" [readonly]="true" />
       </nz-form-item>
     </div>
     <!-- <div nz-col [nzSpan]="24">
@@ -164,19 +168,21 @@
     </div>
   </div>
 </form>
+
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="handleOk()" class="modal__button--save">
-        <i nz-icon nzType="save"></i>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>
-      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-        <i nz-icon nzType="close"></i>
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
         Hủy
-      </button>
+      </a>
     </div>
   </div>
 </div>

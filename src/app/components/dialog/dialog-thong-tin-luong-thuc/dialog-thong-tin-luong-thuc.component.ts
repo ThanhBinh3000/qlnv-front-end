@@ -30,6 +30,8 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     this.initForm();
+    this.loadTonKhoDauNam();
+    this.loadTonKhoCuoiNam();
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -40,16 +42,12 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     }
   }
   initForm() {
-    console.log(this.keHoachLuongThuc);
-
     this.formData = this.fb.group({
       maDonVi: [
         this.keHoachLuongThuc ? this.keHoachLuongThuc.maDonVi : null,
         [Validators.required],
       ],
-      donViTinh: [
-        this.keHoachLuongThuc ? this.keHoachLuongThuc.donViTinh : null,
-      ],
+      donViTinh: ['Tấn'],
       tenDonvi: [
         this.keHoachLuongThuc ? this.keHoachLuongThuc.tenDonvi : null,
         [Validators.required],
@@ -210,6 +208,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         +this.formData.get('xtnGaoSoLuong1').value * 2 +
         +this.formData.get('xtnGaoSoLuong2').value * 2,
     });
+    this.calculatorTonKhoCuoiNam();
   }
   calculatorTkcnTongQuyThoc() {
     this.formData.patchValue({
@@ -223,6 +222,78 @@ export class DialogThongTinLuongThucComponent implements OnInit {
       ntnTongSoQuyThoc:
         +this.formData.get('ntnThoc').value +
         +this.formData.get('ntnGao').value * 2,
+    });
+    this.calculatorTonKhoCuoiNam();
+  }
+  loadTonKhoDauNam() {
+    this.formData.patchValue({
+      tkdnTongSoQuyThoc: 1000,
+      tkdnThocSoLuong1: 5,
+      tkdnThocSoLuong2: 5,
+      tkdnThocSoLuong3: 5,
+      tkdnGaoSoLuong1: 5,
+      tkdnGaoSoLuong2: 5,
+      tkcnTongSoQuyThoc:
+        +this.formData.get('tkdnTongSoQuyThoc').value +
+        +this.formData.get('ntnTongSoQuyThoc').value -
+        +this.formData.get('xtnTongSoQuyThoc').value,
+      tkcnTongThoc:
+        +this.formData.get('tkdnThocSoLuong1').value +
+        +this.formData.get('tkdnThocSoLuong2').value +
+        +this.formData.get('tkdnThocSoLuong3').value,
+      // +this.formData.get('ntnThoc').value -
+      // (+this.formData.get('xtnThocSoLuong1').value +
+      //   +this.formData.get('xtnThocSoLuong2').value +
+      //   +this.formData.get('xtnThocSoLuong3').value),
+      tkcnTongGao:
+        +this.formData.get('tkdnGaoSoLuong1').value +
+        +this.formData.get('tkdnGaoSoLuong2').value,
+      // +this.formData.get('ntnGao').value -
+      // (+this.formData.get('xtnGaoSoLuong1').value +
+      //   +this.formData.get('xtnGaoSoLuong2').value),
+    });
+  }
+  loadTonKhoCuoiNam() {
+    this.formData.patchValue({
+      tkcnTongThoc:
+        +this.formData.get('tkdnThocSoLuong1').value +
+        +this.formData.get('tkdnThocSoLuong2').value +
+        +this.formData.get('tkdnThocSoLuong3').value,
+      tkcnTongGao:
+        +this.formData.get('tkdnGaoSoLuong1').value +
+        +this.formData.get('tkdnGaoSoLuong2').value,
+      tkcnTongSoQuyThoc:
+        +this.formData.get('tkcnTongThoc').value +
+        +this.formData.get('tkcnTongGao').value * 2,
+    });
+    this.formData.patchValue({
+      tkcnTongSoQuyThoc:
+        +this.formData.get('tkcnTongThoc').value +
+        +this.formData.get('tkcnTongGao').value * 2,
+    });
+  }
+
+  calculatorTonKhoCuoiNam() {
+    this.formData.patchValue({
+      tkcnTongThoc:
+        +this.formData.get('tkdnThocSoLuong1').value +
+        +this.formData.get('tkdnThocSoLuong2').value +
+        +this.formData.get('tkdnThocSoLuong3').value +
+        this.formData.get('ntnThoc').value -
+        (+this.formData.get('xtnThocSoLuong1').value +
+          +this.formData.get('xtnThocSoLuong2').value +
+          +this.formData.get('xtnThocSoLuong3').value),
+      tkcnTongGao:
+        +this.formData.get('tkdnGaoSoLuong1').value +
+        +this.formData.get('tkdnGaoSoLuong2').value +
+        this.formData.get('ntnGao').value -
+        (+this.formData.get('xtnGaoSoLuong1').value +
+          +this.formData.get('xtnGaoSoLuong2').value),
+    });
+    this.formData.patchValue({
+      tkcnTongSoQuyThoc:
+        +this.formData.get('tkcnTongThoc').value +
+        +this.formData.get('tkcnTongGao').value * 2,
     });
   }
 }

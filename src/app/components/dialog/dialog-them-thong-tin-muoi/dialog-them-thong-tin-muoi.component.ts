@@ -48,7 +48,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
         this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null,
         [Validators.required],
       ],
-      donViTinh: [this.thongTinMuoi ? this.thongTinMuoi.donViTinh : null],
+      donViTinh: ['Tấn'],
       tenDonVi: [this.thongTinMuoi ? this.thongTinMuoi.tenDonVi : null],
       tkdnTongSo: [this.thongTinMuoi ? this.thongTinMuoi.tkdnTongSoMuoi : null],
       tkdnSoLuong1: [

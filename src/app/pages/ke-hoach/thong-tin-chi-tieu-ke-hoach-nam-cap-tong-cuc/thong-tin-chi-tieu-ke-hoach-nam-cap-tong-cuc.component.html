@@ -374,7 +374,7 @@
                 <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
                 <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
               </tr>
-              <tr>
+              <tr *ngIf="thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0">
                 <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
                 <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi') : 0 |
                   number:
