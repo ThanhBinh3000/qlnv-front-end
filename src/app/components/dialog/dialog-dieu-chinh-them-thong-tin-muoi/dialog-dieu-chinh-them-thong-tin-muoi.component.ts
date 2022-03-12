@@ -66,8 +66,10 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
       await this.loadDonViTinh();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

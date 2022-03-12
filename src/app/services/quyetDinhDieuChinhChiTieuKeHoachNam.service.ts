@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +49,15 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     formData.append('file', body, body.name);
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/import`
     return this.httpClient.post(url, formData).toPromise();
+  }
+
+  exportList(): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/export/list`
+    return this.httpClient.post(url, null, { responseType: 'blob' });
+  }
+
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`
+    return this.httpClient.delete(url).toPromise();
   }
 }

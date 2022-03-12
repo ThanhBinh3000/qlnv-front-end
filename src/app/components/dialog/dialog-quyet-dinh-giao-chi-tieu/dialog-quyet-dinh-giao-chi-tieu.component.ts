@@ -32,8 +32,10 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     try {
       await this.search();
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -85,8 +87,10 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -97,8 +101,10 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 }

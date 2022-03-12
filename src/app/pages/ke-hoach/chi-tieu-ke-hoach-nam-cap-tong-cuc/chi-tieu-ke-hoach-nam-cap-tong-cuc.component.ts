@@ -10,6 +10,7 @@ import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -61,8 +62,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       }
       await this.search();
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -140,8 +143,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    } catch (err) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -151,8 +156,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    } catch (err) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -200,23 +207,36 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-
+        this.spinner.show();
+        try {
+          this.chiTieuKeHoachNamService.deleteData(item.id).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       },
     });
   }
 
   exportData() {
-    var workbook = XLSX.utils.book_new();
-    const listTable = document.getElementsByTagName('table');
-    for (let i = 0; i < listTable.length; i++) {
-      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
-      this.helperService.delete_cols(sheet, 1, 0);
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheet,
-        'Sheet' + (i + 1).toString(),
-      );
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.chiTieuKeHoachNamService.exportList().subscribe(
+          blob => saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx')
+        );
+        this.spinner.hide();
+      }
+      catch (e) {
+        console.log('error: ', e)
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     }
-    XLSX.writeFile(workbook, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx');
   }
 }

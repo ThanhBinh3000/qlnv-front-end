@@ -64,8 +64,10 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -158,8 +160,10 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -170,8 +174,10 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 }

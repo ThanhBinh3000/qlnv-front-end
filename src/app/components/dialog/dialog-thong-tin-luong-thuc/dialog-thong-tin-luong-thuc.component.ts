@@ -26,7 +26,7 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private donViService: DonviService,
-  ) {}
+  ) { }
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     this.initForm();
@@ -35,8 +35,10 @@ export class DialogThongTinLuongThucComponent implements OnInit {
       await this.loadDonVi();
       await this.loadDonViTinh();
       this.spinner.hide();
-    } catch (err) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   initForm() {
@@ -167,8 +169,10 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   async loadDonVi() {
@@ -187,8 +191,10 @@ export class DialogThongTinLuongThucComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   calculatorTkdnTongQuyThoc() {

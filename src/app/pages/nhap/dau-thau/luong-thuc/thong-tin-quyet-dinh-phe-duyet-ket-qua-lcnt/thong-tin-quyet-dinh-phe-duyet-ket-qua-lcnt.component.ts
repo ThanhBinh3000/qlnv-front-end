@@ -10,6 +10,8 @@ import { DialogThongTinPhuLucKHLCNTComponent } from 'src/app/components/dialog/d
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
 import { Subject } from 'rxjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 interface ItemData {
   id: string;
@@ -49,6 +51,7 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -102,8 +105,10 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       this.page = event;
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -113,8 +118,10 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       this.pageSize = event;
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 }

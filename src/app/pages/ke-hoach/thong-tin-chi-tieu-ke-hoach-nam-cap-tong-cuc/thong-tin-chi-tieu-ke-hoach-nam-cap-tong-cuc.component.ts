@@ -25,6 +25,8 @@ import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-c
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -69,6 +71,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
+    private notification: NzNotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -552,7 +555,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -715,7 +720,23 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {},
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": 0,
+            "lyDoTuChoi": null,
+            "trangThai": "01"
+          }
+          await this.chiTieuKeHoachNamService.updateStatus(body);
+          this.spinner.hide();
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
     });
   }
 
@@ -728,20 +749,55 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {},
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": 0,
+            "lyDoTuChoi": null,
+            "trangThai": "01"
+          }
+          await this.chiTieuKeHoachNamService.updateStatus(body);
+          this.spinner.hide();
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
     });
   }
 
   tuChoi() {
-    this.modal.confirm({
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
       nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn từ chối?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {},
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": 0,
+            "lyDoTuChoi": text,
+            "trangThai": "01"
+          }
+          await this.chiTieuKeHoachNamService.updateStatus(body);
+          this.spinner.hide();
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
     });
   }
 
