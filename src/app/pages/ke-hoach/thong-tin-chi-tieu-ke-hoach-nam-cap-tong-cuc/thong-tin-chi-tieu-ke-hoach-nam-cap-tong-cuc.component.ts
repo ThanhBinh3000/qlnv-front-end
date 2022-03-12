@@ -74,6 +74,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
+    this.thongTinChiTieuKeHoachNam.khVatTu = [];
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.loadThongTinChiTieuKeHoachNam(this.id);
   }
@@ -431,36 +434,38 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   exportData() {
     var workbook = XLSX.utils.book_new();
-    const listTable = document.getElementsByTagName('table');
-    for (let i = 0; i < listTable.length; i++) {
-      if (i == 0) {
-        let sheet1 = XLSX.utils.table_to_sheet(listTable[i]);
-        sheet1['!cols'] = [];
-        sheet1['!cols'][24] = { hidden: true };
-        sheet1['!cols'][25] = { hidden: true };
-        XLSX.utils.book_append_sheet(
-          workbook,
-          sheet1,
-          'Sheet' + (i + 1).toString(),
-        );
-      } else if (i == 1) {
-        let sheet2 = XLSX.utils.table_to_sheet(listTable[i]);
-        sheet2['!cols'][12] = { hidden: true };
-        sheet2['!cols'][13] = { hidden: true };
-        sheet2['!cols'][14] = { hidden: true };
-        XLSX.utils.book_append_sheet(
-          workbook,
-          sheet2,
-          'Sheet' + (i + 1).toString(),
-        );
-      } else if (i == 2) {
-        let sheet3 = XLSX.utils.table_to_sheet(listTable[i]);
-        XLSX.utils.book_append_sheet(
-          workbook,
-          sheet3,
-          'Sheet' + (i + 1).toString(),
-        );
-      }
+    const tableLuongThuc = document.getElementById('table-luong-thuc').getElementsByTagName('table');
+    if (tableLuongThuc && tableLuongThuc.length > 0) {
+      let sheetLuongThuc = XLSX.utils.table_to_sheet(tableLuongThuc[0]);
+      sheetLuongThuc['!cols'] = [];
+      sheetLuongThuc['!cols'][24] = { hidden: true };
+      sheetLuongThuc['!cols'][25] = { hidden: true };
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetLuongThuc,
+        'sheetLuongThuc',
+      );
+    }
+    const tableMuoi = document.getElementById('table-muoi').getElementsByTagName('table');
+    if (tableMuoi && tableMuoi.length > 0) {
+      let sheetMuoi = XLSX.utils.table_to_sheet(tableMuoi[0]);
+      sheetMuoi['!cols'] = [];
+      sheetMuoi['!cols'][12] = { hidden: true };
+      sheetMuoi['!cols'][13] = { hidden: true };
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetMuoi,
+        'sheetMuoi',
+      );
+    }
+    const tableVatTu = document.getElementById('table-vat-tu').getElementsByTagName('table');
+    if (tableVatTu && tableVatTu.length > 0) {
+      let sheetVatTu = XLSX.utils.table_to_sheet(tableVatTu[0]);
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetVatTu,
+        'sheetVatTu',
+      );
     }
     XLSX.writeFile(workbook, 'thong-tin-chi-tieu-ke-hoach-nam.xlsx');
   }

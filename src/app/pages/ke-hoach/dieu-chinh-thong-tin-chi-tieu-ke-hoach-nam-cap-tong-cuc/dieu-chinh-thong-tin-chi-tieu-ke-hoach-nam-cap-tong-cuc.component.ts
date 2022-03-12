@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
@@ -11,6 +11,14 @@ import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/d
 import { DialogDieuChinhThemThongTinLuongThucComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-luong-thuc/dialog-dieu-chinh-them-thong-tin-luong-thuc.component';
 import { DialogDieuChinhThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-muoi/dialog-dieu-chinh-them-thong-tin-muoi.component';
 import { DialogDieuChinhThemThongTinVatTuComponent } from 'src/app/components/dialog/dialog-dieu-chinh-them-thong-tin-vat-tu/dialog-dieu-chinh-them-thong-tin-vat-tu.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import { ThongTinChiTieuKeHoachNam } from 'src/app/models/ThongTinChiTieuKHNam';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import { MESSAGE } from 'src/app/constants/message';
+import * as XLSX from 'xlsx';
 interface DataItem {
   name: string;
   age: number;
@@ -60,12 +68,19 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   formData: FormGroup;
   errorInputRequired: string = "Dữ liệu không được để trống.";
   selectedCanCu: any = null;
+  thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam = new ThongTinChiTieuKeHoachNam();
+  fileDinhKem: string = null;
+  tableExist: boolean = false;
 
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
     private fb: FormBuilder,
     private modal: NzModalService,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -87,6 +102,15 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       namKeHoach: [null, [Validators.required]],
       trichYeu: [null],
     });
+    this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
+    this.thongTinChiTieuKeHoachNam.khVatTu = [];
+  }
+
+  ngAfterViewChecked(): void {
+    const table = document.getElementsByTagName('table');
+    this.tableExist = table && table.length > 0 ? true : false;
+    this.cdr.detectChanges();
   }
 
   themMoi() {
@@ -130,10 +154,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         },
       });
     }
-  }
-
-  handleOpenModal(modalName: string) {
-    this.modals[modalName] = true;
   }
 
   redirectChiTieuKeHoachNam() {
@@ -185,5 +205,388 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.selectedCanCu = data;
       }
     })
+  }
+
+  reduceRowData(
+    indexTable: number,
+    indexCell: number,
+    indexRow: number,
+    stringReplace: string,
+    idTable: string,
+  ): number {
+    let sumVal = 0;
+    const listTable = document
+      .getElementById(idTable)
+      ?.getElementsByTagName('table');
+
+    if (listTable && listTable.length >= indexTable) {
+      const table = listTable[indexTable];
+      for (let i = indexRow; i < table.rows.length - 1; i++) {
+        if (
+          table.rows[i]?.cells[indexCell]?.innerHTML &&
+          table.rows[i]?.cells[indexCell]?.innerHTML != ''
+        ) {
+          sumVal =
+            sumVal +
+            parseFloat(
+              table.rows[i].cells[indexCell].innerHTML.replace(
+                stringReplace,
+                '',
+              ),
+            );
+        }
+      }
+    }
+    return sumVal;
+  }
+
+  rowSpanVatTu(data: any): number {
+    let rowspan = 1;
+    data?.nhomVatTuThietBi?.forEach((nhomVatTuTb) => {
+      rowspan += nhomVatTuTb?.vatTuThietBi.length + 1;
+    });
+    return rowspan;
+  }
+
+  selectFile(idElement: string) {
+    document.getElementById(idElement).click();
+  }
+
+  deleteKeHoachLuongThuc(stt: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.thongTinChiTieuKeHoachNam.khLuongThuc =
+          this.thongTinChiTieuKeHoachNam.khLuongThuc.filter(
+            (khlt) => khlt.stt !== stt,
+          );
+        this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((lt, i) => {
+          if (i >= stt - 1) {
+            lt.stt = i + 1;
+          }
+        });
+      },
+    });
+  }
+
+  deleteKeHoachMuoi(stt: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.thongTinChiTieuKeHoachNam.khMuoiDuTru =
+          this.thongTinChiTieuKeHoachNam.khMuoiDuTru.filter(
+            (khlt) => khlt.stt !== stt,
+          );
+        this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((lt, i) => {
+          if (i >= stt - 1) {
+            lt.stt = i + 1;
+          }
+        });
+      },
+    });
+  }
+
+  uploadFile(event: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if (fileList) {
+      this.fileDinhKem = fileList[0].name;
+    }
+  }
+
+  exportData() {
+    var workbook = XLSX.utils.book_new();
+    const tableLuongThuc = document.getElementById('table-luong-thuc-tong-hop').getElementsByTagName('table');
+    if (tableLuongThuc && tableLuongThuc.length > 0) {
+      let sheetLuongThuc = XLSX.utils.table_to_sheet(tableLuongThuc[0]);
+      sheetLuongThuc['!cols'] = [];
+      sheetLuongThuc['!cols'][24] = { hidden: true };
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetLuongThuc,
+        'sheetLuongThuc',
+      );
+    }
+    const tableMuoi = document.getElementById('table-muoi-tong-hop').getElementsByTagName('table');
+    if (tableMuoi && tableMuoi.length > 0) {
+      let sheetMuoi = XLSX.utils.table_to_sheet(tableMuoi[0]);
+      sheetMuoi['!cols'] = [];
+      sheetMuoi['!cols'][12] = { hidden: true };
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetMuoi,
+        'sheetMuoi',
+      );
+    }
+    const tableVatTu = document.getElementById('table-vat-tu-tong-hop').getElementsByTagName('table');
+    if (tableVatTu && tableVatTu.length > 0) {
+      let sheetVatTu = XLSX.utils.table_to_sheet(tableVatTu[0]);
+      XLSX.utils.book_append_sheet(
+        workbook,
+        sheetVatTu,
+        'sheetVatTu',
+      );
+    }
+    XLSX.writeFile(workbook, 'thong-tin-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx');
+  }
+
+  async importFileData(event: any) {
+    this.spinner.show();
+    try {
+      const element = event.currentTarget as HTMLInputElement;
+      let fileList: FileList | null = element.files;
+      if (fileList) {
+        let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.importFile(fileList[0]);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let temptData = res.data;
+          if (temptData) {
+            if (temptData.khluongthuc && temptData.khluongthuc.length > 0) {
+              for (let i = 0; i < temptData.khluongthuc.length; i++) {
+                this.checkDataExistLuongThuc(temptData.khluongthuc[i]);
+              }
+            }
+            if (temptData.khMuoi && temptData.khMuoi.length > 0) {
+              for (let i = 0; i < temptData.khMuoi.length; i++) {
+                this.checkDataExistMuoi(temptData.khMuoi[i]);
+              }
+            }
+            if (temptData.khVatTu && temptData.khVatTu.length > 0) {
+              for (let i = 0; i < temptData.khVatTu.length; i++) {
+                this.checkDataExistVatTu(temptData.khVatTu[i]);
+              }
+            }
+          }
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkDataExistLuongThuc(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khLuongThuc) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khLuongThuc.findIndex(
+        (x) => x.maDonVi == data.maDonVi,
+      );
+      if (indexExist != -1) {
+        this.thongTinChiTieuKeHoachNam.khLuongThuc.splice(indexExist, 1);
+      }
+    } else {
+      this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
+    }
+    this.thongTinChiTieuKeHoachNam.khLuongThuc = [
+      ...this.thongTinChiTieuKeHoachNam.khLuongThuc,
+      data,
+    ];
+    this.thongTinChiTieuKeHoachNam.khLuongThuc.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+
+  checkDataExistMuoi(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khMuoiDuTru) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khMuoiDuTru.findIndex(
+        (x) => x.maDonVi == data.maDonVi,
+      );
+      if (indexExist != -1) {
+        this.thongTinChiTieuKeHoachNam.khMuoiDuTru.splice(indexExist, 1);
+      }
+    } else {
+      this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
+    }
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [
+      ...this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+      data,
+    ];
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+
+  checkDataExistVatTu(data: any) {
+    if (this.thongTinChiTieuKeHoachNam.khVatTu) {
+      let indexExist = this.thongTinChiTieuKeHoachNam.khVatTu.findIndex(
+        (x) => x.maDonVi == data.maDonVi,
+      );
+      if (indexExist != -1) {
+        let nhomVatTuTemp = [];
+        if (
+          this.thongTinChiTieuKeHoachNam.khVatTu[indexExist].nhomVatTuThietBi &&
+          this.thongTinChiTieuKeHoachNam.khVatTu[indexExist].nhomVatTuThietBi
+            .length > 0
+        ) {
+          nhomVatTuTemp =
+            this.thongTinChiTieuKeHoachNam.khVatTu[indexExist].nhomVatTuThietBi;
+        }
+        for (let i = 0; i < data.nhomVatTuThietBi.length; i++) {
+          let indexNhom = nhomVatTuTemp.findIndex(
+            (x) => x.vatTuChaId == data.nhomVatTuThietBi[i].vatTuChaId,
+          );
+          if (indexNhom != -1) {
+            let vatTuThietBiTemp = [];
+            if (
+              nhomVatTuTemp[indexNhom].vatTuThietBi &&
+              nhomVatTuTemp[indexNhom].vatTuThietBi.length > 0
+            ) {
+              vatTuThietBiTemp = nhomVatTuTemp[indexNhom].vatTuThietBi;
+            }
+            for (
+              let j = 0;
+              j < data.nhomVatTuThietBi[i].vatTuThietBi.length;
+              j++
+            ) {
+              let indexVatTu = vatTuThietBiTemp.findIndex(
+                (x) =>
+                  x.vatTuId == data.nhomVatTuThietBi[i].vatTuThietBi[j].vatTuId,
+              );
+              if (indexVatTu != -1) {
+                vatTuThietBiTemp[indexVatTu] =
+                  data.nhomVatTuThietBi[i].vatTuThietBi[j];
+              } else {
+                vatTuThietBiTemp.push(data.nhomVatTuThietBi[i].vatTuThietBi[j]);
+              }
+            }
+            data.nhomVatTuThietBi[i].vatTuThietBi = vatTuThietBiTemp;
+          } else {
+            nhomVatTuTemp.push(data.nhomVatTuThietBi[i]);
+          }
+        }
+        data.nhomVatTuThietBi = nhomVatTuTemp;
+        this.thongTinChiTieuKeHoachNam.khVatTu.splice(indexExist, 1);
+      }
+    } else {
+      this.thongTinChiTieuKeHoachNam.khVatTu = [];
+    }
+    this.thongTinChiTieuKeHoachNam.khVatTu = [
+      ...this.thongTinChiTieuKeHoachNam.khVatTu,
+      data,
+    ];
+    this.thongTinChiTieuKeHoachNam.khVatTu.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+
+  printTable() {
+    const modalIn = this.modal.create({
+      nzTitle: 'Lựa chọn in',
+      nzContent: DialogLuaChonInComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '600px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalIn.afterClose.subscribe((res) => {
+      if (res) {
+        let WindowPrt = window.open(
+          '',
+          '',
+          'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        if (res.luongThuc) {
+          printContent = printContent + '<div>';
+          printContent =
+            printContent +
+            document.getElementById('table-luong-thuc-tong-hop').innerHTML;
+          printContent = printContent + '</div>';
+        }
+        if (res.muoi) {
+          printContent = printContent + '<div>';
+          printContent =
+            printContent + document.getElementById('table-muoi-tong-hop').innerHTML;
+          printContent = printContent + '</div>';
+        }
+        if (res.vatTu) {
+          printContent = printContent + '<div>';
+          printContent =
+            printContent + document.getElementById('table-vat-tu-tong-hop').innerHTML;
+          printContent = printContent + '</div>';
+        }
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
+      }
+    });
+  }
+
+  guiDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+
+      },
+    });
+  }
+
+  pheDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+
+      },
+    });
+  }
+
+  tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+
+      }
+    });
+  }
+
+  huyBo() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hủy bỏ các thao tác đang làm?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.router.navigate(['/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+      },
+    });
   }
 }

@@ -84,9 +84,9 @@
             (nzClick)="tabSelected = tab.vatTu">
           </nz-tab>
         </nz-tabset>
-        <div id="table-luong-thuc">
-          <nz-table [ngClass]="tabSelected == tab.luongThuc ? 'show-table' : 'hide-table'" #groupingTable
-            [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body">
+        <div id="table-luong-thuc"
+          [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <nz-table #groupingTable [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body">
             <thead>
               <tr>
                 <th rowspan="4">STT</th>
@@ -297,9 +297,9 @@
             </tbody>
           </nz-table>
         </div>
-        <div id="table-muoi">
-          <nz-table [ngClass]="tabSelected == tab.muoi ? 'show-table' : 'hide-table'" #groupingTableMuoi
-            [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body">
+        <div id="table-muoi"
+          [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <nz-table #groupingTableMuoi [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body">
             <thead>
               <tr>
                 <th rowspan="3">STT</th>
@@ -423,9 +423,9 @@
             </tbody>
           </nz-table>
         </div>
-        <div id="table-vat-tu">
-          <nz-table [ngClass]="tabSelected == tab.vatTu ? 'show-table' : 'hide-table'" #groupingTableVatTu
-            [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body">
+        <div id="table-vat-tu"
+          [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <nz-table #groupingTableVatTu [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body">
             <thead>
               <tr>
                 <th rowspan="3">STT</th>
