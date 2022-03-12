@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -53,8 +54,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -134,8 +137,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -146,8 +151,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     }
-    catch (err) {
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -170,23 +177,36 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-
+        this.spinner.show();
+        try {
+          this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       },
     });
   }
 
   exportData() {
-    var workbook = XLSX.utils.book_new();
-    const listTable = document.getElementsByTagName('table');
-    for (let i = 0; i < listTable.length; i++) {
-      let sheet = XLSX.utils.table_to_sheet(listTable[i]);
-      this.helperService.delete_cols(sheet, 1, 0);
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheet,
-        'Sheet' + (i + 1).toString(),
-      );
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList().subscribe(
+          blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
+        );
+        this.spinner.hide();
+      }
+      catch (e) {
+        console.log('error: ', e)
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     }
-    XLSX.writeFile(workbook, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx');
   }
 }

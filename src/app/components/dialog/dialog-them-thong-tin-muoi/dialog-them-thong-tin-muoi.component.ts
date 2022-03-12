@@ -28,7 +28,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
@@ -38,8 +38,10 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
       await this.loadDonVi();
       await this.loadDonViTinh();
       this.spinner.hide();
-    } catch (err) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   oninitForm() {
@@ -90,8 +92,10 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
   async loadDonVi() {
@@ -110,8 +114,10 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

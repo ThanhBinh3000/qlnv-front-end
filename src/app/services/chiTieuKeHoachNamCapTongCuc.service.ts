@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -51,5 +52,15 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`
     return this.httpClient.put(url, body).toPromise();
+  }
+
+  exportList(): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`
+    return this.httpClient.post(url, null, { responseType: 'blob' });
+  }
+
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`
+    return this.httpClient.delete(url).toPromise();
   }
 }
