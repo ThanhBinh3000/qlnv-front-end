@@ -25,18 +25,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <nz-form-control>
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon1" class="search__input autocomplete__input">
-            <input placeholder="Đơn vị tính" nz-input [(ngModel)]="inputDonViTinh" (input)="onInputDonViTinh($event)"
-              [nzAutocomplete]="auto1" />
-          </nz-input-group>
-          <ng-template #suffixIcon1>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-          <nz-autocomplete #auto1>
-            <nz-auto-option *ngFor="let option of optionsDonViTinhShow" [nzValue]="option.labelDonViTinh">{{
-              option.labelDonViTinh }}
-            </nz-auto-option>
-          </nz-autocomplete>
+          <input nz-input formControlName="donViTinh" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>

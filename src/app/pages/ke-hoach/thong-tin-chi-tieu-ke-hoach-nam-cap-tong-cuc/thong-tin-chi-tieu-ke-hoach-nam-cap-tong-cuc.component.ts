@@ -71,7 +71,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
@@ -556,6 +556,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           }
         }
       }
+      element.value = null;
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

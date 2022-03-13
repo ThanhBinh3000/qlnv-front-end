@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -24,9 +25,7 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
 
-  optionsDonViTinh: any[] = [];
-  inputDonViTinh: string = '';
-  optionsDonViTinhShow: any[] = [];
+  data: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -37,12 +36,13 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.yearNow = dayjs().get('year');
     this.formData = this.fb.group({
       maDv: [null, [Validators.required]],
       tenDv: [null],
       maHangHoa: [{ value: null, disabled: true }, [Validators.required]],
       tenHangHoa: [null],
-      donViTinh: [null],
+      donViTinh: ["Tấn"],
       soLuongTruoc: [null],
       soLuongGiam: [null],
       soLuongTang: [null],
@@ -59,28 +59,11 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     this.spinner.show();
     try {
       await this.loadDonVi();
-      await this.loadDonViTinh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async loadDonViTinh() {
-    const res = await this.donViService.loadDonViTinh();
-    this.optionsDonViTinh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          ...res.data[i],
-          labelDonViTinh: res.data[i].tenDviTinh,
-        };
-        this.optionsDonViTinh.push(item);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -107,18 +90,6 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  onInputDonViTinh(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViTinhShow = [];
-    } else {
-      this.optionsDonViTinhShow = this.optionsDonViTinh.filter(
-        (x) =>
-          x.labelDonViTinh.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
   }
