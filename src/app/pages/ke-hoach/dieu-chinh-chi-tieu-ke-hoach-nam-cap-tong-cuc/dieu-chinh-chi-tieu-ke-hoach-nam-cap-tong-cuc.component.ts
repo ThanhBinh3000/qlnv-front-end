@@ -37,7 +37,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
-    private helperService: HelperService,
     private modal: NzModalService,
   ) { }
 
