@@ -91,7 +91,7 @@
                 {{getStatusName()}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại báo cáo">
-               Báo cáo kết quả thực hiện vốn, phí hàng DTQG: Báo cáo nhập mua hàng dự trữ quốc gia
+               Báo cáo kết quả thực hiện vốn, phí hàng DTQG: Báo cáo xuất hàng dự trữ quốc gia
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
@@ -99,7 +99,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Báo cáo nhập mua hàng dự trữ quốc gia'">
+          <nz-tab [nzTitle]="'Báo cáo xuất hàng dự trữ quốc gia'">
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -222,10 +222,10 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.soLuongKhoach" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.soLuongTte"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.soLuongTte" (change)="changeModel1(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaKhoach"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaKhoach"  (change)="changeModel1(item.id)"/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaBanTthieu" />
@@ -234,13 +234,13 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaBanTte" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttGiaHtoan"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttGiaHtoan" disabled (change)="changeModel1(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttGiaBanTte" disabled (change)="changeModel1(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttClechGiaTteVaGiaHtoan" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttClechGiaTteVaGiaHtoan" disabled/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ghiChu" />
@@ -338,10 +338,10 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.soLuongKhoach" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.soLuongTte"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.soLuongTte"  (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaKhoach"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaKhoach" (change)="changeModel2(item.id)" />
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaBanTthieu" />
@@ -350,13 +350,13 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaBanTte" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttGiaHtoan"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttGiaHtoan" disabled (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttGiaBanTte" disabled (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttClechGiaTteVaGiaHtoan" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttClechGiaTteVaGiaHtoan" disabled/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ghiChu" />
@@ -454,10 +454,10 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.soLuongKhoach" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.soLuongTte"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.soLuongTte" (change)="changeModel3(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaKhoach"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaKhoach" (change)="changeModel3(item.id)" />
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaBanTthieu" />
@@ -466,13 +466,13 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaBanTte" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttGiaHtoan"  />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttGiaHtoan" disabled (change)="changeModel3(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttGiaBanTte" disabled (change)="changeModel3(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttClechGiaTteVaGiaHtoan" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttClechGiaTteVaGiaHtoan" disabled/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ghiChu" />
