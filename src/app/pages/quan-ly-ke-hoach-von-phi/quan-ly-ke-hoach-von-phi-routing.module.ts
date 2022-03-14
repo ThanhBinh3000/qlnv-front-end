@@ -29,7 +29,7 @@ const routes: Routes = [
       {
         path: 'quan-ly-giao-du-toan-chi-nsnn',
         loadChildren: () =>
-          import('./quan-ly-giao-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
+          import('./quan-ly-giao-du-toan-chi-nsnn/quan-ly-giao-du-toan-chi-nsnn.module').then(
             (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
           ),
       },

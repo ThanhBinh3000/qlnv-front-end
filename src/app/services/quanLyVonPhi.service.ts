@@ -15,11 +15,20 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   urlDefault = environment.SERVICE_API;
+  urlGiao = environment.QLYGIAODA_API;
 
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/bao-cao-du-toan-chi/danh-sach',
+      request,
+    );
+  }
+
+  //search list bao cao giao du toan chi
+  timBaoCaoGiao(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlGiao + '/quyet-dinh-giao-du-toan-chi/danh-sach',
       request,
     );
   }
@@ -36,6 +45,13 @@ export class QuanLyVonPhiService extends BaseService {
   bCChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
+    );
+  }
+
+  // call api chi tiết báo cáo
+  QDGiaoChiTiet(id: any): Observable<any> {
+    return this.httpClient.get(
+      this.urlGiao + '/quyet-dinh-giao-du-toan-chi/chi-tiet/' + id,
     );
   }
 
@@ -62,10 +78,25 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  // trinh duyet giao du toan
+  trinhDuyetGiaoService(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlGiao + '/quyet-dinh-giao-du-toan-chi/them-moi',
+      request,
+    );
+  }
+
   // upload list
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      request,
+    );
+  }
+  // upload list
+  updatelistGiaoDuToan(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlGiao + '/quyet-dinh-giao-du-toan-chi/cap-nhat',
       request,
     );
   }
@@ -221,7 +252,7 @@ export class QuanLyVonPhiService extends BaseService {
   //muc chi
   mucchi():Observable<any>{
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/135',
-    
+
     {
         "paggingReq": {
             "limit": 1000,
@@ -247,7 +278,7 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/sinh-ma-giao-so');
   }
 
-  //giao so tran chi 
+  //giao so tran chi
   giaoSoTranChi(request:any):Observable<any>{
     return  this.httpClient.post(this.urlDefault+'/qlnv-khoachphi/pa-giao-so-kt/giao-so',request);
   }
@@ -282,7 +313,7 @@ export class QuanLyVonPhiService extends BaseService {
   //lay danh sach don vi nhan
   dmDonViNhan():Observable<any>{
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',
-    
+
     {
         "paggingReq": {
             "limit": 1000,
@@ -320,7 +351,7 @@ export class QuanLyVonPhiService extends BaseService {
   //lay danh sach vật tư hàng hóa
   dmVattuhanghoa():Observable<any>{
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
-    
+
     {
         "paggingReq": {
             "limit": 1000,
@@ -348,8 +379,8 @@ export class QuanLyVonPhiService extends BaseService {
   themmoibaocaoketquathuchien(request:any):Observable<any>{
     return this.httpClient.post(this.urlDefault+'/qlnv-khoachphi/bao-cao/them-moi',request);
   }
-  
-  //lay chi tiet cac mau bao cao 
+
+  //lay chi tiet cac mau bao cao
   chitietmaubaocao(id:any):Observable<any>{
     return this.httpClient.get(this.urlDefault+'/qlnv-khoachphi/bao-cao/chi-tiet/'+id)
   }

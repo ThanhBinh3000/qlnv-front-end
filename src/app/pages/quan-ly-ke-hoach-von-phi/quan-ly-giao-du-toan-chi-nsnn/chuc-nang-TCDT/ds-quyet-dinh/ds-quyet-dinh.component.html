@@ -5,6 +5,18 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
+        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit()">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit()">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Phê duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit()">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Từ chối</span>
+        </button> -->
         <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
@@ -23,8 +35,12 @@
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="12">
+            <label class="search__label">Năm</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+          </div>
+          <div nz-col nzSpan="12">
             <label class="search__label">Số quyết định</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày</label>
@@ -35,23 +51,26 @@
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
           </div>
           <div nz-col nzSpan="12">
-            <label class="search__label">Nơi ra quyết định</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.noiQd">
+            <label class="search__label">Đơn vị lập</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH GIAO QUẢN LÝ DỰ TOÁN CHI TẠI TC-DTNN" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH QUYẾT ĐỊNH" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
-              <th width="60px">STT</th>
+              <th rowspan="2">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                  [nzIndeterminate]="indeterminate">
+                </label>
+              </th>
               <th width="130px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
               <th width="175px">Đơn vị quyết định</th>
-              <th width="175px" class="text-center">Nội dung</th>
               <th></th>
               <th></th>
               <th></th>
@@ -59,13 +78,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.soQd }}</td>
-              <td>{{item.ngayQd}}</td>
-              <td>{{item.noiQd}}</td>
-              <td class="text-center">{{item.vanBan}}</td>
+              <td>
+                <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td>{{ item.maBcao }}</td>
+              <td>{{item.ngayTao}}</td>
+              <td>{{item.tenDvi}}</td>
               <td class="text-center">
-                <a routerLink="../{{url}}/{{ item.id }}">
+                <a routerLink="../{{url}}{{ item.id }}">
                   xem
                 </a>
               </td >
@@ -97,7 +118,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd">
+        <button type="button" class="btn btn-main" routerLink="../{{url}}">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

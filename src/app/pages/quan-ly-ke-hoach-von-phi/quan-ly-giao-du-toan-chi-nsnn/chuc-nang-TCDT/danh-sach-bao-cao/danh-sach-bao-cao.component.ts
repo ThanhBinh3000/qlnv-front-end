@@ -3,17 +3,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucService } from '../../../../services/danhMuc.service';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-
-
+import { DanhMucService } from '..//../../../../services/danhMuc.service';
+import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 
 @Component({
-  selector: 'app-tim-kiem',
-  templateUrl: './tim-kiem.component.html',
-  styleUrls: ['./tim-kiem.component.scss'],
+  selector: 'app-danh-sach-bao-cao',
+  templateUrl: './danh-sach-bao-cao.component.html',
+  styleUrls: ['./danh-sach-bao-cao.component.scss']
 })
-export class TimKiemComponent implements OnInit {
+
+export class DanhSachBaoCaoComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
@@ -21,7 +20,8 @@ export class TimKiemComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  url!: string;
+  indeterminate = true;
 
   // phan cu cua teca
   visible = false;
@@ -37,13 +37,12 @@ export class TimKiemComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
+    nam: "",
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
-    noiQd: "",
-    soQd: "",
   };
   pages = {
     size: 10,
@@ -51,6 +50,7 @@ export class TimKiemComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
+  allChecked: any;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucService,
@@ -108,27 +108,27 @@ export class TimKiemComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      ngayTaoDen: this.searchFilter.denNgay,
-      ngayTaoTu: this.searchFilter.tuNgay,
-      noiQd: this.searchFilter.noiQd,
+      maBcao: this.searchFilter.maBaoCao,
+      maDvi: this.searchFilter.donViTao,
+      maLoaiBcao: this.searchFilter.loaiBaoCao,
+      namBcao: this.searchFilter.nam,
+      ngayTaoDen: this.searchFilter.tuNgay,
+      ngayTaoTu: this.searchFilter.denNgay,
       paggingReq: {
         limit: this.pages.size,
-        page: this.pages.page
+        page: this.pages.page,
       },
-      soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: ""
+      trangThai: "",
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
-          console.log(this.danhSachBaoCao);
-
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -137,6 +137,20 @@ export class TimKiemComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
+  }
+
+  //set url khi
+  setUrl(id) {
+    switch (id) {
+      case 26:
+        this.url = '/chi-thuong-xuyen-3-nam/'
+        break;
+      default:
+        this.url = null;
+        break;
+    }
+    console.log(id);
+
   }
 
   //doi so trang
@@ -149,5 +163,32 @@ export class TimKiemComponent implements OnInit {
   onPageSizeChange(size) {
     this.pages.size = size;
     this.onSubmit();
+  }
+  // click o checkbox all
+  updateAllChecked(): void {
+    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
+    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({
+        ...item,
+        checked: true
+      }));
+    } else {
+      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+        ...item,
+        checked: false
+      }));
+    }
+  }
+  // click o checkbox single
+  updateSingleChecked(): void {
+    if (this.danhSachBaoCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.danhSachBaoCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
+      this.indeterminate = true;
+    }
   }
 }
