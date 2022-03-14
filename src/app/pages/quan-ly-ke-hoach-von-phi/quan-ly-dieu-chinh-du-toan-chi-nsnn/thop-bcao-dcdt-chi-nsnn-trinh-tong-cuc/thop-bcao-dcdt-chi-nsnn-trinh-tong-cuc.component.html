@@ -9,8 +9,7 @@
                     </a>
                </div>
                <div class="canphai phai">
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnApprove">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')">
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
                          <span>Trình duyệt</span>
                     </button>
@@ -18,8 +17,7 @@
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Trình phê duyệt</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()"
-                         [hidden]="statusBtnSave">
+                    <button class="btn btn-main btn-sm waves-effect waves-light" >
                          <i class="icon htvbdh_tcdt_save"></i>
                          <span>Lưu</span>
                     </button>
@@ -84,9 +82,10 @@
                                    <div nz-col nzSpan="11">
                                         <label class="search__label">Đơn vị thực hiện</label>
                                         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                             [(ngModel)]="maDonViTao">
+                                             [(ngModel)]="donViThucHien">
                                              <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
-                                                  [nzLabel]="item.tenDvi"></nz-option>
+                                                  [nzLabel]="item.tenDvi">
+                                             </nz-option>
                                         </nz-select>
                                    </div>
                                    <div nz-col nzSpan="10">
@@ -95,7 +94,7 @@
                                    </div>
                                    <div nz-col nzSpan="3">
                                         <br />
-                                        <button type="button" class="btn btn-main">
+                                        <button type="button" class="btn btn-main" (click)="getDetailReport()">
                                              Thêm vào danh sách
                                         </button>
                                    </div>
@@ -125,14 +124,13 @@
                                    <tbody>
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <td [hidden]="status">
-                                                  <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                       (ngModelChange)="updateSingleChecked()"></label>
+                                                  <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"></label>
                                              </td>
                                              <td>{{data.ngayLap}}</td>
                                              <td>
                                                   <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.id == data.maDvi">
-                                                            {{item.tenDm}}
+                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                                            {{item.tenDvi}}
                                                        </div>
                                                   </div>
                                              </td>
@@ -146,8 +144,8 @@
                                                   </div>
                                              </td>
                                              <td>
-                                                  <div *ngFor="let item of loaiChis">
-                                                       <div *ngIf="item.id == data.maLoaiChi">
+                                                  <div *ngFor="let item of nhomChis">
+                                                       <div *ngIf="item.id == data.maNhomChi">
                                                             {{item.tenDm}}
                                                        </div>
                                                   </div>
