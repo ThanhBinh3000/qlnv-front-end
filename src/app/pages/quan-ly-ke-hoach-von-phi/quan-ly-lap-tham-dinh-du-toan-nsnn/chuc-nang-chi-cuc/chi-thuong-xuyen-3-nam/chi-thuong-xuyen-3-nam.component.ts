@@ -46,6 +46,8 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   nhomChis:any = [];                          // danh muc nhom chi
   loaiChis:any = [];                          // danh muc loai chi
   donVis:any = [];                            // danh muc don vi
+  donViTiens:any = [];                        // danh muc don vi tien
+
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -155,7 +157,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    debugger
     //get danh muc noi dung
     this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
@@ -217,6 +218,20 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+
+    //lay danh sach danh muc don vi tien
+    this.danhMucService.dMDonViTien().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donViTiens = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -329,7 +344,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    debugger
     this.spinner.show();
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
@@ -366,7 +380,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
-          debugger
           this.trangThaiBanGhi = data.data.trangThai;
 
           // set list id file ban dau

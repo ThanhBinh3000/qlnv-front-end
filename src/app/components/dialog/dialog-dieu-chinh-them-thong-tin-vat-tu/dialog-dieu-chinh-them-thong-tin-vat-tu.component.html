@@ -1,0 +1,188 @@
+<form nz-form [formGroup]="formData">
+  <div nz-row [nzGutter]="[16, 24]">
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Đơn vị
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+            <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+              [nzAutocomplete]="auto" />
+          </nz-input-group>
+          <ng-template #suffixIcon>
+            <i nz-icon nzType="search"></i>
+          </ng-template>
+          <nz-autocomplete #auto>
+            <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi">{{ option.labelDonVi
+              }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="donViTinh" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Hàng hóa
+        </nz-form-label>
+        <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
+          <nz-input-group nzAddOnAfterIcon="folder-open">
+            <input nz-input formControlName="maHangHoa" />
+          </nz-input-group>
+        </nz-form-control>
+        <!-- dropdown -->
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="dropdown__container">
+            <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
+            <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
+            <div style="margin-bottom: 6px">
+              <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input type="text" nz-input />
+              </nz-input-group>
+              <ng-template #suffixIconButton>
+                <button nz-button nzSearch>
+                  <i nz-icon nzType="search"></i>
+                </button>
+              </ng-template>
+            </div>
+            <nz-table #expandTable [nzData]="listOfMapData">
+              <thead>
+                <tr>
+                  <th>Tên vật tư</th>
+                  <th>Mã vật tư</th>
+                  <th>Chọn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let data of expandTable.data">
+                  <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                      <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.child" [(nzExpand)]="item.expand"
+                        (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                        {{ item.ten }}
+                      </td>
+                      <td>{{ item.ma }}</td>
+                      <td style="text-align: center">
+                        <div *ngIf="!item.child">
+                          <i nz-icon nzType="plus" nzTheme="outline" nzColo></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </nz-table>
+          </div>
+        </nz-dropdown-menu>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL trước điều chỉnh </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="soLuongTruoc" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
+        <nz-form-control>
+          <nz-input-number [nzSize]="'small'" nz-input formControlName="soLuongGiam" [nzMin]="0"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
+        <nz-form-control>
+          <nz-input-number [nzSize]="'small'" nz-input formControlName="soLuongTang" [nzMin]="0"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> SL sau điều chỉnh </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="soLuongSau" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="16"></div>
+    <!-- 1. Chỉ tiêu nhập các năm khác chuyển sang  -->
+    <div nz-col [nzSpan]="24">
+      <span class="form__section-title">
+        1. Chỉ tiêu nhập các năm khác chuyển sang
+      </span>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="tongSo" [readonly]="true" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
+            <input nz-input formControlName="soLuongTheoNam1" [readonly]="true" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
+            <input nz-input formControlName="soLuongTheoNam2" [readonly]="true" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Số lượng - VT1601
+        </nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
+            <input nz-input formControlName="soLuongTheoNam3" [readonly]="true" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

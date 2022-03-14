@@ -8,7 +8,6 @@ import * as fileSaver from 'file-saver';
 import { Link } from 'gojs';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { itemDetail } from 'src/app/models/itemDetail';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";

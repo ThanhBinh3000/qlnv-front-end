@@ -214,7 +214,7 @@ textarea.ant-input {
 
   span,
   b {
-    display: inline-block;
+    // display: inline-block;
   }
 
   b {
@@ -716,7 +716,8 @@ button.btn.btn-outline-grey {
   height: auto;
 
   &.active {
-    background: #861b1b;
+    // background: #861b1b;
+    background: #146264;
     color: #fff;
   }
 }

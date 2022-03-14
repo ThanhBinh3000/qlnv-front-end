@@ -12,19 +12,19 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Hủy bỏ</span>
         </a>
@@ -32,740 +32,860 @@
     </div>
   </div>
 </nz-affix>
-
 <div class="contentBor chi-tieu__body dieu-chinh__body">
   <div class="contentDetail">
-    <div class="main-content">
-      <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
-        <div class="widget-body">
-          <div *ngIf="id == 0">
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Số QĐ">
-                100/QĐ-TCDT
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày ký">
-                17/02/2022
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày hiệu lực">
-                17/02/2022
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm kế hoạch">
-                2022
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trích yếu" [nzSpan]="4">
-                Chỉ tiêu kế hoạch năm
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Tài liệu đính kèm" [nzSpan]="4">
-                <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
-                  <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                  </a>
-                </nz-upload>
-                Chỉ tiêu kế hoạch năm.docx
-              </nz-descriptions-item>
-            </nz-descriptions>
-          </div>
-          <div class="search__body" nz-row [nzGutter]="[18, 12]" *ngIf="id > 0">
-            <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Số QĐ</label>
-              <div>
-                <input class="search__input input-so-qd" nz-input [(ngModel)]="detail.soQD" />
-                <div class="code-so-qd">/QĐ-TCDT</div>
-              </div>
+    <form nz-form [formGroup]="formData" class="mt-16">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <input nz-input [readonly]="true" formControlName="canCu" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="18">
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Số QĐ </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+                  <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
+                    <input class="search__input" nz-input formControlName="soQD" />
+                  </nz-input-group>
+                  <ng-template #soQDError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Ngày ký</label>
-              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayKy"></nz-date-picker>
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ngày ký </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)">
+                  </nz-date-picker>
+                  <ng-template #ngayKyError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Ngày hiệu lực</label>
-              <nz-date-picker class="search__input" [(ngModel)]="detail.ngayHieuLuc"></nz-date-picker>
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayHieuLucError">
+                  <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
+                    (nzOnOpenChange)="handleEndOpenChange($event)">
+                  </nz-date-picker>
+                  <ng-template #ngayHieuLucError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label"><span class="star">*</span> Năm kế hoạch</label>
-              <input class="search__input" nz-input [(ngModel)]="detail.namKeHoach" />
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <input class="search__input" nz-input formControlName="namKeHoach" readonly="true" />
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
-              <label class="search__label">Trích yếu</label>
-              <textarea rows="3" class="search__input" nz-input [(ngModel)]="detail.trichYeu"></textarea>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
+                <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
-              <button class="btn btn-tep btn-sm waves-effect waves-light">
+              <button class="btn btn-tep btn-sm waves-effect waves-light" (click)="selectFile('file-dinh-kem')">
                 <i class="icon htvbdh_tcdt_tep"></i>
                 <span>Tài liệu đính kèm</span>
               </button>
+              <input type="file" id="file-dinh-kem" class="file-not-show" (change)="uploadFile($event)" />
             </div>
           </div>
+        </nz-card>
+        <div class="tab__container">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc"></nz-tab>
+            <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi"></nz-tab>
+            <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
+              (nzClick)="tabSelected = tab.vatTu"></nz-tab>
+          </nz-tabset>
+          <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+            <div id="table-luong-thuc">
+              <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16 table-dieu-chinh">
+                <nz-table #groupingTableThocTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khLuongThuc" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="4">STT</th>
+                      <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="3">Nhập trong năm (2)</th>
+                      <th colspan="8">Xuất trong năm (3)</th>
+                      <th colspan="3">Tồn kho cuối năm (4)
+                        <br>
+                        ( 31/12/2021)
+                      </th>
+                      <th rowspan="4">Trạng thái</th>
+                      <th rowspan="4">Hành động</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="7">Trong đó</th>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="2">Trong đó</th>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="7">Trong đó</th>
+                      <th rowspan="3">Tổng số
+                        <br>
+                        (quy thóc)
+                      </th>
+                      <th colspan="2">Trong đó</th>
+                    </tr>
+                    <tr>
+                      <th colspan="4">Thóc</th>
+                      <th colspan="3">Gạo</th>
+                      <th rowspan="2">Thóc</th>
+                      <th rowspan="2">Gạo</th>
+                      <th colspan="4">Thóc</th>
+                      <th colspan="3">Gạo</th>
+                      <th rowspan="2">Thóc</th>
+                      <th rowspan="2">Gạo</th>
+                    </tr>
+                    <tr>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of groupingTableThocTruoc.data">
+                      <td>{{data.stt}}</td>
+                      <td>{{data.tenDonvi}}</td>
+                      <td>{{data.tkdnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.tkdnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.tkdnThoc.length > 0">
+                        <td *ngFor="let item of data.tkdnThoc">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.tkdnThoc.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td> {{data.tkdnTongGao | number: '1.0-1'}} </td>
+                      <ng-container *ngIf="data.tkdnGao.length > 0">
+                        <td *ngFor="let item of data.tkdnGao"> {{item.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="data.tkdnGao.length == 0">
+                        <td> 0 </td>
+                        <td> 0 </td>
+                      </ng-container>
+                      <td class="tong-so-quy-thoc"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
+                      <td>{{data.ntnThoc | number: '1.0-1'}}</td>
+                      <td>{{data.ntnGao | number: '1.0-1'}}</td>
+                      <td>{{data.xtnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.xtnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.xtnThoc.length > 0">
+                        <td *ngFor="let item of data.xtnThoc">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.xtnThoc.length == 0">
+                        <td>0 </td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{data.xtnTongGao | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.xtnGao.length > 0">
+                        <td *ngFor="let item of data.xtnGao">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.xtnGao.length == 0">
+                        <td>0 </td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{data.tkcnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.tkcnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <td>{{data.tkcnTongGao | number: '1.0-1'}}
+                      </td>
+                      <td>Đã duyệt</td>
+                      <td>
+                        <a (click)="themMoi(data)">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a (click)="deleteKeHoachLuongThuc(data.stt)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+            <div id="table-luong-thuc-tong-hop">
+              <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16">
+                <nz-table #groupingTableThocSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khLuongThuc" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="4">STT</th>
+                      <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="3">Nhập trong năm (2)</th>
+                      <th colspan="8">Xuất trong năm (3)</th>
+                      <th colspan="3">Tồn kho cuối năm (4)
+                        <br>
+                        ( 31/12/2021)
+                      </th>
+                      <th rowspan="4">Trạng thái</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="7">Trong đó</th>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="2">Trong đó</th>
+                      <th rowspan="3">
+                        Tổng số
+                        <br />
+                        (quy thóc)
+                      </th>
+                      <th colspan="7">Trong đó</th>
+                      <th rowspan="3">Tổng số
+                        <br>
+                        (quy thóc)
+                      </th>
+                      <th colspan="2">Trong đó</th>
+                    </tr>
+                    <tr>
+                      <th colspan="4">Thóc</th>
+                      <th colspan="3">Gạo</th>
+                      <th rowspan="2">Thóc</th>
+                      <th rowspan="2">Gạo</th>
+                      <th colspan="4">Thóc</th>
+                      <th colspan="3">Gạo</th>
+                      <th rowspan="2">Thóc</th>
+                      <th rowspan="2">Gạo</th>
+                    </tr>
+                    <tr>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Tổng</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of groupingTableThocSau.data">
+                      <td>{{data.stt}}</td>
+                      <td>{{data.tenDonvi}}</td>
+                      <td>{{data.tkdnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.tkdnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.tkdnThoc.length > 0">
+                        <td *ngFor="let item of data.tkdnThoc">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.tkdnThoc.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td> {{data.tkdnTongGao | number: '1.0-1'}} </td>
+                      <ng-container *ngIf="data.tkdnGao.length > 0">
+                        <td *ngFor="let item of data.tkdnGao"> {{item.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="data.tkdnGao.length == 0">
+                        <td> 0 </td>
+                        <td> 0 </td>
+                      </ng-container>
+                      <td class="tong-so-quy-thoc"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
+                      <td>{{data.ntnThoc | number: '1.0-1'}}</td>
+                      <td>{{data.ntnGao | number: '1.0-1'}}</td>
+                      <td>{{data.xtnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.xtnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.xtnThoc.length > 0">
+                        <td *ngFor="let item of data.xtnThoc">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.xtnThoc.length == 0">
+                        <td>0 </td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{data.xtnTongGao | number: '1.0-1'}}
+                      </td>
+                      <ng-container *ngIf="data.xtnGao.length > 0">
+                        <td *ngFor="let item of data.xtnGao">
+                          {{item.soLuong | number: '1.0-1'}}</td>
+                      </ng-container>
+                      <ng-container *ngIf="data.xtnGao.length == 0">
+                        <td>0 </td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{data.tkcnTongSoQuyThoc | number:
+                        '1.0-1'}}</td>
+                      <td>{{data.tkcnTongThoc | number: '1.0-1'}}
+                      </td>
+                      <td>{{data.tkcnTongGao | number: '1.0-1'}}
+                      </td>
+                      <td>Đã duyệt</td>
+                    </tr>
+                    <tr *ngIf="groupingTableThocSau?.data?.length > 0">
+                      <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 12, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 13, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 14, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 15, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 16, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 17, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 18, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 20, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 21, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 22, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 23, 4,
+                        ',','table-luong-thuc-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row"></td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+          </div>
+          <div [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+            <div id="table-muoi">
+              <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16 table-dieu-chinh">
+                <nz-table #groupingTableMuoiTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khMuoi" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="3">STT</th>
+                      <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th>Nhập trong năm (2)</th>
+                      <th colspan="4 ">Xuât trong năm (3)</th>
+                      <th>Tồn kho cuối năm (4)
+                        <br>
+                        ( 31/12/2021)
+                      </th>
+                      <th rowspan="3">Trạng thái</th>
+                      <th rowspan="3">Hành động</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="3">Trong đó</th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="3">Trong đó</th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let dataMuoi of groupingTableMuoiTruoc.data">
+                      <td>{{dataMuoi.stt}}</td>
+                      <td>{{dataMuoi.tenDonVi}}</td>
+                      <td>{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>
+                      <ng-container *ngIf="dataMuoi.tkdnMuoi.length > 0">
+                        <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="dataMuoi.tkdnMuoi.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{dataMuoi.ntnTongSoMuoi | number: '1.0-1'}}</td>
+                      <td>{{dataMuoi.xtnTongSoMuoi | number: '1.0-1'}}</td>
+                      <ng-container *ngIf="dataMuoi.xtnMuoi.length > 0">
+                        <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="dataMuoi.xtnMuoi.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
+                      <td>Đã duyệt</td>
+                      <td>
+                        <a (click)="themMoi(dataMuoi)">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+            <div id="table-muoi-tong-hop">
+              <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16">
+                <nz-table #groupingTableMuoiSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khMuoi" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="3">STT</th>
+                      <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th>Nhập trong năm (2)</th>
+                      <th colspan="4 ">Xuât trong năm (3)</th>
+                      <th>Tồn kho cuối năm (4)
+                        <br>
+                        ( 31/12/2021)
+                      </th>
+                      <th rowspan="3">Trạng thái</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="3">Trong đó</th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="3">Trong đó</th>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                      <th>Nhập <br> {{yearNow - 3}}</th>
+                      <th>Nhập <br> {{yearNow - 2}}</th>
+                      <th>Nhập <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let dataMuoi of groupingTableMuoiSau.data">
+                      <td>{{dataMuoi.stt}}</td>
+                      <td>{{dataMuoi.tenDonVi}}</td>
+                      <td>{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>
+                      <ng-container *ngIf="dataMuoi.tkdnMuoi.length > 0">
+                        <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="dataMuoi.tkdnMuoi.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{dataMuoi.ntnTongSoMuoi | number: '1.0-1'}}</td>
+                      <td>{{dataMuoi.xtnTongSoMuoi | number: '1.0-1'}}</td>
+                      <ng-container *ngIf="dataMuoi.xtnMuoi.length > 0">
+                        <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
+                      </ng-container>
+                      <ng-container *ngIf="dataMuoi.xtnMuoi.length == 0">
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </ng-container>
+                      <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
+                      <td>Đã duyệt</td>
+                    </tr>
+                    <tr *ngIf="groupingTableMuoiSau?.data?.length > 0">
+                      <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 3, ',', 'table-muoi-tong-hop')
+                        :
+                        0
+                        |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 3, ',',
+                        'table-muoi-tong-hop')
+                        :
+                        0 |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 3, ',',
+                        'table-muoi-tong-hop')
+                        :
+                        0 |
+                        number:
+                        '1.0-1'}}
+                      </td>
+                      <td class="background-last-row"></td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+          </div>
+          <div [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+            <div id="table-vat-tu">
+              <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16 table-dieu-chinh">
+                <nz-table #groupingTableVatTuTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khVatTu" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="3">STT</th>
+                      <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                      <th rowspan="3">MẶT HÀNG</th>
+                      <th rowspan="3">ĐƠN VỊ TÍNH</th>
+                      <th colspan="6">CHỈ TIÊU NHẬP NĂM {{yearNow}}</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
+                      <th rowspan="2">
+                        Kế hoạch {{yearNow}}
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Tổng</th>
+                      <th>Kế hoạch <br> {{yearNow - 3}}</th>
+                      <th>Kế hoạch <br> {{yearNow - 2}}</th>
+                      <th>Kế hoạch <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let itemVatTu of groupingTableVatTuTruoc.data">
+                      <tr>
+                        <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
+                        <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
+                      </tr>
+                      <ng-container *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
+                        <tr class="table__header-vat-tu">
+                          <td>{{itemNhomVatTu.tenVatTuCha}}</td>
+                          <td>{{itemNhomVatTu.donViTinh}}</td>
+                          <td>{{itemNhomVatTu.tongNhap}}</td>
+                          <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
+                          <td>{{itemNhomVatTu.nhapTrongNam}}</td>
+                        </tr>
+                        <ng-container *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
+                          <tr>
+                            <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
+                            <td>{{itemVatTuThietBi.donViTinh}}</td>
+                            <td>{{itemVatTuThietBi.tongNhap}}</td>
+                            <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+            <div id="table-vat-tu-tong-hop">
+              <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
+                class="mt16 flex-card p-lr16">
+                <nz-table #groupingTableVatTuSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khVatTu" nzBordered
+                  class="table__body">
+                  <thead>
+                    <tr>
+                      <th rowspan="3">STT</th>
+                      <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                      <th rowspan="3">MẶT HÀNG</th>
+                      <th rowspan="3">ĐƠN VỊ TÍNH</th>
+                      <th colspan="6">CHỈ TIÊU NHẬP NĂM {{yearNow}}</th>
+                    </tr>
+                    <tr>
+                      <th rowspan="2">
+                        Tổng số
+                      </th>
+                      <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
+                      <th rowspan="2">
+                        Kế hoạch {{yearNow}}
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Tổng</th>
+                      <th>Kế hoạch <br> {{yearNow - 3}}</th>
+                      <th>Kế hoạch <br> {{yearNow - 2}}</th>
+                      <th>Kế hoạch <br> {{yearNow - 1}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let itemVatTu of groupingTableVatTuSau.data">
+                      <tr>
+                        <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
+                        <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
+                      </tr>
+                      <ng-container *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
+                        <tr class="table__header-vat-tu">
+                          <td>{{itemNhomVatTu.tenVatTuCha}}</td>
+                          <td>{{itemNhomVatTu.donViTinh}}</td>
+                          <td>{{itemNhomVatTu.tongNhap}}</td>
+                          <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
+                          <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
+                          <td>{{itemNhomVatTu.nhapTrongNam}}</td>
+                        </tr>
+                        <ng-container *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
+                          <tr>
+                            <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
+                            <td>{{itemVatTuThietBi.donViTinh}}</td>
+                            <td>{{itemVatTuThietBi.tongNhap}}</td>
+                            <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
+                            <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+            </div>
+          </div>
+          <div class="tep" *ngIf="fileDinhKem">
+            <i class="icon htvbdh_tcdt_tep"></i>
+            <span>{{fileDinhKem}}</span>
+          </div>
+          <div class="action">
+            <button type="button" class="btn btn-main" (click)="themMoi()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')">
+              <i class="icon htvbdh_tcdt_import"></i>
+              <span>Import</span>
+            </button>
+            <input type="file" id="file-import-data" class="file-not-show" (change)="importFileData($event)" />
+            <button type="button" class="btn btn-sub" (click)="exportData()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="printTable()">
+              <i class="icon htvbdh_tcdt_print"></i>
+              <span>In</span>
+            </button>
+          </div>
         </div>
-      </nz-card>
-      <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
-            <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16 table-dieu-chinh">
-              <nz-table #groupingTableThocTruoc [nzData]="listThoc" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="4">STT</th>
-                    <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                    <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
-                    <th colspan="3">Nhập trong năm (2)</th>
-                    <th colspan="8">Xuât trong năm (3)</th>
-                    <th colspan="3">Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/2021)
-                    </th>
-                    <th rowspan="4">Trạng thái</th>
-                    <th rowspan="4">Hành động</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">Tổng số
-                      <br>
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                  </tr>
-                  <tr>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of groupingTableThocTruoc.data">
-                    <td *ngIf="data.stt">{{data.stt}}</td>
-                    <td *ngIf="data.stt">{{data.cucDTNNKhuVuc}}</td>
-                    <td *ngIf="data.stt == null" colspan="2" class="first-last-row-table background-last-row">
-                      {{data.cucDTNNKhuVuc}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongThoc | number:
-                      '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.tkdnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.tkdnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnThoc | number: '1.0-1'}}
-                    </td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnGao | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongThoc | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.xtnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.xtnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongThoc | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngIf="data.stt">Đã duyệt</td>
-                    <td *ngIf="data.stt">
-                      <a>
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a>
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                    <td *ngIf="data.stt == null" class="background-last-row"></td>
-                    <td *ngIf="data.stt ==  null" class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-            <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16">
-              <nz-table #groupingTableThocSau [nzData]="listThoc" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="4">STT</th>
-                    <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                    <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
-                    <th colspan="3">Nhập trong năm (2)</th>
-                    <th colspan="8">Xuât trong năm (3)</th>
-                    <th colspan="3">Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/2021)
-                    </th>
-                    <th rowspan="4">Trạng thái</th>
-                    <th rowspan="4">Hành động</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">Tổng số
-                      <br>
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                  </tr>
-                  <tr>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of groupingTableThocSau.data">
-                    <td *ngIf="data.stt">{{data.stt}}</td>
-                    <td *ngIf="data.stt">{{data.cucDTNNKhuVuc}}</td>
-                    <td *ngIf="data.stt == null" colspan="2" class="first-last-row-table background-last-row">
-                      {{data.cucDTNNKhuVuc}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongThoc | number:
-                      '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.tkdnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkdnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.tkdnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnThoc | number: '1.0-1'}}
-                    </td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.ntnGao | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongThoc | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.xtnThoc" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.xtnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngFor="let item of data.xtnGao" [ngClass]="data.stt == null ? 'background-last-row' : ''">
-                      {{item.soLuong | number: '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongThoc | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="data.stt == null ? 'background-last-row' : ''">{{data.tkcnTongGao | number: '1.0-1'}}
-                    </td>
-                    <td *ngIf="data.stt">Đã duyệt</td>
-                    <td *ngIf="data.stt">
-                      <a>
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a>
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                    <td *ngIf="data.stt == null" class="background-last-row"></td>
-                    <td *ngIf="data.stt ==  null" class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-          </nz-tab>
-          <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi">
-            <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16 table-dieu-chinh">
-              <nz-table #groupingTableMuoiTruoc [nzData]="listMuoi" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="4">STT</th>
-                    <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                    <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
-                    <th>Nhập trong năm (2)</th>
-                    <th colspan="4 ">Xuât trong năm (3)</th>
-                    <th>Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/2021)
-                    </th>
-                    <th rowspan="3">Trạng thái</th>
-                    <th rowspan="3">Hành động</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let dataMuoi of groupingTableMuoiTruoc.data">
-                    <td *ngIf="dataMuoi.stt">{{dataMuoi.stt}}</td>
-                    <td *ngIf="dataMuoi.stt">{{dataMuoi.cucDTNNKhuVuc}}</td>
-                    <td *ngIf="dataMuoi.stt == null" colspan="2" class="first-last-row-table background-last-row">
-                      {{dataMuoi.cucDTNNKhuVuc}}</td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkdnTongSoMuoi |
-                      number:
-                      '1.0-1'}}</td>
-                    <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi"
-                      [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.ntnTongSoMuoi | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.xtnTongSoMuoi | number:
-                      '1.0-1'}}</td>
-                    <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi"
-                      [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkcnTongSoMuoi |
-                      number:
-                      '1.0-1'}}</td>
-                    <td *ngIf="dataMuoi.stt">Đã duyệt</td>
-                    <td *ngIf="dataMuoi.stt">
-                      <a>
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a>
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                    <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
-                    <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-            <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16">
-              <nz-table #groupingTableMuoiSau [nzData]="listMuoi" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="4">STT</th>
-                    <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                    <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
-                    <th>Nhập trong năm (2)</th>
-                    <th colspan="4 ">Xuât trong năm (3)</th>
-                    <th>Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/2021)
-                    </th>
-                    <th rowspan="3">Trạng thái</th>
-                    <th rowspan="3">Hành động</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                    <th>Nhập <br> 2017</th>
-                    <th>Nhập <br> 2018</th>
-                    <th>Nhập <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let dataMuoi of groupingTableMuoiSau.data">
-                    <td *ngIf="dataMuoi.stt">{{dataMuoi.stt}}</td>
-                    <td *ngIf="dataMuoi.stt">{{dataMuoi.cucDTNNKhuVuc}}</td>
-                    <td *ngIf="dataMuoi.stt == null" colspan="2" class="first-last-row-table background-last-row">
-                      {{dataMuoi.cucDTNNKhuVuc}}</td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkdnTongSoMuoi |
-                      number:
-                      '1.0-1'}}</td>
-                    <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi"
-                      [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.ntnTongSoMuoi | number:
-                      '1.0-1'}}</td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.xtnTongSoMuoi | number:
-                      '1.0-1'}}</td>
-                    <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi"
-                      [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{itemMuoi.soLuong | number:
-                      '1.0-1'}}
-                    </td>
-                    <td [ngClass]="dataMuoi.stt == null ? 'background-last-row' : ''">{{dataMuoi.tkcnTongSoMuoi |
-                      number:
-                      '1.0-1'}}</td>
-                    <td *ngIf="dataMuoi.stt">Đã duyệt</td>
-                    <td *ngIf="dataMuoi.stt">
-                      <a>
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a>
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                    <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
-                    <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-          </nz-tab>
-          <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
-            (nzClick)="tabSelected = tab.vatTu">
-            <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16 table-dieu-chinh">
-              <nz-table #groupingTable [nzData]="listVatTu" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="3">STT</th>
-                    <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                    <th rowspan="3">MẶT HÀNG</th>
-                    <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                    <th colspan="6">CHỈ TIÊU NHẬP NĂM 2020</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
-                    <th rowspan="2">
-                      Kế hoạch 2020
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Kế hoạch <br> 2017</th>
-                    <th>Kế hoạch <br> 2018</th>
-                    <th>Kế hoạch <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td rowspan="11">1</td>
-                    <td rowspan="11">Hà Nội</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Xuồng cao tốc các loại</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại DT1</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Máy phát điện</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại 30-40 KVL</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="6">2</td>
-                    <td rowspan="6">Tây Bắc</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Xuồng cao tốc các loại</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại DT1</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-            <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
-              class="mt16 flex-card p-lr16">
-              <nz-table #groupingTable [nzData]="listVatTu" nzBordered class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="3">STT</th>
-                    <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                    <th rowspan="3">MẶT HÀNG</th>
-                    <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                    <th colspan="6">CHỈ TIÊU NHẬP NĂM 2020</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
-                    <th rowspan="2">
-                      Kế hoạch 2020
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Kế hoạch <br> 2017</th>
-                    <th>Kế hoạch <br> 2018</th>
-                    <th>Kế hoạch <br> 2019</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td rowspan="11">1</td>
-                    <td rowspan="11">Hà Nội</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Xuồng cao tốc các loại</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại DT1</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Máy phát điện</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại 30-40 KVL</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="6">2</td>
-                    <td rowspan="6">Tây Bắc</td>
-                  </tr>
-                  <tr class="table__header-vat-tu">
-                    <td>Xuồng cao tốc các loại</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  <tr *ngFor="let item of xuongCaoTocCacLoais">
-                    <td>+ loại DT1</td>
-                    <td>Bộ</td>
-                    <td>14,316</td>
-                    <td>6000</td>
-                    <td></td>
-                    <td>3000</td>
-                    <td>3,000</td>
-                    <td>14,316</td>
-                  </tr>
-                </tbody>
-              </nz-table>
-            </nz-card>
-          </nz-tab>
-        </nz-tabset>
-        <div class="tep" *ngIf="id > 0">
-          <i class="icon htvbdh_tcdt_tep"></i>
-          <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
-        </div>
-        <div class="action">
-          <button type="button" class="btn btn-main" (click)="themMoi()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-          <button type="button" class="btn btn-sub">
-            <i class="icon htvbdh_tcdt_import"></i>
-            <span>Import</span>
-          </button>
-          <button type="button" class="btn btn-sub">
-            <i class="icon htvbdh_chuyen-xu-ly"></i>
-            <span>Export</span>
-          </button>
-          <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>In</span>
-          </button>
+        <div class="ghi-chu">
+          <nz-form-item>
+            <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ghi chú </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ghiChuError">
+              <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"></textarea>
+              <ng-template #ghiChuError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
-      <div class="ghi-chu">
-        <nz-form-label nzRequired [nzNoColon]="true">
-          Ghi chú
-        </nz-form-label>
-        <ul>
-          <li class="ghi-chu__item">
-            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
-            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
-            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
-            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
-            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
-            dựng CSDL về Tài chính
-          </li>
-          <li class="ghi-chu__item">
-            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
-            2022
-          </li>
-          <li class="ghi-chu__item">
-            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
-            2022
-          </li>
-        </ul>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
-<!-- modal -->
-<app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-
-<app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-
-<app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam>
-
-<app-thong-tin-muoi [(isVisible)]="modals.thongTinMuoi"></app-thong-tin-muoi>

@@ -9,7 +9,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class UploadComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
-
+  data: string;
   options = {
     luongThuc: false,
     muoi: false,
@@ -31,6 +31,9 @@ export class UploadComponent implements OnInit {
   }
 
   onCancel() {
-    this._modalRef.close();
+    this._modalRef.destroy();
+  }
+  onSave() {
+    this._modalRef.close(this.data);
   }
 }

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
+import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { KeHoachComponent } from './ke-hoach.component';
 
 const routes: Routes = [
@@ -28,17 +30,11 @@ const routes: Routes = [
       },
       {
         path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-        loadChildren: () =>
-          import(
-            '../ke-hoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.DieuChinhChiTieuKeHoachNamModule),
+        component: DieuChinhChiTieuKeHoachNamComponent
       },
       {
         path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
-        loadChildren: () =>
-          import(
-            '../ke-hoach/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.DieuChinhThongTinChiTieuKeHoachNamModule),
+        component: DieuChinhThongTinChiTieuKeHoachNamComponent
       },
     ],
   },

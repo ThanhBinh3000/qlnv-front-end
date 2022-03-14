@@ -208,7 +208,11 @@ export class DanhMucService extends BaseService {
         "trangThai": "",
       }
     )
-
+  }
+    
+  loadDanhMucHangHoa() {
+      const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dm-hang/danh-sach`;
+      return this.httpClient.post<any>(url, null);
   }
 
 
@@ -623,6 +627,19 @@ dMDviTienQDGiaoDT(): Observable<any> {
       }
   );
 }
-
+//danh muc noi dung
+dMDonViTien(): Observable<any> {
+  return this.httpClient.post(
+    this.urlDefault + "/qlnv-category/dmuc-khoachvon/401",
+    {
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": "",
+      "trangThai": ""
+    }
+  );
+}
 }
 
