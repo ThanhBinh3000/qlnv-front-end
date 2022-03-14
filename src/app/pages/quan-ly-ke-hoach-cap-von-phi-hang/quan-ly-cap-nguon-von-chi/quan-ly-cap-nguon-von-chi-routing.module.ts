@@ -8,7 +8,7 @@ const routes: Routes = [
     component: QuanLyCapNguonVonChiNSNNComponent,
   },
   {
-    path: 'tim-kiem',
+    path: 'tim-kiem-danh-sach-cong-van-de-nghi-cap-von',
     loadChildren: () =>
       import(
         './tim-kiem/tim-kiem.module'
@@ -41,7 +41,42 @@ const routes: Routes = [
       import(
         './tim-kiem-danh-sach-tong-hop-de-nghi-cap-von/tim-kiem-danh-sach-tong-hop-de-nghi-cap-von.module'
         ).then((m) => m.TimKiemDanhSachTongHopDeNghiCapVonModule),
-  }
+  },
+  {
+    path: 'tong-hop-de-nghi-cap-von',
+    loadChildren: () =>
+      import(
+        './tong-hop-de-nghi-cap-von/tong-hop-de-nghi-cap-von.module'
+      ).then((m) => m.TongHopDeNghiCapVonModule),
+  },
+  {
+    path: 'tim-kiem-danh-sach-de-nghi-cap-von-cua-cac-bo-nganh',
+    loadChildren:() =>
+      import(
+        './tim-kiem-danh-sach-de-nghi-cap-von-cua-cac-bo-nganh/tim-kiem-danh-sach-de-nghi-cap-von-bo-nganh.module'
+        ).then((m) => m.TimKiemDanhSachDeNghiCapVonBoNganhModule),
+  },
+  {
+    path: 'theo-doi-cap-von-mua-hang-dtqg',
+    loadChildren: () =>
+      import(
+        './theo-doi-cap-von-mua-hang-DTQG/theo-doi-cap-von-mua-hang-dtqg.module'
+        ).then((m) => m.TheoDoiCapVonMuaHangDtqgModule),
+  },
+  {
+    path: 'danh-sach-tong-hop-de-nghi-cap-von',
+    loadChildren:() =>
+      import(
+        './danh-sach-tong-hop-de-nghi-cap-von/danh-sach-tong-hop-de-nghi-cap-von.module'
+        ).then((m) => m.DanhSachTongHopDeNghiCapVonModule),
+  },
+  {
+    path: 'theo-doi-cap-von-mua-hang-dtqg-2',
+    loadChildren: () =>
+      import(
+        './theo-doi-cap-von-mua-hang-DTQG-2/theo-doi-cap-von-mua-hang-dtqg-2.module'
+        ).then((m) => m.TheoDoiCapVonMuaHangDtqg2Module),
+  },
 ];
 
 @NgModule({

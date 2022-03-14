@@ -77,7 +77,7 @@
               <nz-descriptions-item nzTitle="Nơi lập">
                 {{getUnitName()}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số công văn">
+              <nz-descriptions-item nzTitle="Số quyết định">
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày">
@@ -99,36 +99,27 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab>
-            <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="3"> -->
-                <!-- <div class="inner-box">Đơn vị: -->
-                <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select> -->
-                <!-- </div> -->
-              <!-- </div>
-            </div> -->
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="" nzWidth="1%">STT</th>
-                  <th rowspan="" nzWidth="14%">Loại</th>
-                  <th rowspan="" nzWidth="14%">Mặt hàng</th>
-                  <th rowspan="" nzWidth="14%">Chủng loại</th>
-                  <th rowspan="" nzWidth="14%">
-                    Đơn giá
+                  <th rowspan="" nzWidth="13%">Nguồn hàng</th>
+                  <th rowspan="" nzWidth="13%">Mặt hàng</th>
+                  <th rowspan="" nzWidth="13%">Hình thức</th>
+                  <th rowspan="" nzWidth="12%">
+                    Số lượng
                   </th>
-                  <th colspan="" nzWidth="14%">
-                    Đơn vị tính
+                  <th colspan="" nzWidth="12%">
+                    Đơn vị
                   </th>
-                  <th colspan="" nzWidth="14%">
-                    Chi phí liên quan
+                  <th colspan="" nzWidth="12%">
+                    Giá thị trường
                   </th>
-                  <th colspan="" nzWidth="14%">
-                    Địa điểm
+                  <th colspan="" nzWidth="12%">
+                    Giá tối đa/tối thiểu
+                  </th>
+                  <th colspan="" nzWidth="12%">
+                    Thành tiền
                   </th>
                   <th colspan="3" rowspan="" [hidden]="status"></th>
                   <th rowspan="" [hidden]="status">
@@ -143,36 +134,37 @@
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <div *ngFor="let item of noiDungs">
-                        <div *ngIf="item.id == data.maNoiDung">
+                      <div *ngFor="let item of nguonHangs">
+                        <div *ngIf="item.id == data.maNguonHang">
                           {{item.tenDm}}
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let item of nhomChis">
-                        <div *ngIf="item.id == data.maNhomChi">
+                      <div *ngFor="let item of matHangs">
+                        <div *ngIf="item.id == data.maMatHang">
                           {{item.tenDm}}
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let item of loaiChis">
-                        <div *ngIf="item.id == data.maLoaiChi">
+                      <div *ngFor="let item of hinhThucs">
+                        <div *ngIf="item.id == data.maHinhThuc">
                           {{item.tenDm}}
                         </div>
                       </div>
                     </td>
-                    <td>{{ data.namHhanhN }}</td>
-                    <td>{{ data.tranChiDuocTbN1 }}</td>
-                    <td>{{ data.ncauChiCuaDviN1 }}</td>
-                    <td>{{ data.clechTranChiVsNcauN1 }}</td>
-                    <!-- <td>{{ data.tranChiDuocTbN2 }}</td>
-                    <td>{{ data.ncauChiCuaDviN2 }}</td>
-                    <td>{{ data.clechTranChiVsNcauN2 }}</td>
-                    <td>{{ data.tranChiDuocTbN3 }}</td>
-                    <td>{{ data.ncauChiCuaDviN3 }}</td>
-                    <td>{{ data.clechTranChiVsNcauN3 }}</td> -->
+                    <td>{{ data.soLuong }}</td>
+                    <td>
+                      <div *ngFor="let item of donViTinhs">
+                        <div *ngIf="item.id == data.maDviTinh">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ data.giaTtruong }}</td>
+                    <td>{{ data.giaTdaTthieu }}</td>
+                    <td>{{ data.thanhTien }}</td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -191,36 +183,45 @@
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-                        [(ngModel)]="editCache[data.id].data.maNoiDung">
-                        <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn hàng"
+                        [(ngModel)]="editCache[data.id].data.maNguonHang">
+                        <nz-option *ngFor="let item of nguonHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhóm chi"
-                        [(ngModel)]="editCache[data.id].data.maNhomChi">
-                        <nz-option *ngFor="let item of nhomChis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mặt hàng"
+                        [(ngModel)]="editCache[data.id].data.maMatHang">
+                        <nz-option *ngFor="let item of matHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chi"
-                        [(ngModel)]="editCache[data.id].data.maLoaiChi">
-                        <nz-option *ngFor="let item of loaiChis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức"
+                        [(ngModel)]="editCache[data.id].data.maHinhThuc">
+                        <nz-option *ngFor="let item of hinhThucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.namHhanhN" />
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.soLuong"
+                      (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tranChiDuocTbN1"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                        [(ngModel)]="editCache[data.id].data.maDviTinh">
+                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.giaTtruong"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauChiCuaDviN1"
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.giaTdaTthieu"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      {{editCache[data.id].data.clechTranChiVsNcauN1}}
+                      <!-- <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.thanhTien"
+                      (change)="changeModel(data.id)" /> -->
+                      {{editCache[data.id].data.thanhTien}}
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

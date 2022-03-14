@@ -11,19 +11,16 @@ import * as uuid from "uuid";
 import { DanhMucService } from '../../../../services/danhMuc.service';
 import { Utils } from "../../../../Utility/utils";
 export class ItemData {
-  namHhanhN!: number;
-  tranChiDuocTbN1!: number;
-  ncauChiCuaDviN1!: number;
-  clechTranChiVsNcauN1: number;
-  tranChiDuocTbN2!: number;
-  ncauChiCuaDviN2!: number;
-  clechTranChiVsNcauN2: number;
-  tranChiDuocTbN3!: number;
-  ncauChiCuaDviN3!: number;
-  clechTranChiVsNcauN3: number;
-  maNoiDung!: string;
-  maNhomChi!: string;
-  maLoaiChi!: string;
+
+  maNguonHang!: string;
+  maMatHang!: string;
+  maHinhThuc!: string;
+  soLuong!: number;
+  maDviTinh!: string;
+  giaTtruong!: number;
+  giaTdaTthieu!: number;
+  thanhTien!: number;
+
   id!: any;
   maBcao!: String;
   stt!: String;
@@ -39,6 +36,13 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
   userInfo: any;
   errorMessage!: String;                      //
+
+  nguonHangs: any = [];
+  matHangs: any = [];
+  hinhThucs: any = [];
+  donViTinhs: any = [];
+
+
   noiDungs: any = [];                         // danh muc noi dung
   nhomChis:any = [];                          // danh muc nhom chi
   loaiChis:any = [];                          // danh muc loai chi
@@ -153,75 +157,64 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-    //get danh muc noi dung
-    this.danhMucService.dMNoiDung().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.noiDungs = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
 
-    //get danh muc nhom chi
-    this.danhMucService.dMNhomChi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.nhomChis = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+      //get danh muc nguon hang
+      this.danhMucService.dMNguonHang().toPromise().then(
+        (data) =>{
+          if (data.statusCode == 0) {
+            this.nguonHangs = data.data?.content;
+          }else{
+            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          }
+        },
+        (err) =>{
+          this.errorMessage = err.error.message;
         }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
+      );
 
-    //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.loaiChis = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+      //get mat hang
+      this.danhMucService.dMVatTu().toPromise().then(
+        (data) =>{
+          if (data.statusCode == 0) {
+            this.matHangs = data.data?.content;
+          }else{
+            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          }
+        },
+        (err) =>{
+          this.errorMessage = err.error.message;
         }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
+      );
 
-    //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.loaiChis = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+      //get hinh thuc
+      this.danhMucService.dMHinhThuc().toPromise().then(
+        (data) =>{
+          if (data.statusCode == 0) {
+            this.hinhThucs = data.data?.content;
+          }else{
+            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          }
+        },
+        (err) =>{
+          this.errorMessage = err.error.message;
         }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
+      );
 
-    //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+      //get don vi tinh
+      this.danhMucService.dMDviTinh().toPromise().then(
+        (data) =>{
+          if (data.statusCode == 0) {
+            this.donViTinhs = data.data?.content;
+          }else{
+            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          }
+        },
+        (err) =>{
+          this.errorMessage = err.error.message;
         }
-      },
-      (err) => {
-        this.errorMessage = "err.error.message";
-      }
-    );
+      );
+
+    
     this.spinner.hide();
   }
 
@@ -317,68 +310,6 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
     this.spinner.hide();
   }
 
-
-  // trinh duyet
-  // async trinhduyet() {
-  //   let listFile: any = [];
-  //   for (const iterator of this.listFile) {
-  //     listFile.push(await this.uploadFile(iterator));
-  //   }
-
-  //   // replace nhung ban ghi dc them moi id thanh null
-  //   this.lstCTietBCao.filter(item => {
-  //     if (typeof item.id != "number") {
-  //       item.id = null;
-  //     }
-  //   })
-
-  //   // gui du lieu trinh duyet len server
-  //   let request = {
-  //     id: this.id,
-  //     fileDinhKems: listFile,
-  //     listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-  //     lstCTietBCao: this.lstCTietBCao,
-  //     maBcao: this.maBaoCao,
-  //     maDvi: this.maDonViTao,
-  //     maDviTien: this.maDviTien,
-  //     maLoaiBcao: this.maLoaiBaoCao,
-  //     namHienHanh: this.namBaoCaoHienHanh,
-  //     namBcao: this.namBaoCaoHienHanh,
-  //   };
-
-  //   //call service them moi
-  //   this.spinner.show();
-  //   if (this.id == null) {
-  //     this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-  //       data => {
-  //         if (data.statusCode == 0) {
-  //           alert('trinh duyet thanh cong!');
-  //         } else {
-  //           alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-  //         }
-  //       },
-  //       err => {
-  //         alert('trinh duyet that bai!');
-  //         console.log(err);
-  //       },
-  //     );
-  //   } else {
-  //     this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-  //       if (res.statusCode == 0) {
-  //         alert('trinh duyet thanh cong!');
-  //       } else {
-  //         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-  //       }
-  //     })
-  //   }
-  //   this.lstCTietBCao.filter(item => {
-  //     if (!item.id) {
-  //       item.id = uuid.v4();
-  //     }
-  //   });
-  //   this.spinner.hide();
-  // }
-
   // chuc nang check role
   onSubmit(mcn: String) {
     const requestGroupButtons = {
@@ -461,19 +392,14 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      namHhanhN!: 0,
-      tranChiDuocTbN1!: 0,
-      ncauChiCuaDviN1!: 0,
-      clechTranChiVsNcauN1: 0,
-      tranChiDuocTbN2!: 0,
-      ncauChiCuaDviN2!: 0,
-      clechTranChiVsNcauN2: 0,
-      tranChiDuocTbN3!: 0,
-      ncauChiCuaDviN3!: 0,
-      clechTranChiVsNcauN3: 0,
-      maNoiDung!: "",
-      maNhomChi!: "",
-      maLoaiChi!: "",
+      maNguonHang: "",
+      maMatHang: "",
+      maHinhThuc: "",
+      soLuong: 0,
+      maDviTinh: "",
+      giaTtruong: 0,
+      giaTdaTthieu: 0,
+      thanhTien: 0,
       maBcao: "",
       stt: "",
       id: uuid.v4(),
@@ -607,9 +533,8 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
   //gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
-    this.editCache[id].data.clechTranChiVsNcauN1 = Number(this.editCache[id].data.ncauChiCuaDviN1) - Number(this.editCache[id].data.tranChiDuocTbN1);
-    this.editCache[id].data.clechTranChiVsNcauN2 = Number(this.editCache[id].data.ncauChiCuaDviN2) - Number(this.editCache[id].data.tranChiDuocTbN2);
-    this.editCache[id].data.clechTranChiVsNcauN3 = Number(this.editCache[id].data.ncauChiCuaDviN3) - Number(this.editCache[id].data.tranChiDuocTbN3);
+    this.editCache[id].data.thanhTien = Number(this.editCache[id].data.soLuong) * Number(this.editCache[id].data.giaTdaTthieu);
+
   }
 
 }

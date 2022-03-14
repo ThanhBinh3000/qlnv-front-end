@@ -1,0 +1,285 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden]="statusBtnSave">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
+          [hidden]="statusBtnApprove">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Trình duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')"
+          [hidden]="statusBtnTBP">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Trưởng BP trả lại</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')" [hidden]="statusBtnTBP">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Trưởng BP phê duyệt</span>
+        </a>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')"
+          [hidden]="statusBtnLD">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Lãnh đạo trả lại</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')" [hidden]="statusBtnLD">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Lãnh đạo duyệt</span>
+        </a>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')"
+          [hidden]="statusBtnGuiDVCT">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Gửi duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('8')"
+          [hidden]="statusBtnDVCT">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>ĐV cấp trên trả lại</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')"
+          [hidden]="statusBtnDVCT">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>ĐV cấp trên duyệt</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden]="statusBtnDel">
+          <i class="icon htvbdh_tcdt_delete"></i>
+          <span>Xóa</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+          <div>
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+              <nz-descriptions-item nzTitle="Ngày nhập">
+                {{ngayNhap}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+                {{nguoiNhap}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Đơn vị">
+                {{getUnitName()}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Cấp">
+                {{namBaoCaoHienHanh}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Trạng thái">
+                {{getStatusName()}}
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </div>
+        </div>
+      </nz-card>
+      <div class="tab__container">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab>
+            <nz-table nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="" nzWidth="1%">STT</th>
+                  <th rowspan="" nzWidth="25%">Đơn vị</th>
+                  <th rowspan="" nzWidth="25%">Lương thực muối</th>
+                  <th rowspan="" nzWidth="25%">Vật tư thiết bị</th>
+                  <th rowspan="" nzWidth="25%">
+                    Đơn vị tiền
+                  </th>
+                  <th colspan="3" rowspan="" [hidden]="status"></th>
+                  <th rowspan="" [hidden]="status">
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                      [nzIndeterminate]="indeterminate">
+                    </label>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstCTietBCao; let i = index">
+                  <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <div *ngFor="let item of donVis">
+                        <div *ngIf="item.id == data.maDvi">
+                          {{item.tenDvi}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ data.namHhanhN }}</td>
+                    <td>{{ data.tranChiDuocTbN1 }}</td>
+                    <td>{{ data.ncauChiCuaDviN1 }}</td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+
+                  </ng-container>
+                  <ng-template #editTemplate>
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                        [(ngModel)]="editCache[data.id].data.maNoiDung">
+                        <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.namHhanhN" />
+                    </td>
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tranChiDuocTbN1"
+                        (change)="changeModel(data.id)" />
+                    </td>
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauChiCuaDviN1"
+                        (change)="changeModel(data.id)" />
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td>
+                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
+                        class="save">Cancel</a>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+                  </ng-template>
+                </tr>
+              </tbody>
+            </nz-table>
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Danh sách văn bản đính kèm
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                  <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Select File
+                  </button>
+                </nz-upload>
+                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                  style="margin-top: 16px">
+                  Thêm vào danh sách
+                </button>
+              </div>
+            </div>
+
+            <nz-table [nzData]="lstCTietBCao" nzBordered class="table__body" style="width: 600px">
+              <thead>
+                <tr>
+                  <th nzWidth="50">STT</th>
+                  <th nzWidth="170px">Tên file</th>
+                  <th nzWidth="150px"></th>
+                  <th nzWidth="150px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstFile; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ data.fileName }}</td>
+                  <td>
+                    <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
+                  </td>
+                  <td [hidden]="status">
+                    <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+
+            <div>
+              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+                <nz-descriptions-item nzTitle="Nơi nhận">
+                  {{ngayNhap}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Hình thức">
+                  {{ngayNhap}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Lý do từ chối">
+                  <input nz-input placeholder="Lý do từ chối">
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </div>
+
+          </nz-tab>
+        </nz-tabset>
+        <div class="action">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+            <i class="fa fa-trash-o"></i>
+            <span>Xóa</span>
+          </button>
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Import</span>
+          </button>
+          <!-- <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button> -->
+          <!-- <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
+              <i class="icon htvbdh_tcdt_print"></i>
+              <span>In</span>
+            </button> -->
+        </div>
+      </div>
+      <div class="ghi-chu">
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <ul>
+          <li class="ghi-chu__item">
+            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
+            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+            dựng CSDL về Tài chính
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal -->
+<!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
+  
+  <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
+  
+  <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
