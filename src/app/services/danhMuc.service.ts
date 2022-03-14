@@ -476,7 +476,157 @@ dMTrangThai(): Observable<any> {
       }
   );
 }
+    // lay danh sach cuc khu vuc
+    dMCucKhuVuc():Observable<any>{
+      return this.httpClient.post(
+          this.urlDefault  + "/qlnv-category/dmuc-donvi/ds-donvi-child",
+          {
+                  capDvi: "2",
+                  kieuDvi: null,
+                  loaiDvi: null,
+                  maDvi: "0",
+                  maPhuong: null,
+                  maQuan: null,
+                  maTinh: null,
+                  paggingReq: {
+                    "limit": 20,
+                    "page": 1
+                  },
+                  str: "string",
+                  tenDvi: "string",
+                  trangThai: "00"
+          }
+          );
+  }
+//chung loai
+  dMChungLoai(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/462",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
+    );
+  }
+  // địa điểm kho
+  dMDiaDiemKho(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/465",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
+    );
+  }
 
+  //nguon hang
+  dMNguonHang(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/469",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
+    );
+  }
+
+  //hinh thuc
+  dMHinhThuc(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/481",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": ""
+      }
+    );
+  }
+
+
+dMLoaiQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/421",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMNhomQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/425",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMMatHangQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/429",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMDviHangQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/433",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMDviTienQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/438",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
 //danh muc noi dung
 dMDonViTien(): Observable<any> {
   return this.httpClient.post(
@@ -492,3 +642,4 @@ dMDonViTien(): Observable<any> {
   );
 }
 }
+
