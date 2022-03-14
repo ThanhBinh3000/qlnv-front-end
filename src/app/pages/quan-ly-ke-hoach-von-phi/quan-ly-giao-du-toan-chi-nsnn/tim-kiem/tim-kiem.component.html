@@ -24,7 +24,7 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="12">
             <label class="search__label">Số quyết định</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày</label>
@@ -36,7 +36,7 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Nơi ra quyết định</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.noiQd">
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
@@ -60,12 +60,12 @@
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.maBcao }}</td>
-              <td>{{item.ngayTao}}</td>
-              <td>{{item.tenDvi}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td>{{ item.soQd }}</td>
+              <td>{{item.ngayQd}}</td>
+              <td>{{item.noiQd}}</td>
+              <td class="text-center">{{item.vanBan}}</td>
               <td class="text-center">
-                <a routerLink="../{{url}}{{ item.id }}">
+                <a routerLink="../{{url}}/{{ item.id }}">
                   xem
                 </a>
               </td >
@@ -97,7 +97,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <button type="button" class="btn btn-main" routerLink="../nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

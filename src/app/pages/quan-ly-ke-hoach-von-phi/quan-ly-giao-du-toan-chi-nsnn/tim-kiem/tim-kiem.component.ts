@@ -21,7 +21,7 @@ export class TimKiemComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
 
   // phan cu cua teca
   visible = false;
@@ -37,12 +37,13 @@ export class TimKiemComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    nam: "",
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
+    noiQd: "",
+    soQd: "",
   };
   pages = {
     size: 10,
@@ -107,27 +108,27 @@ export class TimKiemComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
-      maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
-      namBcao: this.searchFilter.nam,
-      ngayTaoDen: this.searchFilter.tuNgay,
-      ngayTaoTu: this.searchFilter.denNgay,
+      ngayTaoDen: this.searchFilter.denNgay,
+      ngayTaoTu: this.searchFilter.tuNgay,
+      noiQd: this.searchFilter.noiQd,
       paggingReq: {
         limit: this.pages.size,
-        page: this.pages.page,
+        page: this.pages.page
       },
+      soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: "",
+      trangThai: ""
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
+          console.log(this.danhSachBaoCao);
+
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -136,20 +137,6 @@ export class TimKiemComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
-  }
-
-  //set url khi
-  setUrl(id) {
-    switch (id) {
-      case 26:
-        this.url = '/chi-thuong-xuyen-3-nam/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
-    console.log(id);
-
   }
 
   //doi so trang

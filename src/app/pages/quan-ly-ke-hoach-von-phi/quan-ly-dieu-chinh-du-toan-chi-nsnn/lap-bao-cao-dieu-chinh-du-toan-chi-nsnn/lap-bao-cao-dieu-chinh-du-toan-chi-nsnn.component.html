@@ -43,7 +43,7 @@
 <div class="contentBor chi-tieu__body">
      <div class="contentDetail">
           <div class="main-content">
-               <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+               <nz-card nzTitle="Lập báo cáo điều chỉnh dự toán chi NSNN" class="mt16 flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[18, 12]">
                          <div nz-col nzSpan="6">
                               <label class="search__label">Ngày nhập</label>
@@ -97,16 +97,17 @@
                                    <thead>
                                         <tr>
                                              <th nzWidth="50px">Chọn</th>
-                                             <th nzWidth="100px">Ngày lập</th>
-                                             <th nzWidth="100px">Đơn vị lập</th>
-                                             <th nzWidth="75px">Năm</th>
+                                             <th nzWidth="150px">Ngày lập</th>
+                                             <th nzWidth="150px">Đơn vị lập</th>
+                                             <th nzWidth="100px">Năm</th>
                                              <th nzWidth="100px">Khoản mục</th>
                                              <th nzWidth="150px">Nội dung</th>
-                                             <th nzWidth="200px">Chi cho</th>
+                                             <th nzWidth="150px">Chi cho</th>
                                              <th nzWidth="150px">Phân bố</th>
                                              <th nzWidth="150px">Ngày ghi nhận</th>
-                                             <th nzWidth="150px">Điều chỉnh</th>
-                                             <th nzWidth="300px">Ghi chú</th>
+                                             <th nzWidth="200px">Điều chỉnh</th>
+                                             <th nzWidth="200px">Ghi chú</th>
+                                             <th></th>
                                         </tr>
                                    </thead>
                                    <tbody>
@@ -115,7 +116,7 @@
 
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked()"></label>
+                                                            ></label>
                                                   </td>
                                                   <td>{{data.ngayLap}}</td>
                                                   <td>
@@ -129,44 +130,44 @@
                                                   <td>{{data.maKhoanMuc}}</td>
                                                   <td>
                                                        <div *ngFor="let item of noiDungs">
-                                                            <div *ngIf="item.id == data.noiDung">
+                                                            <div *ngIf="item.id == data.maNoiDung">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>
                                                   </td>
                                                   <td>
-                                                       <div *ngFor="let item of loaiChis">
-                                                            <div *ngIf="item.id == data.maLoaiChi">
+                                                       <div *ngFor="let item of nhomChis">
+                                                            <div *ngIf="item.id == data.maNhomChi">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>
                                                   </td>
                                                   <td>
-                                                       {{data.phanBo}}
+                                                       {{data.soTienPhanBo}}
                                                   </td>
                                                   <td>{{ data.ngayGhiNhan}}</td>
                                                   <td>{{ data.dieuChinh }}</td>
                                                   <td>{{ data.ghiChu }}</td>
+                                                  <td></td>
                                              </ng-container>
                                              <ng-template #editTemplate>
 
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked()"></label>
+                                                            ></label>
                                                   </td>
 
                                                   <td>
                                                        {{editCache[data.id].data.ngayLap}}
                                                   </td>
                                                   <td>
-                                                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                                            [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis"
-                                                                 [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
-                                                            </nz-option>
-                                                       </nz-select>
+                                                       <div *ngFor="let item of donVis">
+                                                            <div *ngIf="item.id == editCache[data.id].data.maDvi">
+                                                                 {{item.tenDm}}
+                                                            </div>
+                                                       </div>
                                                   </td>
-                                                       {{editCache[data.id].data.nam}}
+                                                  {{editCache[data.id].data.nam}}
                                                   <td>
                                                        <input class="search__input" nz-input
                                                             [(ngModel)]="editCache[data.id].data.maKhoanMuc" />
@@ -174,7 +175,7 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear
                                                             nzPlaceHolder="Chọn nội dung"
-                                                            [(ngModel)]="editCache[data.id].data.noiDung">
+                                                            [(ngModel)]="editCache[data.id].data.maNoiDung">
                                                             <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
@@ -182,26 +183,32 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear
                                                             nzPlaceHolder="Chọn loại chi"
-                                                            [(ngModel)]="editCache[data.id].data.maLoaiChi">
-                                                            <nz-option *ngFor="let item of loaiChis" [nzValue]="item.id"
+                                                            [(ngModel)]="editCache[data.id].data.maNhomChi">
+                                                            <nz-option *ngFor="let item of nhomChis" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.phanBo" />
+                                                       <input class="search__input" nz-input type="number"
+                                                            [(ngModel)]="editCache[data.id].data.soTienPhanBo" />
+                                                  </td>
+                                                  <td>
+                                                       <nz-date-picker class="search__input"
+                                                            [(ngModel)]="editCache[data.id].data.ngayGhiNhan">
+                                                       </nz-date-picker>
+                                                  </td>
+                                                  <td>
+                                                       <input class="search__input" nz-input type="number"
+                                                            [(ngModel)]="editCache[data.id].data.dieuChinh" />
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.ngayGhiNhan"/>
+                                                            [(ngModel)]="editCache[data.id].data.ghiChu" />
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.dieuChinh"/>
-                                                  </td>
-                                                  <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.ghiChu"/>
+                                                       <a (click)="saveEdit(data.id)" class="save">Save</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Cancel</a>
                                                   </td>
                                              </ng-template>
                                         </tr>
@@ -250,7 +257,7 @@
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
                                    <div nz-col nzSpan="12">
                                         <label class="search__label">Nơi nhận</label>
-                                        <input class="search__input" nz-input [(ngModel)]="noiNhan"/>
+                                        <input class="search__input" nz-input [(ngModel)]="noiNhan" />
                                    </div>
                               </div>
                          </nz-tab>
@@ -309,7 +316,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

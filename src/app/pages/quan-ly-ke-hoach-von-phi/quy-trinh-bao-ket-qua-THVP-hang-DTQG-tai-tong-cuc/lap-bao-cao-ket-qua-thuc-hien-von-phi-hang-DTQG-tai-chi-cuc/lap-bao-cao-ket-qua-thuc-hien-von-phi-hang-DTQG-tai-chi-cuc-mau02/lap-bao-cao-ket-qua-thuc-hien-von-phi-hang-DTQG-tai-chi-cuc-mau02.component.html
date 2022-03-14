@@ -85,7 +85,7 @@
                 {{namBcao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đợt báo cáo">
-                {{dotbaocao}}
+                <input type="text" nz-input [(ngModel)] ="dotbaocao">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -159,9 +159,7 @@
                   <td></td>
                   <td></td>
                   <td ><i class="fa fa-plus" (click)="addLine1(1)"></i></td>
-                  <td><label nz-checkbox [(ngModel)]="allChecked1" (ngModelChange)="updateAllChecked1()"
-                    [nzIndeterminate]="indeterminate">
-                    </label></td>
+                  <td></td>
                 </tr>
                 <tr *ngFor="let item of lstCTietBCao1; let i = index">
                   <ng-container *ngIf="!editCache1[item.id].edit; else editTemplate1">
@@ -186,6 +184,7 @@
                           <td>{{item.khTtien}}</td>
                           <td>{{item.thSoLuong}}</td>
                           <td>{{item.thGiaMuaTd}}</td>
+                          <td>{{item.thTtien}}</td>
                           <td>{{item.ghiChu}}</td>
                           <td [hidden]="status">
                             <i class="fa fa-trash-o do" (click)="deleteById1(item.id)"></i>
@@ -198,7 +197,7 @@
                           </td>
                           <td [hidden]="status">
                             <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                              (ngModelChange)="updateSingleChecked1()"></label>
+                              (ngModelChange)="updateSingleChecked()"></label>
                           </td>
                   </ng-container>
                   <ng-template #editTemplate1>  
@@ -219,22 +218,22 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.soQd" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khSoLuong" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khSoLuong" (change)="changeModel1(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khGiaMuaTd" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khGiaMuaTd" (change)="changeModel1(item.id)" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khTtien" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.khTtien" disabled />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thSoLuong" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thSoLuong" (change)="changeModel1(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thGiaMuaTd" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thGiaMuaTd" (change)="changeModel1(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thTtien" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.thTtien" disabled />
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ghiChu" />
@@ -252,7 +251,7 @@
                         </td>
                         <td [hidden]="status">
                           <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                            (ngModelChange)="updateSingleChecked1()"></label>
+                            (ngModelChange)="updateSingleChecked()"></label>
                         </td>
                   </ng-template>
                 </tr>
@@ -271,11 +270,7 @@
                   <td></td>
                   <td></td>
                   <td ><i class="fa fa-plus" (click)="addLine2(1)"></i></td>
-                  <td>
-                    <label nz-checkbox [(ngModel)]="allChecked2" (ngModelChange)="updateAllChecked2()"
-                    [nzIndeterminate]="indeterminate">
-                    </label>
-                  </td>
+                  <td></td>
                 </tr>
                 <tr *ngFor="let item of lstCTietBCao2; let i = index">
                   <ng-container *ngIf="!editCache2[item.id].edit; else editTemplate2">
@@ -300,6 +295,7 @@
                           <td>{{item.khTtien}}</td>
                           <td>{{item.thSoLuong}}</td>
                           <td>{{item.thGiaMuaTd}}</td>
+                          <td>{{item.thTtien}}</td>
                           <td>{{item.ghiChu}}</td>
                           <td [hidden]="status">
                             <i class="fa fa-trash-o do" (click)="deleteById2(item.id)"></i>
@@ -312,7 +308,7 @@
                           </td>
                           <td [hidden]="status">
                             <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                              (ngModelChange)="updateSingleChecked2()"></label>
+                              (ngModelChange)="updateSingleChecked()"></label>
                           </td>
                   </ng-container>
                   <ng-template #editTemplate2>   
@@ -333,22 +329,22 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.soQd" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khSoLuong" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khSoLuong" (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khGiaMuaTd" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khGiaMuaTd" (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khTtien" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.khTtien" disabled/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thSoLuong" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thSoLuong" (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thGiaMuaTd" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thGiaMuaTd" (change)="changeModel2(item.id)"/>
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thTtien" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.thTtien" disabled/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ghiChu" />
@@ -366,7 +362,7 @@
                         </td>
                         <td [hidden]="status">
                           <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                            (ngModelChange)="updateSingleChecked2()"></label>
+                            (ngModelChange)="updateSingleChecked()"></label>
                         </td>
                   </ng-template>
                 </tr>
@@ -417,10 +413,10 @@
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" nz-popconfirm nzPopconfirmTitle="Sure to cancel?"  >
+          <!-- <button type="button" class="btn btn-main" nz-popconfirm nzPopconfirmTitle="Sure to cancel?"  >
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
-          </button>
+          </button> -->
           <button type="button" class="btn btn-sub">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>

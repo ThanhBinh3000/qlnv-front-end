@@ -217,6 +217,20 @@ const routes: Routes = [
         './chuc-nang-TCDT/nhan-ghi-nhan-thong-tin-pbo-du-an/nhan-ghi-nhan-thong-tin-pbo-du-an.module'
       ).then((m) => m.NhanGhiNhanThongTinPboDuAnModule),
   },
+  {
+    path: 'danh-sach-bao-cao',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/danh-sach-bao-cao/danh-sach-bao-cao.module'
+      ).then((m) => m.DanhSachBaoCaoModule),
+  },
+  {
+    path: 'danh-sach-bao-cao/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/danh-sach-bao-cao/danh-sach-bao-cao.module'
+      ).then((m) => m.DanhSachBaoCaoModule),
+  },
 
 
 

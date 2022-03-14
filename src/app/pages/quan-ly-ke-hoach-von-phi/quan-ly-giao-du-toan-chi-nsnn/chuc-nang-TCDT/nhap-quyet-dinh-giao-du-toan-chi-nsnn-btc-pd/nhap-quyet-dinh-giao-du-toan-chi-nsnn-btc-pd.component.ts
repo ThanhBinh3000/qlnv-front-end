@@ -14,22 +14,16 @@ import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
-  namHhanhN!: number;
-  tranChiDuocTbN1!: number;
-  ncauChiCuaDviN1!: number;
-  clechTranChiVsNcauN1: number;
-  tranChiDuocTbN2!: number;
-  ncauChiCuaDviN2!: number;
-  clechTranChiVsNcauN2: number;
-  tranChiDuocTbN3!: number;
-  ncauChiCuaDviN3!: number;
-  clechTranChiVsNcauN3: number;
-  maNoiDung!: string;
-  maNhomChi!: string;
-  maLoaiChi!: string;
+  duToan!: number;
+  giaTri!: number;
+  maDviTien!: string;
+  maDviTinh!: string;
+  maLoai!: string;
+  maMatHang!: string;
+  maNhom!: string;
+  namThien!: number;
+  soLuong!: number;
   id!: any;
-  maBcao!: String;
-  stt!: String;
   checked!:boolean;
 }
 
@@ -42,24 +36,26 @@ export class ItemData {
 export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
-  noiDungs: any = [];                         // danh muc noi dung
-  nhomChis:any = [];                          // danh muc nhom chi
-  loaiChis:any = [];                          // danh muc loai chi
-  donVis:any = [];                            // danh muc don vi
+  maLoais: any = [];                          // ma loai
+  maNhoms: any = [];                          // ma nhom
+  maMatHangs: any = [] ;                      // ma mat hang
+  maDviTiens: any = [];                       // ma don vi tien
+  maDviTinhs:any = [];                        // ma don vi tinh
+  donVis: any = [];                           // ma don vi
+  ngayQd!: any;                               // ngay quyet dinh
+  soQd!: any;                                 // so quyet dinh
+  vanBan!: any;                               // noi dung
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao = new Date().getFullYear();         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
   maBaoCao!: string;                          // ma bao cao
-  namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -90,14 +86,16 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     return false;
   };
 
+
   // upload file
-  addFile() {
-    const id = this.fileToUpload?.lastModified.toString();
-    this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
-    this.listFile.push(this.fileToUpload);
-  }
+  // addFile() {
+  //   const id = this.fileToUpload?.lastModified.toString();
+  //   this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
+  //   this.listFile.push(this.fileToUpload);
+  // }
 
   handleUpload(): void {
+    debugger
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
       this.lstFile.push({ id: id, fileName: file?.name });
@@ -117,7 +115,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
               private userService: UserService,
               private notification: NzNotificationService,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
@@ -132,20 +129,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       this.nguoiNhap = userInfo?.username;
       this.maDonViTao = userInfo?.dvql;
       this.spinner.show();
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-        (data) => {
-          if (data.statusCode == 0) {
-            this.maBaoCao = data.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      );
-      this.maBaoCao = '';
-      this.namBaoCaoHienHanh = new Date().getFullYear();
     }
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -155,12 +138,12 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    debugger
-    //get danh muc noi dung
-    this.danhMucService.dMNoiDung().toPromise().then(
+
+    //get danh muc loại quyết định
+    this.danhMucService.dMLoaiQDGiaoDT().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.noiDungs = data.data?.content;
+          this.maLoais = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -170,11 +153,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       }
     );
 
-    //get danh muc nhom chi
-    this.danhMucService.dMNhomChi().toPromise().then(
+    //get danh muc nhóm giao
+    this.danhMucService.dMNhomQDGiaoDT().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.nhomChis = data.data?.content;
+          this.maNhoms = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -184,11 +167,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       }
     );
 
-    //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().toPromise().then(
+    //get danh muc mặt hàng
+    this.danhMucService.dMMatHangQDGiaoDT().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.loaiChis = data.data?.content;
+          this.maMatHangs = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -198,11 +181,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       }
     );
 
-    //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().toPromise().then(
+    //get danh muc đơn vị tính
+    this.danhMucService.dMDviHangQDGiaoDT().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.loaiChis = data.data?.content;
+          this.maDviTinhs = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -211,6 +194,22 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+
+    //get danh muc đơn vị tiền quyết định giao dự toán
+    this.danhMucService.dMDviTienQDGiaoDT().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.maDviTiens = data.data?.content;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+
+
 
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
@@ -260,6 +259,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 
   // luu
   async luu() {
+    debugger
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -277,19 +277,21 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCtiet: this.lstCTietBCao,
       maBcao: this.maBaoCao,
+      // maDvi: this.maDonViTao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      ngayQd: this.ngayQd,
+      noiQd: "12",
+      soQd: this.soQd,
+      trangThai: this.trangThaiBanGhi,
+      vanBan: this.vanBan,
     };
-
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetGiaoService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -303,7 +305,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+      this.quanLyVonPhiService.updatelistGiaoDuToan(request).subscribe(res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
@@ -329,7 +331,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    debugger
     this.spinner.show();
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
@@ -352,11 +353,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCtiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -365,12 +366,12 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
-          debugger
+          this.vanBan = data.data.vanBan;
+          this.soQd = data.data.soQd;
           this.trangThaiBanGhi = data.data.trangThai;
 
           // set list id file ban dau
-          this.lstFile.filter(item => {
+          this.lstFile?.filter(item => {
             this.listIdFiles += item.id + ",";
           })
 
@@ -388,6 +389,8 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       }
     );
     this.spinner.hide();
+    console.log(this.lstCTietBCao)
+
   }
 
   //upload file
@@ -415,21 +418,15 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      namHhanhN!: 0,
-      tranChiDuocTbN1!: 0,
-      ncauChiCuaDviN1!: 0,
-      clechTranChiVsNcauN1: 0,
-      tranChiDuocTbN2!: 0,
-      ncauChiCuaDviN2!: 0,
-      clechTranChiVsNcauN2: 0,
-      tranChiDuocTbN3!: 0,
-      ncauChiCuaDviN3!: 0,
-      clechTranChiVsNcauN3: 0,
-      maNoiDung!: "",
-      maNhomChi!: "",
-      maLoaiChi!: "",
-      maBcao: "",
-      stt: "",
+      duToan: 0,
+      giaTri: 0,
+      maDviTien: "",
+      maDviTinh: "",
+      maLoai: "",
+      maMatHang: "",
+      maNhom: "",
+      namThien: 0,
+      soLuong: 0,
       id: uuid.v4(),
       checked:false,
     }
@@ -439,6 +436,8 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
+    console.log(this.lstCTietBCao);
+
   }
 
   // xoa dong
@@ -513,7 +512,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/tim-kiem']);
   }
 
   // lay ten trang thai
@@ -560,9 +559,9 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   }
 
   //gia tri cac o input thay doi thi tinh toan lai
-  changeModel(id: string): void {
-    this.editCache[id].data.clechTranChiVsNcauN1 = Number(this.editCache[id].data.ncauChiCuaDviN1) - Number(this.editCache[id].data.tranChiDuocTbN1);
-    this.editCache[id].data.clechTranChiVsNcauN2 = Number(this.editCache[id].data.ncauChiCuaDviN2) - Number(this.editCache[id].data.tranChiDuocTbN2);
-    this.editCache[id].data.clechTranChiVsNcauN3 = Number(this.editCache[id].data.ncauChiCuaDviN3) - Number(this.editCache[id].data.tranChiDuocTbN3);
-  }
+  // changeModel(id: string): void {
+  //   this.editCache[id].data.clechTranChiVsNcauN1 = Number(this.editCache[id].data.ncauChiCuaDviN1) - Number(this.editCache[id].data.tranChiDuocTbN1);
+  //   this.editCache[id].data.clechTranChiVsNcauN2 = Number(this.editCache[id].data.ncauChiCuaDviN2) - Number(this.editCache[id].data.tranChiDuocTbN2);
+  //   this.editCache[id].data.clechTranChiVsNcauN3 = Number(this.editCache[id].data.ncauChiCuaDviN3) - Number(this.editCache[id].data.tranChiDuocTbN3);
+  // }
 }

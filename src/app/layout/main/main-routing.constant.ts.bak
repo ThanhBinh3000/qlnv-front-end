@@ -44,4 +44,8 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quản lý kế hoạch vốn phí',
     route: MAIN_ROUTES.qlkhVonPhi,
   },
+  {
+    title:'Quản lý cấp vốn phí hàng',
+    route: MAIN_ROUTES.qlcapVonPhi,
+  },
 ];

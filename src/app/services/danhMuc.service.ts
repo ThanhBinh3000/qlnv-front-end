@@ -472,4 +472,76 @@ dMTrangThai(): Observable<any> {
       }
   );
 }
+
+dMLoaiQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/421",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMNhomQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/425",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMMatHangQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/429",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMDviHangQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/433",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+dMDviTienQDGiaoDT(): Observable<any> {
+  return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/438",
+      {
+          "paggingReq": {
+              "limit": 1000,
+              "page": 1
+          },
+          "str": "",
+          "trangThai": "",
+      }
+  );
+}
+
+
 }

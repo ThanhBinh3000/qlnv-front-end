@@ -42,7 +42,7 @@
 <div class="contentBor chi-tieu__body">
      <div class="contentDetail">
           <div class="main-content">
-               <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+               <nz-card nzTitle="Danh sách tổng hợp báo cáo điều chỉnh dự toán chi NSNN trình Tổng cục" class="mt16 flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[16, 12]">
                          <div nz-col nzSpan="4">
                               <label class="search__label">Ngày lập từ</label>
@@ -59,12 +59,12 @@
                          <div nz-col nzSpan="12">
                               <label class="search__label">Đơn vị</label>
                               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi">
-                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
-                                        [nzLabel]="item.tenDvi"></nz-option>
+                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm"></nz-option>
                               </nz-select>
                          </div>
                          <div nz-col nzSpan="4">
-                              <button type="button" class="btn btn-main">
+                              <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10 ;getDetailReport()">
                                    <span>Tìm kiếm</span>
                               </button>
                          </div>
@@ -74,9 +74,7 @@
                     <nz-tabset nzType="card" class="tab__container">
                          <nz-tab [nzTitle]="'Chi tiết'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                   <div nz-col nzSpan="12">
-                                        <label class="search__body">Tổng số bản ghi được tìm thấy: 8</label>
-                                   </div>
+                                  
                               </div>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
                               </div>
@@ -95,23 +93,36 @@
                                    <tbody>
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <td>
-                                                  {{data.stt}}
+                                                  {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
-                                             <td>{{data.ngayLap}}</td>
+                                             <td>{{data.ngayTao}}</td>
                                              <td>
-                                                  <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.id == data.maDvi">
-                                                            {{item.tenDm}}
-                                                       </div>
-                                                  </div>
+                                                  {{data.tenDvi}}
                                              </td>
-                                             <td>{{data.nam}}</td>
+                                             <td>{{data.namHienHanh}}</td>
                                              <td>{{data.tenTrangThai}}</td>
-                                             <td></td>
+                                             <td><a routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a></td>
                                              <td></td>
                                         </tr>
                                    </tbody>
                               </nz-table>
+                              <div class="tab-content tab-menu" id="myTabContent">
+                                   <div class="tab-pane fade show active justify-content-between">
+                                     <div class="trai">
+                         
+                                     </div>
+                                     <div class="canphai">
+                                       <!-- begin phân trang  -->
+                                       <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
+                                         [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                                         <ng-template #rangeTemplate let-range="range" let-total>
+                                           {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                                         </ng-template>
+                                       </nz-pagination>
+                                       <!-- end phân trang  -->
+                                     </div>
+                                   </div>
+                                 </div>
 
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
                                    <div nz-col nzSpan="12">
@@ -120,29 +131,12 @@
                                    </div>
                               </div>
 
-                              <div class="search__body" nz-row [nzGutter]="[8,12]">
-                                   <button type="button" class="btn btn-main">
-                                        &lt; &lt;
-                                   </button>
-                                   <button type="button" class="btn btn-main">
-                                        &lt;
-                                   </button>
-
-                                   <div nz-col nzSpan="1" style="text-align: center;">
-                                        <label class="search__label">{{trang}}</label>
-
-                                   </div>
-                                   <button type="button" class="btn btn-main">
-                                        &gt;
-                                   </button>
-                                   <button type="button" class="btn btn-main">
-                                        &gt;&gt;
-                                   </button>
-                              </div>
+                              
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main">
+                         <button type="button" class="btn btn-main"
+                              routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn">
                               <span>Tạo mới</span>
                          </button>
                     </div>

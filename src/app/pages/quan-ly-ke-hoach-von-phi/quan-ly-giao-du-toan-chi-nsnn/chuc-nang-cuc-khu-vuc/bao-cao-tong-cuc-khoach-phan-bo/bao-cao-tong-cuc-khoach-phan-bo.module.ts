@@ -18,3 +18,4 @@ import { ComponentsModule } from 'src/app/components/components.module';
 })
 
 export class BaoCaoTongCucKhoachPhanBoModule {}
+
