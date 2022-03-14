@@ -60,13 +60,10 @@ export class DsachDxuatDchinhDtoanChiNsachComponent implements OnInit {
      fileUrl: any;                               // url
      listIdDelete: string = "";                  // list id delete
 
-     statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-     statusBtnSave: boolean;                      // trang thai an/hien nut luu
-     statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
-     statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
-     statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
-     statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
-     statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+     statusBtnDuyet: boolean;
+     statusBtnPheDuyet: boolean;
+     statusBtnTuChoi: boolean;
+     statusBtnTaoMoi: boolean;
 
      listIdFiles: string;                        // id file luc call chi tiet
 
@@ -91,13 +88,11 @@ export class DsachDxuatDchinhDtoanChiNsachComponent implements OnInit {
           this.namBaoCaoHienHanh = new Date().getFullYear();
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
+          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
+          this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
+          this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
+
 
 
           //lay danh sach danh muc don vi

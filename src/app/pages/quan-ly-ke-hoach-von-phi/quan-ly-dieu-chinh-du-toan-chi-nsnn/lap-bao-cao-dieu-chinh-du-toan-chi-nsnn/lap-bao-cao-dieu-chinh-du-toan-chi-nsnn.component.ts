@@ -157,7 +157,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.noiDungs = data.data?.content;
-                         console.log(this.noiDungs);
+                         //console.log(this.noiDungs);
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
@@ -184,7 +184,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.khoanChis = data.data?.content;
-                         console.log(this.khoanChis);
+                         //console.log(this.khoanChis);
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
@@ -265,7 +265,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                trangThai: this.trangThaiBanGhi = "01",
                namHienHanh: this.namBaoCaoHienHanh,
           };
-          console.log(request);
           this.spinner.show();
           if (this.id == null) {
                this.quanLyVonPhiService.themmoi325(request).subscribe( res =>{
@@ -279,6 +278,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                     
           } else {
                this.quanLyVonPhiService.update325(request).subscribe(res => {
+                    console.log(res);
                     if (res.statusCode == 0) {
                          alert('trinh duyet thanh cong!');
                     } else {
@@ -323,8 +323,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.quanLyVonPhiService.chitiet325(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.listCtiet;
+                         this.chiTietBcaos = data.data.dchinhDuToanChiNsnn;
+                         this.lstCTietBCao = this.chiTietBcaos.listCtiet;
+                         console.log(this.lstCTietBCao);
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
 

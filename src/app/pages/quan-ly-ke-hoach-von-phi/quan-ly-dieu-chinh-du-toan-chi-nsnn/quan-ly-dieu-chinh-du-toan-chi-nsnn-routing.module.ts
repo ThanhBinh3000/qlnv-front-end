@@ -92,6 +92,13 @@ const routes: Routes = [
         './ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui/ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui.module'
       ).then((m) => m.KtraRsoatNdungBcaoDcdtNsnnDoChiCucGuiModule),
   },
+  {
+    path: 'test-link-list',
+    loadChildren: () =>
+      import(
+        './test-link-list/test-link-list.module'
+      ).then((m) => m.TestLinkListModule),
+  },
 ];
 
 @NgModule({
