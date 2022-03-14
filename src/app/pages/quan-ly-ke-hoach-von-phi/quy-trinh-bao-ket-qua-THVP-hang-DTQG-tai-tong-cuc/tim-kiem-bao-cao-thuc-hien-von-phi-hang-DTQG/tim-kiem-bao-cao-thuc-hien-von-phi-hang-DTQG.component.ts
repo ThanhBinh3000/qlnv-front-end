@@ -75,7 +75,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
+    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
@@ -144,21 +144,21 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    
+    console.log(lbaocao)
     switch (lbaocao) {
-      case '90':
+      case 407:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
         break;
-      case '91':
+      case 408:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
         break;
-      case '92':
+      case 409:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
         break;
-      case '93':
+      case 410:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
         break;
-      case '94':
+      case 411:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
         break;
       default:
