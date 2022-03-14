@@ -264,6 +264,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
           this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -376,7 +377,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       thTtien:null,
       ghiChu:null,
       maVtuParent:1,
-      loai:'',
+      loai:'dv',
       checked!: false,
     };
 
@@ -591,13 +592,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       this.lstCTietBCao.push(e);
     })
 
-    this.lstCTietBCao.forEach((e,index) => {
-      if(e.id ==1 || e.id==2){
-        this.lstCTietBCao.splice(index,1);
-      }
-      
-    });
-
 
     this.lstCTietBCao.forEach(e =>{
       if (typeof e.id != 'number') {
@@ -615,7 +609,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     // for (let i = 0; i < this.lstFile.length; i++) {
     //   idFileDinhKems += this.lstFile[i].id + ',';
     // }
-
+    console.log(this.lstCTietBCao);
     // lay id file dinh kem (gửi file theo danh sách )
     let listFileUploaded: any = [];
     for (const iterator of this.listFile) {
@@ -655,15 +649,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
         (data) => {
           if(data.statusCode==0){
-            this.notification.success("Cập nhật","Cập nhật thành công")
+            this.notification.success("Thêm mới","Cập nhật thành công")
             console.log(data);
           }else{
-            this.notification.error("Cập nhật","Cập nhật thất bại")
+            this.notification.error("Thêm mới","Cập nhật thất bại")
           }
          
         },
         (err) => {
-          this.notification.error("Cập nhật","Cập nhật thất bại")
+          this.notification.error("Thêm mới","Cập nhật thất bại")
         },
       );
     }

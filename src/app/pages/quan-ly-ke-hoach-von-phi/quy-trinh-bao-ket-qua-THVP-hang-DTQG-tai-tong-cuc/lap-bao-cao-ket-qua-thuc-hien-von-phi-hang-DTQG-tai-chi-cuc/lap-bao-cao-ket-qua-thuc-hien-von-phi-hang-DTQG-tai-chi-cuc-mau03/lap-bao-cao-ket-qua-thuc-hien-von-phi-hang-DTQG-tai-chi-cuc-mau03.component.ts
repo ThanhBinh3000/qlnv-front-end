@@ -259,6 +259,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
           this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -512,7 +513,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
 }
 //chọn row cần sửa và trỏ vào template
 startEdit3(id: string): void {
-  this.editCache1[id].edit = true;
+  this.editCache3[id].edit = true;
 }
 
 addLine3(idx:any): void {
@@ -743,7 +744,7 @@ updateEditCache3(): void {
           }
         },
         (err) => {
-          this.notification.error('Cập nhật','Cập nhật thất bại');
+          this.notification.error('Thêm mới','Cập nhật thất bại');
         },
       );
     }
@@ -786,18 +787,21 @@ updateEditCache3(): void {
 
   
   changeModel1(id: string): void {
-    // this.editCache1[id].data.khTtien = Number(this.editCache1[id].data.khSoLuong) * Number(this.editCache1[id].data.khGiaMuaTd);
-    // this.editCache1[id].data.thTtien = Number(this.editCache1[id].data.thSoLuong) * Number(this.editCache1[id].data.thGiaMuaTd);
+    this.editCache1[id].data.ttGiaHtoan = this.editCache1[id].data.soLuongTte * this.editCache1[id].data.dgGiaKhoach;
+    this.editCache1[id].data.ttGiaBanTte = this.editCache1[id].data.soLuongTte * this.editCache1[id].data.dgGiaBanTte;
+    this.editCache1[id].data.ttClechGiaTteVaGiaHtoan = this.editCache1[id].data.ttGiaBanTte - this.editCache1[id].data.ttGiaHtoan;
   }
 
   changeModel2(id: string): void {
-    // this.editCache2[id].data.khTtien = Number(this.editCache2[id].data.khSoLuong) * Number(this.editCache2[id].data.khGiaMuaTd);
-    // this.editCache2[id].data.thTtien = Number(this.editCache2[id].data.thSoLuong) * Number(this.editCache2[id].data.thGiaMuaTd);
+    this.editCache2[id].data.ttGiaHtoan = this.editCache2[id].data.soLuongTte * this.editCache2[id].data.dgGiaKhoach;
+    this.editCache2[id].data.ttGiaBanTte = this.editCache2[id].data.soLuongTte * this.editCache2[id].data.dgGiaBanTte;
+    this.editCache2[id].data.ttClechGiaTteVaGiaHtoan = this.editCache2[id].data.ttGiaBanTte - this.editCache2[id].data.ttGiaHtoan;
   }
 
   changeModel3(id: string): void {
-    // this.editCache3[id].data.khTtien = Number(this.editCache3[id].data.khSoLuong) * Number(this.editCache3[id].data.khGiaMuaTd);
-    // this.editCache3[id].data.thTtien = Number(this.editCache3[id].data.thSoLuong) * Number(this.editCache3[id].data.thGiaMuaTd);
+    this.editCache3[id].data.ttGiaHtoan = this.editCache3[id].data.soLuongTte * this.editCache3[id].data.dgGiaKhoach;
+    this.editCache3[id].data.ttGiaBanTte = this.editCache3[id].data.soLuongTte * this.editCache3[id].data.dgGiaBanTte;
+    this.editCache3[id].data.ttClechGiaTteVaGiaHtoan = this.editCache3[id].data.ttGiaBanTte - this.editCache3[id].data.ttGiaHtoan;
   }
 
 }
