@@ -18,4 +18,29 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  chiTiet(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/chi-tiet/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  updateStatus(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/phe-duyet`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  update(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/cap-nhat`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  create(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/them-moi`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  xoa(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/xoa`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }
