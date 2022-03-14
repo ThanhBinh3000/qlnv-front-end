@@ -1,0 +1,22 @@
+<div class="modal__content">
+  <nz-form-label [nzNoColon]="true">
+    Lý do từ chối
+  </nz-form-label>
+  <textarea rows="3" class="search__input" nz-input [(ngModel)]="text"></textarea>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        Từ chối
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>

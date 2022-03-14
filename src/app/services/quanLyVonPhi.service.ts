@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { OldResponseData } from '../interfaces/response';
@@ -10,7 +10,8 @@ import { OldResponseData } from '../interfaces/response';
   providedIn: 'root',
 })
 export class QuanLyVonPhiService extends BaseService {
-  constructor(public httpClient: HttpClient) {
+  constructor(public httpClient: HttpClient,
+    public httpClient1: HttpClient) {
     super(httpClient, 'quanLyVonPhi');
   }
 
@@ -41,9 +42,15 @@ export class QuanLyVonPhiService extends BaseService {
 
   // upload file to server
   uploadFile(request: FormData): Observable<any> {
-    return this.httpClient.post(
+    let options = { headers: new HttpHeaders().set('Content-Type', 'multipart/form-data') };
+    const headerss= new HttpHeaders().set('Content-Type', 'multipart/form-data').set('Access-Control-Allow-Origin', '*');
+    let headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+    return this.httpClient1.post(
       this.urlDefault + '/qlnv-core/file/upload',
       request,
+      { 'headers': headerss }
     );
   }
 

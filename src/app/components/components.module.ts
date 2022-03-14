@@ -43,6 +43,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NgxPrintModule } from 'ngx-print';
 
 import { FilterPipe } from '../pipes/filter.pipe';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -56,7 +57,19 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { UploadComponent } from './dialog/dialog-upload/upload.component';
 import { DialogThemMoiVatTuComponent } from './dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { DialogThongTinPhuLucKHLCNTComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt/dialog-thong-tin-phu-luc-khlcnt.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from './dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from './dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
+import { DialogThemMoiGoiThauComponent } from './dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
+import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from './dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
+import { DialogDieuChinhThemThongTinLuongThucComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-luong-thuc/dialog-dieu-chinh-them-thong-tin-luong-thuc.component';
+
+import { DialogDieuChinhThemThongTinMuoiComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-muoi/dialog-dieu-chinh-them-thong-tin-muoi.component';
+import { DialogDieuChinhThemThongTinVatTuComponent } from './dialog/dialog-dieu-chinh-them-thong-tin-vat-tu/dialog-dieu-chinh-them-thong-tin-vat-tu.component';
+import { DialogThongTinLuongThucComponent } from './dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
+import { DialogThemThongTinMuoiComponent } from './dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
+import { DialogLuaChonInComponent } from './dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import { DialogThemThongTinVatTuTrongNamComponent } from './dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
+import { DialogTuChoiComponent } from './dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
@@ -65,7 +78,18 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     UploadComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
+    DialogQuyetDinhGiaoChiTieuComponent,
     DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent,
+    DialogThemMoiGoiThauComponent,
+    DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
+    DialogDieuChinhThemThongTinLuongThucComponent,
+    DialogDieuChinhThemThongTinMuoiComponent,
+    DialogDieuChinhThemThongTinVatTuComponent,
+    DialogThongTinLuongThucComponent,
+    DialogThemThongTinMuoiComponent,
+    DialogLuaChonInComponent,
+    DialogThemThongTinVatTuTrongNamComponent,
+    DialogTuChoiComponent,
     //pipes
     FilterPipe,
   ],
@@ -119,6 +143,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzDrawerModule,
     NzTagModule,
     NzAutocompleteModule,
+    NgxPrintModule,
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
@@ -173,6 +198,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzDrawerModule,
     NzTagModule,
     NzAutocompleteModule,
+    NgxPrintModule,
     TecaTreeSelectModule,
     FilterPipe,
     NzAlertModule,
