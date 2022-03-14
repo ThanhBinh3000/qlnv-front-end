@@ -10,21 +10,17 @@
                </div>
                <div class="canphai phai">
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnApprove">
+                         [hidden]="statusBtnDuyet">
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
-                         <span>Trình duyệt</span>
+                         <span>Duyệt</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnPheDuyet">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Trình phê duyệt</span>
+                         <span>Phê duyệt</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnSave">
+                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
                          <i class="icon htvbdh_tcdt_save"></i>
-                         <span>Lưu</span>
-                    </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                         <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Đóng</span>
+                         <span>Từ chối</span>
                     </button>
                     <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
              <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -95,7 +91,7 @@
                                    <tbody>
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <td>
-                                                  {{data.stt}}
+                                                  {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
                                              <td>{{data.ngayLap}}</td>
                                              <td>
@@ -107,11 +103,33 @@
                                              </td>
                                              <td>{{data.nam}}</td>
                                              <td>{{data.tenTrangThai}}</td>
-                                             <td></td>
+                                             <td><a
+                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
+                                             </td>
                                              <td></td>
                                         </tr>
                                    </tbody>
                               </nz-table>
+                              <div class="tab-content tab-menu" id="myTabContent">
+                                   <div class="tab-pane fade show active justify-content-between">
+                                        <div class="trai">
+
+                                        </div>
+                                        <div class="canphai">
+                                             <!-- begin phân trang  -->
+                                             <nz-pagination class="pagination-card" [nzPageIndex]="pages.page"
+                                                  [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
+                                                  [nzShowTotal]="rangeTemplate"
+                                                  (nzPageIndexChange)="onPageIndexChange($event)"
+                                                  (nzPageSizeChange)="onPageSizeChange($event)">
+                                                  <ng-template #rangeTemplate let-range="range" let-total>
+                                                       {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                                                  </ng-template>
+                                             </nz-pagination>
+                                             <!-- end phân trang  -->
+                                        </div>
+                                   </div>
+                              </div>
 
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
                                    <div nz-col nzSpan="12">
@@ -120,29 +138,12 @@
                                    </div>
                               </div>
 
-                              <div class="search__body" nz-row [nzGutter]="[8,12]">
-                                   <button type="button" class="btn btn-main">
-                                        &lt; &lt;
-                                   </button>
-                                   <button type="button" class="btn btn-main">
-                                        &lt;
-                                   </button>
 
-                                   <div nz-col nzSpan="1" style="text-align: center;">
-                                        <label class="search__label">{{trang}}</label>
-
-                                   </div>
-                                   <button type="button" class="btn btn-main">
-                                        &gt;
-                                   </button>
-                                   <button type="button" class="btn btn-main">
-                                        &gt;&gt;
-                                   </button>
-                              </div>
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main">
+                         <button type="button" class="btn btn-main"
+                              routerLink="../thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc" [hidden]="statusBtnTaoMoi">
                               <span>Tạo mới</span>
                          </button>
                     </div>
