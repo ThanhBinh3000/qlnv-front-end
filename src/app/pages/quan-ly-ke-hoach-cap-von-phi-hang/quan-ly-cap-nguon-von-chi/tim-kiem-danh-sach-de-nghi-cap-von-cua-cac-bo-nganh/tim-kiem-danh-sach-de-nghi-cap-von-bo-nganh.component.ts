@@ -9,11 +9,11 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
 
 @Component({
-  selector: 'app-tim-kiem',
-  templateUrl: './tim-kiem.component.html',
-  styleUrls: ['./tim-kiem.component.scss'],
+  selector: 'app-tim-kiem-danh-sach-de-nghi-cap-von-bo-nganh',
+  templateUrl: './tim-kiem-danh-sach-de-nghi-cap-von-bo-nganh.component.html',
+  styleUrls: ['./tim-kiem-danh-sach-de-nghi-cap-von-bo-nganh.component.scss'],
 })
-export class TimKiemComponent implements OnInit {
+export class TimKiemDanhSachDeNghiCapVonBoNganhComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
@@ -22,10 +22,6 @@ export class TimKiemComponent implements OnInit {
   totalPages = 0;
   errorMessage = "";
   url!: string;
-
-  allChecked = false;                         // check all checkbox
-  indeterminate = true;                       // properties allCheckBox
-
 
   // phan cu cua teca
   visible = false;
@@ -167,20 +163,4 @@ export class TimKiemComponent implements OnInit {
     this.pages.size = size;
     this.onSubmit();
   }
-
-    // click o checkbox all
-    // updateAllChecked(): void {
-    //   this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    //   if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({
-    //       ...item,
-    //       checked: true
-    //     }));
-    //   } else {
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-    //       ...item,
-    //       checked: false
-    //     }));
-    //   }
-    // }
 }
