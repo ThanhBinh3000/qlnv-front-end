@@ -15,14 +15,61 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   formData: FormGroup;
   yearNow: number = 0;
+  tongSoQuyThocTonKhoDauNam: number = null;
+  slThoc1: number = null;
+  slThoc2: number = null;
+  slThoc3: number = null;
+  slGao1: number = null;
+  slGao2: number = null;
+  slGao3: number = null;
+  tongSoQuyThocNhapTrongNam: number = null;
+  slThocTruocDieuChinh: number = null;
+  slThocGiam: number = null;
+  slThocTang: number = null;
+  slThocSauDieuChinh: number = null;
+  slGaoTruocDieuChinh: number = null;
+  slGaoGiam: number = null;
+  slGaoTang: number = null;
+  slGaoSauDieuChinh: number = null;
+  tongSoQuyThocXuatTrongNam: number = null;
+  xuatTongSLThoc: number = null;
+  xuatSlThocTruocDieuChinh1: number = null;
+  xuatSlThocGiam1: number = null;
+  xuatSlThocTang1: number = null;
+  xuatSlThocSauDieuChinh1: number = null;
+  xuatSlThocTruocDieuChinh2: number = null;
+  xuatSlThocGiam2: number = null;
+  xuatSlThocTang2: number = null;
+  xuatSlThocSauDieuChinh2: number = null;
+  xuatSlThocTruocDieuChinh3: number = null;
+  xuatSlThocGiam3: number = null;
+  xuatSlThocTang3: number = null;
+  xuatSlThocSauDieuChinh3: number = null;
+  xuatSlGaoTruocDieuChinh1: number = null;
+  xuatTongSLGao: number = null;
+  xuatSlGaoGiam1: number = null;
+  xuatSlGaoTang1: number = null;
+  xuatSlGaoSauDieuChinh1: number = null;
+  xuatSlGaoTruocDieuChinh2: number = null;
+  xuatSlGaoGiam2: number = null;
+  xuatSlGaoTang2: number = null;
+  xuatSlGaoSauDieuChinh2: number = null;
+  xuatSlGaoTruocDieuChinh3: number = null;
+  xuatSlGaoGiam3: number = null;
+  xuatSlGaoTang3: number = null;
+  xuatSlGaoSauDieuChinh3: number = null;
+  tongSoQuyThocTruocTonKhoCuoiNam: number = null;
+  slThocTruocTonKho: number = null;
+  slGaoTruocTonKho: number = null;
+  tongSoQuyThocSauTonKhoCuoiNam: number = null;
+  slThocSauTonKho: number = null;
+  slGaoSauTonKho: number = null;
 
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
 
-  optionsDonViTinh: any[] = [];
-  inputDonViTinh: string = '';
-  optionsDonViTinhShow: any[] = [];
+  data: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -36,84 +83,17 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     this.yearNow = dayjs().get('year');
     this.formData = this.fb.group({
       maDv: [null, [Validators.required]],
-      donViTinh: [null],
-      tenDonVi: [null],
-      tongSoQuyThocTonKhoDauNam: [null],
-      slThoc1: [null],
-      slThoc2: [null],
-      slThoc3: [null],
-      slGao1: [null],
-      slGao2: [null],
-      slGao3: [null],
-      tongSoQuyThocNhapTrongNam: [null],
-      slThocTruocDieuChinh: [null],
-      slThocGiam: [null],
-      slThocTang: [null],
-      slThocSauDieuChinh: [null],
-      slGaoTruocDieuChinh: [null],
-      slGaoGiam: [null],
-      slGaoTang: [null],
-      slGaoSauDieuChinh: [null],
-      tongSoQuyThocXuatTrongNam: [null],
-      xuatTongSLThoc: [null],
-      xuatSlThocTruocDieuChinh1: [null],
-      xuatSlThocGiam1: [null],
-      xuatSlThocTang1: [null],
-      xuatSlThocSauDieuChinh1: [null],
-      xuatSlThocTruocDieuChinh2: [null],
-      xuatSlThocGiam2: [null],
-      xuatSlThocTang2: [null],
-      xuatSlThocSauDieuChinh2: [null],
-      xuatSlThocTruocDieuChinh3: [null],
-      xuatSlThocGiam3: [null],
-      xuatSlThocTang3: [null],
-      xuatSlThocSauDieuChinh3: [null],
-      xuatSlGaoTruocDieuChinh1: [null],
-      xuatTongSLGao: [null],
-      xuatSlGaoGiam1: [null],
-      xuatSlGaoTang1: [null],
-      xuatSlGaoSauDieuChinh1: [null],
-      xuatSlGaoTruocDieuChinh2: [null],
-      xuatSlGaoGiam2: [null],
-      xuatSlGaoTang2: [null],
-      xuatSlGaoSauDieuChinh2: [null],
-      xuatSlGaoTruocDieuChinh3: [null],
-      xuatSlGaoGiam3: [null],
-      xuatSlGaoTang3: [null],
-      xuatSlGaoSauDieuChinh3: [null],
-      tongSoQuyThocTruocTonKhoCuoiNam: [null],
-      slThocTruocTonKho: [null],
-      slGaoTruocTonKho: [null],
-      tongSoQuyThocSauTonKhoCuoiNam: [null],
-      slThocSauTonKho: [null],
-      slGaoSauTonKho: [null],
+      donViTinh: ["Tấn"],
     });
     this.spinner.show();
     try {
       await this.loadDonVi();
-      await this.loadDonViTinh();
       this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async loadDonViTinh() {
-    const res = await this.donViService.loadDonViTinh();
-    this.optionsDonViTinh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          ...res.data[i],
-          labelDonViTinh: res.data[i].tenDviTinh,
-        };
-        this.optionsDonViTinh.push(item);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -140,17 +120,6 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  onInputDonViTinh(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViTinhShow = [];
-    } else {
-      this.optionsDonViTinhShow = this.optionsDonViTinh.filter(
-        (x) => x.labelDonViTinh.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
   }

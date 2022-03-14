@@ -113,6 +113,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async loadDonVi() {
     try {
       const res = await this.donViService.layTatCaDonVi();

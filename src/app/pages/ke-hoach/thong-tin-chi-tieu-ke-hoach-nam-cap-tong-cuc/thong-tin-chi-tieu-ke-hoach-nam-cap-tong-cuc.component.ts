@@ -601,6 +601,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           }
         }
       }
+      element.value = null;
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

@@ -25,18 +25,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <nz-form-control>
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon1" class="search__input autocomplete__input">
-            <input placeholder="Đơn vị tính" nz-input [(ngModel)]="inputDonViTinh" (input)="onInputDonViTinh($event)"
-              [nzAutocomplete]="auto1" />
-          </nz-input-group>
-          <ng-template #suffixIcon1>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-          <nz-autocomplete #auto1>
-            <nz-auto-option *ngFor="let option of optionsDonViTinhShow" [nzValue]="option.labelDonViTinh">{{
-              option.labelDonViTinh }}
-            </nz-auto-option>
-          </nz-autocomplete>
+          <input nz-input formControlName="donViTinh" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -48,7 +37,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocTonKhoDauNam" [readonly]="true" />
+          <input nz-input [(ngModel)]="tongSoQuyThocTonKhoDauNam" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -57,7 +46,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="slThoc1" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThoc1" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -67,7 +56,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="slThoc2" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThoc2" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -77,37 +66,27 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="slThoc3" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThoc3" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
-        <nz-form-control>
-          <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-            <input nz-input formControlName="slGao1" [readonly]="true" />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-            <input nz-input formControlName="slGao2" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGao2" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-            <input nz-input formControlName="slGao3" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGao3" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -120,7 +99,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocNhapTrongNam" [readonly]="true" />
+          <input nz-input [(ngModel)]="tongSoQuyThocNhapTrongNam" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -129,7 +108,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc trước điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slThocTruocDieuChinh" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThocTruocDieuChinh" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -139,7 +118,7 @@
         <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input formControlName="slThocGiam" [nzMin]="0"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="slThocGiam" [nzMin]="0"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -149,7 +128,7 @@
         <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input formControlName="slThocTang" [nzMin]="0"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="slThocTang" [nzMin]="0"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -159,7 +138,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc sau điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slThocSauDieuChinh" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThocSauDieuChinh" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -169,7 +148,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo trước điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slGaoTruocDieuChinh" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGaoTruocDieuChinh" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -179,7 +158,7 @@
         <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input formControlName="slGaoGiam" [nzMin]="0"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="slGaoGiam" [nzMin]="0"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -189,7 +168,7 @@
         <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input formControlName="slGaoTang" [nzMin]="0"></nz-input-number>
+            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="slGaoTang" [nzMin]="0"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -199,7 +178,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo sau điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slGaoSauDieuChinh" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGaoSauDieuChinh" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -212,7 +191,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocXuatTrongNam" [readonly]="true" />
+          <input nz-input [(ngModel)]="tongSoQuyThocXuatTrongNam" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -222,7 +201,7 @@
           <nz-form-label [nzNoColon]="true"> Tổng SL Thóc </nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <input nz-input formControlName="xuatTongSLThoc" [readonly]="true" />
+              <input nz-input [(ngModel)]="xuatTongSLThoc" [readonly]="true" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -233,7 +212,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc trước điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <input nz-input formControlName="xuatSlThocTruocDieuChinh1" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocTruocDieuChinh1" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -243,7 +222,7 @@
             <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocGiam1" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocGiam1" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -254,7 +233,7 @@
             <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocTang1" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocTang1" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -265,7 +244,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc sau điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <input nz-input formControlName="xuatSlThocSauDieuChinh1" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocSauDieuChinh1" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -275,7 +254,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc trước điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <input nz-input formControlName="xuatSlThocTruocDieuChinh2" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocTruocDieuChinh2" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -285,7 +264,7 @@
             <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocGiam2" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocGiam2" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -296,7 +275,7 @@
             <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocTang2" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocTang2" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -307,7 +286,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc sau điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <input nz-input formControlName="xuatSlThocSauDieuChinh2" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocSauDieuChinh2" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -317,7 +296,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc trước điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <input nz-input formControlName="xuatSlThocTruocDieuChinh3" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocTruocDieuChinh3" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -327,7 +306,7 @@
             <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocGiam3" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocGiam3" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -338,7 +317,7 @@
             <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlThocTang3" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlThocTang3" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -349,7 +328,7 @@
             <nz-form-label [nzNoColon]="true"> SL Thóc sau điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <input nz-input formControlName="xuatSlThocSauDieuChinh3" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlThocSauDieuChinh3" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -362,7 +341,7 @@
           <nz-form-label [nzNoColon]="true"> Tổng SL Gạo </nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <input nz-input formControlName="xuatTongSLGao" [readonly]="true" />
+              <input nz-input [(ngModel)]="xuatTongSLGao" [readonly]="true" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -372,50 +351,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> SL Gạo trước điều chỉnh </nz-form-label>
             <nz-form-control>
-              <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <input nz-input formControlName="xuatSlGaoTruocDieuChinh1" [readonly]="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
-            <nz-form-control>
-              <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoGiam1" [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
-            <nz-form-control>
-              <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoTang1" [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> SL Gạo sau điều chỉnh </nz-form-label>
-            <nz-form-control>
-              <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-                <input nz-input formControlName="xuatSlGaoSauDieuChinh1" [readonly]="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> SL Gạo trước điều chỉnh </nz-form-label>
-            <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <input nz-input formControlName="xuatSlGaoTruocDieuChinh2" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlGaoTruocDieuChinh2" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -425,7 +362,7 @@
             <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoGiam2" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlGaoGiam2" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -436,7 +373,7 @@
             <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoTang2" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlGaoTang2" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -447,7 +384,7 @@
             <nz-form-label [nzNoColon]="true"> SL Gạo sau điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-                <input nz-input formControlName="xuatSlGaoSauDieuChinh2" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlGaoSauDieuChinh2" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -457,7 +394,7 @@
             <nz-form-label [nzNoColon]="true"> SL Gạo trước điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <input nz-input formControlName="xuatSlGaoTruocDieuChinh3" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlGaoTruocDieuChinh3" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -467,7 +404,7 @@
             <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoGiam3" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlGaoGiam3" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -478,7 +415,7 @@
             <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <nz-input-number [nzSize]="'small'" nz-input formControlName="xuatSlGaoTang3" [nzMin]="0">
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="xuatSlGaoTang3" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -489,7 +426,7 @@
             <nz-form-label [nzNoColon]="true"> SL Gạo sau điều chỉnh </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-                <input nz-input formControlName="xuatSlGaoSauDieuChinh3" [readonly]="true" />
+                <input nz-input [(ngModel)]="xuatSlGaoSauDieuChinh3" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -504,7 +441,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số quy thóc trước điều chỉnh </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocTruocTonKhoCuoiNam" [readonly]="true" />
+          <input nz-input [(ngModel)]="tongSoQuyThocTruocTonKhoCuoiNam" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -513,7 +450,7 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL Thóc trước điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slThocTruocTonKho" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThocTruocTonKho" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -523,7 +460,7 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL gạo trước điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slGaoTruocTonKho" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGaoTruocTonKho" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -532,7 +469,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số quy thóc sau điều chỉnh </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="tongSoQuyThocSauTonKhoCuoiNam" [readonly]="true" />
+          <input nz-input [(ngModel)]="tongSoQuyThocSauTonKhoCuoiNam" [readonly]="true" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -541,7 +478,7 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL thóc sau điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slThocSauTonKho" [readonly]="true" />
+            <input nz-input [(ngModel)]="slThocSauTonKho" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -551,7 +488,7 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL gạo sau điều chỉnh </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input formControlName="slGaoSauTonKho" [readonly]="true" />
+            <input nz-input [(ngModel)]="slGaoSauTonKho" [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
