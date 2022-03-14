@@ -36,6 +36,14 @@
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="6">
               <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <input nz-input [readonly]="true" [(ngModel)]="selectedCanCu.soQuyetDinh" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số quyết định </nz-form-label>
                 <input class="search__input" nz-input [(ngModel)]="chiTiet.soQd" />
               </nz-form-item>
@@ -68,8 +76,8 @@
             <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương án trình tổng cục </nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input nz-input [(ngModel)]="chiTiet.veViec" [readonly]="true" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhuongAnTrinhTongCuc()">
+                  <input nz-input [(ngModel)]="selectedPhuongAn.id" [readonly]="true" />
                 </nz-input-group>
               </nz-form-item>
             </div>

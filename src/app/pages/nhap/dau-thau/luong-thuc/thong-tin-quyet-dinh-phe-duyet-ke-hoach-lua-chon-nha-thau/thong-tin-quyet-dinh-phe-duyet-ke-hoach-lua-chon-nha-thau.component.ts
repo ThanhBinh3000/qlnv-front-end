@@ -8,6 +8,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
+import { DialogPhuongAnTrinhTongCucComponent } from 'src/app/components/dialog/dialog-phuong-an-trinh-tong-cuc/dialog-phuong-an-trinh-tong-cuc.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -28,6 +30,8 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   editId: string | null = null;
   chiTiet: ThongTinQuyetDinhPheDuyetKHLCNT = new ThongTinQuyetDinhPheDuyetKHLCNT();
   id: number;
+  selectedCanCu: any = {};
+  selectedPhuongAn: any = {};
 
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
@@ -60,18 +64,56 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       });
       this.chiTiet.children1 = [];
       this.id = +this.routerActive.snapshot.paramMap.get('id');
-      this.loadDanhMucHang();
-      await this.phuongThucDauThauGetAll();
-      await this.nguonVonGetAll();
-      await this.hinhThucDauThauGetAll();
-      await this.loaiHopDongGetAll();
-      await this.loadChiTiet(this.id);
+      await Promise.all([
+        this.loadDanhMucHang(),
+        this.phuongThucDauThauGetAll(),
+        this.nguonVonGetAll(),
+        this.hinhThucDauThauGetAll(),
+        this.loaiHopDongGetAll(),
+        this.loadChiTiet(this.id),
+      ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  openDialogQuyetDinhGiaoChiTieu() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.selectedCanCu = data;
+      }
+    });
+  }
+
+  openDialogPhuongAnTrinhTongCuc() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin phương án trình tổng cục',
+      nzContent: DialogPhuongAnTrinhTongCucComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.selectedPhuongAn = data;
+      }
+    });
   }
 
   layThongTinPhuongAn(id: string): void {
@@ -205,13 +247,16 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   }
 
   back() {
-    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
+    this.router.navigate([`/nhap/dau-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau`])
   }
 
   async save() {
     this.spinner.show();
     try {
       if (this.id == 0) {
+
+      }
+      else {
 
       }
     } catch (e) {
