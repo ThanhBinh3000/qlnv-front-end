@@ -17,6 +17,7 @@ import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-qu
 import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
 import { QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
+import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong-cuc/phuong-an-trinh-tong-cuc.component';
 
 const routes: Routes = [
   {
@@ -83,10 +84,18 @@ const routes: Routes = [
     path: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/:id',
     component: ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
   },
+  {
+    path: 'phuong-an-trinh-tong-cuc',
+    component: PhuongAnTrinhTongCucComponent,
+  },
+  {
+    path: 'phuong-an-trinh-tong-cuc/thong-tin-chung-phuong-an-trinh-tong-cuc/:id',
+    component: ThongTinChungPhuongAnTrinhTongCucComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DauThauRoutingModule { }
+export class DauThauRoutingModule {}

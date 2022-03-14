@@ -20,6 +20,7 @@ import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-qu
 import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
 import { QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
+import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong-cuc/phuong-an-trinh-tong-cuc.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong
     NhapQuyetDinhComponent,
     QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
     ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
+    PhuongAnTrinhTongCucComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })
-export class DauThauModule { }
+export class DauThauModule {}

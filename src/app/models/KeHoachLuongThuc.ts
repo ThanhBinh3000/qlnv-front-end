@@ -24,4 +24,7 @@ export class KeHoachLuongThuc {
   tenDonvi: string;
   maDonVi: string;
   donViTinh: string;
+  donViId: number;
+  khGaoId: number;
+  khThocId: number;
 }

@@ -95,6 +95,9 @@
     border-bottom: 0;
   }
   .file-not-show {
-    display: none;
+    display: none !important;
+  }
+  .tai-lieu-dinh-kem {
+    padding: 16px 8px !important;
   }
 }

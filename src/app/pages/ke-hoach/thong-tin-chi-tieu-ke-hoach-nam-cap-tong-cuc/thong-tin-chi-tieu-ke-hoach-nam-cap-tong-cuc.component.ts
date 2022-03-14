@@ -27,6 +27,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -63,6 +64,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   keHoachVatTuDialog: KeHoachVatTu;
   fileDinhKem: string = null;
   qdTCDT: string = MESSAGE.QD_TCDT;
+  formData: FormGroup;
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
+  listNam: any[] = [];
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -71,16 +75,53 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
-    this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
-    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
-    this.thongTinChiTieuKeHoachNam.khVatTu = [];
     this.id = +this.routerActive.snapshot.paramMap.get('id');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: this.yearNow - i,
+        text: this.yearNow - i,
+      });
+    }
+    this.initForm();
     this.loadThongTinChiTieuKeHoachNam(this.id);
   }
-
+  initForm() {
+    this.formData = this.fb.group({
+      soQD: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.soQuyetDinh
+          : null,
+        [Validators.required],
+      ],
+      ngayKy: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.ngayKy
+          : null,
+        [Validators.required],
+      ],
+      ngayHieuLuc: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.ngayHieuLuc
+          : null,
+        [Validators.required],
+      ],
+      namKeHoach: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.namKeHoach
+          : null,
+        [Validators.required],
+      ],
+      trichYeu: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.trichYeu
+          : null,
+      ],
+    });
+  }
   themMoi(data?: any) {
     if (this.tabSelected == TAB_SELECTED.luongThuc) {
       const modalLuongThuc = this.modal.create({
@@ -205,6 +246,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
           this.keHoachLuongThucDialog.stt =
             this.thongTinChiTieuKeHoachNam.khLuongThuc?.length + 1;
+          this.keHoachLuongThucDialog.donViId = luongThuc.value.donViId;
+          this.keHoachLuongThucDialog.khGaoId = luongThuc.value.khGaoId;
+          this.keHoachLuongThucDialog.khThocId = luongThuc.value.khThocId;
 
           // this.thongTinChiTieuKeHoachNam.khLuongThuc = [
           //   ...this.thongTinChiTieuKeHoachNam.khLuongThuc,
@@ -292,8 +336,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           nhom.vatTuThietBi.push(vatTuThietBi1);
           this.keHoachVatTuDialog.nhomVatTuThietBi.push(nhom);
 
-          console.log(this.keHoachVatTuDialog);
-
           this.checkDataExistVatTu(this.keHoachVatTuDialog);
         }
       });
@@ -361,6 +403,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiDialog.stt =
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length + 1;
 
+          this.keHoachMuoiDialog.donViId = muoi.value.donViId;
+          this.keHoachMuoiDialog.id = muoi.value.id;
           // this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [
           //   ...this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           //   this.keHoachMuoiDialog,
@@ -381,6 +425,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .subscribe((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
+          console.log(this.thongTinChiTieuKeHoachNam);
+
+          this.initForm();
+          console.log(this.formData.get('soQD').value);
+          this.formData.patchValue({
+            soQD: this.formData.get('soQD').value.split('/')[0],
+          });
         }
       });
   }
@@ -434,38 +485,32 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   exportData() {
     var workbook = XLSX.utils.book_new();
-    const tableLuongThuc = document.getElementById('table-luong-thuc').getElementsByTagName('table');
+    const tableLuongThuc = document
+      .getElementById('table-luong-thuc')
+      .getElementsByTagName('table');
     if (tableLuongThuc && tableLuongThuc.length > 0) {
       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableLuongThuc[0]);
       sheetLuongThuc['!cols'] = [];
       sheetLuongThuc['!cols'][24] = { hidden: true };
       sheetLuongThuc['!cols'][25] = { hidden: true };
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheetLuongThuc,
-        'sheetLuongThuc',
-      );
+      XLSX.utils.book_append_sheet(workbook, sheetLuongThuc, 'sheetLuongThuc');
     }
-    const tableMuoi = document.getElementById('table-muoi').getElementsByTagName('table');
+    const tableMuoi = document
+      .getElementById('table-muoi')
+      .getElementsByTagName('table');
     if (tableMuoi && tableMuoi.length > 0) {
       let sheetMuoi = XLSX.utils.table_to_sheet(tableMuoi[0]);
       sheetMuoi['!cols'] = [];
       sheetMuoi['!cols'][12] = { hidden: true };
       sheetMuoi['!cols'][13] = { hidden: true };
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheetMuoi,
-        'sheetMuoi',
-      );
+      XLSX.utils.book_append_sheet(workbook, sheetMuoi, 'sheetMuoi');
     }
-    const tableVatTu = document.getElementById('table-vat-tu').getElementsByTagName('table');
+    const tableVatTu = document
+      .getElementById('table-vat-tu')
+      .getElementsByTagName('table');
     if (tableVatTu && tableVatTu.length > 0) {
       let sheetVatTu = XLSX.utils.table_to_sheet(tableVatTu[0]);
-      XLSX.utils.book_append_sheet(
-        workbook,
-        sheetVatTu,
-        'sheetVatTu',
-      );
+      XLSX.utils.book_append_sheet(workbook, sheetVatTu, 'sheetVatTu');
     }
     XLSX.writeFile(workbook, 'thong-tin-chi-tieu-ke-hoach-nam.xlsx');
   }
@@ -583,6 +628,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNam.khLuongThuc.forEach((lt, i) => {
       lt.stt = i + 1;
     });
+
+    console.log('1111: ', this.thongTinChiTieuKeHoachNam);
   }
 
   checkDataExistMuoi(data: any) {
@@ -815,7 +862,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
   }
   save() {
-    console.log(this.thongTinChiTieuKeHoachNam);
+    console.log('123: ', this.thongTinChiTieuKeHoachNam);
+
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
+      this.formData.get('soQD').value
+    }${MESSAGE.QD_TCDT}`;
+    this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
+    this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
+      this.formData.get('ngayHieuLuc').value;
+    this.thongTinChiTieuKeHoachNam.namKeHoach =
+      this.formData.get('namKeHoach').value;
+    this.thongTinChiTieuKeHoachNam.trichYeu =
+      this.formData.get('trichYeu').value;
+
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNam)
@@ -846,4 +905,22 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         });
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.controls['ngayHieuLuc'].value) {
+      return false;
+    }
+    return (
+      startValue.getTime() >
+      this.formData.controls['ngayHieuLuc'].value.getTime()
+    );
+  };
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.controls['ngayKy'].value) {
+      return false;
+    }
+    return (
+      endValue.getTime() <= this.formData.controls['ngayKy'].value.getTime()
+    );
+  };
 }

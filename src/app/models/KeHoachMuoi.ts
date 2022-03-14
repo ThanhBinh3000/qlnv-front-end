@@ -12,4 +12,6 @@ export class KeHoachMuoi {
   tenDonVi: string;
   maDonVi: string;
   donViTinh: string;
+  donViId: number;
+  id: number;
 }

@@ -25,6 +25,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   optionsDVT: any[] = [];
   optionsDonViTinh: any[] = [];
   yearNow: number = 0;
+  listDonViTinh: any[] = [];
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -32,13 +33,25 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     //treeview
-
+    this.listDonViTinh.push({
+      value: 'bộ',
+      text: 'bộ',
+    });
+    this.listDonViTinh.push({
+      value: 'chiếc',
+      text: 'chiếc',
+    });
+    this.listDonViTinh.push({
+      value: 'máy',
+      text: 'máy',
+    });
     this.formData = this.fb.group({
+      id: [null],
       maDonVi: [null, [Validators.required]],
       tenDonVi: [null],
       donViId: [null],
@@ -63,7 +76,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       this.loadDanhMucHang();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -95,7 +108,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -117,7 +130,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
