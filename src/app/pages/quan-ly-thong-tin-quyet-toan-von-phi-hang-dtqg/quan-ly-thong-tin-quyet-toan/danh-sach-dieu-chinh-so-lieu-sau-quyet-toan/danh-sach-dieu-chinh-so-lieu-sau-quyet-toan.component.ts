@@ -5,23 +5,29 @@ import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucService } from '../../../../services/danhMuc.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../constants/message';
 
 
 
 @Component({
-  selector: 'app-tim-kiem-danh-sach-de-nghi-cap-von',
-  templateUrl: './tim-kiem-danh-sach-de-nghi-cap-von.component.html',
-  styleUrls: ['./tim-kiem-danh-sach-de-nghi-cap-von.component.scss'],
+  selector: 'app-danh-sach-dieu-chinh-so-lieu-sau-quyet-toan',
+  templateUrl: './danh-sach-dieu-chinh-so-lieu-sau-quyet-toan.component.html',
+  styleUrls: ['./danh-sach-dieu-chinh-so-lieu-sau-quyet-toan.component.scss'],
 })
-export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
+export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
+  danhSachCongVan: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
   url!: string;
+
+  allChecked = false;                         // check all checkbox
+  indeterminate = true;                       // properties allCheckBox
+
 
   // phan cu cua teca
   visible = false;
@@ -37,12 +43,9 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    nam: "",
     tuNgay: "",
     denNgay: "",
-    maBaoCao: "",
     donViTao: "",
-    loaiBaoCao: "",
   };
   pages = {
     size: 10,
@@ -51,11 +54,14 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
   donViTaos: any = [];
   baoCaos: any = [];
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
-    private danhMuc: DanhMucService,
-    private router: Router,
-    private datePipe: DatePipe,
-  ) {
+        private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMuc: DanhMucService,
+        private router: Router,
+        private datePipe: DatePipe,
+        private notification: NzNotificationService,
+
+  ) 
+  {
   }
 
   ngOnInit(): void {
@@ -65,13 +71,14 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
         console.log(err);
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -80,12 +87,13 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
   }
@@ -107,10 +115,7 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
-      namBcao: this.searchFilter.nam,
       ngayTaoDen: this.searchFilter.tuNgay,
       ngayTaoTu: this.searchFilter.denNgay,
       paggingReq: {
@@ -122,18 +127,20 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDsachDnghi(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDsachCvanDnghi(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data?.content;
+          console.log(data);
+          
+          this.danhSachCongVan = data.data?.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
   }
@@ -163,4 +170,20 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
     this.pages.size = size;
     this.onSubmit();
   }
+
+    // click o checkbox all
+    // updateAllChecked(): void {
+    //   this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
+    //   if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+    //       ...item,
+    //       checked: true
+    //     }));
+    //   } else {
+    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+    //       ...item,
+    //       checked: false
+    //     }));
+    //   }
+    // }
 }
