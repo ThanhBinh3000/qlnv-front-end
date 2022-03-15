@@ -21,6 +21,8 @@ import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh
 import { QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.component';
 import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong-cuc/phuong-an-trinh-tong-cuc.component';
+import { HopDongMuaComponent } from './luong-thuc/hop-dong-mua/hop-dong-mua.component';
+import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong
     QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
     ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent,
     PhuongAnTrinhTongCucComponent,
+    HopDongMuaComponent,
+    ThongTinHopDongMuaComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })
-export class DauThauModule {}
+export class DauThauModule { }

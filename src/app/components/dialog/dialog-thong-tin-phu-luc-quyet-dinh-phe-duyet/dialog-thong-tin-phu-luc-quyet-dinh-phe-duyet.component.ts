@@ -36,6 +36,14 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
     try {
       await this.danhMucDonViGetAll();
       this.spinner.hide();
+      this.dataTable.push({
+        goiThau: 'ggg',
+        diaDiem: 'hhhh',
+        soLuong: 'hhhh',
+        donGia: 'hhhh',
+        thanhTien: 'hhhh',
+      });
+      this.updateEditCache();
     }
     catch (e) {
       console.log('error: ', e)

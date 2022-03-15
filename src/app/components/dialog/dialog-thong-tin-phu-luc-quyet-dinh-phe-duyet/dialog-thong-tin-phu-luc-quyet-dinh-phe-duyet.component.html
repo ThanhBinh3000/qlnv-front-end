@@ -64,8 +64,10 @@
                     [nzMin]="0"></nz-input-number>
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id)" class="save"><i nz-icon nzType="save"></i></a>
-                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc chắn muốn hủy?" (nzOnConfirm)="cancelEdit(data.id)">
+                  <a (click)="saveEdit(data.id)" class="save">
+                    <i nz-icon nzType="save"></i>
+                  </a>
+                  <a (click)="cancelEdit(data.id)">
                     <i nz-icon nzType="close"></i>
                   </a>
                 </td>
