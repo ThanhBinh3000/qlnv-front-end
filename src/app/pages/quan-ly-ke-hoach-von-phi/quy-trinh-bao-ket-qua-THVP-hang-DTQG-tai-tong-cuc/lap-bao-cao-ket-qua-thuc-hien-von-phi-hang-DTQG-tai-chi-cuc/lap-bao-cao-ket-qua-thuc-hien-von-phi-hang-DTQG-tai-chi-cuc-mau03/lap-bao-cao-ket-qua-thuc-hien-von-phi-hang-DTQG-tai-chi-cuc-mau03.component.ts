@@ -858,14 +858,20 @@ updateEditCache3(): void {
         this.lstCTietBCao.forEach(element => {
           if(element.maVtuParent=='1'){
             this.lstCTietBCao1.push(element);
-          }else{
+          }else if(element.maVtuParent=='2'){
             this.lstCTietBCao2.push(element);
+          }else{
+            this.lstCTietBCao3.push(element);
           }
         });
         this.notification.success('Tổng hợp báo cáo','Tổng hợp báo cáo thành công');
         this.updateEditCache1();
         this.updateEditCache2();
+      }else{
+        this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
       }
+    },err=>{
+      this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
     })
   }
 }
