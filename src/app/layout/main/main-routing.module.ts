@@ -53,6 +53,13 @@ const routes: Routes = [
             (m) => m.QuanLyKeHoachVonPhiHangModule,
           ),
       },
+      {
+        path: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
+        loadChildren: () =>
+          import('../../pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.module').then(
+            (m) => m.QuanLyThongTinQuyetToanVonPhiHangDtqgModule,
+          ),
+      },
     ],
   },
 ];
