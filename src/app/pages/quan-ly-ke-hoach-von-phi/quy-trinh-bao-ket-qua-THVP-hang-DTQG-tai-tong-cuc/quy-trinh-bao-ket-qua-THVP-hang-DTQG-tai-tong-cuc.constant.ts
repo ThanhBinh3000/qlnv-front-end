@@ -15,4 +15,10 @@ export const QUY_TRINH_BAO_CAO_KET_QUA_THUC_HIEN_THVP_HANG_DTQG_TAI_TONG_CUC_DTN
     description: 'Tổng hợp báo cáo kết quả thực hiện vốn, phí hàng DTQG',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN}/tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg`,
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Khai thác báo cáo',
+    description: 'Tổng hợp báo cáo kết quả thực hiện vốn, phí hàng DTQG',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN}/khai-thac-bao-cao`,
+  },
 ];

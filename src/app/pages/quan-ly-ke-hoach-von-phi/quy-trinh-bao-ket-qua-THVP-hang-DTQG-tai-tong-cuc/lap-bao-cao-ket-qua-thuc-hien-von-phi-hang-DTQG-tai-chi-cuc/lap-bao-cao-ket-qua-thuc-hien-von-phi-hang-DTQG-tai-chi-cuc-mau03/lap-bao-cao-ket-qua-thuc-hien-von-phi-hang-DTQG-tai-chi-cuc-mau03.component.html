@@ -52,6 +52,10 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden]="flagXuatFile" >
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xuất báo cáo</span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
@@ -231,7 +235,7 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaBanTthieu" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.dgGiaBanTte" (change)="changeModel1(item.id)" />
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache1[item.id].data.ttGiaHtoan" disabled (change)="changeModel1(item.id)" />
@@ -347,7 +351,7 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaBanTthieu" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.dgGiaBanTte" (change)="changeModel2(item.id)" />
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache2[item.id].data.ttGiaHtoan" disabled (change)="changeModel2(item.id)"/>
@@ -463,7 +467,7 @@
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaBanTthieu" />
                         </td>
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaBanTte" />
+                          <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.dgGiaBanTte" (change)="changeModel3(item.id)"/>
                         </td>
                         <td>
                           <input class="search__input" nz-input [(ngModel)]="editCache3[item.id].data.ttGiaHtoan" disabled (change)="changeModel3(item.id)" />
