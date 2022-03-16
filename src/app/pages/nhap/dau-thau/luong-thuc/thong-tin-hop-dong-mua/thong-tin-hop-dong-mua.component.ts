@@ -8,6 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { DialogThongTinPhuLucHopDongMuaComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
 
 interface ItemData {
   id: string;
@@ -35,7 +36,9 @@ export class ThongTinHopDongMuaComponent implements OnInit {
   formData: FormGroup;
   id: number;
   editId: string | null = null;
-  listOfData: ItemData[] = [];
+  listOfData: any[] = [{
+    tenGoiThau: 'aaa'
+  }];
   selectedCanCu: any = {};
 
   constructor(
@@ -44,6 +47,13 @@ export class ThongTinHopDongMuaComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
   ) { }
+
+  ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+    this.id = +this.routerActive.snapshot.paramMap.get('id');
+  }
 
   openDialogQuyetDinhGiaoChiTieu() {
     if (this.id == 0) {
@@ -65,16 +75,28 @@ export class ThongTinHopDongMuaComponent implements OnInit {
     }
   }
 
+  openDialogThongTinPhuLuc(data: any) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin phụ lục KH LCNT cho các Cục DTNN KV',
+      nzContent: DialogThongTinPhuLucHopDongMuaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.selectedCanCu = data;
+      }
+    });
+  }
+
   tongHopDeXuatTuCuc(id: string): void {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, id])
   }
 
-  ngOnInit(): void {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
-  }
   back() {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
   }

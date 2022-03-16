@@ -329,14 +329,14 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let data of editRowTable.data" class="editable-row">
-                        <td>{{ data.stt }}</td>
-                        <td>{{ data.cuc }}</td>
-                        <td>{{ data.soGoiThau }}</td>
-                        <td>{{ data.soDeXuat }}</td>
-                        <td>{{ data.ngayDeXuat }}</td>
-                        <td>{{ data.tenDuAn }}</td>
-                        <td>{{ data.soLuong }}</td>
-                        <td>{{ data.tongTien }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.stt }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
+                        <td (click)="openDialogThongTinPhuLuc(data)">{{ data.tenGoiThau }}</td>
                         <td class="text-center">
                           <a>
                             <i class="fa fa-pencil"></i>
