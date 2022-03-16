@@ -10,6 +10,7 @@ export const MAIN_ROUTES = {
   danhmuc: 'danhmuc',
   qlkhVonPhi: 'qlkh-von-phi',
   qlcapVonPhi: 'qlcap-von-phi-hang',
+  qlthongTinQuyetToanVonPhi: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -48,5 +49,9 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title:'Quản lý cấp vốn phí hàng',
     route: MAIN_ROUTES.qlcapVonPhi,
+  },
+  {
+    title:'Quản lý thông tin quyết toán vốn phí hàng DTQG',
+    route: MAIN_ROUTES.qlthongTinQuyetToanVonPhi,
   },
 ];
