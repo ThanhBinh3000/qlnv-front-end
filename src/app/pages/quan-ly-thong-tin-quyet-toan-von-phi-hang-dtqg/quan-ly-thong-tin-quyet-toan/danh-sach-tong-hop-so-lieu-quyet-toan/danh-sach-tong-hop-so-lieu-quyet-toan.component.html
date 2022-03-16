@@ -24,23 +24,33 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
 
           <div nz-col nzSpan="6">
+            <label class="search__label">Năm</label>
+            <input nz-input class="search__input" type="text" />
+          </div>
+
+          <div nz-col nzSpan="9">
             <label class="search__label">Từ ngày lập</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="9">
             <label class="search__label">Đến ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
           </div>
           <div nz-col nzSpan="12">
+            <label class="search__label">Đơn vị lập</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
+              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Số quyết định</label>
+            <input nz-input class="search__input" type="text">
+          </div>
+
+          <div nz-col nzSpan="8">
             <label class="search__label">Trạng thái</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person">
 
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Nơi lập</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
 
@@ -62,13 +72,12 @@
                 <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate">
                 </label>
               </th>
-              <th width="130px">Ngày lập</th>
-              <th width="175px">Nơi lập</th>
-              <th width="175px">Số quyết định</th>
+              <th width="130px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
-              <th width="175px">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="175px">Căn cứ hợp đồng</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th width="175px">Ngày lập</th>
+              <th width="175px">Đơn vị lập</th>
+              <th width="175px">Trạng thái</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -120,7 +129,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../lap-de-nghi-cap-von-mua-vat-tu-thiet-bi">
+        <button type="button" class="btn btn-main" routerLink="../{{url}}">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

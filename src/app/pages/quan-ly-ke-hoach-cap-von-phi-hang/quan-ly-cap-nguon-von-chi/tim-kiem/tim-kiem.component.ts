@@ -17,7 +17,7 @@ export class TimKiemComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
+  danhSachCongVan: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
@@ -41,12 +41,9 @@ export class TimKiemComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    nam: "",
     tuNgay: "",
     denNgay: "",
-    maBaoCao: "",
     donViTao: "",
-    loaiBaoCao: "",
   };
   pages = {
     size: 10,
@@ -111,10 +108,7 @@ export class TimKiemComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
-      namBcao: this.searchFilter.nam,
       ngayTaoDen: this.searchFilter.tuNgay,
       ngayTaoTu: this.searchFilter.denNgay,
       paggingReq: {
@@ -126,10 +120,12 @@ export class TimKiemComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDsachCvanDnghi(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
+          console.log(data);
+          
+          this.danhSachCongVan = data.data?.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {

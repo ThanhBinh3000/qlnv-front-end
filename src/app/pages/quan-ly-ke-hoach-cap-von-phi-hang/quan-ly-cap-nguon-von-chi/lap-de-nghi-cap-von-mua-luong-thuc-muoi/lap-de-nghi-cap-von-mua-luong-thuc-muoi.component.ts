@@ -10,6 +10,10 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucService } from '../../../../services/danhMuc.service';
 import { Utils } from "../../../../Utility/utils";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../constants/message';
+
+
 export class ItemData {
 
   maNguonHang!: string;
@@ -116,6 +120,8 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private danhMucService: DanhMucService,
               private userService: UserService,
+              private notification: NzNotificationService,
+
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -126,7 +132,7 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+     await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -137,11 +143,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR,data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
@@ -164,11 +170,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           if (data.statusCode == 0) {
             this.nguonHangs = data.data?.content;
           }else{
-            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) =>{
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
 
@@ -178,11 +184,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           if (data.statusCode == 0) {
             this.matHangs = data.data?.content;
           }else{
-            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) =>{
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
 
@@ -192,11 +198,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           if (data.statusCode == 0) {
             this.hinhThucs = data.data?.content;
           }else{
-            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) =>{
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
 
@@ -206,11 +212,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           if (data.statusCode == 0) {
             this.donViTinhs = data.data?.content;
           }else{
-            this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) =>{
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
 
@@ -226,11 +232,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           this.userInfo = data?.data
           return data?.data;
         } else {
-
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     return userInfo;
@@ -282,24 +288,26 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
-          console.log(err);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-      })
+      },err =>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+      )
     }
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
@@ -322,7 +330,12 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err =>{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }
@@ -333,9 +346,9 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
+  async getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -355,13 +368,19 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
           })
+
+          if(this.trangThaiBanGhi == '1' || this.trangThaiBanGhi == '3' || this.trangThaiBanGhi == '5' || this.trangThaiBanGhi == '8') {
+            this.status = false;
+          }else{
+            this.status = true;
+          }
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
         console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.show();
@@ -383,7 +402,7 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
         return objfile;
       },
       err => {
-        console.log('false :', err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     return temp;
