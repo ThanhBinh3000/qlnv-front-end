@@ -17,7 +17,7 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
+  danhSachDeNghi: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
@@ -125,7 +125,7 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
     this.quanLyVonPhiService.timDsachDnghi(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data?.content;
+          this.danhSachDeNghi = data.data?.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
