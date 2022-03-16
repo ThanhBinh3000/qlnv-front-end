@@ -689,6 +689,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               for (let i = 0; i < temptData.khVatTu.length; i++) {
                 this.checkDataExistVatTu(temptData.khVatTu[i]);
               }
+              this.thongTinChiTieuKeHoachNam.khVatTu = this.updateDataListVatTu(this.thongTinChiTieuKeHoachNam.khVatTu);
             }
           }
         }

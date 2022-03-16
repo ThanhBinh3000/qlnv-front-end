@@ -1,10 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
@@ -13,53 +8,23 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component.scss'],
 })
 export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
-  cucDTNN: string = null;
-  listDonVi: any[] = [];
-  tenDuAn: string = null;
   ghiChu: string = null;
-  dataTable: any[] = [{
-    goiThau: 'ggg',
-    diaDiem: 'hhhh',
-    soLuong: 12,
-    donGia: 100000,
-    thanhTien: 1200000,
-  }];
   tableExist: boolean = false;
+  data: any = {};
 
   constructor(
     private _modalRef: NzModalRef,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private danhMucService: DanhMucService,
     private helperService: HelperService,
     private cdr: ChangeDetectorRef,
   ) { }
 
   async ngOnInit() {
-    this.spinner.show();
-    try {
-      await this.danhMucDonViGetAll();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
   }
 
   ngAfterViewChecked(): void {
     const table = document.getElementsByTagName('table');
     this.tableExist = table && table.length > 0 ? true : false;
     this.cdr.detectChanges();
-  }
-
-  async danhMucDonViGetAll() {
-    this.listDonVi = [];
-    let res = await this.danhMucService.danhMucDonViGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDonVi = res.data;
-    }
   }
 
   reduceRowData(
@@ -90,15 +55,7 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
     return sumVal;
   }
 
-  handleOk() {
-
-  }
-
   onCancel() {
     this._modalRef.close();
-  }
-
-  async search() {
-    // this.dataTable = [];
   }
 }

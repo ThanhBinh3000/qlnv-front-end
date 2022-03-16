@@ -2,22 +2,19 @@
   <div nz-col [nzSpan]="8">
     <nz-form-item>
       <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNN KV </nz-form-label>
-      <nz-select [(ngModel)]="cucDTNN">
-        <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-        </nz-option>
-      </nz-select>
+      <input nz-input [(ngModel)]="data.tenDvi" [readonly]="true" />
     </nz-form-item>
   </div>
   <div nz-col [nzSpan]="24">
     <nz-form-item>
       <nz-form-label nzRequired [nzNoColon]="true"> Tên dự án </nz-form-label>
-      <input nz-input [(ngModel)]="tenDuAn" />
+      <input nz-input [(ngModel)]="data.tenDuAn" [readonly]="true" />
     </nz-form-item>
   </div>
   <div nz-col [nzSpan]="24" class="mt-16">
     <div id="table-goi-thau">
       <nz-card nzTitle="Danh sách gói thầu" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
-        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable">
+        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="data?.children">
           <thead>
             <tr>
               <th width="60px">STT</th>
@@ -32,12 +29,12 @@
             <tr *ngFor="let data of basicTable.data; let i = index">
               <td class="text-center">{{i+1}}</td>
               <td>{{ data.goiThau}}</td>
-              <td>{{ data.diaDiem }}</td>
+              <td>{{ data.diaDiemNhap }}</td>
               <td>{{ data.soLuong | number: '1.0-1' }}</td>
               <td>{{ data.donGia | number: '1.0-1' }}</td>
               <td>{{ data.thanhTien | number: '1.0-1' }}</td>
             </tr>
-            <tr *ngIf="dataTable?.length > 0">
+            <tr *ngIf="basicTable.data.length > 0">
               <td colspan="3" class="background-last-row align-right">Tổng</td>
               <td class="background-last-row">{{ (tableExist ? reduceRowData(0, 3, 1, ',','table-goi-thau') : 0) |
                 number:
@@ -59,7 +56,7 @@
       <nz-form-label nzRequired [nzNoColon]="true">
         Ghi chú
       </nz-form-label>
-      <textarea nz-input [rows]="3" [(ngModel)]="ghiChu"></textarea>
+      <textarea nz-input [rows]="3" [(ngModel)]="ghiChu" [readonly]="true"></textarea>
     </nz-form-item>
   </div>
 </div>
