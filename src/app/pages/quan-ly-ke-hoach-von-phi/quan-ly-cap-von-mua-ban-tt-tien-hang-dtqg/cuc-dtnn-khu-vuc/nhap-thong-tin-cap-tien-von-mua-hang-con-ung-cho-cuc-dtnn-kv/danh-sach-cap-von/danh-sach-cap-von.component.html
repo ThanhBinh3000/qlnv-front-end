@@ -9,27 +9,22 @@
                     </a>
                </div>
                <div class="canphai phai">
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnDuyet">
-                         <i class="icon htvbdh_tcdt_guiduyet"></i>
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnDuyet">
+                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Duyệt</span>
                     </button>
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnPheDuyet">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Phê duyệt</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
-                         <i class="icon htvbdh_tcdt_save"></i>
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>Từ chối</span>
                     </button>
-                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_pheduyet"></i>
-             <span>Phê duyệt</span>
-           </button>
-           <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_tuchoi"></i>
-             <span>Từ chối</span>
-           </a> -->
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                         <i class="icon htvbdh_tcdt_pheduyet"></i>
+                         <span>Đóng</span>
+                    </button>
                </div>
           </div>
      </div>
@@ -39,27 +34,37 @@
      <div class="contentDetail">
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-                    <div class="search__body" nz-row [nzGutter]="[16, 24]">
-                         <div nz-col nzSpan="4">
+                    <div class="search__body" nz-row [nzGutter]="[16, 12]">
+                         <div nz-col nzSpan="8">
                               <label class="search__label">Ngày lập từ</label>
                               <nz-date-picker class="search__input" [(ngModel)]="tuNgay"></nz-date-picker>
                          </div>
-                         <div nz-col nzSpan="4">
+                         <div nz-col nzSpan="8">
                               <label class="search__label">Đến ngày</label>
                               <nz-date-picker class="search__input" [(ngModel)]="denNgay"></nz-date-picker>
                          </div>
-                         <div nz-col nzSpan="4">
-                              <label class="search__label">Năm</label>
-                              <input class="search__input" nz-input [(ngModel)]="namBcao" />
+                         <div nz-col nzSpan="8">
+                              <label class="search__label">Loại</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại vốn " [(ngModel)]="loaiVon">
+                                   <nz-option *ngFor="let item of nguonVons" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                              </nz-select>
                          </div>
-                         <div nz-col nzSpan="12">
-                              <label class="search__label">Đơn vị</label>
-                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi">
-                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                         <div nz-col nzSpan="11">
+                              <label class="search__label">Nơi lập</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                                   <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
                                         [nzLabel]="item.tenDvi"></nz-option>
                               </nz-select>
                          </div>
-                         <div nz-col nzSpan="4">
+                         <div nz-col nzSpan="11">
+                              <label class="search__label">Nơi cấp (nhận)</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiCap">
+                                   <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
+                                        [nzLabel]="item.tenDvi"></nz-option>
+                              </nz-select>
+                         </div>
+                         <div nz-col nzSpan="2">
+                              <br />
                               <button type="button" class="btn btn-main">
                                    <span>Tìm kiếm</span>
                               </button>
@@ -71,7 +76,8 @@
                          <nz-tab [nzTitle]="'Chi tiết'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col nzSpan="12">
-                                        <label class="search__body">Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
+                                        <label class="search__body">Tổng số bản ghi được tìm thấy:
+                                             {{totalElements}}</label>
                                    </div>
                               </div>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
@@ -79,13 +85,15 @@
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
-                                             <th nzWidth="50px">STT</th>
-                                             <th nzWidth="200px">Ngày lập</th>
-                                             <th nzWidth="300px">Đơn vị lập</th>
-                                             <th nzWidth="10px">Năm</th>
-                                             <th nzWidth="500px">Trạng thái</th>
-                                             <th nzWidth="10px"></th>
-                                             <th nzWidth="100px"></th>
+                                             <th nzWidth="75px">Chọn</th>
+                                             <th nzWidth="200px">Loại</th>
+                                             <th nzWidth="300px">Đơn vị cấp</th>
+                                             <th nzWidth="300px">Nơi nhận</th>
+                                             <th nzWidth="200px">Ngày ghi nhận</th>
+                                             <th nzWidth="200px">Số tiền</th>
+                                             <th nzWidth="200px">Ghi chú</th>
+                                             <th nzWidth="50px"></th>
+                                             <th nzWidth="50px"></th>
                                         </tr>
                                    </thead>
                                    <tbody>
@@ -93,20 +101,43 @@
                                              <td>
                                                   {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
-                                             <td>{{data.ngayLap}}</td>
                                              <td>
-                                                  <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.id == data.maDvi">
+                                                  <div *ngFor="let item of nguonVons">
+                                                       <div *ngIf="item.id == data.loaiVon">
                                                             {{item.tenDm}}
                                                        </div>
                                                   </div>
                                              </td>
-                                             <td>{{data.nam}}</td>
-                                             <td>{{data.tenTrangThai}}</td>
-                                             <td><a
-                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
+                                             <td>
+                                                  <div *ngFor="let item of donVis">
+                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                                            {{item.tenDvi}}
+                                                       </div>
+                                                  </div>
                                              </td>
-                                             <td></td>
+                                             <td>
+                                                  <div *ngFor="let item of cucKhuVucs">
+                                                       <div *ngIf="item.id == data.noiNhan">
+                                                            {{item.tenDm}}
+                                                       </div>
+                                                  </div>
+                                             </td>
+                                             <td>
+                                                  {{data.ngayGhiNhan}}
+                                             </td>
+                                             <td>
+                                                  {{data.soTien}}
+                                             </td>
+                                             <td>
+                                                  {{data.ghiChu}}
+                                             </td>
+                                            
+                                             <td>
+                                                  <a routerLink="../nhap-thong-tin-cap-tien-von-mua-hang-von-ung-cho-cuc-dtnn-khu-vuc/{{data.id}}">Sửa</a>
+                                             </td>
+                                             <td>
+                                                  <a routerLink="#">Xóa</a>
+                                             </td>
                                         </tr>
                                    </tbody>
                               </nz-table>
@@ -131,19 +162,11 @@
                                    </div>
                               </div>
 
-                              <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                   <div nz-col nzSpan="12">
-                                        <label class="search_label">Lý do từ chối</label>
-                                        <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
-                                   </div>
-                              </div>
-
-
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main"
-                              routerLink="../thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc" [hidden]="statusBtnTaoMoi">
+                         <button type="button" class="btn btn-main" [hidden]="statusBtnTaoMoi"
+                              routerLink="../nhap-thong-tin-cap-tien-von-mua-hang-von-ung-cho-cuc-dtnn-khu-vuc">
                               <span>Tạo mới</span>
                          </button>
                     </div>
