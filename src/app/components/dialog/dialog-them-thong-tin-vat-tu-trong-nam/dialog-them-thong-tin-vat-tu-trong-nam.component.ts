@@ -33,7 +33,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
@@ -68,6 +68,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       maVatTuCha: [null],
       vatTuId: [null],
       maVatTu: [null],
+      vatTu: [null],
     });
     this.spinner.show();
     try {
@@ -251,6 +252,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       maVatTuCha: vatTu.parent.ma,
       vatTuId: vatTu.id,
       maVatTu: vatTu.ma,
+      vatTu: vatTu
     });
   }
 

@@ -19,11 +19,11 @@
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-        <td>{{ data.loaiVthh }}</td>
-        <td>{{ data.hthucLcnt }}</td>
-        <td>{{ data.pthucLcnt }}</td>
-        <td>{{ data.loaiHdong }}</td>
-        <td>{{ data.nguonVon }}</td>
+        <td>{{ data.tenLoaiVthh }}</td>
+        <td>{{ data.tenHthucLcnt }}</td>
+        <td>{{ data.tenPthucLcnt }}</td>
+        <td>{{ data.tenLoaiHdong }}</td>
+        <td>{{ data.tenNguonVon }}</td>
         <td>{{ data.namKeHoach }}</td>
         <td class="text-center">
           <a (click)="handleOk(data)">

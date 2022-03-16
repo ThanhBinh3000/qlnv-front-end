@@ -4,7 +4,8 @@ export class KeHoachVatTu {
   maDonVi: string;
   tenDonVi: string;
   stt: number;
-  nhomVatTuThietBi: Array<NhomVatTuThietBi>;
+  vatTuThietBi: Array<VatTuThietBi>;
+  listDisplay: Array<any>;
 }
 
 export class NhomVatTuThietBi {

@@ -22,6 +22,8 @@ import * as XLSX from 'xlsx';
 import { DieuChinhThongTinChiTieuKHNam } from 'src/app/models/DieuChinhThongTinChiTieuKHNam';
 import { QuyetDinhChiTieuKHNam } from 'src/app/models/QuyetDinhChiTieuKHNam';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { KeHoachVatTu } from 'src/app/models/KeHoachVatTu';
 interface DataItem {
   name: string;
   age: number;
@@ -84,6 +86,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private helperService: HelperService,
     private cdr: ChangeDetectorRef,
   ) {
   }
@@ -280,12 +283,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         ) {
           sumVal =
             sumVal +
-            parseFloat(
-              table.rows[i].cells[indexCell].innerHTML.replace(
-                stringReplace,
-                '',
-              ),
-            );
+            parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
         }
       }
     }
@@ -294,7 +292,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   rowSpanVatTu(data: any): number {
     let rowspan = 1;
-    data?.nhomVatTuThietBi?.forEach((nhomVatTuTb) => {
+    data?.vatTuThietBi?.forEach((nhomVatTuTb) => {
       rowspan += nhomVatTuTb?.vatTuThietBi.length + 1;
     });
     return rowspan;
@@ -479,47 +477,24 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (indexExist != -1) {
         let nhomVatTuTemp = [];
         if (
-          this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].nhomVatTuThietBi &&
-          this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].nhomVatTuThietBi
+          this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].vatTuThietBi &&
+          this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].vatTuThietBi
             .length > 0
         ) {
           nhomVatTuTemp =
-            this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].nhomVatTuThietBi;
+            this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[indexExist].vatTuThietBi;
         }
-        for (let i = 0; i < data.nhomVatTuThietBi.length; i++) {
+        for (let i = 0; i < data.vatTuThietBi.length; i++) {
           let indexNhom = nhomVatTuTemp.findIndex(
-            (x) => x.vatTuChaId == data.nhomVatTuThietBi[i].vatTuChaId,
+            (x) => x.vatTuChaId == data.vatTuThietBi[i].vatTuChaId,
           );
           if (indexNhom != -1) {
-            let vatTuThietBiTemp = [];
-            if (
-              nhomVatTuTemp[indexNhom].vatTuThietBi &&
-              nhomVatTuTemp[indexNhom].vatTuThietBi.length > 0
-            ) {
-              vatTuThietBiTemp = nhomVatTuTemp[indexNhom].vatTuThietBi;
-            }
-            for (
-              let j = 0;
-              j < data.nhomVatTuThietBi[i].vatTuThietBi.length;
-              j++
-            ) {
-              let indexVatTu = vatTuThietBiTemp.findIndex(
-                (x) =>
-                  x.vatTuId == data.nhomVatTuThietBi[i].vatTuThietBi[j].vatTuId,
-              );
-              if (indexVatTu != -1) {
-                vatTuThietBiTemp[indexVatTu] =
-                  data.nhomVatTuThietBi[i].vatTuThietBi[j];
-              } else {
-                vatTuThietBiTemp.push(data.nhomVatTuThietBi[i].vatTuThietBi[j]);
-              }
-            }
-            data.nhomVatTuThietBi[i].vatTuThietBi = vatTuThietBiTemp;
+            data.vatTuThietBi[i] = nhomVatTuTemp[indexNhom];
           } else {
-            nhomVatTuTemp.push(data.nhomVatTuThietBi[i]);
+            nhomVatTuTemp.push(data.vatTuThietBi[i]);
           }
         }
-        data.nhomVatTuThietBi = nhomVatTuTemp;
+        data.vatTuThietBi = nhomVatTuTemp;
         this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.splice(indexExist, 1);
       }
     } else {
@@ -641,5 +616,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.router.navigate(['/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc']);
       },
     });
+  }
+
+  getListVatTuCha(data: KeHoachVatTu) {
+    return data.vatTuThietBi.filter(x => x.maVatTuCha == null);
   }
 }
