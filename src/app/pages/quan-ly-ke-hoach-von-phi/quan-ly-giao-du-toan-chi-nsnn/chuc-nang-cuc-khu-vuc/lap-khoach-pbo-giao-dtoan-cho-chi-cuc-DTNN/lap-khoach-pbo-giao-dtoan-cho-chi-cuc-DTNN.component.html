@@ -106,7 +106,7 @@
               <nz-descriptions-item nzTitle="Đơn vị lập">
                 {{getUnitName()}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Quyết định BTC">
+              <nz-descriptions-item nzTitle="Quyết định số">
                 <input class="search__input" nz-input [(ngModel)]="qDinhBTC" />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="ngày quyết định">
@@ -122,7 +122,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Lập kế hoạch phân bổ, giao dự toán chi cho chi cục DTNN/Văn phòng Cục'">
+          <nz-tab [nzTitle]="'Lập kế hoạch phân bổ, giao dự toán chi cho chi cục DTNN'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
@@ -155,13 +155,10 @@
                     Chi cho
                   </th>
                   <th>
-                    Ghi chú
-                  </th>
-                  <th>
-                    Phê duyệt
-                  </th>
-                  <th>
                     Phân bổ
+                  </th>
+                  <th>
+                    Ghi chú
                   </th>
                 </tr>
               </thead>
@@ -203,9 +200,8 @@
                         </div>
                       </div>
                     </td>
-                    <td>{{ data.ghiChu }}</td>
-                    <td>{{ data.pheDuyet }}</td>
                     <td>{{ data.phanBo }}</td>
+                    <td>{{ data.ghiChu }}</td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -257,14 +253,12 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
-                    </td>
-                    <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.pheDuyet" />
-                    </td>
-                    <td>
                       <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.phanBo" />
                     </td>
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
+                    </td>
+
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -319,16 +313,18 @@
                 </tr>
               </tbody>
             </nz-table>
-            <div nz-col nzSpan="24">
-              <label class="search__label">Lý do từ chối</label>
-              <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
+            <div nz-col nzSpan="6">
+              <label class="search__label">Nơi nhận</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="noiNhan">
+                <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+              </nz-select>
             </div>
           </nz-tab>
         </nz-tabset>
         <div class="action">
           <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_print"></i>
-            <span>Xuất báo cáo tổng hợp</span>
+            <span>Lập báo cáo</span>
           </button>
           <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
             <i class="fa fa-trash-o"></i>

@@ -21,10 +21,6 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-        <button nz-button class="search__button--clear">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
-        </button>
       </div>
     </div>
   </div>
@@ -43,7 +39,7 @@
             <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày</label>
+            <label class="search__label">Ngày lập từ</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
@@ -58,7 +54,7 @@
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="KẾ HOẠCH PHÂN BỔ GIAO DỰ TOÁN CHO CHI CỤC DTNN/VĂN PHÒNG CỤC" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH TỔNG HỢP KẾ HOẠCH PHÂN BỔ GIAO DỰ TOÁN CỦA ĐƠN VỊ TRÌNH TỔNG CỤC" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
@@ -126,13 +122,13 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <button type="button" class="btn btn-main" routerLink="../tong-hop-lap-khoach-pbo-giao-dtoan-cua-dvi-trinh-tc">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
+          <span>Tạo mới</span>
         </button>
-        <button type="button" class="btn btn-sub">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
+        <button  type="button" class="btn btn-sub">
+          <i nz-icon nzType="close"></i>
+          <span>Đóng</span>
         </button>
       </ng-template>
     </div>

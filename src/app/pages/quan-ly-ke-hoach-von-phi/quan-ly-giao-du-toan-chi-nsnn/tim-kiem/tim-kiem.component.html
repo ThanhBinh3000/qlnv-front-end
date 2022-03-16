@@ -9,10 +9,6 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-        <button nz-button class="search__button--clear">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
-        </button>
       </div>
     </div>
   </div>
@@ -40,6 +36,10 @@
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
+          <div nz-col nzSpan="24">
+            <label class="search__label">Về việc</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.vanBan" />
+          </div>
         </div>
       </nz-card>
       <nz-card nzTitle="DANH SÁCH GIAO QUẢN LÝ DỰ TOÁN CHI TẠI TC-DTNN" [nzExtra]="tableCard1"
@@ -50,8 +50,8 @@
               <th width="60px">STT</th>
               <th width="130px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
-              <th width="175px">Đơn vị quyết định</th>
-              <th width="175px" class="text-center">Nội dung</th>
+              <th width="175px">Nơi ra quyết định</th>
+              <th width="175px" class="text-center">Về việc</th>
               <th></th>
               <th></th>
               <th></th>
@@ -69,10 +69,10 @@
                   xem
                 </a>
               </td >
-              <td class="text-center">
+              <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
                 sửa
               </td>
-              <td class="text-center">
+              <td class="text-center" (click)="redirectThongTinTimKiem()">
                 Xóa
               </td>
             </tr>
@@ -101,9 +101,9 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
-        <button type="button" class="btn btn-sub">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
+        <button type="button" class="btn btn-sub" (click)="redirectQLGiaoDTChi()">
+          <i nz-icon nzType="close"></i>
+          <span>Đóng</span>
         </button>
       </ng-template>
     </div>

@@ -1,11 +1,11 @@
+
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucService } from '..//../../../../services/danhMuc.service';
+import { DanhMucService } from '../../../../../services/danhMuc.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
-
 
 
 @Component({
@@ -13,6 +13,7 @@ import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.servic
   templateUrl: './ds-khoach-pbo-giao-dtoan-cho-chi-cucDTNN-vpCuc.component.html',
   styleUrls: ['./ds-khoach-pbo-giao-dtoan-cho-chi-cucDTNN-vpCuc.component.scss']
 })
+
 export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
@@ -21,7 +22,9 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  lyDoTuChoi!: any;
+  allChecked = false;                         // check all checkbox
   indeterminate = true;
 
   // phan cu cua teca
@@ -38,12 +41,16 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    nam: "",
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
+    noiQd: "",
+    soQd: "",
+    vanBan: "",
+    nam: "",
+    maDvi: "",
   };
   pages = {
     size: 10,
@@ -51,7 +58,6 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
-  allChecked: any;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucService,
@@ -61,22 +67,6 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
-      }
-    );
-
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -94,42 +84,60 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
 
   redirectThongTinTimKiem() {
     this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/lap-du-toan-chi-ngan-sach-cho-don-vi',
       0,
     ]);
   }
 
   redirectSuaThongTinTimKiem(id) {
     this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/lap-du-toan-chi-ngan-sach-cho-don-vi',
       id,
     ]);
+  }
+
+  redirectQLGiaoDTChi() {
+    this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn']);
+  }
+
+  updateSingleChecked(): void {
+    if (this.danhSachBaoCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.danhSachBaoCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
+      this.indeterminate = true;
+    }
   }
 
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
-      maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
-      namBcao: this.searchFilter.nam,
-      ngayTaoDen: this.searchFilter.tuNgay,
-      ngayTaoTu: this.searchFilter.denNgay,
+      ngayTaoDen: this.searchFilter.denNgay,
+      ngayTaoTu: this.searchFilter.tuNgay,
+      noiQd: this.searchFilter.noiQd,
       paggingReq: {
         limit: this.pages.size,
-        page: this.pages.page,
+        page: this.pages.page
       },
+      soQd: this.searchFilter.soQd,
       str: "",
       trangThai: "",
+      maDvi: this.searchFilter.maDvi,
+
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
+          console.log(this.danhSachBaoCao);
+
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -138,20 +146,6 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
-  }
-
-  //set url khi
-  setUrl(id) {
-    switch (id) {
-      case 26:
-        this.url = '/chi-thuong-xuyen-3-nam/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
-    console.log(id);
-
   }
 
   //doi so trang
@@ -164,32 +158,5 @@ export class DsKhoachPboGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   onPageSizeChange(size) {
     this.pages.size = size;
     this.onSubmit();
-  }
-  // click o checkbox all
-  updateAllChecked(): void {
-    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({
-        ...item,
-        checked: true
-      }));
-    } else {
-      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-        ...item,
-        checked: false
-      }));
-    }
-  }
-  // click o checkbox single
-  updateSingleChecked(): void {
-    if (this.danhSachBaoCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.danhSachBaoCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-      this.indeterminate = true;
-    }
   }
 }
