@@ -254,7 +254,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     })
     this.cols++;
     this.lenghtTh = this.cols;
+    this.updateEditCache();
     console.log(this.listColTrongDot)
+    console.log(this.lstCTietBCao)
+
   }
 
   addLine(idx: any) {
@@ -263,12 +266,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       listVtu=[]
     }else{
       this.temparr.forEach(e => {
+        debugger
+        e.id = uuid.v4();
         listVtu.push(e);
       })
     }
 
     let item = {
-      id: 0,
+      id: uuid.v4(),
       stt: 0,
       maNdungChi: 0,
       maNdungChiParent: 0,
@@ -288,11 +293,24 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       edit: true,
       data: { ...item },
     };
+    console.log(this.lstCTietBCao);
+    
   }
 
 
+  updateEditCache(): void {
+    this.lstCTietBCao.forEach((item) => {
+      this.editCache[item.id] = {
+        edit: false,
+        data: { ...item },
+      };
+    });
+  }
 
-
+  // start edit
+  startEdit(id: string): void {
+    this.editCache[id].edit = true;
+  }
 
    //update khi sửa
    saveEdit(id: string): void {
@@ -312,6 +330,14 @@ cancelEdit(id: string): void {
     data: { ...this.lstCTietBCao[index] },
     edit: false,
   };
+}
+
+// xoa dong
+deleteById(id: any): void {
+  this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+  if (typeof id == "number") {
+    this.listIdDelete += id + ",";
+  }
 }
 
 //checkox trên tùng row
