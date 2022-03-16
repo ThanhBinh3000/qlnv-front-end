@@ -51,8 +51,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '91';
+  maLoaiBaocao: string = '91';
   nam: any;
+  dotBaocao:any;
   userInfor: any;
   status: boolean = false;
   ngaynhap: any;
@@ -106,17 +107,41 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
 
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
+    this.maDvi = this.router.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaocao = this.router.snapshot.paramMap.get('maLoaiBaocao');
+    this.nam = this.router.snapshot.paramMap.get('nam');
+    this.dotBaocao = this.router.snapshot.paramMap.get('dotBaocao');
 
     if (this.id != null) {
       this.getDetailReport();
       // this.updateEditCache();
+    }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
+      this.callTonghop();
+      this.nguoinhap = userInfor?.username;
+      this.donvitao = userInfor?.dvql;
+      this.namBcao = this.currentday.getFullYear();
+      this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maLoaiBaocao = '90';
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.mabaocao = res.data;
+          } else {
+            this.errorMessage =
+              'Có lỗi trong quá trình sinh mã báo cáo vấn tin!';
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        },
+      );
     } else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = userInfor?.username;
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '91';
+      this.maLoaiBaocao = '91';
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -252,7 +277,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
             }
           })
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = '91';
+          this.maLoaiBaocao = '91';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -715,7 +740,7 @@ updateEditCache3(): void {
       maDvi: this.donvitao ='235',
       maDviCha:'',
       maDviTien:null,
-      maLoaiBcao: this.maLoaiBacao,
+      maLoaiBcao: this.maLoaiBaocao,
       namBcao: this.namBcao,
       namHienHanh:null,
       thangBcao:null,
@@ -804,4 +829,49 @@ updateEditCache3(): void {
     this.editCache3[id].data.ttClechGiaTteVaGiaHtoan = this.editCache3[id].data.ttGiaBanTte - this.editCache3[id].data.ttGiaHtoan;
   }
 
+
+  callTonghop(){
+    if(Number(this.maLoaiBaocao) == 407){
+      this.maLoaiBaocao ='90';
+    }
+    if(Number(this.maLoaiBaocao) == 408){
+      this.maLoaiBaocao ='91';
+    }
+    if(Number(this.maLoaiBaocao) == 409){
+      this.maLoaiBaocao ='92';
+    }
+    if(Number(this.maLoaiBaocao) == 410){
+      this.maLoaiBaocao ='93';
+    }
+    if(Number(this.maLoaiBaocao) == 411){
+      this.maLoaiBaocao ='94';
+    }
+    let objTonghop ={
+      maDvi:this.maDvi = '0402',
+      maLoaiBcao:this.maLoaiBaocao,
+      namBcao:this.nam,
+      thangordotBcao:this.dotBaocao,
+    }
+    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).subscribe(res => {
+      if(res.statusCode==0){
+        this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(element => {
+          if(element.maVtuParent=='1'){
+            this.lstCTietBCao1.push(element);
+          }else if(element.maVtuParent=='2'){
+            this.lstCTietBCao2.push(element);
+          }else{
+            this.lstCTietBCao3.push(element);
+          }
+        });
+        this.notification.success('Tổng hợp báo cáo','Tổng hợp báo cáo thành công');
+        this.updateEditCache1();
+        this.updateEditCache2();
+      }else{
+        this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
+      }
+    },err=>{
+      this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
+    })
+  }
 }

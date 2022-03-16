@@ -120,11 +120,11 @@
                   <th>Tổng Cộng</th>
                   <th>Thóc</th>
                   <th>Gạo</th>
-                  <th *ngFor="let colname of listColTrongDot">{{colname}}</th>
+                  <th *ngFor="let colname of listColTrongDot">{{colname.colName}}</th>
                   <th>Tổng Cộng</th>
                   <th>Thóc</th>
                   <th>Gạo</th>
-                  <th *ngFor="let colname of listColLuyke">{{colname}}</th>
+                  <th *ngFor="let colname of listColLuyke">{{colname.colName}}</th>
                </tr>
                <tr>
                  <th>A</th>
@@ -140,8 +140,7 @@
                  <th></th>
                  <th></th>
                  <th></th>
-                 <th></th>
-                 <th></th>
+                 
                </tr>
                <tr>
                 <th></th>
@@ -157,8 +156,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
+               
               </tr>
               <tr>
                 <th></th>
@@ -174,8 +172,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
+                
               </tr>
               <tr>
                 <th></th>
@@ -191,13 +188,12 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
+                <th *ngIf="lenghtTh!=0"></th>
               </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of lstCTietBCao; let i = index">
-                  <ng-container >
+                  <ng-container *ngIf="!editCache[item.id].edit; else editTemplate">
                         <td>{{i+1}}</td>
                         <td>{{item.maNdungChi}}</td>
                         <td>{{item.trongDotTcong}}</td>
@@ -206,29 +202,16 @@
                         <td>{{item.luyKeTcong}}</td>
                         <td>{{item.luyKeThoc}}</td>
                         <td>{{item.luyKeGao}}</td>
-                        <div *ngFor="let kv of item.listCtiet;let i = index">
-                            <div *ngIf="kv.col == cols; then content"></div>
-                            <ng-template #content>
-                              <td>
-                                <div *ngFor="let kv of item.listCtiet;let i = index">
-                                  <div *ngIf="kv.col == cols; then content"></div>
-                                  <ng-template #content>
-                                    {{kv.sl}}
-                                  </ng-template>
-                                </div>
-                              </td>
-                              <td>
-                                <div *ngFor="let kv of item.listCtiet;let i = index">
-                                  <div *ngIf="kv.col == cols; then content"></div>
-                                  <ng-template #content>
-                                    {{kv.sl}}
-                                  </ng-template>
-                                </div>
-                              </td>
-                            </ng-template>
-                        </div>
-                        
-                        
+                        <td *ngFor="let kv of item.listCtiet;let i = index">
+                          <ng-template *ngIf="kv.loaiMatHang==0">
+                            {{kv.sl}}
+                          </ng-template> 
+                       </td>
+                        <td *ngFor="let kv of item.listCtiet;let i = index">   
+                          <ng-template *ngIf="kv.loaiMatHang==1">
+                            {{kv.sl}}
+                          </ng-template> 
+                        </td>
                         <td>{{item.ghiChu}}</td>
                         <td [hidden]="status">
                           <i class="fa fa-trash-o do" ></i>
@@ -244,6 +227,63 @@
                           ></label>
                         </td>
                   </ng-container>
+                  <ng-template #editTemplate>
+                    <td>{{i+1}}</td>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                        [(ngModel)]="editCache[item.id].data.maNdungChi">
+                        <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.trongDotTcong">
+                    </td>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.trongDotThoc">
+                    </td>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.trongDotGao">
+                    </td>
+                    <td *ngFor="let kv of editCache[item.id].data.listCtiet;let i = index">
+                      <div *ngIf="kv.loaiMatHang == 0 &&  kv.vt ==cols; then content else content2"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input [(ngModel)]="kv.sl" />
+                        </ng-template>
+                    </td>
+                    
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.luyKeTcong">
+                    </td>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.luyKeThoc">
+                    </td>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.luyKeGao">
+                    </td>
+                    <ng-template #content2>
+                      <td *ngFor="let kv of editCache[item.id].data.listCtiet;let i = index">
+                            <input class="search__input" nz-input [(ngModel)]="kv.sl" />
+                      </td>
+                    </ng-template>
+                    <td>
+                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu">
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" ></i>
+                    </td>
+                    <td>
+                      <a  class="save" (click)="saveEdit(item.id)">Save</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(item.id)"
+                        class="save">Cancel</a>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox  [nzValue]="item.id" [(ngModel)]="item.checked"
+                      (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+                  </ng-template>
                 </tr>
               </tbody>
             </nz-table>
