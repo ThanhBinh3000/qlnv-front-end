@@ -9,27 +9,10 @@
                     </a>
                </div>
                <div class="canphai phai">
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnDuyet">
-                         <i class="icon htvbdh_tcdt_guiduyet"></i>
-                         <span>Duyệt</span>
-                    </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnPheDuyet">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Phê duyệt</span>
+                         <span>Đóng</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
-                         <i class="icon htvbdh_tcdt_save"></i>
-                         <span>Từ chối</span>
-                    </button>
-                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_pheduyet"></i>
-             <span>Phê duyệt</span>
-           </button>
-           <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_tuchoi"></i>
-             <span>Từ chối</span>
-           </a> -->
                </div>
           </div>
      </div>
@@ -39,27 +22,39 @@
      <div class="contentDetail">
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-                    <div class="search__body" nz-row [nzGutter]="[16, 24]">
-                         <div nz-col nzSpan="4">
+                    <div class="search__body" nz-row [nzGutter]="[16, 12]">
+                         <div nz-col nzSpan="6">
+                              <label class="search__label">Số quyết định</label>
+                              <input class="search__input" nz-input [(ngModel)]="soQd">
+                         </div>
+                         <div nz-col nzSpan="6">
                               <label class="search__label">Ngày lập từ</label>
                               <nz-date-picker class="search__input" [(ngModel)]="tuNgay"></nz-date-picker>
                          </div>
-                         <div nz-col nzSpan="4">
+                         <div nz-col nzSpan="6">
                               <label class="search__label">Đến ngày</label>
                               <nz-date-picker class="search__input" [(ngModel)]="denNgay"></nz-date-picker>
                          </div>
-                         <div nz-col nzSpan="4">
-                              <label class="search__label">Năm</label>
-                              <input class="search__input" nz-input [(ngModel)]="namBcao" />
-                         </div>
-                         <div nz-col nzSpan="12">
-                              <label class="search__label">Đơn vị</label>
-                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi">
-                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                         <div nz-col nzSpan="6">
+                              <label class="search__label">Nơi lập</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nơi lập" [(ngModel)]="noiLap">
+                                   <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
                                         [nzLabel]="item.tenDvi"></nz-option>
                               </nz-select>
                          </div>
-                         <div nz-col nzSpan="4">
+                         <div nz-col nzSpan="18">
+                              <label class="search__label">Về việc</label>
+                              <input class="search__input" nz-input [(ngModel)]="veViec">
+                         </div>
+                         <div nz-col nzSpan="6">
+                              <label class="search__label">Trạng thái</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+                                   <nz-option *ngFor="let item of trangThais" [nzValue]="item.id"
+                                        [nzLabel]="item.tenDm"></nz-option>
+                              </nz-select>
+                         </div>
+                         <div nz-col nzSpan="2">
+                              <br />
                               <button type="button" class="btn btn-main">
                                    <span>Tìm kiếm</span>
                               </button>
@@ -79,13 +74,15 @@
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
-                                             <th nzWidth="50px">STT</th>
+                                             <th nzWidth="75px">STT</th>
                                              <th nzWidth="200px">Ngày lập</th>
                                              <th nzWidth="300px">Đơn vị lập</th>
-                                             <th nzWidth="10px">Năm</th>
-                                             <th nzWidth="500px">Trạng thái</th>
-                                             <th nzWidth="10px"></th>
-                                             <th nzWidth="100px"></th>
+                                             <th nzWidth="300px">Ngày ghi nhận</th>
+                                             <th nzWidth="200px">Về việc</th>
+                                             <th nzWidth="200px">Trạng thái</th>
+                                             <th nzWidth="50px"></th>
+                                             <th nzWidth="50px"></th>
+                                             <th nzWidth="50px"></th>
                                         </tr>
                                    </thead>
                                    <tbody>
@@ -93,20 +90,38 @@
                                              <td>
                                                   {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
-                                             <td>{{data.ngayLap}}</td>
+                                             <td>
+                                                  {{data.ngayLap}}
+                                             </td>
                                              <td>
                                                   <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.id == data.maDvi">
+                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                                            {{item.tenDvi}}
+                                                       </div>
+                                                  </div>
+                                             </td>
+                                             <td>
+                                                  {{data.ngayGhiNhan}}
+                                             </td>
+                                             <td>
+                                                  {{data.veViec}}
+                                             </td>
+                                             <td>
+                                                  <div *ngFor="let item of trangThais">
+                                                       <div *ngIf="item.id == data.trangThai">
                                                             {{item.tenDm}}
                                                        </div>
                                                   </div>
                                              </td>
-                                             <td>{{data.nam}}</td>
-                                             <td>{{data.tenTrangThai}}</td>
-                                             <td><a
-                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
+                                             <td>
+                                                  <a routerLink="../ghi-nhan-thong-tin-nhan-tien-von-vmvu-tu-cuc-dtnn-khu-vuc/{{data.id}}">Xem</a>
                                              </td>
-                                             <td></td>
+                                             <td>
+                                                  <a routerLink="#">Sửa</a>
+                                             </td>
+                                             <td>
+                                                  <a routerLink="#">Xóa</a>
+                                             </td>
                                         </tr>
                                    </tbody>
                               </nz-table>
@@ -130,20 +145,14 @@
                                         </div>
                                    </div>
                               </div>
-
-                              <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                   <div nz-col nzSpan="12">
-                                        <label class="search_label">Lý do từ chối</label>
-                                        <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
-                                   </div>
-                              </div>
-
-
+                              
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main"
-                              routerLink="../thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc" [hidden]="statusBtnTaoMoi">
+                         <button type="button" class="btn btn-main" routerLink="#">
+                              <span>Xuất</span>
+                         </button>
+                         <button type="button" class="btn btn-main" routerLink="../ghi-nhan-thong-tin-nhan-tien-von-vmvu-tu-cuc-dtnn-khu-vuc">
                               <span>Tạo mới</span>
                          </button>
                     </div>
