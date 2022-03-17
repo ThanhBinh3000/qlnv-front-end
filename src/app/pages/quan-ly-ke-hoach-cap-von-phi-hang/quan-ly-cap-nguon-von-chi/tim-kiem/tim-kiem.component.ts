@@ -2,10 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucService } from '../../../../services/danhMuc.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-
+import { MESSAGE } from '../../../../constants/message';
 
 
 @Component({
@@ -56,39 +57,40 @@ export class TimKiemComponent implements OnInit {
     private danhMuc: DanhMucService,
     private router: Router,
     private datePipe: DatePipe,
+    private notification: NzNotificationService,
   ) {
   }
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
-      }
-    );
+    // this.danhMuc.dMLoaiBaoCao().toPromise().then(
+    //   data => {
+    //     console.log(data);
+    //     if (data.statusCode == 0) {
+    //       this.baoCaos = data.data?.content;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   err => {
+    //     console.log(err);
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //   }
+    // );
 
-    //lay danh sach danh muc
-    this.danhMuc.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donViTaos = data.data;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        this.errorMessage = "err.error.message";
-      }
-    );
+    // //lay danh sach danh muc
+    // this.danhMuc.dMDonVi().toPromise().then(
+    //   data => {
+    //     if (data.statusCode == 0) {
+    //       this.donViTaos = data.data;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   err => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //   }
+    // );
   }
 
   redirectThongTinTimKiem() {
@@ -129,11 +131,11 @@ export class TimKiemComponent implements OnInit {
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
   }
