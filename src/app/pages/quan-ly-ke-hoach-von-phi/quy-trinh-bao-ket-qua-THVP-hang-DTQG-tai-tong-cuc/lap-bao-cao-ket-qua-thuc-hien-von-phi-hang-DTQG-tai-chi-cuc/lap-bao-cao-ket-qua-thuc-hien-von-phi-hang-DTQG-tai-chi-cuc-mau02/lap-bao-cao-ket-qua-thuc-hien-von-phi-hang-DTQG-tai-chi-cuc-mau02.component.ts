@@ -93,7 +93,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
-
+  checkxemkhaithac:any;
+  flagXuatFile:boolean= true;
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -116,10 +117,17 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.nam = this.router.snapshot.paramMap.get('nam');
     this.dotBaocao = this.router.snapshot.paramMap.get('dotBaocao');
 
+    //xem chi tiet xuất file exel;
+    this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
+
     
-    if (this.id != null) {
-      this.getDetailReport();
+    if ( this.id!=null && this.checkxemkhaithac!=null) {
+      debugger
+      this.getDetailReportToExportFile();
       // this.updateEditCache();
+    }else if(this.id!=null){
+     
+      this.getDetailReport();
     }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
       this.callTonghop();
       this.nguoinhap = userInfor?.username;
@@ -303,6 +311,56 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           } else {
             this.status = true;
           }
+          // set list id file ban dau
+          this.lstFile.filter((item) => {
+            this.listIdFiles += item.id + ',';
+          });
+          // this.updateEditCache();
+        } else {
+          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.errorMessage = err.error.message;
+      },
+    );
+  }
+
+  // call chi tiet bao cao
+  getDetailReportToExportFile() {
+    this.spinner.hide();
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.statusCode == 0) {
+          this.chiTietBcaos = data.data;
+          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao.forEach(e => {
+            if(e.maVtuParent =='1'){
+              this.lstCTietBCao1.push(e);
+            }else{
+              this.lstCTietBCao2.push(e);
+            }
+          })
+          this.updateEditCache1();
+          this.updateEditCache2();
+          this.lstFile = data.data.lstFile;
+          this.maLoaiBaocao = '90';
+          // set thong tin chung bao cao
+          this.ngaynhap = data.data.ngayTao;
+          this.nguoinhap = data.data.nguoiTao;
+          this.donvitao = data.data.maDvi;
+          this.mabaocao = data.data.maBcao;
+          this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
+          this.trangThaiBanGhi = data.data.trangThai;
+          
+          
+          this.status = true;
+          this.flagXuatFile = false;
+          
+          
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
@@ -676,15 +734,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
         (data) => {
           if(data.statusCode==0){
-            this.notification.success("Thêm mới","Cập nhật thành công")
+            this.notification.success("Thêm mới","Thêm mới thành công")
             console.log(data);
           }else{
-            this.notification.error("Thêm mới","Cập nhật thất bại")
+            this.notification.error("Thêm mới","Thêm mới thất bại")
           }
          
         },
         (err) => {
-          this.notification.error("Thêm mới","Cập nhật thất bại")
+          this.notification.error("Thêm mới","Thêm mới thất bại")
         },
       );
     }
