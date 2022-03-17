@@ -209,7 +209,7 @@ export class DanhMucService extends BaseService {
       }
     )
   }
-    
+
   loadDanhMucHangHoa() {
       const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dm-hang/danh-sach`;
       return this.httpClient.post<any>(url, null);
@@ -557,7 +557,7 @@ dMTrangThai(): Observable<any> {
     );
   }
 
-
+  // danh muc loai quyet dinh giao
 dMLoaiQDGiaoDT(): Observable<any> {
   return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/421",
@@ -571,7 +571,7 @@ dMLoaiQDGiaoDT(): Observable<any> {
       }
   );
 }
-
+// danh muc nhom qd giao du toan
 dMNhomQDGiaoDT(): Observable<any> {
   return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/425",
@@ -585,7 +585,7 @@ dMNhomQDGiaoDT(): Observable<any> {
       }
   );
 }
-
+// danh muc mat hang giao du toan
 dMMatHangQDGiaoDT(): Observable<any> {
   return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/429",
@@ -599,7 +599,7 @@ dMMatHangQDGiaoDT(): Observable<any> {
       }
   );
 }
-
+// danh muc don vi tinh giao du toan
 dMDviHangQDGiaoDT(): Observable<any> {
   return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/433",
@@ -613,7 +613,7 @@ dMDviHangQDGiaoDT(): Observable<any> {
       }
   );
 }
-
+// danh muc don vi tien qd giao du toan
 dMDviTienQDGiaoDT(): Observable<any> {
   return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/438",
@@ -631,6 +631,21 @@ dMDviTienQDGiaoDT(): Observable<any> {
 dMDonViTien(): Observable<any> {
   return this.httpClient.post(
     this.urlDefault + "/qlnv-category/dmuc-khoachvon/401",
+    {
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": "",
+      "trangThai": ""
+    }
+  );
+}
+
+//danh muc Khoan muc
+dMKhoanMuc(): Observable<any> {
+  return this.httpClient.post(
+    this.urlDefault + "/qlnv-category/dmuc-khoachvon/503",
     {
       "paggingReq": {
         "limit": 1000,

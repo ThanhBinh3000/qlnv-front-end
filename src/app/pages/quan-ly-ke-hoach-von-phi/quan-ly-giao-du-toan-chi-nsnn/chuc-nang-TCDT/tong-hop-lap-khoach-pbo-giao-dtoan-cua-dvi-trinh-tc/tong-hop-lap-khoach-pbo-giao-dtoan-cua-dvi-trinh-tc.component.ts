@@ -134,18 +134,6 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
-                         }
-                    },
-                    (err) => {
-                         this.errorMessage = err.error.message;
-                    }
-               );
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }

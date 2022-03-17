@@ -36,6 +36,7 @@ export class ItemData {
 export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
+
   maLoais: any = [];                          // ma loai
   maNhoms: any = [];                          // ma nhom
   maMatHangs: any = [] ;                      // ma mat hang
@@ -45,6 +46,8 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   ngayQd!: any;                               // ngay quyet dinh
   soQd!: any;                                 // so quyet dinh
   vanBan!: any;                               // noi dung
+  nguoiKy!: any;                              // nguoi ky
+
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao

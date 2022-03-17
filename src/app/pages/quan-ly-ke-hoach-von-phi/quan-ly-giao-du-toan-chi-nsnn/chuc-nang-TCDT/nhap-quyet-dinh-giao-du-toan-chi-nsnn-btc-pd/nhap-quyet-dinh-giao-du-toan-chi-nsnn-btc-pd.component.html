@@ -12,7 +12,7 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i nz-icon nzType="close"></i>
           <span>Đóng</span>
         </button>
@@ -26,36 +26,42 @@
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <div class="widget-body">
           <div>
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
-                {{ngayNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" >
-                {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đơn vị tạo">
-                {{getUnitName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                {{getStatusName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Nơi q/đ">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung">
-                  <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
-                </nz-select>
+              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+                <nz-descriptions-item nzTitle="Ngày nhập">
+                  {{ngayNhap}}
                 </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số quyết định">
-                  <input class="search__input" nz-input [(ngModel)]="soQd" />
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="ngày quyết định">
-                <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
-              </nz-descriptions-item>
-              <nz-descriptions-item >
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Nội dung" >
-                <input class="search__input" nz-input [(ngModel)]="vanBan" />
-              </nz-descriptions-item>
-            </nz-descriptions>
+                <nz-descriptions-item nzTitle="Người nhập" >
+                  {{nguoiNhap}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Đơn vị">
+                  {{getUnitName()}}
+                </nz-descriptions-item>
+                <!-- <nz-descriptions-item nzTitle="Trạng thái">
+                  {{getStatusName()}}
+                </nz-descriptions-item> -->
+                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Nơi q/đ">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung">
+                    <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
+                  </nz-select>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Số quyết định">
+                    <input class="search__input" nz-input [(ngModel)]="soQd" />
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="ngày quyết định">
+                  <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
+                </nz-descriptions-item>
+                <nz-descriptions-item ></nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Về việc" nzSpan="4" >
+                  <input class="search__input" nz-input [(ngModel)]="vanBan" />
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Người ký" nzSpan="1">
+                  <input class="search__input" nz-input [(ngModel)]="nguoiKy" />
+                </nz-descriptions-item>
+                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
+                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
+                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
+              </nz-descriptions>
           </div>
         </div>
       </nz-card>
@@ -86,10 +92,10 @@
                   <th nzWidth="150px">Nhóm</th>
                   <th nzWidth="150px">Mặt hàng</th>
                   <th>
-                    Số lượng
+                    Đơn vị hàng
                   </th>
                   <th>
-                    Đơn vị hàng
+                    Số lượng
                   </th>
                   <th>
                     Giá trị
@@ -98,7 +104,7 @@
                     Đơn vị tiền
                   </th>
                   <th>
-                    Dự toán
+                    Thành tiền
                   </th>
                   <th>
                     Năm
@@ -133,7 +139,6 @@
                         </div>
                       </div>
                     </td>
-                    <td>{{ data.soLuong }}</td>
                     <td>
                       <div *ngFor="let item of maDviTinhs">
                         <div *ngIf="item.id == data.maDviTinh">
@@ -141,6 +146,7 @@
                         </div>
                       </div>
                     </td>
+                    <td>{{ data.soLuong }}</td>
                     <td>{{ data.giaTri }}</td>
                     <td>
                       <div *ngFor="let item of maDviTiens">
