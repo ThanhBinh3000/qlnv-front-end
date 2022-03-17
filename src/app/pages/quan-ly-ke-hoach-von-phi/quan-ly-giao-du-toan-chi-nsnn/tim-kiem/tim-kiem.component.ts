@@ -44,6 +44,7 @@ export class TimKiemComponent implements OnInit {
     loaiBaoCao: "",
     noiQd: "",
     soQd: "",
+    vanBan: "",
   };
   pages = {
     size: 10,
@@ -93,16 +94,20 @@ export class TimKiemComponent implements OnInit {
 
   redirectThongTinTimKiem() {
     this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
       0,
     ]);
   }
 
   redirectSuaThongTinTimKiem(id) {
     this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
       id,
     ]);
+  }
+
+  redirectQLGiaoDTChi() {
+    this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn']);
   }
 
   //search list bao cao theo tieu chi

@@ -9,32 +9,26 @@
                  </a>
             </div>
             <div class="canphai phai">
-                 <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                      [hidden]="statusBtnApprove">
-                      <i class="icon htvbdh_tcdt_guiduyet"></i>
-                      <span>Trình duyệt</span>
-                 </button>
-                 <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                      <i class="icon htvbdh_tcdt_pheduyet"></i>
-                      <span>Trình phê duyệt</span>
-                 </button>
-                 <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()"
-                      [hidden]="statusBtnSave">
-                      <i class="icon htvbdh_tcdt_save"></i>
-                      <span>Lưu</span>
-                 </button>
-                 <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                      <i class="icon htvbdh_tcdt_pheduyet"></i>
-                      <span>Đóng</span>
-                 </button>
-                 <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê duyệt</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a> -->
+              <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Trình duyệt</span>
+              </button>
+              <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Trình phê duyệt</span>
+              </button>
+              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <i class="icon htvbdh_tcdt_print"></i>
+                <span>In</span>
+              </button>
+              <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+              </button>
+              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <i nz-icon nzType="close"></i>
+                <span>Đóng</span>
+              </button>
             </div>
        </div>
   </div>
@@ -46,24 +40,20 @@
             <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
                  <div class="search__body" nz-row [nzGutter]="[18, 12]">
                       <div nz-col nzSpan="6">
-                           <label class="search__label">Ngày nhập</label>
+                           <label class="search__label">Ngày lập</label>
                            <input class="search__input" nz-input [(ngModel)]="ngayNhap" disabled />
                       </div>
                       <div nz-col nzSpan="6">
-                           <label class="search__label">Người nhập</label>
+                           <label class="search__label">Người lập</label>
                            <input class="search__input" nz-input [(ngModel)]="nguoiNhap" disabled />
                       </div>
-                      <div nz-col nzSpan="6">
-                           <label class="search__label">Năm</label>
-                           <input class="search__input" nz-input [(ngModel)]="namBcao" />
-                      </div>
-                      <div nz-col nzSpan="6">
+                      <div nz-col nzSpan="7">
                            <label class="search__label">Trạng thái</label>
-                           <input class="search__input" nz-input [(ngModel)]="tenTrangThai" disabled />
+                           <input class="search__input" nz-input [(ngModel)]="trangThaiBanGhi" disabled />
                       </div>
                       <div nz-col nzSpan="12">
-                           <label class="search__label">Đơn vị lập</label>
-                           <input class="search__input" nz-input [(ngModel)]="maDonViTao" disabled />
+                            <label class="search__label">Đơn vị lập</label>
+                            <input class="search__input" nz-input [(ngModel)]="maDonViTao" disabled />
                       </div>
                       <div nz-col nzSpan="6">
                            <label class="search__label">Quyết định số</label>
@@ -73,6 +63,10 @@
                            <label class="search__label">Ngày quyết định</label>
                            <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
                       </div>
+                      <div nz-col nzSpan="24">
+                        <label class="search__label">Ghi chú</label>
+                        <input class="search__input" nz-input [(ngModel)]="ghiChu" />
+                   </div>
                  </div>
             </nz-card>
             <div class="tab__container">
@@ -80,32 +74,25 @@
                       <nz-tab [nzTitle]="'Chi tiết:'">
                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                            </div>
-                           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                <div nz-col nzSpan="11">
-                                     <label class="search__label">Đơn vị thực hiện</label>
-                                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                          [(ngModel)]="maDonViTao">
-                                          <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
-                                               [nzLabel]="item.tenDvi"></nz-option>
-                                     </nz-select>
-                                </div>
-                                <div nz-col nzSpan="10">
-                                     <label class="search__label">Ghi chú</label>
-                                     <input class="search__input" nz-input [(ngModel)]="ghiChu" />
-                                </div>
-                                <div nz-col nzSpan="3">
-                                     <br />
-                                     <button type="button" class="btn btn-main">
-                                          Thêm vào danh sách
-                                     </button>
-                                </div>
-                           </div>
                            <div class="action">
                                 <button type="button" class="btn btn-main" (click)="deleteSelected()">
                                      <i class="fa fa-trash-o"></i>
                                      <span>Xóa</span>
                                 </button>
+                                <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
+                                  <i class="icon htvbdh_dau-cong"></i>
+                                  <span>Thêm</span>
+                                </button>
                            </div>
+                           <!-- <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                                <div nz-col nzSpan="3">
+                                     <br />
+                                     <button type="button" class="btn btn-main">
+                                          Thêm
+                                     </button>
+                                </div>
+                           </div> -->
+
                            <nz-table nzBordered class="table__body">
                                 <thead>
                                      <tr>
@@ -124,10 +111,10 @@
                                                <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                     (ngModelChange)="updateSingleChecked()"></label>
                                           </td>
-                                          <td>{{data.ngayLap}}</td>
-                                          <td>{{data.nam}}</td>
+                                          <td>{{data.maDvi}}</td>
                                           <td>{{data.maKhoanMuc}}</td>
-                                          <td>{{data.phanBo}}</td>
+                                          <td>{{data.maLoaiChi}}</td>
+                                          <td>{{data.maLoaiChi}}</td>
                                           <td>{{ data.ngayGhiNhan}}</td>
                                           <td>{{ data.ghiChu }}</td>
                                      </tr>
@@ -173,13 +160,12 @@
                                      </tr>
                                 </tbody>
                            </nz-table>
-
-                           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                <div nz-col nzSpan="12">
-                                     <label class="search__label">Nơi nhận</label>
-                                     <input class="search__input" nz-input [(ngModel)]="noiNhan" />
-                                </div>
-                           </div>
+                          <div nz-col nzSpan="6">
+                            <label class="search__label">Nơi nhận</label>
+                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao">
+                              <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                            </nz-select>
+                          </div>
                       </nz-tab>
                  </nz-tabset>
 
