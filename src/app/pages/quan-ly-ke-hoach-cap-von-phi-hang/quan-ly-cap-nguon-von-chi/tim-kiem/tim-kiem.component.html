@@ -58,27 +58,28 @@
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
-              <th width="60px">
-                <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate">
-                </label>
+              <th width="1%">
+                STT
               </th>
-              <th width="130px">Ngày lập</th>
-              <th width="175px">Nơi lập</th>
-              <th width="175px">Số quyết định</th>
-              <th width="175px">Ngày quyết định</th>
-              <th width="175px">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="175px">Căn cứ hợp đồng</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th width="14.2%">Ngày lập</th>
+              <th width="14.2%" class="text-center">Nơi lập</th>
+              <th width="14.2%">Số quyết định</th>
+              <th width="14.2%">Ngày quyết định</th>
+              <th width="14.2%">Căn cứ chỉ tiêu kế hoạch</th>
+              <th width="14.2%">Căn cứ hợp đồng</th>
+              <th width="14.2%" class="text-center">Trạng thái</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachCongVan; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.ngayTao}}</td>
-              <td>{{item.namBcao}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
               <td class="text-center">{{item.tenDvi}}</td>
+              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td>{{item.namBcao}}</td>
+              <td></td> 
+              <td></td> 
+              <td class="text-center">{{item.tenTrangThai}}</td>
             </tr>
           </tbody>
         </nz-table>
