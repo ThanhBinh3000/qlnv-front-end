@@ -41,4 +41,9 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-donvi/danh-sach/tat-ca`;
     return this.httpClient.get<any>(url).toPromise();
   }
+
+  danhMucChungGetAll(loai: string): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/${loai}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
 }

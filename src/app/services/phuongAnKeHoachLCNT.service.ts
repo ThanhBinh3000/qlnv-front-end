@@ -18,4 +18,9 @@ export class PhuongAnKeHoachLCNTService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  danhSachChuaQuyetDinh(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/tra-cuu/ds-chua-qd`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }
