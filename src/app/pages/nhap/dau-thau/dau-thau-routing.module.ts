@@ -1,3 +1,5 @@
+import { ChiTietDonViThucHienQuyetDinhComponent } from './luong-thuc/chi-tiet-don-vi-thuc-hien-quyet-dinh/chi-tiet-don-vi-thuc-hien-quyet-dinh.component';
+import { ThongTinGiaoNhiemVuNhapXuatHangComponent } from './luong-thuc/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang.component';
 import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -20,6 +22,9 @@ import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong
 import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong-cuc/phuong-an-trinh-tong-cuc.component';
 import { HopDongMuaComponent } from './luong-thuc/hop-dong-mua/hop-dong-mua.component';
 import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './luong-thuc/quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { QuanLyPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
+import { ThemMoiPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
 
 const routes: Routes = [
   {
@@ -102,10 +107,30 @@ const routes: Routes = [
     path: 'hop-dong-mua/thong-tin-hop-dong-mua/:id',
     component: ThongTinHopDongMuaComponent,
   },
+  {
+    path: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
+    component: QuyetDinhGiaoNhiemVuNhapHangComponent,
+  },
+  {
+    path: 'quyet-dinh-giao-nhiem-vu-nhap-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/:id',
+    component: ThongTinGiaoNhiemVuNhapXuatHangComponent,
+  },
+  {
+    path: 'quyet-dinh-giao-nhiem-vu-nhap-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/:id/chi-tiet-don-vi-thuc-hien-quyet-dinh/:id',
+    component: ChiTietDonViThucHienQuyetDinhComponent,
+  },
+  {
+    path: 'quan-ly-phieu-nhap-kho',
+    component: QuanLyPhieuNhapKhoComponent,
+  },
+  {
+    path: 'quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/:id',
+    component: ThemMoiPhieuNhapKhoComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DauThauRoutingModule { }
+export class DauThauRoutingModule {}
