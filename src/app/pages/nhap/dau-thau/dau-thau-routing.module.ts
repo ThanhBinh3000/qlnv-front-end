@@ -25,6 +25,10 @@ import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua
 import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './luong-thuc/quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { QuanLyPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
 import { ThemMoiPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
+import { QuanLyBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-ban-nghiem-thu-ke-lot/quan-ly-bien-ban-nghiem-thu-ke-lot.component';
+import { ThemMoiBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot.component';
+import { QuanLyPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
+import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
 
 const routes: Routes = [
   {
@@ -126,6 +130,22 @@ const routes: Routes = [
   {
     path: 'quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/:id',
     component: ThemMoiPhieuNhapKhoComponent,
+  },
+  {
+    path: 'quan-ly-bien-ban-nghiem-thu-ke-lot',
+    component: QuanLyBienBanNghiemThuKeLotComponent,
+  },
+  {
+    path: 'quan-ly-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot/:id',
+    component: ThemMoiBienBanNghiemThuKeLotComponent,
+  },
+  {
+    path: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
+    component: QuanLyPhieuKiemTraChatLuongHangComponent,
+  },
+  {
+    path: 'quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/:id',
+    component: ThemMoiPhieuKiemTraChatLuongHangComponent,
   },
 ];
 

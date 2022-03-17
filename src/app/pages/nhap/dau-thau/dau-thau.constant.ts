@@ -148,13 +148,13 @@ export const LUONG_THUC_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'quan-ly-bien-ban-nghiem-thu-ke-lot',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
