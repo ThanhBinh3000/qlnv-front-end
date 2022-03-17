@@ -54,20 +54,19 @@
                 <nz-date-picker class="search__input" [(ngModel)]="chiTiet.ngayQd"></nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"></nz-form-label>
-                <button class="btn btn-tep btn-sm waves-effect waves-light">
-                  <i class="icon htvbdh_tcdt_tep"></i>
-                  <span>File đính kèm</span>
-                </button>
-              </nz-form-item>
-            </div>
             <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true">
                 Về việc
               </nz-form-label>
               <textarea nz-input [rows]="3" [(ngModel)]="chiTiet.veViec"></textarea>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzFileList]="fileList">
+                <button class="btn btn-tep btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_tep"></i>
+                  <span>File đính kèm</span>
+                </button>
+              </nz-upload>
             </div>
           </div>
         </nz-card>
@@ -102,60 +101,10 @@
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
                       Loại hàng DTQG
                     </nz-form-label>
-                    <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click" class="pd-0">
-                      <nz-input-group nzAddOnAfterIcon="folder-open" class="ma-hang-hoa">
-                        <input nz-input [(ngModel)]="selectHang.ten" [readonly]="true" />
-                      </nz-input-group>
-                    </nz-form-control>
-                    <!-- dropdown -->
-                    <nz-dropdown-menu #menu="nzDropdownMenu">
-                      <div class="dropdown__container">
-                        <h6 class="modal__title">Danh sách vật tư hàng hóa</h6>
-                        <p style="margin-bottom: 0px; font-weight: 500">Tìm kiếm</p>
-                        <div style="margin-bottom: 6px">
-                          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                            <input type="text" nz-input (input)="searchHangHoa($event)" />
-                          </nz-input-group>
-                          <ng-template #suffixIconButton>
-                            <button nz-button nzSearch>
-                              <i nz-icon nzType="search"></i>
-                            </button>
-                          </ng-template>
-                        </div>
-                        <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false"
-                          [nzShowPagination]="false" class="table__container-vat-tu">
-                          <thead>
-                            <tr>
-                              <th>Tên vật tư</th>
-                              <th>Mã vật tư</th>
-                              <th>Chọn</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <ng-container *ngFor="let data of expandTable.data, let i = index">
-                              <ng-container *ngFor="let item of mapOfExpandedData[data.id], let j = index">
-                                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                                  <td [nzIndentSize]="item.level! * 20"
-                                    [nzShowExpand]="!!item.child && item.child.length !== 0 || !item?.child"
-                                    [(nzExpand)]="item.expand" (nzExpandChange)="
-                                        collapse(mapOfExpandedData[data.id], item, $event)
-                                      ">
-                                    {{ item.ten }}
-                                  </td>
-                                  <td>{{ item.ma }}</td>
-                                  <td style="text-align: center">
-                                    <div *ngIf="item?.child?.length == 0 || !item?.child">
-                                      <i nz-icon nzType="plus" nzTheme="outline" nzColo nz-menu-item
-                                        (click)="selectHangHoa(item)"></i>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </ng-container>
-                            </ng-container>
-                          </tbody>
-                        </nz-table>
-                      </div>
-                    </nz-dropdown-menu>
+                    <nz-select [(ngModel)]="chiTiet.loaiVthh">
+                      <nz-option *ngFor="let p of listVatTuHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                      </nz-option>
+                    </nz-select>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="18">

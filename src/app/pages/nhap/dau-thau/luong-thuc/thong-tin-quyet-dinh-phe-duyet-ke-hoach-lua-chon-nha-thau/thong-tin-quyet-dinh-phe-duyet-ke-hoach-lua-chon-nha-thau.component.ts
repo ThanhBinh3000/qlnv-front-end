@@ -18,6 +18,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinhPheDuyetKHLCNT } from 'src/app/models/ThongTinQuyetDinhPheDuyetKHLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
@@ -45,6 +46,8 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   listNguonVon: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
+  listVatTuHangHoa: any[] = [];
+  fileList: NzUploadFile[] = [];
 
   constructor(
     private router: Router,
@@ -66,13 +69,16 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       this.chiTiet.children1 = [];
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       await Promise.all([
-        this.loadDanhMucHang(),
+        this.loaiHangDTQGGetAll(),
         this.phuongThucDauThauGetAll(),
         this.nguonVonGetAll(),
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
         this.loadChiTiet(this.id),
       ]);
+      if (this.id > 0) {
+        this.selectedPhuongAn.id = this.chiTiet.idPaHdr;
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -150,6 +156,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       this.chiTiet.tgianTbao = this.selectedPhuongAn.tgianTbao;
       this.chiTiet.veViec = this.selectedPhuongAn.veViec;
       this.selectHang.ten = this.selectedPhuongAn.tenLoaiVthh;
+      if (this.chiTiet.children && this.chiTiet.children.length > 0) {
+        for (let i = 0; i < this.chiTiet.children.length; i++) {
+
+        }
+      }
     }
   }
 
@@ -163,6 +174,14 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
         });
       }
     });
+  }
+
+  async loaiHangDTQGGetAll() {
+    this.listVatTuHangHoa = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVatTuHangHoa = res.data;
+    }
   }
 
   async phuongThucDauThauGetAll() {
