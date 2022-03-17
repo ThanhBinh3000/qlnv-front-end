@@ -168,6 +168,18 @@ export const LUONG_THUC_LIST: DauThau[] = [
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: 'phuong-an-trinh-tong-cuc',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quyết định giao nhiệm vụ nhập hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý phiếu nhập kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quan-ly-phieu-nhap-kho',
+  },
 ];
 
 export const VAT_TU_LIST: DauThau[] = [

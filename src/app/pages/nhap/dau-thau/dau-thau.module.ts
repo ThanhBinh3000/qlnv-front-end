@@ -1,3 +1,4 @@
+import { ChiTietDonViThucHienQuyetDinhComponent } from './luong-thuc/chi-tiet-don-vi-thuc-hien-quyet-dinh/chi-tiet-don-vi-thuc-hien-quyet-dinh.component';
 import { ThemMoiDeXuatKeHoachLuaChonNhaThauComponent } from './luong-thuc/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,6 +24,10 @@ import { ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent } from './luong
 import { PhuongAnTrinhTongCucComponent } from './luong-thuc/phuong-an-trinh-tong-cuc/phuong-an-trinh-tong-cuc.component';
 import { HopDongMuaComponent } from './luong-thuc/hop-dong-mua/hop-dong-mua.component';
 import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './luong-thuc/quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { ThongTinGiaoNhiemVuNhapXuatHangComponent } from './luong-thuc/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang.component';
+import { QuanLyPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
+import { ThemMoiPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,12 @@ import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua
     PhuongAnTrinhTongCucComponent,
     HopDongMuaComponent,
     ThongTinHopDongMuaComponent,
+    QuyetDinhGiaoNhiemVuNhapHangComponent,
+    ThongTinGiaoNhiemVuNhapXuatHangComponent,
+    ChiTietDonViThucHienQuyetDinhComponent,
+    QuanLyPhieuNhapKhoComponent,
+    ThemMoiPhieuNhapKhoComponent,
   ],
   imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
 })
-export class DauThauModule { }
+export class DauThauModule {}
