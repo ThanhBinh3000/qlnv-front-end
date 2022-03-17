@@ -89,6 +89,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
+  flagXuatFile:boolean = true;
+  checkxemkhaithac:any;
 
   constructor(
     private nguoiDungSerivce: UserService,
@@ -111,8 +113,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
     this.maLoaiBaocao = this.router.snapshot.paramMap.get('maLoaiBaocao');
     this.nam = this.router.snapshot.paramMap.get('nam');
     this.dotBaocao = this.router.snapshot.paramMap.get('dotBaocao');
+    
 
-    if (this.id != null) {
+    //xem chi tiet xuất file exel;
+    this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
+
+    if ( this.id!=null && this.checkxemkhaithac!=null) {
+      this.getDetailReportToExportFile();
+    }else if (this.id != null) {
       this.getDetailReport();
       // this.updateEditCache();
     }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
@@ -313,6 +321,60 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
       },
     );
   }
+
+  // call chi tiet bao cao
+  getDetailReportToExportFile() {
+    this.spinner.hide();
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.statusCode == 0) {
+          this.chiTietBcaos = data.data;
+          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao.forEach(e => {
+            if(e.maVtuParent=='1'){
+              this.lstCTietBCao1.push(e);
+            }else if(e.maVtuParent=='2'){
+              this.lstCTietBCao2.push(e);
+            }else{
+              this.lstCTietBCao3.push(e);
+            }
+          })
+          this.updateEditCache1();
+          this.updateEditCache2();
+          this.updateEditCache3();
+          this.lstFile = data.data.lstFile;
+          this.maLoaiBaocao = '91';
+          // set thong tin chung bao cao
+          this.ngaynhap = data.data.ngayTao;
+          this.nguoinhap = data.data.nguoiTao;
+          this.donvitao = data.data.maDvi;
+          this.mabaocao = data.data.maBcao;
+          this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
+          this.trangThaiBanGhi = data.data.trangThai;
+          
+          
+          this.status = true;
+          this.flagXuatFile = false;
+          
+          
+          // set list id file ban dau
+          this.lstFile.filter((item) => {
+            this.listIdFiles += item.id + ',';
+          });
+          // this.updateEditCache();
+        } else {
+          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.errorMessage = err.error.message;
+      },
+    );
+  }
+
 
   //lay ten don vi tạo
   getUnitName() {

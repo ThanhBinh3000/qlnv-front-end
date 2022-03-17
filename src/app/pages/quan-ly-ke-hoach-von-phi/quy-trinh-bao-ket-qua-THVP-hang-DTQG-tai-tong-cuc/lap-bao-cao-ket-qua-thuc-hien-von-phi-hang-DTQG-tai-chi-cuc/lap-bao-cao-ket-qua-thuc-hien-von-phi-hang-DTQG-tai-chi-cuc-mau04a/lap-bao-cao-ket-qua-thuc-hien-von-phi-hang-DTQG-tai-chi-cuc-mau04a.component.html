@@ -127,11 +127,11 @@
                   <th>Tổng Cộng</th>
                   <th>Thóc</th>
                   <th>Gạo</th>
-                  <th *ngFor="let colname of listColTrongDot">{{colname.colName}}</th>
+                  <th *ngFor="let colname of listColTrongDot" > <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="deleteCol(colname.id)">{{colname.colName}}</a> </th>
                   <th>Tổng Cộng</th>
                   <th>Thóc</th>
                   <th>Gạo</th>
-                  <th *ngFor="let colname of listColLuyke">{{colname.colName}}</th>
+                  <th *ngFor="let colname of listColLuyke"> <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="deleteCol(colname.id)">{{colname.colName}}</a></th>
                 </tr>
                 <tr>
                   <th>A</th>
@@ -147,7 +147,8 @@
                   <th></th>
                   <th></th>
                   <th></th>
-
+                  <th *ngFor="let colname of listColTrongDot"></th>
+                  <th *ngFor="let colname of listColTrongDot"></th>
                 </tr>
                 <tr>
                   <th></th>
@@ -163,7 +164,8 @@
                   <th></th>
                   <th></th>
                   <th></th>
-
+                  <th *ngFor="let colname of listColTrongDot"></th>
+                  <th *ngFor="let colname of listColTrongDot"></th>
                 </tr>
                 <tr>
                   <th></th>
@@ -179,7 +181,8 @@
                   <th></th>
                   <th></th>
                   <th></th>
-
+                  <th *ngFor="let colname of listColTrongDot"></th>
+                  <th *ngFor="let colname of listColTrongDot"></th>
                 </tr>
                 <tr>
                   <th></th>
@@ -196,14 +199,21 @@
                   <th></th>
                   <th></th>
                   <th></th>
-                  <th *ngIf="lenghtTh!=0"></th>
+                  <th *ngFor="let colname of listColTrongDot"></th>
+                  <th *ngFor="let colname of listColTrongDot"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[item.id].edit; else editTemplate">
                     <td>{{i+1}}</td>
-                    <td>{{item.maNdungChi}}</td>
+                    <td>
+                      <div *ngFor="let vt of listVattu">
+                        <div *ngIf="vt.id == item.maNdungChi">
+                          {{vt.tenDm}}
+                        </div>
+                      </div>
+                    </td>
                     <td>{{item.trongDotTcong}}</td>
                     <td>{{item.trongDotThoc}}</td>
                     <td>{{item.trongDotGao}}</td>
@@ -226,7 +236,7 @@
                     </ng-container>
                     <td>{{item.ghiChu}}</td>
                     <td [hidden]="status">
-                      <i class="fa fa-trash-o do" (click)="deleteById(item.id)"></i>
+                      <i class="fa fa-trash-o do" (click)="deleteByStt(item.id)"></i>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
@@ -262,7 +272,7 @@
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet;let i = index">
                       <ng-container *ngIf="kv.loaiMatHang == 0">
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="kv.sl" />
+                          <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number"/>
                         </td>
                       </ng-container>
                     </ng-container>
@@ -281,7 +291,7 @@
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet;let i = index">
                       <ng-container *ngIf="kv.loaiMatHang == 1">
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="kv.sl" />
+                          <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
                         </td>
                       </ng-container>
                     </ng-container>
@@ -289,9 +299,11 @@
                       <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu">
                     </td>
                     <td [hidden]="status">
-                      <i class="fa fa-trash-o do" (click)="deleteById(item.id)"></i>
+                      <i class="fa fa-trash-o do" ></i>
                     </td>
                     <td>
+                    
+                      <a (click)="saveEdit1(item.id, i)" class="save" [hidden]="statusButton">Save mức cha</a>
                       <a (click)="saveEdit(item.id)" class="save">Save</a>
                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(item.id)"
                         class="save">Cancel</a>

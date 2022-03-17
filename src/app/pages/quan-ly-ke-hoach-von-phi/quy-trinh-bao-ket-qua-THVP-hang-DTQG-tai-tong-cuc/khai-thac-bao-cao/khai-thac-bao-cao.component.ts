@@ -8,11 +8,11 @@ import { DanhMucService } from 'src/app/services/danhMuc.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 @Component({
-  selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
-  templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
-  styleUrls: ['./tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.scss']
+  selector: 'app-khai-thac-bao-cao',
+  templateUrl: './khai-thac-bao-cao.component.html',
+  styleUrls: ['./khai-thac-bao-cao.component.scss']
 })
-export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
+export class KhaiThacBaoCaoComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
@@ -42,10 +42,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 
   searchFilter = {
-    maDvi:'235',
     ngayTaoTu:'',
     ngayTaoDen:'',
-    trangThai:'',
     maBcao:'',
     maLoaiBcao:'',
     namBcao:'',
@@ -126,12 +124,13 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   
   timkiem(){
-    console.log(this.searchFilter);
+   
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo');
       return;
     }
     this.searchFilter.maLoaiBcao='91';
+    console.log(this.searchFilter);
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         this.notifi.success('Danh Sách Báo Cáo', 'Lấy thông tin thành công');
@@ -145,7 +144,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       console.log(res);
     })
   }
-
+ 
 
   //set url khi
   setUrl(lbaocao:any) {

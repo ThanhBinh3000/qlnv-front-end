@@ -22,6 +22,13 @@ const routes: Routes = [
       ).then((m) => m.TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGModule),
   },
   {
+    path: 'khai-thac-bao-cao',
+    loadChildren: () =>
+      import(
+        './khai-thac-bao-cao/khai-thac-bao-cao.module'
+      ).then((m) => m.KhaiThacBaoCaoModule),
+  },
+  {
     path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02',
     loadChildren: () =>
       import(
@@ -30,6 +37,13 @@ const routes: Routes = [
   },
   {
     path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/:id',
+    loadChildren: () =>
+      import(
+        './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau02/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau02.module'
+      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Module),
+  },
+  {
+    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/:id/:status',
     loadChildren: () =>
       import(
         './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau02/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau02.module'
@@ -51,6 +65,13 @@ const routes: Routes = [
   },
   {
     path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/:id',
+    loadChildren: () =>
+      import(
+        './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau03/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau03.module'
+      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Module),
+  },
+  {
+    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/:id/:status',
     loadChildren: () =>
       import(
         './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau03/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau03.module'
