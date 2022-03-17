@@ -381,7 +381,7 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzContent: MESSAGE.DELETE_CONFIRM,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -389,10 +389,20 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          // this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-          //   await this.search();
-          //   this.spinner.hide();
-          // });
+          let body = {
+            "id": item.id,
+            "maDvi": null
+          }
+          this.quyetDinhPheDuyetKeHoachLCNTService.xoa(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.error(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         }
         catch (e) {
           console.log('error: ', e)

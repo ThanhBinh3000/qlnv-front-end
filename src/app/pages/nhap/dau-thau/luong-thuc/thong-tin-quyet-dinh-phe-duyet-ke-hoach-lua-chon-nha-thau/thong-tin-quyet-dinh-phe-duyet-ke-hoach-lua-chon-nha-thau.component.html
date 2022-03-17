@@ -61,11 +61,27 @@
               <textarea nz-input [rows]="3" [(ngModel)]="chiTiet.veViec"></textarea>
             </div>
             <div nz-col [nzSpan]="6">
-              <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzFileList]="fileList">
+              <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
+                (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"
+                nzAccept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                 <button class="btn btn-tep btn-sm waves-effect waves-light">
                   <i class="icon htvbdh_tcdt_tep"></i>
                   <span>File đính kèm</span>
                 </button>
+                <ng-template #fileListTpl let-list>
+                  <nz-list>
+                    <nz-list-item *ngFor="let item of list">
+                      <div class="trai">
+                        {{ item.name }}
+                      </div>
+                      <div class="phai">
+                        <a (click)="xoaFile(item)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </div>
+                    </nz-list-item>
+                  </nz-list>
+                </ng-template>
               </nz-upload>
             </div>
           </div>
