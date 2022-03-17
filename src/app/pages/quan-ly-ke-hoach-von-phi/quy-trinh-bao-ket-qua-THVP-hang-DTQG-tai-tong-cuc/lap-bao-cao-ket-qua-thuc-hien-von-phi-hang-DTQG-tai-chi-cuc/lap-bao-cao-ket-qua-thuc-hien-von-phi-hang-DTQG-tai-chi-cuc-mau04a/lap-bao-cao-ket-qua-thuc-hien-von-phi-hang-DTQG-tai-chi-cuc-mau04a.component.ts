@@ -300,7 +300,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     //   e.listCtiet.push(objLuyke);
     // })
     this.addColLL(this.chiTietBcaos, objTrongdot, objLuyke);
-
     this.updateLstCTietBCao();
     this.cols++;
     this.lenghtTh = this.cols;
@@ -346,7 +345,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
     let item = {
       id: uuid.v4(),
-      stt: 0,
+      stt: "",
       maNdungChi: 0,
       maNdungChiParent: 0,
       maNdungChiChild: 0,
@@ -693,11 +692,31 @@ updateSingleChecked(): void {
 
   // lưu cấp con
   saveEdit2(id: string, index: number): void {
-    var item: linkList ;
-    this.tranferData(item,this.editCache[id].data);
-    item.vt =0;
-    item.checked=false;
-    item.next=[];
+    var item: linkList ={
+      id:0,
+      vt:0,
+      stt:this.editCache[id].data.stt,
+      maNdungChi:this.editCache[id].data.maNdungChi,
+      maNdungChiParent:this.editCache[id].data.maNdungChiParent,
+      maNdungChiChild:this.editCache[id].data.maNdungChiChild,
+      trongDotTcong:this.editCache[id].data.trongDotTcong,
+      trongDotThoc:this.editCache[id].data.trongDotThoc,
+      trongDotGao:this.editCache[id].data.trongDotGao,
+      luyKeTcong:this.editCache[id].data.luyKeTcong,
+      luyKeThoc:this.editCache[id].data.luyKeThoc,
+      luyKeGao:this.editCache[id].data.luyKeGao,
+      listCtiet:this.editCache[id].data.listCtiet,
+      parentId:this.editCache[id].data.parentId,
+      ghiChu:this.editCache[id].data.ghiChu,
+      next: [],
+      checked:false,
+    }
+
+    
+    // this.tranferData(item,this.editCache[id].data);
+    // item.vt =0;
+    // item.checked=false;
+    // item.next=[];
   
     this.kt = false;
     this.addLess(this.chiTietBcaos, item, index);
