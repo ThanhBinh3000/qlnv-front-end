@@ -491,29 +491,24 @@
                   <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
                   <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
                 </tr>
-                <ng-container *ngFor="let itemNhomVatTu of itemVatTu.nhomVatTuThietBi">
-                  <tr class="table__header-vat-tu">
-                    <td>{{itemNhomVatTu.tenVatTuCha}}</td>
-                    <td>{{itemNhomVatTu.donViTinh}}</td>
-                    <td>{{itemNhomVatTu.tongNhap}}</td>
-                    <td>{{itemNhomVatTu.tongCacNamTruoc}}</td>
-                    <td>{{itemNhomVatTu.cacNamTruoc[0].soLuong}}</td>
-                    <td>{{itemNhomVatTu.cacNamTruoc[1].soLuong}}</td>
-                    <td>{{itemNhomVatTu.cacNamTruoc[2].soLuong}}</td>
-                    <td>{{itemNhomVatTu.nhapTrongNam}}</td>
+                <ng-container *ngFor="let item of itemVatTu.listDisplay">
+                  <tr
+                    [ngClass]="item.level == 0 ? 'table__header-vat-tu' : ((item.level > 0 && item.display) ? 'show-row' : 'hide-row')">
+                    <td [nzIndentSize]="item.level * 20">
+                      <a (click)="displayChild(item, itemVatTu, true)"
+                        *ngIf="item.level > 0 && item.hasChild && !item.expand">+</a>
+                      <a (click)="displayChild(item, itemVatTu, false)"
+                        *ngIf="item.level > 0 && item.hasChild && item.expand">-</a>
+                      {{item.tenVatTu}}
+                    </td>
+                    <td>{{item.donViTinh}}</td>
+                    <td>{{item.tongNhap}}</td>
+                    <td>{{item.tongCacNamTruoc}}</td>
+                    <td>{{item.cacNamTruoc[0].soLuong}}</td>
+                    <td>{{item.cacNamTruoc[1].soLuong}}</td>
+                    <td>{{item.cacNamTruoc[2].soLuong}}</td>
+                    <td>{{item.nhapTrongNam}}</td>
                   </tr>
-                  <ng-container *ngFor="let itemVatTuThietBi of itemNhomVatTu.vatTuThietBi">
-                    <tr>
-                      <td>+ {{itemVatTuThietBi.tenVatTu}}</td>
-                      <td>{{itemVatTuThietBi.donViTinh}}</td>
-                      <td>{{itemVatTuThietBi.tongNhap}}</td>
-                      <td>{{itemVatTuThietBi.tongCacNamTruoc}}</td>
-                      <td>{{itemVatTuThietBi.cacNamTruoc[0].soLuong}}</td>
-                      <td>{{itemVatTuThietBi.cacNamTruoc[1].soLuong}}</td>
-                      <td>{{itemVatTuThietBi.cacNamTruoc[2].soLuong}}</td>
-                      <td>{{itemVatTuThietBi.nhapTrongNam}}</td>
-                    </tr>
-                  </ng-container>
                 </ng-container>
               </ng-container>
             </tbody>

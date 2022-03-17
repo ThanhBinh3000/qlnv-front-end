@@ -111,7 +111,7 @@ export const LUONG_THUC_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'hop-dong-mua',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',

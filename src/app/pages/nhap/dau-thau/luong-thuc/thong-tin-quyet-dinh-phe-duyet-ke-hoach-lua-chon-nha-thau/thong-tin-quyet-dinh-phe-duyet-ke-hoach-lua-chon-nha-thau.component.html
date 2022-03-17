@@ -33,7 +33,15 @@
     <div class="contentDetail">
       <div class="main-content thong-tin-de-xuat-khlcnt">
         <nz-card nzTitle="Thông tin quản lý quyết định" class="mt16 flex-card p-lr16">
-          <div nz-row [nzGutter]="[16, 12]">
+          <div nz-row [nzGutter]="[16, 6]">
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <input nz-input [readonly]="true" [(ngModel)]="selectedCanCu.soQuyetDinh" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số quyết định </nz-form-label>
@@ -68,8 +76,8 @@
             <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương án trình tổng cục </nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input nz-input [(ngModel)]="chiTiet.veViec" [readonly]="true" />
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhuongAnTrinhTongCuc()">
+                  <input nz-input [(ngModel)]="selectedPhuongAn.id" [readonly]="true" />
                 </nz-input-group>
               </nz-form-item>
             </div>
@@ -77,7 +85,7 @@
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="24">
               <div class="cangiua group-button-search">
-                <button class="btn btn-main btn-sm waves-effect waves-light" (click)="layThongTinPhuongAn('0')">
+                <button class="btn btn-main btn-sm waves-effect waves-light" (click)="layThongTinPhuongAn()">
                   <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
                   <span>Lấy thông tin từ phương án</span>
                 </button>
@@ -91,7 +99,7 @@
               <div nz-row [nzGutter]="[16, 6]">
                 <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
+                    <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
                       Loại hàng DTQG
                     </nz-form-label>
                     <nz-form-control nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click" class="pd-0">
@@ -199,7 +207,7 @@
                     <nz-form-label [nzNoColon]="true">
                       Ngày phát hành HSMT duyệt
                     </nz-form-label>
-                    <nz-date-picker class="search__input"></nz-date-picker>
+                    <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianTbao"></nz-date-picker>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -207,7 +215,7 @@
                     <nz-form-label [nzNoColon]="true">
                       Thời điểm mở HSKT duyệt
                     </nz-form-label>
-                    <nz-date-picker class="search__input"></nz-date-picker>
+                    <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianMthau"></nz-date-picker>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -215,7 +223,7 @@
                     <nz-form-label [nzNoColon]="true">
                       Thời điểm đóng thầu duyệt
                     </nz-form-label>
-                    <nz-date-picker class="search__input"></nz-date-picker>
+                    <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianDthau"></nz-date-picker>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -223,7 +231,7 @@
                     <nz-form-label [nzNoColon]="true">
                       Hoàn thành nhập gạo duyệt
                     </nz-form-label>
-                    <nz-date-picker class="search__input"></nz-date-picker>
+                    <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianNhang"></nz-date-picker>
                   </nz-form-item>
                 </div>
               </div>
@@ -243,7 +251,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let data of editRowTable.data; let i = index">
+                    <tr *ngFor="let data of editRowTable.data; let i = index" (click)="displayDialogPhuLuc(data)">
                       <td class="text-center">{{i+1}}</td>
                       <td>{{ data.soGthau }}</td>
                       <td>{{ data.tenDvi }}</td>
@@ -261,7 +269,8 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Ghi chú
             </nz-form-label>
-            <textarea nz-input [rows]="3" [(ngModel)]="chiTiet.ghiChu"></textarea>
+            <textarea nz-input [rows]="3" [(ngModel)]="chiTiet.ghiChu"
+              (ngModelChange)="validateGhiChu($event)"></textarea>
             <span class="error-text" *ngIf="errorGhiChu">{{errorInputRequired}}</span>
           </nz-form-item>
         </div>
