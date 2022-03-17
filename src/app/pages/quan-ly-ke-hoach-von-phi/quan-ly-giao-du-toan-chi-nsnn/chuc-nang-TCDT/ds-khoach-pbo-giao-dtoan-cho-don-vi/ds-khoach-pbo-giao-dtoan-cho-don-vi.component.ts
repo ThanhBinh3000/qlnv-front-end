@@ -1,19 +1,20 @@
+
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucService } from '../../../../services/danhMuc.service';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-
+import { DanhMucService } from '../../../../../services/danhMuc.service';
+import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 
 
 @Component({
-  selector: 'app-tim-kiem',
-  templateUrl: './tim-kiem.component.html',
-  styleUrls: ['./tim-kiem.component.scss'],
+  selector: 'app-ds-khoach-pbo-giao-dtoan-cho-don-vi',
+  templateUrl: './ds-khoach-pbo-giao-dtoan-cho-don-vi.component.html',
+  styleUrls: ['./ds-khoach-pbo-giao-dtoan-cho-don-vi.component.scss']
 })
-export class TimKiemComponent implements OnInit {
+
+export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
@@ -22,6 +23,9 @@ export class TimKiemComponent implements OnInit {
   totalPages = 0;
   errorMessage = "";
   url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  lyDoTuChoi!: any;
+  allChecked = false;                         // check all checkbox
+  indeterminate = true;
 
   // phan cu cua teca
   visible = false;
@@ -45,6 +49,8 @@ export class TimKiemComponent implements OnInit {
     noiQd: "",
     soQd: "",
     vanBan: "",
+    nam: "",
+    maDvi: "",
   };
   pages = {
     size: 10,
@@ -61,22 +67,6 @@ export class TimKiemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
-      }
-    );
-
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -94,20 +84,32 @@ export class TimKiemComponent implements OnInit {
 
   redirectThongTinTimKiem() {
     this.router.navigate([
-      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/lap-du-toan-chi-ngan-sach-cho-don-vi',
       0,
     ]);
   }
 
   redirectSuaThongTinTimKiem(id) {
     this.router.navigate([
-      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
+      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/lap-du-toan-chi-ngan-sach-cho-don-vi',
       id,
     ]);
   }
 
   redirectQLGiaoDTChi() {
     this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn']);
+  }
+
+  updateSingleChecked(): void {
+    if (this.danhSachBaoCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.danhSachBaoCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
+      this.indeterminate = true;
+    }
   }
 
   //search list bao cao theo tieu chi
@@ -122,11 +124,13 @@ export class TimKiemComponent implements OnInit {
       },
       soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: ""
+      trangThai: "",
+      maDvi: this.searchFilter.maDvi,
+
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

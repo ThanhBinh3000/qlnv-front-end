@@ -5,6 +5,18 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Trình duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </button>
         <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
@@ -18,40 +30,46 @@
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="12">
-            <label class="search__label">Số quyết định</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
-          </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày</label>
+            <label class="search__label">Năm</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+          </div>
+          <div nz-col nzSpan="3"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày lập từ</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
           </div>
+          <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Đơn vị ra quyết định</label>
+
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đơn vị lập</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.noiQd">
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="24">
-            <label class="search__label">Về việc</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.vanBan" />
+          <div nz-col nzSpan="3"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số quyết định BTC</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH GIAO QUẢN LÝ DỰ TOÁN CHI TẠI TC-DTNN" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH KẾ HOẠCH PHÂN BỐ, GIAO DỰ TOÁN CHO ĐƠN VỊ" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
-              <th width="60px">STT</th>
-              <th width="130px">Số quyết định</th>
-              <th width="175px">Ngày quyết định</th>
-              <th width="175px">Nơi ra quyết định</th>
-              <th width="175px" class="text-center">Về việc</th>
+              <th width="60px" class="text-center">Chọn</th>
+              <th width="130px" class="text-center">Số quyết định</th>
+              <th width="175px" class="text-center">Ngày quyết định</th>
+              <th width="175px" class="text-center">Năm</th>
+              <th width="175px" class="text-center">Ngày lập</th>
+              <th width="175px" class="text-center">Đơn vị lập</th>
+              <th width="175px" class="text-center">Trạng thái</th>
               <th></th>
               <th></th>
               <th></th>
@@ -59,11 +77,17 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.soQd }}</td>
-              <td>{{item.ngayQd}}</td>
-              <td>{{item.noiQd}}</td>
-              <td class="text-center">{{item.vanBan}}</td>
+              <td style="display: none">{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td class="text-center">
+                <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td class="text-center">{{ item.soQd }}</td>
+              <td class="text-center">{{item.ngayQd}}</td>
+              <td class="text-center">{{item.nam}}</td>
+              <td class="text-center">{{item.tuNgay}}</td>
+              <td class="text-center">{{item.maDvi}}</td>
+              <td class="text-center">{{item.trangThai}}</td>
               <td class="text-center">
                 <a routerLink="../{{url}}/{{ item.id }}">
                   xem
@@ -95,11 +119,19 @@
             </div>
           </div>
         </div>
+        <div nz-col nzSpan="24">
+          <label class="search__label">Lý do từ chối</label>
+          <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
+        </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh">
+        <button type="button" class="btn btn-sub">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Xuất</span>
+        </button>
+        <button type="button" class="btn btn-main" routerLink="../lap-du-toan-chi-ngan-sach-cho-don-vi">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
+          <span>Tạo mới</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="redirectQLGiaoDTChi()">
           <i nz-icon nzType="close"></i>
