@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -417,9 +418,23 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        // this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList().subscribe(
-        //   blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
-        // );
+        let body = {
+          "denNgayQd": this.endValue
+            ? dayjs(this.endValue).format('DD/MM/YYYY')
+            : null,
+          "loaiVthh": this.selectHang.ma ?? "00",
+          "namKhoach": this.searchFilter.namKeHoach,
+          "paggingReq": null,
+          "soQd": this.searchFilter.soQD,
+          "str": null,
+          "trangThai": "01",
+          "tuNgayQd": this.startValue
+            ? dayjs(this.startValue).format('DD/MM/YYYY')
+            : null,
+        }
+        this.quyetDinhPheDuyetKeHoachLCNTService.exportList(body).subscribe(
+          blob => saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+        );
         this.spinner.hide();
       }
       catch (e) {

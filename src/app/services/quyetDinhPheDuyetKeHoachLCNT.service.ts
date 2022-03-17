@@ -43,4 +43,9 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/xoa`
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/ket-xuat`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
