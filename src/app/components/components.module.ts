@@ -203,4 +203,4 @@ import { DialogTuChoiComponent } from './dialog/dialog-tu-choi/dialog-tu-choi.co
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

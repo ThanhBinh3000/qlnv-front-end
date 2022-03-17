@@ -422,7 +422,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   loadThongTinChiTieuKeHoachNam(id: number) {
     this.chiTieuKeHoachNamService
       .loadThongTinChiTieuKeHoachNam(id)
-      .subscribe((res) => {
+      .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
           console.log(this.thongTinChiTieuKeHoachNam);

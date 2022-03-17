@@ -37,9 +37,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
-  loadThongTinChiTieuKeHoachNam(id: number) {
+  loadThongTinChiTieuKeHoachNam(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
-    return this.httpClient.get<any>(url_);
+    return this.httpClient.get<any>(url_).toPromise();
   }
 
   importFile(body: any): Promise<any> {
