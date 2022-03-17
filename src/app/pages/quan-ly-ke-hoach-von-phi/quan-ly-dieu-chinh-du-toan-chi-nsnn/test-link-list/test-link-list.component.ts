@@ -25,6 +25,7 @@ export class ItemData {
 export class LinkList {
   abc!: number;
   vt!: number;
+  checked!: boolean;
   next: LinkList[];
 }
 
@@ -39,12 +40,15 @@ export class TestLinkListComponent implements OnInit {
   chiTietBcaos: LinkList = {
     vt: 0,
     abc: 0,
+    checked: false,
     next: [],
   };
 
   vt: number;
   stt: number;
   kt: boolean;
+  status: boolean = false;
+  disable: boolean = false;
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -67,11 +71,13 @@ export class TestLinkListComponent implements OnInit {
     let value = {
       abc: 0,
       vt: 1,
+      checked: false,
       next: [],
     }
     let value2 = {
       abc: 1,
       vt: 2,
+      checked: false,
       next: [],
     }
     this.chiTietBcaos.next.push(value);
@@ -92,12 +98,12 @@ export class TestLinkListComponent implements OnInit {
     }
     if (data.next.length == 0) return;
     for (var i = 0; i < data.next.length; i++) {
-      if (index == 0){
+      if (index == 0) {
         this.duyet(data.next[i], str, i + 1);
       } else {
-        this.duyet(data.next[i], str + index.toString() + "." , i + 1);
+        this.duyet(data.next[i], str + index.toString() + ".", i + 1);
       }
-      
+
     }
   }
 
@@ -127,18 +133,21 @@ export class TestLinkListComponent implements OnInit {
       checked: false,
     }
 
+
     this.lstCTietBCao.splice(id, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
     };
+    this.status = false;
+    this.disable = true;
   }
 
-  updateSTT(data: LinkList){
-    if (data.next.length == 0){
+  updateSTT(data: LinkList) {
+    if (data.next.length == 0) {
       return;
     }
-    data.next.forEach(item =>{
+    data.next.forEach(item => {
       item.vt = this.stt + 1;
       this.stt += 1;
       this.updateSTT(item);
@@ -152,10 +161,10 @@ export class TestLinkListComponent implements OnInit {
     this.updateLstCTietBCao();
   }
 
-  delete(data:LinkList, idx: number){
+  delete(data: LinkList, idx: number) {
     if (data.next.length == 0) return;
     var index = data.next.findIndex(item => item.vt == idx);
-    if (index == -1){
+    if (index == -1) {
       data.next.forEach(item => {
         this.delete(item, idx);
       })
@@ -166,63 +175,72 @@ export class TestLinkListComponent implements OnInit {
     }
   }
 
+  deleteSelected() {
+    this.deleteAllSelected(this.chiTietBcaos);
+    this.updateSTT(this.chiTietBcaos);
+    this.updateLstCTietBCao();
+    this.allChecked = false;
+    this.chiTietBcaos.checked = false;
+  }
+
+  deleteAllSelected(data: LinkList) {
+    if (data.next.length == 0) {
+      return;
+    }
+    data.next = data.next.filter(item => item.checked == false);
+    this.stt = 0;
+
+    data.next.forEach(item => this.deleteAllSelected(item));
+  }
+
   // click o checkbox all
   updateAllChecked(): void {
-    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
-        ...item,
-        checked: true
-      }));
-    } else {
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-        ...item,
-        checked: false
-      }));
-    }
+    this.subUpdateChecked(this.chiTietBcaos, this.allChecked);
   }
 
-  updateChecked(){
-    let index: number[] = [];
-    for (var i = 0; i < this.lstCTietBCao.length; i++){
-      if (this.lstCTietBCao[i].checked) index.push(i+1);
-    }
-    this.updateCheckedLL(this.chiTietBcaos, index);
-
+  updateChecked() {
+    this.updateCheckedLL(this.chiTietBcaos);
   }
 
-  updateCheckedLL(data: LinkList, index: number[]){
+  updateCheckedLL(data: LinkList) {
+    if (data.vt != 0) {
+      if (data.checked != this.lstCTietBCao[data.vt - 1].checked) {
+        this.subUpdateChecked(data, !data.checked);
+        return;
+      }
+    }
+
     if (data.next.length == 0) return;
-    data.next.forEach(item => {
-      this.updateCheckedLL(item, index);
-    })
     var kt = true;
     data.next.forEach(item => {
-      if (!index.includes(item.vt)) kt = false;
+      this.updateCheckedLL(item);
+      if (!item.checked) kt = false;
     })
+
     if (kt) {
-      this.lstCTietBCao[data.vt-1].checked = true;
+      data.checked = true;
+      this.lstCTietBCao[data.vt - 1].checked = true;
     } else {
-      this.lstCTietBCao[data.vt-1].checked = false;
+      data.checked = false;
+      this.lstCTietBCao[data.vt - 1].checked = false;
     }
   }
-  // click o checkbox single
-  updateSingleChecked(): void {
-    if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-      this.indeterminate = true;
-    }
+
+  subUpdateChecked(data: LinkList, kt: boolean) {
+    data.checked = kt;
+    if (data.vt > 0)
+      this.lstCTietBCao[data.vt - 1].checked = kt;
+    if (data.next.length == 0) return;
+    data.next.forEach(item => this.subUpdateChecked(item, kt));
   }
+
 
 
   // start edit
   startEdit(id: string): void {
     this.editCache[id].edit = true;
+    this.status = true;
+    this.disable = true;
   }
 
   // huy thay doi
@@ -234,11 +252,33 @@ export class TestLinkListComponent implements OnInit {
     };
   }
 
+  saveEdit(id: string): void {
+    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.saveEditLL(this.chiTietBcaos, index + 1);
+    this.disable = false;
+  }
+
+  saveEditLL(data: LinkList, idx: number) {
+    if (data.vt == idx) {
+      data.abc = this.lstCTietBCao[idx - 1].abc;
+      return;
+    }
+    if (data.next.length == 0) return;
+    if (data.vt > idx) return;
+    data.next.forEach(item => {
+      this.saveEditLL(item, idx);
+    })
+  }
+
   // luu thay doi
   saveEdit1(id: string, index: number): void {
     var item: LinkList = {
       abc: this.editCache[id].data.abc,
       vt: 0,
+      checked: false,
       next: [],
     }
     this.kt = false;
@@ -250,6 +290,7 @@ export class TestLinkListComponent implements OnInit {
     this.updateSTT(this.chiTietBcaos);
     console.log(this.chiTietBcaos);
     this.updateLstCTietBCao();
+    this.disable = false;
   }
 
   // luu thay doi
@@ -257,6 +298,7 @@ export class TestLinkListComponent implements OnInit {
     var item: LinkList = {
       abc: this.editCache[id].data.abc,
       vt: 0,
+      checked: false,
       next: [],
     }
     this.kt = false;
@@ -268,28 +310,29 @@ export class TestLinkListComponent implements OnInit {
     this.updateSTT(this.chiTietBcaos);
     console.log(this.chiTietBcaos);
     this.updateLstCTietBCao();
+    this.disable = false;
   }
 
-  
+
 
   addEqual(data: LinkList, value: LinkList, idx: number) {
     if (data.next.length == 0) return;
     var index = data.next.findIndex(item => item.vt == idx);
-    if (index == -1){
+    if (index == -1) {
       data.next.forEach(item => {
         this.addEqual(item, value, idx);
       })
     } else {
       this.kt = true;
-      data.next.splice(index+1, 0, value);
+      data.next.splice(index + 1, 0, value);
       return;
     }
   }
-   
-  addEqual1(data: LinkList, value: LinkList){
-    var idx = data.next.length-1;
-    if (data.next[idx].next.length != 0){
-     this.addEqual1(data.next[idx], value);
+
+  addEqual1(data: LinkList, value: LinkList) {
+    var idx = data.next.length - 1;
+    if (data.next[idx].next.length != 0) {
+      this.addEqual1(data.next[idx], value);
     } else {
       data.next.push(value);
       return;
@@ -299,7 +342,7 @@ export class TestLinkListComponent implements OnInit {
   addLess(data: LinkList, value: LinkList, idx: number) {
     if (data.next.length == 0) return;
     var index = data.next.findIndex(item => item.vt == idx);
-    if (index == -1){
+    if (index == -1) {
       data.next.forEach(item => {
         this.addLess(item, value, idx);
       })
@@ -310,12 +353,12 @@ export class TestLinkListComponent implements OnInit {
     }
   }
 
-  addLess1(data: LinkList, value: LinkList){
-    if (data.next.length == 0){
+  addLess1(data: LinkList, value: LinkList) {
+    if (data.next.length == 0) {
       data.next.push(value);
       return;
     }
-    this.addLess1(data.next[data.next.length-1], value);
+    this.addLess1(data.next[data.next.length - 1], value);
   }
 
 }
