@@ -435,7 +435,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
-                    <ng-container *ngIf="!dsGoiThauClone[i].isEdit; else editTemplate">
+                    <ng-container *ngIf="!dsGoiThauClone[i]?.isEdit; else editTemplate">
                       <td>
                         {{i+1}}
                       </td>
@@ -449,7 +449,7 @@
                         <a (click)="startEdit(i)">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="deleteRow(i)">
+                        <a (click)="deleteRow(data.idVirtual)">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>

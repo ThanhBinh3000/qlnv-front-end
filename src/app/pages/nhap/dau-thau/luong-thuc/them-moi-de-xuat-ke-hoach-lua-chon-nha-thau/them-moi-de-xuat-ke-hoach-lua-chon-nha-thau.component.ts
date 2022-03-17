@@ -96,20 +96,12 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     );
     this.dsGoiThauClone[index].isEdit = false;
   }
-  updateEditCache(): void {
-    this.chiTietThongTinDXKHLCNT.children2.forEach((item) => {
-      this.editCache[item.idVirtual] = {
-        edit: false,
-        data: { ...item },
-      };
-    });
-    console.log('updateEditCache', this.editCache);
-  }
-
-  deleteRow(index: number): void {
-    this.dsGoiThauClone.splice(index, 1);
-    Object.assign(this.chiTietThongTinDXKHLCNT.children2, this.dsGoiThauClone);
-    console.log('goi thau delete: ', this.dsGoiThauClone);
+  deleteRow(idVirtual: number): void {
+    this.chiTietThongTinDXKHLCNT.children2 =
+      this.chiTietThongTinDXKHLCNT.children2.filter(
+        (d) => d.idVirtual !== idVirtual,
+      );
+    Object.assign(this.dsGoiThauClone, this.chiTietThongTinDXKHLCNT.children2);
   }
 
   ngOnInit(): void {
@@ -295,8 +287,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
           });
           this.dsGoiThauClone = this.chiTietThongTinDXKHLCNT.children2;
           console.log(this.dsGoiThauClone);
-
-          this.updateEditCache();
         }
       })
       .catch(() => {
@@ -397,9 +387,11 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       });
   }
   downloadFile() {
-    this.uploadFileService.downloadFile('Khaithac.docx').subscribe((blob) => {
-      saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.docx');
-    });
+    this.uploadFileService
+      .downloadFile('as/11123/Book1.xlsx')
+      .subscribe((blob) => {
+        saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx');
+      });
   }
   thanhTien: number = 0;
   calclatorThanhTien() {
