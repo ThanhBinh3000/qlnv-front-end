@@ -18,7 +18,9 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinhPheDuyetKHLCNT } from 'src/app/models/ThongTinQuyetDinhPheDuyetKHLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
+import { environment } from 'src/environments/environment';
+import { ChiTietFile } from 'src/app/models/ChiTietFile';
 
 @Component({
   selector: 'thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
@@ -47,7 +49,8 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listVatTuHangHoa: any[] = [];
-  fileList: NzUploadFile[] = [];
+  fileList: any[] = [];
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`
 
   constructor(
     private router: Router,
@@ -76,9 +79,6 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
         this.loaiHopDongGetAll(),
         this.loadChiTiet(this.id),
       ]);
-      if (this.id > 0) {
-        this.selectedPhuongAn.id = this.chiTiet.idPaHdr;
-      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -157,11 +157,60 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       this.chiTiet.veViec = this.selectedPhuongAn.veViec;
       this.selectHang.ten = this.selectedPhuongAn.tenLoaiVthh;
       if (this.chiTiet.children && this.chiTiet.children.length > 0) {
-        for (let i = 0; i < this.chiTiet.children.length; i++) {
-
-        }
+        this.getListFile(this.chiTiet.children);
       }
     }
+  }
+
+  getListFile(data: any) {
+    if (!this.fileList) {
+      this.fileList = [];
+    }
+    if (data && data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        let item = {
+          uid: 'fileOld_' + i.toString(),
+          name: data[i].fileName,
+          status: 'done',
+          url: data[i].fileUrl,
+          size: data[i].fileSize ? parseFloat(data[i].fileSize.replace('KB', '')) * 1024 : 0,
+          id: data[i].id,
+        };
+        this.fileList.push(item);
+      }
+    }
+  }
+
+  handleChange(info: NzUploadChangeParam): void {
+    if (info.file.status === 'done') {
+      if (info.file.response) {
+        let fileList = [...info.fileList];
+        fileList = fileList.map(file => {
+          if (file.response) {
+            file.url = file.response.url;
+          }
+          return file;
+        });
+        this.fileList = [];
+        for (let i = 0; i < fileList.length; i++) {
+          let item = {
+            uid: fileList[i].uid ?? 'fileNew_' + i.toString(),
+            name: fileList[i].name,
+            status: 'done',
+            url: fileList[i].url,
+            size: fileList[i].size,
+            id: fileList[i].id,
+          };
+          this.fileList.push(item);
+        }
+      }
+    } else if (info.file.status === 'error') {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  xoaFile(data) {
+    this.fileList = this.fileList.filter(x => x.uid != data.uid);
   }
 
   loadDanhMucHang() {
@@ -284,6 +333,26 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.chiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         this.chiTiet = res.data;
+        if (this.id > 0) {
+          this.selectedPhuongAn.id = this.chiTiet.idPaHdr;
+          this.selectedPhuongAn.children = this.chiTiet.children;
+          this.selectedPhuongAn.children1 = this.chiTiet.children1;
+          this.selectedPhuongAn.hthucLcnt = this.chiTiet.hthucLcnt;
+          this.selectedPhuongAn.loaiHdong = this.chiTiet.loaiHdong;
+          this.selectedPhuongAn.loaiVthh = this.chiTiet.loaiVthh;
+          this.selectedPhuongAn.namKhoach = this.chiTiet.namKhoach;
+          this.selectedPhuongAn.ngayTao = this.chiTiet.ngayTao;
+          this.selectedPhuongAn.nguoiTao = this.chiTiet.nguoiTao;
+          this.selectedPhuongAn.nguonVon = this.chiTiet.nguonVon;
+          this.selectedPhuongAn.pthucLcnt = this.chiTiet.pthucLcnt;
+          this.selectedPhuongAn.tgianDthau = this.chiTiet.tgianDthau;
+          this.selectedPhuongAn.tgianMthau = this.chiTiet.tgianMthau;
+          this.selectedPhuongAn.tgianNhang = this.chiTiet.tgianNhang;
+          this.selectedPhuongAn.tgianTbao = this.chiTiet.tgianTbao;
+          this.selectedPhuongAn.veViec = this.chiTiet.veViec;
+          this.selectedPhuongAn.tenLoaiVthh = this.selectHang.ten;
+          this.getListFile(this.chiTiet.children);
+        }
       }
     }
   }
@@ -305,6 +374,19 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
             detail[i].detail = detailChild;
           }
         }
+        this.chiTiet.children = [];
+        if (this.fileList && this.fileList.length > 0) {
+          for (let i = 0; i < this.fileList.length; i++) {
+            let item = new ChiTietFile();
+            item.dataType = null;
+            item.id = this.fileList[i].id ?? 0;
+            item.fileName = this.fileList[i].name;
+            item.fileSize = ((this.fileList[i].size ?? 0) / 1024).toString() + 'KB';
+            item.fileType = null;
+            item.fileUrl = this.fileList[i].url;
+            this.chiTiet.children.push(item);
+          }
+        }
         let body = {
           "blanhDthau": null,
           "detail": detail,
@@ -324,7 +406,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
           "tgianMthau": this.chiTiet.tgianMthau ? dayjs(this.chiTiet.tgianMthau).format("YYYY-MM-DD") : null,
           "tgianNhang": this.chiTiet.tgianNhang ? dayjs(this.chiTiet.tgianNhang).format("YYYY-MM-DD") : null,
           "tgianTbao": this.chiTiet.tgianTbao ? dayjs(this.chiTiet.tgianTbao).format("YYYY-MM-DD") : null,
-          "veViec": this.chiTiet.veViec
+          "veViec": this.chiTiet.veViec,
         }
         if (this.id == 0) {
           let res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
