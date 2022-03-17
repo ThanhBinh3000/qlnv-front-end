@@ -28,7 +28,11 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     private router: Router,
   ) {}
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+  }
   redirectToThemMoiPhieuNhapkho() {
     this.router.navigate([
       'nhap/dau-thau/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/',

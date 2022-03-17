@@ -6,7 +6,7 @@
       <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
         aria-labelledby="banhanh-tab">
         <div class="trai">
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
             <i class="fa fa-arrow-circle-left"></i>
           </a>
         </div>
@@ -169,7 +169,7 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                   <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">
+                    <nz-form-label [nzNoColon]="true">
                       Ghi chú
                     </nz-form-label>
                     <textarea rows="3" class="search__input" nz-input></textarea>

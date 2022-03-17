@@ -1,5 +1,5 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogTuChoiComponent } from './../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -31,7 +31,11 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     private modal: NzModalService,
   ) {}
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+  }
   tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -46,5 +50,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       if (text) {
       }
     });
+  }
+  back() {
+    this.router.navigate(['nhap/dau-thau/quan-ly-phieu-nhap-kho']);
   }
 }
