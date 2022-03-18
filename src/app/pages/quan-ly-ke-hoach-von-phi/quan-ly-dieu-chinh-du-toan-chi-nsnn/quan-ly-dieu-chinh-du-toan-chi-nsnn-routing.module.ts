@@ -21,20 +21,7 @@ const routes: Routes = [
         './tim-kiem/tim-kiem.module'
       ).then((m) => m.TimKiemModule),
   },
-  {
-    path: 'chi-thuong-xuyen-3-nam',
-    loadChildren: () =>
-      import(
-        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
-      ).then((m) => m.ChiThuongXuyen3NamModule),
-  },
-  {
-    path: 'chi-thuong-xuyen-3-nam/:id',
-    loadChildren: () =>
-      import(
-        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
-      ).then((m) => m.ChiThuongXuyen3NamModule),
-  },
+  
   {
     path: 'lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
     loadChildren: () =>

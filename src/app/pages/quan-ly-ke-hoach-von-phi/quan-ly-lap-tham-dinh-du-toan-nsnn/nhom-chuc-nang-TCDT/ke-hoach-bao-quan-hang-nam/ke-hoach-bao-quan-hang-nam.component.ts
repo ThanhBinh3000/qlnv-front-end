@@ -11,6 +11,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { C } from '@angular/cdk/keycodes';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
 
 
 export class ItemData {
@@ -98,6 +100,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   listIdFiles: string;                        // id file luc call chi tiet
 
 
+
   allChecked1 = false;                         // check all checkbox
   allChecked2 = false;
   allChecked3 = false;
@@ -137,6 +140,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private userSerivce: UserService,
+    private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
@@ -169,11 +173,11 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg)
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
@@ -194,13 +198,12 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.vatTus = data.data?.content;
-          //console.log(this.vatTus);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -210,11 +213,11 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.hide();
@@ -228,11 +231,11 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           this.userInfo = data?.data
           return data?.data;
         } else {
-
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     return userInfo;
@@ -341,11 +344,19 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
-      if (data.statusCode == 0) {
-        this.getDetailReport();
+    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.getDetailReport();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    });
+    );
     this.spinner.hide();
   }
 
@@ -457,7 +468,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         return objfile;
       },
       err => {
-        console.log('false :', err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     return temp;
