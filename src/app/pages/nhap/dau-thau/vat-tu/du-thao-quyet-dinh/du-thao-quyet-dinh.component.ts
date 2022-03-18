@@ -78,7 +78,7 @@ export class DuThaoQuyetDinhComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate([`/nhap/dau-thau/ke-hoach-lua-chon-nha-thau-vat-tu`])
+    this.router.navigate([`/nhap/dau-thau/ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu`, this.id])
   }
 
   openDialogThongTinPhuLucKLCNT() {

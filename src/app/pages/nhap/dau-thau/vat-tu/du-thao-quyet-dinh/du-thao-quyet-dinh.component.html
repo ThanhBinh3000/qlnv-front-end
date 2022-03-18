@@ -54,7 +54,7 @@
             </div>
           </div>
         </nz-card>
-        <nz-card nzTitle="Phụ lục" class="mt16 flex-card p-lr16 title-card-center">
+        <nz-card nzTitle="Phụ lục" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
           <nz-table #editRowTable [nzData]="listOfData" nzBordered class="table__body">
             <thead>
               <tr>
@@ -77,6 +77,7 @@
                 <th>Thời gian thực hiện
                   hợp đồng
                 </th>
+                <th [width]="60"></th>
               </tr>
             </thead>
             <tbody>
@@ -90,10 +91,24 @@
                 <td>{{ data.diaDiemNhapKho }}</td>
                 <td>{{ data.diaDiemNhapKho }}</td>
                 <td>{{ data.diaDiemNhapKho }}</td>
+                <td>
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
               </tr>
             </tbody>
           </nz-table>
         </nz-card>
+        <ng-template #tableCard1>
+          <button type="button" class="btn btn-main">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>
