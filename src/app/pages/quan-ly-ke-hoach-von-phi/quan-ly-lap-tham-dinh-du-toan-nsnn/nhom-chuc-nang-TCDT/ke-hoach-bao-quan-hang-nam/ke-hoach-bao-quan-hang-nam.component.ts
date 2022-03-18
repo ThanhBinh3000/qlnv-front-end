@@ -99,6 +99,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   listIdFiles: string;                        // id file luc call chi tiet
 
+  
 
   allChecked1 = false;                         // check all checkbox
   allChecked2 = false;
