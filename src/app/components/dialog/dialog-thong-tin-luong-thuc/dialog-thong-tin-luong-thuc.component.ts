@@ -43,6 +43,9 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   }
   initForm() {
     this.formData = this.fb.group({
+      donViId: [this.keHoachLuongThuc ? this.keHoachLuongThuc.donViId : null],
+      khGaoId: [this.keHoachLuongThuc ? this.keHoachLuongThuc.khGaoId : null],
+      khThocId: [this.keHoachLuongThuc ? this.keHoachLuongThuc.khThocId : null],
       maDonVi: [
         this.keHoachLuongThuc ? this.keHoachLuongThuc.maDonVi : null,
         [Validators.required],

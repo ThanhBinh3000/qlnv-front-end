@@ -1,4 +1,4 @@
-import { ItemDetail } from './itemDetail';
+import { ItemDetail } from './ItemDetail';
 export class KeHoachMuoi {
   stt: number;
   cucId: number;
@@ -12,4 +12,6 @@ export class KeHoachMuoi {
   tenDonVi: string;
   maDonVi: string;
   donViTinh: string;
+  donViId: number;
+  id: number;
 }

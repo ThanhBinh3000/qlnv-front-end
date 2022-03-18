@@ -7,10 +7,10 @@ export interface OldResponseData {
   totalRecord?: number;
 }
 export type ResponseData<T> = {
-  success: boolean;
-  status?: number;
+  included?: boolean;
+  statusCode?: number;
   error?: string;
   data?: T;
-  message?: string;
+  msg?: string;
   totalRecord?: number;
 };

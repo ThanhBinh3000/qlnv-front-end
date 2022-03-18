@@ -22,7 +22,7 @@
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
-      <nz-form-item>
+      <!-- <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
           <input placeholder="Đơn vị tính" nz-input formControlName="donViTinh" (input)="onInputDonViTinh($event)"
@@ -38,6 +38,12 @@
             option.labelDonViTinh }}
           </nz-auto-option>
         </nz-autocomplete>
+      </nz-form-item> -->
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-select formControlName="namKeHoach">
+          <nz-option *ngFor="let p of listDonViTinh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -98,8 +104,6 @@
               </tbody>
             </nz-table>
           </div>
-
-
         </nz-dropdown-menu>
       </nz-form-item>
     </div>

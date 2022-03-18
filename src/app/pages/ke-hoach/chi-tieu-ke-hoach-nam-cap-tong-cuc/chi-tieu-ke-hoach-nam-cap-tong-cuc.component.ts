@@ -42,7 +42,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -63,7 +63,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -144,7 +144,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -157,7 +157,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -213,9 +213,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
             await this.search();
             this.spinner.hide();
           });
-        }
-        catch (e) {
-          console.log('error: ', e)
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -227,13 +226,14 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        this.chiTieuKeHoachNamService.exportList().subscribe(
-          blob => saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx')
-        );
+        this.chiTieuKeHoachNamService
+          .exportList()
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
+          );
         this.spinner.hide();
-      }
-      catch (e) {
-        console.log('error: ', e)
+      } catch (e) {
+        console.log('error: ', e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
