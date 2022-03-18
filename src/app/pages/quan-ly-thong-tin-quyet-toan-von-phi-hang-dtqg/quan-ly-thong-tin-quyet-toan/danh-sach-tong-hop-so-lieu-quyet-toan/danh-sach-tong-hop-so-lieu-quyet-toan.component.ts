@@ -23,7 +23,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string = "tong-hop-so-lieu-quyet-toan";
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -46,6 +46,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
     tuNgay: "",
     denNgay: "",
     donViTao: "",
+    soQd: "",
   };
   pages = {
     size: 10,
@@ -120,16 +121,17 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
         limit: this.pages.size,
         page: this.pages.page,
       },
+      soQd: this.searchFilter.soQd,
       str: "",
       trangThai: "",
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDsachCvanDnghi(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDsachTongHopSoLieuQuyetToan(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
-          
+
           this.danhSachCongVan = data.data?.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
