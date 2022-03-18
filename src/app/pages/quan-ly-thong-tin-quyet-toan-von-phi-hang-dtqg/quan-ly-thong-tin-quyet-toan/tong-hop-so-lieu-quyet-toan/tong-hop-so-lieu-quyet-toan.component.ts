@@ -1,12 +1,15 @@
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
-import { DanhMucService } from '../../../../../services/danhMuc.service';
+import { DanhMucService } from '../../../../services/danhMuc.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -26,14 +29,13 @@ export class ItemData {
      ghiChu!: string;
      checked!: boolean;
 }
-
 @Component({
-  selector: 'app-nhan-ghi-nhan-thong-tin-pbo-du-an',
-  templateUrl: './nhan-ghi-nhan-thong-tin-pbo-du-an.component.html',
-  styleUrls: ['./nhan-ghi-nhan-thong-tin-pbo-du-an.component.scss']
+  selector: 'app-tong-hop-so-lieu-quyet-toan',
+  templateUrl: './tong-hop-so-lieu-quyet-toan.component.html',
+  styleUrls: ['./tong-hop-so-lieu-quyet-toan.component.scss']
 })
 
-export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
+export class TongHopSoLieuQuyetToanComponent implements OnInit {
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -63,6 +65,7 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
      ngayQd!: string;
      phanBo!: string;
      tenTrangThai!: string;
+     duToan!: number;
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
      listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -133,18 +136,6 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
-                         }
-                    },
-                    (err) => {
-                         this.errorMessage = err.error.message;
-                    }
-               );
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }

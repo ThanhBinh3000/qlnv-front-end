@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
@@ -24,17 +23,20 @@ export class ItemData {
      phanBo!: number;
      ngayGhiNhan!: any;
      dieuChinh!: string;
+     soTien!: number;
+     maDonViTien!: string;
      ghiChu!: string;
+     thanhTien!: number;
      checked!: boolean;
 }
 
 @Component({
-  selector: 'app-bao-cao-tong-cuc-khoach-phan-bo',
-  templateUrl: './bao-cao-tong-cuc-khoach-phan-bo.component.html',
-  styleUrls: ['./bao-cao-tong-cuc-khoach-phan-bo.component.scss']
+  selector: 'app-nhan-ghi-nhan-thong-tin-pbo-du-an',
+  templateUrl: './nhan-ghi-nhan-thong-tin-pbo-du-an.component.html',
+  styleUrls: ['./nhan-ghi-nhan-thong-tin-pbo-du-an.component.scss']
 })
 
-export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
+export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -87,7 +89,6 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
-     isChecked= false;
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -109,7 +110,6 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           });
           this.fileList = [];
      }
-
 
 
      constructor(private router: Router,
@@ -421,6 +421,9 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                ngayGhiNhan: "",
                dieuChinh: "",
                ghiChu: "",
+               soTien: 0,
+               maDonViTien: "",
+               thanhTien: 0,
                checked: false,
           }
 
@@ -549,7 +552,4 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           });
      }
 
-     checkValue(event: any) {
-      console.log(event);
-     }
 }
