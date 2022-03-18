@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 @Component({
@@ -78,13 +79,13 @@ export class KhaiThacBaoCaoComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -93,12 +94,13 @@ export class KhaiThacBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -133,15 +135,17 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     console.log(this.searchFilter);
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-        this.notifi.success('Danh Sách Báo Cáo', 'Lấy thông tin thành công');
+        this.notifi.success(MESSAGE.SUCCESS,res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
         }
       }else{
-        this.notifi.error('Danh Sách Báo Cáo', 'Có lỗi trong quá trình vấn tin');
+        this.notifi.error(MESSAGE.ERROR, res?.msg);
       }
       console.log(res);
+    },err=>{
+      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
  
