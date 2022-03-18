@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -9,7 +10,7 @@ import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhMuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 
 @Component({
@@ -381,7 +382,7 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzContent: MESSAGE.DELETE_CONFIRM,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -389,10 +390,20 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          // this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-          //   await this.search();
-          //   this.spinner.hide();
-          // });
+          let body = {
+            "id": item.id,
+            "maDvi": null
+          }
+          this.quyetDinhPheDuyetKeHoachLCNTService.xoa(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.error(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         }
         catch (e) {
           console.log('error: ', e)
@@ -407,9 +418,23 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        // this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList().subscribe(
-        //   blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
-        // );
+        let body = {
+          "denNgayQd": this.endValue
+            ? dayjs(this.endValue).format('DD/MM/YYYY')
+            : null,
+          "loaiVthh": this.selectHang.ma ?? "00",
+          "namKhoach": this.searchFilter.namKeHoach,
+          "paggingReq": null,
+          "soQd": this.searchFilter.soQD,
+          "str": null,
+          "trangThai": "01",
+          "tuNgayQd": this.startValue
+            ? dayjs(this.startValue).format('DD/MM/YYYY')
+            : null,
+        }
+        this.quyetDinhPheDuyetKeHoachLCNTService.exportList(body).subscribe(
+          blob => saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+        );
         this.spinner.hide();
       }
       catch (e) {

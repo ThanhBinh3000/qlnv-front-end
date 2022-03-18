@@ -1,0 +1,152 @@
+<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
+</dau-thau-tab>
+<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+  <!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Trình duyệt</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix> -->
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số phiếu</label>
+              <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
+                <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
+                </nz-input-number>
+              </nz-input-group>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select>
+                <nz-option nzValue="1111" nzLabel="1111"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Đơn vị</label>
+              <input class="search__input" placeholder="Căn cứ trên hợp đồng" nz-input />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Mã kho / ngăn</label>
+              <input class="search__input" placeholder="Tên đơn vị" nz-input />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày chứng từ: Từ ngày</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đến ngày</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký">
+              </nz-date-picker>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Danh sách Phiếu nhập kho hàng DTQG chờ duyệt'" class="tt-chung__container">
+              <nz-card class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th width="45px">
+                        <label nz-checkbox></label>
+                      </th>
+                      <th width="931px">Số phiếu</th>
+                      <th width="161px">Ngày lập phiếu</th>
+                      <th width="203px">Ngày chứng từ</th>
+                      <th width="295px">Đơn vị tạo phiếu</th>
+                      <th width="295px">Tên Ngăn / Lô</th>
+                      <th width="295px">Tên hàng DTQG</th>
+                      <th width="295px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <th width="45px">
+                        <label nz-checkbox></label>
+                      </th>
+                      <td>PKM01</td>
+                      <td>17/02/2022</td>
+                      <td></td>
+                      <td></td>
+                      <td>Lô 1</td>
+                      <td>Gạo</td>
+                      <td>
+                        <a>
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách Phiếu nhập kho hàng DTQG đã duyệt'" class="tt-chung__container">
+              <!-- TODO chưa có giao diện -->
+            </nz-tab>
+          </nz-tabset>
+          <div class="action">
+            <button type="button" class="btn btn-main" (click)="redirectToThemMoiPhieuNhapkho()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyentheolo"></i>
+              <span>Duyệt theo lô</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,3 +10,24 @@
     margin-right: 8px;
   }
 }
+.input-file {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0;
+}
+.file-tai-lieu-dinh-kem {
+  width: 100%;
+  border: 1px solid #c4c9cc;
+  position: absolute;
+  top: 0px;
+  z-index: 0;
+}
+.upload-file {
+  position: relative;
+}
+.icon-tep {
+  margin-right: 8px;
+}

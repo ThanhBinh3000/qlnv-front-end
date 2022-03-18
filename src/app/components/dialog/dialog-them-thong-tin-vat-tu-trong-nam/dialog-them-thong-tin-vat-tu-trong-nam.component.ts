@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { VatTu } from './danh-sach-vat-tu-hang-hoa.type';
 import * as dayjs from 'dayjs';
-import { DanhMucService } from 'src/app/services/danhMuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'dialog-them-thong-tin-vat-tu-trong-nam',
@@ -25,6 +25,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   optionsDVT: any[] = [];
   optionsDonViTinh: any[] = [];
   yearNow: number = 0;
+  listDonViTinh: any[] = [];
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -37,8 +38,20 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     //treeview
-
+    this.listDonViTinh.push({
+      value: 'bộ',
+      text: 'bộ',
+    });
+    this.listDonViTinh.push({
+      value: 'chiếc',
+      text: 'chiếc',
+    });
+    this.listDonViTinh.push({
+      value: 'máy',
+      text: 'máy',
+    });
     this.formData = this.fb.group({
+      id: [null],
       maDonVi: [null, [Validators.required]],
       tenDonVi: [null],
       donViId: [null],
@@ -55,6 +68,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       maVatTuCha: [null],
       vatTuId: [null],
       maVatTu: [null],
+      vatTu: [null],
     });
     this.spinner.show();
     try {
@@ -63,7 +77,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       this.loadDanhMucHang();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -95,7 +109,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -118,7 +132,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -238,6 +252,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       maVatTuCha: vatTu.parent.ma,
       vatTuId: vatTu.id,
       maVatTu: vatTu.ma,
+      vatTu: vatTu
     });
   }
 

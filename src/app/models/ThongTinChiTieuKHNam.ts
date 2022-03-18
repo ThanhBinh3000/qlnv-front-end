@@ -10,8 +10,8 @@ export class ThongTinChiTieuKeHoachNam {
   tenTrangThai: string;
   trangThai: string;
   trichYeu: string;
-  khLuongThuc: Array<KeHoachLuongThuc>;
-  khMuoiDuTru: Array<KeHoachMuoi>;
-  khVatTu: Array<KeHoachVatTu>;
+  khLuongThuc: Array<KeHoachLuongThuc> = [];
+  khMuoiDuTru: Array<KeHoachMuoi> = [];
+  khVatTu: Array<KeHoachVatTu> = [];
   ghiChu: string;
 }

@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucService } from '../../../../services/danhMuc.service';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
@@ -55,7 +55,7 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
   baoCaos: any = [];
   constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucService,
+        private danhMuc: DanhMucHDVService,
         private router: Router,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
