@@ -126,12 +126,8 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           private datePipe: DatePipe,
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
-<<<<<<< HEAD
-          private danhMucService: DanhMucService,
           private notification: NzNotificationService,
-=======
           private danhMucService: DanhMucHDVService,
->>>>>>> 53785ca0ec92f4ca2255b17599217c529603e189
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
