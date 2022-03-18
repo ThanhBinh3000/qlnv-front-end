@@ -4,8 +4,8 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from '../../../../services/danhMuc.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
 
@@ -54,7 +54,7 @@ export class TimKiemComponent implements OnInit {
   baoCaos: any = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private danhMuc: DanhMucService,
+    private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notifi:NzNotificationService,
@@ -68,7 +68,6 @@ export class TimKiemComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
@@ -83,7 +82,6 @@ export class TimKiemComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }

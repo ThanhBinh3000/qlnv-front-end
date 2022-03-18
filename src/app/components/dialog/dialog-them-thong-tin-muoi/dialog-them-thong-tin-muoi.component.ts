@@ -46,8 +46,10 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
   }
   oninitForm() {
     this.formData = this.fb.group({
+      donViId: [this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null],
+      id: [this.thongTinMuoi ? this.thongTinMuoi.donViId : null],
       maDonVi: [
-        this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null,
+        this.thongTinMuoi ? this.thongTinMuoi.id : null,
         [Validators.required],
       ],
       donViTinh: ['Tấn'],

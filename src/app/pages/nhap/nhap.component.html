@@ -8,7 +8,8 @@
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
       <li class="nav-item" data-toggle="collapse" data-target="#collapsnav" *ngFor="let route of routes">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="route.url">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="route.url" nz-dropdown
+          [attr.nzDropdownMenu]="route.dropdown">
           <span class="icon" [ngClass]="route.icon"></span>
           <span class="text"> {{route.title}} </span>
         </a>
@@ -17,6 +18,16 @@
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </li>
     </ul>
+    <ng-container *ngFor="let route of routes">
+      <nz-dropdown-menu #{{route.dropdown}}="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>1st menu item length</li>
+          <li nz-menu-item>2nd menu item length</li>
+          <li nz-menu-item>3rd menu item length</li>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-container>
+
   </nz-affix>
 </div>
 <router-outlet></router-outlet>

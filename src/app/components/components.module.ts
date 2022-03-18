@@ -70,6 +70,9 @@ import { DialogThemThongTinMuoiComponent } from './dialog/dialog-them-thong-tin-
 import { DialogLuaChonInComponent } from './dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from './dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { DialogTuChoiComponent } from './dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogPhuongAnTrinhTongCucComponent } from './dialog/dialog-phuong-an-trinh-tong-cuc/dialog-phuong-an-trinh-tong-cuc.component';
+import { DialogThongTinPhuLucHopDongMuaComponent } from './dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
+import { DialogThemBienbanNghiemThuKeLotComponent } from './dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
@@ -90,6 +93,9 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     DialogLuaChonInComponent,
     DialogThemThongTinVatTuTrongNamComponent,
     DialogTuChoiComponent,
+    DialogPhuongAnTrinhTongCucComponent,
+    DialogThongTinPhuLucHopDongMuaComponent,
+    DialogThemBienbanNghiemThuKeLotComponent,
     //pipes
     FilterPipe,
   ],

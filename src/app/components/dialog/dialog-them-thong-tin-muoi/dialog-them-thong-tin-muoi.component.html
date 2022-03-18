@@ -8,7 +8,7 @@
         <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
           <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input donvi__input">
             <input placeholder="Đơn vị" nz-input formControlName="tenDonVi" (input)="onInput($event)"
-              [nzAutocomplete]="auto" />
+              [nzAutocomplete]="auto" [readonly]="this.thongTinMuoi" />
           </nz-input-group>
           <ng-template #suffixIcon>
             <i nz-icon nzType="search"></i>
@@ -189,10 +189,10 @@
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
         <i aria-hidden="true" class="fa fa-sign-out"></i>
         Hủy
-      </a>
+      </button>
     </div>
   </div>
 </div>

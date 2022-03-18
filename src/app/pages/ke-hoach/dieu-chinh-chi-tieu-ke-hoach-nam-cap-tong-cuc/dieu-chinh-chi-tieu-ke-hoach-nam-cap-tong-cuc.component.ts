@@ -118,7 +118,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     }
     this.totalRecord = 0;
     let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
-    if (res.msg == 'Thành công') {
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;

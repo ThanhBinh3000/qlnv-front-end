@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucService } from '../../../../services/danhMuc.service';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MESSAGE } from '../../../../constants/message';
 
@@ -54,7 +54,7 @@ export class TimKiemComponent implements OnInit {
   baoCaos: any = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private danhMuc: DanhMucService,
+    private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,

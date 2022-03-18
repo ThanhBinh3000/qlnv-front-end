@@ -93,4 +93,14 @@
       }
     }
   }
+  .error-text {
+    color: red;
+    font-size: 12px;
+  }
+  .ant-upload-text-icon {
+    display: none;
+  }
+  .ant-upload-list-text .ant-upload-list-item-name {
+    padding-left: 0px;
+  }
 }
