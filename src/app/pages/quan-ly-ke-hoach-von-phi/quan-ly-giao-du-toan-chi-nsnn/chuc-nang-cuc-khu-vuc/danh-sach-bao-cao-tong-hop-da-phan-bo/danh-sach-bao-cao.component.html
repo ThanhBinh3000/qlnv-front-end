@@ -17,7 +17,6 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-
       </div>
     </div>
   </div>
@@ -27,31 +26,34 @@
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="6">
             <label class="search__label">Năm</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
           </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Số quyết định</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
-          </div>
+          <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
           </div>
+          <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="6">
             <label class="search__label">Đơn vị lập</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
+          <div nz-col nzSpan="3"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số quyết định</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+          </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH BÁO CÁO TỔNG HỢP ĐÃ PHÂN BỔ" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
@@ -59,9 +61,8 @@
               <th width="130px">STT</th>
               <th width="175px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
-              <th width="175px">Đơn vị quyết định</th>
+              <th width="175px">Đơn vị lập</th>
               <th width="175px" class="text-center">Trạng thái</th>
-              <th></th>
               <th></th>
               <th></th>
             </tr>
@@ -69,7 +70,7 @@
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.maBcao }}</td>
+              <td>{{ item.soQd }}</td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.tenDvi}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
@@ -101,7 +102,11 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <button type="button" class="btn btn-main">
+          <i class="icon htvbdh_printer"></i>
+          <span>Xuất</span>
+        </button>
+        <button type="button" class="btn btn-main" routerLink="../bao-cao-tong-cuc-khoach-phan-bo">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>
@@ -109,10 +114,7 @@
           <i nz-icon nzType="close"></i>
           <span>Đóng</span>
         </button>
-        <!-- <button nz-button class="search__button--clear">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
-        </button> -->
+
       </ng-template>
     </div>
   </div>
