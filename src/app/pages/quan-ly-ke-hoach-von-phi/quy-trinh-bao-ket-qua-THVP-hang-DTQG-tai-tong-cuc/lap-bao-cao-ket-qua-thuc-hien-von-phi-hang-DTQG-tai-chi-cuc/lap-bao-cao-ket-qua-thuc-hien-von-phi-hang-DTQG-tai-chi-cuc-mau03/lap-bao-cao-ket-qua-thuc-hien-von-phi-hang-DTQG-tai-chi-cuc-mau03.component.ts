@@ -10,6 +10,7 @@ import { Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 
 
@@ -134,13 +135,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
+            this.notification.success(MESSAGE.SUCCESS,res?.msg)
           } else {
-            this.errorMessage =
-              'Có lỗi trong quá trình sinh mã báo cáo vấn tin!';
+            this.notification.error(MESSAGE.ERROR,res?.msg)
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
         },
       );
     } else {
@@ -154,14 +155,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
-            this.mabaocao = res.data;
+            this.notification.success(MESSAGE.SUCCESS,res?.msg)
           } else {
-            this.errorMessage =
-              'Có lỗi trong quá trình sinh mã báo cáo vấn tin!';
+            this.notification.error(MESSAGE.ERROR,res?.msg)
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
         },
       );
       // this.updateEditCache();
@@ -185,14 +185,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
       (data) => {
         if (data.statusCode == 0) {
           this.listDonvitinh = data.data?.content;
-          console.log(data);
+          this.notification.success(MESSAGE.SUCCESS,data?.msg)
+          
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR,data?.msg)
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
       },
     );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
@@ -311,13 +311,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
           this.updateEditCache1();
           this.updateEditCache2();
           this.updateEditCache3();
+          this.notification.success(MESSAGE.SUCCESS, data?.msg)
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, data?.msg)
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
       },
     );
   }
@@ -363,14 +364,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-          // this.updateEditCache();
+          this.notification.success(MESSAGE.SUCCESS, data?.msg)
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, data?.msg)
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
       },
     );
   }
@@ -816,22 +816,24 @@ updateEditCache3(): void {
     if (this.id != null) {
       this.quanLyVonPhiService.capnhatbaocao(request).subscribe((res) => {
         if (res.statusCode == 0) {
-          this.notification.success('Cập nhật','Cập nhật thành công');
+          this.notification.success(MESSAGE.SUCCESS,MESSAGE.UPDATE_SUCCESS);
         } else {
-          this.notification.error('Cập nhật','Cập nhật thất bại');
+          this.notification.error(MESSAGE.ERROR,res?.msg);
         }
+      },err=> {
+        this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       });
     } else {
       this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
         (data) => {
           if(data.statusCode==0){
-            this.notification.success('Thêm mới','Thêm mới thành công');
+            this.notification.success(MESSAGE.SUCCESS,MESSAGE.ADD_SUCCESS);
           }else{
-            this.notification.error('Thêm mới','Thêm mới thất bại');
+            this.notification.error(MESSAGE.ERROR,data?.msg);
           }
         },
         (err) => {
-          this.notification.error('Thêm mới','Cập nhật thất bại');
+          this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -926,14 +928,14 @@ updateEditCache3(): void {
             this.lstCTietBCao3.push(element);
           }
         });
-        this.notification.success('Tổng hợp báo cáo','Tổng hợp báo cáo thành công');
+        this.notification.success(MESSAGE.SUCCESS,res?.msg);
         this.updateEditCache1();
         this.updateEditCache2();
       }else{
-        this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
+        this.notification.error(MESSAGE.ERROR,res?.msg);
       }
     },err=>{
-      this.notification.error('Tổng hợp báo cáo','Có lỗi trong quá trình vấn tin!');
+      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
     })
   }
 }
