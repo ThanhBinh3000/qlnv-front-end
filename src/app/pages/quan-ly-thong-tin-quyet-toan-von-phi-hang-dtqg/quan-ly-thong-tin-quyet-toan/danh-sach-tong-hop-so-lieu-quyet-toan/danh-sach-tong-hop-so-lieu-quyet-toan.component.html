@@ -59,29 +59,42 @@
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
-            <tr>
-              <th width="60px">
-                <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate">
-                </label>
-              </th>
-              <th width="130px">Số quyết định</th>
-              <th width="175px">Ngày quyết định</th>
-              <th width="175px">Ngày lập</th>
-              <th width="175px">Đơn vị lập</th>
-              <th width="175px">Trạng thái</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of danhSachCongVan; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
-              <td>{{item.ngayTao}}</td>
-              <td>{{item.namBcao}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
-              <td class="text-center">{{item.tenDvi}}</td>
-            </tr>
-          </tbody>
+            <thead>
+              <tr>
+                <th width="60px">Chọn</th>
+                <th width="130px">Số quyết định</th>
+                <th width="175px">Ngày quyết định</th>
+                <th width="175px">Ngày lập</th>
+                <th width="175px">Đơn vị lập</th>
+                <th width="175px">Trạng thái</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of danhSachCongVan; let i = index">
+                <td>
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                </td>
+                <td>{{ item.soQd }}</td>
+                <td>{{item.ngayTao}}</td>
+                <td>{{item.ngayTao}}</td>
+                <td>{{item.maDvi}}</td>
+                <td >{{item.trangThai}}</td>
+                <td class="text-center">
+                  <a routerLink="../{{url}}/{{ item.id }}">
+                    xem
+                  </a>
+                </td >
+                <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
+                  sửa
+                </td>
+                <td class="text-center" (click)="redirectThongTinTimKiem()">
+                  Xóa
+                </td>
+              </tr>
+            </tbody>
         </nz-table>
         <div nz-row>
           <div nz-col nzSpan="24" style="margin-top: 5px;">
