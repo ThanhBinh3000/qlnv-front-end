@@ -56,6 +56,8 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
   ) { }
 
+
+  
   async ngOnInit() {
     this.spinner.show();
     try {
