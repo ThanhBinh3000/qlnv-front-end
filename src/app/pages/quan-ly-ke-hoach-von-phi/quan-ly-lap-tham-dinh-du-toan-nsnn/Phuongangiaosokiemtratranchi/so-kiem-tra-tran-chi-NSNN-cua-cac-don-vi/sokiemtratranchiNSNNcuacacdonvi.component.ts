@@ -9,6 +9,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 export class chitietpagiao {
   id: any;
@@ -77,6 +79,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     private datepipe: DatePipe,
     private sanitizer: DomSanitizer,
     private route: Router,
+    private notification : NzNotificationService,
   ) {}
 
   async ngOnInit() {
@@ -99,12 +102,12 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
               }
               console.log(res);
           } else {
-              alert('Có lỗi trong quá trình vấn tin!');
+             this.notification.error(MESSAGE.ERROR, res?.msg);
               this.checkdata = false;
           }
       },
       err => {
-          alert(err.error.message);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           this.checkdata = false;
       },
   );

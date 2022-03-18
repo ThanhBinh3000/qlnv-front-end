@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
@@ -29,6 +31,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     private userService: UserService,
      private router: Router,
      private quankhoachvon :QuanLyVonPhiService,
+     private notification : NzNotificationService,
      ) {
     this.namPa = this.currentYear.getFullYear().toString();
   }
@@ -54,7 +57,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         }
       },
       (err) => {
-        console.log(err);
+        
       },
     );
   }
@@ -93,7 +96,9 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
             console.log(res);
             this.listVanban=res.data.content;
             this.totalitem = res.data.totalElements;
-            console.log(this.listVanban);
+           this.notification.success(MESSAGE.SUCCESS, res?.msg);
+        }else{
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     })
   }
