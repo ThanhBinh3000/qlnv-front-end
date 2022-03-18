@@ -11,7 +11,7 @@ import { OldResponseData } from '../interfaces/response';
 })
 export class DanhMucHDVService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'danhMuc');
+    super(httpClient, 'danhMucHDV');
   }
 
   urlDefault = environment.SERVICE_API;

@@ -1,13 +1,15 @@
 
+
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -27,14 +29,13 @@ export class ItemData {
      ghiChu!: string;
      checked!: boolean;
 }
-
 @Component({
-  selector: 'app-bao-cao-tong-cuc-khoach-phan-bo',
-  templateUrl: './bao-cao-tong-cuc-khoach-phan-bo.component.html',
-  styleUrls: ['./bao-cao-tong-cuc-khoach-phan-bo.component.scss']
+  selector: 'app-tong-hop-so-lieu-quyet-toan',
+  templateUrl: './tong-hop-so-lieu-quyet-toan.component.html',
+  styleUrls: ['./tong-hop-so-lieu-quyet-toan.component.scss']
 })
 
-export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
+export class TongHopSoLieuQuyetToanComponent implements OnInit {
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -64,6 +65,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
      ngayQd!: string;
      phanBo!: string;
      tenTrangThai!: string;
+     duToan!: number;
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
      listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -87,7 +89,6 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
-     isChecked= false;
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -109,7 +110,6 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           });
           this.fileList = [];
      }
-
 
 
      constructor(private router: Router,
@@ -136,18 +136,6 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
-                         }
-                    },
-                    (err) => {
-                         this.errorMessage = err.error.message;
-                    }
-               );
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
@@ -549,7 +537,4 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           });
      }
 
-     checkValue(event: any) {
-      console.log(event);
-     }
 }

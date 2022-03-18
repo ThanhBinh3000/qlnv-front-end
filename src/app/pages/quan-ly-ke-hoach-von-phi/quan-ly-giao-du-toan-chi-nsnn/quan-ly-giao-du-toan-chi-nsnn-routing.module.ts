@@ -193,28 +193,28 @@ const routes: Routes = [
     path: 'nhan-ghi-nhan-thong-tin-pbo-du-an',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/nhan-ghi-nhan-thong-tin-pbo-du-an/nhan-ghi-nhan-thong-tin-pbo-du-an.module'
+        './chuc-nang-cuc-khu-vuc/nhan-ghi-nhan-thong-tin-pbo-du-an/nhan-ghi-nhan-thong-tin-pbo-du-an.module'
       ).then((m) => m.NhanGhiNhanThongTinPboDuAnModule),
   },
   {
     path: 'nhan-ghi-nhan-thong-tin-pbo-du-an/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/nhan-ghi-nhan-thong-tin-pbo-du-an/nhan-ghi-nhan-thong-tin-pbo-du-an.module'
+        './chuc-nang-cuc-khu-vuc/nhan-ghi-nhan-thong-tin-pbo-du-an/nhan-ghi-nhan-thong-tin-pbo-du-an.module'
       ).then((m) => m.NhanGhiNhanThongTinPboDuAnModule),
   },
   {
     path: 'danh-sach-bao-cao',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/danh-sach-bao-cao/danh-sach-bao-cao.module'
+        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-tong-hop-da-phan-bo/danh-sach-bao-cao.module'
       ).then((m) => m.DanhSachBaoCaoModule),
   },
   {
     path: 'danh-sach-bao-cao/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/danh-sach-bao-cao/danh-sach-bao-cao.module'
+        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-tong-hop-da-phan-bo/danh-sach-bao-cao.module'
       ).then((m) => m.DanhSachBaoCaoModule),
   },
   {
@@ -258,6 +258,20 @@ const routes: Routes = [
       import(
         './chuc-nang-cuc-khu-vuc/lap-khoach-pbo-giao-dtoan-cho-chi-cuc-DTNN/lap-khoach-pbo-giao-dtoan-cho-chi-cuc-DTNN.module'
       ).then((m) => m.LapKhoachPboGiaoDtoanChoChiCucDTNNModule),
+  },
+  {
+    path: 'ds-nhan-ghi-nhan-thong-tin-pbo-du-toan',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan.module'
+      ).then((m) => m.DsNhanGhiNhanThongTinPboDuAnModule),
+  },
+  {
+    path: 'ds-nhan-ghi-nhan-thong-tin-pbo-du-toan/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan.module'
+      ).then((m) => m.DsNhanGhiNhanThongTinPboDuAnModule),
   },
 
 

@@ -23,7 +23,10 @@ export class ItemData {
      phanBo!: number;
      ngayGhiNhan!: any;
      dieuChinh!: string;
+     soTien!: number;
+     maDonViTien!: string;
      ghiChu!: string;
+     thanhTien!: number;
      checked!: boolean;
 }
 
@@ -418,6 +421,9 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
                ngayGhiNhan: "",
                dieuChinh: "",
                ghiChu: "",
+               soTien: 0,
+               maDonViTien: "",
+               thanhTien: 0,
                checked: false,
           }
 
