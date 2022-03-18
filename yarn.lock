@@ -7743,6 +7743,11 @@
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
 
+"vn-num2words@^1.0.4":
+  "integrity" "sha512-Zjm/TOsYK3kdoylWibXriM9GTLFRS5ACpI2+yqHgltMaIp7/QStHEqBb5M4vfjqz/Xosg3jrT7YVmllJEbY3Vg=="
+  "resolved" "https://registry.npmjs.org/vn-num2words/-/vn-num2words-1.0.4.tgz"
+  "version" "1.0.4"
+
 "void-elements@^2.0.0":
   "integrity" "sha1-wGavtYK7HLQSjWDqkjkulNXp2+w="
   "resolved" "https://registry.npmjs.org/void-elements/-/void-elements-2.0.1.tgz"

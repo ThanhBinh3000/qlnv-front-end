@@ -45,8 +45,14 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách báo cáo Tổng cục kế hoạch phân bổ',
-    description: 'Danh sách báo cáo Tổng cục kế hoạch phân bổ',
+    title: 'Danh sách nhận/ghi nhận thông tin phân bổ dự toán',
+    description: 'Danh sách nhận/ghi nhận thông tin phân bổ dự toán',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan`,
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh sách báo cáo tổng hợp đã phân bổ',
+    description: 'Danh sách báo cáo tổng hợp đã phân bổ',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-bao-cao`,
   },
 ];

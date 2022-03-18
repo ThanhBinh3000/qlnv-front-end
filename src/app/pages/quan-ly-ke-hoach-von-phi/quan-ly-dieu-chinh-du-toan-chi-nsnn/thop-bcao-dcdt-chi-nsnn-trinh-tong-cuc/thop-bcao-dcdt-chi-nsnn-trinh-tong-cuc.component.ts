@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
-import { DanhMucService } from '../../../../services/danhMuc.service';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -95,8 +95,12 @@ export class ThopBcaoDcdtChiNsnnTrinhTongCucComponent implements OnInit {
           private datePipe: DatePipe,
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
+<<<<<<< HEAD
           private danhMucService: DanhMucService,
           private notification: NzNotificationService,
+=======
+          private danhMucService: DanhMucHDVService,
+>>>>>>> 53785ca0ec92f4ca2255b17599217c529603e189
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }

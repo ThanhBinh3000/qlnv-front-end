@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
-import { DanhMucService } from '../../../../../services/danhMuc.service';
+import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -87,6 +87,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
+     isChecked= false;
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -110,6 +111,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
      }
 
 
+
      constructor(private router: Router,
           private routerActive: ActivatedRoute,
           private spinner: NgxSpinnerService,
@@ -117,7 +119,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           private datePipe: DatePipe,
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
-          private danhMucService: DanhMucService,
+          private danhMucService: DanhMucHDVService,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -547,4 +549,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           });
      }
 
+     checkValue(event: any) {
+      console.log(event);
+     }
 }

@@ -9,14 +9,14 @@ import { Utils } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { DatePipe } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ActivatedRoute } from '@angular/router';
+import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
-
   id: any;
   stt: any;
   maNdungChi: any;
   maNdungChiParent: any;
-  maNdungChiChild: any;
   trongDotTcong: any;
   trongDotThoc: any;
   trongDotGao: any;
@@ -37,13 +37,12 @@ export class vatTu {
   sl: any;
 }
 
-
 export class linkList {
+  id: any;
   vt: number;
   stt: any;
   maNdungChi: any;
   maNdungChiParent: any;
-  maNdungChiChild: any;
   trongDotTcong: any;
   trongDotThoc: any;
   trongDotGao: any;
@@ -67,7 +66,8 @@ export class linkList {
   ],
 })
 export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
-  implements OnInit {
+  implements OnInit
+{
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private spinner: NgxSpinnerService,
@@ -75,68 +75,121 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     private nguoiDungSerivce: UserService,
     private datepipe: DatePipe,
     private notification: NzNotificationService,
-  ) { }
+    private router: ActivatedRoute,
+  ) {}
 
   async ngOnInit() {
+    this.cols = 3;
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-    this.cols = 3;
+   
 
-    if (this.id != null) {
+    this.id = this.router.snapshot.paramMap.get('id');
+    this.maDvi = this.router.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaocao = this.router.snapshot.paramMap.get('maLoaiBaocao');
+    this.nam = this.router.snapshot.paramMap.get('nam');
+    this.dotBaocao = this.router.snapshot.paramMap.get('dotBaocao');
+
+    //xem chi tiet xuất file exel;
+    this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
+
+    if ( this.id!=null && this.checkxemkhaithac!=null) {
+      this.getDetailReportToExportFile();
+    }else if (this.id != null) {
       //call service lay chi tiet
-    } else {
+      this.getDetailReport();
+    }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
+      this.callTonghop();
+      this.nguoinhap = userInfor?.username;
+      this.donvitao = userInfor?.dvql;
+      this.namBcao = this.currentday.getFullYear();
+      this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maLoaiBaocao = '92';
+      this.trangThaiBanGhi='1';
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.mabaocao = res.data;
+            this.notification.success(MESSAGE.SUCCESS, res?.msg);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    }
+     else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = userInfor?.username;
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '91';
+      this.maLoaiBaocao = '92';
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
+            this.notification.success(MESSAGE.SUCCESS, res?.msg);
           } else {
-            this.notification.error(
-              'Sinh Mã Báo Cáo',
-              'Có lỗi trong quá trình vấn tin!',
-            );
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
-          this.notification.error(
-            'Sinh Mã Báo Cáo',
-            'Có lỗi trong quá trình vấn tin!',
-          );
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfor?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnSave = utils.getRoleSave(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnApprove = utils.getRoleApprove(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnTBP = utils.getRoleTBP(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnLD = utils.getRoleLD(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
+    this.statusBtnDVCT = utils.getRoleDVCT(
+      this.trangThaiBanGhi,
+      2,
+      userInfor?.roles[0]?.id,
+    );
     //get danh muc noi dung
     this.quanLyVonPhiService.dmVattuhanghoa().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          console.log(this.listVattu);
+          this.notification.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.notification.error(
-            'Lấy danh sách vật tư',
-            'Có lỗi trong quá trình vấn tin!',
-          );
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
         console.log(err);
-        this.notification.error(
-          'Lấy danh sách vật tư',
-          'Có lỗi trong quá trình vấn tin!',
-        );
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -165,14 +218,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   namBcao: any;
   loaiBaocao: any;
   dotbaocao: any;
+  nho: boolean;
 
   lstCTietBCao: ItemData[] = [];
   chiTietBcaos: linkList = {
+    id: uuid.v4(),
     vt: 0,
     stt: null,
-    maNdungChi: null,
-    maNdungChiParent: null,
-    maNdungChiChild: null,
+    maNdungChi: '',
+    maNdungChiParent: '',
     trongDotTcong: null,
     trongDotThoc: null,
     trongDotGao: null,
@@ -181,7 +235,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     luyKeGao: null,
     listCtiet: [],
     parentId: null,
-    ghiChu: null,
+    ghiChu: '',
     next: [],
     checked: false,
   };
@@ -192,7 +246,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   donViTaos: any[] = [];
   userInfor: any;
   currentday: Date = new Date();
-  maLoaiBacao: any;
+  maLoaiBaocao: any;
   listColTrongDot: any[] = [];
   listColLuyke: any[] = [];
   cols: number = 0;
@@ -205,10 +259,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   kt: boolean;
   statusB: boolean = false;
   disable: boolean = false;
-
-
+  donvitien: any;
+  listIdFiles: string;
   statusButton: boolean = false;
-
+  maDvi:any;
+  nam:any;
+  dotBaocao:any;
+  checkxemkhaithac:any;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
 
   //chuc nang trinh duyet len các cap tren
@@ -247,95 +304,169 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     return userInfo;
   }
 
-  //check all input
-  // updateAllChecked(): void {
-  //   this.indeterminate = false;
-  //   if (this.allChecked) {
-  //     this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
-  //       ...item,
-  //       checked: true,
-  //     }));
-  //   } else {
-  //     this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
-  //       ...item,
-  //       checked: false,
-  //     }));
-  //   }
-  // }
+  async luu() {
+    this.lstCTietBCao.forEach((e) => {
+      e.stt=0;
+      if (typeof e.id != 'number') {
+        e.id = null;
+      }
+      e.listCtiet.forEach((el) => {
+        if (typeof el.id != 'number') {
+          el.id = null;
+        }
+      });
+    });
 
-  luu() { }
+    // donvi tien
+    if (this.donvitien == undefined) {
+      this.donvitien = '01';
+    }
 
+    // lay id file dinh kem
+    let idFileDinhKems = '';
+    for (let i = 0; i < this.lstFile.length; i++) {
+      idFileDinhKems += this.lstFile[i].id + ',';
+    }
+
+    // lay id file dinh kem (gửi file theo danh sách )
+    let listFileUploaded: any = [];
+    for (const iterator of this.listFile) {
+      listFileUploaded.push(await this.uploadFile(iterator));
+    }
+
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: this.id,
+      fileDinhKems: listFileUploaded,
+      listIdDeletes: this.listIdDelete,
+      listIdFiles: null,
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: this.mabaocao,
+      maDvi: (this.donvitao = 235),
+      maDviCha: '',
+      maDviTien: null,
+      maLoaiBcao: this.maLoaiBaocao,
+      namBcao: this.namBcao,
+      namHienHanh: null,
+      thangBcao: null,
+      trangThai: this.trangThaiBanGhi,
+      dotBcao: this.dotbaocao,
+      loaiBaoCao: 1,
+    };
+
+    this.spinner.show();
+    console.log(request);
+
+    if (this.id != null) {
+      this.quanLyVonPhiService.capnhatbaocao(request).subscribe((res) => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err =>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+    } else {
+      this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    }
+
+    this.updateEditCache();
+    this.spinner.hide();
+  }
 
   addCol() {
-    if (this.ObjCol == undefined) return
+    if (this.ObjCol == undefined) return;
     var colname;
-    this.listVattu.forEach(e => {
+    this.listVattu.forEach((e) => {
       if (this.ObjCol == e.id) {
         colname = e.tenDm;
       }
-    })
+    });
     let objTrongdot = {
       id: uuid.v4(),
       maVtu: this.ObjCol,
-      loaiMatHang: 0,
+      loaiMatHang: '0',
       colName: colname,
       sl: 0,
     };
-    let objLuyke = {
-      id: objTrongdot.id,
-      maVtu: this.ObjCol,
-      loaiMatHang: 1,
-      colName: colname,
-      sl: 0,
-    };
+    // let objLuyke = {
+    //   id: objTrongdot.id,
+    //   maVtu: this.ObjCol,
+    //   loaiMatHang: 1,
+    //   colName: colname,
+    //   sl: 0,
+    // };
     this.listColTrongDot.push(objTrongdot);
-    this.listColLuyke.push(objLuyke);
+    // this.listColLuyke.push(objLuyke);
 
-    this.addColLL(this.chiTietBcaos, objTrongdot, objLuyke);
+    this.addColLL(this.chiTietBcaos, objTrongdot);
     this.updateLstCTietBCao();
     this.cols++;
   }
 
-
   //them cot moi vao linklist
-  addColLL(data: linkList, obj1: vatTu, obj2: vatTu) {
-    data.listCtiet.push(obj1);
-    data.listCtiet.push(obj2);
+  addColLL(data: linkList, obj: vatTu) {
+    let objTrongdot = {
+      id: obj.id,
+      maVtu: obj.maVtu,
+      loaiMatHang: '0',
+      colName: obj.colName,
+      sl: 0,
+    };
+    let objLuyke = {
+      id: obj.id,
+      maVtu: obj.maVtu,
+      loaiMatHang: '1',
+      colName: obj.colName,
+      sl: 0,
+    };
+    data.listCtiet.push(objTrongdot);
+    data.listCtiet.push(objLuyke);
     if (data.next.length == 0) return;
-    data.next.forEach(item => {
-      this.addColLL(item, obj1, obj2);
-    })
-
+    data.next.forEach((item) => {
+      this.addColLL(item, obj);
+    });
   }
-
 
   addLine(idx: any) {
     var listVtu: vatTu[] = [];
 
-    this.listColTrongDot.forEach(e => {
+    this.listColTrongDot.forEach((e) => {
       let objTrongD = {
         id: e.id,
         maVtu: e.maVtu,
-        loaiMatHang: 0,
+        loaiMatHang: '0',
         colName: '',
         sl: 0,
-      }
+      };
       let objLke = {
         id: e.id,
         maVtu: e.maVtu,
-        loaiMatHang: 1,
+        loaiMatHang: '1',
         colName: '',
         sl: 0,
-      }
+      };
       listVtu.push(objTrongD);
       listVtu.push(objLke);
-    })
+    });
 
     let item = {
       id: uuid.v4(),
-      stt: "",
-      maNdungChi: 0,
-      maNdungChiParent: 0,
+      stt: 0,
+      maNdungChi: '',
+      maNdungChiParent: '',
       maNdungChiChild: 0,
       trongDotTcong: 0,
       trongDotThoc: 0,
@@ -345,7 +476,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       luyKeGao: 0,
       listCtiet: listVtu,
       parentId: null,
-      ghiChu: 0,
+      ghiChu: '',
       checked: false,
     };
     this.lstCTietBCao.splice(idx, 0, item);
@@ -360,33 +491,281 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   //xóa cột
   deleteCol(id: any) {
-    debugger
-    let idx = this.listColTrongDot.findIndex( e => {e.id==id});
-    let idx1 = this.listColLuyke.findIndex(e =>{e.id==id});
+    debugger;
 
-    this.listColTrongDot = this.listColTrongDot.splice(idx, 1);
-    this.listColLuyke = this.listColLuyke.splice(idx1 ,1);
-    this.lstCTietBCao.forEach(e => {
-      let idx = e.listCtiet.findIndex(e=>e.id ==id);
-      e.listCtiet = e.listCtiet.splice(idx, 1);
-    })
-    this.deleteColLL(this.chiTietBcaos, id);
+    let idx = this.listColTrongDot.findIndex((e) => e.id == id);
+    this.listColTrongDot.splice(idx, 1);
+    this.listColLuyke.splice(idx, 1);
+    this.lstCTietBCao.forEach((e) => {
+      e.listCtiet.splice(2 * id, 1);
+      e.listCtiet.splice(2 * id, 1);
+    });
+
+    this.deleteColLL(this.chiTietBcaos, 2 * id);
     this.cols = this.cols - 1;
+    console.log(this.lstCTietBCao);
     console.log(this.chiTietBcaos);
   }
 
-  deleteColLL(data: linkList, id: any){
-    if (data.vt != 0) {
-      data.listCtiet = data.listCtiet.splice(id, 1);
-    }
+  deleteColLL(data: linkList, id: any) {
+    data.listCtiet.splice(id, 1);
     if (data.next.length == 0) return;
-    data.next.forEach(item => {
+    data.next.forEach((item) => {
       this.deleteColLL(item, id);
+    });
+  }
+
+  // call chi tiet bao cao
+  getDetailReport() {
+    this.spinner.hide();
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.statusCode == 0) {
+          // this.chiTietBcaos = data.data;
+          this.lstCTietBCao = data.data.lstCTietBCao;
+
+          this.lstFile = data.data.lstFile;
+          this.maLoaiBaocao = '92';
+          // set thong tin chung bao cao
+          this.ngaynhap = data.data.ngayTao;
+          this.nguoinhap = data.data.nguoiTao;
+          this.donvitao = data.data.maDvi;
+          this.mabaocao = data.data.maBcao;
+          this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
+          this.trangThaiBanGhi = data.data.trangThai;
+          let e = this.lstCTietBCao[0];
+
+          e.listCtiet.forEach((el) => {
+            if (el.loaiMatHang == 0) {
+              this.listVattu.forEach((vt) => {
+                if (vt.id == el.maVtu) {
+                  let objTrongdot = {
+                    id: el.id,
+                    maVtu: vt.id,
+                    loaiMatHang: el.loaiMatHang,
+                    colName: vt.tenDm,
+                    sl: el.sl,
+                  };
+                  this.listColTrongDot.push(objTrongdot);
+                }
+              });
+            }
+          });
+
+          this.lstCTietBCao.forEach((item) => {
+            this.transformToLinkList(item);
+          });
+          console.log(this.chiTietBcaos);
+          this.updateLstCTietBCao();
+          console.log(this.lstCTietBCao);
+          this.cols = this.cols + this.listColTrongDot.length;
+          if (
+            this.trangThaiBanGhi == '1' ||
+            this.trangThaiBanGhi == '3' ||
+            this.trangThaiBanGhi == '5' ||
+            this.trangThaiBanGhi == '8'
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
+          // set list id file ban dau
+          this.lstFile.filter((item) => {
+            this.listIdFiles += item.id + ',';
+          });
+          this.updateLstCTietBCao();
+          this.notification.success(MESSAGE.SUCCESS, data?.msg);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
+      },
+    );
+  }
+
+
+  getDetailReportToExportFile(){
+    this.spinner.hide();
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.statusCode == 0) {
+          // this.chiTietBcaos = data.data;
+          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstFile = data.data.lstFile;
+          this.maLoaiBaocao = '92';
+          // set thong tin chung bao cao
+          this.ngaynhap = data.data.ngayTao;
+          this.nguoinhap = data.data.nguoiTao;
+          this.donvitao = data.data.maDvi;
+          this.mabaocao = data.data.maBcao;
+          this.namBcao = data.data.namBcao;
+          this.dotbaocao = data.data.dotBcao;
+          this.trangThaiBanGhi = data.data.trangThai;
+          let e = this.lstCTietBCao[0];
+
+          e.listCtiet.forEach((el) => {
+            if (el.loaiMatHang == 0) {
+              this.listVattu.forEach((vt) => {
+                if (vt.id == el.maVtu) {
+                  let objTrongdot = {
+                    id: el.id,
+                    maVtu: vt.id,
+                    loaiMatHang: el.loaiMatHang,
+                    colName: vt.tenDm,
+                    sl: el.sl,
+                  };
+                  this.listColTrongDot.push(objTrongdot);
+                }
+              });
+            }
+          });
+
+          this.lstCTietBCao.forEach((item) => {
+            this.transformToLinkList(item);
+          });
+          this.updateLstCTietBCao();
+          this.cols = this.cols + this.listColTrongDot.length;
+          this.status = true;
+          
+          // set list id file ban dau
+          this.lstFile.filter((item) => {
+            this.listIdFiles += item.id + ',';
+          });
+          this.updateLstCTietBCao();
+          this.notification.success(MESSAGE.SUCCESS, data?.msg);
+        } else {
+          this.notification.error(MESSAGE.ERROR,data?.msg
+          );
+        }
+      },
+      (err) => {
+        this.notification.error(
+          MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR
+        );
+      },
+    );
+  }
+
+
+  callTonghop(){
+
+    if(Number(this.maLoaiBaocao) == 407){
+      this.maLoaiBaocao ='90';
+    }
+    if(Number(this.maLoaiBaocao) == 408){
+      this.maLoaiBaocao ='91';
+    }
+    if(Number(this.maLoaiBaocao) == 409){
+      this.maLoaiBaocao ='92';
+    }
+    if(Number(this.maLoaiBaocao) == 410){
+      this.maLoaiBaocao ='93';
+    }
+    if(Number(this.maLoaiBaocao) == 411){
+      this.maLoaiBaocao ='94';
+    }
+    let objTonghop ={
+      maDvi:this.maDvi = '0402',
+      maLoaiBcao:this.maLoaiBaocao,
+      namBcao:this.nam,
+      thangordotBcao:this.dotBaocao,
+    }
+    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).subscribe(res => {
+      if(res.statusCode==0){
+        this.lstCTietBCao = res.data;
+        this.lstFile = res.data.lstFile;
+        this.maLoaiBaocao = '92';
+        let e = this.lstCTietBCao[0];
+        e.listCtiet.forEach((el) => {
+            if (el.loaiMatHang == 0) {
+              this.listVattu.forEach((vt) => {
+                if (vt.id == el.maVtu) {
+                  let objTrongdot = {
+                    id: el.id,
+                    maVtu: vt.id,
+                    loaiMatHang: el.loaiMatHang,
+                    colName: vt.tenDm,
+                    sl: el.sl,
+                  };
+                  this.listColTrongDot.push(objTrongdot);
+                }
+              });
+            }
+          });
+        this.lstCTietBCao.forEach((item) => {
+            this.transformToLinkList(item);
+        });
+        this.updateLstCTietBCao();
+        this.cols = this.cols + this.listColTrongDot.length;
+
+        // set list id file ban dau
+        this.lstFile.filter((item) => {
+          this.listIdFiles += item.id + ',';
+        });
+        this.updateLstCTietBCao();
+
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
+       
+      }else{
+        this.notification.error(MESSAGE.ERROR,res?.msg);
+      }
+    },err=>{
+      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
     })
   }
 
-  //chua co del col trong linklist
 
+  transformToLinkList(item: ItemData) {
+    var obj: linkList = {
+      id: item.id,
+      vt: item.parentId,
+      stt: item.stt,
+      maNdungChi: item.maNdungChi,
+      maNdungChiParent: item.maNdungChiParent,
+      trongDotTcong: item.trongDotTcong,
+      trongDotThoc: item.trongDotThoc,
+      trongDotGao: item.trongDotGao,
+      luyKeTcong: item.luyKeTcong,
+      luyKeThoc: item.luyKeThoc,
+      luyKeGao: item.luyKeGao,
+      listCtiet: item.listCtiet,
+      parentId: item.parentId,
+      ghiChu: item.ghiChu,
+      next: [],
+      checked: false,
+    };
+    this.nho = false;
+    this.addToLinkList(this.chiTietBcaos, obj);
+    if (!this.nho) {
+      this.chiTietBcaos.next.forEach((item) => {
+        if (item.maNdungChiParent == obj.parentId) {
+          obj.next.push(item);
+        }
+      });
+      obj.next = obj.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
+      obj.next.forEach((item) => {
+        let idx = this.chiTietBcaos.next.findIndex((e) => e.vt == item.vt);
+        this.chiTietBcaos.next.splice(idx, 1);
+      });
+    }
+  }
+  // let sortedCompany = company.sort((a, b) => (a.name < b.name) ? -1 : 1);
+
+  addToLinkList(data: linkList, item: linkList) {
+    if (item.maNdungChiParent == data.vt) {
+      data.next.push(item);
+      data.next = data.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
+    }
+    data.next.forEach((e) => {
+      this.addToLinkList(e, item);
+    });
+    if (data.next.length == 0) return;
+  }
 
   updateEditCache(): void {
     this.lstCTietBCao.forEach((item) => {
@@ -397,7 +776,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     });
   }
 
-
   // start edit
   startEdit(id: string): void {
     this.editCache[id].edit = true;
@@ -407,10 +785,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   //update khi sửa
   saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    this.editCache[id].data.checked = this.lstCTietBCao.find(
+      (item) => item.id === id,
+    ).checked; // set checked editCache = checked lstCTietBCao
+    const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.saveEditLL(this.chiTietBcaos, index + 1);
     this.disable = false;
   }
@@ -422,13 +802,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       data: { ...this.lstCTietBCao[index] },
       edit: false,
     };
+    this.disable = false;
   }
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-    if (typeof id == "number") {
-      this.listIdDelete += id + ",";
+    this.lstCTietBCao = this.lstCTietBCao.filter((item) => item.id != id);
+    if (typeof id == 'number') {
+      this.listIdDelete += id + ',';
     }
   }
 
@@ -499,6 +880,31 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     );
   }
 
+  //upload file
+  async uploadFile(file: File) {
+    // day file len server
+    const upfile: FormData = new FormData();
+    upfile.append('file', file);
+    upfile.append('folder', this.mabaocao + '/' + this.donvitao + '/');
+    let temp = await this.quanLyVonPhiService
+      .uploadFile(upfile)
+      .toPromise()
+      .then(
+        (data) => {
+          let objfile = {
+            fileName: data.filename,
+            fileSize: data.size,
+            fileUrl: data.url,
+          };
+          return objfile;
+        },
+        (err) => {
+          console.log('false :', err);
+        },
+      );
+    return temp;
+  }
+
   // // xóa với checkbox
   // deleteSelected() {
   //   // add list delete id
@@ -514,18 +920,16 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   //   this.allChecked = false;
   // }
 
-
   //thao tác bảng
 
   //khoi tao
-  duyet(data: linkList, str: string, index: number) {
+  duyet(data: linkList, str: string, index: number, parent: number) {
     if (index != 0) {
       let mm = {
-        id: uuid.v4(),
+        id: data.id,
         stt: str + index.toString(),
         maNdungChi: data.maNdungChi,
-        maNdungChiParent: data.maNdungChiParent,
-        maNdungChiChild: data.maNdungChiChild,
+        maNdungChiParent: parent.toString(),
         trongDotTcong: data.trongDotTcong,
         trongDotThoc: data.trongDotThoc,
         trongDotGao: data.trongDotGao,
@@ -533,26 +937,25 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         luyKeThoc: data.luyKeThoc,
         luyKeGao: data.luyKeGao,
         listCtiet: data.listCtiet,
-        parentId: data.parentId,
+        parentId: data.vt,
         ghiChu: data.ghiChu,
         checked: false,
-      }
+      };
       this.lstCTietBCao.push(mm);
     }
     if (data.next.length == 0) return;
     for (var i = 0; i < data.next.length; i++) {
       if (index == 0) {
-        this.duyet(data.next[i], str, i + 1);
+        this.duyet(data.next[i], str, i + 1, data.vt);
       } else {
-        this.duyet(data.next[i], str + index.toString() + ".", i + 1);
+        this.duyet(data.next[i], str + index.toString() + '.', i + 1, data.vt);
       }
-
     }
   }
 
   updateLstCTietBCao() {
     this.lstCTietBCao = [];
-    this.duyet(this.chiTietBcaos, "", 0);
+    this.duyet(this.chiTietBcaos, '', 0, 0);
     this.updateEditCache();
   }
 
@@ -560,39 +963,55 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (data.next.length == 0) {
       return;
     }
-    data.next.forEach(item => {
+    data.next.forEach((item) => {
       item.vt = this.stt + 1;
       this.stt += 1;
       this.updateSTT(item);
-    })
+    });
   }
 
   // xoa dong theo so thu tu
   deleteByStt(idx: any): void {
+    
     this.delete(this.chiTietBcaos, idx);
     this.stt = 0;
     this.updateSTT(this.chiTietBcaos);
     this.updateLstCTietBCao();
   }
 
-
   //xoa theo so thu tu
   delete(data: linkList, idx: number) {
     if (data.next.length == 0) return;
-    var index = data.next.findIndex(item => item.vt == idx);
+    var index = data.next.findIndex((item) => item.vt == idx);
     if (index == -1) {
-      data.next.forEach(item => {
+      data.next.forEach((item) => {
         this.delete(item, idx);
-      })
+      });
     } else {
       this.kt = true;
-      data.next = data.next.filter(item => item.vt != idx);
+      //this.getListIdDelete(data.next[index]);
+      data.next = data.next.filter((item) => item.vt != idx);
       return;
     }
   }
 
+  getListIdDelete(data: linkList){
+    if (typeof this.lstCTietBCao[data.vt-1].id == 'number'){
+      this.listIdDelete += this.lstCTietBCao[data.vt-1].id + ',';
+    }
+    if (data.next.length == 0) return;
+    data.next.forEach(item => {
+      this.getListIdDelete(item);
+    })
+  }
+
   //xoa bằng checkbox
   deleteSelected() {
+    // this.lstCTietBCao.forEach((item) => {
+    //   if (item.checked && typeof item.id == 'number') {
+    //     this.listIdDelete += item.id + ',';
+    //   }
+    // });
     this.deleteAllSelected(this.chiTietBcaos);
     this.updateSTT(this.chiTietBcaos);
     this.updateLstCTietBCao();
@@ -604,10 +1023,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (data.next.length == 0) {
       return;
     }
-    data.next = data.next.filter(item => item.checked == false);
+    data.next = data.next.filter((item) => item.checked == false);
     this.stt = 0;
 
-    data.next.forEach(item => this.deleteAllSelected(item));
+    data.next.forEach((item) => this.deleteAllSelected(item));
   }
 
   // click o checkbox all
@@ -629,10 +1048,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
     if (data.next.length == 0) return;
     var kt = true;
-    data.next.forEach(item => {
+    data.next.forEach((item) => {
       this.updateCheckedLL(item);
       if (!item.checked) kt = false;
-    })
+    });
 
     if (kt) {
       data.checked = true;
@@ -645,10 +1064,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   subUpdateChecked(data: linkList, kt: boolean) {
     data.checked = kt;
-    if (data.vt > 0)
-      this.lstCTietBCao[data.vt - 1].checked = kt;
+    if (data.vt > 0) this.lstCTietBCao[data.vt - 1].checked = kt;
     if (data.next.length == 0) return;
-    data.next.forEach(item => this.subUpdateChecked(item, kt));
+    data.next.forEach((item) => this.subUpdateChecked(item, kt));
   }
 
   saveEditLL(data: linkList, idx: number) {
@@ -658,20 +1076,19 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     }
     if (data.next.length == 0) return;
     if (data.vt > idx) return;
-    data.next.forEach(item => {
+    data.next.forEach((item) => {
       this.saveEditLL(item, idx);
-    })
+    });
   }
 
-  // lưu bằng cấp 
+  // lưu bằng cấp
   saveEdit1(id: string, index: number): void {
-
     var item: linkList = {
+      id: uuid.v4(),
       vt: 0,
       stt: this.editCache[id].data.stt,
       maNdungChi: this.editCache[id].data.maNdungChi,
       maNdungChiParent: this.editCache[id].data.maNdungChiParent,
-      maNdungChiChild: this.editCache[id].data.maNdungChiChild,
       trongDotTcong: this.editCache[id].data.trongDotTcong,
       trongDotThoc: this.editCache[id].data.trongDotThoc,
       trongDotGao: this.editCache[id].data.trongDotGao,
@@ -683,8 +1100,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       ghiChu: this.editCache[id].data.ghiChu,
       next: [],
       checked: false,
-    }
-
+    };
 
     this.kt = false;
     this.addEqual(this.chiTietBcaos, item, index);
@@ -701,11 +1117,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   // lưu cấp con
   saveEdit2(id: string, index: number): void {
     var item: linkList = {
+      id: uuid.v4(),
       vt: 0,
       stt: this.editCache[id].data.stt,
       maNdungChi: this.editCache[id].data.maNdungChi,
       maNdungChiParent: this.editCache[id].data.maNdungChiParent,
-      maNdungChiChild: this.editCache[id].data.maNdungChiChild,
       trongDotTcong: this.editCache[id].data.trongDotTcong,
       trongDotThoc: this.editCache[id].data.trongDotThoc,
       trongDotGao: this.editCache[id].data.trongDotGao,
@@ -717,8 +1133,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       ghiChu: this.editCache[id].data.ghiChu,
       next: [],
       checked: false,
-    }
-
+    };
 
     // this.tranferData(item,this.editCache[id].data);
     // item.vt =0;
@@ -734,17 +1149,17 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.updateSTT(this.chiTietBcaos);
     console.log(this.chiTietBcaos);
     this.updateLstCTietBCao();
+    console.log(this.lstCTietBCao);
     this.disable = false;
   }
 
-
   addEqual(data: linkList, value: linkList, idx: number) {
     if (data.next.length == 0) return;
-    var index = data.next.findIndex(item => item.vt == idx);
+    var index = data.next.findIndex((item) => item.vt == idx);
     if (index == -1) {
-      data.next.forEach(item => {
+      data.next.forEach((item) => {
         this.addEqual(item, value, idx);
-      })
+      });
     } else {
       this.kt = true;
       data.next.splice(index + 1, 0, value);
@@ -764,11 +1179,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   addLess(data: linkList, value: linkList, idx: number) {
     if (data.next.length == 0) return;
-    var index = data.next.findIndex(item => item.vt == idx);
+    var index = data.next.findIndex((item) => item.vt == idx);
     if (index == -1) {
-      data.next.forEach(item => {
+      data.next.forEach((item) => {
         this.addLess(item, value, idx);
-      })
+      });
     } else {
       this.kt = true;
       data.next[index].next.splice(0, 0, value);
@@ -784,11 +1199,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.addLess1(data.next[data.next.length - 1], value);
   }
 
-
   tranferData(data: linkList, item: ItemData) {
+    data.id = item.id,
     data.maNdungChi = item.maNdungChi;
     data.maNdungChiParent = item.maNdungChiParent;
-    data.maNdungChiChild = item.maNdungChiChild;
     data.trongDotTcong = item.trongDotTcong;
     data.trongDotThoc = item.trongDotThoc;
     data.trongDotGao = item.trongDotGao;

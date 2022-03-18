@@ -1,4 +1,4 @@
-import { ItemDetail } from './itemDetail';
+import { ItemDetail } from './ItemDetail';
 
 export class KeHoachLuongThuc {
   id: number;
@@ -24,4 +24,7 @@ export class KeHoachLuongThuc {
   tenDonvi: string;
   maDonVi: string;
   donViTinh: string;
+  donViId: number;
+  khGaoId: number;
+  khThocId: number;
 }

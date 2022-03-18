@@ -132,7 +132,7 @@
                   <th>Tổng Cộng</th>
                   <th>Thóc</th>
                   <th>Gạo</th>
-                  <th *ngFor="let colname of listColLuyke"> <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+                  <th *ngFor="let colname of listColTrongDot"> <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
                       (nzOnConfirm)="deleteCol(colname.id)">{{colname.colName}}</a></th>
                 </tr>
                 <tr>
@@ -315,7 +315,7 @@
                       </ng-container>
                     </ng-container>
                     <td>
-                      <input type="number" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu">
+                      <input type="text" class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu">
                     </td>
                     <td>
                       <i class="fa fa-trash-o do"></i>
@@ -391,7 +391,7 @@
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm cột</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(this.lstCTietBCao.length)">
+          <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao.length!=0" (click)="addLine(this.lstCTietBCao.length)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm dòng</span>
           </button>

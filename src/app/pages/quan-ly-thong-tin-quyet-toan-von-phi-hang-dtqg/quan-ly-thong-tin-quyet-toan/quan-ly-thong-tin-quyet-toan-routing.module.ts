@@ -21,6 +21,13 @@ const routes: Routes = [
         './danh-sach-dieu-chinh-so-lieu-sau-quyet-toan/danh-sach-dieu-chinh-so-lieu-sau-quyet-toan.module'
       ).then((m) => m.DanhSachDieuChinhSoLieuSauQuyetToanModule),
   },
+  {
+    path: 'tong-hop-so-lieu-quyet-toan',
+    loadChildren: () =>
+      import(
+        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
+      ).then((m) => m.TongHopSoLieuQuyetToanModule),
+  },
 ];
 
 @NgModule({

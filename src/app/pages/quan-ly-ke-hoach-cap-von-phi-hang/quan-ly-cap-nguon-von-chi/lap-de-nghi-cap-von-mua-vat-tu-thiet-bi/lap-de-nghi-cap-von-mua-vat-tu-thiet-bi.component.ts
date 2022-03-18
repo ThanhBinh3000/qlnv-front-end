@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucService } from '../../../../services/danhMuc.service';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
@@ -112,7 +112,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private danhMucService: DanhMucService,
+              private danhMucService: DanhMucHDVService,
               private userService: UserService,
               private notification: NzNotificationService,
               ) {

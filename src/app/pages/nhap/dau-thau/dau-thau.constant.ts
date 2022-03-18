@@ -111,7 +111,7 @@ export const LUONG_THUC_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'hop-dong-mua',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -148,19 +148,37 @@ export const LUONG_THUC_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Biên bản nghiệm thu kê lót BQ ban đầu nhập lương thực',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'quan-ly-bien-ban-nghiem-thu-ke-lot',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu kiểm tra chất lượng hàng DTQG nhập kho',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Phiếu nhập điều chỉnh',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Phương án trình tổng cục',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'phuong-an-trinh-tong-cuc',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quyết định giao nhiệm vụ nhập hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý phiếu nhập kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quan-ly-phieu-nhap-kho',
   },
 ];
 
@@ -193,7 +211,7 @@ export const VAT_TU_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'phuong-an-trinh-tong-cuc',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
