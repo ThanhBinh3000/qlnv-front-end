@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -18,6 +20,7 @@ export class TongHopComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private nguoiDungSerivce: UserService,
+    private notifi : NzNotificationService
   ) { }
 
   url: any;
@@ -41,13 +44,13 @@ export class TongHopComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
       },
       err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -57,12 +60,13 @@ export class TongHopComponent implements OnInit {
         if (data.statusCode == 0) {
           console.log(data);
           this.donViTaos = data.data;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
       },
       err => {
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       }
     );
   }

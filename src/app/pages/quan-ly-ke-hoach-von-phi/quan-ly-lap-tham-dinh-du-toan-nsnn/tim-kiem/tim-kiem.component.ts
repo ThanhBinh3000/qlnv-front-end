@@ -2,7 +2,9 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from '../../../../services/danhMuc.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
@@ -55,6 +57,7 @@ export class TimKiemComponent implements OnInit {
     private danhMuc: DanhMucService,
     private router: Router,
     private datePipe: DatePipe,
+    private notifi:NzNotificationService,
   ) {
   }
 
@@ -65,13 +68,13 @@ export class TimKiemComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
       },
       err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -80,12 +83,13 @@ export class TimKiemComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
       },
       err => {
-        this.errorMessage = "err.error.message";
+        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -128,12 +132,13 @@ export class TimKiemComponent implements OnInit {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
+          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
       }
     );
   }
