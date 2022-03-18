@@ -10,6 +10,9 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
+
 
 export class ItemData {
   checked!: boolean;
@@ -106,6 +109,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private userSerivce: UserService,
     private danhMucService: DanhMucService,
+    private notification: NzNotificationService,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
   }
@@ -127,11 +131,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
@@ -154,41 +158,36 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
     this.danhMucService.dMHinhThucVanBan().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
-          this.loaiVbans = data.data.content;
-          console.log(this.loaiVbans);
+          this.loaiVbans = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.danhMucService.dMDonviChuTri().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.maDviChuTris = data.data.content;
-          console.log(this.maDviChuTris);
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -203,11 +202,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           this.userInfo = data?.data
           return data?.data;
         } else {
-
+            this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     return userInfo;
@@ -256,21 +255,28 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
-          alert("trinh duyet thanh cong!");
-          console.log(data);
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
         },
         (err) => {
-          alert("trinh duyet that bai!");
-          console.log();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-        if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
-        } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+      this.quanLyVonPhiService.updatelist(request).subscribe(
+        res => {
+          if (res.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-      })
+      );
     }
 
     this.lstCTietBCao.filter(item => {
@@ -291,11 +297,19 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
-      if (data.statusCode == 0) {
-        this.getDetailReport();
+    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.getDetailReport();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    });
+    );
     this.spinner.hide();
   }
 
@@ -337,12 +351,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
             this.listIdFiles += item.id + ",";
           })
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.show();
@@ -364,7 +377,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         return objfile;
       },
       err => {
-        console.log('false :', err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     return temp;
