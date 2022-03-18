@@ -88,17 +88,25 @@
                                    <label class="search__label">Dự toán</label>
                                    <input class="search__input" nz-input [(ngModel)]="duToan" disabled />
                               </div>
-                              <div nz-col nzSpan="7">
+                              <div nz-col nzSpan="6">
                                    <label class="search__label">mã đơn vị sử dụng ngân sách</label>
-                                   <input class="search__input" nz-input [(ngModel)]="trangThaiBanGhi" disabled />
+                                   <input class="search__input" nz-input [(ngModel)]="maDonViTao" disabled />
                               </div>
                               <div nz-col nzSpan="6">
-                                   <label class="search__label">Quyết định số</label>
+                                   <label class="search__label">Mã kho bạc nơi giao dịch</label>
                                    <input class="search__input" nz-input [(ngModel)]="soQd" />
                               </div>
                               <div nz-col nzSpan="6">
-                                   <label class="search__label">Ngày quyết định</label>
-                                   <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
+                                <label class="search__label">Vốn cấp</label>
+                                <input class="search__input" nz-input [(ngModel)]="duToan"  />
+                              </div>
+                              <div nz-col nzSpan="6">
+                                <label class="search__label">Vốn ứng</label>
+                                <input class="search__input" nz-input [(ngModel)]="duToan"  />
+                              </div>
+                              <div nz-col nzSpan="24">
+                                <label class="search__label">Ghi chú</label>
+                                <input class="search__input" nz-input [(ngModel)]="ghiChu"  />
                               </div>
                             </div>
                             <div class="action">
@@ -115,21 +123,30 @@
                            <nz-table nzBordered class="table__body">
                                 <thead>
                                      <tr>
-                                          <th nzWidth="50px">Chọn</th>
-                                          <th nzWidth="100px">Đơn vị</th>
-                                          <th nzWidth="100px">Khoản mục</th>
-                                          <th nzWidth="150px">Loại</th>
-                                          <th nzWidth="200px">Chi cho</th>
-                                          <th nzWidth="150px">Tổng tiền</th>
-                                          <th nzWidth="300px">Ghi chú</th>
+                                          <th nzWidth="100px" rowspan="2">Đơn vị</th>
+                                          <th nzWidth="100px" colspan="3">Cấp tiền mua nước</th>
+                                          <th nzWidth="150px" colspan="3">cấp tiền mua gạo</th>
+                                          <th nzWidth="200px" colspan="4">Tổng tiền cấp vốn mua lương thực</th>
+                                     </tr>
+                                     <tr>
+                                      <th nzWidth="100px" >Vốn cấp</th>
+                                      <th nzWidth="100px" >Vốn ứng</th>
+                                      <th nzWidth="100px" >Cộng</th>
+                                      <th nzWidth="100px" >Vốn cấp</th>
+                                      <th nzWidth="100px" >Vốn ứng</th>
+                                      <th nzWidth="100px" >Cộng</th>
+                                      <th nzWidth="100px" >Dự toán</th>
+                                      <th nzWidth="100px" >Vốn cấp</th>
+                                      <th nzWidth="100px" >Vốn ứng</th>
+                                      <th nzWidth="100px" >Cộng</th>
                                      </tr>
                                 </thead>
                                 <tbody>
                                      <tr *ngFor="let data of lstCTietBCao; let i = index">
-                                          <td [hidden]="status">
+                                          <!-- <td [hidden]="status">
                                                <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                     (ngModelChange)="updateSingleChecked()"></label>
-                                          </td>
+                                          </td> -->
                                           <td>{{data.maDvi}}</td>
                                           <td>{{data.maKhoanMuc}}</td>
                                           <td>{{data.maLoaiChi}}</td>
