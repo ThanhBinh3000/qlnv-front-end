@@ -98,7 +98,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
             this.totalitem = res.data.totalElements;
            this.notification.success(MESSAGE.SUCCESS, res?.msg);
         }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
     })
   }

@@ -9,6 +9,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 
 export class ItemData {
@@ -79,7 +81,8 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     private router: ActivatedRoute,
     private datepipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private route:Router
+    private route:Router,
+    private notification:NzNotificationService,
   ) {}
 
   async ngOnInit() {
@@ -113,12 +116,11 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
           } else {
-            this.errorMessage =
-              'Có lỗi trong quá trình sinh mã báo cáo vấn tin!';
+           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -129,12 +131,11 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
               this.listChitieu = data.data?.content;
               console.log(this.listChitieu);
           } else {
-              this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
       },
       (err) => {
-          console.log(err);
-          this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
    );
    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
@@ -234,12 +235,11 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             this.listIdFiles += item.id + ',';
           });
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -454,20 +454,24 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
-          alert('Cập nhật thành công');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          alert('Có lỗi trong quá trình vấn tin');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
+      },err=>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
-          alert('trinh duyet thanh cong!');
-          console.log(data);
+          if(data.statusCode==0){
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          }
         },
         (err) => {
-          alert('trinh duyet that bai!');
-          console.log();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -503,7 +507,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           return objfile;
         },
         (err) => {
-          console.log('false :', err);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     return temp;
@@ -529,7 +533,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             console.log(this.lstCTietBCao)
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
-            alert('co loi trong qua trinh van tin');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
     },err =>{
         alert(err.error.message);
@@ -538,7 +542,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         if (res.statusCode == 0) {
             this.mabaocao = res.data;
         } else {
-            this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
     })
     this.spinner.show();

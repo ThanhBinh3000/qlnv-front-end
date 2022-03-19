@@ -46,7 +46,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
       if(res.statusCode==0){
         this.donviTaos = res.data;
       }else{
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
       
       
@@ -55,7 +55,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         if(res.statusCode==0){
           this.listDvnhan= res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
         
       
@@ -115,7 +115,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           this.length = res.data.totalElements;
           this.listSogiaoTranChi = res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
         
     })

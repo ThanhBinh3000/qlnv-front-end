@@ -125,7 +125,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
@@ -139,7 +139,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
           this.listNoidung = res.data?.content;
           
         } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
@@ -153,7 +153,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
               this.listNhomchi = data.data?.content;
               console.log(this.listNhomchi);
           } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
       },
       (err) => {
@@ -259,7 +259,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             this.listIdFiles += item.id + ',';
           });
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {

@@ -46,7 +46,7 @@ export class TongHopComponent implements OnInit {
           this.baoCaos = data.data?.content;
           this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {
@@ -62,7 +62,7 @@ export class TongHopComponent implements OnInit {
           this.donViTaos = data.data;
           this.notifi.success(MESSAGE.SUCCESS,data?.msg);
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {

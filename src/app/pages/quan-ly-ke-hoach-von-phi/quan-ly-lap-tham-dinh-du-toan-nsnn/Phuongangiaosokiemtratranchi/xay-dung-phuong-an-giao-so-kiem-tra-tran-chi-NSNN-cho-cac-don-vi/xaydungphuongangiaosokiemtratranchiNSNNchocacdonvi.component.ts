@@ -132,7 +132,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.maphuongan = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
@@ -146,7 +146,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.listNoidung = res.data?.content;
           console.log(this.listNoidung);
         } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
@@ -159,7 +159,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
@@ -265,9 +265,9 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (soqd != null && socv != null) {
             this.checknutgiao = false;
           }
-          this.notification.success(MESSAGE.SUCCESS, data?.msg);
+         
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
@@ -554,7 +554,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
@@ -567,7 +567,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
@@ -654,7 +654,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS, "Giao số trần chi thành công!");
         }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -698,7 +698,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS, "Giao số trần chi thành công!");
         }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },err=> {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

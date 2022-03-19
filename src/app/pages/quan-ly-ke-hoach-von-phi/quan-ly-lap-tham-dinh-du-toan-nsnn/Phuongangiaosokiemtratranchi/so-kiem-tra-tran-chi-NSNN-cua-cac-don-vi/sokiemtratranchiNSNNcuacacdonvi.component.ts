@@ -102,7 +102,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
               }
               console.log(res);
           } else {
-             this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
               this.checkdata = false;
           }
       },

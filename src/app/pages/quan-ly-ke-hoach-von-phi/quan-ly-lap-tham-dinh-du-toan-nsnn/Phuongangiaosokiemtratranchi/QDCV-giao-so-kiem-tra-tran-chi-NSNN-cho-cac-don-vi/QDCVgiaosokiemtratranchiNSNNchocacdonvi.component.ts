@@ -65,7 +65,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
         this.listPhuongAn = res.data;
         
       }else{
-        this.notification.error(MESSAGE.ERROR,res?.msg)
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     },err => {
       this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
@@ -138,7 +138,7 @@ showcongvan(){
       this.soQd = ob.soQd;
       console.log(res);
     }else{
-      this.notification.error(MESSAGE.ERROR, res?.msg);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     }
   },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
