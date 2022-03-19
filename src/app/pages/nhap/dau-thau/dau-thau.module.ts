@@ -65,6 +65,10 @@ import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-
     QuanLyPhieuKiemTraChatLuongHangComponent,
     ThemMoiPhieuKiemTraChatLuongHangComponent,
   ],
-  imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
+  imports: [
+    CommonModule,
+    DauThauRoutingModule,
+    ComponentsModule,
+  ],
 })
-export class DauThauModule {}
+export class DauThauModule { }

@@ -3,7 +3,7 @@ export const NHAP_ROUTE_LIST = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Đấu thầu',
-    url: `/${NHAP_MAIN_ROUTE}/dau-thau`,
+    url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau`,
     dropdown: 'dau-thau',
   },
   {
