@@ -455,5 +455,12 @@ export class QuanLyVonPhiService extends BaseService {
         request,
       );
     }
+    //search list danh sach de nghi cap von
+    timDsachTongHopSoLieuQuyetToan(request: any): Observable<any> {
+      return this.httpClient.post(
+        this.urlDefault + '/qlnv-khoachphi/quyet-toan/danh-sach',
+        request,
+      );
+    }
 
 }
