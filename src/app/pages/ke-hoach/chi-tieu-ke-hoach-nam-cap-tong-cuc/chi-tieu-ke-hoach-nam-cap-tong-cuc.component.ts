@@ -42,7 +42,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -226,8 +226,34 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
+        let maDonVi = null;
+        let tenDvi = null;
+        if (this.inputDonVi && this.inputDonVi.length > 0) {
+          let getDonVi = this.optionsDonVi.filter(
+            (x) => x.labelDonVi == this.inputDonVi,
+          );
+          if (getDonVi && getDonVi.length > 0) {
+            maDonVi = getDonVi[0].maDvi;
+            tenDvi = getDonVi[0].tenDvi;
+          }
+        }
+        let body = {
+          ngayKyDenNgay: this.endValue
+            ? dayjs(this.endValue).format('YYYY-MM-DD')
+            : null,
+          id: 0,
+          donViId: maDonVi,
+          tenDvi: tenDvi,
+          pageNumber: null,
+          pageSize: null,
+          soQD: this.searchFilter.soQD,
+          trichYeu: this.searchFilter.trichYeu,
+          ngayKyTuNgay: this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+        };
         this.chiTieuKeHoachNamService
-          .exportList()
+          .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
           );

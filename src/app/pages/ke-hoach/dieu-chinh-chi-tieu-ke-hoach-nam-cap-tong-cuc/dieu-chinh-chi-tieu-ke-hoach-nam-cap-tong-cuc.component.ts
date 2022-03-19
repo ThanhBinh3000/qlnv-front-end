@@ -196,7 +196,20 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList().subscribe(
+        let body = {
+          pageSize: null,
+          pageNumber: null,
+          soQD: this.searchFilter.soQD,
+          namKeHoach: this.searchFilter.namKeHoach,
+          trichYeu: this.searchFilter.trichYeu,
+          ngayKyDenNgay: this.endValue
+            ? dayjs(this.endValue).format('YYYY-MM-DD')
+            : null,
+          ngayKyTuNgay: this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+        }
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList(body).subscribe(
           blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
         );
         this.spinner.hide();

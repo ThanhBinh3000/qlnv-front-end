@@ -54,9 +54,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     return this.httpClient.put(url, body).toPromise();
   }
 
-  exportList(): Observable<Blob> {
+  exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
-    return this.httpClient.post(url, null, { responseType: 'blob' });
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteData(id: any): Promise<any> {
