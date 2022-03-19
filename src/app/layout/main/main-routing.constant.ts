@@ -13,11 +13,11 @@ export const MAIN_ROUTES = {
 export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Kế hoạch',
-    route: MAIN_ROUTES.kehoach,
+    route: `${MAIN_ROUTES.kehoach}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
   },
   {
     title: 'Nhập',
-    route: MAIN_ROUTES.nhap,
+    route: `${MAIN_ROUTES.nhap}/dau-thau/danh-sach-dau-thau`,
   },
   {
     title: 'Xuất',

@@ -14,7 +14,6 @@ import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './luong-thuc/quyet-dinh-ph
 import { ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent } from './luong-thuc/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 import { ThongTinDauThauComponent } from './luong-thuc/thong-tin-dau-thau/thong-tin-dau-thau.component';
 import { ChiTietThongTinDauThauComponent } from './luong-thuc/chi-tiet-thong-tin-dau-thau/chi-tiet-thong-tin-dau-thau.component';
-import { DauThauTabComponent } from './dau-thau-tab/dau-thau-tab.component';
 import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-quyet-dinh.component';
@@ -45,7 +44,6 @@ import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-
     ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
     ThongTinDauThauComponent,
     ChiTietThongTinDauThauComponent,
-    DauThauTabComponent,
     KeHoachLuaChonNhaThauVatTuComponent,
     ThongTinKeHoachLuaChonNhaThauVatTuComponent,
     DuThaoQuyetDinhComponent,

@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NHAP_ROUTE_LIST } from './nhap.constant';
+import { NzPlacementType } from 'ng-zorro-antd/dropdown';
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -14,9 +15,9 @@ import { NHAP_ROUTE_LIST } from './nhap.constant';
 export class NhapComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit() {
     if (

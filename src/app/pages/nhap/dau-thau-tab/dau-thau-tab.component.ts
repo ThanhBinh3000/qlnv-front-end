@@ -9,8 +9,6 @@ import { MUOI_LIST, VAT_TU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-
   styleUrls: ['./dau-thau-tab.component.scss'],
 })
 export class DauThauTabComponent implements OnInit {
-  @Input() isVisible: boolean;
-  @Output() isVisibleChange = new EventEmitter<boolean>();
   muoiList = MUOI_LIST;
   vatTuList = VAT_TU_LIST;
   luongThucList = LUONG_THUC_LIST;
@@ -29,27 +27,18 @@ export class DauThauTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selectedTabNow = this.selectedIndex;
+    if (this.router.url.indexOf('/muoi/')) {
+      this.selectedTabNow = 1;
+    }
+    else if (this.router.url.indexOf('/vat-tu/')) {
+      this.selectedTabNow = 2;
+    }
+    else {
+      this.selectedTabNow = 0;
+    }
   }
 
   redirect(url: string) {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
     this.router.navigate([this.defaultUrl + url]);
-  }
-
-  showDetailTab(tab: string) {
-    if (this.tabSelected == tab) {
-      this.isVisible = !this.isVisible;
-      this.isVisibleChange.emit(this.isVisible);
-    }
-    else {
-      this.isVisible = true;
-      this.isVisibleChange.emit(this.isVisible);
-    }
-    this.tabSelected = tab;
-    if (!this.isVisible) {
-      this.selectedTabNow = this.selectedIndex;
-    }
   }
 }
