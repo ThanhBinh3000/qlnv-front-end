@@ -84,19 +84,19 @@ const routes: Routes = [
         component: ChiTietThongTinDauThauComponent,
       },
       {
-        path: 'ke-hoach-lua-chon-nha-thau-vat-tu',
+        path: 'vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu',
         component: KeHoachLuaChonNhaThauVatTuComponent,
       },
       {
-        path: 'ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/:id',
+        path: 'vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/:id',
         component: ThongTinKeHoachLuaChonNhaThauVatTuComponent,
       },
       {
-        path: 'ke-hoach-lua-chon-nha-thau-vat-tu/du-thao-quyet-dinh/:id',
+        path: 'vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/du-thao-quyet-dinh/:id',
         component: DuThaoQuyetDinhComponent,
       },
       {
-        path: 'ke-hoach-lua-chon-nha-thau-vat-tu/nhap-quyet-dinh/:id',
+        path: 'vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/nhap-quyet-dinh/:id',
         component: NhapQuyetDinhComponent,
       },
       {
