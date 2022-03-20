@@ -11,8 +11,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'nguoi-dung',
-        pathMatch: 'full',
+        redirectTo: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        pathMatch: 'full'
       },
       {
         path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',

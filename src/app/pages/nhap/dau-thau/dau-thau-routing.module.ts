@@ -36,6 +36,11 @@ const routes: Routes = [
     component: DauThauComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'danh-sach-dau-thau',
+        pathMatch: 'full'
+      },
+      {
         path: 'vat-tu',
         loadChildren: () =>
           import('../dau-thau/vat-tu/vat-tu.module').then(

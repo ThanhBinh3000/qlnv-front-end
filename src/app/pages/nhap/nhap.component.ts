@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { NHAP_ROUTE_LIST } from './nhap.constant';
 import { NzPlacementType } from 'ng-zorro-antd/dropdown';
+import { timeout } from 'rxjs/operators';
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -29,6 +30,15 @@ export class NhapComponent implements OnInit, AfterViewInit {
     } else {
       this.myTab.nativeElement.className = 'nav nav-tabs';
     }
+  }
+
+  updateCssOverlay() {
+    setTimeout(() => {
+      let child = document.getElementsByClassName('dau-thau-tab');
+      if (child && child.length > 0) {
+        child[0].parentElement.classList.add('left-0');
+      }
+    }, 200);
   }
 
   endSlide() {

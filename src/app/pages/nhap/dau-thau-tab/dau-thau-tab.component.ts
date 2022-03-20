@@ -27,10 +27,10 @@ export class DauThauTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.router.url.indexOf('/muoi/')) {
+    if (this.router.url.indexOf('/muoi/') != -1) {
       this.selectedTabNow = 1;
     }
-    else if (this.router.url.indexOf('/vat-tu/')) {
+    else if (this.router.url.indexOf('/vat-tu/') != -1) {
       this.selectedTabNow = 2;
     }
     else {
