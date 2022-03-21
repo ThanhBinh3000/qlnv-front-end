@@ -78,7 +78,7 @@ export class ThongTinKeHoachLuaChonNhaThauVatTuComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate([`/nhap/dau-thau/ke-hoach-lua-chon-nha-thau-vat-tu`])
+    this.router.navigate([`/nhap/dau-thau/vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu`])
   }
 
   openDialogThongTinPhuLucKLCNT() {
@@ -112,7 +112,7 @@ export class ThongTinKeHoachLuaChonNhaThauVatTuComponent implements OnInit {
   }
 
   redirectToDuThao() {
-    this.router.navigate([`/nhap/dau-thau/ke-hoach-lua-chon-nha-thau-vat-tu/du-thao-quyet-dinh`, 0])
+    this.router.navigate([`/nhap/dau-thau/vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/du-thao-quyet-dinh`, 0])
   }
 
   async changePageIndex(event) {

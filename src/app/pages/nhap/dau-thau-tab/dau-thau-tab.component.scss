@@ -1,4 +1,4 @@
-@import "../../../../../assets/scss/default.scss";
+@import "../../../../assets/scss/default.scss";
 ::ng-deep {
   .main-content-dau-thau {
     padding: unset !important;
@@ -53,5 +53,13 @@
     .action-top {
       padding-right: 48px;
     }
+  }
+  .ant-tabs-content-holder {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 184px);
+  }
+  .ant-popover-inner-content {
+    padding: 0;
   }
 }

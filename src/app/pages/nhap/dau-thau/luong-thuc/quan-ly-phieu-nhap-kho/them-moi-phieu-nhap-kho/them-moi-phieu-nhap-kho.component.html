@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+<div class="luong-thuc__danh-sach">
   <nz-affix class="menu-lv3" [nzOffsetTop]="43">
     <div class="tab-content tab-menu" id="myTabContent">
       <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
