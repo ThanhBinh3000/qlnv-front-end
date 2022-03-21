@@ -180,6 +180,12 @@ export const LUONG_THUC_LIST: DauThau[] = [
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: 'quan-ly-phieu-nhap-kho',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý bảng kê cân hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quan-ly-bang-ke-can-hang',
+  },
 ];
 
 export const VAT_TU_LIST: DauThau[] = [

@@ -31,6 +31,8 @@ import { QuanLyBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-
 import { ThemMoiBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
+import { QuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-hang/quan-ly-bang-ke-can-hang.component';
+import { ThongTinQuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,8 @@ import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-
     ThemMoiBienBanNghiemThuKeLotComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     ThemMoiPhieuKiemTraChatLuongHangComponent,
+    QuanLyBangKeCanHangComponent,
+    ThongTinQuanLyBangKeCanHangComponent,
   ],
   imports: [
     CommonModule,
