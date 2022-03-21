@@ -9,6 +9,8 @@ import { Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { UserService } from 'src/app/services/user.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
   id!: any;
@@ -105,6 +107,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     private sanitizer: DomSanitizer,
     private route: Router,
     private userService:UserService,
+    private notification: NzNotificationService,
   ) {}
 
   async ngOnInit() {
@@ -129,12 +132,11 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.maphuongan = res.data;
           } else {
-            this.errorMessage =
-              'Có lỗi trong quá trình sinh mã báo cáo vấn tin!';
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -144,11 +146,11 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.listNoidung = res.data?.content;
           console.log(this.listNoidung);
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     //get danh muc dự án
@@ -156,14 +158,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
-          console.log(this.listNhomchi);
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
     this.spinner.hide();
@@ -265,13 +265,13 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (soqd != null && socv != null) {
             this.checknutgiao = false;
           }
+         
         } else {
-          this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -297,6 +297,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
+        
       }
     });
     this.spinner.hide();
@@ -551,26 +552,26 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.quanLyVonPhiService.themmoiPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          alert(err.error.message);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     } else {
       this.quanLyVonPhiService.capnhatPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          alert(err.error.message);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -650,7 +651,13 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       };
       console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
-        console.log(res);
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, "Giao số trần chi thành công!");
+        }else{
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     });
   }
@@ -688,7 +695,13 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       };
       console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
-        console.log(res);
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, "Giao toàn bộ thành công!");
+        }else{
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },err=> {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     });
   }

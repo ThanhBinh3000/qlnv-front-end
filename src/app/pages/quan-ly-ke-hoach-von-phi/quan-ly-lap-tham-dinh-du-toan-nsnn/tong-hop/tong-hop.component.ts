@@ -44,9 +44,9 @@ export class TongHopComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+         
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {
@@ -60,9 +60,9 @@ export class TongHopComponent implements OnInit {
         if (data.statusCode == 0) {
           console.log(data);
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+          
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {
@@ -88,7 +88,7 @@ export class TongHopComponent implements OnInit {
           console.log(data);
           this.userInfo = data?.data
           this.maDonViTao = this.userInfo?.dvql;
-          console.log(this.maDonViTao);
+          
           return data?.data;
         } else {
 

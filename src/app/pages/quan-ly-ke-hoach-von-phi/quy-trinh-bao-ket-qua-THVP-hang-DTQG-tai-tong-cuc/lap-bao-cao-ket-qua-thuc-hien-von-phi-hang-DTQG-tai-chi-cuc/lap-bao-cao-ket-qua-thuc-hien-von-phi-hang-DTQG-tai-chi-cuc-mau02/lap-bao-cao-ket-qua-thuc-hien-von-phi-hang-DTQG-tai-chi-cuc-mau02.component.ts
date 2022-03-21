@@ -140,7 +140,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            this.notification.success(MESSAGE.SUCCESS,res?.msg);
+            
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg);
           }
@@ -163,7 +163,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            this.notification.success(MESSAGE.SUCCESS,res?.msg);
+            
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg);
           }
@@ -179,7 +179,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS,data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -192,7 +192,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       (data) => {
         if (data.statusCode == 0) {
           this.listDonvitinh = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS,data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -204,7 +204,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
         this.donViTaos =res.data;
-        this.notification.success(MESSAGE.SUCCESS,res?.msg);
+        
       } else {
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -320,7 +320,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-          this.notification.success(MESSAGE.SUCCESS,data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.SUCCESS,data?.msg);
         }
@@ -369,7 +369,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-          this.notification.success(MESSAGE.SUCCESS,data?.msg);
+         
         } else {
           this.notification.error(MESSAGE.SUCCESS,data?.msg);
         }
@@ -822,7 +822,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
               this.lstCTietBCao2.push(element);
             }
           });
-          this.notification.success(MESSAGE.SUCCESS,res?.msg)
+          
           this.updateEditCache1();
           this.updateEditCache2();
         }else{
