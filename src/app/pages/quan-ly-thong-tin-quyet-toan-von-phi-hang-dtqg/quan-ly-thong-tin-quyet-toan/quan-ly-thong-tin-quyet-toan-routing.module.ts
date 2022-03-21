@@ -28,6 +28,13 @@ const routes: Routes = [
         './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
       ).then((m) => m.TongHopSoLieuQuyetToanModule),
   },
+  {
+    path: 'tong-hop-so-lieu-quyet-toan/:id',
+    loadChildren: () =>
+      import(
+        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
+      ).then((m) => m.TongHopSoLieuQuyetToanModule),
+  },
 ];
 
 @NgModule({
