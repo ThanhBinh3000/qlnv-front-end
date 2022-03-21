@@ -30,7 +30,7 @@ export class ChiTietThongTinLCNTComponent implements OnInit {
   }
 
   redirectToTTDT() {
-    this.router.navigate(['/nhap/dau-thau/thong-tin-dau-thau']);
+    this.router.navigate(['/nhap/dau-thau/vat-tu/thong-tin-lcnt']);
   }
 
   guiDuyet() {
@@ -86,9 +86,15 @@ export class ChiTietThongTinLCNTComponent implements OnInit {
       nzWidth: 310,
       nzOnOk: () => {
         this.router.navigate([
-          '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+          '/nhap/dau-thau/vat-tu/thong-tin-lcnt',
         ]);
       },
     });
+  }
+
+  redirectChiTie(id: number) {
+    this.router.navigate([
+      '/nhap/dau-thau/vat-tu/thong-tin-lcnt/chi-tiet-thong-tin-goi-thau', id
+    ]);
   }
 }

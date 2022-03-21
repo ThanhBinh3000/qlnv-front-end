@@ -5,6 +5,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
@@ -13,61 +14,62 @@ import { DonviService } from 'src/app/services/donvi.service';
   styleUrls: ['./dialog-dieu-chinh-them-thong-tin-luong-thuc.component.scss'],
 })
 export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
-  formData: FormGroup;
   yearNow: number = 0;
-  tongSoQuyThocTonKhoDauNam: number = null;
-  slThoc1: number = null;
-  slThoc2: number = null;
-  slThoc3: number = null;
-  slGao1: number = null;
-  slGao2: number = null;
-  slGao3: number = null;
-  tongSoQuyThocNhapTrongNam: number = null;
-  slThocTruocDieuChinh: number = null;
-  slThocGiam: number = null;
-  slThocTang: number = null;
-  slThocSauDieuChinh: number = null;
-  slGaoTruocDieuChinh: number = null;
-  slGaoGiam: number = null;
-  slGaoTang: number = null;
-  slGaoSauDieuChinh: number = null;
-  tongSoQuyThocXuatTrongNam: number = null;
-  xuatTongSLThoc: number = null;
-  xuatSlThocTruocDieuChinh1: number = null;
-  xuatSlThocGiam1: number = null;
-  xuatSlThocTang1: number = null;
-  xuatSlThocSauDieuChinh1: number = null;
-  xuatSlThocTruocDieuChinh2: number = null;
-  xuatSlThocGiam2: number = null;
-  xuatSlThocTang2: number = null;
-  xuatSlThocSauDieuChinh2: number = null;
-  xuatSlThocTruocDieuChinh3: number = null;
-  xuatSlThocGiam3: number = null;
-  xuatSlThocTang3: number = null;
-  xuatSlThocSauDieuChinh3: number = null;
-  xuatSlGaoTruocDieuChinh1: number = null;
-  xuatTongSLGao: number = null;
-  xuatSlGaoGiam1: number = null;
-  xuatSlGaoTang1: number = null;
-  xuatSlGaoSauDieuChinh1: number = null;
-  xuatSlGaoTruocDieuChinh2: number = null;
-  xuatSlGaoGiam2: number = null;
-  xuatSlGaoTang2: number = null;
-  xuatSlGaoSauDieuChinh2: number = null;
-  xuatSlGaoTruocDieuChinh3: number = null;
-  xuatSlGaoGiam3: number = null;
-  xuatSlGaoTang3: number = null;
-  xuatSlGaoSauDieuChinh3: number = null;
-  tongSoQuyThocTruocTonKhoCuoiNam: number = null;
-  slThocTruocTonKho: number = null;
-  slGaoTruocTonKho: number = null;
-  tongSoQuyThocSauTonKhoCuoiNam: number = null;
-  slThocSauTonKho: number = null;
-  slGaoSauTonKho: number = null;
+  tongSoQuyThocTonKhoDauNam: number = 0;
+  slThoc1: number = 0;
+  slThoc2: number = 0;
+  slThoc3: number = 0;
+  slGao1: number = 0;
+  slGao2: number = 0;
+  slGao3: number = 0;
+  tongSoQuyThocNhapTrongNam: number = 0;
+  slThocTruocDieuChinh: number = 0;
+  slThocGiam: number = 0;
+  slThocTang: number = 0;
+  slThocSauDieuChinh: number = 0;
+  slGaoTruocDieuChinh: number = 0;
+  slGaoGiam: number = 0;
+  slGaoTang: number = 0;
+  slGaoSauDieuChinh: number = 0;
+  tongSoQuyThocXuatTrongNam: number = 0;
+  xuatTongSLThoc: number = 0;
+  xuatSlThocTruocDieuChinh1: number = 0;
+  xuatSlThocGiam1: number = 0;
+  xuatSlThocTang1: number = 0;
+  xuatSlThocSauDieuChinh1: number = 0;
+  xuatSlThocTruocDieuChinh2: number = 0;
+  xuatSlThocGiam2: number = 0;
+  xuatSlThocTang2: number = 0;
+  xuatSlThocSauDieuChinh2: number = 0;
+  xuatSlThocTruocDieuChinh3: number = 0;
+  xuatSlThocGiam3: number = 0;
+  xuatSlThocTang3: number = 0;
+  xuatSlThocSauDieuChinh3: number = 0;
+  xuatSlGaoTruocDieuChinh1: number = 0;
+  xuatTongSLGao: number = 0;
+  xuatSlGaoGiam1: number = 0;
+  xuatSlGaoTang1: number = 0;
+  xuatSlGaoSauDieuChinh1: number = 0;
+  xuatSlGaoTruocDieuChinh2: number = 0;
+  xuatSlGaoGiam2: number = 0;
+  xuatSlGaoTang2: number = 0;
+  xuatSlGaoSauDieuChinh2: number = 0;
+  xuatSlGaoTruocDieuChinh3: number = 0;
+  xuatSlGaoGiam3: number = 0;
+  xuatSlGaoTang3: number = 0;
+  xuatSlGaoSauDieuChinh3: number = 0;
+  tongSoQuyThocTruocTonKhoCuoiNam: number = 0;
+  slThocTruocTonKho: number = 0;
+  slGaoTruocTonKho: number = 0;
+  tongSoQuyThocSauTonKhoCuoiNam: number = 0;
+  slThocSauTonKho: number = 0;
+  slGaoSauTonKho: number = 0;
+  donViTinh: string = 'Tấn';
 
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
+  selectedDonVi: any = null;
 
   data: any = null;
 
@@ -75,16 +77,13 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
     private donViService: DonviService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
   ) { }
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
-    this.formData = this.fb.group({
-      maDv: [null, [Validators.required]],
-      donViTinh: ["Tấn"],
-    });
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -122,6 +121,53 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
+  }
+
+  selectDonVi(donVi) {
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
+    this.chiTieuKeHoachNamService
+      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['010103', '010101'] })
+      .then((res) => {
+        res.data.forEach((tonKho) => {
+          if (tonKho.maVthh == '010101') {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1).toString():
+                this.slThoc3 = 0;
+                break;
+              case (this.yearNow - 2).toString():
+                this.slThoc2 = 0;
+                break;
+              case (this.yearNow - 3).toString():
+                this.slThoc1 = 0;
+                break;
+              default:
+                break;
+            }
+          } else if (tonKho.maVthh == '010103') {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1).toString():
+                this.slThoc1 = 0;
+                break;
+              case (this.yearNow - 2).toString():
+                this.slThoc1 = 0;
+                break;
+              default:
+                break;
+            }
+          }
+        });
+      });
+  }
+
+  caculatorData() {
+    this.tongSoQuyThocTonKhoDauNam = this.slThoc1 + this.slThoc2 + this.slThoc3 + this.slGao2 * 2 + this.slGao3 * 2;
+
+    this.tongSoQuyThocNhapTrongNam = this.slThocSauDieuChinh + this.slGaoSauDieuChinh;
+  }
+
+  caculatorThocDieuChinh() {
+    this.slThocSauDieuChinh = this.slThocTruocDieuChinh + this.slThocTang - this.slThocGiam;
   }
 
   handleOk() {

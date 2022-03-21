@@ -106,30 +106,32 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   updateDataListVatTu(data: any) {
-    for (let j = 0; j < data.length; j++) {
-      let res = [];
-      let parentList = data[j].vatTuThietBi.filter(x => x.maVatTuCha == null);
-      for (let i = 0; i < parentList.length; i++) {
-        let tempt = [];
-        let hasChild = false;
-        let checkChild = data[j].vatTuThietBi.filter(x => x.maVatTuCha == parentList[i].maVatTu);
-        if (checkChild && checkChild.length > 0) {
-          hasChild = true;
+    if (data && data.length > 0) {
+      for (let j = 0; j < data.length; j++) {
+        let res = [];
+        let parentList = data[j].vatTuThietBi.filter(x => x.maVatTuCha == null);
+        for (let i = 0; i < parentList.length; i++) {
+          let tempt = [];
+          let hasChild = false;
+          let checkChild = data[j].vatTuThietBi.filter(x => x.maVatTuCha == parentList[i].maVatTu);
+          if (checkChild && checkChild.length > 0) {
+            hasChild = true;
+          }
+          let item = {
+            ...parentList[i],
+            level: 0,
+            hasChild: hasChild,
+            expand: false,
+            display: true,
+          };
+          tempt.push(item);
+          let dataChild = this.updateDataChaCon(data[j].vatTuThietBi, item, tempt);
+          res = [...res, ...dataChild];
         }
-        let item = {
-          ...parentList[i],
-          level: 0,
-          hasChild: hasChild,
-          expand: false,
-          display: true,
-        };
-        tempt.push(item);
-        let dataChild = this.updateDataChaCon(data[j].vatTuThietBi, item, tempt);
-        res = [...res, ...dataChild];
-      }
-      data[j].listDisplay = [];
-      if (res && res.length > 0) {
-        data[j].listDisplay = res;
+        data[j].listDisplay = [];
+        if (res && res.length > 0) {
+          data[j].listDisplay = res;
+        }
       }
     }
     return data;
@@ -355,6 +357,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu =
                   tempData.khVatTu;
 
+                this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu = this.updateDataListVatTu(this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu);
+
                 this.dieuChinhThongTinChiTieuKHNam.qd.khLuongThuc =
                   tempData.khLuongThuc;
                 this.dieuChinhThongTinChiTieuKHNam.qd.khMuoi =
@@ -371,6 +375,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                   tempData.soQuyetDinh;
                 this.dieuChinhThongTinChiTieuKHNam.qd.trichYeu =
                   tempData.trichYeu;
+
+                this.dieuChinhThongTinChiTieuKHNam.qd.khVatTu = this.updateDataListVatTu(this.dieuChinhThongTinChiTieuKHNam.qd.khVatTu);
               }
             });
           this.spinner.hide();
@@ -409,9 +415,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   rowSpanVatTu(data: any): number {
     let rowspan = 1;
-    data?.vatTuThietBi?.forEach((nhomVatTuTb) => {
-      rowspan += nhomVatTuTb?.vatTuThietBi.length + 1;
-    });
+    if (data && data?.listDisplay && data?.listDisplay?.length > 0) {
+      let getDisplay = data?.listDisplay.filter(x => x.display == true);
+      if (getDisplay && getDisplay.length > 0) {
+        rowspan = getDisplay.length + 1;
+      }
+
+    }
     return rowspan;
   }
 

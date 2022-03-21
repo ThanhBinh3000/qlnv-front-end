@@ -8,6 +8,7 @@ import { QuyetDinhPheDuyetKeHoachLCNTComponent } from './quyet-dinh-phe-duyet-ke
 import { ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent } from './thong-tin-quyet-dinh-phe-duyet-ke-hoach-lcnt/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lcnt.component';
 import { ThongTinLCNTComponent } from './thong-tin-lcnt/thong-tin-lcnt.component';
 import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet-thong-tin-lcnt.component';
+import { ChiTietThongTinGoiThauComponent } from './chi-tiet-thong-tin-goi-thau/chi-tiet-thong-tin-goi-thau.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet
     ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent,
     ThongTinLCNTComponent,
     ChiTietThongTinLCNTComponent,
+    ChiTietThongTinGoiThauComponent,
   ],
   imports: [
     CommonModule,
