@@ -8,6 +8,7 @@ import * as fileSaver from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-QDCVgiaosokiemtratranchiNSNNchocacdonvi',
@@ -62,10 +63,12 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
     this.quankhoachvon.danhsachphuonganduocduyet().subscribe(res => {
       if(res.statusCode==0){
         this.listPhuongAn = res.data;
-        console.log(res);
+        
       }else{
-        alert('Có lỗi trong quá trình vấn tin!');
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
     })
   }
 
@@ -114,7 +117,9 @@ xoaquyetdinh(){
     }else{
       this.notification.error('Xóa QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
     }
-    console.log(res);
+    
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   })
 }
 
@@ -132,7 +137,11 @@ showcongvan(){
       this.soCv = ob.soCv;
       this.soQd = ob.soQd;
       console.log(res);
+    }else{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     }
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   })
 }
 //luu
@@ -162,6 +171,8 @@ async luu(){
         this.notification.error('Lưu QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
       }
       
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
     })
   }
 
