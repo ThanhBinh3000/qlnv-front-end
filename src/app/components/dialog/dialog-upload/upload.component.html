@@ -3,16 +3,17 @@
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên tài liệu </nz-form-label>
-        <input nz-input formControlName="tenTaiLieu" />
+        <nz-form-control nzErrorTip="Vui lòng nhập tên tài liệu">
+          <input nz-input formControlName="tenTaiLieu" />
+        </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="24">
+    <div nz-col [nzSpan]="24" class="mt-40">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Chọn file </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Chọn file </nz-form-label>
         <!-- <nz-upload nzAction="" class="chon-file"> -->
         <div class="upload-file">
-          <input type="file" id="avatar" name="avatar" #inputFile (change)="getNameFile(inputFile.files, $event)"
-            class="input-file" formControlName="file">
+          <input type="file" id="avatar" name="avatar" #inputFile (change)="getNameFile($event)" class="input-file">
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light file-tai-lieu-dinh-kem">
             <ng-container *ngIf="nameFile; else elseTemplate">
               {{nameFile}}
@@ -34,14 +35,15 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onSave()">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onSave()"
+        [disabled]="!formData.valid">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
-      </a>
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
         <i aria-hidden="true" class="fa fa-sign-out"></i>
         Hủy
-      </a>
+      </button>
     </div>
   </div>
 </div>

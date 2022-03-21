@@ -18,6 +18,7 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   tenDvi: string;
   trangThai: string;
   trichYeu: string;
+  children?: Array<FileDinhKem> = [];
   children1?: Array<ThongTinChung> = [];
   children2?: Array<DanhSachGoiThau> = [];
   children3?: Array<CanCuXacDinh> = [];
@@ -47,12 +48,18 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   detail1?: Array<ThongTinChung> = [];
   detail2?: Array<DanhSachGoiThau> = [];
   detail3?: Array<CanCuXacDinh> = [];
+  children1?: Array<ThongTinChung> = [];
+  children2?: Array<DanhSachGoiThau> = [];
+  children3?: Array<CanCuXacDinh> = [];
+  children?: Array<FileDinhKem> = [];
   fileDinhKems?: Array<FileDinhKem> = [];
 }
 export class FileDinhKem {
-  dataId: number;
+  createDate: string;
+  dataType: string;
   fileName: string;
   fileSize: string;
+  fileType: string;
   fileUrl: string;
   id: number;
 }
@@ -90,8 +97,8 @@ export class DanhSachGoiThau {
 }
 export class CanCuXacDinh {
   id: number;
-  idHdr: number;
   loaiCanCu: string;
   tenTlieu: string;
   fileDinhKems: Array<FileDinhKem>;
+  children: Array<FileDinhKem>;
 }

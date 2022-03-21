@@ -1,8 +1,10 @@
+import { ResponseData } from './../interfaces/response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
+import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -72,5 +74,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   chinhSuaChiTieuKeHoach(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
+  }
+  tonKhoDauNam(body: any): Promise<ResponseData<Array<TonKhoDauNamLuongThuc>>> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
+    return this.httpClient.post(url, body).toPromise();
   }
 }

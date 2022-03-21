@@ -18,7 +18,7 @@ export class UploadFileService extends BaseService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('title', title);
-    formData.append('filename', 'a');
+    formData.append('folder', 'tcdt');
     return this.httpClient.post<any>(url, formData).toPromise();
   }
   downloadFile(urlFile: string): Observable<Blob> {

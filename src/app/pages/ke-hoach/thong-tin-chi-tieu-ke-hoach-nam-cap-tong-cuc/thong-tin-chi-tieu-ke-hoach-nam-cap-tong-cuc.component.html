@@ -509,6 +509,36 @@
                     <td>{{item.nhapTrongNam}}</td>
                   </tr>
                 </ng-container>
+                <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
+                  <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 16, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 17, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 18, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 20, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 21, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 22, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 23, 3, ',','table-vat-tu') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                </tr>
               </ng-container>
             </tbody>
           </nz-table>

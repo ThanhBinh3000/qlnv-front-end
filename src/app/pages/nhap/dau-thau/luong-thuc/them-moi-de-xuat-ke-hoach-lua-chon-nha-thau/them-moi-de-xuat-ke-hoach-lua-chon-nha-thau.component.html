@@ -18,19 +18,19 @@
                   <i class="icon htvbdh_tcdt_save"></i>
                   <span>Lưu</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()">
                   <i class="icon htvbdh_tcdt_guiduyet"></i>
                   <span>Gửi duyệt</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()">
                   <i class="icon htvbdh_tcdt_pheduyet"></i>
                   <span>Phê duyệt</span>
                 </button>
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()">
                   <i class="icon htvbdh_tcdt_tuchoi"></i>
                   <span>Từ chối</span>
                 </a>
-                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
                   <i class="icon htvbdh_tcdt_delete"></i>
                   <span>Hủy bỏ</span>
                 </a>
@@ -162,7 +162,7 @@
             </div>
           </form>
         </nz-card>
-        <div class="tab__luong-thuc">
+        <div class="tab__luong-thuc mt-16">
           <!-- <form nz-form> -->
           <nz-tabset nzType="card" class="tab__container">
             <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" (nzClick)="tabSelected = 'thongTinChung'">
@@ -264,7 +264,7 @@
                         <nz-form-label [nzNoColon]="true">
                           Thời gian thực hiện dự kiến từ ngày
                         </nz-form-label>
-                        <nz-date-picker class="search__input" [(ngModel)]="thongTinChungDXKHLCNT.denNgayThHien"
+                        <nz-date-picker class="search__input" [(ngModel)]="thongTinChungDXKHLCNT.tuNgayThHien"
                           name="denNgayThHien">
                         </nz-date-picker>
                       </nz-form-item>
@@ -424,12 +424,12 @@
                 <thead>
                   <tr>
                     <th [width]="35">STT</th>
-                    <th>Gói thầu</th>
-                    <th>Số lượng (tấn)</th>
-                    <th>Địa điểm nhập kho</th>
-                    <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
-                    <th>Thành tiền (đồng)</th>
-                    <th>Bằng chữ</th>
+                    <th [width]="200">Gói thầu</th>
+                    <th [width]="150">Số lượng (tấn)</th>
+                    <th [width]="300">Địa điểm nhập kho</th>
+                    <th [width]="200">Đơn giá đã bao gồm VAT (đồng/kg)</th>
+                    <th [width]="300">Thành tiền (đồng)</th>
+                    <th [width]="400">Bằng chữ</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -443,8 +443,8 @@
                       <td>{{ data.soLuong }}</td>
                       <td>{{ data.diaDiemNhap }}</td>
                       <td>{{ data.donGia }}</td>
-                      <td>{{ data.thanhTien | number: '1.0-1'}}</td>
-                      <td>{{ data.thanhTien ? convertTienTobangChu(+data.thanhTien) : '' }}</td>
+                      <td>{{ data.soLuong * 1000 * data.donGia | number: '1.0-1'}}</td>
+                      <td>{{ data.soLuong ? convertTienTobangChu(data.soLuong * 1000 * data.donGia) : '' }}</td>
                       <td>
                         <a (click)="startEdit(i)">
                           <i class="fa fa-pencil"></i>
@@ -455,31 +455,37 @@
                       </td>
                     </ng-container>
                     <ng-template #editTemplate>
-                      <td>{{i+1}}</td>
-                      <td><input type="text" nz-input [(ngModel)]="dsGoiThauClone[i].goiThau" name="goiThau" /></td>
+                      <td [width]="35">{{i+1}}</td>
+                      <td><input type="text" nz-input [(ngModel)]="dsGoiThauClone[i].goiThau" name="goiThau"
+                          class="w-200" /></td>
                       <td>
                         <nz-input-number nz-input [(ngModel)]="dsGoiThauClone[i].soLuong" [nzMin]="1" [nzStep]="1"
-                          [nzSize]="'small'" (input)="calclatorThanhTien()">
+                          [nzSize]="'small'" (input)="calclatorThanhTien()" class="w-150">
                         </nz-input-number>
                       </td>
-
-                      <td><input type="text" nz-input [(ngModel)]="dsGoiThauClone[i].diaDiemNhap" />
+                      <td><input type="text" nz-input [(ngModel)]="dsGoiThauClone[i].diaDiemNhap" class="w-300" />
                       </td>
                       <td>
                         <nz-input-number nz-input [(ngModel)]="dsGoiThauClone[i].donGia" [nzMin]="1" [nzStep]="1"
-                          [nzSize]="'small'">
+                          [nzSize]="'small'" class="w-200">
                         </nz-input-number>
                       </td>
-                      <td>
-
+                      <td [width]="300">
+                        {{dsGoiThauClone[i].soLuong *
+                        1000 *
+                        dsGoiThauClone[i].donGia | number: '1.0-1'}}
                       </td>
-                      <td>{{dsGoiThauClone[i].soLuong ?
+                      <td [width]="400">{{dsGoiThauClone[i].soLuong ?
                         convertTienTobangChu(dsGoiThauClone[i].soLuong *
                         1000 *
                         dsGoiThauClone[i].donGia) : '' }}</td>
                       <td>
-                        <a (click)="saveEdit(i)" class="save">Save</a>
-                        <a (click)="cancelEdit(i)">Cancel</a>
+                        <a (click)="saveEdit(i)" class="save">
+                          <i class="icon htvbdh_dau-cong"></i>
+                        </a>
+                        <a (click)="cancelEdit(i)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
                       </td>
                     </ng-template>
                   </tr>
@@ -501,7 +507,7 @@
                 <div nz-col nzSpan="24">
                   <nz-card nzTitle="BÁO GIÁ THỊ TRƯỜNG" class="mt16 flex-card p-lr16"
                     [nzExtra]="tableCardBaoGiaThiTruong">
-                    <nz-table #editRowTable nzBordered>
+                    <nz-table #baoGiaThiTruong nzBordered [nzData]="baoGiaThiTruongList">
                       <thead>
                         <tr>
                           <th [width]="35">STT</th>
@@ -510,17 +516,17 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let data of editRowTable.data" class="editable-row">
-                          <td>1</td>
-                          <td>Báo giá của công ty abc</td>
+                        <tr *ngFor="let data of baoGiaThiTruong.data, let i = index" class="editable-row">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.tenTlieu}}</td>
                           <td class="action">
-                            <a (click)="downloadFile()">
+                            <a (click)="downloadFile(data.children[0])">
                               <i class="icon htvbdh_tcdt_import"></i>
                             </a>
-                            <a>
+                            <a (click)="editCanCuTaiLieuDinhKem(data)">
                               <i class="fa fa-pencil"></i>
                             </a>
-                            <a>
+                            <a (click)="deleteTaiLieu(data.id)">
                               <i class="fa fa-trash-o do"></i>
                             </a>
                           </td>
@@ -531,7 +537,7 @@
                 </div>
                 <div nz-col nzSpan="24">
                   <nz-card nzTitle="CĂN CỨ KHÁC" class="mt16 flex-card p-lr16" [nzExtra]="tableCardCanCuKhac">
-                    <nz-table #editRowTable nzBordered>
+                    <nz-table #canCuKhac nzBordered [nzData]="canCuKhacList">
                       <thead>
                         <tr>
                           <th [width]="35">STT</th>
@@ -540,17 +546,17 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let data of editRowTable.data" class="editable-row">
-                          <td>1</td>
-                          <td>Báo giá của công ty abc</td>
+                        <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
+                          <td>{{i + 1}}</td>
+                          <td>{{data.tenTlieu}}</td>
                           <td class="action">
-                            <a>
+                            <a (click)="downloadFile(data)">
                               <i class="icon htvbdh_tcdt_import"></i>
                             </a>
-                            <a>
+                            <a (click)="editCanCuTaiLieuDinhKem(data)">
                               <i class="fa fa-pencil"></i>
                             </a>
-                            <a>
+                            <a (click)="deleteTaiLieu(data.id)">
                               <i class="fa fa-trash-o do"></i>
                             </a>
                           </td>

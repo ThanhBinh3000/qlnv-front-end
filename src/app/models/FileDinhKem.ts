@@ -1,3 +1,5 @@
+import { CanCuXacDinh } from './DeXuatKeHoachuaChonNhaThau';
+
 export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
   ldoTuchoi: string;
@@ -83,9 +85,4 @@ export class DanhSachGoiThau {
   soLuong: number;
   thanhTien: string;
   bangChu: string;
-}
-export class CanCuXacDinh {
-  id: number;
-  loaiCanCu: string;
-  tenTlieu: string;
 }

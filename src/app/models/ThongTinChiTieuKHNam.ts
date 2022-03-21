@@ -15,3 +15,9 @@ export class ThongTinChiTieuKeHoachNam {
   khVatTu: Array<KeHoachVatTu> = [];
   ghiChu: string;
 }
+export class TonKhoDauNamLuongThuc {
+  maDonVi: string;
+  maVthh: string;
+  nam: string;
+  slHienThoi: number;
+}

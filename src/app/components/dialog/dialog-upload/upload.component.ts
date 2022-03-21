@@ -1,7 +1,15 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { environment } from 'src/environments/environment';
+import { CanCuXacDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
   selector: 'upload',
@@ -12,16 +20,23 @@ export class UploadComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange = new EventEmitter<boolean>();
   formData: FormGroup;
-  options = {
-    luongThuc: false,
-    muoi: false,
-    vatTu: false,
-  };
   nameFile: string;
-  constructor(private _modalRef: NzModalRef, private fb: FormBuilder) {}
+  file: File;
+  dataCanCuXacDinh: CanCuXacDinh;
+  constructor(
+    private _modalRef: NzModalRef,
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+    if (this.dataCanCuXacDinh) {
+      this.nameFile = this.dataCanCuXacDinh.children[0]?.fileName;
+      this.formData.patchValue({
+        tenTaiLieu: this.dataCanCuXacDinh.tenTlieu,
+      });
+    }
   }
 
   handleOk() {
@@ -38,19 +53,23 @@ export class UploadComponent implements OnInit {
     this._modalRef.destroy();
   }
   onSave() {
-    console.log(this.formData.value);
-
     this._modalRef.close(this.formData.value);
   }
-  getNameFile(fileDialog?: any, event?: any) {
-    this.nameFile = fileDialog[0].name;
+
+  getNameFile(event?: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      this.nameFile = fileList[0].name;
+    }
     this.formData.patchValue({
-      file: event.target.files[0],
+      file: event.target.files[0] as File,
     });
   }
+
   initForm() {
     this.formData = this.fb.group({
-      tenTaiLieu: [null],
+      tenTaiLieu: [null, [Validators.required]],
       file: [null],
     });
   }
