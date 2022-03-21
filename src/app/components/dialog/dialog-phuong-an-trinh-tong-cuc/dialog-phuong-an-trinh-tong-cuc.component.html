@@ -7,6 +7,7 @@
     <thead>
       <tr>
         <th [width]="35">STT</th>
+        <th>Số phương án</th>
         <th>Loại hàng DTQG</th>
         <th>Hình thức LCNT</th>
         <th>Phương thức LCNT</th>
@@ -19,6 +20,7 @@
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+        <td>{{ data.soPhAn }}</td>
         <td>{{ data.tenLoaiVthh }}</td>
         <td>{{ data.tenHthucLcnt }}</td>
         <td>{{ data.tenPthucLcnt }}</td>

@@ -31,4 +31,5 @@ export class ThongTinQuyetDinhPheDuyetKHLCNT {
     tgianTbao: string;
     trangThai: string;
     veViec: string;
+    qdCanCu: string;
 }
