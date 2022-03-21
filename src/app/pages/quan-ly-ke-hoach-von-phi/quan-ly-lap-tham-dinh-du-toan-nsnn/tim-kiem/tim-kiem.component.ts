@@ -130,7 +130,7 @@ export class TimKiemComponent implements OnInit {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+        
         } else {
           this.notifi.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
