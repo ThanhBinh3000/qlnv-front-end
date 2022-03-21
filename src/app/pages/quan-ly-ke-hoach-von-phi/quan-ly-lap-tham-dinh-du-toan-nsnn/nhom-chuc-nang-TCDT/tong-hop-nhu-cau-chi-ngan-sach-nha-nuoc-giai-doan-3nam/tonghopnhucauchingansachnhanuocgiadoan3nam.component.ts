@@ -562,7 +562,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
+            
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

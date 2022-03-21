@@ -100,7 +100,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
                       this.tongso += e.soDuocGiao;
                   });
               }
-              console.log(res);
+              
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
               this.checkdata = false;

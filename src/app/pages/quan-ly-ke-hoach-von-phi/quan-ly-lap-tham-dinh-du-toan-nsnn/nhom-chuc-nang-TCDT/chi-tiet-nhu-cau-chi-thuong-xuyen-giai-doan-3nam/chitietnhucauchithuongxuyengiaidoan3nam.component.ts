@@ -131,7 +131,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listNoidung = data.data?.content;
-          console.log(this.listNoidung);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -145,7 +145,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
-          console.log(this.listNhomchi);
+         
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

@@ -98,7 +98,7 @@
                 {{getStatusName()}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại báo cáo">
-                Báo cáo kết quả thực hiện vốn, phí hàng DTQG: Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ
+                Báo cáo kết quả thực hiện vốn, phí hàng DTQG: Báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
@@ -106,7 +106,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ'">
+          <nz-tab [nzTitle]="'Báo cáo chi tiết thực hiện phí bảo quản lần đầu hàng DTQG'">
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -136,7 +136,7 @@
                 </tr>
                 <tr>
                   <th>A</th>
-                  <th>Tình hình thực hiện nhiệm vụ xuất</th>
+                  <th>Tình hình thực hiện nhiệm vụ bảo quản</th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -277,7 +277,7 @@
                     </td>
                     <td>
                       <input type="number" class="search__input" nz-input
-                        [(ngModel)]="editCache[item.id].data.trongDotTcong">
+                        [(ngModel)]="editCache[item.id].data.trongDotTcong" disabled>
                     </td>
                     <td>
                       <input type="number" class="search__input" nz-input
@@ -290,13 +290,13 @@
                     <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet;let i = index">
                       <ng-container *ngIf="kv.loaiMatHang == 0">
                         <td>
-                          <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                          <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number"  />
                         </td>
                       </ng-container>
                     </ng-container>
                     <td>
                       <input type="number" class="search__input" nz-input
-                        [(ngModel)]="editCache[item.id].data.luyKeTcong">
+                        [(ngModel)]="editCache[item.id].data.luyKeTcong" disabled>
                     </td>
                     <td>
                       <input type="number" class="search__input" nz-input

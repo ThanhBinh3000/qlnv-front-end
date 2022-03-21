@@ -151,7 +151,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       (data) => {
           if (data.statusCode == 0) {
               this.listNhomchi = data.data?.content;
-              console.log(this.listNhomchi);
+              
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
@@ -559,7 +559,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
+            
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)

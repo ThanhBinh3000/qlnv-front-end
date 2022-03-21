@@ -46,10 +46,10 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     //lay danh sach loai bao cao
     this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().subscribe(
       data => {
-        console.log(data);
+        
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.ERROR,data?.msg);
+         
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
@@ -65,7 +65,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
         if (data.statusCode == 0) {
           console.log(data);
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.ERROR,data?.msg);
+          
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }

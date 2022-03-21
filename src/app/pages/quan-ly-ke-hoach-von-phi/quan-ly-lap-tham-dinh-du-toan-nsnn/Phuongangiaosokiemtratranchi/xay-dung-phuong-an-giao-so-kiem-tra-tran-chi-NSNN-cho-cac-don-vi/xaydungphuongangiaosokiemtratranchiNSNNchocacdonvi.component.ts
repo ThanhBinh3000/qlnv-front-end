@@ -696,7 +696,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
         if(res.statusCode==0){
-          this.notification.success(MESSAGE.SUCCESS, "Giao số trần chi thành công!");
+          this.notification.success(MESSAGE.SUCCESS, "Giao toàn bộ thành công!");
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
