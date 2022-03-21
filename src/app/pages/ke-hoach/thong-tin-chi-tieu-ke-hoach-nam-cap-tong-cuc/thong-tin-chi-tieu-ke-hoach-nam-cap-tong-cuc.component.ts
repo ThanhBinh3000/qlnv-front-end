@@ -612,10 +612,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
     if (listTable && listTable.length >= indexTable) {
       const table = listTable[indexTable];
-      console.log('table:', table);
 
       for (let i = indexRow; i < table.rows.length - 1; i++) {
         if (
+          table?.rows[i]?.className.includes('table__header-vat-tu') &&
           table.rows[i]?.cells[indexCell]?.innerHTML &&
           table.rows[i]?.cells[indexCell]?.innerHTML != ''
         ) {
