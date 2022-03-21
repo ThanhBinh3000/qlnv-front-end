@@ -142,7 +142,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       (res) => {
         if (res.statusCode == 0) {
           this.listLoaikehoach = res.data?.content;
-          console.log(this.listLoaikehoach);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -156,7 +156,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       (data) => {
           if (data.statusCode == 0) {
               this.listLoaiduan = data.data?.content;
-              console.log(this.listLoaiduan);
+              
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
@@ -568,7 +568,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
+           
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

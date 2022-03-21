@@ -149,7 +149,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       (res) => {
         if (res.statusCode == 0) {
           this.listDviChuTri = res.data?.content;
-          console.log(this.listDviChuTri);
+          
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -553,7 +553,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
+           
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);

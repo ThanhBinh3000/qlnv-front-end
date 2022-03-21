@@ -3,16 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { MESSAGE } from 'src/app/constants/message';
-import { Utils } from 'src/app/Utility/utils';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-
-
 
 export class ItemData {
   id: any;
@@ -57,12 +55,14 @@ export class linkList {
   next: linkList[];
   checked: boolean;
 }
+
+
 @Component({
-  selector: 'app-lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b',
-  templateUrl: './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b.component.html',
-  styleUrls: ['./lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b.component.scss']
+  selector: 'app-lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau05',
+  templateUrl: './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau05.component.html',
+  styleUrls: ['./lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau05.component.scss']
 })
-export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent implements OnInit {
+export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implements OnInit {
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -100,13 +100,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBaocao = '93';
+      this.maLoaiBaocao = '94';
       this.trangThaiBanGhi='1';
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            // this.notification.success(MESSAGE.SUCCESS, res?.msg);
+           
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -122,12 +122,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBaocao = '93';
+      this.maLoaiBaocao = '94';
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            // this.notification.success(MESSAGE.SUCCESS, res?.msg);
+            
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -178,7 +178,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          // this.notification.success(MESSAGE.SUCCESS,data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -347,7 +347,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       thangBcao: null,
       trangThai: this.trangThaiBanGhi,
       dotBcao: this.dotbaocao,
-      loaiBaoCao: 2,
+      loaiBaoCao: 3,
     };
 
     this.spinner.show();
@@ -522,7 +522,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.lstCTietBCao = data.data.lstCTietBCao;
 
           this.lstFile = data.data.lstFile;
-          this.maLoaiBaocao = '93';
+          this.maLoaiBaocao = '94';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -553,9 +553,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.lstCTietBCao.forEach((item) => {
             this.transformToLinkList(item);
           });
-      
+          console.log(this.chiTietBcaos);
           this.updateLstCTietBCao();
-        
+          console.log(this.lstCTietBCao);
           this.cols = this.cols + this.listColTrongDot.length;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -593,7 +593,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           // this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.lstFile = data.data.lstFile;
-          this.maLoaiBaocao = '93';
+          this.maLoaiBaocao = '94';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -675,7 +675,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       if(res.statusCode==0){
         this.lstCTietBCao = res.data;
         this.lstFile = res.data.lstFile;
-        this.maLoaiBaocao = '93';
+        this.maLoaiBaocao = '94';
         let e = this.lstCTietBCao[0];
         e.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
@@ -705,7 +705,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         });
         this.updateLstCTietBCao();
 
-        
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
        
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
@@ -1218,9 +1218,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         tonglstChitietVtuTrongDot +=e.sl;
       })
     }
+    
     this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
+    
     let tonglstChitietVtuLuyke =0;
-
     if(this.editCache[id].data.listCtiet.length!=0){
       this.editCache[id].data.listCtiet.forEach(e => {
         tonglstChitietVtuLuyke +=e.sl;

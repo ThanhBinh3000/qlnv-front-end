@@ -136,7 +136,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       (res) => {
         if (res.statusCode == 0) {
           this.listHinhThucVanBan = res.data?.content;
-          console.log(this.listHinhThucVanBan);
+         
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -149,7 +149,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       (res) => {
         if (res.statusCode == 0) {
           this.listDviChuTri = res.data?.content;
-          console.log(this.listDviChuTri);
+          
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -159,7 +159,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       },
     );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-      console.log(res);
+      
       this.donViTaos = res.data;
     })
     this.spinner.hide();
@@ -556,7 +556,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
+            
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);

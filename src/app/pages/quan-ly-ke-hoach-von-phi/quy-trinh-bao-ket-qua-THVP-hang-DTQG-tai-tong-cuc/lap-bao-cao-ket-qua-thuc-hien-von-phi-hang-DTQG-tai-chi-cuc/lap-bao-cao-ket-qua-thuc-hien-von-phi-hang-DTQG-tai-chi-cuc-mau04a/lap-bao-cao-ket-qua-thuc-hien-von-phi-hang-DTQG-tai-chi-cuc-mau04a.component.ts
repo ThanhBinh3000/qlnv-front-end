@@ -110,7 +110,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            this.notification.success(MESSAGE.SUCCESS, res?.msg);
+            // this.notification.success(MESSAGE.SUCCESS, res?.msg);
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -131,7 +131,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            this.notification.success(MESSAGE.SUCCESS, res?.msg);
+            // this.notification.success(MESSAGE.SUCCESS, res?.msg);
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -182,13 +182,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS,data?.msg);
+          // this.notification.success(MESSAGE.SUCCESS,data?.msg);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+       
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
@@ -576,7 +576,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          this.notification.success(MESSAGE.SUCCESS, data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -637,7 +637,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          this.notification.success(MESSAGE.SUCCESS, data?.msg);
+          
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg
           );
@@ -709,7 +709,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         });
         this.updateLstCTietBCao();
 
-        this.notification.success(MESSAGE.SUCCESS, res?.msg);
+        
        
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
@@ -989,16 +989,19 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       });
     } else {
       this.kt = true;
-      //this.getListIdDelete(data.next[index]);
+      this.getListIdDelete(data.next[index]);
       data.next = data.next.filter((item) => item.vt != idx);
       return;
     }
   }
 
   getListIdDelete(data: linkList){
-    if (typeof this.lstCTietBCao[data.vt-1].id == 'number'){
-      this.listIdDelete += this.lstCTietBCao[data.vt-1].id + ',';
+    if(data.vt>0){
+      if (typeof this.lstCTietBCao[data.vt-1].id == 'number'){
+        this.listIdDelete += this.lstCTietBCao[data.vt-1].id + ',';
+      }
     }
+    
     if (data.next.length == 0) return;
     data.next.forEach(item => {
       this.getListIdDelete(item);
@@ -1007,11 +1010,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   //xoa bằng checkbox
   deleteSelected() {
-    // this.lstCTietBCao.forEach((item) => {
-    //   if (item.checked && typeof item.id == 'number') {
-    //     this.listIdDelete += item.id + ',';
-    //   }
-    // });
     this.deleteAllSelected(this.chiTietBcaos);
     this.updateSTT(this.chiTietBcaos);
     this.updateLstCTietBCao();
@@ -1023,9 +1021,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (data.next.length == 0) {
       return;
     }
+
+    if(data.checked==true){
+      this.getListIdDelete(data);
+    }
     data.next = data.next.filter((item) => item.checked == false);
     this.stt = 0;
-
     data.next.forEach((item) => this.deleteAllSelected(item));
   }
 
@@ -1212,5 +1213,24 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     data.listCtiet = item.listCtiet;
     data.parentId = item.parentId;
     data.ghiChu = item.ghiChu;
+  }
+
+  tinhtong(id:any){
+    let tonglstChitietVtuTrongDot=0;
+    if(this.editCache[id].data.listCtiet.length!=0){
+      this.editCache[id].data.listCtiet.forEach(e => {
+        tonglstChitietVtuTrongDot +=e.sl;
+      })
+    }
+    
+    this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
+    
+    let tonglstChitietVtuLuyke =0;
+    if(this.editCache[id].data.listCtiet.length!=0){
+      this.editCache[id].data.listCtiet.forEach(e => {
+        tonglstChitietVtuLuyke +=e.sl;
+      })
+    }
+    this.editCache[id].data.luyKeTcong = this.editCache[id].data.luyKeThoc + this.editCache[id].data.luyKeGao + tonglstChitietVtuLuyke;
   }
 }

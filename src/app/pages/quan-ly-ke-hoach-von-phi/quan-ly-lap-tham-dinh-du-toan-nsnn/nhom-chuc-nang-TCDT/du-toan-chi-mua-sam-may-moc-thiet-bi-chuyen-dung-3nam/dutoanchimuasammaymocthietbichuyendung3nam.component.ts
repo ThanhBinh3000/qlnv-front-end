@@ -129,7 +129,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       (data) => {
           if (data.statusCode == 0) {
               this.listChitieu = data.data?.content;
-              console.log(this.listChitieu);
+              
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
