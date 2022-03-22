@@ -17,16 +17,21 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 export class ItemData {
      id: any;
      stt!: string;
-     ngayLap!: any;
-     maDvi!: string;
-     nam!: number;
-     maKhoanMuc!: string;
-     noiDung!: string;
-     maLoaiChi!: string;
-     phanBo!: number;
-     ngayGhiNhan!: any;
-     dieuChinh!: string;
-     ghiChu!: string;
+     ctmgTong: number;
+      ctmgVonCap: number;
+      ctmgVonUng: number;
+      ctmtTong: number;
+      ctmtVonCap: number;
+      ctmtVonUng: number;
+      duToan: number;
+      ghiChu: string;
+      maDviThien: string;
+      nam: number;
+      tcvmltTong: number;
+      tcvmltVonCap: number;
+      tcvmltVonUng: number;
+      vonCap: string;
+      vonUng: string;
      checked!: boolean;
 }
 @Component({
@@ -399,16 +404,21 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           let item: ItemData = {
                id: uuid.v4(),
                stt: "",
-               ngayLap: this.ngayNhap,
-               maDvi: this.maDonViTao,
-               nam: this.namBcao,
-               maKhoanMuc: "",
-               noiDung: "",
-               maLoaiChi: "",
-               phanBo: 0,
-               ngayGhiNhan: "",
-               dieuChinh: "",
-               ghiChu: "",
+               ctmgTong: 0,
+              ctmgVonCap: 0,
+              ctmgVonUng: 0,
+              ctmtTong: 0,
+              ctmtVonCap: 0,
+              ctmtVonUng: 0,
+              duToan: 0,
+              ghiChu: "",
+              maDviThien: "",
+              nam: 0,
+              tcvmltTong: 0,
+              tcvmltVonCap: 0,
+              tcvmltVonUng: 0,
+              vonCap: "",
+              vonUng: "",
                checked: false,
           }
 
