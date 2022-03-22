@@ -228,7 +228,7 @@ export class DieuChinhSoLieuQuyetToanVonMuaHangDTQGComponent implements OnInit {
                listIdDeletes:this.listIdDelete,
                listIdFiles:'',
                lstCtiet: this.lstCTietBCao,
-               maDvi: this.maDonViTao = "0301",
+               maDvi: this.maDonViTao,
                ngayQuyetDinh: this.ngayQd,
                soQd: this.soQd,
                trangThai: this.trangThaiBanGhi,

@@ -142,10 +142,11 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
 
   xoadanhsachdieuchinh(id:any){
     var indx = this.danhSachCongVan.findIndex(item => {item.id ===id});
-    this.danhSachCongVan.slice(indx,1);
+    
     this.tonghopSolieuQtoan.xoadieuchinhsolieu(id).subscribe(res => {
       if(res.statusCode==0){
         this.notification.success(MESSAGE.SUCCESS, res?.msg);
+        this.danhSachCongVan.slice(indx,1);
       }else{
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

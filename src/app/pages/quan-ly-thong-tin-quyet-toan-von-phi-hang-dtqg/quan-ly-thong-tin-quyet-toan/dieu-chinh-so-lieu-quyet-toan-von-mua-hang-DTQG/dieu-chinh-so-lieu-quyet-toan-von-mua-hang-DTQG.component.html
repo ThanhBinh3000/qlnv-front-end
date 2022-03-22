@@ -87,7 +87,7 @@
                                 <div nz-col nzSpan="8">
                                   <label class="search__label">Đơn vị thực hiện</label>
                                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao">
-                                    <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                                    <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
                                   </nz-select>
                                 </div>
                                 <div nz-col nzSpan="8">
