@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChiTietThongTinGoiThauComponent } from './chi-tiet-thong-tin-goi-thau/chi-tiet-thong-tin-goi-thau.component';
 import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet-thong-tin-lcnt.component';
 import { QuyetDinhPheDuyetKeHoachLCNTComponent } from './quyet-dinh-phe-duyet-ke-hoach-lcnt/quyet-dinh-phe-duyet-ke-hoach-lcnt.component';
 import { ThongTinLCNTComponent } from './thong-tin-lcnt/thong-tin-lcnt.component';
@@ -26,6 +27,10 @@ const routes: Routes = [
       {
         path: 'thong-tin-lcnt/chi-tiet-thong-tin-lcnt/:id',
         component: ChiTietThongTinLCNTComponent
+      },
+      {
+        path: 'thong-tin-lcnt/chi-tiet-thong-tin-goi-thau/:id',
+        component: ChiTietThongTinGoiThauComponent
       },
     ]
   }

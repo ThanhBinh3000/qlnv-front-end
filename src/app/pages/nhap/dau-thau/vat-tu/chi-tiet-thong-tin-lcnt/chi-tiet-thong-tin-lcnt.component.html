@@ -213,7 +213,7 @@
                     <a>
                       <i class="icon htvbdh_tcdt_import"></i>
                     </a>
-                    <a>
+                    <a (click)="redirectChiTie(1)">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a>
@@ -225,7 +225,7 @@
             </nz-table>
           </nz-card>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-main">
+            <button type="button" class="btn btn-main" (click)="redirectChiTie(0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

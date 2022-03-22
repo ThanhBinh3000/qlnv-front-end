@@ -7,6 +7,14 @@
       <li nz-submenu class="nav-item next" (click)="startSlide()">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
+      <!-- <li nz-submenu class="nav-item" data-toggle="collapse" data-target="#collapsnav"
+        [nzMenuClassName]="'dau-thau-tab'" (mouseenter)="updateCssOverlay()" *ngFor="let route of routes">
+        <span class="nav-link" routerLinkActive="active" [routerLink]="route.url" title><i class="icon"
+            [ngClass]="route.icon"></i><span>{{route.title}}</span></span>
+        <ul>
+          <dau-thau-tab></dau-thau-tab>
+        </ul>
+      </li> -->
       <li class="nav-item" data-toggle="collapse" data-target="#collapsnav" *ngFor="let route of routes, let i = index">
         <span class="nav-link" routerLinkActive="active" [routerLink]="route.url" nz-popover title
           [nzPopoverContent]="contentTemplate" nzPopoverPlacement="leftBottom"
