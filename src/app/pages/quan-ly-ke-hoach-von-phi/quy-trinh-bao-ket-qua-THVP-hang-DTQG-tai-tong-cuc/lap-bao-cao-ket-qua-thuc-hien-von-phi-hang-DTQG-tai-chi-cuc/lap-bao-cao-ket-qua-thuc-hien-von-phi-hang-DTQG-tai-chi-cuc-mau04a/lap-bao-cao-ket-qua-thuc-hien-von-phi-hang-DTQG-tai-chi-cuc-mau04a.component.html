@@ -264,7 +264,7 @@
                       </td>
                     </ng-template>
                     <td [hidden]="status">
-                      <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                      <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked" (change)="updateChecked()"></label>
                     </td>
                   </ng-container>
                   <ng-template #editTemplate>
@@ -332,7 +332,7 @@
                     </td>
                     <td [hidden]="status">
                       <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                        (ngModelChange)="updateSingleChecked()"></label>
+                        (ngModelChange)="updateChecked()"></label>
                     </td>
                   </ng-template>
                 </tr>
