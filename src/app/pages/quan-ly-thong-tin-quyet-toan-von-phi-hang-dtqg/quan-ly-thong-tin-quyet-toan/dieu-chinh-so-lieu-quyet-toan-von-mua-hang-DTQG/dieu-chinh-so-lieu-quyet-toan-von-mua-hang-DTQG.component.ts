@@ -1,51 +1,38 @@
-
-
-
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../Utility/utils";
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
+import * as fileSaver from 'file-saver';
+import * as uuid from "uuid";
+import { Utils } from 'src/app/Utility/utils';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DatePipe } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 
 export class ItemData {
      id: any;
      stt!: string;
      maDviThien!: string;
-     ctmtTong!: number;
-     ctmtVonCap!: number;
-     ctmtVonUng!: number;
-     ctmgTong!: number;
-     ctmgVonCap!: number;
-     ctmgVonUng!: number;
-     nam!: any;
-     duToan!: number;
-     tcvmltVonCap:number;
-     tcvmltVonUng:number;
-     tcvmltTong:number;
+     tongGiaQtoan!: number;
+     tongTienDchinh!: number;
+     nam!: number;
      ghiChu!: any;
-     vonCap:number;
-     vonUng:number;
      checked!: boolean;
 }
-@Component({
-  selector: 'app-tong-hop-so-lieu-quyet-toan',
-  templateUrl: './tong-hop-so-lieu-quyet-toan.component.html',
-  styleUrls: ['./tong-hop-so-lieu-quyet-toan.component.scss']
-})
 
-export class TongHopSoLieuQuyetToanComponent implements OnInit {
-     
-     
+
+@Component({
+  selector: 'app-dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG',
+  templateUrl: './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.component.html',
+  styleUrls: ['./dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.component.scss']
+})
+export class DieuChinhSoLieuQuyetToanVonMuaHangDTQGComponent implements OnInit {
+
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -249,7 +236,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           this.spinner.show();
           console.log(request);
           if (this.id == null) {
-               this.tonghopSolieuQtoan.tonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(
+               this.tonghopSolieuQtoan.dieuchinhsolieusauquyettoan(request).subscribe(
                     (data) => {
                          if(data.statusCode==0){
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -262,7 +249,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           } else {
-               this.tonghopSolieuQtoan.capnhattonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(res => {
+               this.tonghopSolieuQtoan.capnhatdieuchinhsolieusauquyettoan(request).subscribe(res => {
                     
                          if(res.statusCode==0){
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -307,7 +294,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      // call chi tiet bao cao
      getDetailReport() {
           this.spinner.hide();
-          this.tonghopSolieuQtoan.chitiettonghopsolieuquyettoanvonmuahangDTQG(this.id).subscribe(
+          this.tonghopSolieuQtoan.chitietdieuchinhsolieu(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          console.log(data);
@@ -376,21 +363,11 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           let item: ItemData = {
                id: uuid.v4(),
                stt: '',
-               ctmtTong: 0,
-               ctmtVonCap: 0,
-               ctmtVonUng: 0,
-               ctmgTong: 0,
-               ctmgVonCap: 0,
-               ctmgVonUng: 0,
                maDviThien!: '',
+               tongGiaQtoan!: 0,
+               tongTienDchinh!: 0,
                nam!: 0,
-               duToan!: 0,
-               tcvmltVonCap:0,
-               tcvmltVonUng:0,
-               tcvmltTong:0,
                ghiChu!: '',
-               vonCap:0,
-               vonUng:0,
                checked!: false,
           }
 
@@ -524,49 +501,19 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
    
      
      
-     tinhtong(id:any){
-          this.editCache[id].data.ctmtTong = this.editCache[id].data.ctmtVonCap + this.editCache[id].data.ctmtVonUng;
-          this.editCache[id].data.ctmgTong = this.editCache[id].data.ctmgVonCap + this.editCache[id].data.ctmgVonUng;
-          this.editCache[id].data.tcvmltTong = this.editCache[id].data.tcvmltVonCap + this.editCache[id].data.tcvmltVonUng;
      
-          this.tongcol()
-
-     }
 
 
-     tongctmtVonCap:number;
-     tongctmtVonUng:number;
-     tongctmtTong:number;
-     tongctmgVonCap:number;
-     tongctmgVonUng:number;
-     tongctmgTong:number;
-     tongtcvmltDutoan:number;
-     tongtcvmltVonCap:number;
-     tongtcvmltVonUng:number;
-     tongtcvmltTong:number;
+     tongGiaTriQToan:number;
+     tongSoTienDchinh:number;
+     
 
      tongcol(){
-          this.tongctmtVonCap=0;
-          this.tongctmtVonUng=0;
-          this.tongctmtTong=0;
-          this.tongctmgVonCap=0;
-          this.tongctmgVonUng=0;
-          this.tongctmgTong=0;
-         this. tongtcvmltDutoan=0;
-          this.tongtcvmltVonCap=0;
-          this.tongtcvmltVonUng=0;
-          this.tongtcvmltTong=0;
+          this.tongGiaTriQToan =0;
+          this.tongSoTienDchinh =0;
           this.lstCTietBCao.forEach(e =>{
-               this.tongctmtVonCap +=e.ctmtVonCap;
-               this.tongctmtVonUng +=e.ctmtVonUng;
-               this.tongctmtTong +=e.ctmtTong;
-               this.tongctmgVonCap +=e.ctmgVonCap;
-               this.tongctmgVonUng +=e.ctmgVonUng;
-               this.tongctmgTong +=e.ctmgTong;
-               this.tongtcvmltDutoan +=e.duToan;
-               this.tongtcvmltVonCap +=e.tcvmltVonCap;
-               this.tongtcvmltVonUng +=e.tcvmltVonUng;
-               this.tongtcvmltTong +=e.tcvmltTong;
+               this.tongGiaTriQToan +=e.tongGiaQtoan;
+               this.tongSoTienDchinh +=e.tongTienDchinh
           })
      }
 }

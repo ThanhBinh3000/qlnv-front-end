@@ -63,53 +63,34 @@
           </div> -->
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH ĐIỀU CHỈNH SỐ LIỆU SAU QUYẾT TOÁN" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
-              <th width="60px">
-                <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate">
-                </label>
+              <th width="60px">STT
               </th>
-              <th width="130px">Ngày lập</th>
-              <th width="175px">Nơi lập</th>
               <th width="175px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
-              <th width="175px">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="175px">Căn cứ hợp đồng</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th width="175px">Ngày lập</th>
+              <th width="175px">Đơn vị lập</th>
+              <th width="175px" class="text-center">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachCongVan; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td>{{ (i + 1) }}</td>
+              <td>{{item.soQd}}</td>
+              <td>{{item.ngayQuyetDinh}}</td>
               <td>{{item.ngayTao}}</td>
-              <td>{{item.namBcao}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
-              <td class="text-center">{{item.tenDvi}}</td>
+              <td>{{getUnitName(item.maDvi)}}</td>
+              <td>
+                <a routerLink="../{{url}}/{{ item.id }}" style="margin-right:20px">Sửa</a>
+                <a (click)="xoadanhsachdieuchinh(item.id)">Xóa</a>
+              </td>
             </tr>
           </tbody>
         </nz-table>
-        <div nz-row>
-          <div nz-col nzSpan="24" style="margin-top: 5px;">
-            <label class="search__label">Lý do từ chối :</label>
-            <input class="search__input" type="text" style="width: 95.9%">
-          </div>
-          <!-- <div nz-col nzSpan="12">
-
-          </div> -->
-          <div nz-col nzSpan="4" style="margin-top: 10px;">
-            <button class="btn btn-main">
-              Phê duyệt
-            </button>
-            <button class="btn btn-main">
-              Từ chối
-            </button>
-          </div>
-        </div>
-
         <div class="tab-content tab-menu" id="myTabContent">
           <div class="tab-pane fade show active justify-content-between">
             <div class="trai">

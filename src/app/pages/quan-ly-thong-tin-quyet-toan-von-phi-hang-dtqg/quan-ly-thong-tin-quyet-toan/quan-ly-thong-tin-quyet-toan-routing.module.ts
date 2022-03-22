@@ -28,6 +28,27 @@ const routes: Routes = [
         './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
       ).then((m) => m.TongHopSoLieuQuyetToanModule),
   },
+  {
+    path: 'tong-hop-so-lieu-quyet-toan/:id',
+    loadChildren: () =>
+      import(
+        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
+      ).then((m) => m.TongHopSoLieuQuyetToanModule),
+  },
+  {
+    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg',
+    loadChildren: () =>
+      import(
+        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
+      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
+  },
+  {
+    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg/:id',
+    loadChildren: () =>
+      import(
+        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
+      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
+  },
 ];
 
 @NgModule({

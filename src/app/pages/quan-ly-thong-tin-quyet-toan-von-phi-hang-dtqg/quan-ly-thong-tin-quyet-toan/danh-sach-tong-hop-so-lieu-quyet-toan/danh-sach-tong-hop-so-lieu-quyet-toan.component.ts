@@ -7,6 +7,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MESSAGE } from '../../../../constants/message';
+import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
+import { Utils } from 'src/app/Utility/utils';
 
 
 
@@ -54,8 +56,9 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
+  trangThai:any;
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
+    private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
@@ -64,29 +67,14 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+   
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+         
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -125,14 +113,18 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
       str: "",
       trangThai: "",
     };
-
+    console.log(requestReport);
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDsachTongHopSoLieuQuyetToan(requestReport).toPromise().then(
+    this.tonghopSolieuQtoan.timDsachTongHopSoLieuQuyetToan(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
 
           this.danhSachCongVan = data.data?.content;
+          this.danhSachCongVan.forEach(e => {
+            e.ngayTao = this.datePipe.transform(e.ngayTao,'dd/MM/yyyy');
+            e.ngayQuyetDinh = this.datePipe.transform(e.ngayQuyetDinh,'dd/MM/yyyy');
+          })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
@@ -143,6 +135,12 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+  }
+
+
+  getStatusName(status:any) {
+    const utils = new Utils();
+    return utils.getStatusName(status);
   }
 
   //set url khi
@@ -159,6 +157,18 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
 
   }
 
+  //checkox trên tùng row
+  updateSingleChecked(): void {
+    if (this.danhSachCongVan.every((item) => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.danhSachCongVan.every((item) => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;

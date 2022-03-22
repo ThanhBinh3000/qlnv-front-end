@@ -4,9 +4,9 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
+import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
 
 
 
@@ -19,11 +19,11 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
-  danhSachCongVan: any = [];
+  danhSachCongVan: any []= [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string ='dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg';
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -54,7 +54,7 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
   donViTaos: any = [];
   baoCaos: any = [];
   constructor(
-        private quanLyVonPhiService: QuanLyVonPhiService,
+        private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
         private danhMuc: DanhMucHDVService,
         private router: Router,
         private datePipe: DatePipe,
@@ -65,29 +65,14 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+    
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -112,6 +97,11 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
     ]);
   }
 
+
+  //lay ten don vi tạo
+  getUnitName(dvTao:any) {
+    return this.donViTaos.find((item) => item.maDvi == dvTao)?.tenDvi;
+  }
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
@@ -127,12 +117,16 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDsachCvanDnghi(requestReport).toPromise().then(
+    this.tonghopSolieuQtoan.timDsachDieuChinhSoLieuSauQuyetToan(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
           
           this.danhSachCongVan = data.data?.content;
+          this.danhSachCongVan.forEach(e =>{
+            e.ngayQuyetDinh = this.datePipe.transform(e.ngayQuyetDinh,'dd/MM/yyyy');
+            e.ngayTao = this.datePipe.transform(e.ngayTao,'dd/MM/yyyy');
+          })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
@@ -145,6 +139,18 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
     );
   }
 
+
+  xoadanhsachdieuchinh(id:any){
+    var indx = this.danhSachCongVan.findIndex(item => {item.id ===id});
+    this.danhSachCongVan.slice(indx,1);
+    this.tonghopSolieuQtoan.xoadieuchinhsolieu(id).subscribe(res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    })
+  }
   //set url khi
   setUrl(id) {
     switch (id) {
