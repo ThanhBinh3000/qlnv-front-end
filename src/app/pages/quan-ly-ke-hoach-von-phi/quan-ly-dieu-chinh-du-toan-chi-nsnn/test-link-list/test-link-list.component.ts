@@ -216,14 +216,12 @@ export class TestLinkListComponent implements OnInit {
       this.updateCheckedLL(item);
       if (!item.checked) kt = false;
     })
-
-    if (kt) {
-      data.checked = true;
-      this.lstCTietBCao[data.vt - 1].checked = true;
+    if (data.vt == 0) {
+      this.allChecked = kt;
     } else {
-      data.checked = false;
-      this.lstCTietBCao[data.vt - 1].checked = false;
+      this.lstCTietBCao[data.vt - 1].checked = kt;
     }
+    data.checked = kt;
   }
 
   subUpdateChecked(data: LinkList, kt: boolean) {
