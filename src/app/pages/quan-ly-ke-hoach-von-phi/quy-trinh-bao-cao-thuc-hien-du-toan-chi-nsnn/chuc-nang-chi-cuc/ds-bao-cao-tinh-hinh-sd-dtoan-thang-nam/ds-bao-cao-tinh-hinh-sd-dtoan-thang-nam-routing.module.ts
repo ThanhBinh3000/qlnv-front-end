@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChiThuongXuyen3NamComponent } from './chi-thuong-xuyen-3-nam.component';
+import { DsBaoCaoTinhHinhSdDtoanThangNamComponent } from './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChiThuongXuyen3NamComponent,
+    component: DsBaoCaoTinhHinhSdDtoanThangNamComponent,
   },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ChiThuongXuyen3NamRoutingModule {}
+export class DsBaoCaoTinhHinhSdDtoanThangNamRoutingModule {}

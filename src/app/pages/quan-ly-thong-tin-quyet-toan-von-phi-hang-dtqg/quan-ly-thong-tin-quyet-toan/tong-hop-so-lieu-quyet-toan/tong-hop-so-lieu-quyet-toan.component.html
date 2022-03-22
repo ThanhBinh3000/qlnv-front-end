@@ -79,46 +79,6 @@
                  <nz-tabset nzType="card" class="tab__container">
                       <nz-tab [nzTitle]="'Chi tiết:'">
                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                            <div class="chitiet__body ml-1" nz-row [nzGutter]="[18, 12]" >
-                              <!-- <div nz-col nzSpan="12">
-                                    <label class="search__label">Đơn vị thực hiện</label>
-                                    <input class="search__input" nz-input [(ngModel)]="maDonViTao" disabled />
-                              </div> -->
-                              <div nz-col nzSpan="12">
-                                <label class="search__label">Đơn vị thực hiện</label>
-                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao">
-                                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-                                </nz-select>
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">Năm thực hiện</label>
-                                   <input class="search__input" nz-input [(ngModel)]="ngayNhap"  />
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">Dự toán</label>
-                                   <input class="search__input" nz-input [(ngModel)]="duToan" disabled />
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">mã đơn vị sử dụng ngân sách</label>
-                                   <input class="search__input" nz-input [(ngModel)]="maDonViTao" disabled />
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">Mã kho bạc nơi giao dịch</label>
-                                   <input class="search__input" nz-input [(ngModel)]="soQd" />
-                              </div>
-                              <div nz-col nzSpan="6">
-                                <label class="search__label">Vốn cấp</label>
-                                <input class="search__input" nz-input [(ngModel)]="duToan"  />
-                              </div>
-                              <div nz-col nzSpan="6">
-                                <label class="search__label">Vốn ứng</label>
-                                <input class="search__input" nz-input [(ngModel)]="duToan"  />
-                              </div>
-                              <div nz-col nzSpan="24">
-                                <label class="search__label">Ghi chú</label>
-                                <input class="search__input" nz-input [(ngModel)]="ghiChu"  />
-                              </div>
-                            </div>
                             <div class="action">
                                  <button type="button" class="btn btn-main" (click)="deleteSelected()">
                                       <i class="fa fa-trash-o"></i>
