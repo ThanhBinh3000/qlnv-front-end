@@ -8,10 +8,12 @@ export class KeHoachMuoi {
   ntnTongSoMuoi: number;
   xtnTongSoMuoi: number;
   xtnMuoi: ItemDetail[];
+  xuatTrongNam: ItemDetail[];
   tkcnTongSoMuoi: number;
   tenDonVi: string;
   maDonVi: string;
   donViTinh: string;
   donViId: number;
   id: number;
+  nhapTrongNam: string;
 }

@@ -1,3 +1,4 @@
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { KeHoachMuoi } from './../../../models/KeHoachMuoi';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -28,13 +29,13 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) {}
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
     this.oninitForm();
-    this.loadTonKhoDauNam();
-    this.loadTonKhoCuoiNam();
+
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -46,10 +47,10 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
   }
   oninitForm() {
     this.formData = this.fb.group({
-      donViId: [this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null],
-      id: [this.thongTinMuoi ? this.thongTinMuoi.donViId : null],
+      donViId: [this.thongTinMuoi ? this.thongTinMuoi.donViId : null],
+      id: [this.thongTinMuoi ? this.thongTinMuoi.id : null],
       maDonVi: [
-        this.thongTinMuoi ? this.thongTinMuoi.id : null,
+        this.thongTinMuoi ? this.thongTinMuoi.maDonVi : null,
         [Validators.required],
       ],
       donViTinh: ['Tấn'],
@@ -130,14 +131,48 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     }
   }
   selectDonVi(donVi) {
-    console.log(donVi);
-
     this.formData.patchValue({
       maDonVi: donVi.maDvi,
       tenDonVi: donVi.tenDvi,
+      donViId: donVi.id,
     });
-
-    console.log(this.formData.value);
+    this.chiTieuKeHoachNamService
+      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['04'] })
+      .then((res) => {
+        res.data.forEach((tonKho) => {
+          if (tonKho.maVthh == '04') {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1).toString():
+                this.formData.patchValue({
+                  tkdnSoLuong1: tonKho.slHienThoi,
+                });
+                break;
+              case (this.yearNow - 2).toString():
+                this.formData.patchValue({
+                  tkdnSoLuong2: tonKho.slHienThoi,
+                });
+                break;
+              case (this.yearNow - 3).toString():
+                this.formData.patchValue({
+                  tkdnSoLuong3: tonKho.slHienThoi,
+                });
+                break;
+              default:
+                break;
+            }
+          }
+          this.calculatorTkdnTongMuoi();
+          this.loadTonKhoCuoiNam();
+        });
+      });
+  }
+  calculatorTkdnTongMuoi() {
+    this.formData.patchValue({
+      tkdnTongSo:
+        +this.formData.get('tkdnSoLuong1').value +
+        +this.formData.get('tkdnSoLuong2').value +
+        +this.formData.get('tkdnSoLuong3').value,
+    });
   }
 
   onInputDonViTinh(e: Event): void {
@@ -163,19 +198,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
   handleCancel() {
     this._modalRef.destroy();
   }
-  loadTonKhoDauNam() {
-    this.formData.patchValue({
-      tkdnSoLuong1: 5,
-      tkdnSoLuong2: 5,
-      tkdnSoLuong3: 5,
-    });
-    this.formData.patchValue({
-      tkdnTongSo:
-        +this.formData.get('tkdnSoLuong1').value +
-        +this.formData.get('tkdnSoLuong2').value +
-        +this.formData.get('tkdnSoLuong3').value,
-    });
-  }
+
   calculatorXtnTongSoMuoi() {
     this.formData.patchValue({
       xtnTongSo:

@@ -33,7 +33,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
@@ -85,6 +85,9 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
 
   //modal func
   save() {
+    this.setValueDonViTinh();
+    console.log('123: ', this.formData);
+
     this._modalRef.close(this.formData);
   }
 
@@ -167,10 +170,18 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       );
     }
   }
-
+  donViTinhModel: string;
   selectDonViTinh(donViTinh) {
+    console.log(donViTinh);
+    this.donViTinhModel = donViTinh;
+    // this.formData.patchValue({
+    //   donViTinh: donViTinh,
+    // });
+    // console.log(this.formData);
+  }
+  setValueDonViTinh() {
     this.formData.patchValue({
-      donViTinh: donViTinh.tenDviTinh,
+      donViTinh: this.donViTinhModel,
     });
   }
 
@@ -252,7 +263,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       maVatTuCha: vatTu.parent.ma,
       vatTuId: vatTu.id,
       maVatTu: vatTu.ma,
-      vatTu: vatTu
+      vatTu: vatTu,
     });
   }
 

@@ -145,17 +145,17 @@ export class DialogThongTinLuongThucComponent implements OnInit {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
                 this.formData.patchValue({
-                  tkdnThocSoLuong1: 0,
+                  tkdnThocSoLuong1: tonKho.slHienThoi,
                 });
                 break;
               case (this.yearNow - 2).toString():
                 this.formData.patchValue({
-                  tkdnThocSoLuong2: 0,
+                  tkdnThocSoLuong2: tonKho.slHienThoi,
                 });
                 break;
               case (this.yearNow - 3).toString():
                 this.formData.patchValue({
-                  tkdnThocSoLuong3: 0,
+                  tkdnThocSoLuong3: tonKho.slHienThoi,
                 });
                 break;
               default:
@@ -165,12 +165,12 @@ export class DialogThongTinLuongThucComponent implements OnInit {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
                 this.formData.patchValue({
-                  tkdnGaoSoLuong1: 0,
+                  tkdnGaoSoLuong1: tonKho.slHienThoi,
                 });
                 break;
               case (this.yearNow - 2).toString():
                 this.formData.patchValue({
-                  tkdnGaoSoLuong2: 0,
+                  tkdnGaoSoLuong2: tonKho.slHienThoi,
                 });
                 break;
               default:

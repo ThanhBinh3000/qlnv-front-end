@@ -3,6 +3,7 @@ export class KeHoachVatTu {
   donViId: number;
   maDonVi: string;
   tenDonVi: string;
+  donViTinh: string;
   stt: number;
   vatTuThietBi: Array<VatTuThietBi>;
   listDisplay: Array<any>;

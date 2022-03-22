@@ -41,8 +41,8 @@
       </nz-form-item> -->
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-        <nz-select formControlName="namKeHoach">
-          <nz-option *ngFor="let p of listDonViTinh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        <nz-select formControlName="donViTinh" (ngModelChange)="selectDonViTinh($event)">
+          <nz-option *ngFor="let donVi of listDonViTinh" [nzValue]="donVi.value" [nzLabel]="donVi.text"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>

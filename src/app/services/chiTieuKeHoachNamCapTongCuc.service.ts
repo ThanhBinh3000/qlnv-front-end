@@ -79,4 +79,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
     return this.httpClient.post(url, body).toPromise();
   }
+  downloadFile(): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
+    return this.httpClient.post(url, null, { responseType: 'blob' });
+  }
 }

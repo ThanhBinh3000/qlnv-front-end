@@ -1,34 +1,30 @@
-import {
-  KeHoachVatTu,
-  NhomVatTuThietBi,
-  CacNamTruoc,
-  VatTuThietBi,
-} from './../../../models/KeHoachVatTu';
-import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
-import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
-import { DialogThongTinLuongThucComponent } from './../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
-import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNam';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { saveAs } from 'file-saver';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
-import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
-import * as XLSX from 'xlsx';
-import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
-import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
+import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
+import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import * as XLSX from 'xlsx';
+import { DialogThongTinLuongThucComponent } from './../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
+import { KeHoachVatTu, VatTuThietBi } from './../../../models/KeHoachVatTu';
+import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNam';
+import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -57,6 +53,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   tab = TAB_SELECTED;
   yearNow = 2022;
   thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam =
+    new ThongTinChiTieuKeHoachNam();
+  thongTinChiTieuKeHoachNamInput: ThongTinChiTieuKeHoachNam =
     new ThongTinChiTieuKeHoachNam();
   tableExist: boolean = false;
   keHoachLuongThucDialog: KeHoachLuongThuc;
@@ -386,6 +384,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachVatTuDialog.tenDonVi = vatTu.value.tenDonVi;
           this.keHoachVatTuDialog.maDonVi = vatTu.value.maDonVi;
           this.keHoachVatTuDialog.donViId = vatTu.value.donViId;
+          this.keHoachVatTuDialog.donViTinh = vatTu.value.donViTinh;
           this.keHoachVatTuDialog.stt =
             this.thongTinChiTieuKeHoachNam.khVatTu?.length + 1;
           this.keHoachVatTuDialog.vatTuThietBi = [];
@@ -459,6 +458,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiDialog.ntnTongSoMuoi = muoi.value.ntnTongSo;
           this.keHoachMuoiDialog.tenDonVi = muoi.value.tenDonVi;
           this.keHoachMuoiDialog.tkcnTongSoMuoi = +muoi.value.tkcnTongSo;
+          this.keHoachMuoiDialog.donViTinh = muoi.value.donViTinh;
           const tkdnMuoi1 = {
             id: null,
             nam: this.yearNow - 1,
@@ -927,6 +927,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: '01',
           };
+          await this.save();
           await this.chiTieuKeHoachNamService.updateStatus(body);
           this.spinner.hide();
         } catch (e) {
@@ -1014,7 +1015,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   save() {
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
       this.formData.get('soQD').value
-    }`;
+    }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1022,9 +1023,45 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.get('namKeHoach').value;
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
+
+    this.thongTinChiTieuKeHoachNamInput = cloneDeep(
+      this.thongTinChiTieuKeHoachNam,
+    );
+    this.thongTinChiTieuKeHoachNamInput.khMuoi = [];
+    this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
+      this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+    );
+
+    this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
+      delete muoi.maDonVi;
+      delete muoi.tkdnTongSoMuoi;
+      delete muoi.tkdnMuoi;
+      delete muoi.tkcnTongSoMuoi;
+      muoi.xuatTrongNam = cloneDeep(muoi.xtnMuoi);
+      delete muoi.xtnMuoi;
+      muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
+      delete muoi.ntnTongSoMuoi;
+      delete muoi.xtnTongSoMuoi;
+      delete muoi.id;
+    });
+    delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
+    this.thongTinChiTieuKeHoachNamInput.khVatTu.forEach((vatTu) => {
+      delete vatTu.listDisplay;
+      delete vatTu.maDonVi;
+      vatTu.vatTuThietBi.forEach((thietbi) => {
+        delete thietbi.cacNamTruoc;
+        delete thietbi.maVatTu;
+        delete thietbi.maVatTuCha;
+        delete thietbi.tenVatTu;
+        delete thietbi.tenVatTuCha;
+        delete thietbi.tongCacNamTruoc;
+        delete thietbi.tongNhap;
+      });
+    });
+
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
-        .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNam)
+        .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           console.log(res);
         })
@@ -1036,12 +1073,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      this.thongTinChiTieuKeHoachNam.id = 0;
-      this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.thongTinChiTieuKeHoachNam.soQuyetDinh}`;
-      console.log(this.thongTinChiTieuKeHoachNam);
-
+      this.thongTinChiTieuKeHoachNamInput?.khVatTu?.forEach((chiTieu) => {
+        delete chiTieu.listDisplay;
+      });
       this.chiTieuKeHoachNamService
-        .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNam)
+        .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           console.log(res);
         })
@@ -1073,4 +1109,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       endValue.getTime() <= this.formData.controls['ngayKy'].value.getTime()
     );
   };
+  downloadTemplate() {
+    this.chiTieuKeHoachNamService.downloadFile().subscribe((blob) => {
+      saveAs(blob, 'biểu mẫu nhập dữ liệu Lương thực.xlsx');
+    });
+  }
 }
