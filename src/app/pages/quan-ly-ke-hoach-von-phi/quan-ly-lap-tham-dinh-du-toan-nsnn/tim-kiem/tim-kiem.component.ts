@@ -25,19 +25,6 @@ export class TimKiemComponent implements OnInit {
   errorMessage = "";
   url!: string;
 
-  // phan cu cua teca
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  noParent = true;
-  searchValue = '';
-
   searchFilter = {
     nam: "",
     tuNgay: "",

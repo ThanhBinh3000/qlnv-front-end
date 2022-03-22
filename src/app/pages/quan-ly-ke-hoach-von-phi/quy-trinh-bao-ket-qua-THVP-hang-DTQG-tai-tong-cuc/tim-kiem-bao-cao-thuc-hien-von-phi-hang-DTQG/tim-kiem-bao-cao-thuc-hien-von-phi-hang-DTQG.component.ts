@@ -49,8 +49,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     trangThai:'',
     maBcao:'',
     maLoaiBcao:'',
-    namBcao:'',
-    dotBcao:'',
+    namBCao:'',
+    thangBCao:'',
     paggingReq: {
       limit: 20,
       page: 1
@@ -76,12 +76,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
+    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.ERROR, data?.msg);
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -96,7 +95,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.ERROR, data?.msg);
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -156,27 +154,16 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   setUrl(lbaocao:any) {
     console.log(lbaocao)
     switch (lbaocao) {
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
+      case 526:
+        this.url = '/bao-cao/'
         break;
-      case 408:
+      case 527:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
         break;
       default:
         this.url = null;
         break;
     }
-   console.log(lbaocao);
-
   }
 
   //doi so trang

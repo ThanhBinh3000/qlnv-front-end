@@ -146,7 +146,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //get danh muc noi dung
-    this.danhMucService.dMKeHoachVon().subscribe(
+    this.danhMucService.dMVatTu().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.tenTbis = data.data?.content;

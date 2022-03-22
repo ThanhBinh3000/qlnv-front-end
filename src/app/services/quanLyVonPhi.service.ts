@@ -20,7 +20,7 @@ export class QuanLyVonPhiService extends BaseService {
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao-du-toan-chi/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach',
       request,
     );
   }

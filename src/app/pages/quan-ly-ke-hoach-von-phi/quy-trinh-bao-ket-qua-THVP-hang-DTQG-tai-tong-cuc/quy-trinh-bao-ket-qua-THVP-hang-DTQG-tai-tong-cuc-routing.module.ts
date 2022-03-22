@@ -140,6 +140,22 @@ const routes: Routes = [
         './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b.module'
       ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bModule),
   },
+
+  //hung
+  {
+    path: 'bao-cao',
+    loadChildren: () =>
+      import(
+        './bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
+  {
+    path: 'bao-cao/:id',
+    loadChildren: () =>
+      import(
+        './bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
 ];
 
 @NgModule({
