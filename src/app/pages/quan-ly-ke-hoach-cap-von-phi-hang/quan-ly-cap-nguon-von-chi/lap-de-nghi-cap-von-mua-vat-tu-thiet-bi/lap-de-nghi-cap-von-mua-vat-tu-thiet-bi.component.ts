@@ -12,6 +12,7 @@ import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
+///import { Tracing } from 'trace_events';
 export class ItemData {
   maLoaiGia!: string;
   maMatHang!: string;
@@ -35,6 +36,10 @@ export class ItemData {
 export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 
   userInfo: any;
+  soCvan: string;
+  ngay: string;
+  noiLap:string;
+  maTrangThai: string;
   errorMessage!: String;                      //
   noiDungs: any = [];                         // danh muc noi dung
   nhomChis:any = [];                          // danh muc nhom chi

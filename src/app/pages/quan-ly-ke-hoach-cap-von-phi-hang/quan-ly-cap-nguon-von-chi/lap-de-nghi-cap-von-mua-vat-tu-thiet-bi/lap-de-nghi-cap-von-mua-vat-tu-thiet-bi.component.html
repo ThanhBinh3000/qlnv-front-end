@@ -63,40 +63,100 @@
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-        <div class="widget-body">
-          <div>
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
-                {{ngayNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
-                {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Nơi lập">
-                {{getUnitName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số công văn">
-                {{maBaoCao}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày">
-                {{namBaoCaoHienHanh}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                {{getStatusName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Căn cứ">
-                Xây dựng Chi thường xuyên giai đoạn 03 năm
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Hợp đồng mua bán">
-                demo
-              </nz-descriptions-item>
-            </nz-descriptions>
+        <div class="search__body" nz-row [nzGutter]="[16, 12]">
+          <div nz-col nzSpan="8">
+            <label class="search__label">Ngày nhập</label>
+            <input class="search__input" nz-input [(ngModel)]="ngayNhap" disabled />
+          </div>
+          <div nz-col nzSpan="8">
+            <label class="search__label">Người nhập</label>
+            <input class="search__input" nz-input [(ngModel)]="nguoiNhap" disabled />
+          </div>
+          <div nz-col nzSpan="8">
+            <label class="search__label">Trạng thái</label>
+            <input class="search__input" nz-input [(ngModel)]="maTrangThai" disabled />
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Nơi lập</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+              <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Số công văn</label>
+            <input class="search__input" nz-input [(ngModel)]="soCvan" disabled />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày</label>
+            <input class="search__input" nz-input [(ngModel)]="ngay" disabled />
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Căn cứ</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ" [(ngModel)]="noiLap">
+              <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Hợp đồng mua bán</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hợp đồng mua bán" [(ngModel)]="noiLap">
+              <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
           </div>
         </div>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab>
+          <nz-tab [nzTitle]="'Danh mục hàng hóa đề xuất'">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col nzSpan="8">
+                <label class="search__label">Loại giá</label>
+                <input class="search__input" nz-input [(ngModel)]="ngayNhap" disabled />
+              </div>
+              <div nz-col nzSpan="8">
+                <label class="search__label">Mặt hàng</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="8">
+                <label class="search__label">Chi phí liên quan</label>
+                <input class="search__input" nz-input type="number" [(ngModel)]="maTrangThai" disabled />
+              </div>
+              <div nz-col nzSpan="8">
+                <label class="search__label">Chủng loại</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="6">
+                <label class="search__label">Đơn giá</label>
+                <input class="search__input" nz-input type="number" [(ngModel)]="maTrangThai" disabled />
+              </div>
+              <div nz-col nzSpan="5">
+                <label class="search__label">Đơn giá hiện tại</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="5">
+                <label class="search__label">Đơn vị</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="12">
+                <label class="search__label">Địa điểm</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="noiLap">
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="12">
+                <br />
+                <button class="btn btn-main" type="button">
+                  Thêm vào danh sách
+                </button>
+              </div>
+            </div>
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -190,7 +250,8 @@
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chủng loại"
                         [(ngModel)]="editCache[data.id].data.maCloai">
-                        <nz-option *ngFor="let item of chungLoais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                        <nz-option *ngFor="let item of chungLoais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
                       </nz-select>
                     </td>
                     <td>
@@ -199,7 +260,8 @@
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache[data.id].data.maDviTinh">
-                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                        <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
                       </nz-select>
                     </td>
                     <td>
@@ -272,10 +334,10 @@
 
             <div>
               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Nơi nhận" >
+                <nz-descriptions-item nzTitle="Nơi nhận">
                   {{ngayNhap}}
                 </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Hình thức" >
+                <nz-descriptions-item nzTitle="Hình thức">
                   {{ngayNhap}}
                 </nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Lý do từ chối">
