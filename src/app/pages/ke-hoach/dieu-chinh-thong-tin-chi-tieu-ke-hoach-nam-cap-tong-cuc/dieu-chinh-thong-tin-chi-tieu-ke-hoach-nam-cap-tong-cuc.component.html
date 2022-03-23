@@ -92,7 +92,7 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKeHoachError">
-                  <nz-select formControlName="namKeHoach">
+                  <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                   <ng-template #namKeHoachError let-control>
@@ -133,12 +133,12 @@
                     <tr>
                       <th rowspan="4">STT</th>
                       <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                       <th colspan="3">Nhập trong năm (2)</th>
                       <th colspan="8">Xuất trong năm (3)</th>
                       <th colspan="3">Tồn kho cuối năm (4)
                         <br>
-                        ( 31/12/2021)
+                        ( 31/12/{{yearNow}})
                       </th>
                       <th rowspan="4">Trạng thái</th>
                       <th rowspan="4">Hành động</th>
@@ -276,12 +276,12 @@
                     <tr>
                       <th rowspan="4">STT</th>
                       <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                       <th colspan="3">Nhập trong năm (2)</th>
                       <th colspan="8">Xuất trong năm (3)</th>
                       <th colspan="3">Tồn kho cuối năm (4)
                         <br>
-                        ( 31/12/2021)
+                        ( 31/12/{{yearNow}})
                       </th>
                       <th rowspan="4">Trạng thái</th>
                     </tr>
@@ -504,12 +504,12 @@
                     <tr>
                       <th rowspan="3">STT</th>
                       <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                       <th>Nhập trong năm (2)</th>
                       <th colspan="4 ">Xuât trong năm (3)</th>
                       <th>Tồn kho cuối năm (4)
                         <br>
-                        ( 31/12/2021)
+                        ( 31/12/{{yearNow}})
                       </th>
                       <th rowspan="3">Trạng thái</th>
                       <th rowspan="3">Hành động</th>
@@ -586,12 +586,12 @@
                     <tr>
                       <th rowspan="3">STT</th>
                       <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/2021)</th>
+                      <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                       <th>Nhập trong năm (2)</th>
                       <th colspan="4 ">Xuât trong năm (3)</th>
                       <th>Tồn kho cuối năm (4)
                         <br>
-                        ( 31/12/2021)
+                        ( 31/12/{{yearNow}})
                       </th>
                       <th rowspan="3">Trạng thái</th>
                     </tr>

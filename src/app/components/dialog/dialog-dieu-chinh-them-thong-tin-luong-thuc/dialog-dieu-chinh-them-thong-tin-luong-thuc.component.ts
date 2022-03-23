@@ -5,6 +5,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 
@@ -83,7 +84,6 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -94,6 +94,10 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  loadChiTiet() {
+
   }
 
   async loadDonVi() {
@@ -133,13 +137,20 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
           if (tonKho.maVthh == '010101') {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
-                this.slThoc3 = 0;
+                this.slThoc3 = 10;
+                this.caculatorXuatThocSdc3();
+                this.caculatorXuatGaoSdc3();
                 break;
               case (this.yearNow - 2).toString():
-                this.slThoc2 = 0;
+                this.slThoc2 = 10;
+                this.xuatSlThocTruocDieuChinh2 = 5;
+                this.caculatorXuatThocSdc2();
+                this.caculatorXuatGaoSdc2();
                 break;
               case (this.yearNow - 3).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
+                this.xuatSlThocTruocDieuChinh1 = 5;
+                this.caculatorXuatThocSdc1();
                 break;
               default:
                 break;
@@ -147,10 +158,10 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
           } else if (tonKho.maVthh == '010103') {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
                 break;
               case (this.yearNow - 2).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
                 break;
               default:
                 break;
@@ -160,18 +171,30 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
       });
   }
 
-  caculatorData() {
-    this.tongSoQuyThocTonKhoDauNam = this.slThoc1 + this.slThoc2 + this.slThoc3 + this.slGao2 * 2 + this.slGao3 * 2;
-
-    this.tongSoQuyThocNhapTrongNam = this.slThocSauDieuChinh + this.slGaoSauDieuChinh;
-  }
-
-  caculatorThocDieuChinh() {
-    this.slThocSauDieuChinh = this.slThocTruocDieuChinh + this.slThocTang - this.slThocGiam;
-  }
-
   handleOk() {
-    this._modalRef.close();
+    let data: KeHoachLuongThuc = new KeHoachLuongThuc();
+
+    this._modalRef.close(data);
+  }
+
+  caculatorXuatThocSdc1() {
+    this.xuatSlThocSauDieuChinh1 = (this.xuatSlThocTruocDieuChinh1 ?? 0) + (this.xuatSlThocTang1 ?? 0) - (this.xuatSlThocGiam1 ?? 0);
+  }
+
+  caculatorXuatThocSdc2() {
+    this.xuatSlThocSauDieuChinh2 = (this.xuatSlThocTruocDieuChinh2 ?? 0) + (this.xuatSlThocTang2 ?? 0) - (this.xuatSlThocGiam2 ?? 0);
+  }
+
+  caculatorXuatThocSdc3() {
+    this.xuatSlThocSauDieuChinh3 = (this.xuatSlThocTruocDieuChinh3 ?? 0) + (this.xuatSlThocTang3 ?? 0) - (this.xuatSlThocGiam3 ?? 0);
+  }
+
+  caculatorXuatGaoSdc2() {
+    this.xuatSlGaoSauDieuChinh2 = (this.xuatSlGaoTruocDieuChinh2 ?? 0) + (this.xuatSlGaoTang2 ?? 0) - (this.xuatSlGaoGiam2 ?? 0);
+  }
+
+  caculatorXuatGaoSdc3() {
+    this.xuatSlGaoSauDieuChinh3 = (this.xuatSlGaoTruocDieuChinh3 ?? 0) + (this.xuatSlGaoTang3 ?? 0) - (this.xuatSlGaoGiam3 ?? 0);
   }
 
   handleCancel() {

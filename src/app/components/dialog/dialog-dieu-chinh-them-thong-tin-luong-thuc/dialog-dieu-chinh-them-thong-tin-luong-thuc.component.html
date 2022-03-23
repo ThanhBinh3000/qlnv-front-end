@@ -37,7 +37,9 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="tongSoQuyThocTonKhoDauNam" [readonly]="true" />
+        <input nz-input
+          [ngModel]="(slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slGao2 ?? 0) * 2 + (slGao3 ?? 0) * 2"
+          [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -99,7 +101,9 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="tongSoQuyThocNhapTrongNam" [readonly]="true" />
+        <input nz-input
+          [ngModel]="(slThocTruocDieuChinh ?? 0) + (slThocTang ?? 0) - (slThocGiam ?? 0) + ((slGaoTruocDieuChinh ?? 0) + (slGaoTang ?? 0) - (slGaoGiam ?? 0)) * 2"
+          [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -120,7 +124,7 @@
         <nz-input-group>
           <input *ngIf="slThocTang > 0" nz-input [(ngModel)]="slThocGiam" [readonly]="true" />
           <nz-input-number *ngIf="slThocTang <= 0 || !slThocTang" [nzSize]="'small'" nz-input [(ngModel)]="slThocGiam"
-            [nzMin]="0">
+            [nzMin]="0" [nzMax]="(slThocTruocDieuChinh ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>
@@ -144,7 +148,8 @@
       <nz-form-label [nzNoColon]="true"> SL Thóc sau điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slThocSauDieuChinh" [readonly]="true" />
+          <input nz-input [ngModel]="(slThocTruocDieuChinh ?? 0) + (slThocTang ?? 0) - (slThocGiam ?? 0)"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -166,7 +171,7 @@
         <nz-input-group>
           <input *ngIf="slGaoTang > 0" nz-input [(ngModel)]="slGaoGiam" [readonly]="true" />
           <nz-input-number *ngIf="slGaoTang <= 0 || !slGaoTang" [nzSize]="'small'" nz-input [(ngModel)]="slGaoGiam"
-            [nzMin]="0">
+            [nzMin]="0" [nzMax]="(slGaoTruocDieuChinh ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>
@@ -190,7 +195,8 @@
       <nz-form-label [nzNoColon]="true"> SL Gạo sau điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slGaoSauDieuChinh" [readonly]="true" />
+          <input nz-input [ngModel]="(slGaoTruocDieuChinh ?? 0) + (slGaoTang ?? 0) - (slGaoGiam ?? 0)"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -203,7 +209,9 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Tổng số quy thóc </nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="tongSoQuyThocXuatTrongNam" [readonly]="true" />
+        <input nz-input
+          [ngModel]="(xuatSlThocSauDieuChinh1 ?? 0) + (xuatSlThocSauDieuChinh2 ?? 0) + (xuatSlThocSauDieuChinh3 ?? 0) + ((xuatSlGaoSauDieuChinh2 ?? 0) + (xuatSlGaoSauDieuChinh3 ?? 0)) * 2"
+          [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -213,7 +221,9 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input [(ngModel)]="xuatTongSLThoc" [readonly]="true" />
+            <input nz-input
+              [ngModel]="(xuatSlThocSauDieuChinh1 ?? 0) + (xuatSlThocSauDieuChinh2 ?? 0) + (xuatSlThocSauDieuChinh3 ?? 0)"
+              [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -236,7 +246,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
               <input *ngIf="xuatSlThocTang1 > 0" nz-input [(ngModel)]="xuatSlThocGiam1" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocTang1 <= 0 || !xuatSlThocTang1" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocGiam1" [nzMin]="0">
+                [(ngModel)]="xuatSlThocGiam1" [nzMin]="0" [nzMax]="(xuatSlThocTruocDieuChinh1 ?? 0)"
+                (input)="caculatorXuatThocSdc1()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -249,7 +260,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
               <input *ngIf="xuatSlThocGiam1 > 0" nz-input [(ngModel)]="xuatSlThocTang1" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocGiam1 <= 0 || !xuatSlThocGiam1" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocTang1" [nzMin]="0">
+                [(ngModel)]="xuatSlThocTang1" [nzMin]="0" [nzMax]="(slThoc1 ?? 0) - (xuatSlThocTruocDieuChinh1 ?? 0)"
+                (input)="caculatorXuatThocSdc1()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -282,7 +294,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
               <input *ngIf="xuatSlThocTang2 > 0" nz-input [(ngModel)]="xuatSlThocGiam2" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocTang2 <= 0 || !xuatSlThocTang2" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocGiam2" [nzMin]="0">
+                [(ngModel)]="xuatSlThocGiam2" [nzMin]="0" [nzMax]="(xuatSlThocTruocDieuChinh2 ?? 0)"
+                (input)="caculatorXuatThocSdc2()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -295,7 +308,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
               <input *ngIf="xuatSlThocGiam2 > 0" nz-input [(ngModel)]="xuatSlThocTang2" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocGiam2 <= 0 || !xuatSlThocGiam2" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocTang2" [nzMin]="0">
+                [(ngModel)]="xuatSlThocTang2" [nzMin]="0" [nzMax]="(slThoc2 ?? 0) - (xuatSlThocTruocDieuChinh2 ?? 0)"
+                (input)="caculatorXuatThocSdc2()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -328,7 +342,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
               <input *ngIf="xuatSlThocTang3 > 0" nz-input [(ngModel)]="xuatSlThocGiam3" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocTang3 <= 0 || !xuatSlThocTang3" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocGiam3" [nzMin]="0">
+                [(ngModel)]="xuatSlThocGiam3" [nzMin]="0" [nxMax]="(xuatSlThocTruocDieuChinh3 ?? 0)"
+                (input)="caculatorXuatThocSdc3()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -341,7 +356,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
               <input *ngIf="xuatSlThocGiam3 > 0" nz-input [(ngModel)]="xuatSlThocTang3" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlThocGiam3 <= 0 || !xuatSlThocGiam3" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlThocTang3" [nzMin]="0">
+                [(ngModel)]="xuatSlThocTang3" [nzMin]="0" [nzMax]="(slThoc3 ?? 0) - (xuatSlThocTruocDieuChinh3 ?? 0)"
+                (input)="caculatorXuatThocSdc3()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -365,7 +381,8 @@
         <nz-form-label [nzNoColon]="true"> Tổng SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <input nz-input [(ngModel)]="xuatTongSLGao" [readonly]="true" />
+            <input nz-input [ngModel]="(xuatSlGaoSauDieuChinh2 ?? 0) + (xuatSlGaoSauDieuChinh3 ?? 0)"
+              [readonly]="true" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -388,7 +405,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
               <input *ngIf="xuatSlGaoTang2 > 0" nz-input [(ngModel)]="xuatSlGaoGiam2" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlGaoTang2 <= 0 || !xuatSlGaoTang2" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlGaoGiam2" [nzMin]="0">
+                [(ngModel)]="xuatSlGaoGiam2" [nzMin]="0" [nzMax]="(xuatSlGaoTruocDieuChinh2 ?? 0)"
+                (input)="caculatorXuatGaoSdc2()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -401,7 +419,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
               <input *ngIf="xuatSlGaoGiam2 > 0" nz-input [(ngModel)]="xuatSlGaoTang2" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlGaoGiam2 <= 0 || !xuatSlGaoGiam2" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlGaoTang2" [nzMin]="0">
+                [(ngModel)]="xuatSlGaoTang2" [nzMin]="0" [nzMax]="(slGao2 ?? 0) - (xuatSlGaoTruocDieuChinh2 ?? 0)"
+                (input)="caculatorXuatGaoSdc2()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -434,7 +453,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
               <input *ngIf="xuatSlGaoTang3 > 0" nz-input [(ngModel)]="xuatSlGaoGiam3" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlGaoTang3 <= 0 || !xuatSlGaoTang3" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlGaoGiam3" [nzMin]="0">
+                [(ngModel)]="xuatSlGaoGiam3" [nzMin]="0" [nzMax]="(xuatSlGaoTruocDieuChinh3 ?? 0)"
+                (input)="caculatorXuatGaoSdc3()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -447,7 +467,8 @@
             <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
               <input *ngIf="xuatSlGaoGiam3 > 0" nz-input [(ngModel)]="xuatSlGaoTang3" [readonly]="true" />
               <nz-input-number *ngIf="xuatSlGaoGiam3 <= 0 || !xuatSlGaoGiam3" [nzSize]="'small'" nz-input
-                [(ngModel)]="xuatSlGaoTang3" [nzMin]="0">
+                [(ngModel)]="xuatSlGaoTang3" [nzMin]="0" [nzMax]="(slGao3 ?? 0) - (xuatSlGaoTruocDieuChinh3 ?? 0)"
+                (input)="caculatorXuatGaoSdc3()">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -473,7 +494,9 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Tổng số quy thóc trước điều chỉnh </nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="tongSoQuyThocTruocTonKhoCuoiNam" [readonly]="true" />
+        <input nz-input
+          [ngModel]="(slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slThocTruocDieuChinh ?? 0) - (xuatSlThocTruocDieuChinh1 ?? 0) - (xuatSlThocTruocDieuChinh2 ?? 0) - (xuatSlThocTruocDieuChinh3 ?? 0) + ((slGao2 ?? 0) + (slGao3 ?? 0) + (slGaoTruocDieuChinh ?? 0) - (xuatSlGaoTruocDieuChinh2 ?? 0) - (xuatSlGaoTruocDieuChinh3 ?? 0)) * 2"
+          [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -482,7 +505,9 @@
       <nz-form-label [nzNoColon]="true"> Tổng SL Thóc trước điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slThocTruocTonKho" [readonly]="true" />
+          <input nz-input
+            [ngModel]="(slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slThocTruocDieuChinh ?? 0) - (xuatSlThocTruocDieuChinh1 ?? 0) - (xuatSlThocTruocDieuChinh2 ?? 0) - (xuatSlThocTruocDieuChinh3 ?? 0)"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -492,7 +517,9 @@
       <nz-form-label [nzNoColon]="true"> Tổng SL gạo trước điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slGaoTruocTonKho" [readonly]="true" />
+          <input nz-input
+            [ngModel]="(slGao2 ?? 0) + (slGao3 ?? 0) + (slGaoTruocDieuChinh ?? 0) - (xuatSlGaoTruocDieuChinh2 ?? 0) - (xuatSlGaoTruocDieuChinh3 ?? 0)"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -501,7 +528,9 @@
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Tổng số quy thóc sau điều chỉnh </nz-form-label>
       <nz-form-control>
-        <input nz-input [(ngModel)]="tongSoQuyThocSauTonKhoCuoiNam" [readonly]="true" />
+        <input nz-input
+          [ngModel]="(slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slGao2 ?? 0) * 2 + (slGao3 ?? 0) * 2 + (slThocTruocDieuChinh ?? 0) + (slThocTang ?? 0) - (slThocGiam ?? 0) + ((slGaoTruocDieuChinh ?? 0) + (slGaoTang ?? 0) - (slGaoGiam ?? 0)) * 2 - ((xuatSlThocSauDieuChinh1 ?? 0) + (xuatSlThocSauDieuChinh2 ?? 0) + (xuatSlThocSauDieuChinh3 ?? 0) + ((xuatSlGaoSauDieuChinh2 ?? 0) + (xuatSlGaoSauDieuChinh3 ?? 0)) * 2)"
+          [readonly]="true" />
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -510,7 +539,9 @@
       <nz-form-label [nzNoColon]="true"> Tổng SL thóc sau điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slThocSauTonKho" [readonly]="true" />
+          <input nz-input
+            [ngModel]="((slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slGao2 ?? 0) * 2 + (slGao3 ?? 0) * 2 + (slThocTruocDieuChinh ?? 0) + (slThocTang ?? 0) - (slThocGiam ?? 0) + ((slGaoTruocDieuChinh ?? 0) + (slGaoTang ?? 0) - (slGaoGiam ?? 0)) * 2 - ((xuatSlThocSauDieuChinh1 ?? 0) + (xuatSlThocSauDieuChinh2 ?? 0) + (xuatSlThocSauDieuChinh3 ?? 0) + ((xuatSlGaoSauDieuChinh2 ?? 0) + (xuatSlGaoSauDieuChinh3 ?? 0)) * 2)) / 3"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -520,7 +551,9 @@
       <nz-form-label [nzNoColon]="true"> Tổng SL gạo sau điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group>
-          <input nz-input [(ngModel)]="slGaoSauTonKho" [readonly]="true" />
+          <input nz-input
+            [ngModel]="((slThoc1 ?? 0) + (slThoc2 ?? 0) + (slThoc3 ?? 0) + (slGao2 ?? 0) * 2 + (slGao3 ?? 0) * 2 + (slThocTruocDieuChinh ?? 0) + (slThocTang ?? 0) - (slThocGiam ?? 0) + ((slGaoTruocDieuChinh ?? 0) + (slGaoTang ?? 0) - (slGaoGiam ?? 0)) * 2 - ((xuatSlThocSauDieuChinh1 ?? 0) + (xuatSlThocSauDieuChinh2 ?? 0) + (xuatSlThocSauDieuChinh3 ?? 0) + ((xuatSlGaoSauDieuChinh2 ?? 0) + (xuatSlGaoSauDieuChinh3 ?? 0)) * 2)) / 3 * 2"
+            [readonly]="true" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>

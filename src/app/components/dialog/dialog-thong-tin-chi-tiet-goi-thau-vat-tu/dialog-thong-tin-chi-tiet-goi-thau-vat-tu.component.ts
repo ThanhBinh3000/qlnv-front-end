@@ -8,6 +8,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 })
 export class DialogThongTinChiTietGoiThauComponent implements OnInit {
   data: any;
+  radioValue: string = "trung";
 
   options = {
     luongThuc: false,
