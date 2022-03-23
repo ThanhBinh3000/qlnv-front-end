@@ -54,4 +54,10 @@ export class QuanLyThongTinQuyetToanVonPhiHangDTQGService {
     xoadieuchinhsolieu(id:any):Observable<any>{
       return this.httpClient.delete('http://192.168.1.125:8094/dieu-chinh-sau-quyet-toan/xoa/'+id);
     }
+
+    //xoa tong hop so lieu quyet toan
+
+    xoatonghopsolieu(id:any):Observable<any>{
+      return this.httpClient.delete('http://192.168.1.125:8094/quyet-toan/xoa/'+id)
+    }
 }

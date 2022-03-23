@@ -111,7 +111,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
       },
       soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: "",
+      trangThai: this.trangThai,
     };
     console.log(requestReport);
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
@@ -137,6 +137,23 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
     );
   }
 
+
+  //xoa tong hop so lieu
+  xoatonghop(id:any){
+    let indx = this.danhSachCongVan.findIndex(item => item.id ===id);
+
+    this.tonghopSolieuQtoan.xoatonghopsolieu(id).subscribe(res =>{
+
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
+        this.danhSachCongVan.splice(indx,1);
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
 
   getStatusName(status:any) {
     const utils = new Utils();
