@@ -1,3 +1,5 @@
+import { ThemMoiBienBanLayMauKhoComponent } from './luong-thuc/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
+import { QuanLyBienBanLayMauComponent } from './luong-thuc/quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
 import { ChiTietDonViThucHienQuyetDinhComponent } from './luong-thuc/chi-tiet-don-vi-thuc-hien-quyet-dinh/chi-tiet-don-vi-thuc-hien-quyet-dinh.component';
 import { ThongTinGiaoNhiemVuNhapXuatHangComponent } from './luong-thuc/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang.component';
 import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
@@ -31,6 +33,10 @@ import { QuanLyPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-p
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './luong-thuc/quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
 import { QuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-hang/quan-ly-bang-ke-can-hang.component';
 import { ThongTinQuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang.component';
+import { QuanLyPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
+import { ThemMoPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { QuanLyPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
+import { ThemMoiPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
 
 const routes: Routes = [
   {
@@ -40,14 +46,12 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'danh-sach-dau-thau',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'vat-tu',
         loadChildren: () =>
-          import('../dau-thau/vat-tu/vat-tu.module').then(
-            (m) => m.VatTuModule,
-          ),
+          import('../dau-thau/vat-tu/vat-tu.module').then((m) => m.VatTuModule),
       },
       {
         path: 'danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau/:id',
@@ -169,6 +173,30 @@ const routes: Routes = [
         path: 'quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/:id',
         component: ThongTinQuanLyBangKeCanHangComponent,
       },
+      {
+        path: 'quan-ly-bien-ban-lay-mau',
+        component: QuanLyBienBanLayMauComponent,
+      },
+      {
+        path: 'quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/:id',
+        component: ThemMoiBienBanLayMauKhoComponent,
+      },
+      {
+        path: 'quan-ly-phieu-kiem-nghiem-chat-luong',
+        component: QuanLyPhieuKiemNghiemChatLuongComponent,
+      },
+      {
+        path: 'quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/:id',
+        component: ThemMoPhieuKiemNghiemChatLuongComponent,
+      },
+      {
+        path: 'quan-ly-phieu-nhap-day-kho',
+        component: QuanLyPhieuNhapDayKhoComponent,
+      },
+      {
+        path: 'quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/:id',
+        component: ThemMoiPhieuNhapDayKhoComponent,
+      },
     ],
   },
 ];
@@ -177,4 +205,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DauThauRoutingModule { }
+export class DauThauRoutingModule {}

@@ -1,0 +1,163 @@
+<div class="luong-thuc__danh-sach">
+  <!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Trình duyệt</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix> -->
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số biên bản</label>
+              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
+              </nz-input-number>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Từ ngày lập</label>
+              <input class="search__input" placeholder=" " nz-input />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đến ngày lập</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder=" ">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đơn vị DTQG</label>
+              <input class="search__input" nz-input />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Mã hàng DTQG</label>
+              <input class="search__input" placeholder=" " nz-input />
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Thông tin biên bản nhập đầy kho'" class="tt-chung__container">
+              <nz-card class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <th width="931px">Số biên bản</th>
+                      <th width="161px">Ngày lập</th>
+                      <th width="203px">Ngày nhập đầy</th>
+                      <th width="295px">Số lượng nhập</th>
+                      <th width="295px">Tên thủ kho</th>
+                      <th width="295px">Kho/Ngăn / Lô</th>
+                      <th width="295px">Mã hàng DTQG</th>
+                      <th width="295px">Tên hàng DTQG</th>
+                      <th width="295px">Trạng thái</th>
+                      <th width="295px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>17/02/2022</td>
+                      <td>17/02/2022</td>
+                      <td>1000</td>
+                      <td>Nguyễn Duy Trường</td>
+                      <td>A1/L1</td>
+                      <td>01</td>
+                      <td>Gạo</td>
+                      <td></td>
+                      <td>
+                        <a>
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a>
+                          <span class="icon htvbdh_da-xu-ly"></span>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai"></div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
+                        [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                        <ng-template #rangeTemplate let-range="range" let-total>
+                          3-3 of 4 items
+                        </ng-template>
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-card>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Danh sách phiếu nhập kho tương ứng'" class="tt-chung__container">
+              <nz-table #basicTable class="nowrap">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="931px">Số phiếu</th>
+                    <th width="161px">Ngày lập</th>
+                    <th width="203px">Số lượng </th>
+                    <th width="295px">Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>17/02/2022</td>
+                    <td>1000</td>
+                    <td>một nghìn</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+          </nz-tabset>
+          <div class="action">
+            <button type="button" class="btn btn-main" (click)="redirectToThemMoiPhieuNhapDaykho()">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyentheolo"></i>
+              <span>Duyệt theo lô</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
