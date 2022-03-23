@@ -95,6 +95,9 @@
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
                                         {{namBaoCaoHienHanh}}
                                    </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Năm BC">
+                                        {{namBcao}}
+                                   </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
@@ -107,7 +110,7 @@
                </nz-card>
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
-                         <nz-tab [nzTitle]="'Xây dựng Chi thường xuyên giai đoạn 03 năm'">
+                         <nz-tab [nzTitle]="'Tổng hợp Dự toán chi ngân sách thường xuyên hàng năm'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         <!-- <div class="inner-box">Đơn vị: -->
@@ -253,7 +256,7 @@
                                                   <td>
                                                        <div *ngFor="let item of donVis">
                                                             <div *ngIf="item.id == data.maDvi">
-                                                                 {{item.tenDm}}
+                                                                 {{item.tenDvi}}
                                                             </div>
                                                        </div>
                                                   </td>
@@ -329,7 +332,7 @@
                                                             nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
                                                             <nz-option *ngFor="let item of donVis"
-                                                                 [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                                                                 [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
                                                        </nz-select>
                                                   </td>
 

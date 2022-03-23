@@ -111,6 +111,21 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.nam != null
     ) {
       this.calltonghop();
+      this.nguoinhap = userInfor?.username;
+      this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.donvitao = userInfor?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.mabaocao = res.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
     } else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = userInfor?.username;
@@ -266,7 +281,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
+    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
   }
 
   getStatusName() {

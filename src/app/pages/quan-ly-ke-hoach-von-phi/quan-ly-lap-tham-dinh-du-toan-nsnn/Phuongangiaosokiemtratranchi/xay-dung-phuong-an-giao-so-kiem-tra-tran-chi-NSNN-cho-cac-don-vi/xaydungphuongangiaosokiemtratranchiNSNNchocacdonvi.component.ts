@@ -166,6 +166,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
+      if(res.statusCode==0){
+        
+        this.donViTaos = res.data;
+      }
+    })
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -278,7 +284,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
+    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
