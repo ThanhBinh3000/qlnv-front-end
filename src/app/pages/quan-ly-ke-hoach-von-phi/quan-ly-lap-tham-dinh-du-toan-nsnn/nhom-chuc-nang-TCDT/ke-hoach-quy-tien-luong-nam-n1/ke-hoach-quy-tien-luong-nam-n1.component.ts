@@ -150,6 +150,21 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.nam != null
     ) {
       this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.maDonViTao = userInfo?.dvql;
+      this.namBaoCaoHienHanh = this.currentday.getFullYear();
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
     }
     else {
       this.trangThaiBanGhi = "1";
@@ -492,7 +507,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

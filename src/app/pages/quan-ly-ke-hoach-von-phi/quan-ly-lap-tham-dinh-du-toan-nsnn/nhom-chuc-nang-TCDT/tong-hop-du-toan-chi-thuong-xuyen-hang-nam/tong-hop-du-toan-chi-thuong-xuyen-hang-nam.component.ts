@@ -143,7 +143,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = localStorage.getItem('userName');
+    let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
 
     //check prama dieu huong router
@@ -158,6 +158,8 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       this.nam != null
     ) {
       this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.maDonViTao = userInfo?.dvql;
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -192,6 +194,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
+          console.log(data);
           this.donVis = data.data;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -275,7 +278,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       maDvi: this.maDonViTao = "01",
       maDviTien: this.maDviTien = "01",
       maLoaiBcao: this.maLoaiBaoCao = "01",
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
@@ -539,7 +542,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   // start edit

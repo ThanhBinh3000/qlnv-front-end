@@ -163,6 +163,8 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.nam != null
     ) {
       this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.maDonViTao = userInfo?.dvql;
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -503,7 +505,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   redirectChiTieuKeHoachNam() {

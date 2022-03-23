@@ -499,7 +499,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
