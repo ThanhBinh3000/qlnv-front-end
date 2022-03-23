@@ -72,6 +72,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           this.danhMucService.dMCucKhuVuc().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
+                         console.log(data);
                          this.cucKhuVucs = data.data?.content;
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -108,7 +109,15 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      async getDetailReport() {
           this.spinner.show();
           let request = {
-
+               maDonVi: this.maDvi,
+               ngayTaoTu: this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
+               ngayTaoDen: this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
+               paggingReq: {
+                    limit: this.pages.size,
+                    page: this.pages.page,
+               },
+               soVban: this.soVanBan,
+               trangThai: this.maTrangThai,
           }
           //     await this.quanLyVonPhiService.bCChiTiet().toPromise().then(
           //       (data) => {
