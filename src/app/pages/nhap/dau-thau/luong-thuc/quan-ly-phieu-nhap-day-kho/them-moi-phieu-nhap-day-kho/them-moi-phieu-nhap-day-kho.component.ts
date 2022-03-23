@@ -1,20 +1,23 @@
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import * as dayjs from 'dayjs';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'them-moi-bien-ban-lay-mau',
-  templateUrl: './them-moi-bien-ban-lay-mau.component.html',
-  styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
+  selector: 'them-moi-phieu-nhap-day-kho',
+  templateUrl: './them-moi-phieu-nhap-day-kho.component.html',
+  styleUrls: ['./them-moi-phieu-nhap-day-kho.component.scss'],
 })
-export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
@@ -49,6 +52,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['nhap/dau-thau/quan-ly-bien-ban-lay-mau']);
+    this.router.navigate(['nhap/dau-thau/quan-ly-phieu-nhap-day-kho']);
   }
 }

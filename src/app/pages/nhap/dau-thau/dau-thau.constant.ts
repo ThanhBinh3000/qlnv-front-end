@@ -198,6 +198,12 @@ export const LUONG_THUC_LIST: DauThau[] = [
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: 'quan-ly-phieu-kiem-nghiem-chat-luong',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý phiếu nhập đầy kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'quan-ly-phieu-nhap-day-kho',
+  },
 ];
 
 export const VAT_TU_LIST: DauThau[] = [

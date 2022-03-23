@@ -1,0 +1,184 @@
+<div class="luong-thuc__danh-sach">
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+        <div class="canphai phai">
+          <button class="btn btn-main btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+          </button>
+          <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_trinh"></i>
+            <span>Trình duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_da-xu-ly"></i>
+            <span>Duyệt</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+          </button>
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="icon htvbdh_xemthem"></i>
+            <span>Xem phiếu nhập</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="THÔNG TIN CHUNG BIÊN BẢN NHẬP ĐẦY KHO" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Số biên bản
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ngày lập
+                </nz-form-label>
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder=" ">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Đơn vị lập
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Mã kho / ngăn / lô
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Mã hàng DTQG
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tên hàng DTQG
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6"></div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày bắt đầu nhập
+                </nz-form-label>
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder=" ">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ngày kết thúc nhập
+                </nz-form-label>
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder=" ">
+                </nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Thủ kho
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Kỹ thuật viên đơn vị
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Kế toán
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Thủ trưởng đơn vị
+                </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-card nzTitle="BIÊN BẢN NHẬP ĐẦY KHO" class="mt16 flex-card p-lr16">
+            <nz-table #basicTable class="nowrap">
+              <thead>
+                <tr>
+                  <th width="60px">Số lượng</th>
+                  <th width="931px">Đơn giá</th>
+                  <th width="161px">Thành tiền</th>
+                  <th width="203px">Ghi chú</th>
+                  <th width="295px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>100</td>
+                  <td>10.000.000</td>
+                  <td>1.000.000.000</td>
+                  <td>Gạo tẻ ...</td>
+                  <td>
+                    <a>
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

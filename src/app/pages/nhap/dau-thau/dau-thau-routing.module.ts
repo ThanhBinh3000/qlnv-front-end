@@ -35,6 +35,8 @@ import { QuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-h
 import { ThongTinQuanLyBangKeCanHangComponent } from './luong-thuc/quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang.component';
 import { QuanLyPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { QuanLyPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
+import { ThemMoiPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
 
 const routes: Routes = [
   {
@@ -186,6 +188,14 @@ const routes: Routes = [
       {
         path: 'quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/:id',
         component: ThemMoPhieuKiemNghiemChatLuongComponent,
+      },
+      {
+        path: 'quan-ly-phieu-nhap-day-kho',
+        component: QuanLyPhieuNhapDayKhoComponent,
+      },
+      {
+        path: 'quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/:id',
+        component: ThemMoiPhieuNhapDayKhoComponent,
       },
     ],
   },
