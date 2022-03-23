@@ -472,7 +472,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.id == item.maDvi)?.tenDvi;
   }
 
   startEdit(id: string): void {

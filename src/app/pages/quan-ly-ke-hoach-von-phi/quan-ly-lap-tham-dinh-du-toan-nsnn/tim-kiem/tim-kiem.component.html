@@ -46,8 +46,22 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
               <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Trạng thái</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+              <nz-option  nzValue="1" nzLabel="Đang soạn"></nz-option>
+              <nz-option  nzValue="2" nzLabel="Trình duyệt"></nz-option>
+              <nz-option  nzValue="3" nzLabel="Trưởng bộ phận từ chối"></nz-option>
+              <nz-option  nzValue="4" nzLabel="Trưởng bộ phận duyệt"></nz-option>
+              <nz-option  nzValue="5" nzLabel="Lãnh đạo từ chối"></nz-option>
+              <nz-option  nzValue="6" nzLabel="Lãnh đạo duyệt"></nz-option>
+              <nz-option  nzValue="7" nzLabel="Gửi ĐV cấp trên"></nz-option>
+              <nz-option  nzValue="8" nzLabel="ĐV cấp trên từ chối"></nz-option>
+              <nz-option  nzValue="9" nzLabel="ĐV cấp trên duyệt"></nz-option>
             </nz-select>
           </div>
         </div>
