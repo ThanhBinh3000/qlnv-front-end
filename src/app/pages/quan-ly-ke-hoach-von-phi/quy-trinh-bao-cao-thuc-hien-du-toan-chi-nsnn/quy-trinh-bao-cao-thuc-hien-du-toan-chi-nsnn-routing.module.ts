@@ -28,6 +28,21 @@ const routes: Routes = [
         './tim-kiem/tim-kiem.module'
       ).then((m) => m.TimKiemModule),
   },
+  //hung
+  {
+    path: 'bao-cao',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
+  {
+    path: 'bao-cao/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
 
 ];
 

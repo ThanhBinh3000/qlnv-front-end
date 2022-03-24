@@ -50,7 +50,7 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   // call api chi tiết báo cáo
-  bCChiTiet(id: any): Observable<any> {
+  bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
@@ -456,5 +456,11 @@ export class QuanLyVonPhiService extends BaseService {
       );
     }
     
+    // call api chi tiết báo cáo
+  baoCaoChiTiet(id: any): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,
+    );
+  }
 
 }

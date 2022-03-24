@@ -157,6 +157,7 @@ export class DanhMucHDVService extends BaseService {
       }
     );
   }
+  
   dMLoaiDan(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/106",
@@ -210,24 +211,6 @@ export class DanhMucHDVService extends BaseService {
     )
   }
 
-  loadDanhMucHangHoa() {
-    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
-    return this.httpClient.post<any>(url, null);
-  }
-
-
-  //danh muc chi tieu
-
-  dmchitieu(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/111', {
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": "",
-      "trangThai": "",
-    });
-  }
   //danh muc ke hoach von
   dMHinhThucVanBan(): Observable<any> {
     return this.httpClient.post(
@@ -657,6 +640,20 @@ dMKhoanMuc(): Observable<any> {
   );
 }
 
+//danh muc ke hoach von
+dMLoaiBaoCaoThucHienDuToanChi(): Observable<any> {
+  return this.httpClient.post(
+    this.urlDefault + "/qlnv-category/dmuc-khoachvon/525",
+    {
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": "",
+      "trangThai": "",
+    }
+  );
+}
 
 
 
@@ -675,36 +672,6 @@ dMKhoanMuc(): Observable<any> {
 
 
 
-gateway: string = '/qlnv-gateway/qlnv-category'
-// code bên teca
-phuongThucDauThauGetAll(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/PT_DTHAU`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
 
-  nguonVonGetAll(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/NGUON_VON`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  hinhThucDauThauGetAll(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/HT_LCNT`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  loaiHopDongGetAll(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/LOAI_HDONG`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  danhMucDonViGetAll(): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-donvi/danh-sach/tat-ca`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-  danhMucChungGetAll(loai: string): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/${loai}`;
-    return this.httpClient.get<any>(url).toPromise();
-  }
 }
 

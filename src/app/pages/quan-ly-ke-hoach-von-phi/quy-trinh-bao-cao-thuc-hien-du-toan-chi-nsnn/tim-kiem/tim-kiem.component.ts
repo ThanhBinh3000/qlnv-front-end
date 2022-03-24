@@ -64,9 +64,8 @@ export class TimKiemComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
+    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
       data => {
-        console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
         } else {
@@ -74,7 +73,6 @@ export class TimKiemComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
         this.errorMessage = "err.error.message";
       }
     );
