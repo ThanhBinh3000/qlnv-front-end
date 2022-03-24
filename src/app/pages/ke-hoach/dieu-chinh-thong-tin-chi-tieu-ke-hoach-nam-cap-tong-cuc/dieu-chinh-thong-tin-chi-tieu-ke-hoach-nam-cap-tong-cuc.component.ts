@@ -253,7 +253,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
       modalLuongThuc.afterClose.subscribe((res) => {
         if (res) {
-          this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc = res;
+          this.checkDataExistLuongThuc(res);
         }
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {
