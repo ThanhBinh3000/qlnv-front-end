@@ -1,3 +1,4 @@
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -33,6 +34,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) {}
 
   async ngOnInit() {
@@ -86,8 +88,6 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   //modal func
   save() {
     this.setValueDonViTinh();
-    console.log('123: ', this.formData);
-
     this._modalRef.close(this.formData);
   }
 
@@ -158,6 +158,39 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       tenDonVi: donVi.tenDvi,
       donViId: donVi.id,
     });
+    if (this.formData.get('tenHangHoa').value) {
+      this.getTonKhoDauNam();
+    }
+  }
+  getTonKhoDauNam() {
+    this.chiTieuKeHoachNamService
+      .tonKhoDauNam({
+        maDvi: this.formData.get('maDonVi').value,
+        maVthhList: [`"${this.formData.get('maVatTuCha').value}"`],
+      })
+      .then((res) => {
+        res?.data.forEach((tonKho) => {
+          switch (tonKho.nam) {
+            case (this.yearNow - 1).toString():
+              this.formData.patchValue({
+                soLuongTheoNam1: tonKho.slHienThoi,
+              });
+              break;
+            case (this.yearNow - 2).toString():
+              this.formData.patchValue({
+                soLuongTheoNam2: tonKho.slHienThoi,
+              });
+              break;
+            case (this.yearNow - 3).toString():
+              this.formData.patchValue({
+                soLuongTheoNam3: tonKho.slHienThoi,
+              });
+              break;
+            default:
+              break;
+          }
+        });
+      });
   }
 
   onInputDonViTinh(e: Event): void {
@@ -258,13 +291,16 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   selectHangHoa(vatTu: any) {
     this.formData.patchValue({
       tenHangHoa: vatTu.ten,
-      tenVatTuCha: vatTu.parent.ten,
-      vatTuChaId: vatTu.parent.id,
-      maVatTuCha: vatTu.parent.ma,
+      tenVatTuCha: vatTu?.parent?.ten,
+      vatTuChaId: vatTu?.parent?.id,
+      maVatTuCha: vatTu?.parent?.ma,
       vatTuId: vatTu.id,
       maVatTu: vatTu.ma,
       vatTu: vatTu,
     });
+    if (this.formData.get('tenDonVi').value) {
+      this.getTonKhoDauNam();
+    }
   }
 
   calculatorTongVatTu() {

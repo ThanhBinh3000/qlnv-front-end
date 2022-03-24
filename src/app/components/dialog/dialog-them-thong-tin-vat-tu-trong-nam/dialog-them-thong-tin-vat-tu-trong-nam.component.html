@@ -154,7 +154,7 @@
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
             <nz-input-number formControlName="soLuongTheoNam1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -168,7 +168,7 @@
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
             <nz-input-number formControlName="soLuongTheoNam2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -182,7 +182,7 @@
         <nz-form-control class="mb-16">
           <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
             <nz-input-number formControlName="soLuongTheoNam3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>

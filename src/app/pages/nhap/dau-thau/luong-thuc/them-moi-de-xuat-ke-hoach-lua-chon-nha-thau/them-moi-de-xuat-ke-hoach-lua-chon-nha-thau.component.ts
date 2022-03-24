@@ -453,7 +453,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      console.log('them: 10', this.chiTietThongTinDXKHLCNT);
       this.chiTietThongTinDXKHLCNT.trangThai = '00';
       this.chiTietThongTinDXKHLCNT.loaiVthh = '00';
       this.chiTietThongTinDXKHLCNT.children1 = [];
