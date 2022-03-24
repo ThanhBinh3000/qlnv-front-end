@@ -348,7 +348,7 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.hide();
-    await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
