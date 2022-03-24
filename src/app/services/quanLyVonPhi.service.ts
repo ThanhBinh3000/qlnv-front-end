@@ -178,7 +178,7 @@ export class QuanLyVonPhiService extends BaseService {
   //danh muc ke hoach von
   dMKeHoachVon(): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/55',
+      this.urlDefault + '/qlnv-category/dmuc-khoachvon/32',
       {
         paggingReq: {
           limit: 1000,

@@ -27,6 +27,9 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   listVanban: any[] = [];
   donviTaos:any []=[];
   totalitem:any;
+  checkroleDvi:any;
+
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -36,12 +39,11 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     this.namPa = this.currentYear.getFullYear().toString();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let username = this.userService.getUserName();
-    this.getUserInfo(username);
+    let userInfor: any = await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
       this.donviTaos = res.data;
-      console.log(this.donviTaos);
     })
   }
 
@@ -50,9 +52,10 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     await this.userService.getUserInfo(username).subscribe(
       (data) => {
         if (data?.statusCode == 0) {
+          console.log(data);
           this.donvitao = data?.data.dvql;
           this.nguoinhap = data?.data.username;
-          console.log(data)
+          this.checkroleDvi = data?.data.roles[0].id;
         } else {
         }
       },
@@ -64,7 +67,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
+    return this.donviTaos.find((item) => item.id == this.donvitao)?.tenDvi;
   }
 
   //get trạng thai

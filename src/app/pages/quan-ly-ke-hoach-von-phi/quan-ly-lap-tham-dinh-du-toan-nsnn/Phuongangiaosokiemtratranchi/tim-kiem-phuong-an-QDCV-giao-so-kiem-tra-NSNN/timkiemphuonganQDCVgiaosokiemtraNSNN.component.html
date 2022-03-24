@@ -13,7 +13,14 @@
                 <nz-date-picker [(ngModel)]="ngaylap" type="date"></nz-date-picker>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
-               {{getUnitName()}}
+                <ng-container *ngIf="checkroleDvi==3;else template">
+                    {{getUnitName()}}
+                </ng-container>
+                <ng-template #template>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao"> 
+                    <nz-option *ngFor="let dv of donviTaos" [nzValue]="dv.id" [nzLabel]="dv.tenDvi"></nz-option>
+                  </nz-select>
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại văn bản">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản" [(ngModel)]="loaivanban"> 

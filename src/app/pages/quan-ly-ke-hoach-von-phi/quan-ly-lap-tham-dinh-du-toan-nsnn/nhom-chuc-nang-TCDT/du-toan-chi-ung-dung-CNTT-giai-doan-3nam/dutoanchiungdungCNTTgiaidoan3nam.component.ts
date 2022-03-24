@@ -156,6 +156,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     this.quanLyVonPhiService.dMKeHoachVon().subscribe(
       (res) => {
         if (res.statusCode == 0) {
+          console.log(res);
           this.listLoaikehoach = res.data?.content;
           
         } else {
