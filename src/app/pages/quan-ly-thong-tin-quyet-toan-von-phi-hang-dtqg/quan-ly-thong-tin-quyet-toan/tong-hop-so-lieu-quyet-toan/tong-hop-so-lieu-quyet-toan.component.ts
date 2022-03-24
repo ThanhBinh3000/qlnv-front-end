@@ -13,20 +13,28 @@ import { Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
      id: any;
      stt!: string;
-     ngayLap!: any;
-     maDvi!: string;
-     nam!: number;
-     maKhoanMuc!: string;
-     noiDung!: string;
-     maLoaiChi!: string;
-     phanBo!: number;
-     ngayGhiNhan!: any;
-     dieuChinh!: string;
-     ghiChu!: string;
+     maDviThien!: string;
+     ctmtTong!: number;
+     ctmtVonCap!: number;
+     ctmtVonUng!: number;
+     ctmgTong!: number;
+     ctmgVonCap!: number;
+     ctmgVonUng!: number;
+     nam!: any;
+     duToan!: number;
+     tcvmltVonCap:number;
+     tcvmltVonUng:number;
+     tcvmltTong:number;
+     ghiChu!: any;
+     vonCap:number;
+     vonUng:number;
      checked!: boolean;
 }
 @Component({
@@ -36,6 +44,8 @@ export class ItemData {
 })
 
 export class TongHopSoLieuQuyetToanComponent implements OnInit {
+     
+     
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -46,7 +56,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      errorMessage!: String;                      //
      id!: any;                                   // id truyen tu router
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
-     lstFile: any = [];                          // list File de day vao api
+     lstFile: any[] = [];                         // list File de day vao api
      status: boolean = false;                     // trang thai an/ hien cua trang thai
      namBcao = new Date().getFullYear();         // nam bao cao
      userName: any;                              // ten nguoi dang nhap
@@ -120,6 +130,8 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
           private danhMucService: DanhMucHDVService,
+          private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
+          private notification :NzNotificationService,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -149,68 +161,13 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-          this.danhMucService.dMNoiDung().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.noiDungs = data.data?.content;
-                         console.log(this.noiDungs);
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
-          this.danhMucService.dMLoaiChi().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.loaiChis = data.data?.content;
-                         console.log(this.loaiChis);
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
-          this.danhMucService.dMKhoanChi().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.khoanChis = data.data?.content;
-                         console.log(this.khoanChis);
-                    } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-                    }
-               },
-               (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
-               }
-          );
-          // this.danhMucService.dMMucChi().toPromise().then(
-          //      (data) => {
-          //           if (data.statusCode == 0) {
-          //                this.mucChis = data.data?.content;
-          //                console.log(this.mucChis);
-          //           } else {
-          //                this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-          //           }
-          //      },
-          //      (err) => {
-          //           console.log(err);
-          //           this.errorMessage = err.error.message;
-          //      }
-          // );
-
+          
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
+                         console.log(data);
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
@@ -254,6 +211,18 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
 
      // luu
      async luu() {
+          this.lstCTietBCao.forEach(e => {
+               if(typeof e.id !='number'){
+                    e.id = null;
+               }
+          })
+
+          this.lstCTietBCao.filter(item => {
+               if (!item.id) {
+                    item.id = uuid.v4();
+               }
+          });
+          this.updateEditCache();
           let listFile: any = [];
           for (const iterator of this.listFile) {
                listFile.push(await this.uploadFile(iterator));
@@ -268,42 +237,49 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           // gui du lieu trinh duyet len server
           let request = {
                id: this.id,
-               idFileDinhKem: listFile,
-               lstCTietBCao: this.lstCTietBCao,
-               maBcao: this.maBaoCao,
-               maDvi: this.maDonViTao = "01",
-               maDviTien: this.maDviTien = "01",
-               maLoaiBcao: this.maLoaiBaoCao = "01",
-               namBcao: this.namBaoCaoHienHanh,
-               namHienHanh: this.namBaoCaoHienHanh,
+               fileDinhKems: listFile,
+               listIdDeletes:this.listIdDelete,
+               listIdFiles:'',
+               lstCtiet: this.lstCTietBCao,
+               maDvi: this.maDonViTao,
+               ngayQuyetDinh: this.ngayQd,
+               soQd: this.soQd,
+               trangThai: this.trangThaiBanGhi,
           };
           this.spinner.show();
+          console.log(request);
           if (this.id == null) {
-               this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+               this.tonghopSolieuQtoan.tonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(
                     (data) => {
-                         alert("trinh duyet thanh cong!");
-                         console.log(data);
+                         if(data.statusCode==0){
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                         }else{
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
+                         
                     },
                     (err) => {
-                         alert("trinh duyet that bai!");
-                         console.log();
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-                    if (res.statusCode == 0) {
-                         alert('trinh duyet thanh cong!');
-                    } else {
-                         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-                    }
+               this.tonghopSolieuQtoan.capnhattonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(res => {
+                    
+                         if(res.statusCode==0){
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                         }else{
+                              this.notification.error(MESSAGE.ERROR, res?.msg);
+                         }
+               },err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                })
           }
-
           this.lstCTietBCao.filter(item => {
                if (!item.id) {
                     item.id = uuid.v4();
                }
           });
           this.updateEditCache();
+          
           this.spinner.hide();
      }
 
@@ -331,21 +307,22 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      // call chi tiet bao cao
      getDetailReport() {
           this.spinner.hide();
-          this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+          this.tonghopSolieuQtoan.chitiettonghopsolieuquyettoanvonmuahangDTQG(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.lstCTietBCao;
+                         console.log(data);
+                         this.lstCTietBCao = data.data.lstCtiet;
+                         this.tongcol();
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
-
+                         
                          // set thong tin chung bao cao
-                         this.ngayNhap = data.data.ngayTao;
+                         this.ngayNhap = this.datePipe.transform( data.data.ngayTao,'dd/MM/yyyy');
                          this.nguoiNhap = data.data.nguoiTao;
                          this.maDonViTao = data.data.maDvi;
-                         this.maBaoCao = data.data.maBcao;
-                         this.namBaoCaoHienHanh = data.data.namBcao;
                          this.trangThaiBanGhi = data.data.trangThai;
+                         this.soQd = data.data.soQd;
+                         this.ngayQd = data.data.ngayQuyetDinh;
                          if (
                               this.trangThaiBanGhi == '1' ||
                               this.trangThaiBanGhi == '3' ||
@@ -360,13 +337,13 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
                          })
+                         
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     }
                },
                (err) => {
-                    console.log(err);
-                    this.errorMessage = err.error.message;
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           this.spinner.show();
@@ -398,18 +375,23 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      addLine(id: number): void {
           let item: ItemData = {
                id: uuid.v4(),
-               stt: "",
-               ngayLap: this.ngayNhap,
-               maDvi: this.maDonViTao,
-               nam: this.namBcao,
-               maKhoanMuc: "",
-               noiDung: "",
-               maLoaiChi: "",
-               phanBo: 0,
-               ngayGhiNhan: "",
-               dieuChinh: "",
-               ghiChu: "",
-               checked: false,
+               stt: '',
+               ctmtTong: 0,
+               ctmtVonCap: 0,
+               ctmtVonUng: 0,
+               ctmgTong: 0,
+               ctmgVonCap: 0,
+               ctmgVonUng: 0,
+               maDviThien!: '',
+               nam!: 0,
+               duToan!: 0,
+               tcvmltVonCap:0,
+               tcvmltVonUng:0,
+               tcvmltTong:0,
+               ghiChu!: '',
+               vonCap:0,
+               vonUng:0,
+               checked!: false,
           }
 
           this.lstCTietBCao.splice(id, 0, item);
@@ -525,6 +507,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+          this.tongcol();
      }
 
      // gan editCache.data == lstCTietBCao
@@ -537,4 +520,53 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           });
      }
 
+
+   
+     
+     
+     tinhtong(id:any){
+          this.editCache[id].data.ctmtTong = this.editCache[id].data.ctmtVonCap + this.editCache[id].data.ctmtVonUng;
+          this.editCache[id].data.ctmgTong = this.editCache[id].data.ctmgVonCap + this.editCache[id].data.ctmgVonUng;
+          this.editCache[id].data.tcvmltTong = this.editCache[id].data.tcvmltVonCap + this.editCache[id].data.tcvmltVonUng;
+     
+          this.tongcol()
+
+     }
+
+
+     tongctmtVonCap:number;
+     tongctmtVonUng:number;
+     tongctmtTong:number;
+     tongctmgVonCap:number;
+     tongctmgVonUng:number;
+     tongctmgTong:number;
+     tongtcvmltDutoan:number;
+     tongtcvmltVonCap:number;
+     tongtcvmltVonUng:number;
+     tongtcvmltTong:number;
+
+     tongcol(){
+          this.tongctmtVonCap=0;
+          this.tongctmtVonUng=0;
+          this.tongctmtTong=0;
+          this.tongctmgVonCap=0;
+          this.tongctmgVonUng=0;
+          this.tongctmgTong=0;
+         this. tongtcvmltDutoan=0;
+          this.tongtcvmltVonCap=0;
+          this.tongtcvmltVonUng=0;
+          this.tongtcvmltTong=0;
+          this.lstCTietBCao.forEach(e =>{
+               this.tongctmtVonCap +=e.ctmtVonCap;
+               this.tongctmtVonUng +=e.ctmtVonUng;
+               this.tongctmtTong +=e.ctmtTong;
+               this.tongctmgVonCap +=e.ctmgVonCap;
+               this.tongctmgVonUng +=e.ctmgVonUng;
+               this.tongctmgTong +=e.ctmgTong;
+               this.tongtcvmltDutoan +=e.duToan;
+               this.tongtcvmltVonCap +=e.tcvmltVonCap;
+               this.tongtcvmltVonUng +=e.tcvmltVonUng;
+               this.tongtcvmltTong +=e.tcvmltTong;
+          })
+     }
 }

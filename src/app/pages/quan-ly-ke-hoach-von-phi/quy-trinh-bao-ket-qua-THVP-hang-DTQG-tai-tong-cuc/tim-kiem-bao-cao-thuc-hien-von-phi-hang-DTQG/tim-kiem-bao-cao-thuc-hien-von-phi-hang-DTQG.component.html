@@ -22,21 +22,19 @@
     <div class="main-content">
       <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6">
-            <label class="search__label">Mã báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Năm báo cáo </label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBCao" />
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Tháng báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.thangBCao" />
+          <div nz-col nzSpan="12">
+            <label class="search__label">Đơn vị tạo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a unit" [(ngModel)]="searchFilter.maDvi">
+              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
@@ -48,11 +46,9 @@
               <nz-option nzValue="9" nzLabel="ĐV cấp trên duyệt"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="12">
-          </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
+            <label class="search__label">Mã báo cáo</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Loại báo cáo</label>
@@ -60,7 +56,14 @@
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
-         
+          <div nz-col nzSpan="6">
+            <label class="search__label">Năm báo cáo</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBcao" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đợt báo cáo</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
+          </div>
         </div>
       </nz-card>
       <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm" [nzExtra]="tableCard1"

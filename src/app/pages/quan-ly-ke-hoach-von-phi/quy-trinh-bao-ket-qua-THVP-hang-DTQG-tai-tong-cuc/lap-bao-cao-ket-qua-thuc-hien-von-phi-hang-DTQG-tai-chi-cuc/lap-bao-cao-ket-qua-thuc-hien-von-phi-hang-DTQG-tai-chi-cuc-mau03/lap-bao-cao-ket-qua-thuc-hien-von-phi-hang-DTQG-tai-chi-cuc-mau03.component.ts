@@ -135,7 +135,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            this.notification.success(MESSAGE.SUCCESS,res?.msg)
+            
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg)
           }
@@ -155,7 +155,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS,res?.msg)
+            
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg)
           }
@@ -185,7 +185,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
       (data) => {
         if (data.statusCode == 0) {
           this.listDonvitinh = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS,data?.msg)
+        
           
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg)
@@ -311,7 +311,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
           this.updateEditCache1();
           this.updateEditCache2();
           this.updateEditCache3();
-          this.notification.success(MESSAGE.SUCCESS, data?.msg)
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg)
         }
@@ -364,7 +364,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau03Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-          this.notification.success(MESSAGE.SUCCESS, data?.msg)
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg)
         }
@@ -928,7 +928,7 @@ updateEditCache3(): void {
             this.lstCTietBCao3.push(element);
           }
         });
-        this.notification.success(MESSAGE.SUCCESS,res?.msg);
+       
         this.updateEditCache1();
         this.updateEditCache2();
       }else{

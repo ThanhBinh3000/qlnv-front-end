@@ -56,7 +56,7 @@ export class TimKiemComponent implements OnInit {
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {
@@ -70,7 +70,7 @@ export class TimKiemComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       err => {
@@ -117,9 +117,9 @@ export class TimKiemComponent implements OnInit {
           this.danhSachBaoCao = data.data.content;
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+        
         } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
+          this.notifi.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {

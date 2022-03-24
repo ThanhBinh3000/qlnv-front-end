@@ -49,8 +49,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     trangThai:'',
     maBcao:'',
     maLoaiBcao:'',
-    namBCao:'',
-    thangBCao:'',
+    namBcao:'',
+    dotBcao:'',
     paggingReq: {
       limit: 20,
       page: 1
@@ -76,11 +76,12 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
+    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
+         
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -95,6 +96,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
+         
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -135,7 +137,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         
-        this.notifi.success(MESSAGE.ERROR, res?.msg);
+        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
@@ -154,16 +156,27 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   setUrl(lbaocao:any) {
     console.log(lbaocao)
     switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
+      case 407:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
         break;
-      case 527:
+      case 408:
         this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
+        break;
+      case 409:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
+        break;
+      case 410:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
+        break;
+      case 411:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
         break;
       default:
         this.url = null;
         break;
     }
+   console.log(lbaocao);
+
   }
 
   //doi so trang

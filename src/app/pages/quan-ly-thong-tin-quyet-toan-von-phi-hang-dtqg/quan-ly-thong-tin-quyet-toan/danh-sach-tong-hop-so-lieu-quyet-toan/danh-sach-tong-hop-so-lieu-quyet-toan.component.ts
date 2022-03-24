@@ -7,6 +7,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MESSAGE } from '../../../../constants/message';
+import { QuanLyThongTinQuyetToanVonPhiHangDTQGService } from 'src/app/services/quanLyThongTinQuyetToanVonPhiHangDTQG';
+import { Utils } from 'src/app/Utility/utils';
 
 
 
@@ -23,7 +25,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string = "tong-hop-so-lieu-quyet-toan";
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -46,6 +48,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
     tuNgay: "",
     denNgay: "",
     donViTao: "",
+    soQd: "",
   };
   pages = {
     size: 10,
@@ -53,8 +56,9 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
+  trangThai:any;
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
+    private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
@@ -63,29 +67,14 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+   
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+         
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -120,17 +109,22 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
         limit: this.pages.size,
         page: this.pages.page,
       },
+      soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: "",
+      trangThai: this.trangThai,
     };
-
+    console.log(requestReport);
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDsachCvanDnghi(requestReport).toPromise().then(
+    this.tonghopSolieuQtoan.timDsachTongHopSoLieuQuyetToan(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
-          
+
           this.danhSachCongVan = data.data?.content;
+          this.danhSachCongVan.forEach(e => {
+            e.ngayTao = this.datePipe.transform(e.ngayTao,'dd/MM/yyyy');
+            e.ngayQuyetDinh = this.datePipe.transform(e.ngayQuyetDinh,'dd/MM/yyyy');
+          })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
         } else {
@@ -141,6 +135,29 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+  }
+
+
+  //xoa tong hop so lieu
+  xoatonghop(id:any){
+    let indx = this.danhSachCongVan.findIndex(item => item.id ===id);
+
+    this.tonghopSolieuQtoan.xoatonghopsolieu(id).subscribe(res =>{
+
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
+        this.danhSachCongVan.splice(indx,1);
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
+
+  getStatusName(status:any) {
+    const utils = new Utils();
+    return utils.getStatusName(status);
   }
 
   //set url khi
@@ -157,6 +174,18 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
 
   }
 
+  //checkox trên tùng row
+  updateSingleChecked(): void {
+    if (this.danhSachCongVan.every((item) => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.danhSachCongVan.every((item) => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;

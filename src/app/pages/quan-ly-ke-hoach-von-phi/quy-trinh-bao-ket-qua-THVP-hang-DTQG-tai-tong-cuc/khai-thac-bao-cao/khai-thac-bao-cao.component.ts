@@ -79,7 +79,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+         
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -94,7 +94,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.SUCCESS,data?.msg);
+         
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -135,8 +135,8 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     console.log(this.searchFilter);
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-        this.notifi.success(MESSAGE.SUCCESS,res?.msg);
         this.listBcaoKqua = res.data.content;
+        this.notifi.success(MESSAGE.SUCCESS,res?.msg);
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
         }

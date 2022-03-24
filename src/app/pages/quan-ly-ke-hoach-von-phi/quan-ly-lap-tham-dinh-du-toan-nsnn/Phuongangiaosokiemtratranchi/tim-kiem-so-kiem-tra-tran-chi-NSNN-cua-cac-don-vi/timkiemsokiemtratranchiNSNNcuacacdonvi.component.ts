@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
@@ -32,6 +34,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
      private router: Router,
      private quankhoachvon :QuanLyVonPhiService,
      private datepipe:DatePipe,
+     private notification: NzNotificationService,
      ) {
     this.namgiao = this.currentYear.getFullYear();
   }
@@ -40,12 +43,22 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     let username = this.userService.getUserName();
     this.getUserInfo(username);
     this.quankhoachvon.dMDonVi().subscribe(res => {
-      this.donviTaos = res.data;
-      console.log(this.donviTaos);
+      if(res.statusCode==0){
+        this.donviTaos = res.data;
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+      
+      
     })
     this.quankhoachvon.dmDonViNhan().subscribe(res =>{
-      this.listDvnhan= res.data.content;
-      console.log(res)
+        if(res.statusCode==0){
+          this.listDvnhan= res.data.content;
+        }else{
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+        
+      
   })
   }
 
@@ -102,10 +115,9 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           this.length = res.data.totalElements;
           this.listSogiaoTranChi = res.data.content;
         }else{
-          alert('Có lỗi trong quá trình vấn tin!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
         
-        console.log(this.length);
     })
   }
    

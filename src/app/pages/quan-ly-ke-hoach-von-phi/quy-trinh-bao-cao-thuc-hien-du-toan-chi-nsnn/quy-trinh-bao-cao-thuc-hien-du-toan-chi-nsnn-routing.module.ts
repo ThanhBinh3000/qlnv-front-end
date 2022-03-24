@@ -8,11 +8,18 @@ const routes: Routes = [
     component: QuyTrinhBaoCaoThucHienDuToanChiNSNNComponent,
   },
   {
-    path: 'tim-kiem',
+    path: 'ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
     loadChildren: () =>
       import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
+        './chuc-nang-chi-cuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam.module'
+      ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamModule),
+  },
+  {
+    path: 'ds-chi-tiet-nhap-lieu-bao-cao',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ds-chi-tiet-nhap-lieu-bao-cao/ds-chi-tiet-nhap-lieu-bao-cao.module'
+      ).then((m) => m.DsChiTietNhapLieuBaoCaoModule),
   },
   {
     path: 'tong-hop',
@@ -21,20 +28,22 @@ const routes: Routes = [
         './tim-kiem/tim-kiem.module'
       ).then((m) => m.TimKiemModule),
   },
+  //hung
   {
-    path: 'chi-thuong-xuyen-3-nam',
+    path: 'bao-cao',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
-      ).then((m) => m.ChiThuongXuyen3NamModule),
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
   },
   {
-    path: 'chi-thuong-xuyen-3-nam/:id',
+    path: 'bao-cao/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
-      ).then((m) => m.ChiThuongXuyen3NamModule),
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
   },
+
 ];
 
 @NgModule({

@@ -548,6 +548,21 @@ const routes: Routes = [
       ).then((m) => m.QDCVgiaosokiemtratranchiNSNNchocacdonviModule),
   },
 
+  {
+    path: 'danh-sach-van-ban-gui-tcdt-ve-du-toan-nsnn',
+    loadChildren: () =>
+      import(
+        './nhom-cuc-nang-cuc-khu-vuc/danh-sach-van-ban-gui-tcdt-ve-du-toan-nsnn/danh-sach-van-ban-gui-tcdt-ve-du-toan-nsnn.module'
+      ).then((m) => m.DanhSachVanBanGuiTcdtVeDuToanNsnnModule),
+  },
+  {
+    path: 'van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam',
+    loadChildren: () =>
+      import(
+        './nhom-cuc-nang-cuc-khu-vuc/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam.module'
+      ).then((m) => m.VanBanGuiTcdtVeNsnnVaKhtc3NamModule),
+  },
+
 
 ];
 
