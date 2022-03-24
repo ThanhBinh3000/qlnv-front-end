@@ -543,7 +543,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // lay ten don vi tao
      getUnitName() {
-          return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+          return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
      }
 
      // start edit

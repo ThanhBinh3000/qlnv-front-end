@@ -25,6 +25,10 @@ export class TimKiemComponent implements OnInit {
   errorMessage = "";
   url!: string;
 
+
+  trangThai:any;
+
+
   searchFilter = {
     nam: "",
     tuNgay: "",
@@ -107,7 +111,7 @@ export class TimKiemComponent implements OnInit {
         page: this.pages.page,
       },
       str: "",
-      trangThai: "",
+      trangThai: this.trangThai,
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

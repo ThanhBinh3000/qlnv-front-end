@@ -254,7 +254,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
     };
 
     //call service them moi
@@ -476,7 +476,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == item.maDvi)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

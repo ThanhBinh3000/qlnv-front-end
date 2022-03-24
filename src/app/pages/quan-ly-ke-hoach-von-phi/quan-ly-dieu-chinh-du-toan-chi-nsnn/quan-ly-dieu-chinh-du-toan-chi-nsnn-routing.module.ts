@@ -15,6 +15,13 @@ const routes: Routes = [
       ).then((m) => m.TimKiemModule),
   },
   {
+    path: 'danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
+    loadChildren: () =>
+      import(
+        './danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach/danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach.module'
+      ).then((m) => m.DanhSachDeXuatDieuChinhDuToanChiNganSachModule),
+  },
+  {
     path: 'tong-hop',
     loadChildren: () =>
       import(

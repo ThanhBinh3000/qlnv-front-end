@@ -22,6 +22,7 @@ export class TimKiemDanhSachDeNghiCapVonComponent implements OnInit {
   totalPages = 0;
   errorMessage = "";
   url!: string;
+  lyDoTuChoi: string;
 
   // phan cu cua teca
   visible = false;

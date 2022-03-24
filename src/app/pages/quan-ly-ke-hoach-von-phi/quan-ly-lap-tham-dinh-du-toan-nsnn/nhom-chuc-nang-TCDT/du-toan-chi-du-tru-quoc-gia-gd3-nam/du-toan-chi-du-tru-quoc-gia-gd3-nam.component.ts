@@ -11,6 +11,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 export class ItemData {
   maNdungChi: string;
   chiTiet: string;
@@ -112,6 +114,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private nguoiDungSerivce: UserService,
               private danhMucService: DanhMucHDVService,
+              private notification:NzNotificationService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -134,6 +137,21 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.nam != null
     ) {
       this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maBaoCao = res.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
     }
     else {
       this.trangThaiBanGhi = "1";
@@ -483,7 +501,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   // start edit
@@ -529,12 +547,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
             // this.namBaoCao = this.namBcao;
-            this.namBcaohienhanh = this.currentday.getFullYear();
+            this.namBaoCaoHienHanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            console.log(this.lstCTietBCao)
-            this.namBcaohienhanh = this.namBcaohienhanh
+            
         }else{
             alert('co loi trong qua trinh van tin');
         }
