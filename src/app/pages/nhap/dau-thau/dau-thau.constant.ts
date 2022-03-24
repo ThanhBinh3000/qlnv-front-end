@@ -235,13 +235,13 @@ export const VAT_TU_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'QĐ phê duyệt kết quả LCNT',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'vat-tu/quyet-dinh-phe-duyet-ket-qua-lcnt',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng mua',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: 'phuong-an-trinh-tong-cuc',
+    url: 'vat-tu/hop-dong-mua',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',

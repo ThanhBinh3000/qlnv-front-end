@@ -60,13 +60,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     soQD: null,
     ngayKy: null,
     ngayHieuLuc: null,
-    namKeHoach: null,
+    namKeHoach: dayjs().get('year'),
     trichYeu: null,
   };
   tab = TAB_SELECTED;
   listNam: any[] = [];
-  firstDayOfYear: string = '';
-  lastDayOfYear: string = '';
   yearNow: number = 0;
   startValue: Date | null = null;
   endValue: Date | null = null;
@@ -99,10 +97,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         text: this.yearNow - i,
       });
     }
-    this.firstDayOfYear = '01/01/' + (this.yearNow - 1).toString();
-    this.lastDayOfYear = '31/12/' + (this.yearNow - 1).toString();
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.loadDataChiTiet(this.id);
+  }
+
+  selectNam() {
+    this.yearNow = this.formData.get('namKeHoach').value;
   }
 
   updateDataListVatTu(data: any) {
@@ -248,11 +248,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           data: data,
+          yearNow: this.yearNow
         },
       });
       modalLuongThuc.afterClose.subscribe((res) => {
         if (res) {
-
+          this.checkDataExistLuongThuc(res);
         }
       });
     } else if (this.tabSelected == TAB_SELECTED.vatTu) {

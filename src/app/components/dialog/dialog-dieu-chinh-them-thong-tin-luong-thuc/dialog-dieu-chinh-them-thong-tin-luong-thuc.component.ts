@@ -5,6 +5,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 
@@ -71,6 +72,10 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   optionsDonViShow: any[] = [];
   selectedDonVi: any = null;
 
+  thocIdDefault: number = 3;
+  gaoIdDefault: number = 4;
+  muoiIdDefault: number = 481;
+
   data: any = null;
 
   constructor(
@@ -83,7 +88,6 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     this.spinner.show();
     try {
       await this.loadDonVi();
@@ -94,6 +98,10 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  loadChiTiet() {
+
   }
 
   async loadDonVi() {
@@ -133,13 +141,20 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
           if (tonKho.maVthh == '010101') {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
-                this.slThoc3 = 0;
+                this.slThoc3 = 10;
+                this.caculatorXuatThocSdc3();
+                this.caculatorXuatGaoSdc3();
                 break;
               case (this.yearNow - 2).toString():
-                this.slThoc2 = 0;
+                this.slThoc2 = 10;
+                this.xuatSlThocTruocDieuChinh2 = 5;
+                this.caculatorXuatThocSdc2();
+                this.caculatorXuatGaoSdc2();
                 break;
               case (this.yearNow - 3).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
+                this.xuatSlThocTruocDieuChinh1 = 5;
+                this.caculatorXuatThocSdc1();
                 break;
               default:
                 break;
@@ -147,10 +162,10 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
           } else if (tonKho.maVthh == '010103') {
             switch (tonKho.nam) {
               case (this.yearNow - 1).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
                 break;
               case (this.yearNow - 2).toString():
-                this.slThoc1 = 0;
+                this.slThoc1 = 10;
                 break;
               default:
                 break;
@@ -160,18 +175,141 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
       });
   }
 
-  caculatorData() {
-    this.tongSoQuyThocTonKhoDauNam = this.slThoc1 + this.slThoc2 + this.slThoc3 + this.slGao2 * 2 + this.slGao3 * 2;
-
-    this.tongSoQuyThocNhapTrongNam = this.slThocSauDieuChinh + this.slGaoSauDieuChinh;
-  }
-
-  caculatorThocDieuChinh() {
-    this.slThocSauDieuChinh = this.slThocTruocDieuChinh + this.slThocTang - this.slThocGiam;
-  }
-
   handleOk() {
-    this._modalRef.close();
+    if (!this.data) {
+      this.data = new KeHoachLuongThuc();
+    }
+
+    this.data.tenDonvi = this.selectedDonVi.tenDvi;
+    this.data.maDonVi = this.selectedDonVi.maDvi;
+    this.data.donViId = this.selectedDonVi.donViId;
+    this.data.khGaoId = this.data ? this.data.khGaoId : null;
+    this.data.khThocId = this.data ? this.data.khThocId : null;
+    this.data.donViTinh = this.data ? this.data.donViTinh : null;
+
+    //ton kho dau nam
+    this.data.tkdnTongThoc =
+      (this.slThoc1 ?? 0) +
+      (this.slThoc2 ?? 0) +
+      (this.slThoc3 ?? 0);
+
+    const tkdnThoc1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.slThoc3 ?? 0),
+      vatTuId: null,
+    };
+    const tkdnThoc2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.slThoc2 ?? 0),
+      vatTuId: null,
+    };
+    const tkdnThoc3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: (this.slThoc1 ?? 0),
+      vatTuId: null,
+    };
+    this.data.tkdnThoc = [
+      tkdnThoc1,
+      tkdnThoc2,
+      tkdnThoc3,
+    ];
+
+    this.data.tkdnTongGao = (this.slGao2 ?? 0) + (this.slGao3 ?? 0);
+
+    const tkdnGao1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.slGao2 ?? 0),
+      vatTuId: null,
+    };
+    const tkdnGao2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.slGao3 ?? 0),
+      vatTuId: null,
+    };
+    this.data.tkdnGao = [tkdnGao1, tkdnGao2];
+
+    this.data.tkdnTongSoQuyThoc = this.data.tkdnTongThoc + this.data.tkdnGao * 2;
+
+    //nhap trong nam
+    this.data.ntnThoc = (this.slThocTruocDieuChinh ?? 0) + (this.slThocTang ?? 0) - (this.slThocGiam ?? 0);
+    this.data.ntnGao = (this.slGaoTruocDieuChinh ?? 0) + (this.slGaoTang ?? 0) - (this.slGaoGiam ?? 0);
+    this.data.ntnTongSoQuyThoc = this.data.ntnThoc + this.data.ntnGao * 2;
+
+    //xuat trong nam
+    this.data.xtnTongThoc = (this.xuatSlThocSauDieuChinh1 ?? 0) + (this.xuatSlThocSauDieuChinh2 ?? 0) + (this.xuatSlThocSauDieuChinh3 ?? 0);
+
+    const xtnThoc1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.xuatSlThocSauDieuChinh3 ?? 0),
+      vatTuId: null,
+    };
+    const xtnThoc2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.xuatSlThocSauDieuChinh2 ?? 0),
+      vatTuId: null,
+    };
+    const xtnThoc3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: (this.xuatSlThocSauDieuChinh1 ?? 0),
+      vatTuId: null,
+    };
+    this.data.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
+
+    this.data.xtnTongGao = (this.xuatSlGaoSauDieuChinh2 ?? 0) + (this.xuatSlGaoSauDieuChinh3 ?? 0);
+    const xtnGao1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.xuatSlGaoSauDieuChinh3 ?? 0),
+      vatTuId: null,
+    };
+    const xtnGao2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.xuatSlGaoSauDieuChinh2 ?? 0),
+      vatTuId: null,
+    };
+    this.data.xtnGao = [xtnGao1, xtnGao2];
+
+    this.data.xtnTongSoQuyThoc = this.data.xtnTongThoc + this.data.xtnGao * 2;
+
+    //ton kho cuoi nam
+    this.data.tkcnTongSoQuyThoc = this.data.tkdnTongSoQuyThoc + this.data.ntnTongSoQuyThoc - this.data.xtnTongSoQuyThoc;
+
+    this.data.tkcnTongThoc = this.data.tkcnTongSoQuyThoc / 3;
+
+    this.data.tkcnTongGao = this.data.tkcnTongThoc * 2;
+
+    this.data.stt = 1;
+
+    this._modalRef.close(this.data);
+  }
+
+  caculatorXuatThocSdc1() {
+    this.xuatSlThocSauDieuChinh1 = (this.xuatSlThocTruocDieuChinh1 ?? 0) + (this.xuatSlThocTang1 ?? 0) - (this.xuatSlThocGiam1 ?? 0);
+  }
+
+  caculatorXuatThocSdc2() {
+    this.xuatSlThocSauDieuChinh2 = (this.xuatSlThocTruocDieuChinh2 ?? 0) + (this.xuatSlThocTang2 ?? 0) - (this.xuatSlThocGiam2 ?? 0);
+  }
+
+  caculatorXuatThocSdc3() {
+    this.xuatSlThocSauDieuChinh3 = (this.xuatSlThocTruocDieuChinh3 ?? 0) + (this.xuatSlThocTang3 ?? 0) - (this.xuatSlThocGiam3 ?? 0);
+  }
+
+  caculatorXuatGaoSdc2() {
+    this.xuatSlGaoSauDieuChinh2 = (this.xuatSlGaoTruocDieuChinh2 ?? 0) + (this.xuatSlGaoTang2 ?? 0) - (this.xuatSlGaoGiam2 ?? 0);
+  }
+
+  caculatorXuatGaoSdc3() {
+    this.xuatSlGaoSauDieuChinh3 = (this.xuatSlGaoTruocDieuChinh3 ?? 0) + (this.xuatSlGaoTang3 ?? 0) - (this.xuatSlGaoGiam3 ?? 0);
   }
 
   handleCancel() {
