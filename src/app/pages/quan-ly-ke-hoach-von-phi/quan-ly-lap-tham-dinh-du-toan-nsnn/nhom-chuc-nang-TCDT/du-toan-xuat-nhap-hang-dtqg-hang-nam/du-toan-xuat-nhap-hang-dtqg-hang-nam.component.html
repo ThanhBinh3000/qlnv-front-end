@@ -77,11 +77,8 @@
               <nz-descriptions-item nzTitle="Ngày nhập">
                 {{ngayNhap}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+              <nz-descriptions-item nzTitle="Người nhập" >
                 {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC">
-                {{namBaoCaoHienHanh + 1}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
                 {{getUnitName()}}
@@ -98,7 +95,9 @@
               <nz-descriptions-item nzTitle="Loại báo cáo">
                 Dự toán Phí nhập xuất hàng DTQG hàng năm
               </nz-descriptions-item>
-
+              <nz-descriptions-item nzTitle="Năm BC" [nzSpan]="4">
+                {{namBcao}}
+              </nz-descriptions-item>
             </nz-descriptions>
           </div>
         </div>

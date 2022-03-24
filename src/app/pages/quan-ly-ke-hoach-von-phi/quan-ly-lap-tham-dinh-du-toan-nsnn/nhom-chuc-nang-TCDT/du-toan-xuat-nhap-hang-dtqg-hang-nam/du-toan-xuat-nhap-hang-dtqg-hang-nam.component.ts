@@ -314,7 +314,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
@@ -384,7 +384,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data.lstCTietBCao;

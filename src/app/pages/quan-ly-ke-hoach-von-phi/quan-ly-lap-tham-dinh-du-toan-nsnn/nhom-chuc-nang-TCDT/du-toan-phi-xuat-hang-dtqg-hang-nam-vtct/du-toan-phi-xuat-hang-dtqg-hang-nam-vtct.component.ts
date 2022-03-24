@@ -374,7 +374,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data.lstCTietBCao;
@@ -385,7 +385,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namBaoCaoHienHanh;
+          this.namBcao = data.data.namBaoCao
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -812,7 +813,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
         }
-        console.log(this.lstCTietBCao)
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
         alert('co loi trong qua trinh van tin');

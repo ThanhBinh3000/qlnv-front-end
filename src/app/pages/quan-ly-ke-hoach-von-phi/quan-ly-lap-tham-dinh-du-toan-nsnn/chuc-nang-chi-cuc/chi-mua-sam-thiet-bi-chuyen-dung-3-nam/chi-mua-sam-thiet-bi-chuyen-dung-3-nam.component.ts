@@ -160,7 +160,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //get danh muc noi dung
-    this.danhMucService.dmchitieu().toPromise().then(
+    this.danhMucService.dMVatTu().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.listMachitieu = data.data?.content;
@@ -313,7 +313,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
