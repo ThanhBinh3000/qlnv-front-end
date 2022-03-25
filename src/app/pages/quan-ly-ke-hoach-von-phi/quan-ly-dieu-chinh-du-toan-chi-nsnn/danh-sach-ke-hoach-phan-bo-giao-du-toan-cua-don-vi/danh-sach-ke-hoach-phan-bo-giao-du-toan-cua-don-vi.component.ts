@@ -14,25 +14,30 @@ import { min } from 'moment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
-import { ItemDanhSach } from '../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
-
+export class danhMuc {
+     id: number;
+     tenDm: string;
+}
 @Component({
-     selector: 'app-danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
-     templateUrl: './danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach.component.html',
-     styleUrls: ['./danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach.component.scss'],
+     selector: 'app-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
+     templateUrl: './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component.html',
+     styleUrls: ['./danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component.scss'],
 })
 
 
 
-export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit {
-     donVis: any = [];                            //don vi se hien thi
+export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit {
+     donVis: danhMuc[] = [];                            //don vi se hien thi
      chiCucs: any = [];                           //danh muc don vi cap chi cuc
      cucKhuVucs: any = [];                        //danh muc don vi cap cuc khu vuc
      tongCucs: any = [];                           //danh muc don vi cap tong cuc
 
-     tuNgay: string;                              //tim kiem tu ngay
-     denNgay: string;                             //tim kiem den ngay
+     tuNgayQd: string;                              //tim kiem tu ngay
+     denNgayQd: string;                             //tim kiem den ngay
+     tuNgayGn: string;
+     denNgayGn: string;
+     soQd: string;
      nam: number;                                 //nam tim kiem
      idDvi: number;                               //id don vi tim kiem
      lstCTietBCao: any = [];                      // list chi tiet bao cao
@@ -70,18 +75,20 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      async ngOnInit() {
           let userName = this.userSerivce.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
-          console.log(userInfo);
+
           const utils = new Utils();
           this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
           this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
           this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
+
+
+
           //lay danh sach danh muc don vi
-          this.danhMucService.dMDonVi().toPromise().then(
+          this.danhMucService.dMMaCucDtnnKvucs().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.donVis = data.data;
-                         console.log(this.donVis);
+                         this.cucKhuVucs = data.data?.content;
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -91,22 +98,52 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                }
           );
 
-          this.donVis.forEach(item => {
-               if (item.maDvi.length == 4) {
-                    this.cucKhuVucs.push(item);
-               } else {
-                    if (item.maDvi.length == 6) {
-                         this.chiCucs.push(item);
+          //lay danh sach danh muc don vi
+          this.danhMucService.dMDonVi().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.chiCucs = data.data;
                     } else {
-                         this.tongCucs.push(item);
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
-          })
-          console.log(this.cucKhuVucs);
-          console.log(this.chiCucs);
-          console.log(this.tongCucs);
-          let idDviQl = userInfo?.dvql;
+          );
           
+          let idDviQl = userInfo?.dvql;
+          if (this.chiCucs.findIndex(item => item.id == idDviQl)) {
+               this.chiCucs.forEach(item => {
+                    let mm: danhMuc = {
+                         id: item.id,
+                         tenDm: item.tenDvi,
+                    }
+                    this.donVis.push(mm);
+               })
+               this.status = false;
+          } else {
+               this.status = true;
+               if (this.cucKhuVucs.findIndex(item => item.id == idDviQl)) {
+                    this.cucKhuVucs.forEach(item => {
+                         let mm: danhMuc = {
+                              id: item.id,
+                              tenDm: item.tenDvi,
+                         }
+                         this.donVis.push(mm);
+                    })
+               } else {
+                    this.tongCucs.forEach(item => {
+                         let mm: danhMuc = {
+                              id: item.id,
+                              tenDm: item.tenDvi,
+                         }
+                         this.donVis.push(mm);
+                    })
+               }
+          }
+
+
           this.spinner.hide();
      }
 
@@ -159,8 +196,11 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
 
           let request = {
                maDvi: this.idDvi,
-               ngayTaoTu: this.datePipe.transform(this.tuNgay, 'dd/MM/yyyy',),
-               ngayTaoDen: this.datePipe.transform(this.denNgay, 'dd/MM/yyyy',),
+               tuNgayQd: this.datePipe.transform(this.tuNgayQd, Utils.FORMAT_DATE_STR,),
+               denNgayQd: this.datePipe.transform(this.denNgayQd, Utils.FORMAT_DATE_STR,),
+               tuNgayGn: this.datePipe.transform(this.tuNgayGn, Utils.FORMAT_DATE_STR,),
+               denNgayGn: this.datePipe.transform(this.denNgayGn, Utils.FORMAT_DATE_STR,),
+               soQd: this.soQd,
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,

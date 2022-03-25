@@ -282,7 +282,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
     };
 
     //call service them moi
@@ -356,9 +356,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namBaoCaoHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
-
+          this.namBcao = data.data.namBcao;
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -524,6 +524,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.tinhtong();
   }
 
   // gan editCache.data == lstCTietBCao
@@ -567,4 +568,20 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     })
     this.spinner.show();
 }
+
+  tongnam1:number;
+  tongnam2:number;
+  tongnam3:number;
+
+  tinhtong(){
+    this.tongnam1=0;
+    this.tongnam2=0;
+    this.tongnam3=0
+
+    this.lstCTietBCao.forEach(e => {
+      this.tongnam1 +=e.khoachChiNsnnN1;
+      this.tongnam2 +=e.khoachChiNsnnN2;
+      this.tongnam3 +=e.khoachChiNsnnN3;
+    })
+  }
 }

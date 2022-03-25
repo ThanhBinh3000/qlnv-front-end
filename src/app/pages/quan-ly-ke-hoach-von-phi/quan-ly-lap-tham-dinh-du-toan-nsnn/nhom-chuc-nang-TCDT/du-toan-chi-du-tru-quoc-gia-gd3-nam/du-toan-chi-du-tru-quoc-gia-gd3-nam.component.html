@@ -83,10 +83,13 @@
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
                 {{namBaoCaoHienHanh}}
               </nz-descriptions-item>
+              <!-- <nz-descriptions-item nzTitle="Năm BC">
+                {{namBcao}}
+              </nz-descriptions-item> -->
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Loại báo cáo">
+              <nz-descriptions-item nzTitle="Loại báo cáo" >
                 Dự toán chi dự trữ quốc gia giai đoạn 3 năm
               </nz-descriptions-item>
             </nz-descriptions>
@@ -180,13 +183,13 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.khoachChiNsnnN1" />
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.khoachChiNsnnN1" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.khoachChiNsnnN2" />
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.khoachChiNsnnN2" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.khoachChiNsnnN3" />
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.khoachChiNsnnN3" />
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -204,6 +207,18 @@
                         (ngModelChange)="updateSingleChecked()"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr *ngIf="lstCTietBCao.length!=0">
+                  <td></td>
+                  <td>Tổng</td>
+                  <td></td> 
+                  <td>{{tongnam1}}</td>
+                  <td>{{tongnam2}}</td>
+                  <td>{{tongnam3}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </tbody>
             </nz-table>

@@ -281,7 +281,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
     };
 
     //call service them moi
@@ -357,7 +357,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-
+          this.namBcao = data.data.namBcao;
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";

@@ -24,11 +24,11 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      errorMessage!: String;                      //
      trangThais: any = [
           {
-               id: 1,
+               id: "1",
                tenDm: "Đang soạn",
           },
           {
-               id: 2,
+               id: "2",
                tenDm: "Đã gửi TCDT",
           },
      ];
@@ -109,31 +109,31 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      async getDetailReport() {
           this.spinner.show();
           let request = {
-               maDonVi: this.maDvi,
-               ngayTaoTu: this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
-               ngayTaoDen: this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
+               maDonVi: null, //this.maDvi,
+               ngayTaoTu: null,// this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
+               ngayTaoDen: null, //this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
                },
-               soVban: this.soVanBan,
+               soVban: null,//this.soVanBan,
                trangThai: this.maTrangThai,
           }
-          //     await this.quanLyVonPhiService.bCChiTiet().toPromise().then(
-          //       (data) => {
-          //         if (data.statusCode == 0) {
-          //           this.chiTietBcaos = data.data;
-          //           this.lstCTietBCao = data.data.lstCTietBCao;
-          //           this.totalPages = data.data.totalPages;
-          //           this.totalElements = data.data.totalElements;
-          //         } else {
-          //           this.notification.error(MESSAGE.ERROR, data?.msg);
-          //         }
-          //       },
-          //       (err) => {
-          //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-          //       }
-          //     );
+          await this.quanLyVonPhiService.timDsachVban(request).subscribe(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.chiTietBcaos = data.data;
+                         this.lstCTietBCao = data.data.content;
+                         this.totalPages = data.data.totalPages;
+                         this.totalElements = data.data.totalElements;
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+               }
+          );
           this.spinner.hide();
      }
 

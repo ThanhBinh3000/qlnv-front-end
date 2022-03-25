@@ -53,9 +53,13 @@
                               <label class="search__label">Số văn bản</label>
                               <input class="search__input" nz-input [(ngModel)]="soVban">
                          </div>
-                         <div nz-col nzSpan="12">
+                         <div nz-col nzSpan="12" [hidden]="!kt">
                               <label class="search__label">Ngày duyệt văn bản</label>
-                              <input class="search__input" nz-input [(ngModel)]="ngayDuyetVban">
+                              <nz-date-picker class="search__input"  [(ngModel)]="ngayDuyetVban"> </nz-date-picker>
+                         </div>
+                         <div nz-col nzSpan="12" [hidden]="kt">
+                              <label class="search__label">Ngày duyệt văn bản</label>
+                              <input nz-input class="search__input"  [(ngModel)]="ngayDuyetVban">
                          </div>
                          
                     </div>
@@ -84,11 +88,12 @@
                                              <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
-                                                       {{data.maBcao}}
+                                                       <a routerLink="../{{data.url}}">{{data.objResp.maBcao}}</a>
+                                                       
                                                   </td>
                                                   <td>
                                                        <div *ngFor="let item of baoCaos">
-                                                            <div *ngIf="item.id == data.maLoaiBcao">
+                                                            <div *ngIf="item.id == data.objResp.maLoaiBcao">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>
@@ -97,7 +102,7 @@
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                                                   </td>
                                                   <td>
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
@@ -107,17 +112,17 @@
                                              </ng-container>
                                              <ng-template #editTemplate>
                                                   <td>{{ i + 1 }}</td>
-                                                  <td>
-                                                       <nz-select nzShowSearch nzAllowClear
+                                                  <td >
+                                                       <nz-select nzShowSearch nzAllowClear 
                                                             nzPlaceHolder="Chọn báo cáo"
-                                                            [(ngModel)]="editCache[data.id].data.maBcao">
-                                                            <nz-option *ngFor="let item of lstBcao" [nzValue]="item.maBcao"
+                                                            [(ngModel)]="editCache[data.id].data.objResp.maBcao" (ngModelChange)="changeModel(data.id)">
+                                                            <nz-option *ngFor="let item of lstBcao" [nzValue]="item.maBcao" 
                                                                  [nzLabel]="item.maBcao"></nz-option>
                                                        </nz-select>
                                                   </td>
                                                   <td>
                                                        <div *ngFor="let item of baoCaos">
-                                                            <div *ngIf="item.id == editCache[data.id].data.maLoaiBcao">
+                                                            <div *ngIf="item.id == editCache[data.id].data.objResp.maLoaiBcao">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>

@@ -314,7 +314,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
