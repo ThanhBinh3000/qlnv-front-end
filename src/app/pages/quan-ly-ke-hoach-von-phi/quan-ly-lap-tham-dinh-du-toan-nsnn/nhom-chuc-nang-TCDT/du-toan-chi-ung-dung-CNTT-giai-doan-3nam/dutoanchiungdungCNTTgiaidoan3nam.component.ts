@@ -156,6 +156,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     this.quanLyVonPhiService.dMKeHoachVon().subscribe(
       (res) => {
         if (res.statusCode == 0) {
+          console.log(res);
           this.listLoaikehoach = res.data?.content;
           
         } else {
@@ -252,7 +253,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;

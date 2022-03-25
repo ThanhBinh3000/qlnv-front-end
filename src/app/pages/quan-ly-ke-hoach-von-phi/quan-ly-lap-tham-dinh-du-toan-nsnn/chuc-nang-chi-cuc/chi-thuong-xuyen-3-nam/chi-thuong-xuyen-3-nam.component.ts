@@ -50,7 +50,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
-  chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   namBcao = new Date().getFullYear();         // nam bao cao
@@ -366,10 +365,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -537,7 +535,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   // start edit

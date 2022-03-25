@@ -79,7 +79,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
+    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
@@ -159,6 +159,9 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   setUrl(lbaocao:any) {
     console.log(lbaocao)
     switch (lbaocao) {
+      case 526:
+        this.url = '/bao-cao/'
+        break;
       case 521:
         this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
         break;

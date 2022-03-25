@@ -33,8 +33,11 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
      cucKhuVucs: any = [];                        //danh muc don vi cap cuc khu vuc
      tongCucs: any = [];                           //danh muc don vi cap tong cuc
 
-     tuNgay: string;                              //tim kiem tu ngay
-     denNgay: string;                             //tim kiem den ngay
+     tuNgayQd: string;                              //tim kiem tu ngay
+     denNgayQd: string;                             //tim kiem den ngay
+     tuNgayGn: string;
+     denNgayGn: string;
+     soQd: string;
      nam: number;                                 //nam tim kiem
      idDvi: number;                               //id don vi tim kiem
      lstCTietBCao: any = [];                      // list chi tiet bao cao
@@ -193,8 +196,11 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
 
           let request = {
                maDvi: this.idDvi,
-               ngayTaoTu: this.datePipe.transform(this.tuNgay, 'dd/MM/yyyy',),
-               ngayTaoDen: this.datePipe.transform(this.denNgay, 'dd/MM/yyyy',),
+               tuNgayQd: this.datePipe.transform(this.tuNgayQd, Utils.FORMAT_DATE_STR,),
+               denNgayQd: this.datePipe.transform(this.denNgayQd, Utils.FORMAT_DATE_STR,),
+               tuNgayGn: this.datePipe.transform(this.tuNgayGn, Utils.FORMAT_DATE_STR,),
+               denNgayGn: this.datePipe.transform(this.denNgayGn, Utils.FORMAT_DATE_STR,),
+               soQd: this.soQd,
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,

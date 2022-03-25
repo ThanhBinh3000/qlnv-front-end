@@ -86,7 +86,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
      statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
-     listIdDelete: string;
+     listIdDelete: string = "";
 
 
      allChecked = false;                         // check all checkbox
@@ -120,10 +120,10 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+               this.quanLyVonPhiService.sinhMaVban().toPromise().then(
                     (data) => {
                          if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
+                              this.soVban = data.data;
                          } else {
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
@@ -220,7 +220,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     item.id = null;
                }
           })         
-         
+         console.log(this.listIdDelete);
           //call service them moi
           this.spinner.show();
           if (this.id == null) {
@@ -581,6 +581,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
                     break;
                default:
+                    url = "";
                     break;
           }
           return url;
