@@ -134,6 +134,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+
     }
 
     const utils = new Utils();
@@ -446,7 +447,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

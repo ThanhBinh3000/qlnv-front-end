@@ -519,7 +519,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   redirectChiTieuKeHoachNam() {
@@ -641,12 +641,12 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   saveEdit1(id: string): void {
     this.editCache1[id].data.checked = this.lstCTietBCao.find(item => item.id == id).checked;  // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);                          // lay vi tri hang minh sua
-    if (this.lstCTietBCao[index].maCucDtnnKvuc == "") {   
+    if (this.lstCTietBCao[index].maCucDtnnKvuc == "") {
       let mini: superMiniData = {
         id: id,
         maDvi: this.editCache1[id].data.maCucDtnnKvuc,
         sl: 0,
-      }                                                         
+      }
       this.bangDvi.splice(index, 0, mini);
       this.lstCTiet.forEach(item => {
         item.SL.splice(index, 0, mini);

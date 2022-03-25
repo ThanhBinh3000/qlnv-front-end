@@ -146,7 +146,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listNoidung = data.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -160,7 +160,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       (data) => {
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
-         
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -283,7 +283,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {

@@ -151,7 +151,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       (res) => {
         if (res.statusCode == 0) {
           this.listHinhThucVanBan = res.data?.content;
-         
+
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -164,7 +164,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       (res) => {
         if (res.statusCode == 0) {
           this.listDviChuTri = res.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -174,7 +174,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       },
     );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-      
+
       this.donViTaos = res.data;
     })
     this.spinner.hide();
@@ -280,7 +280,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -492,7 +492,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
 
     if (
       this.id != null
-      
+
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
@@ -509,7 +509,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           }else{
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-          
+
         },
         (err) => {
           this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
@@ -571,7 +571,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            
+
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);

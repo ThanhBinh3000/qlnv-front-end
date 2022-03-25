@@ -152,7 +152,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       (res) => {
         if (res.statusCode == 0) {
           this.listNoidung = res.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -166,7 +166,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       (data) => {
           if (data.statusCode == 0) {
               this.listNhomchi = data.data?.content;
-              
+
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
@@ -285,7 +285,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -500,7 +500,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
 
     if (
       this.id != null
-      
+
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
@@ -574,7 +574,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            
+
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
