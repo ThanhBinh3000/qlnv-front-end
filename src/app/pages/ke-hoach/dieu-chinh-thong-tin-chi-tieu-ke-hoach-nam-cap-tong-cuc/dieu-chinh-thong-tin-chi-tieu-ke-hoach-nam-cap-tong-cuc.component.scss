@@ -14,6 +14,7 @@
     }
     .tab__container {
       margin-top: 12px;
+      position: relative;
     }
     .ghi-chu {
       .ant-form-item-no-colon {
@@ -31,9 +32,6 @@
     }
     tr.table__header-vat-tu.ant-table-row > td {
       background: #f1f1f1;
-    }
-    .tab__container {
-      position: relative;
     }
     .action {
       position: absolute;
@@ -69,14 +67,42 @@
     height: 15px;
     left: 695px;
     color: #2196f3;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     span {
       margin-left: 5px;
     }
+  }
+  .show-table {
+    display: block;
+  }
+  .hide-table {
+    display: none;
+  }
+  .table-out-tab {
+    margin-top: 0px !important;
+    padding: 10px;
+    border: solid 1px #f0f0f0;
+    border-top: 0;
+    background: #fff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .ant-tabs-content-holder {
+    border-bottom: 0;
+  }
+  .file-not-show {
+    display: none !important;
   }
   .dieu-chinh__body {
     .table-dieu-chinh .ant-table-content .ant-table-thead > tr > th {
       background: #e3f9f9;
       border: 0.5px solid #b8f0f1 !important;
     }
+  }
+  .tai-lieu-dinh-kem {
+    padding: 16px 8px !important;
   }
 }

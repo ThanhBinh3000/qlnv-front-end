@@ -1,4 +1,4 @@
-@import './shared/colors.scss';
+@import "./shared/colors.scss";
 
 /*::ng-deep <<<< để apdungj css toàn cục*/
 $font-size10: 10px; //1rem;
@@ -18,7 +18,7 @@ td {
 }
 body {
   // font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: $font-size13;
 }
 textarea.ant-input,
@@ -36,11 +36,11 @@ textarea.ant-input,
 .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder,
 .ant-btn,
-[role='button'],
+[role="button"],
 a,
 area,
 button,
-input:not([type='range']),
+input:not([type="range"]),
 label,
 select,
 summary,
@@ -55,7 +55,7 @@ textarea,
   line-height: 1.2;
 }
 /* link ảnh.............................*/
-$img-path: '../../../../assets/images/';
+$img-path: "../../../../assets/images/";
 
 /*top menu.......................*/
 $bg-header: $maincolor;
@@ -112,7 +112,7 @@ $inputLabel-text: 500;
 $mb: $input-h/2;
 
 .ant-upload.ant-upload-select {
-  margin-top: $label-padding;
+  // margin-top: $label-padding;
 }
 
 $tab-h: 9px;
@@ -120,7 +120,7 @@ $tab-h: 9px;
 /*32px............................................*/
 $maxTD-w: 200px;
 /* important.............................*/
-$i: unquote('!important');
+$i: unquote("!important");
 $shadow-menu-right: 0px 0px 11px rgb(0 0 0 / 40%);
 $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
@@ -135,31 +135,13 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
 @mixin bg-header {
   background: $bg-header $i;
-  background: -moz-linear-gradient(
-      left,
-      $bg-header-gradient 0%,
-      $bg-header 100%
-    )
+  background: -moz-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: -webkit-gradient(left top, right top, color-stop(0%, $bg-header-gradient), color-stop(100%, $bg-header))
     $i;
-  background: -webkit-gradient(
-      left top,
-      right top,
-      color-stop(0%, $bg-header-gradient),
-      color-stop(100%, $bg-header)
-    )
-    $i;
-  background: -webkit-linear-gradient(
-      left,
-      $bg-header-gradient 0%,
-      $bg-header 100%
-    )
-    $i;
-  background: -o-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%)
-    $i;
-  background: -ms-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%)
-    $i;
-  background: linear-gradient(to right, $bg-header-gradient 0%, $bg-header 100%)
-    $i;
+  background: -webkit-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: -o-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: -ms-linear-gradient(left, $bg-header-gradient 0%, $bg-header 100%) $i;
+  background: linear-gradient(to right, $bg-header-gradient 0%, $bg-header 100%) $i;
   // box-shadow: -2px -1px 6px rgb(0 0 0 / 30%);
 }
 
@@ -221,7 +203,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
   }
 
   &:after {
-    content: '';
+    content: "";
     border-left: solid 1px $color-f1;
     position: absolute;
     left: 12px;
@@ -231,7 +213,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
   & + .ant-select-tree-switcher {
     &:before {
-      content: '';
+      content: "";
       border-bottom: solid 1px $color-f1;
       position: absolute;
       left: -12px;
@@ -241,7 +223,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
     &.ant-select-tree-switcher-noop {
       &:after {
-        content: '';
+        content: "";
         border-left: solid 1px $color-f1;
         position: absolute;
         left: -12px;
@@ -256,35 +238,27 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
   top: 7px;
 }
 
-.ant-select-tree-indent
-  + .ant-select-tree-switcher.ant-select-tree-switcher_close:after,
-.ant-select-tree-indent
-  + .ant-select-tree-switcher.ant-select-tree-switcher_open:after {
+.ant-select-tree-indent + .ant-select-tree-switcher.ant-select-tree-switcher_close:after,
+.ant-select-tree-indent + .ant-select-tree-switcher.ant-select-tree-switcher_open:after {
   border-left: solid 1px $color-f1;
-  content: '';
+  content: "";
   left: -12px;
   position: absolute;
   top: -15px;
   bottom: -1px;
 }
 
-.ant-select-tree-indent
-  + .ant-select-tree-switcher.ant-select-tree-switcher_open,
-.ant-select-tree-indent
-  + .ant-select-tree-switcher.ant-select-tree-switcher_close,
-.ant-select-tree-indent-unit
-  + .ant-select-tree-indent-unit
-  + .ant-select-tree-indent-unit {
+.ant-select-tree-indent + .ant-select-tree-switcher.ant-select-tree-switcher_open,
+.ant-select-tree-indent + .ant-select-tree-switcher.ant-select-tree-switcher_close,
+.ant-select-tree-indent-unit + .ant-select-tree-indent-unit + .ant-select-tree-indent-unit {
   position: relative;
   overflow: visible;
   height: 100%;
 }
 
-.ant-select-tree-indent-unit
-  + .ant-select-tree-indent-unit
-  + .ant-select-tree-indent-unit:after {
+.ant-select-tree-indent-unit + .ant-select-tree-indent-unit + .ant-select-tree-indent-unit:after {
   border-left: solid 1px $color-f1;
-  content: '';
+  content: "";
   left: -12px;
   position: absolute;
   top: -15px;
@@ -342,7 +316,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
   position: relative;
 
   &:after {
-    content: '';
+    content: "";
     border-left: solid 1px $color-f1;
     position: absolute;
     left: 12px;
@@ -357,7 +331,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
     justify-content: center;
 
     &:before {
-      content: '';
+      content: "";
       border-bottom: solid 1px $color-f1;
       position: absolute;
       left: -12px;
@@ -366,7 +340,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
     }
 
     &.ant-tree-switcher-noop:after {
-      content: '';
+      content: "";
       border-left: solid 1px $color-f1;
       position: absolute;
       left: -12px;
@@ -400,8 +374,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
 .ant-tree-indent + .ant-tree-switcher.ant-tree-switcher_close,
 .ant-tree-indent + .ant-tree-switcher.ant-tree-switcher_open,
-.ant-tree-indent-unit.ant-tree-indent-unit-start.ant-tree-indent-unit-end
-  + .ant-tree-indent-unit,
+.ant-tree-indent-unit.ant-tree-indent-unit-start.ant-tree-indent-unit-end + .ant-tree-indent-unit,
 .ant-tree-indent-unit + .ant-tree-indent-unit + .ant-tree-indent-unit {
   position: relative;
   overflow: visible;
@@ -410,7 +383,7 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 
 .ant-tree-indent-unit + .ant-tree-indent-unit + .ant-tree-indent-unit:after {
   border-left: solid 1px $color-f1;
-  content: '';
+  content: "";
   left: -12px;
   position: absolute;
   top: -15px;
@@ -421,14 +394,14 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
   &.ant-tree-switcher_close:after,
   &.ant-tree-switcher_open:after {
     border-left: solid 1px $color-f1;
-    content: '';
+    content: "";
     left: -12px;
     position: absolute;
     top: -15px;
     bottom: -1px;
   }
 }
-.ant-tree-indent[ng-reflect-nz-tree-level='0'] {
+.ant-tree-indent[ng-reflect-nz-tree-level="0"] {
   &:after {
     display: none;
   }
@@ -453,15 +426,12 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 }
 
 .title:before {
-  content: '\f0a9';
-  font-family: 'FontAwesome' !important;
+  content: "\f0a9";
+  font-family: "FontAwesome" !important;
   font-size: $font-size14;
 }
 
-.ant-collapse-content
-  > .ant-collapse-content-box
-  .ant-table-wrapper
-  + h3.title {
+.ant-collapse-content > .ant-collapse-content-box .ant-table-wrapper + h3.title {
   margin-top: 16px;
   background: #f8fefe;
   margin-left: -15px;
@@ -614,8 +584,7 @@ app-danh-sach-file.hidecard,
 }
 
 .ant-select-multiple {
-  &.ant-select-show-search.ant-select:not(.ant-select-customize-input)
-    .ant-select-selector {
+  &.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
     max-height: 200px;
     overflow-y: auto;
     height: auto !important;
@@ -692,7 +661,7 @@ app-danh-sach-file.hidecard,
 }
 
 ::ng-deep .flex-card.ant-card {
-  border: none;
+  // border: none;
   background: transparent;
   box-shadow: unset;
   // margin-bottom: 24px;
@@ -1127,8 +1096,7 @@ app-danh-sach-file.hidecard,
       color: $color-icon-xam;
     }
 
-    .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
-      .ant-select-selector {
+    .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
       box-shadow: unset !important;
       outline: none !important;
     }
@@ -1362,8 +1330,8 @@ app-danh-sach-file.hidecard,
 }
 
 .date-picker-custom:after {
-  content: '\f133';
-  font-family: 'FontAwesome';
+  content: "\f133";
+  font-family: "FontAwesome";
   color: $color-icon-xam;
   position: absolute;
   right: 10px;
@@ -1389,7 +1357,7 @@ span.icon.htvbdh_dau-cong {
 .ant-upload .ant-btn .anticon {
   color: $color-icon-xam;
 }
-[ng-reflect-nz-input-read-only='true'],
+[ng-reflect-nz-input-read-only="true"],
 input[readonly] {
   background: whitesmoke;
   pointer-events: none;
@@ -1413,7 +1381,7 @@ input[readonly] {
 body.affix-fix .ant-layout {
   // min-height: calc(100vh + 75px) !important;
   .contentDetail {
-    min-height: calc(100vh - 216px);
+    min-height: 100%;
     margin-bottom: 0;
   }
 }
@@ -1431,27 +1399,19 @@ nz-affix {
   }
 }
 .descriptions-fix {
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-item-active
-    > .ant-collapse-header:before {
+  .ant-collapse > .ant-collapse-item.ant-collapse-item-active > .ant-collapse-header:before {
     transform: rotate(180deg);
     top: 8px !important;
     margin-left: -22px;
   }
 
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-no-arrow
-    > .ant-collapse-header,
-  .ant-collapse
-    > .ant-collapse-item.ant-collapse-no-arrow
-    > .ant-collapse-header[aria-expanded='false'] {
+  .ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header,
+  .ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header[aria-expanded="false"] {
     transition: all 0s, visibility 0s;
   }
 
   .ant-collapse-header,
-  .ant-collapse
-    > .ant-collapse-item
-    > .ant-collapse-header[aria-expanded='false'] {
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header[aria-expanded="false"] {
     padding-left: 0px !important;
     padding-right: 0px;
     font-size: 0;
@@ -1508,10 +1468,7 @@ nz-affix {
   }
 
   .descriptions-fix .ant-collapse-header:before,
-  .descriptions-fix
-    .ant-collapse
-    > .ant-collapse-item
-    > .ant-collapse-header[aria-expanded='false']:before {
+  .descriptions-fix .ant-collapse > .ant-collapse-item > .ant-collapse-header[aria-expanded="false"]:before {
     margin-left: 10px;
   }
 }
@@ -1624,7 +1581,7 @@ td .date-picker-custom dp-date-picker.dp-material {
 }
 
 .flex-card.ant-card .ant-card-head-title a:before {
-  content: '/';
+  content: "/";
   position: absolute;
   left: -3px;
   font-size: 16px;
@@ -1679,7 +1636,7 @@ td .date-picker-custom dp-date-picker.dp-material {
     right: 0;
     border-top: solid 1px $tab-menu-border;
     &:after {
-      content: '';
+      content: "";
       display: flex;
       width: 100%;
       height: 8px;
@@ -1760,13 +1717,7 @@ a.btn.btn-disabled {
   border: none;
   padding-right: 0;
 }
-.ant-table.ant-table-bordered
-  > .ant-table-container
-  > .ant-table-content
-  > table
-  > tbody
-  > tr:last-child
-  > td {
+.ant-table.ant-table-bordered > .ant-table-container > .ant-table-content > table > tbody > tr:last-child > td {
   border-bottom: solid 1px #f1f1f1 !important;
 }
 
@@ -1774,10 +1725,7 @@ a.btn.btn-disabled {
 .ant-form-item .ant-input-group .ant-select {
   width: 100%;
 }
-.ant-form-item
-  .ant-input-group
-  .ant-select-single:not(.ant-select-customize-input)
-  .ant-select-selector {
+.ant-form-item .ant-input-group .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -1785,4 +1733,24 @@ a.btn.btn-disabled {
 
 svg {
   vertical-align: baseline;
+}
+td.action.ant-table-cell {
+  text-align: right;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.bg-white {
+  background-color: white;
+}
+.search-tools {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  margin-top: 8px;
 }

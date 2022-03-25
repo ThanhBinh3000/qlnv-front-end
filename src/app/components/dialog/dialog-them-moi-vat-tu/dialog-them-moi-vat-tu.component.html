@@ -1,0 +1,70 @@
+<form nz-form [formGroup]="formData">
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Gói thầu </nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+          <input class="search__input" nz-input formControlName="goiThau" />
+          <ng-template #soQDError let-control>
+            <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="16">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Địa điểm nhập kho </nz-form-label>
+        <input nz-input formControlName="diaDiemNhap" />
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
+        <nz-input-number formControlName="soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+          (input)="calculatorThanhTien()">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
+        <nz-input-number formControlName="donGia" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+          (input)="calculatorThanhTien()">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Thành tiền (đồng) </nz-form-label>
+        <input nz-input formControlName="thanhTien" readonly />
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Bằng chữ </nz-form-label>
+        <input nz-input formControlName="bangChu" readonly />
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

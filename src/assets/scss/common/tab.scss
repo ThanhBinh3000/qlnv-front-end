@@ -54,3 +54,13 @@
     background: #e3f9f9 !important;
   }
 }
+.active-tab {
+  background: #20a1a4 !important;
+  .content-item {
+    .icon,
+    .content-item-title,
+    .content-item-description {
+      color: #fff !important;
+    }
+  }
+}

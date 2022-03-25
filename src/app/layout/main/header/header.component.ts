@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -21,11 +20,10 @@ export class HeaderComponent implements OnInit {
     private modal: NzModalService,
     private authService: AuthService,
     private userService: UserService,
-    // private _notificationService: NotificationService,
     private notification: NzNotificationService,
     private _modalService: NzModalService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
@@ -108,7 +106,7 @@ export class HeaderComponent implements OnInit {
       nzStyle: { top: '50px' },
       nzWidth: 600,
     });
-    modal.afterClose.subscribe((b) => {});
+    modal.afterClose.subscribe((b) => { });
   }
 
   showModalThongTinCaNhan() {
@@ -121,7 +119,7 @@ export class HeaderComponent implements OnInit {
       nzStyle: { top: '50px' },
       nzWidth: 800,
     });
-    modal.afterClose.subscribe((b) => {});
+    modal.afterClose.subscribe((b) => { });
   }
 
   logOut() {

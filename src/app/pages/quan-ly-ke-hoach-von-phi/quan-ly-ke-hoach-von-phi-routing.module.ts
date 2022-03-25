@@ -13,17 +13,45 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
-        loadChildren: () =>
-          import(
-            './quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/tim-kiem.module'
-          ).then((m) => m.TimKiemModule),
-      },
-      {
         path: 'quan-ly-lap-tham-dinh-du-toan-nsnn',
         loadChildren: () =>
           import('./quan-ly-lap-tham-dinh-du-toan-nsnn/quan-ly-lap-tham-dinh-du-toan-nsnn.module').then(
             (m) => m.QuanLyLapThamDinhDuToanNSNNModule,
+          ),
+      },
+      {
+        path: 'quan-ly-dieu-chinh-du-toan-chi-nsnn',
+        loadChildren: () =>
+          import('./quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
+            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          ),
+      },
+      {
+        path: 'quan-ly-giao-du-toan-chi-nsnn',
+        loadChildren: () =>
+          import('./quan-ly-giao-du-toan-chi-nsnn/quan-ly-giao-du-toan-chi-nsnn.module').then(
+            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          ),
+      },
+      {
+        path: 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg',
+        loadChildren: () =>
+          import('./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-dieu-chinh-du-toan-chi-nsnn.module').then(
+            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          ),
+      },
+      {
+        path: 'quy-trinh-bc-thuc-hien-du-toan-chi-nsnn',
+        loadChildren: () =>
+          import('./quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn.module').then(
+            (m) => m.QuanLyDieuChinhDuToanChiNSNNModule,
+          ),
+      },
+      {
+        path: 'quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn',
+        loadChildren: () =>
+          import('./quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc.module').then(
+            (m) => m.QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucModule,
           ),
       },
     ],
