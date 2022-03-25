@@ -8,12 +8,12 @@ export const QUAN_LY_CAP_NGUON_VON_CHI_NSNN_LIST: QuanLyCapNguonVonChiNSNN[] = [
     description: 'Tìm kiếm danh sách công văn đề nghị cấp vốn',
     url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/tim-kiem-danh-sach-cong-van-de-nghi-cap-von`,
   },
-  // {
-  //   icon: 'htvbdh_tcdt_icon-common',
-  //   title: 'Đề nghị cấp vốn',
-  //   description: 'Lập đề nghị cấp vốn mua vật tư, thiết bị',
-  //   url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/lap-de-nghi-cap-von-mua-vat-tu-thiet-bi`,
-  // },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Đề nghị cấp vốn',
+    description: 'Lập đề nghị cấp vốn mua vật tư, thiết bị',
+    url: `/${MAIN_ROUTE_QUAN_LY_CAP_VON_PHI_HANG}/${MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN}/lap-de-nghi-cap-von-mua-vat-tu-thiet-bi`,
+  },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Tìm kiếm',

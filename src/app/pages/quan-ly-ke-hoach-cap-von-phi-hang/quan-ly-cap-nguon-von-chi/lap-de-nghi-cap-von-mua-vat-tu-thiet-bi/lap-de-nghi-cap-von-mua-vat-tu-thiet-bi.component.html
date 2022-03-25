@@ -8,7 +8,11 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden]="statusBtnSave">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
+        </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -53,6 +57,10 @@
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" >
+          <i class="icon htvbdh_tcdt_close"></i>
+          <span>Đóng</span>
         </a>
       </div>
     </div>
@@ -334,19 +342,21 @@
 
             <div>
               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Nơi nhận">
+                <!-- <nz-descriptions-item nzTitle="Nơi nhận">
                   {{ngayNhap}}
                 </nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Hình thức">
                   {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Lý do từ chối">
+                </nz-descriptions-item> -->
+                <nz-descriptions-item nzTitle="Lý do từ chối" [nzSpan]="4">
                   <input nz-input placeholder="Lý do từ chối">
                 </nz-descriptions-item>
-                <nz-descriptions-item style="background-color:#fff">
+                <!-- <nz-descriptions-item style="background-color:#fff">
                   <button class="btn btn-main">Gửi</button>
-                </nz-descriptions-item>
+                </nz-descriptions-item> -->
               </nz-descriptions>
+              <button nz-button [nzType]="'primary'" class="btn btn-function">Phê duyệt</button>
+              <button nz-button [nzType]="'primary'"class="btn btn-function">Từ chối</button>
             </div>
 
           </nz-tab>

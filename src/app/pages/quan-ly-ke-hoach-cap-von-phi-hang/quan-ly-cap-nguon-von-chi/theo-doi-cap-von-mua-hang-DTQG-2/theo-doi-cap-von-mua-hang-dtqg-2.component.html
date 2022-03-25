@@ -77,20 +77,14 @@
               <nz-descriptions-item nzTitle="Ngày nhập">
                 {{ngayNhap}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+              <nz-descriptions-item nzTitle="Người nhập" >
                 {{nguoiNhap}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị">
                 {{getUnitName()}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Nơi đề nghị">
+              <nz-descriptions-item nzTitle="Trạng thái">
                 {{maBaoCao}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số công văn">
-                {{namBaoCaoHienHanh}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày công văn">
-                {{getStatusName()}}
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
@@ -98,11 +92,12 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab>
+          <nz-tab nzTitle="THEO DÕI CẤP VỐN MUA HÀNG DỰ TRỮ QUỐC GIA">
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="" nzWidth="1%">STT</th>
+                  <th rowspan="" nzWidth="14%">Đơn vị đề xuất</th>
                   <th rowspan="" nzWidth="14%">Loại</th>
                   <th rowspan="" nzWidth="14%">Mặt hàng</th>
                   <th rowspan="" nzWidth="14%">Số lượng</th>
@@ -246,19 +241,10 @@
               </tbody>
             </nz-table>
 
-            <div>
-              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Nơi nhận" >
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Hình thức" >
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Lý do từ chối">
-                  <input nz-input placeholder="Lý do từ chối">
-                </nz-descriptions-item>
-              </nz-descriptions>
-            </div>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Lý do từ chối</label>
+              <input class="search__input" nz-input />
+           </div>
 
           </nz-tab>
         </nz-tabset>
@@ -271,9 +257,17 @@
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-main">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
+          </button>
+          <button type="button" class="btn btn-main">
+            <i class="icon"></i>
+            <span>Từ chối</span>
+          </button>
+          <button type="button" class="btn btn-main">
+            <i class="icon"></i>
+            <span>Duyệt</span>
           </button>
           <!-- <button type="button" class="btn btn-sub">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
