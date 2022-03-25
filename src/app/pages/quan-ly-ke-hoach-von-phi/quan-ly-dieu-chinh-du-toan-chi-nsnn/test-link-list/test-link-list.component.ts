@@ -223,7 +223,7 @@ export class TestLinkListComponent implements OnInit {
     }
     data.checked = kt;
   }
-
+  // gan tat ca con cua nó co cung trang thai
   subUpdateChecked(data: LinkList, kt: boolean) {
     data.checked = kt;
     if (data.vt > 0)
@@ -258,7 +258,7 @@ export class TestLinkListComponent implements OnInit {
     this.saveEditLL(this.chiTietBcaos, index + 1);
     this.disable = false;
   }
-
+  //save vao tu editcache vao trong linklist
   saveEditLL(data: LinkList, idx: number) {
     if (data.vt == idx) {
       data.abc = this.lstCTietBCao[idx - 1].abc;

@@ -562,7 +562,13 @@ const routes: Routes = [
         './nhom-cuc-nang-cuc-khu-vuc/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam.module'
       ).then((m) => m.VanBanGuiTcdtVeNsnnVaKhtc3NamModule),
   },
-
+  {
+    path: 'van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/:id',
+    loadChildren: () =>
+      import(
+        './nhom-cuc-nang-cuc-khu-vuc/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam.module'
+      ).then((m) => m.VanBanGuiTcdtVeNsnnVaKhtc3NamModule),
+  },
 
 ];
 
