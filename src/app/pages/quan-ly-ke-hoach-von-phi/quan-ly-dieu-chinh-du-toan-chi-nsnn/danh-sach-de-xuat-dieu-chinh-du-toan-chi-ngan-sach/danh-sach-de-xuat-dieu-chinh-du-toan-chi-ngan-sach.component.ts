@@ -180,6 +180,8 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                str: "",
           }
 
+          
+
 
           this.quanLyVonPhiService.timkiem325(request).subscribe(
                (data) => {
