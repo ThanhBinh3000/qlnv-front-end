@@ -505,7 +505,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   redirectChiTieuKeHoachNam() {
@@ -635,12 +635,12 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   saveEdit1(id: string): void {
     this.editCache1[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);                          // lay vi tri hang minh sua
-    if (this.lstCTietBCao[index].maDvi == "") {         
+    if (this.lstCTietBCao[index].maDvi == "") {
       let mm: superMiniData = {
         id: id,
         maDvi: this.editCache1[id].data.maDvi,
         sl: 0,
-      }                                // trong truong hop them moi don vi                    
+      }                                // trong truong hop them moi don vi
       this.bangDvi.splice(index, 0, mm);
       this.lstCTiet1.forEach(item => {
         item.SL.splice(index, 0, mm);

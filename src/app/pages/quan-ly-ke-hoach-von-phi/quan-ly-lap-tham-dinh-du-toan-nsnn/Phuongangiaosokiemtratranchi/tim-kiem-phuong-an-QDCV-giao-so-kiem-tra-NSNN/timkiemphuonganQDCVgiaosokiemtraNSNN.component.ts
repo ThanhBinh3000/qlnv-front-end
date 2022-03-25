@@ -25,7 +25,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   maPa: string = null;
   currentYear: Date = new Date();
   listVanban: any[] = [];
-  donviTaos:any []=[];
+  donViTaos: any[] = [];
   totalitem:any;
   checkroleDvi:any;
 
@@ -43,7 +43,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     let username = this.userService.getUserName();
     let userInfor: any = await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
-      this.donviTaos = res.data;
+      this.donViTaos = res.data;
     })
   }
 
@@ -60,14 +60,14 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         }
       },
       (err) => {
-        
+
       },
     );
   }
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donviTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   //get trạng thai
@@ -105,10 +105,10 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         }
     })
   }
-  
+
   //tao moi
   taomoi(){
-    
+
     console.log(this.loaivanban);
     if(this.loaivanban==""){
         alert('Bạn chưa chọn loại văn bản');

@@ -16,16 +16,12 @@ import { MESSAGE } from '../../../../constants/message';
 export class ItemData {
      id: any;
      stt!: string;
-     ngayLap!: any;
-     maDvi!: number;
-     nam!: number;
-     maKhoanMuc!: string;
-     maNoiDung!: string;
-     maNhomChi!: string;
-     soTienPhanBo!: number;
-     ngayGhiNhan!: string;
-     dieuChinh!: string;
-     ghiChu!: string;
+     noiDung!: string;
+     uocThucHien!: number;
+     duToanGiao: number;
+     dcTang!: number;
+     dcGiam!: number;
+     lyDo!: string;
      checked!: boolean;
 }
 
@@ -41,27 +37,18 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      khoanChis: any = [];
      phanBos: any = [];
      donVis: any = [];
-     noiNhan: any;
+     noiDung: string;
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
      id!: any;                                   // id truyen tu router
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
-     lstFile: any = [];                          // list File de day vao api
-     status: boolean = false;                     // trang thai an/ hien cua trang thai
+     lstFile: any = [];                            // trang thai an/ hien cua trang thai
      namBcao = new Date().getFullYear();         // nam bao cao
      userName: any;                              // ten nguoi dang nhap
-     ngayNhap!: any;                             // ngay nhap
-     nguoiNhap!: string;                         // nguoi nhap
      maDonViTao!: any;                           // ma don vi tao
-     maBaoCao!: string;                          // ma bao cao
-     namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
-     trangThaiBanGhi: string = "1";
-     donViThucHien!: string;
-     soQd!: string;
-     ngayQd!: string;
-     phanBo!: string;
-     tenTrangThai!: string;
+     trangThaiBanGhi!: any;
+
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
      listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -116,7 +103,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
      ) {
-          this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+          
      }
 
 
@@ -127,24 +114,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           if (this.id) {
                this.getDetailReport();
           } else {
-               this.trangThaiBanGhi = "1";
-               this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
-               this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, data?.msg);
-                         }
-                    },
-                    (err) => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    }
-               );
-               this.maBaoCao = '';
-               this.namBaoCaoHienHanh = new Date().getFullYear();
           }
 
           const utils = new Utils();
@@ -253,15 +223,15 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           })
           // gui du lieu trinh duyet len server
           let request = {
-               id: this.id,
-               listIdFile: listFile,
-               chiNsnnCtietReqs: this.lstCTietBCao,
-               maDvi: this.maDonViTao = "01",
-               ngayqd: this.datePipe.transform(this.ngayQd, 'dd/MM/yyyy',),
-               phanBo: this.phanBo = "01",
-               soQd: this.soQd,
-               trangThai: this.trangThaiBanGhi = "01",
-               namHienHanh: this.namBaoCaoHienHanh,
+               // id: this.id,
+               // listIdFile: listFile,
+               // chiNsnnCtietReqs: this.lstCTietBCao,
+               // maDvi: this.maDonViTao = "01",
+               // ngayqd: this.datePipe.transform(this.ngayQd, 'dd/MM/yyyy',),
+               // phanBo: this.phanBo = "01",
+               // soQd: this.soQd,
+               // trangThai: this.trangThaiBanGhi = "01",
+               // namHienHanh: this.namBaoCaoHienHanh,
           };
           this.spinner.show();
           if (this.id == null) {
@@ -326,11 +296,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.spinner.hide();
      }
 
-     //thay doi trang thai
-     changeStatus(status: boolean) {
-          this.status = status;
-     }
-
      // call chi tiet bao cao
      getDetailReport() {
           this.spinner.hide();
@@ -343,15 +308,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
 
-                         // set thong tin chung bao cao
-                         this.ngayNhap = this.datePipe.transform(this.chiTietBcaos.ngayTao, 'dd-MM-yyyy',);
-                         this.nguoiNhap = this.chiTietBcaos.nguoiTao;
-                         this.maDonViTao = data.data.maDvi;
-                         this.namBaoCaoHienHanh = data.data.namHienHanh;
                          this.trangThaiBanGhi = data.data.trangThai;
-                         this.phanBo = this.chiTietBcaos.phanBo;
-                         this.soQd = this.chiTietBcaos.soQd;
-                         this.ngayQd = this.chiTietBcaos.ngayQuyetDinh;
                          // set list id file ban dau
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
@@ -372,7 +329,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           // day file len server
           const upfile: FormData = new FormData();
           upfile.append('file', file);
-          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+          upfile.append('folder', this.maDonViTao + '/' + this.maDonViTao + '/');
           let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
                (data) => {
                     let objfile = {
@@ -388,52 +345,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           );
           return temp;
      }
-
-     // them dong moi
-     addLine(id: number): void {
-          let item: ItemData = {
-               id: uuid.v4(),
-               stt: "",
-               ngayLap: this.ngayNhap,
-               maDvi: this.maDonViTao,
-               nam: this.namBcao,
-               maKhoanMuc: "",
-               maNoiDung: "",
-               maNhomChi: "",
-               soTienPhanBo: 0,
-               ngayGhiNhan: "",
-               dieuChinh: "",
-               ghiChu: "",
-               checked: false,
-          }
-
-          this.lstCTietBCao.splice(id, 0, item);
-          this.editCache[item.id] = {
-               edit: true,
-               data: { ...item }
-          };
-     }
-
-     // // xoa dong
-     // deleteById(id: any): void {
-     //      this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-     //      if (typeof id == "number") {
-     //           this.listIdDelete += id + ",";
-     //      }
-     // }
-
-     // xóa với checkbox
-     deleteSelected() {
-          // add list delete id
-          this.lstCTietBCao.filter(item => {
-               if (item.checked == true && typeof item.id == "number") {
-                    this.listIdDelete += item.id + ","
-               }
-          })
-          // delete object have checked = true
-          this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
-     }
-
      // xoa file trong bang file
      deleteFile(id: string): void {
           this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
@@ -455,18 +366,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           fileSaver.saveAs(blob, file.name);
      }
 
-     // // click o checkbox single
-     // updateSingleChecked(): void {
-     //      if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
-     //           this.allChecked = false;
-     //           this.indeterminate = false;
-     //      } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
-     //           this.allChecked = true;
-     //           this.indeterminate = false;
-     //      } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
-     //           this.indeterminate = true;
-     //      }
-     // }
 
      redirectChiTieuKeHoachNam() {
           this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
@@ -502,7 +401,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-          this.lstCTietBCao[index].ngayGhiNhan = this.datePipe.transform(this.lstCTietBCao[index].ngayGhiNhan, 'dd/MM/yyyy',);
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
      }
 

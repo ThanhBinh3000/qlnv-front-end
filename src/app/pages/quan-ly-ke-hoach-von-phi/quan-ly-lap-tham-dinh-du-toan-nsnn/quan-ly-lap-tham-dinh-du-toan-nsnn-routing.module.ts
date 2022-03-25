@@ -562,7 +562,28 @@ const routes: Routes = [
         './nhom-cuc-nang-cuc-khu-vuc/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam.module'
       ).then((m) => m.VanBanGuiTcdtVeNsnnVaKhtc3NamModule),
   },
-
+  {
+    path: 'van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/:id',
+    loadChildren: () =>
+      import(
+        './nhom-cuc-nang-cuc-khu-vuc/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam.module'
+      ).then((m) => m.VanBanGuiTcdtVeNsnnVaKhtc3NamModule),
+  },
+  {
+    path:'ke-hoach-dao-tao-boi-duong-3-nam-tc',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-dao-tao-boi-duong-3-nam/ke-hoach-dao-tao-boi-duong-3-nam.module')
+    .then(m => m.KeHoachDaoTaoBoiDuong3NamModule),
+  },
+  {
+    path:'ke-hoach-dao-tao-boi-duong-3-nam-tc/:id',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-dao-tao-boi-duong-3-nam/ke-hoach-dao-tao-boi-duong-3-nam.module')
+    .then(m => m.KeHoachDaoTaoBoiDuong3NamModule),
+  },
+  {
+    path:'ke-hoach-dao-tao-boi-duong-3-nam-tc/:maDvi/:maLoaiBacao/:nam',
+    loadChildren:() => import('./nhom-chuc-nang-TCDT/ke-hoach-dao-tao-boi-duong-3-nam/ke-hoach-dao-tao-boi-duong-3-nam.module')
+    .then(m => m.KeHoachDaoTaoBoiDuong3NamModule),
+  },
 
 ];
 

@@ -1,4 +1,28 @@
 <!--body-->
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button nz-button class="search__button--search" (click)="taomoi()">
+          <i nz-icon nzType="plus"></i>
+          Tạo mới
+        </button>
+        <button nz-button class="search__button--search" (click)="timkiem()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+        <button nz-button class="search__button--clear" (click)="dong()">
+          <i nz-icon nzType="close"></i>
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
@@ -17,13 +41,13 @@
                     {{getUnitName()}}
                 </ng-container>
                 <ng-template #template>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao"> 
-                    <nz-option *ngFor="let dv of donviTaos" [nzValue]="dv.id" [nzLabel]="dv.tenDvi"></nz-option>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao">
+                    <nz-option *ngFor="let dv of donViTaos" [nzValue]="dv.id" [nzLabel]="dv.tenDvi"></nz-option>
                   </nz-select>
                 </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại văn bản">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản" [(ngModel)]="loaivanban"> 
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản" [(ngModel)]="loaivanban">
                   <nz-option nzValue="PA" nzLabel="PA"></nz-option>
                   <nz-option nzValue="CV" nzLabel="CV"></nz-option>
                 </nz-select>
@@ -32,7 +56,7 @@
                 <nz-date-picker [(ngModel)]="denngay" type="date"></nz-date-picker>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangthai"> 
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangthai">
                   <nz-option nzValue="1" nzLabel="Đang soạn"></nz-option>
                   <nz-option nzValue="2" nzLabel="Đã duyệt"></nz-option>
                   <nz-option nzValue="3" nzLabel="Giao lại"></nz-option>
@@ -52,35 +76,17 @@
               <nz-descriptions-item ></nz-descriptions-item>
               <nz-descriptions-item ></nz-descriptions-item>
             </nz-descriptions>
-            <div class="row">
-              <div class="col-md-4"></div>
-              <div class="col-md-4">
-                <button class="btn btn-main btn-sm waves-effect waves-light" style="text-align: center;" (click)="timkiem()" >
-                  <i class="icon"></i>
-                  <span>Tìm kiếm</span>
-                </button>
-              </div>
-              <div class="col-md-4">
-                <button class="btn btn-main btn-sm waves-effect waves-light" style="text-align: center;" (click)="taomoi()" >
-                  <i class="icon"></i>
-                  <span>Tạo mới</span>
-                </button>
-                <button class="btn btn-main btn-sm waves-effect waves-light" style="text-align: center;" (click)="dong()" >
-                  <i class="icon"></i>
-                  <span>Đóng</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </nz-card>
       <div class="tab__container">
+
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Danh sách phương án giao số kiểm tra NSNN'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" > 
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" >
                   <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                   <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                   <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
@@ -89,6 +95,7 @@
                 <!-- </div> -->
               </div>
             </div>
+
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -114,7 +121,7 @@
                       <td>{{getStatusName(vb.trangThai)}}</td>
                       <td>{{vb.maDvi}}</td>
                       <td>4</td>
-                  </tr> 
+                  </tr>
                 <tr *ngIf="listVanban.length==0" style="text-align: center;">
                   <td colspan="9"> Không có dữ liệu</td>
                 </tr>

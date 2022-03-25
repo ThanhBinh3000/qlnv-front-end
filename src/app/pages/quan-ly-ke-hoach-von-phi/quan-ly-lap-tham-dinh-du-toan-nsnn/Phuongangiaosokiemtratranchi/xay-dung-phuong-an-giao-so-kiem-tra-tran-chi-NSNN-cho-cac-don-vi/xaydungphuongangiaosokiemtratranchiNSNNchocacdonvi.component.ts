@@ -168,7 +168,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
-        
+
         this.donViTaos = res.data;
       }
     })
@@ -271,7 +271,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (soqd != null && socv != null) {
             this.checknutgiao = false;
           }
-         
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -284,7 +284,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+    return this.donViTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -303,7 +303,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
-        
+
       }
     });
     this.spinner.hide();
@@ -728,7 +728,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.tongdanang = 0;
 
     this.lstCTietBCao.filter((item) => {
-     
+
       item.lstPaGiaoSoKiemTraTcNsnnCtietDvi.filter((itemCtiet) => {
         debugger
         if (itemCtiet.khuvucId == 342) {
@@ -806,8 +806,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       })
        // lay vi tri hang minh sua
      // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    
-     
+
+
       })
   }
 }
