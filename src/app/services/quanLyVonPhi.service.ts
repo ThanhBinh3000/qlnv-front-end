@@ -456,5 +456,29 @@ export class QuanLyVonPhiService extends BaseService {
       );
     }
     
+    timDsachVban(request: any): Observable<any> {
+      return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
+        request,
+      );
+    }  
+    
+    ctietVban(id: number): Observable<any> {
+      return this.httpClient.get('http://192.168.1.125:8094/lap-tham-dinh-du-toan/chi-tiet-van-ban/'+id
+      );
+    }  
+
+    themMoiVban(request: any): Observable<any> {
+      return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi-van-ban',
+      request
+      );
+    } 
+
+    capNhatVban(request: any): Observable<any> {
+      return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/cap-nhat-van-ban',
+      request
+      );
+    } 
+
+    
 
 }

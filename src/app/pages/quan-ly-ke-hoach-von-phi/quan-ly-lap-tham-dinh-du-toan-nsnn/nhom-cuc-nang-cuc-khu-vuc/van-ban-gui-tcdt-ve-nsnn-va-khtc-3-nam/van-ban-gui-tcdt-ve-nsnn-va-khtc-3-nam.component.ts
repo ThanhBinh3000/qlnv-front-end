@@ -13,11 +13,24 @@ import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 
-export class ItemData {
+export class ObjResp {
+     id: string;
+     maBcao: string;
+     maDvi: number;
+     maDviTien: string;
      maLoaiBcao: string;
+     namBcao: number;
+     namHienHanh: number;
+     ngayTao: string;
+     nguoiTao: string;
+     trangThai: string;
+}
+
+export class ItemData {
      id!: any;
-     maBcao!: String;
-     stt!: String;
+     stt!: string;
+     objResp: ObjResp;
+     url: string;
      checked!: boolean;
 }
 
@@ -30,10 +43,10 @@ export class ItemData {
 export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      userInfo: any;
      errorMessage!: String;                      //
-     ngayNhap!: any;                             // ngay nhap
+     ngayNhap!: string;                             // ngay nhap
      nguoiNhap!: string;                         // nguoi nhap
      noiTao!: string;
-     trangThai!: string;
+     trangThai: string='6';
      soVban!: string;
      ngayDuyetVban!: string;
      baoCaos: any = [];
@@ -50,9 +63,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           },
      ];
 
+     url: string;
+
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      id!: any;                                   // id truyen tu router
-     chiTietBcaos: any;                          // thong tin chi tiet bao cao
+     chiTietBcaos: any[];                          // thong tin chi tiet bao cao
      userName: any;                              // ten nguoi dang nhap
 
      maDonViTao!: any;                           // ma don vi tao
@@ -60,7 +75,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
      trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
      maLoaiBaoCao: string = "26";                // nam bao cao
-     newDate = new Date();                       //
+     newDate = new Date();    
+     kt: boolean;                   //
 
      statusBtnDel: boolean;                       // trang thai an/hien nut xoa
      statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -87,7 +103,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           private userService: UserService,
           private notification: NzNotificationService,
      ) {
-          this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+          this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
      }
 
 
@@ -97,7 +113,9 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           let userInfo: any = await this.getUserInfo(userName); //get user info
           if (this.id) {
                await this.getDetailReport();
+               this.kt = false;
           } else {
+               this.kt=true;
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
@@ -117,6 +135,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
+
           const utils = new Utils();
           this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
@@ -130,6 +149,20 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.baoCaos = data.data?.content;
+                         console.log(this.baoCaos);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+               }
+          );
+          this.danhMucService.dMucBcaoDuyet().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.lstBcao = data.data;
+                         console.log(this.lstBcao);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -182,28 +215,31 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      async luu() {
 
           // replace nhung ban ghi dc them moi id thanh null
-          this.lstCTietBCao.filter(item => {
+          this.lstCTietBCao.forEach(item => {
                if (typeof item.id != "number") {
                     item.id = null;
                }
-          })
-
-          // gui du lieu trinh duyet len server
-          let request = {
-               id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-               lstCTietBCao: this.lstCTietBCao,
-               maBcao: this.maBaoCao,
-               maDvi: this.maDonViTao,
-               maLoaiBcao: this.maLoaiBaoCao,
-               namHienHanh: this.namBaoCaoHienHanh,
-               namBcao: this.namBaoCaoHienHanh,
-          };
-
+          })         
+         
           //call service them moi
           this.spinner.show();
           if (this.id == null) {
-               this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+               let request = {
+                    id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+                    listIdDeletes: this.listIdDelete,
+                    lstCtiet: this.lstCTietBCao,
+                    ngayDuyetVban: this.datePipe.transform(this.ngayDuyetVban, Utils.FORMAT_DATE_STR),
+                    ngaySua: this.ngayNhap,
+                    ngayTao: "",
+                    nguoiSua: "",
+                    nguoiTao: this.nguoiNhap,
+                    soVban: this.soVban,
+                    stt: "",
+                    trangThai: this.trangThai,
+               };
+               this.quanLyVonPhiService.themMoiVban(request).subscribe(
                     data => {
+                         console.log(data);
                          if (data.statusCode == 0) {
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                          } else {
@@ -216,7 +252,20 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     },
                );
           } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+               let request1 = {
+                    id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+                    listIdDeletes: this.listIdDelete,
+                    lstCtiet: this.lstCTietBCao,
+                    ngayDuyetVban: this.ngayDuyetVban,
+                    ngaySua: this.ngayNhap,
+                    ngayTao: "",
+                    nguoiSua: "",
+                    nguoiTao: this.nguoiNhap,
+                    soVban: this.soVban,
+                    stt: "",
+                    trangThai: this.trangThai,
+               };
+               this.quanLyVonPhiService.capNhatVban(request1).subscribe(res => {
                     if (res.statusCode == 0) {
                          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                     } else {
@@ -259,18 +308,42 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      // call chi tiet bao cao
      async getDetailReport() {
           this.spinner.show();
-          await this.quanLyVonPhiService.bCChiTiet(this.id).toPromise().then(
+          await this.quanLyVonPhiService.ctietVban(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.lstCTietBCao;
+                         console.log(data);
+                         this.chiTietBcaos = data.data.lstCtiet;
+                         console.log(this.chiTietBcaos);
+                         
+                         this.chiTietBcaos.forEach(item => {
+                              let mm: ItemData = {
+                                   id: item.id,
+                                   stt: item.stt,
+                                   objResp: {
+                                        id: item.objResp.id,
+                                        maBcao: item.objResp.maBcao,
+                                        maDvi: item.objResp.maDvi,
+                                        maDviTien: item.objResp.maDviTien,
+                                        maLoaiBcao: item.objResp.maLoaiBcao,
+                                        namBcao: item.objResp.namBcao,
+                                        namHienHanh: item.objResp.namHienHanh,
+                                        ngayTao: item.objResp.ngayTao,
+                                        nguoiTao: item.objResp.nguoiTao,
+                                        trangThai: item.objResp.trangThai,
+                                   },
+                                   url: this.getUrl(item.objResp.maLoaiBcao) + '/' + item.objResp.id,
+                                   checked: false,
+                              }
+                              this.lstCTietBCao.push(mm);
+                         })
+                         console.log(this.lstCTietBCao);
                          this.updateEditCache();
 
                          // set thong tin chung bao cao
-                         this.ngayNhap = data.data.ngayTao;
+                         this.ngayDuyetVban = data.data.ngayDuyetVban;
                          this.nguoiNhap = data.data.nguoiTao;
-                         this.maDonViTao = data.data.maDvi;
-                         this.maBaoCao = data.data.maBcao;
+                         this.maDonViTao = data.data.maDonVi;
+                         this.soVban = data.data.soVban;
                          this.namBaoCaoHienHanh = data.data.namBcao;
                          this.trangThaiBanGhi = data.data.trangThai;
                     } else {
@@ -290,10 +363,21 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      // them dong moi
      addLine(id: number): void {
           let item: ItemData = {
-               maBcao: "",
-               maLoaiBcao: "",
-               stt: "",
                id: uuid.v4(),
+               stt: "",
+               objResp: {
+                    id: "",
+                    maBcao: "",
+                    maDvi: 0,
+                    maDviTien: "",
+                    maLoaiBcao: "",
+                    namBcao: 0,
+                    namHienHanh: 0,
+                    ngayTao: "",
+                    nguoiTao: "",
+                    trangThai: "",
+               },
+               url: "",
                checked: false,
           }
 
@@ -389,6 +473,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+          console.log(this.lstCTietBCao);
      }
 
      // gan editCache.data == lstCTietBCao
@@ -399,5 +484,105 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     data: { ...item }
                };
           });
+     }
+
+     changeModel(id: string): void {
+          let mm = this.lstBcao.filter(item => item.maBcao == this.editCache[id].data.objResp.maBcao)
+          console.log(mm);
+          this.editCache[id].data.objResp.id = mm[0].id;
+          this.editCache[id].data.objResp.maDvi = mm[0].maDvi;
+          this.editCache[id].data.objResp.maDviTien = mm[0].maDviTien;
+          this.editCache[id].data.objResp.maLoaiBcao = mm[0].maLoaiBcao;
+          this.editCache[id].data.objResp.namBcao = mm[0].namBcao;
+          this.editCache[id].data.objResp.namHienHanh = mm[0].namHienHanh;
+          this.editCache[id].data.objResp.ngayTao = mm[0].ngayTao;
+          this.editCache[id].data.objResp.nguoiTao = mm[0].nguoiTao;
+          this.editCache[id].data.objResp.trangThai = mm[0].trangThai;
+          this.editCache[id].data.url = this.getUrl(mm[0].maLoaiBcao) + '/' + mm[0].id;
+          console.log(this.editCache[id].data);
+     }
+
+     getUrl(maLoaiBcao: string) {
+          var url: string;
+          switch (Number(maLoaiBcao)) {
+               case 207:
+                    url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
+                    break;
+               case 204:
+                    url = '/quan-ly-dcdtc-nsnn/ke-hoach-bao-quan-hang-nam';
+                    break;
+               case 307:
+                    url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/';
+                    break;
+               case 308:
+                    url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam';
+                    break;
+               case 309:
+                    url = '/du-toan-chi-ung-dung-cntt-3-nam';
+                    break;
+               case 310:
+                    url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam';
+                    break;
+               case 311:
+                    url = '/chi-ngan-sach-nha-nuoc-3-nam';
+                    break;
+               case 312:
+                    url = '/nhu-cau-phi-nhap-xuat-3-nam';
+                    break;
+               case 313:
+                    url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
+                    break;
+               case 314:
+                    url = '/ke-hoach-dao-tao-boi-duong-3-nam';
+                    break;
+               case 315:
+                    url = '/nhu-cau-ke-hoach-dtxd3-nam/';
+                    break;
+               case 316:
+                    url = '/tong-hop-du-toan-chi-thuong-xuyen-hang-nam';
+                    break;
+               case 317:
+                    url = '/du-toan-xuat-nhap-hang-dtqg-hang-nam';
+                    break;
+               case 318:
+                    url = '/ke-hoach-bao-quan-hang-nam';
+                    break;
+               case 319:
+                    url = '/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct';
+                    break;
+               case 320:
+                    url = '/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/';
+                    break;
+               case 321:
+                    url = '/ke-hoach-quy-tien-luong-nam-n1/';
+                    break;
+               case 322:
+                    url = '/du-toan-chi-du-tru-quoc-gia-gd3-nam/';
+                    break;
+               case 324:
+                    url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam';
+                    break;
+               case 325:
+                    url = '/du-toan-chi-ung-dung-cntt-giai-doan-3nam';
+                    break;
+               case 326:
+                    url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam';
+                    break;
+               case 327:
+                    url = '/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam';
+                    break;
+               case 328:
+                    url = '/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+                    break;
+               case 329:
+                    url = '/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+                    break;
+               case 330:
+                    url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
+                    break;
+               default:
+                    break;
+          }
+          return url;
      }
 }

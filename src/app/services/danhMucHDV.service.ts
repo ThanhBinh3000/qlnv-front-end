@@ -659,7 +659,10 @@ dMKhoanMuc(): Observable<any> {
 
 
 
-
+dMucBcaoDuyet(): Observable<any> {
+  return this.httpClient.get('http://192.168.1.125:8094/lap-tham-dinh-du-toan/danh-sach-bao-cao-duyet/'
+  );
+}  
 
 
 
