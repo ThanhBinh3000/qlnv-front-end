@@ -20,50 +20,61 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách đề nghị cấp vốn" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="8">
             <label class="search__label">Từ ngày lập</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="8">
             <label class="search__label">Đến ngày</label>
             <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person">
-
-            </nz-select>
+          <div nz-col nzSpan="8">
+            <label class="search__label">Số quyết định</label>
+            <input type="text" nz-input class="search__input">
           </div>
           <div nz-col nzSpan="12">
-            <label class="search__label">Đơn vị tạo</label>
+            <label class="search__label">Nơi lập</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
-          
           <div nz-col nzSpan="12">
-            <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
-              <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            <label class="search__label">Phân loại</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person">
+              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" routerLink="../{{url}}">
+              Tổng hợp
+             </button>
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" routerLink="../{{url}}">
+             Tạo mới
+             </button>
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" routerLink="../{{url}}">
+              Đóng
+             </button>
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
+      <nz-card nzTitle="Danh sách tổng hợp đề nghị cấp vốn" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
               <th width="60px">STT</th>
               <th width="130px">Ngày lập</th>
+              <th>Người lập </th>
               <th width="175px">Nơi lập</th>
               <th width="175px">Số quyết định</th>
               <th width="175px">Ngày quyết định</th>
-              <th width="175px">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="175px">Căn cứ hợp đồng</th>
               <th width="175px" class="text-center">Trạng thái</th>
             </tr>
           </thead>
@@ -81,7 +92,6 @@
         <div class="tab-content tab-menu" id="myTabContent">
           <div class="tab-pane fade show active justify-content-between">
             <div class="trai">
-
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
@@ -94,6 +104,23 @@
               <!-- end phân trang  -->
             </div>
           </div>
+        </div>
+        <div>
+            <div nz-col nzSpan="24">
+            <label class="search__label">Lý do từ chối</label>
+            <input class="search__input" nz-input  />
+            </div>
+        </div>
+        <div  nz-col nzSpan="12" style="margin:20px">
+          <button type="button" class="btn btn-main" routerLink="../{{url}}">
+            Duyệt
+          </button>
+          <button type="button" class="btn btn-main" routerLink="../{{url}}">
+            Phê duyệt
+          </button>
+          <button type="button" class="btn btn-main" routerLink="../{{url}}">
+           Từ chối
+          </button>
         </div>
       </nz-card>
       <ng-template #tableCard1>

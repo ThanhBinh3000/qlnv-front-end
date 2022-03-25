@@ -12,6 +12,7 @@ import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
+import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 
 
 export class ItemData {
@@ -207,18 +208,11 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
       );
 
       //get don vi tinh
-      this.danhMucService.dMDviTinh().toPromise().then(
-        (data) =>{
-          if (data.statusCode == 0) {
-            this.donViTinhs = data.data?.content;
-          }else{
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        (err) =>{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.quanLyVonPhiService.dMDonVi().subscribe(res => {
+        if(res.statusCode==0){
+          this.donVis = res.data;
         }
-      );
+      })
 
     
     this.spinner.hide();
@@ -515,7 +509,7 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName(){
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
 
   // start edit
