@@ -7,12 +7,6 @@ export const QUAN_LY_GIAO_DU_TOAN_CHI_NSNN_LIST: QuanLyGiaoDuToanChiNSNN[] = [
     description: 'Quyết định giao dự toán chi NSNN do bộ tài chính phê duyệt',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/tim-kiem`,
   },
-  // {
-  //   icon: 'htvbdh_tcdt_icon-common',
-  //   title: 'Danh sách kế hoạch phân bổ ngân sách',
-  //   description: 'Danh sách kế hoạch phân bổ ngân sách',
-  //   url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN}/danh-sach-ke-hoach-phan-bo-ngan-sach`,
-  // },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Danh sách kế hoạch phân bổ, giao dự toán cho đơn vị',

@@ -22,6 +22,21 @@ const routes: Routes = [
       ).then((m) => m.DanhSachDeXuatDieuChinhDuToanChiNganSachModule),
   },
   {
+    path: 'danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
+    loadChildren: () =>
+      import(
+        './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.module'
+      ).then((m) => m.DanhSachKeHoachPhanBoGiaoDuToanCuaDonViModule),
+  },
+
+  {
+    path: 'chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao',
+    loadChildren: () =>
+      import(
+        './chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao/chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao.module'
+      ).then((m) => m.ChonChiTietCuaPhanBoDuToanChiDaGiaoModule),
+  },
+  {
     path: 'tong-hop',
     loadChildren: () =>
       import(
@@ -43,49 +58,7 @@ const routes: Routes = [
         './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.module'
       ).then((m) => m.LapBaoCaoDieuChinhDuToanChiNsnnModule),
   },
-  {
-    path: 'dsach-dxuat-dchinh-dtoan-chi-nsach',
-    loadChildren: () =>
-      import(
-        './dsach-dxuat-dchinh-dtoan-chi-nsach/dsach-dxuat-dchinh-dtoan-chi-nsach.module'
-      ).then((m) => m.DsachDxuatDchinhDtoanChiNsachModule),
-  },
-  {
-    path: 'thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc',
-    loadChildren: () =>
-      import(
-        './thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc/thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc.module'
-      ).then((m) => m.ThopBcaoDcdtChiNsnnTrinhTongCucModule),
-  },
-  {
-    path: 'thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc/:id',
-    loadChildren: () =>
-      import(
-        './thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc/thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc.module'
-      ).then((m) => m.ThopBcaoDcdtChiNsnnTrinhTongCucModule),
-  },
-  {
-    path: 'dsach-thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc',
-    loadChildren: () =>
-      import(
-        './dsach-thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc/dsach-thop-bcao-dcdt-chi-nsnn-trinh-tong-cuc.module'
-      ).then((m) => m.DsachThopBcaoDcdtChiNsnnTrinhTongCucModule),
-  },
-
-  {
-    path: 'ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui',
-    loadChildren: () =>
-      import(
-        './ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui/ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui.module'
-      ).then((m) => m.KtraRsoatNdungBcaoDcdtNsnnDoChiCucGuiModule),
-  },
-  {
-    path: 'ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui/:id',
-    loadChildren: () =>
-      import(
-        './ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui/ktra-rsoat-ndung-bcao-dcdt-nsnn-do-chi-cuc-gui.module'
-      ).then((m) => m.KtraRsoatNdungBcaoDcdtNsnnDoChiCucGuiModule),
-  },
+  
   {
     path: 'test-link-list',
     loadChildren: () =>

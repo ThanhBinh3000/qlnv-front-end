@@ -12,6 +12,7 @@ import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { SYSTYPE_CONFIRM } from 'src/app/constants/config';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 
 export class ItemData{
@@ -56,7 +57,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   status: boolean = false;
   ngaynhap: any;
   nguoinhap: any;
-  donvitao: any;
+  donvitao!: any;
   mabaocao: any;
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
@@ -85,6 +86,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMucService: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private router: ActivatedRoute,
     private datepipe: DatePipe,
@@ -151,7 +153,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       (res) => {
         if (res.statusCode == 0) {
           this.listHinhThucVanBan = res.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -164,7 +166,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       (res) => {
         if (res.statusCode == 0) {
           this.listDviChuTri = res.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -173,11 +175,27 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-      if(res.statusCode==0){
-        this.donViTaos =res.data;
+    // this.quanLyVonPhiService.dMDonVi().subscribe(res => {
+    //   if(res.statusCode==0){
+    //     this.donViTaos =res.data;
+    //   }
+    // })
+
+    //lay danh sach danh muc don vi
+    this.danhMucService.dMDonVi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          console.log(data);
+          this.donViTaos = data.data;
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = "err.error.message";
       }
-    })
+    );
+
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -281,7 +299,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+    return this.donViTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -488,7 +506,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
     if (
       this.id != null
-      
+
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
@@ -568,7 +586,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-           
+
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);

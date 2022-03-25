@@ -167,7 +167,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       (data) => {
           if (data.statusCode == 0) {
               this.listNhomchi = data.data?.content;
-            
+
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
@@ -284,7 +284,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -498,7 +498,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
 
     if (
       this.id != null
-      
+
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
@@ -576,7 +576,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            
+
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);

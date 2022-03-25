@@ -56,7 +56,7 @@
                               <div class="tab-pane fade show active justify-content-between" id="banhanh"
                                    role="tabpanel" aria-labelledby="banhanh-tab">
                                    <div class="canphai phai">
-                                        <button type="button" class="btn btn-main">
+                                        <button type="button" class="btn btn-main" (click)="getDetailReport()">
                                              <span>Tìm kiếm</span>
                                         </button>
                                    </div>
@@ -90,21 +90,21 @@
                                                   {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
                                              <td>
-                                                  {{data.soVanBan}}
+                                                  {{data.soVban}}
                                              </td>
                                              <td>
-                                                  {{data.ngayLap}}
+                                                  {{data.ngayDuyetVban}}
                                              </td>
                                              <td>
                                                   <div *ngFor="let item of trangThais">
-                                                       <div *ngIf="item.id == data.maTrangThai">
+                                                       <div *ngIf="item.id == data.trangThai">
                                                             {{item.tenDm}}
                                                        </div>
                                                   </div>
                                              </td>
                                              <td>
                                                   <div *ngFor="let item of cucKhuVucs">
-                                                       <div *ngIf="item.id == data.maDvi">
+                                                       <div *ngIf="item.id == data.maDonVi">
                                                             {{item.tenDm}}
                                                        </div>
                                                   </div>

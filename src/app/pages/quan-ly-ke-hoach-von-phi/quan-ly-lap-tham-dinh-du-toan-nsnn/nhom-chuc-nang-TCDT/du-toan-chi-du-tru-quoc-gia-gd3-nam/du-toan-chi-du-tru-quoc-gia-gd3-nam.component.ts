@@ -501,7 +501,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName(){
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   // start edit
@@ -552,7 +552,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-            
+
         }else{
             alert('co loi trong qua trinh van tin');
         }

@@ -103,7 +103,7 @@ export class TimKiemComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -220,8 +220,6 @@ export class TimKiemComponent implements OnInit {
         this.url = null;
         break;
     }
-    console.log(id);
-
   }
 
   //doi so trang

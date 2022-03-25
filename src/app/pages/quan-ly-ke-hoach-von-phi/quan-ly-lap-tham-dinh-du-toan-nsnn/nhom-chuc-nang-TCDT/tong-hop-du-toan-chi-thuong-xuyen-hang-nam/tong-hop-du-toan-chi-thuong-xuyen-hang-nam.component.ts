@@ -319,7 +319,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   }
 
 
-  
+
   // chuc nang check role
   onSubmit(mcn: String) {
     const requestGroupButtons = {
@@ -542,7 +542,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   // start edit
