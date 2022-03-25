@@ -19,8 +19,8 @@ export class ItemData {
   maVtuTbi!: String;
   tcongN1!: number;
   tcongN2!: number;
-  tcongN3!: number; 
-  checked!:boolean; 
+  tcongN3!: number;
+  checked!:boolean;
 }
 
 @Component({
@@ -144,7 +144,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       (data) => {
           if (data.statusCode == 0) {
               this.listChitieu = data.data?.content;
-              
+
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
@@ -261,7 +261,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find((item) => item.id == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {
@@ -317,12 +317,12 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   // them dong moi
   addLine(id: number): void {
     let item: ItemData = {
-      id:uuid.v4(),  
+      id:uuid.v4(),
       stt: 0,
       maVtuTbi: '',
       tcongN1: 0,
       tcongN2: 0,
-      tcongN3: 0, 
+      tcongN3: 0,
       checked: false,
     };
 
@@ -465,7 +465,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
 
     if (
       this.id != null
-      
+
     ) {
       this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
         if (res.statusCode == 0) {
@@ -545,7 +545,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-           
+
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -562,7 +562,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.spinner.show();
 }
 
-  
+
   tinhtong1():number{
     let tong1:number=0;
     this.lstCTietBCao.forEach(e =>{

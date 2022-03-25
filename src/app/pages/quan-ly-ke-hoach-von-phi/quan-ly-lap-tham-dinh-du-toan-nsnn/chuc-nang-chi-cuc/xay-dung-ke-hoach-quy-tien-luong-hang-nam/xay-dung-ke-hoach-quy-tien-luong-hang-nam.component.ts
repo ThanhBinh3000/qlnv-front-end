@@ -75,8 +75,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
   listIdFiles: string;                        // id file luc call chi tiet
-
-
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
@@ -155,12 +155,17 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           console.log( this.donVis);
+          this.donVis.forEach(e => {
+            if(e.id==this.maDonViTao){
+              this.capDvi = e.capDvi;
 
+            }
+          })
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -169,6 +174,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         this.errorMessage = "err.error.message";
       }
     );
+    if(this.capDvi==3){
+      this.checkKV=true;
+    }else{
+      this.checkKV = false;
+    }
     this.spinner.hide();
   }
 
@@ -372,6 +382,12 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
+
+    if(this.capDvi==3){
+      this.checkKV=true;
+    }else{
+      this.checkKV=false;
+    }
   }
 
   // xoa dong
@@ -453,7 +469,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
