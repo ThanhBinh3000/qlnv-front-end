@@ -10,31 +10,34 @@
                </div>
                <div class="canphai phai">
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnApprove">
+                         [hidden]="statusBtnTaoMoi">
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
                          <span>Trình duyệt</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnTaoMoi">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Trình phê duyệt</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()"
-                         [hidden]="statusBtnSave">
+                    
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
+                         [hidden]="statusBtnDuyet">
+                         <i class="icon htvbdh_tcdt_pheduyet"></i>
+                         <span>Duyệt</span>
+                    </button>
+
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnPheDuyet">
+                         <i class="icon htvbdh_tcdt_pheduyet"></i>
+                         <span>Phê duyệt</span>
+                    </button>
+                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
+                         <span>Từ chối</span>
+                         
+                    </button>
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()">
                          <i class="icon htvbdh_tcdt_save"></i>
                          <span>Lưu</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                         <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Đóng</span>
-                    </button>
-                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_pheduyet"></i>
-             <span>Phê duyệt</span>
-           </button>
-           <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_tuchoi"></i>
-             <span>Từ chối</span>
-           </a> -->
                </div>
           </div>
      </div>
@@ -47,11 +50,11 @@
                     <div class="search__body" nz-row [nzGutter]="[18, 12]">
                          <div nz-col nzSpan="12">
                               <label class="search__label">Đơn vị lập</label>
-                              <input class="search__input" nz-input [(ngModel)]="maDonViTao" />
+                              <input class="search__input" nz-input [(ngModel)]="tenDvi" disabled />
                          </div>
                          <div nz-col nzSpan="3">
                               <label class="search__label">Năm</label>
-                              <input class="search__input" nz-input [(ngModel)]="namBcao" />
+                              <input class="search__input" nz-input [(ngModel)]="namBcao" disabled />
                          </div>
                          <div nz-col nzSpan="9"></div>
                          <div nz-col nzSpan="24">
@@ -72,36 +75,51 @@
                                         <tr>
                                              <th rowspan="2" nzWidth="50px">STT</th>
                                              <th rowspan="2" nzWidth="400px">Nội dung</th>
-                                             <th rowspan="2" nzWidth="200px">Ước thực hiện <br /> đén thời điểm <br />
-                                                  hiện tại</th>
+                                             <th rowspan="2" nzWidth="300px">Ước thực hiện đến <br /> thời điểm hiện tại
+                                             </th>
                                              <th rowspan="2" nzWidth="200px">Dự toán giao</th>
                                              <th colspan="2">Điều chỉnh</th>
                                              <th rowspan="2" nzWidth="300px">Lý do</th>
+                                             <th rowspan="2"></th>
                                         </tr>
                                         <tr>
-                                             <th nzWidth="100px">
+                                             <th nzWidth="50px">
                                                   Tăng
                                              </th>
-                                             <th nzWidth="100px">
+                                             <th nzWidth="50px">
                                                   Giảm
                                              </th>
                                         </tr>
                                    </thead>
                                    <tbody>
+                                        <tr>
+                                             <td>I</td>
+                                             <td>Hoạt động dự trữ quốc gia (khoản 331)</td>
+                                             <td></td>
+                                             <td></td>
+                                             <td></td>
+                                             <td></td>
+                                             <td></td>
+                                             <td></td>
+                                        </tr>
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 
                                                   <td>
-                                                       {{data.stt}}
+                                                       {{data.maNdung}}
                                                   </td>
                                                   <td>
-                                                       {{data.noiDung}}
+                                                       <div *ngFor="let item of khoanMucs">
+                                                            <div *ngIf="item.maKmuc == data.maNdung">
+                                                                 {{item.tieuDe}}
+                                                            </div>
+                                                       </div>
                                                   </td>
                                                   <td>
-                                                       {{data.uocThucHien}}
+                                                       {{data.uocThien}}
                                                   </td>
                                                   <td>
-                                                       {{data.duToanGiao}}
+                                                       {{data.dtoanGiao}}
                                                   </td>
                                                   <td>
                                                        {{data.dcTang}}
@@ -110,42 +128,64 @@
                                                        {{data.dcGiam}}
                                                   </td>
                                                   <td>
-                                                       {{data.lyDo}}
+                                                       {{data.ghiChu}}
+                                                  </td>
+                                                  <td>
+                                                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                                   </td>
                                              </ng-container>
                                              <ng-template #editTemplate>
                                                   <td>
-                                                       {{editCache[data.id].data.stt}}
+                                                       {{editCache[data.id].data.maNdung}}
                                                   </td>
                                                   <td>
-                                                       {{editCache[data.id].data.noiDung}}
+                                                       <div *ngFor="let item of khoanMucs">
+                                                            <div *ngIf="item.maKmuc == editCache[data.id].data.maNdung">
+                                                                 {{item.tieuDe}}
+                                                            </div>
+                                                       </div>
+                                                  </td>
+                                                  <td>
+                                                       <input class="search__input" nz-input type="number"
+                                                            [(ngModel)]="editCache[data.id].data.uocThien" (change)="changeUocThien(data.id)" />
+                                                  </td>
+                                                  <input class="search__input" nz-input type="number"
+                                                       [(ngModel)]="editCache[data.id].data.dtoanGiao" (change)="changeDtoanGiao(data.id)"/>
+                                                  <td>
+                                                       <input class="search__input" nz-input type="number"
+                                                            [(ngModel)]="editCache[data.id].data.dcTang" (change)="changeDcTang(data.id)"/>
+                                                  </td>
+                                                  <td>
+                                                       <input class="search__input" nz-input type="number"
+                                                            [(ngModel)]="editCache[data.id].data.dcGiam" (change)="changeDcGiam(data.id)"/>
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.uocThucHien" />
-                                                  </td>
-                                                  <input class="search__input" nz-input
-                                                       [(ngModel)]="editCache[data.id].data.duToanGiao" />
-                                                  <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.dcTang" />
+                                                            [(ngModel)]="editCache[data.id].data.ghiChu" />
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.dcGiam" />
-                                                  </td>
-                                                  <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.lyDo" />
+                                                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                              </ng-template>
                                         </tr>
+                                        
                                         <tr>
                                              <td></td>
                                              <td>Tổng cộng</td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
+                                             <td>
+                                                  {{tongCong?.uocThien}}
+                                             </td>
+                                             <td>
+                                                  {{tongCong?.dtoanGiao}}
+                                             </td>
+                                             <td>
+                                                  {{tongCong?.dcTang}}
+                                             </td>
+                                             <td>
+                                                  {{tongCong?.dcGiam}}
+                                             </td>
                                              <td></td>
                                              <td></td>
                                         </tr>
@@ -192,12 +232,15 @@
                                    </tbody>
                               </nz-table>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                   
+
                               </div>
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         
+                         <button type="button" class="btn btn-main" (click)="addKmuc()">
+                              <i class="icon htvbdh_dau-cong"></i>
+                              <span>Thêm</span>
+                            </button>
                     </div>
                </div>
                <div class="ghi-chu">
