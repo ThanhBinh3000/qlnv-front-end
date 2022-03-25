@@ -203,8 +203,6 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           this.spinner.hide();
      }
 
-
-
      // xoa dong
      deleteById(id: any): void {
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
