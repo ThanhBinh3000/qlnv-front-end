@@ -46,10 +46,7 @@
                          </div>
                          <div nz-col nzSpan="12">
                               <label class="search__label">Đơn vị</label>
-                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="idDvi">
-                                   <nz-option *ngFor="let item of donVis" [nzValue]="item.id"
-                                        [nzLabel]="item.tenDm"></nz-option>
-                              </nz-select>
+                              <input class="search__input" nz-input [(ngModel)]="tenDvi" disabled/>
                          </div>
                          <div nz-col nzSpan="4">
                               <button type="button" class="btn btn-main"
@@ -63,10 +60,10 @@
                     <nz-tabset nzType="card" class="tab__container">
                          <nz-tab [nzTitle]="'Chi tiết'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                   Tổng số bản ghi được tìm thấy: {{totalElements}}
+                                   
                               </div>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
-
+                                   Tổng số bản ghi được tìm thấy: {{totalElements}}
                               </div>
                               <nz-table nzBordered class="table__body">
                                    <thead>
@@ -88,23 +85,19 @@
                                                   {{ (i + 1) + (pages.page - 1)*pages.size }}
                                              </td>
                                              <td>
-                                                  {{data.ngaylap}}
+                                                  {{data.ngayTao}}
                                              </td>
                                              <td>
-                                                  <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.id == data.maDvi">
-                                                         {{item.tenDm}}
-                                                       </div>
-                                                     </div>
+                                                  {{data.tenDvi}}
                                              </td>
                                              <td>
-                                                  {{data.nam}}
+                                                  {{data.namPb}}
                                              </td>
                                              <td [hidden]="status">
                                                   {{data.noiDung}}
                                              </td>
                                              <td>
-                                                  {{data.tenTrangThai}}
+                                                  {{getStatusName(data.trangThai)}}
                                              </td>
                                              <td>
                                                   <a routerLink="#">Xem</a>
