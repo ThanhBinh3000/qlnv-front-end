@@ -14,7 +14,6 @@ import { min } from 'moment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
-import { ItemDanhSach } from '../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 
 @Component({
@@ -33,13 +32,14 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
 
      tuNgay: string;                              //tim kiem tu ngay
      denNgay: string;                             //tim kiem den ngay
+     tenDvi: string;
      nam: number;                                 //nam tim kiem
      idDvi: number;                               //id don vi tim kiem
      lstCTietBCao: any = [];                      // list chi tiet bao cao
      userInfo: any;
      status: boolean = false;                     // trang thai an/ hien cua cot noi dung
      userName: any;                              // ten nguoi dang nhap
-     
+
      //dung de phan trang
      pages = {
           size: 10,
@@ -77,11 +77,10 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
           this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
           //lay danh sach danh muc don vi
-          this.danhMucService.dMDonVi().toPromise().then(
+          await this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
-                         console.log(this.donVis);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -91,22 +90,32 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                }
           );
 
-          this.donVis.forEach(item => {
-               if (item.maDvi.length == 4) {
+          await this.donVis.forEach(item => {
+               if ((item.maDvi).length == 4) {
                     this.cucKhuVucs.push(item);
                } else {
-                    if (item.maDvi.length == 6) {
+                    if ((item.maDvi).length == 6) {
                          this.chiCucs.push(item);
                     } else {
                          this.tongCucs.push(item);
                     }
                }
           })
-          console.log(this.cucKhuVucs);
-          console.log(this.chiCucs);
-          console.log(this.tongCucs);
-          let idDviQl = userInfo?.dvql;
-          
+
+          this.idDvi = userInfo?.dvql;
+          if (this.chiCucs.findIndex(item => item.id == this.idDvi) != -1) {
+               this.donVis = this.chiCucs;
+               this.status = false;
+          } else {
+               this.status = true;
+               if (this.cucKhuVucs.findIndex(item => item.id == this.idDvi) != -1) {
+                    this.donVis = this.cucKhuVucs;
+               } else {
+                    this.donVis = this.tongCucs;
+               }
+          }
+
+          this.tenDvi = this.getUnitName();
           this.spinner.hide();
      }
 
@@ -161,18 +170,23 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                maDvi: this.idDvi,
                ngayTaoTu: this.datePipe.transform(this.tuNgay, 'dd/MM/yyyy',),
                ngayTaoDen: this.datePipe.transform(this.denNgay, 'dd/MM/yyyy',),
+               namHienHanh: this.nam,
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
                },
                trangThai: "",
+               soQd: "",
+               str: "",
           }
 
 
           this.quanLyVonPhiService.timkiem325(request).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
+                         
                          this.lstCTietBCao = data.data.content;
+                         console.log(this.lstCTietBCao);
                          this.lstCTietBCao.forEach(e => {
                               e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyy');
                          });
@@ -190,26 +204,38 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           this.spinner.hide();
      }
 
+
+
      // xoa dong
      deleteById(id: any): void {
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
      }
 
+     // lay ten don vi tao
+     getUnitName() {
+          return this.donVis.find(item => item.id == this.idDvi)?.tenDvi;
+     }
+
+     // lay ten trang thai
+     getStatusName(trangThaiBanGhi: string) {
+          const utils = new Utils();
+          return utils.getStatusName(trangThaiBanGhi);
+     }
 
      redirectChiTieuKeHoachNam() {
           this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
      }
 
      //doi so trang
-  onPageIndexChange(page) {
-     this.pages.page = page;
-     this.getDetailReport();
-   }
- 
-   //doi so luong phan tu tren 1 trang
-   onPageSizeChange(size) {
-     this.pages.size = size;
-     this.getDetailReport();
-   }
+     onPageIndexChange(page) {
+          this.pages.page = page;
+          this.getDetailReport();
+     }
+
+     //doi so luong phan tu tren 1 trang
+     onPageSizeChange(size) {
+          this.pages.size = size;
+          this.getDetailReport();
+     }
 
 }
