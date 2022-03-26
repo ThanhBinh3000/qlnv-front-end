@@ -25,6 +25,7 @@ import { KeHoachVatTu, VatTuThietBi } from './../../../models/KeHoachVatTu';
 import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNam';
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import { cloneDeep } from 'lodash';
+import * as dayjs from 'dayjs';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -51,7 +52,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: null,
   };
   tab = TAB_SELECTED;
-  yearNow = 2022;
+  yearNow: number = 0;
   thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam =
     new ThongTinChiTieuKeHoachNam();
   thongTinChiTieuKeHoachNamInput: ThongTinChiTieuKeHoachNam =
@@ -81,6 +82,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.yearNow = dayjs().get('year');
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -89,6 +91,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
     }
     this.initForm();
+    this.formData.patchValue({
+      namKeHoach: (this.yearNow = dayjs().get('year')),
+    });
     this.loadThongTinChiTieuKeHoachNam(this.id);
   }
 
@@ -244,6 +249,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           keHoachLuongThuc: data,
+          yearNow: this.yearNow,
         },
       });
       modalLuongThuc.afterClose.subscribe((luongThuc) => {
@@ -376,6 +382,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzComponentParams: {
           // totalRecord: this.totalRecord,
           // date: event,
+          yearNow: this.yearNow,
         },
       });
       modalVatTu.afterClose.subscribe((vatTu) => {
@@ -448,6 +455,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           thongTinMuoi: data,
+          yearNow: this.yearNow,
         },
       });
       modalMuoi.afterClose.subscribe((muoi) => {
@@ -923,11 +931,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: 0,
+            id: this.id,
             lyDoTuChoi: null,
             trangThai: '01',
           };
-          await this.save();
+          if (this.id == 0) {
+            await this.save();
+          }
           await this.chiTieuKeHoachNamService.updateStatus(body);
           this.spinner.hide();
         } catch (e) {
@@ -952,7 +962,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: 0,
+            id: this.id,
             lyDoTuChoi: null,
             trangThai: '02',
           };
@@ -982,7 +992,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: 0,
+            id: this.id,
             lyDoTuChoi: text,
             trangThai: '03',
           };
@@ -1080,6 +1090,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           console.log(res);
+          this.router.navigate(['kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
         })
         .catch((e) => {
           console.error('error: ', e);
@@ -1113,5 +1124,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.chiTieuKeHoachNamService.downloadFile().subscribe((blob) => {
       saveAs(blob, 'biểu mẫu nhập dữ liệu Lương thực.xlsx');
     });
+  }
+  selectNam() {
+    this.yearNow = this.formData.get('namKeHoach').value;
   }
 }

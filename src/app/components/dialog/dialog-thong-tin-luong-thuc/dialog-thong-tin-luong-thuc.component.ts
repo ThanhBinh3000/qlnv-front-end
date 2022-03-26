@@ -30,7 +30,6 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) {}
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     this.initForm();
 
     this.spinner.show();

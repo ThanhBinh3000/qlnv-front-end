@@ -42,7 +42,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -187,13 +187,18 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
+    this.search();
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
+    if (status == '00') {
+      return 'Mới tạo';
+    } else if (status == '01') {
+      return 'Chờ duyệt';
+    } else if (status == '02') {
       return 'Đã duyệt';
-    } else {
-      return 'Chưa duyệt';
+    } else if (status == '03') {
+      return 'Từ chối';
     }
   }
 
