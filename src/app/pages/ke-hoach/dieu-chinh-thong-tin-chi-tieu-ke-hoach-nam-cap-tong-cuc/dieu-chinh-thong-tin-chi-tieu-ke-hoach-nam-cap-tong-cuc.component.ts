@@ -248,7 +248,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           data: data,
-          yearNow: this.yearNow
+          yearNow: this.yearNow,
         },
       });
       modalLuongThuc.afterClose.subscribe((res) => {
@@ -266,10 +266,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           data: data,
+          yearNow: this.yearNow,
         },
       });
       modalVatTu.afterClose.subscribe((res) => {
         if (res) {
+          this.checkDataExistVatTu(res);
+          this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu = this.updateDataListVatTu(this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu);
         }
       });
     } else if (this.tabSelected == TAB_SELECTED.muoi) {
@@ -282,10 +285,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           data: data,
+          yearNow: this.yearNow,
         },
       });
       modalMuoi.afterClose.subscribe((res) => {
         if (res) {
+          this.checkDataExistMuoi(res);
+          console.log(this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi)
         }
       });
     }

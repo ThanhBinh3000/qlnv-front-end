@@ -1,3 +1,4 @@
+import { KeHoachVatTu } from 'src/app/models/KeHoachVatTu';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -23,6 +24,22 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
+  selectedDonVi: any = {};
+  errorDonVi: boolean = false;
+
+  maDv: string = "";
+  tenDv: string = "";
+  maHangHoa: string = "";
+  tenHangHoa: string = "";
+  donViTinh: ["Tấn"];
+  soLuongTruoc: number = 0;
+  soLuongGiam: number = 0;
+  soLuongTang: number = 0;
+  soLuongSau: number = 0;
+  tongSo: number = 0;
+  soLuongTheoNam1: number = 0;
+  soLuongTheoNam2: number = 0;
+  soLuongTheoNam3: number = 0;
 
   data: any = null;
 
@@ -36,21 +53,6 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
 
   async ngOnInit() {
     this.yearNow = dayjs().get('year');
-    this.formData = this.fb.group({
-      maDv: [null, [Validators.required]],
-      tenDv: [null],
-      maHangHoa: [{ value: null, disabled: true }, [Validators.required]],
-      tenHangHoa: [null],
-      donViTinh: ["Tấn"],
-      soLuongTruoc: [null],
-      soLuongGiam: [null],
-      soLuongTang: [null],
-      soLuongSau: [null],
-      tongSo: [null],
-      soLuongTheoNam1: [null],
-      soLuongTheoNam2: [null],
-      soLuongTheoNam3: [null],
-    });
     //treeview
     this.listOfMapData.forEach((item) => {
       this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
@@ -91,6 +93,12 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
+  }
+
+  selectDonVi(donVi) {
+    this.errorDonVi = false;
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
   }
 
   //treeview func
@@ -142,7 +150,17 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   }
 
   handleOk() {
-    this._modalRef.close();
+    this.errorDonVi = false;
+    if (!this.selectedDonVi || !this.selectedDonVi.maDvi) {
+      this.errorDonVi = true;
+      return;
+    }
+
+    if (!this.data) {
+      this.data = new KeHoachVatTu();
+    }
+
+    this._modalRef.close(this.data);
   }
 
   handleCancel() {

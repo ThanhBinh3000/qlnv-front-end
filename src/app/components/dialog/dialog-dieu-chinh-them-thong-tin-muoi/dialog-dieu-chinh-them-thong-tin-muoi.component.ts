@@ -5,6 +5,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
@@ -16,11 +17,40 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
   formData: FormGroup;
   yearNow: number = 0;
 
+  maDv: string = "";
+  donViTinh: string = "Tấn";
+  tenDonVi: number = 0;
+  tongSoTonKho: number = 0;
+  slMuoi1: number = 0;
+  slMuoi2: number = 0;
+  slMuoi3: number = 0;
+  tongSoQuyThocNhapTrongNam: number = 0;
+  slMuoiTruocDieuChinh: number = 0;
+  slMuoiGiam: number = 0;
+  slMuoiTang: number = 0;
+  tongSoXuat: number = 0;
+  xuatSLMuoiTruoc1: number = 0;
+  xuatSLMuoiGiam1: number = 0;
+  xuatSLMuoiTang1: number = 0;
+  xuatSLMuoiTruoc2: number = 0;
+  xuatSLMuoiGiam2: number = 0;
+  xuatSLMuoiTang2: number = 0;
+  xuatSLMuoiTruoc3: number = 0;
+  xuatSLMuoiGiam3: number = 0;
+  xuatSLMuoiTang3: number = 0;
+  tongTruocCuoiNam: number = 0;
+  tongSauCuoiNam: number = 0;
+
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
+  selectedDonVi: any = {};
+  errorDonVi: boolean = false;
 
   data: any = null;
+  thocIdDefault: number = 2;
+  gaoIdDefault: number = 6;
+  muoiIdDefault: number = 78;
 
   constructor(
     private fb: FormBuilder,
@@ -32,41 +62,55 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
-    this.formData = this.fb.group({
-      maDv: [null, [Validators.required]],
-      donViTinh: ["Tấn"],
-      tenDonVi: [null],
-      tongSoTonKho: [null],
-      slMuoi1: [null],
-      slMuoi2: [null],
-      slMuoi3: [null],
-      tongSoQuyThocNhapTrongNam: [null],
-      slMuoiTruocDieuChinh: [null],
-      slMuoiGiam: [null],
-      slMuoiTang: [null],
-      tongSoXuat: [null],
-      xuatSLMuoiTruoc1: [null],
-      xuatSLMuoiGiam1: [null],
-      xuatSLMuoiTang1: [null],
-      xuatSLMuoiTruoc2: [null],
-      xuatSLMuoiGiam2: [null],
-      xuatSLMuoiTang2: [null],
-      xuatSLMuoiTruoc3: [null],
-      xuatSLMuoiGiam3: [null],
-      xuatSLMuoiTang3: [null],
-      tongTruocCuoiNam: [null],
-      tongSauCuoiNam: [null],
-    });
     this.spinner.show();
     try {
       await this.loadDonVi();
+      this.loadChiTiet();
       this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  loadChiTiet() {
+    if (this.data) {
+      this.selectedDonVi.tenDvi = this.data.tenDonvi;
+      this.selectedDonVi.maDvi = this.data.maDonVi;
+      this.selectedDonVi.donViId = this.data.donViId;
+      this.inputDonVi = this.data.tenDonvi;
+      this.data.tkdnMuoi.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.slMuoi3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.slMuoi2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.slMuoi1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
+      this.data.xtnMuoi.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.slMuoi3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.slMuoi2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.slMuoi1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
     }
   }
 
@@ -97,8 +141,80 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
     }
   }
 
+  selectDonVi(donVi) {
+    this.errorDonVi = false;
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
+  }
+
   handleOk() {
-    this._modalRef.close();
+    this.errorDonVi = false;
+    if (!this.selectedDonVi || !this.selectedDonVi.maDvi) {
+      this.errorDonVi = true;
+      return;
+    }
+
+    if (!this.data) {
+      this.data = new KeHoachMuoi();
+    }
+
+    this.data.tenDonVi = this.selectedDonVi.tenDvi;
+    this.data.maDonVi = this.selectedDonVi.maDvi;
+    this.data.donViId = this.selectedDonVi.donViId;
+    this.data.khGaoId = this.data ? this.data.khGaoId : this.gaoIdDefault;
+    this.data.khThocId = this.data ? this.data.khThocId : this.thocIdDefault;
+    this.data.donViTinh = this.data ? this.data.donViTinh : null;
+
+    //ton kho dau nam
+    const tkdnMuoi1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.slMuoi3 ?? 0),
+      vatTuId: null,
+    };
+    const tkdnMuoi2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.slMuoi2 ?? 0),
+      vatTuId: null,
+    };
+    const tkdnMuoi3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: (this.slMuoi1 ?? 0),
+      vatTuId: null,
+    };
+    this.data.tkdnMuoi = [tkdnMuoi1, tkdnMuoi2, tkdnMuoi3];
+    this.data.tkdnTongSoMuoi = (this.slMuoi3 ?? 0) + (this.slMuoi2 ?? 0) + (this.slMuoi1 ?? 0);
+
+    //nhap trong nam
+    this.data.ntnTongSoMuoi = (this.slMuoiTruocDieuChinh ?? 0) + (this.slMuoiTang ?? 0) - (this.slMuoiGiam ?? 0);
+
+    //xuat trong nam
+    const xtnMuoi1 = {
+      id: null,
+      nam: this.yearNow - 1,
+      soLuong: (this.xuatSLMuoiTruoc3 ?? 0) + (this.xuatSLMuoiTang3 ?? 0) - (this.xuatSLMuoiGiam3 ?? 0),
+      vatTuId: null,
+    };
+    const xtnMuoi2 = {
+      id: null,
+      nam: this.yearNow - 2,
+      soLuong: (this.xuatSLMuoiTruoc2 ?? 0) + (this.xuatSLMuoiTang2 ?? 0) - (this.xuatSLMuoiGiam2 ?? 0),
+      vatTuId: null,
+    };
+    const xtnMuoi3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: (this.xuatSLMuoiTruoc1 ?? 0) + (this.xuatSLMuoiTang1 ?? 0) - (this.xuatSLMuoiGiam1 ?? 0),
+      vatTuId: null,
+    };
+    this.data.xtnMuoi = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
+    this.data.xtnTongSoMuoi = (this.xuatSLMuoiTruoc1 ?? 0) + (this.xuatSLMuoiTang1 ?? 0) - (this.xuatSLMuoiGiam1 ?? 0) + (this.xuatSLMuoiTruoc2 ?? 0) + (this.xuatSLMuoiTang2 ?? 0) - (this.xuatSLMuoiGiam2 ?? 0) + (this.xuatSLMuoiTruoc3 ?? 0) + (this.xuatSLMuoiTang3 ?? 0) - (this.xuatSLMuoiGiam3 ?? 0);
+
+    //ton kho cuoi nam
+    this.data.tkcnTongSoMuoi = this.data.tkdnTongSoMuoi + this.data.ntnTongSoMuoi - this.data.xtnTongSoMuoi;
+    this._modalRef.close(this.data);
   }
 
   handleCancel() {

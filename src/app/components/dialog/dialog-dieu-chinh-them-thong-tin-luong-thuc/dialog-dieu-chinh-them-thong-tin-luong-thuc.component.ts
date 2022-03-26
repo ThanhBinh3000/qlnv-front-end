@@ -70,11 +70,12 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   optionsDonVi: any[] = [];
   inputDonVi: string = '';
   optionsDonViShow: any[] = [];
-  selectedDonVi: any = null;
+  selectedDonVi: any = {};
+  errorDonVi: boolean = false;
 
-  thocIdDefault: number = 3;
-  gaoIdDefault: number = 4;
-  muoiIdDefault: number = 481;
+  thocIdDefault: number = 2;
+  gaoIdDefault: number = 6;
+  muoiIdDefault: number = 78;
 
   data: any = null;
 
@@ -91,6 +92,7 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     this.spinner.show();
     try {
       await this.loadDonVi();
+      this.loadChiTiet();
       this.spinner.hide();
     }
     catch (e) {
@@ -101,7 +103,77 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   }
 
   loadChiTiet() {
-
+    if (this.data) {
+      this.selectedDonVi.tenDvi = this.data.tenDonvi;
+      this.selectedDonVi.maDvi = this.data.maDonVi;
+      this.selectedDonVi.donViId = this.data.donViId;
+      this.inputDonVi = this.data.tenDonvi;
+      this.data.tkdnThoc.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.slThoc3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.slThoc2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.slThoc1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
+      this.data.tkdnGao.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.slGao3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.slGao2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.slGao1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
+      this.data.xtnThoc.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.xuatSlThocTruocDieuChinh3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.xuatSlThocTruocDieuChinh2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.xuatSlThocTruocDieuChinh1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
+      this.data.xtnGao.forEach(element => {
+        switch (element.nam) {
+          case (this.yearNow - 1):
+            this.xuatSlGaoTruocDieuChinh3 = element.soLuong;
+            break;
+          case (this.yearNow - 2):
+            this.xuatSlGaoTruocDieuChinh2 = element.soLuong;
+            break;
+          case (this.yearNow - 3):
+            this.xuatSlGaoTruocDieuChinh1 = element.soLuong;
+            break;
+          default:
+            break;
+        }
+      });
+      this.caculatorXuatThocSdc1();
+      this.caculatorXuatThocSdc2();
+      this.caculatorXuatThocSdc3();
+      this.caculatorXuatGaoSdc2();
+      this.caculatorXuatGaoSdc3();
+    }
   }
 
   async loadDonVi() {
@@ -132,6 +204,7 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   }
 
   selectDonVi(donVi) {
+    this.errorDonVi = false;
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
     this.chiTieuKeHoachNamService
@@ -176,6 +249,11 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   }
 
   handleOk() {
+    if (!this.selectedDonVi || !this.selectedDonVi.maDvi) {
+      this.errorDonVi = true;
+      return;
+    }
+
     if (!this.data) {
       this.data = new KeHoachLuongThuc();
     }
@@ -183,8 +261,8 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     this.data.tenDonvi = this.selectedDonVi.tenDvi;
     this.data.maDonVi = this.selectedDonVi.maDvi;
     this.data.donViId = this.selectedDonVi.donViId;
-    this.data.khGaoId = this.data ? this.data.khGaoId : null;
-    this.data.khThocId = this.data ? this.data.khThocId : null;
+    this.data.khGaoId = this.data ? this.data.khGaoId : this.gaoIdDefault;
+    this.data.khThocId = this.data ? this.data.khThocId : this.thocIdDefault;
     this.data.donViTinh = this.data ? this.data.donViTinh : null;
 
     //ton kho dau nam
@@ -233,7 +311,7 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     };
     this.data.tkdnGao = [tkdnGao1, tkdnGao2];
 
-    this.data.tkdnTongSoQuyThoc = this.data.tkdnTongThoc + this.data.tkdnGao * 2;
+    this.data.tkdnTongSoQuyThoc = this.data.tkdnTongThoc + this.data.tkdnTongGao * 2;
 
     //nhap trong nam
     this.data.ntnThoc = (this.slThocTruocDieuChinh ?? 0) + (this.slThocTang ?? 0) - (this.slThocGiam ?? 0);
@@ -278,7 +356,7 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     };
     this.data.xtnGao = [xtnGao1, xtnGao2];
 
-    this.data.xtnTongSoQuyThoc = this.data.xtnTongThoc + this.data.xtnGao * 2;
+    this.data.xtnTongSoQuyThoc = this.data.xtnTongThoc + this.data.xtnTongGao * 2;
 
     //ton kho cuoi nam
     this.data.tkcnTongSoQuyThoc = this.data.tkdnTongSoQuyThoc + this.data.ntnTongSoQuyThoc - this.data.xtnTongSoQuyThoc;
