@@ -79,6 +79,8 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
 
   data: any = null;
 
+  isEdit: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -103,11 +105,14 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
   }
 
   loadChiTiet() {
+    this.isEdit = false;
     if (this.data) {
-      this.selectedDonVi.tenDvi = this.data.tenDonvi;
+      this.isEdit = true;
+      this.selectedDonVi.tenDvi = this.data.tenDonvi ?? this.data.tenDonVi;
       this.selectedDonVi.maDvi = this.data.maDonVi;
       this.selectedDonVi.donViId = this.data.donViId;
-      this.inputDonVi = this.data.tenDonvi;
+      this.inputDonVi = this.data.tenDonvi ?? this.data.tenDonVi;
+
       this.data.tkdnThoc.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
@@ -138,16 +143,35 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
             break;
         }
       });
+
       this.data.xtnThoc.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
-            this.xuatSlThocTruocDieuChinh3 = element.soLuong;
+            this.xuatSlThocTruocDieuChinh3 = 10;
+            if (this.xuatSlThocTruocDieuChinh3 - element.soLuong > 0) {
+              this.xuatSlThocGiam3 = this.xuatSlThocTruocDieuChinh3 - element.soLuong;
+            }
+            else {
+              this.xuatSlThocTang3 = element.soLuong - this.xuatSlThocTruocDieuChinh3;
+            }
             break;
           case (this.yearNow - 2):
-            this.xuatSlThocTruocDieuChinh2 = element.soLuong;
+            this.xuatSlThocTruocDieuChinh2 = 10;
+            if (this.xuatSlThocTruocDieuChinh2 - element.soLuong > 0) {
+              this.xuatSlThocGiam2 = this.xuatSlThocTruocDieuChinh2 - element.soLuong;
+            }
+            else {
+              this.xuatSlThocTang2 = element.soLuong - this.xuatSlThocTruocDieuChinh2;
+            }
             break;
           case (this.yearNow - 3):
-            this.xuatSlThocTruocDieuChinh1 = element.soLuong;
+            this.xuatSlThocTruocDieuChinh1 = 10;
+            if (this.xuatSlThocTruocDieuChinh1 - element.soLuong > 0) {
+              this.xuatSlThocGiam1 = this.xuatSlThocTruocDieuChinh1 - element.soLuong;
+            }
+            else {
+              this.xuatSlThocTang1 = element.soLuong - this.xuatSlThocTruocDieuChinh1;
+            }
             break;
           default:
             break;
@@ -156,18 +180,53 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
       this.data.xtnGao.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
-            this.xuatSlGaoTruocDieuChinh3 = element.soLuong;
+            this.xuatSlGaoTruocDieuChinh3 = 10;
+            if (this.xuatSlGaoTruocDieuChinh3 - element.soLuong > 0) {
+              this.xuatSlGaoGiam3 = this.xuatSlGaoTruocDieuChinh3 - element.soLuong;
+            }
+            else {
+              this.xuatSlGaoTang3 = element.soLuong - this.xuatSlGaoTruocDieuChinh3;
+            }
             break;
           case (this.yearNow - 2):
-            this.xuatSlGaoTruocDieuChinh2 = element.soLuong;
+            this.xuatSlGaoTruocDieuChinh2 = 10;
+            if (this.xuatSlGaoTruocDieuChinh2 - element.soLuong > 0) {
+              this.xuatSlGaoGiam2 = this.xuatSlGaoTruocDieuChinh2 - element.soLuong;
+            }
+            else {
+              this.xuatSlGaoTang2 = element.soLuong - this.xuatSlGaoTruocDieuChinh2;
+            }
             break;
           case (this.yearNow - 3):
-            this.xuatSlGaoTruocDieuChinh1 = element.soLuong;
+            this.xuatSlGaoTruocDieuChinh1 = 10;
+            if (this.xuatSlGaoTruocDieuChinh1 - element.soLuong > 0) {
+              this.xuatSlGaoGiam1 = this.xuatSlGaoTruocDieuChinh1 - element.soLuong;
+            }
+            else {
+              this.xuatSlGaoTang1 = element.soLuong - this.xuatSlGaoTruocDieuChinh1;
+            }
             break;
           default:
             break;
         }
       });
+
+      this.slThocTruocDieuChinh = 10;
+      if (this.data.ntnThoc && this.data.ntnThoc - this.slThocTruocDieuChinh > 0) {
+        this.slThocTang = this.data.ntnThoc - this.slThocTruocDieuChinh;
+      }
+      else {
+        this.slThocGiam = this.slThocTruocDieuChinh - this.data.ntnThoc;
+      }
+
+      this.slGaoTruocDieuChinh = 10;
+      if (this.data.ntnGao && this.data.ntnGao - this.slGaoTruocDieuChinh > 0) {
+        this.slGaoTang = this.data.ntnGao - this.slGaoTruocDieuChinh;
+      }
+      else {
+        this.slGaoGiam = this.slGaoTruocDieuChinh - this.data.ntnGao;
+      }
+
       this.caculatorXuatThocSdc1();
       this.caculatorXuatThocSdc2();
       this.caculatorXuatThocSdc3();

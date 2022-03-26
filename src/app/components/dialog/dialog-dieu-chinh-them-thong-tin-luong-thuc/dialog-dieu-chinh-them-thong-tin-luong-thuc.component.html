@@ -7,7 +7,7 @@
       <nz-form-control>
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
           <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-            [nzAutocomplete]="auto" />
+            [nzAutocomplete]="auto" [readonly]="isEdit" />
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>

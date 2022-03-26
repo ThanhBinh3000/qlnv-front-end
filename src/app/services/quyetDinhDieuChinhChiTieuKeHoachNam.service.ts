@@ -60,4 +60,24 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`
     return this.httpClient.delete(url).toPromise();
   }
+
+  soLuongTruocDieuChinh(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/so-luong-truoc-dieu-chinh`
+    return this.httpClient.get(url, body).toPromise();
+  }
+
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
+    return this.httpClient.put(url, body).toPromise();
+  }
+
+  them(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`
+    return this.httpClient.post(url, body).toPromise();
+  }
+
+  sua(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`
+    return this.httpClient.put(url, body).toPromise();
+  }
 }

@@ -8,19 +8,23 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
+          [disabled]="!formData.valid"
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03'">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -108,15 +112,32 @@
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
-              <button class="btn btn-tep btn-sm waves-effect waves-light" (click)="selectFile('file-dinh-kem')">
-                <i class="icon htvbdh_tcdt_tep"></i>
-                <span>Tài liệu đính kèm</span>
-              </button>
-              <input type="file" id="file-dinh-kem" class="file-not-show" (change)="uploadFile($event)" />
+              <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
+                (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"
+                nzAccept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                <button class="btn btn-tep btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_tep"></i>
+                  <span>File đính kèm</span>
+                </button>
+                <ng-template #fileListTpl let-list>
+                  <nz-list>
+                    <nz-list-item *ngFor="let item of list">
+                      <div class="trai">
+                        {{ item.name }}
+                      </div>
+                      <div class="phai">
+                        <a (click)="xoaFile(item)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </div>
+                    </nz-list-item>
+                  </nz-list>
+                </ng-template>
+              </nz-upload>
             </div>
           </div>
         </nz-card>
-        <div class="tab__container">
+        <div class="tab__container" *ngIf="selectedCanCu && yearNow > 0">
           <nz-tabset nzType="card" class="tab__container">
             <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc"></nz-tab>
             <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi"></nz-tab>
@@ -845,9 +866,9 @@
               </nz-card>
             </div>
           </div>
-          <div class="tep" *ngIf="fileDinhKem">
+          <div class="tep" (click)="downloadTemplate()">
             <i class="icon htvbdh_tcdt_tep"></i>
-            <span>{{fileDinhKem}}</span>
+            <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
           </div>
           <div class="action">
             <button type="button" class="btn btn-main" (click)="themMoi()">

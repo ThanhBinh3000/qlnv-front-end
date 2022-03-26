@@ -52,6 +52,8 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
   gaoIdDefault: number = 6;
   muoiIdDefault: number = 78;
 
+  isEdit: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -76,11 +78,14 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
   }
 
   loadChiTiet() {
+    this.isEdit = false;
     if (this.data) {
-      this.selectedDonVi.tenDvi = this.data.tenDonvi;
+      this.isEdit = true;
+      this.selectedDonVi.tenDvi = this.data.tenDonvi ?? this.data.tenDonVi;
       this.selectedDonVi.maDvi = this.data.maDonVi;
       this.selectedDonVi.donViId = this.data.donViId;
-      this.inputDonVi = this.data.tenDonvi;
+      this.inputDonVi = this.data.tenDonvi ?? this.data.tenDonVi;
+
       this.data.tkdnMuoi.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
@@ -96,21 +101,48 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
             break;
         }
       });
+
       this.data.xtnMuoi.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
-            this.slMuoi3 = element.soLuong;
+            this.xuatSLMuoiTruoc3 = 10;
+            if (this.xuatSLMuoiTruoc3 - element.soLuong > 0) {
+              this.xuatSLMuoiGiam3 = this.xuatSLMuoiTruoc3 - element.soLuong;
+            }
+            else {
+              this.xuatSLMuoiTang3 = element.soLuong - this.xuatSLMuoiTruoc3;
+            }
             break;
           case (this.yearNow - 2):
-            this.slMuoi2 = element.soLuong;
+            this.xuatSLMuoiTruoc2 = 10;
+            if (this.xuatSLMuoiTruoc2 - element.soLuong > 0) {
+              this.xuatSLMuoiGiam2 = this.xuatSLMuoiTruoc2 - element.soLuong;
+            }
+            else {
+              this.xuatSLMuoiTang2 = element.soLuong - this.xuatSLMuoiTruoc2;
+            }
             break;
           case (this.yearNow - 3):
-            this.slMuoi1 = element.soLuong;
+            this.xuatSLMuoiTruoc1 = 10;
+            if (this.xuatSLMuoiTruoc1 - element.soLuong > 0) {
+              this.xuatSLMuoiGiam1 = this.xuatSLMuoiTruoc1 - element.soLuong;
+            }
+            else {
+              this.xuatSLMuoiTang1 = element.soLuong - this.xuatSLMuoiTruoc1;
+            }
             break;
           default:
             break;
         }
       });
+
+      this.slMuoiTruocDieuChinh = 10;
+      if (this.data.ntnTongSoMuoi && this.data.ntnTongSoMuoi - this.slMuoiTruocDieuChinh > 0) {
+        this.slMuoiTang = this.data.ntnTongSoMuoi - this.slMuoiTruocDieuChinh;
+      }
+      else {
+        this.slMuoiGiam = this.slMuoiTruocDieuChinh - this.data.ntnTongSoMuoi;
+      }
     }
   }
 

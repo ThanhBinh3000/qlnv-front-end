@@ -7,7 +7,7 @@
       <nz-form-control>
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
           <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-            [nzAutocomplete]="auto" />
+            [nzAutocomplete]="auto" [readonly]="isEdit" />
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
@@ -157,9 +157,9 @@
       <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-          <input *ngIf="xuatSLMuoiGiam1 > 0" nz-input [(ngModel)]="xuatSLMuoiTang1" [readonly]="true" />
-          <nz-input-number *ngIf="xuatSLMuoiGiam1 <= 0 || !xuatSLMuoiGiam1" [nzSize]="'small'" nz-input
-            [(ngModel)]="xuatSLMuoiTang1" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc1 ?? 0)">
+          <input *ngIf="xuatSLMuoiTang1 > 0" nz-input [(ngModel)]="xuatSLMuoiGiam1" [readonly]="true" />
+          <nz-input-number *ngIf="xuatSLMuoiTang1 <= 0 || !xuatSLMuoiTang1" [nzSize]="'small'" nz-input
+            [(ngModel)]="xuatSLMuoiGiam1" [nzMin]="0" [nzMax]="(slMuoi1 ?? 0) - (xuatSLMuoiTruoc1 ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>
@@ -170,9 +170,9 @@
       <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 3}}">
-          <input *ngIf="xuatSLMuoiTang1 > 0" nz-input [(ngModel)]="xuatSLMuoiGiam1" [readonly]="true" />
-          <nz-input-number *ngIf="xuatSLMuoiTang1 <= 0 || !xuatSLMuoiTang1" [nzSize]="'small'" nz-input
-            [(ngModel)]="xuatSLMuoiGiam1" [nzMin]="0" [nzMax]="(slMuoi1 ?? 0) - (xuatSLMuoiTruoc1 ?? 0)">
+          <input *ngIf="xuatSLMuoiGiam1 > 0" nz-input [(ngModel)]="xuatSLMuoiTang1" [readonly]="true" />
+          <nz-input-number *ngIf="xuatSLMuoiGiam1 <= 0 || !xuatSLMuoiGiam1" [nzSize]="'small'" nz-input
+            [(ngModel)]="xuatSLMuoiTang1" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc1 ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>
@@ -191,19 +191,6 @@
   <div nz-col [nzSpan]="8">
     <nz-form-item>
       <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
-      <nz-form-control>
-        <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
-          <input *ngIf="xuatSLMuoiGiam2 > 0" nz-input [(ngModel)]="xuatSLMuoiTang2" [readonly]="true" />
-          <nz-input-number *ngIf="xuatSLMuoiGiam2 <= 0 || !xuatSLMuoiGiam2" [nzSize]="'small'" nz-input
-            [(ngModel)]="xuatSLMuoiTang2" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc2 ?? 0)">
-          </nz-input-number>
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
-  </div>
-  <div nz-col [nzSpan]="8">
-    <nz-form-item>
-      <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
           <input *ngIf="xuatSLMuoiTang2 > 0" nz-input [(ngModel)]="xuatSLMuoiGiam2" [readonly]="true" />
@@ -216,6 +203,19 @@
   </div>
   <div nz-col [nzSpan]="8">
     <nz-form-item>
+      <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzAddOnAfter="{{yearNow - 2}}">
+          <input *ngIf="xuatSLMuoiGiam2 > 0" nz-input [(ngModel)]="xuatSLMuoiTang2" [readonly]="true" />
+          <nz-input-number *ngIf="xuatSLMuoiGiam2 <= 0 || !xuatSLMuoiGiam2" [nzSize]="'small'" nz-input
+            [(ngModel)]="xuatSLMuoiTang2" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc2 ?? 0)">
+          </nz-input-number>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="8">
+    <nz-form-item>
       <nz-form-label [nzNoColon]="true"> SL Muối trước điều chỉnh </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
@@ -229,9 +229,9 @@
       <nz-form-label [nzNoColon]="true"> Giảm </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-          <input *ngIf="xuatSLMuoiGiam3 > 0" nz-input [(ngModel)]="xuatSLMuoiTang3" [readonly]="true" />
-          <nz-input-number *ngIf="xuatSLMuoiGiam3 <= 0 || !xuatSLMuoiGiam3" [nzSize]="'small'" nz-input
-            [(ngModel)]="xuatSLMuoiTang3" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc3 ?? 0)">
+          <input *ngIf="xuatSLMuoiTang3 > 0" nz-input [(ngModel)]="xuatSLMuoiGiam3" [readonly]="true" />
+          <nz-input-number *ngIf="xuatSLMuoiTang3 <= 0 || !xuatSLMuoiTang3" [nzSize]="'small'" nz-input
+            [(ngModel)]="xuatSLMuoiGiam3" [nzMin]="0" [nzMax]="(slMuoi3 ?? 0) - (xuatSLMuoiTruoc3 ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>
@@ -242,9 +242,9 @@
       <nz-form-label [nzNoColon]="true"> Tăng </nz-form-label>
       <nz-form-control>
         <nz-input-group nzAddOnAfter="{{yearNow - 1}}">
-          <input *ngIf="xuatSLMuoiTang3 > 0" nz-input [(ngModel)]="xuatSLMuoiGiam3" [readonly]="true" />
-          <nz-input-number *ngIf="xuatSLMuoiTang3 <= 0 || !xuatSLMuoiTang3" [nzSize]="'small'" nz-input
-            [(ngModel)]="xuatSLMuoiGiam3" [nzMin]="0" [nzMax]="(slMuoi3 ?? 0) - (xuatSLMuoiTruoc3 ?? 0)">
+          <input *ngIf="xuatSLMuoiGiam3 > 0" nz-input [(ngModel)]="xuatSLMuoiTang3" [readonly]="true" />
+          <nz-input-number *ngIf="xuatSLMuoiGiam3 <= 0 || !xuatSLMuoiGiam3" [nzSize]="'small'" nz-input
+            [(ngModel)]="xuatSLMuoiTang3" [nzMin]="0" [nzMax]="(xuatSLMuoiTruoc3 ?? 0)">
           </nz-input-number>
         </nz-input-group>
       </nz-form-control>

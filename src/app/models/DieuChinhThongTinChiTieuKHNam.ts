@@ -5,4 +5,5 @@ export class DieuChinhThongTinChiTieuKHNam {
     qdDc: QuyetDinhChiTieuKHNam;
     qdGocId: number;
     ghiChu: string;
+    trangThai: string;
 }

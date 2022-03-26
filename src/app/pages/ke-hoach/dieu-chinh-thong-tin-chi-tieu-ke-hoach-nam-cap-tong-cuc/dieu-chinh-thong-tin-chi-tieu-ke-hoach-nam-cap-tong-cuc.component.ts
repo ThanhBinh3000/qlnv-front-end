@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
@@ -24,6 +25,8 @@ import { QuyetDinhChiTieuKHNam } from 'src/app/models/QuyetDinhChiTieuKHNam';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { KeHoachVatTu } from 'src/app/models/KeHoachVatTu';
+import { environment } from 'src/environments/environment';
+import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 interface DataItem {
   name: string;
   age: number;
@@ -75,6 +78,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     new DieuChinhThongTinChiTieuKHNam();
   fileDinhKem: string = null;
   tableExist: boolean = false;
+
+  fileList: any[] = [];
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`
 
   constructor(
     private router: Router,
@@ -223,7 +229,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       soQD: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       ngayHieuLuc: [null, [Validators.required]],
-      namKeHoach: [null, [Validators.required]],
+      namKeHoach: [this.yearNow, [Validators.required]],
       trichYeu: [null],
       ghiChu: [null, [Validators.required]],
     });
@@ -267,6 +273,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzComponentParams: {
           data: data,
           yearNow: this.yearNow,
+          qdGocId: this.dieuChinhThongTinChiTieuKHNam.qd.id,
         },
       });
       modalVatTu.afterClose.subscribe((res) => {
@@ -356,6 +363,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.formData.controls['namKeHoach'].setValue(
                   tempData.namKeHoach,
                 );
+
+                this.dieuChinhThongTinChiTieuKHNam.qdGocId = tempData.id;
 
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc =
                   tempData.khLuongThuc;
@@ -705,7 +714,29 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: async () => { },
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: '01',
+          };
+          let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
     });
   }
 
@@ -718,7 +749,29 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: async () => { },
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: '02',
+          };
+          let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
     });
   }
 
@@ -734,6 +787,27 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: text,
+            trangThai: '03',
+          };
+          let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       }
     });
   }
@@ -753,5 +827,101 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         ]);
       },
     });
+  }
+
+  async save() {
+    if (this.formData.valid) {
+      this.spinner.show();
+      try {
+        this.dieuChinhThongTinChiTieuKHNam.qdDc.id = this.id;
+        let body = {
+          "qdDc": this.dieuChinhThongTinChiTieuKHNam.qdDc,
+          "qdGocId": this.dieuChinhThongTinChiTieuKHNam.qdGocId
+        }
+        if (this.id > 0) {
+          let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.sua(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+        else {
+          let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.them(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+        this.spinner.hide();
+      }
+      catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
+  }
+
+  downloadTemplate() {
+    this.chiTieuKeHoachNamCapTongCucService.downloadFile().subscribe((blob) => {
+      saveAs(blob, 'biểu mẫu nhập dữ liệu Lương thực.xlsx');
+    });
+  }
+
+  getListFile(data: any) {
+    if (!this.fileList) {
+      this.fileList = [];
+    }
+    if (data && data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        let item = {
+          uid: 'fileOld_' + i.toString(),
+          name: data[i].fileName,
+          status: 'done',
+          url: data[i].fileUrl,
+          size: data[i].fileSize ? parseFloat(data[i].fileSize.replace('KB', '')) * 1024 : 0,
+          id: data[i].id,
+        };
+        this.fileList.push(item);
+      }
+    }
+  }
+
+  handleChange(info: NzUploadChangeParam): void {
+    if (info.file.status === 'done') {
+      if (info.file.response) {
+        let fileList = [...info.fileList];
+        fileList = fileList.map(file => {
+          if (file.response) {
+            file.url = file.response.url;
+          }
+          return file;
+        });
+        this.fileList = [];
+        for (let i = 0; i < fileList.length; i++) {
+          let item = {
+            uid: fileList[i].uid ?? 'fileNew_' + i.toString(),
+            name: fileList[i].name,
+            status: 'done',
+            url: fileList[i].url,
+            size: fileList[i].size,
+            id: fileList[i].id,
+          };
+          this.fileList.push(item);
+        }
+      }
+    } else if (info.file.status === 'error') {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  xoaFile(data) {
+    this.fileList = this.fileList.filter(x => x.uid != data.uid);
   }
 }
