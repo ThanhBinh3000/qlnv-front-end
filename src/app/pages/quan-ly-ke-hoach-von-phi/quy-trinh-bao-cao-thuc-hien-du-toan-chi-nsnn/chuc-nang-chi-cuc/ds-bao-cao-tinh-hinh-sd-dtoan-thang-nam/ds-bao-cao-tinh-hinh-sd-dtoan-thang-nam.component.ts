@@ -45,7 +45,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 
   searchFilter = {
-    maDvi:'235',
+    maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
     trangThai:'',
@@ -131,12 +131,10 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 
   timkiem(){
-    console.log(this.searchFilter);
     if(this.searchFilter.maLoaiBcao==''){
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.searchFilter.maLoaiBcao='91';
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
