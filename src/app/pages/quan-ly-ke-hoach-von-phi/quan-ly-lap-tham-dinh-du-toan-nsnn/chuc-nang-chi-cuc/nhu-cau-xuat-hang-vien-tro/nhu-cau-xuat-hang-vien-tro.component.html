@@ -71,7 +71,7 @@
               <nz-descriptions-item nzTitle="Ngày nhập">
                 {{ngayNhap}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+              <nz-descriptions-item nzTitle="Người nhập" >
                 {{nguoiNhap}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
@@ -83,7 +83,10 @@
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
                 {{namBaoCaoHienHanh}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
+              <nz-descriptions-item nzTitle="Năm BC">
+                {{namBcao}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="4">
                 {{getStatusName()}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại báo cáo">

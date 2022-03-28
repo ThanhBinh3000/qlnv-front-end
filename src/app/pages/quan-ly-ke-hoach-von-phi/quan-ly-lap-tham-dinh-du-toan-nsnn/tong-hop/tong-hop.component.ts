@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { LOAIBAOCAO, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-tong-hop',
@@ -39,20 +39,7 @@ export class TongHopComponent implements OnInit {
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCao().subscribe(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-         
-        } else {
-          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
-      }
-    );
+    this.baoCaos = LOAIBAOCAO;
 
     //lay danh sach danh muc
     this.quanLyVonPhiService.dMDonVi().subscribe(
@@ -190,7 +177,7 @@ export class TongHopComponent implements OnInit {
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donViTaos.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donViTaos.find(item => item.id == this.maDonViTao)?.tenDvi;
   }
   //doi so trang
   onPageIndexChange(page) {

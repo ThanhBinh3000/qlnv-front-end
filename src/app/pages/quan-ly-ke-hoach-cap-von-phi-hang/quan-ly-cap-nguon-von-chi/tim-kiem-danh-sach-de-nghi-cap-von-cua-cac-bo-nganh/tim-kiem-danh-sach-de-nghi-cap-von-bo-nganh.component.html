@@ -37,28 +37,42 @@
               <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
           </div>
-          
           <div nz-col nzSpan="12">
             <label class="search__label">Số công văn</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
               <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
           </div>
+          <div nz-col nzSpan="24">
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" >
+              Tổng hợp
+             </button>
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" >
+             Tạo mới
+             </button>
+          </div>
+          <div nz-col nzSpan="8">
+            <button type="button" class="btn btn-main" >
+              Đóng
+             </button>
+          </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
+      <nz-card nzTitle="Danh sách đề nghị cấp vốn của các bộ ngành" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
               <th width="60px">STT</th>
-              <th width="130px">Ngày lập</th>
+              <th width="130px">Số công văn</th>
+              <th width="175px">Ngày công văn</th>
               <th width="175px">Nơi lập</th>
-              <th width="175px">Số quyết định</th>
-              <th width="175px">Ngày quyết định</th>
-              <th width="175px">Căn cứ chỉ tiêu kế hoạch</th>
-              <th width="175px">Căn cứ hợp đồng</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th width="175px">Số tiền</th>
+              <th width="175px"></th>
             </tr>
           </thead>
           <tbody>
@@ -91,14 +105,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button>
-        <button type="button" class="btn btn-sub">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
-        </button>
+        
       </ng-template>
     </div>
   </div>

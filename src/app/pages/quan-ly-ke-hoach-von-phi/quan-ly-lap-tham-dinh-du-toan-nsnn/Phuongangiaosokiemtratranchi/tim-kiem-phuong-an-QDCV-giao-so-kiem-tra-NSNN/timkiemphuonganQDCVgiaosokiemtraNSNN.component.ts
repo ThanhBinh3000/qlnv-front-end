@@ -25,8 +25,11 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   maPa: string = null;
   currentYear: Date = new Date();
   listVanban: any[] = [];
-  donviTaos:any []=[];
+  donViTaos: any[] = [];
   totalitem:any;
+  checkroleDvi:any;
+
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -36,12 +39,11 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     this.namPa = this.currentYear.getFullYear().toString();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let username = this.userService.getUserName();
-    this.getUserInfo(username);
+    let userInfor: any = await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
-      this.donviTaos = res.data;
-      console.log(this.donviTaos);
+      this.donViTaos = res.data;
     })
   }
 
@@ -50,21 +52,22 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     await this.userService.getUserInfo(username).subscribe(
       (data) => {
         if (data?.statusCode == 0) {
+          console.log(data);
           this.donvitao = data?.data.dvql;
           this.nguoinhap = data?.data.username;
-          console.log(data)
+          this.checkroleDvi = data?.data.roles[0].id;
         } else {
         }
       },
       (err) => {
-        
+
       },
     );
   }
 
   //lay ten don vi tạo
   getUnitName() {
-    return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   //get trạng thai
@@ -102,10 +105,10 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         }
     })
   }
-  
+
   //tao moi
   taomoi(){
-    
+
     console.log(this.loaivanban);
     if(this.loaivanban==""){
         alert('Bạn chưa chọn loại văn bản');

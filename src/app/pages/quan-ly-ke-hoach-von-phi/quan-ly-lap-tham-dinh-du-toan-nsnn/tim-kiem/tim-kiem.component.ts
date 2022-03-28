@@ -7,6 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { LOAIBAOCAO } from 'src/app/Utility/utils';
 
 
 
@@ -54,20 +55,7 @@ export class TimKiemComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-        } else {
-          this.notifi.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
+    this.baoCaos = LOAIBAOCAO;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {

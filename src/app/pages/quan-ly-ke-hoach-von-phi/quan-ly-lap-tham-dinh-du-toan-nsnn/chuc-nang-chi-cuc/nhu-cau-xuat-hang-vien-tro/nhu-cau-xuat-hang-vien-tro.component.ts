@@ -249,7 +249,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
     };
 
     //call service them moi
@@ -325,6 +325,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.namBcao = data.data.namBcao;
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -472,7 +473,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.id == item.maDvi)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

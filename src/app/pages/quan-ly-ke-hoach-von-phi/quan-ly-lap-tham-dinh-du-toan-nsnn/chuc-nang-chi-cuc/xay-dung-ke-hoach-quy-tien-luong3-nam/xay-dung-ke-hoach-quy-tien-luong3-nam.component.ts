@@ -10,6 +10,9 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
+
 export class ItemData {
   maDvi!: String;
   tongCboN!: number;
@@ -106,6 +109,8 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  checkKV:boolean;                       // trang thai
+  capDvi:any;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -136,6 +141,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private userSerivce: UserService,
               private danhMucService: DanhMucHDVService,
+              private notification: NzNotificationService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -178,10 +184,16 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if(e.id==this.maDonViTao){
+              this.capDvi = e.capDvi;
+
+            }
+          })
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -190,6 +202,12 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
         this.errorMessage = "err.error.message";
       }
     );
+
+    if(this.capDvi==3){
+      this.checkKV=true;
+    }else{
+      this.checkKV = false;
+    }
     this.spinner.hide();
   }
 
@@ -225,7 +243,6 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
 
   // luu
   async luu() {
-    debugger
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -258,23 +275,25 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.IMPORT_NUMBER_SUCCESS_2);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           console.log(err);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.IMPORT_NUMBER_SUCCESS_2);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
+      },err =>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
     this.lstCTietBCao.filter(item => {
@@ -367,7 +386,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      maDvi!: "",
+      maDvi!: this.maDonViTao,
       tongCboN: 0,
       tongBcheDuocPdN: 0,
       tongQuyLuongCoTchatLuongN: 0,
@@ -418,6 +437,11 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
+    if(this.capDvi==3){
+      this.checkKV=true;
+    }else{
+      this.checkKV=false;
+    }
   }
 
   // xoa dong
@@ -499,7 +523,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   getUnitName(){
-    return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+ return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {

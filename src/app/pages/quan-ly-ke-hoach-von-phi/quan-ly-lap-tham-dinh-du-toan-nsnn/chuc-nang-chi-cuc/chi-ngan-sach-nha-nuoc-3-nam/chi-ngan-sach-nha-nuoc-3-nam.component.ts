@@ -168,7 +168,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.noiDungs = data.data?.content;
                     } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);    
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
@@ -543,7 +543,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // lay ten don vi tao
      getUnitName() {
-          return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
+       return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
      }
 
      // start edit

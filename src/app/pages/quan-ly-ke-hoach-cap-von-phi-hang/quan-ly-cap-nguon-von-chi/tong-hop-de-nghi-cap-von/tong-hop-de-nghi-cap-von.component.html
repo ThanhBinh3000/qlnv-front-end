@@ -8,12 +8,12 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden]="statusBtnSave">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-          [hidden]="statusBtnApprove">
+          >
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -62,7 +62,7 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Thông tin chung " class="mt16 flex-card p-lr16">
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
@@ -87,7 +87,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab>
+          <nz-tab nzTitle="Tổng hợp đề nghị cấp vốn ">
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -211,21 +211,6 @@
                 </tr>
               </tbody>
             </nz-table>
-
-            <div>
-              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Nơi nhận">
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Hình thức">
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Lý do từ chối">
-                  <input nz-input placeholder="Lý do từ chối">
-                </nz-descriptions-item>
-              </nz-descriptions>
-            </div>
-
           </nz-tab>
         </nz-tabset>
         <div class="action">

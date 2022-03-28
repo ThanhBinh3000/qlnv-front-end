@@ -74,10 +74,10 @@
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
+              <nz-descriptions-item nzTitle="Ngày nhập" >
                 {{ngayNhap}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+              <nz-descriptions-item nzTitle="Người nhập" >
                 {{nguoiNhap}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị">
@@ -86,19 +86,58 @@
               <nz-descriptions-item nzTitle="Nơi đề nghị">
                 {{maBaoCao}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số công văn">
+              <nz-descriptions-item nzTitle="Số công văn"  >
                 {{namBaoCaoHienHanh}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày công văn">
-                {{getStatusName()}}
+                <nz-date-picker class="search__input" ></nz-date-picker>
               </nz-descriptions-item>
+              
             </nz-descriptions>
           </div>
         </div>
       </nz-card>
       <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container">
-          <nz-tab>
+        <nz-tabset  class="tab__container">
+          <nz-tab nzType="card" nzTitle="THEO DÕI CẤP VỐN MUA HÀNG DỰ TRỮ QUỐC GIA" >
+            <div class="search__body" nz-row [nzGutter]="[18, 12]">
+              <div nz-col nzSpan="6">
+                <label class="search__label">Loại</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="6">
+                <label class="search__label">Mặt hàng</label>
+                <input class="search__input" nz-input  />
+              </div>
+              <div nz-col nzSpan="6">
+                <label class="search__label">Số lượng</label>
+                <input class="search__input" nz-input  />
+              </div>
+              <div nz-col nzSpan="6">
+                <label class="search__label">Đơn vị hàng</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="4">
+                <label class="search__label">Thành tiền</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="4">
+                <label class="search__label">Đơn vị tièn</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
+                  <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="8">
+                <label class="search__label"></label>
+                <button class="search__input" nz-button nzType="primary" style="margin-top:20px">Thêm vào danh sách</button>
+              </div>
+            </div>
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
@@ -245,21 +284,6 @@
                 </tr>
               </tbody>
             </nz-table>
-
-            <div>
-              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Nơi nhận" >
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Hình thức" >
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Lý do từ chối">
-                  <input nz-input placeholder="Lý do từ chối">
-                </nz-descriptions-item>
-              </nz-descriptions>
-            </div>
-
           </nz-tab>
         </nz-tabset>
         <div class="action">
