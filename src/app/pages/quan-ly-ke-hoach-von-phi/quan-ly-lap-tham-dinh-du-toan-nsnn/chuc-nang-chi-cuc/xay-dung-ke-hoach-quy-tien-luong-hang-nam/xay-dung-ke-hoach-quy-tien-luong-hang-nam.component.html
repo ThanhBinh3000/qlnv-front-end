@@ -52,6 +52,10 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')" >
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Điều chỉnh theo số kiểm tra</span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
@@ -83,9 +87,6 @@
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
                 {{namBaoCaoHienHanh}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC">
-                {{namBcao}}
-              </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
               </nz-descriptions-item>
@@ -93,6 +94,12 @@
                 Xây dựng kế hoach quỹ tiền lương hàng năm
               </nz-descriptions-item>
             </nz-descriptions>
+            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+              <div nz-col nzSpan="3" >
+                <label class="search__label">Số VB gửi TC</label>
+                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
+              </div>
+            </div>
           </div>
         </div>
       </nz-card>

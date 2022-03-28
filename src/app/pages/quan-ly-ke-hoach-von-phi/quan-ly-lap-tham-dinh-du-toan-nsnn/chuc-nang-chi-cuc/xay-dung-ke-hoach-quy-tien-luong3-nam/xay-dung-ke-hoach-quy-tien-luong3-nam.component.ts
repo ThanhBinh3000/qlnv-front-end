@@ -83,7 +83,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = "06";                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -108,9 +108,12 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
-
   checkKV:boolean;                       // trang thai
   capDvi:any;
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -189,11 +192,18 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.donVis.forEach(e => {
-            if(e.id==this.maDonViTao){
+            if(e.maDvi==this.maDonViTao){
               this.capDvi = e.capDvi;
-
             }
           })
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          // this.capDv = Dvi.capDvi;
+          if( this.capDv == '2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
+
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -203,7 +213,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       }
     );
 
-    if(this.capDvi==3){
+    if(this.capDvi=='3'){
       this.checkKV=true;
     }else{
       this.checkKV = false;
@@ -267,6 +277,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh,
+      soVban: this.soVban,
     };
 
     //call service them moi
