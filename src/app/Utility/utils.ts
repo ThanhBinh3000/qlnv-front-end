@@ -407,3 +407,15 @@ export const LOAIBAOCAO =[
     export	const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N:string = "30";
     export	const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N:string = "31";
     export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
+    
+    export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
+    {
+        id:526,
+        tenDm:'Báo cáo giải ngân định kỳ tháng'
+    },
+    {
+        id:527,
+        tenDm:'Báo cáo giải ngân cả năm'
+    },
+]    
+     

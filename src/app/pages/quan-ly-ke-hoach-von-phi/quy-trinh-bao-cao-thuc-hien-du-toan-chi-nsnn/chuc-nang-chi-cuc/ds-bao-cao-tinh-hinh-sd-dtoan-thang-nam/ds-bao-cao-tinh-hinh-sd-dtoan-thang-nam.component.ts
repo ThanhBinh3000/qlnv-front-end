@@ -7,6 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 
   searchFilter = {
-    maDvi:'235',
+    maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
     trangThai:'',
@@ -67,7 +68,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = [];
+  baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -78,28 +79,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.SUCCESS, data?.msg);
-        } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.SUCCESS, data?.msg);
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -131,12 +115,10 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 
   timkiem(){
-    console.log(this.searchFilter);
     if(this.searchFilter.maLoaiBcao==''){
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.searchFilter.maLoaiBcao='91';
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
@@ -153,7 +135,13 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
-
+  themMoi(){
+    if(this.searchFilter.maLoaiBcao==''){
+      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      return;
+    }
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
+  }
 
   //set url khi
   setUrl(lbaocao:any) {
@@ -184,8 +172,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
         this.url = null;
         break;
     }
-   console.log(lbaocao);
-
   }
 
   //doi so trang

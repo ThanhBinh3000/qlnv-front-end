@@ -159,7 +159,7 @@ export class TimKiemComponent implements OnInit {
   //set url khi
   setUrl(id) {
     switch (id) {
-      case 26:
+      case 12:
         this.url = '/chi-thuong-xuyen-3-nam/'
         break;
       default:
