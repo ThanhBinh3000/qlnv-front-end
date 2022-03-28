@@ -104,8 +104,8 @@ export class ItemDataPL1 {
   luyKeGiaiNganCk: number;
   luyKeGiaiNganCkTle: number;
   id!: any;
-  parentId!: any;
-  ownId!: any;
+  parent!: number;
+  own!: number;
   stt!: any;
   checked!:boolean;
 }
@@ -159,8 +159,8 @@ export class linkList {
   luyKeGiaiNganCk: number;
   luyKeGiaiNganCkTle: number;
   // listCtiet: vatTu[] = [];
-  parentId: any;            // id cha no
-  ownId!: any;              // id chhinh no
+  parent: any;            // id cha no
+  own!: any;              // id chhinh no
   next: linkList[];
   checked: boolean;
 }
@@ -184,7 +184,7 @@ export class BaoCaoComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = [];                          // danh muc loai bao cao
+  loaiBaoCaos: any = [];                          // danh muc loai bao cao
 
 
   userInfo: any;
@@ -197,7 +197,6 @@ export class BaoCaoComponent implements OnInit {
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
 
-  trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -284,13 +283,13 @@ export class BaoCaoComponent implements OnInit {
       })
     }
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
     //get danh muc noi dung
 
     //lay danh sach loai bao cao
@@ -298,7 +297,7 @@ export class BaoCaoComponent implements OnInit {
       data => {
         console.log(data);
         if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
+          this.loaiBaoCaos = data.data?.content;
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -388,7 +387,6 @@ async getDetailReport() {
     (data) => {
       if (data.statusCode == 0) {
         this.baoCao = data.data;
-        console.log(this.baoCao);
         this.baoCao?.lstBCao?.forEach(item => {
           let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
           if(index !== -1){
@@ -396,9 +394,11 @@ async getDetailReport() {
             item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
           }
         })
-
+        debugger
         this.baoCao?.lstBCao?.forEach((item) => {
           if(item.maLoai == PHULUCLIST[0].maPhuLuc){
+            debugger
+            this.lstCTietBCaoPL1 = item?.lstCTietBCao;
             item?.lstCTietBCao.filter(item1 =>{
               this.transformToLinkList(item1);
             })
@@ -406,6 +406,7 @@ async getDetailReport() {
         });
 
         this.updateEditCache();
+        this.updateEditCachePL1();
         this.lstFile = data.data.lstFile;
 
         // set list id file ban dau
@@ -413,7 +414,7 @@ async getDetailReport() {
           this.listIdFiles += item.id + ",";
         })
 
-        if (this.trangThaiBanGhi == '1' || this.trangThaiBanGhi == '3' || this.trangThaiBanGhi == '5' || this.trangThaiBanGhi == '8') {
+        if (this.baoCao.trangThai == '1' || this.baoCao.trangThai == '3' || this.baoCao.trangThai == '5' || this.baoCao.trangThai == '8') {
           this.status = false;
         } else {
           this.status = true;
@@ -432,7 +433,7 @@ async getDetailReport() {
 transformToLinkList(item: ItemDataPL1) {
   var obj: linkList = {
   id: item.id,
-  vt: item.ownId,
+  vt: item.own,
   stt: item.stt,
   maNdung: item.maNdung,
   kphiSdungTcong: item.kphiSdungTcong,
@@ -478,8 +479,8 @@ transformToLinkList(item: ItemDataPL1) {
   luyKeGiaiNganCk: item.luyKeGiaiNganCk,
   luyKeGiaiNganCkTle: item.luyKeGiaiNganCkTle,
   // listCtiet: vatTu[] = [];
-  parentId: item.parentId,
-  ownId : item.ownId,
+  parent: item.parent,
+  own : item.own,
   next: [],
   checked: false,
   };
@@ -487,7 +488,7 @@ transformToLinkList(item: ItemDataPL1) {
   this.addToLinkList(this.chiTietBcaosPL1, obj);
   if (!this.nho) {
     this.chiTietBcaosPL1.next.forEach((item) => {
-      if (item.parentId == obj.ownId) {
+      if (item.parent == obj.own) {
         obj.next.push(item);
       }
     });
@@ -501,7 +502,7 @@ transformToLinkList(item: ItemDataPL1) {
 // let sortedCompany = company.sort((a, b) => (a.name < b.name) ? -1 : 1);
 
 addToLinkList(data: linkList, item: linkList) {
-  if (item.parentId == data.vt) {
+  if (item.parent == data.vt) {
     data.next.push(item);
     data.next = data.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
   }
@@ -903,12 +904,18 @@ addToLinkList(data: linkList, item: linkList) {
     //   namHienHanh: this.namBaoCaoHienHanh,
     //   namBcao: this.namBaoCaoHienHanh,
     // };
+    this.baoCao.maLoaiBcao = '526';
     this.baoCao.fileDinhKems = listFile;
     this.baoCao.listIdFiles = this.listIdFiles;
     this.baoCao.trangThai = "1";
+    this.lstCTietBCaoPL1.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      } 
+    })
     this.baoCao?.lstBCao.filter(item => {
       if(item.maLoai == PHULUCLIST[0].maPhuLuc){
-        item.lstCTietBCao = this.chiTietBcaosPL1;
+        item.lstCTietBCao = this.lstCTietBCaoPL1;
       }
     })
     //call service them moi
@@ -920,6 +927,7 @@ addToLinkList(data: linkList, item: linkList) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.spinner.hide();
           }
         },
         err => {
@@ -950,7 +958,13 @@ addToLinkList(data: linkList, item: linkList) {
         } 
       })
     });
+    this.lstCTietBCaoPL1.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    })
     this.updateEditCache();
+    this.updateEditCachePL1();
     this.spinner.hide();
   }
 
@@ -1025,8 +1039,8 @@ addToLinkList(data: linkList, item: linkList) {
     luyKeGiaiNganNsttTle: null,
     luyKeGiaiNganCk: null,
     luyKeGiaiNganCkTle: null,
-    parentId: null,
-    ownId: null,
+    parent: null,
+    own: null,
     next: [],
     checked: false,
   };
@@ -1115,8 +1129,8 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganCk: 0,
       luyKeGiaiNganCkTle: 0,
       stt: 0,
-      parentId: null,
-      ownId: null,
+      parent: null,
+      own: null,
       id: uuid.v4(),
       checked:false,
     }
@@ -1179,8 +1193,8 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganNsttTle: this.editCachePL1[id].data.luyKeGiaiNganNsttTle,
       luyKeGiaiNganCk: this.editCachePL1[id].data.luyKeGiaiNganCk,
       luyKeGiaiNganCkTle: this.editCachePL1[id].data.luyKeGiaiNganCkTle,
-      parentId: this.editCachePL1[id].data.parentId,
-      ownId: this.editCachePL1[id].data.ownId,
+      parent: this.editCachePL1[id].data.parent,
+      own: this.editCachePL1[id].data.own,
       next: [],
       checked: false,
     };
@@ -1292,8 +1306,8 @@ addToLinkList(data: linkList, item: linkList) {
         luyKeGiaiNganCk:data.luyKeGiaiNganCk,
         luyKeGiaiNganCkTle:data.luyKeGiaiNganCkTle,
         // listCtiet: data.listCtiet,
-        parentId: parent.toString(),
-        ownId: data.vt,
+        parent: parent,
+        own: data.vt,
         checked: false,
       };
       this.lstCTietBCaoPL1.push(mm);
@@ -1399,8 +1413,8 @@ addToLinkList(data: linkList, item: linkList) {
     data.luyKeGiaiNganNsttTle= item.luyKeGiaiNganNsttTle;
     data.luyKeGiaiNganCk= item.luyKeGiaiNganCk;
     data.luyKeGiaiNganCkTle= item.luyKeGiaiNganCkTle;
-    data.parentId = item.parentId;
-    data.ownId = item.ownId;
+    data.parent = item.parent;
+    data.own = item.own;
   }
 
   saveEdit1(id: string, index: number): void {
@@ -1451,8 +1465,8 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganNsttTle: this.editCachePL1[id].data.luyKeGiaiNganNsttTle,
       luyKeGiaiNganCk: this.editCachePL1[id].data.luyKeGiaiNganCk,
       luyKeGiaiNganCkTle: this.editCachePL1[id].data.luyKeGiaiNganCkTle,
-      parentId: this.editCachePL1[id].data.parentId,
-      ownId: this.editCachePL1[id].data.ownId,
+      parent: this.editCachePL1[id].data.parent,
+      own: this.editCachePL1[id].data.own,
       next: [],
       checked: false,
     };
@@ -1548,5 +1562,11 @@ addToLinkList(data: linkList, item: linkList) {
         };
       })
     });
+  }
+
+  // lay ten trang thai ban ghi
+  getStatusName(id){
+    const utils = new Utils();
+    return utils.getStatusName(id);
   }
 }
