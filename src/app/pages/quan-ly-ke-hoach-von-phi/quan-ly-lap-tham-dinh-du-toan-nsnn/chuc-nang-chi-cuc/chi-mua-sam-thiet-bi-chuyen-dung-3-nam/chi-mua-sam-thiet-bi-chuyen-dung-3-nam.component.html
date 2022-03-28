@@ -99,19 +99,25 @@
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
-                                        Xây dựng Chi thường xuyên giai đoạn 03 năm
+                                        Dự toán chi mua sắm máy móc thiết bị chuyên dụng 3 năm
                                    </nz-descriptions-item>
                               </nz-descriptions>
+                              <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+                                   <div nz-col nzSpan="3" >
+                                     <label class="search__label">Số VB gửi TC</label>
+                                     <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
+                                   </div>
+                              </div>
                          </div>
                     </div>
                </nz-card>
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
-                         <nz-tab [nzTitle]="'Xây dựng Chi thường xuyên giai đoạn 03 năm'">
+                         <nz-tab [nzTitle]="'Dự toán chi mua sắm máy móc thiết bị chuyên dụng 3 năm'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         <!-- <div class="inner-box">Đơn vị: -->
-                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
+                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien">
                                              <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                                              <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                                              <nz-option nzValue="3" nzLabel="Triệu"></nz-option>

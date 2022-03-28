@@ -154,7 +154,7 @@ export class TimKiemComponent implements OnInit {
         this.url = '/du-toan-chi-ung-dung-cntt-3-nam/'
         break;
       case 310:
-        this.url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/'
+        this.url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/'
         break;
       case 311:
         this.url = '/chi-ngan-sach-nha-nuoc-3-nam/'
