@@ -52,7 +52,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;
   namBaoCao!: any;
   trangThaiBanGhi: string = "1";
-  maLoaiBaoCao: string = '10';
+  maLoaiBaoCao: string ='10';
   maDviTien: string = '';
   newDate = new Date();
   fileToUpload!: File;
@@ -87,6 +87,10 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+  
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -128,7 +132,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+    await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -178,6 +182,13 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if( this.capDv=='2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -232,23 +243,31 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         item.id = null;
       }
     })
+    console.log(this.maDviTien);
+    // donvi tien
+    if (this.maDviTien == '') {
+      this.maDviTien = '01';
+    }
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
-      maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao ,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
+      soVban:this.soVban,
     };
+    console.log(request)
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
           if (data.statusCode == 0){
+            console.log(data);
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -316,18 +335,24 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
+          console.log(data);
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
+          if(this.lstCTietBCao.length!=null){
+            this.updateEditCache();
+          }
+         
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
           this.ngayNhap = data.data.ngayTao;
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
+          console.log(this.maDonViTao);
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.soVban = data.data.soVban;
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -338,12 +363,15 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
-          this.lstCTietBCao.forEach(e => {
-            this.tong1 += e.n1;
-            this.tong2 += e.n2;
-            this.tong3 += e.n3;
-          })
-
+          
+          if(this.lstCTietBCao.length!=0){
+            this.lstCTietBCao.forEach(e => {
+              this.tong1 += e.n1;
+              this.tong2 += e.n2;
+              this.tong3 += e.n3;
+            })
+          }
+          
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";

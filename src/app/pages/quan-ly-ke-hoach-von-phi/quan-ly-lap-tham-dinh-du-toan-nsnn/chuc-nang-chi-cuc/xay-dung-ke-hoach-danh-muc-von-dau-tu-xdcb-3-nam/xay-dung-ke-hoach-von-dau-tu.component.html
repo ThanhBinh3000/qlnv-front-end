@@ -90,6 +90,12 @@
                 Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm
               </nz-descriptions-item>
             </nz-descriptions>
+            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+              <div nz-col nzSpan="3" >
+                <label class="search__label">Số VB gửi TC</label>
+                <input class="search__input" nz-input [(ngModel)]="soVBGuiTC" disabled/>
+              </div>
+            </div>
           </div>
         </div>
       </nz-card>
@@ -235,47 +241,44 @@
                   </th>
               </tr>
               <tr>
-                  <td></td>
+                  <th></th>
                   <th>TỔNG CỘNG</th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td width="2.25%" [hidden]="status"></td>
-                  <td width="2.25%" [hidden]="status"></td>
-                  <td width="2.25%" [hidden]="status"></td>
-                  <td width="2.25%" [hidden]="status"></td>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th width="2.25%" [hidden]="status"></th>
+                  <th width="2.25%" [hidden]="status"></th>
+                  <th width="2.25%" [hidden]="status"></th>
+                  <th width="2.25%" [hidden]="status"></th>
               </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td></td>
-                </tr>
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>{{ i + 1 }}</td>
