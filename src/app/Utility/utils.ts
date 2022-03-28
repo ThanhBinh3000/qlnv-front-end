@@ -335,4 +335,15 @@ export const LOAIBAOCAO =[
         tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
     },
 ]    
+
+export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
+    {
+        id:526,
+        tenDm:'Báo cáo giải ngân định kỳ tháng'
+    },
+    {
+        id:527,
+        tenDm:'Báo cáo giải ngân cả năm'
+    },
+]    
      
