@@ -340,7 +340,7 @@ export const LOAIBAOCAO =[
     },
     {
         id:'32',
-        tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'
+        tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
     }
 ]    
 // Loai bao cao

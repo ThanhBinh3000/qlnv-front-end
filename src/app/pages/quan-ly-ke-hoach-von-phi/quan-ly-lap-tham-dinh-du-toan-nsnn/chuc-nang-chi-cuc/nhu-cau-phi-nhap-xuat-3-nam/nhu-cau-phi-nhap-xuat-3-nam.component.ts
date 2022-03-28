@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -57,7 +57,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      maBaoCao!: string;
      namBaoCaoHienHanh!: any;
      trangThaiBanGhi!: string;
-     maLoaiBaoCao: string = "01";
+     maLoaiBaoCao: string = QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N;
      maDviTien: string = "01";
      newDate = new Date();
      fileToUpload!: File;
@@ -82,6 +82,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
+     soVban:any;
+     capDv:any;
+     checkDv:boolean;
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -209,6 +212,13 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
+                         var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+                         this.capDv = Dvi.capDvi;
+                         if( this.capDv=='2'){
+                         this.checkDv = false;
+                         }else{
+                         this.checkDv = true;
+                         }
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -264,17 +274,22 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                }
           })
 
+          if(this.maDviTien !=""){
+               this.maDviTien = '01';
+          }
+
           // gui du lieu trinh duyet len server
           let request = {
                id: this.id,
                idFileDinhKem: listFile,
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
-               maDvi: this.maDonViTao = "01",
-               maDviTien: this.maDviTien = "01",
-               maLoaiBcao: this.maLoaiBaoCao = "01",
+               maDvi: this.maDonViTao ,
+               maDviTien: this.maDviTien ,
+               maLoaiBcao: this.maLoaiBaoCao ,
                namBcao: this.namBaoCaoHienHanh,
-               namHienHanh: this.namBaoCaoHienHanh,
+               namHienHanh: this.namBcao,
+               soVban:this.soVban,
           };
           this.spinner.show();
           if (this.id == null) {
@@ -362,6 +377,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                          this.maBaoCao = data.data.maBcao;
                          this.namBaoCaoHienHanh = data.data.namBcao;
                          this.trangThaiBanGhi = data.data.trangThai;
+                         this.soVban = data.data.soVban;
                          if (
                               this.trangThaiBanGhi == '1' ||
                               this.trangThaiBanGhi == '3' ||

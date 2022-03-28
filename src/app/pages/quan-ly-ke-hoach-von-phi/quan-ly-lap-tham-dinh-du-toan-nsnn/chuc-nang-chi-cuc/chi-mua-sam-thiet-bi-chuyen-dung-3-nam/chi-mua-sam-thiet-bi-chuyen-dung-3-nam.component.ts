@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -52,7 +52,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;
   namBaoCao!: any;
   trangThaiBanGhi: string = "1";
-  maLoaiBaoCao: string ='10';
+  maLoaiBaoCao: string =QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N;
   maDviTien: string = '';
   newDate = new Date();
   fileToUpload!: File;
