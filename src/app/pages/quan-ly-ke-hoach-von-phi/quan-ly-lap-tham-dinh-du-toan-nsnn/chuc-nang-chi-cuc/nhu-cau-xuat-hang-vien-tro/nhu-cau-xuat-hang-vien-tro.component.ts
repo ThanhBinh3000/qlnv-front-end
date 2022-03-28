@@ -10,6 +10,8 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
   maVtuTbi!: number;
@@ -82,6 +84,9 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
+  soVBGuiTC:any;
+  capDv:any;
+  checkDv:boolean;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -113,6 +118,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private userSerivce: UserService,
               private danhMucService: DanhMucHDVService,
+              private notification : NzNotificationService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -134,11 +140,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -160,11 +166,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTieus = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -173,12 +179,19 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if( this.capDv=='2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -196,7 +209,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     return userInfo;
@@ -235,8 +248,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     }
 
     this.lstCTietBCao.push(object);
-
-    console.log(object);
 
     // gui du lieu trinh duyet len server
     let request = {
