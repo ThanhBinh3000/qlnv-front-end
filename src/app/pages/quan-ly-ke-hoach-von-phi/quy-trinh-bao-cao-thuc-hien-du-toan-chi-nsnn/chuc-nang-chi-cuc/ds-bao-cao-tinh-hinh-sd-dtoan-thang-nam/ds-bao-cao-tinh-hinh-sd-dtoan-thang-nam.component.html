@@ -70,16 +70,17 @@
         <nz-table #basicTable class="nowrap" [nzScroll]="{ y: '240px' }">
           <thead>
             <tr>
-              <th width="60px">STT</th>
-              <th width="130px">Mã báo cáo</th>
-              <th width="175px">Báo cáo năm</th>
-              <th width="175px">Báo cáo tháng</th>
-              <th width="175px">Ngày lập</th>
-              <th width="175px">Ngày trình duyệt</th>
-              <th width="175px">Ngày duyệt <br> <span>(Ngày trưởng bộ phận kế toán duyệt)</span></th>
-              <th width="175px">Ngày phê duyệt <br> <span>(Lãnh đạo chi cục phê duyệt)</span></th>
-              <th width="175px">Ngày cấp trên trả kết quả</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th nzWidth="60px">STT</th>
+              <th nzWidth="130px">Mã báo cáo</th>
+              <th nzWidth="100px">Báo cáo năm</th>
+              <th nzWidth="100px">Báo cáo tháng</th>
+              <th nzWidth="175px">Ngày lập</th>
+              <th nzWidth="175px">Ngày trình duyệt</th>
+              <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày trưởng bộ phận kế toán duyệt)</span></th>
+              <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo chi cục phê duyệt)</span></th>
+              <th nzWidth="175px">Ngày cấp trên trả kết quả</th>
+              <th nzWidth="100px" class="text-center">Trạng thái</th>
+              <th >Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -94,7 +95,20 @@
               <td>{{item.namBcao}}</td>
               <td>{{item.namBcao}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
-
+              <td>
+                <button type="button" class="btn btn-main">
+                  <span>Phê duyệt</span>
+                </button>
+                <button type="button" class="btn btn-main">
+                  <span>Nhập/Sửa dữ liệu</span>
+                </button>
+                <button type="button" class="btn btn-main">
+                  <span>Xem</span>
+                </button>
+                <button type="button" class="btn btn-main">
+                  <span>Xóa</span>
+                </button>
+              </td>
             </tr>
           </tbody>
         </nz-table>

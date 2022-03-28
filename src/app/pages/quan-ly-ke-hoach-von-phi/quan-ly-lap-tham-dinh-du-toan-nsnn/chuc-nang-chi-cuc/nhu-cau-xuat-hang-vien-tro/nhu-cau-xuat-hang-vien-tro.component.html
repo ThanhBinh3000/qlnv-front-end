@@ -93,6 +93,12 @@
                 Xây dựng Nhu cầu xuất hàng DTQG viện trợ cứu trợ hàng năm
               </nz-descriptions-item>
             </nz-descriptions>
+            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+              <div nz-col nzSpan="3" >
+                <label class="search__label">Số VB gửi TC</label>
+                <input class="search__input" nz-input [(ngModel)]="soVBGuiTC" disabled/>
+              </div>
+            </div>
           </div>
         </div>
       </nz-card>

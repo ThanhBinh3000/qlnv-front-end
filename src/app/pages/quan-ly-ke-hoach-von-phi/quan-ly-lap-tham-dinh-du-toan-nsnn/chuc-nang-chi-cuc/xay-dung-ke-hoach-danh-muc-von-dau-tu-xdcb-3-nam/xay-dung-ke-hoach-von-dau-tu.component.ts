@@ -10,6 +10,7 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+
 export class ItemData {
   tenDan!: string;
   maKhoach!: string;
@@ -100,6 +101,9 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
+  soVBGuiTC:any;
+  capDv:any;
+  checkDv:boolean;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -140,6 +144,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
+    console.log(userInfo);
     if (this.id) {
       this.getDetailReport();
     } else {
@@ -233,6 +238,13 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          var Dvi = this.donVis.find(e =>  e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if(this.capDv=='2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -375,7 +387,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-
+          this.soVBGuiTC = data.data.soVBGuiTC;
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";

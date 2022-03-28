@@ -172,8 +172,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
         this.url = null;
         break;
     }
-   console.log(lbaocao);
-
   }
 
   //doi so trang
