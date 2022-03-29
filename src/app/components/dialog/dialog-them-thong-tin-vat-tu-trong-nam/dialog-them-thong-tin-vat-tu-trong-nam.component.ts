@@ -35,10 +35,9 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     //treeview
     this.listDonViTinh.push({
       value: 'bộ',

@@ -937,8 +937,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           };
           if (this.id == 0) {
             await this.save();
+          } else {
+            const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              this.redirectChiTieuKeHoachNam();
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
           }
-          await this.chiTieuKeHoachNamService.updateStatus(body);
+
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1095,8 +1104,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.redirectChiTieuKeHoachNam();
+            if (this.id == 0) {
+              let body = {
+                id: res.data.id,
+                lyDoTuChoi: null,
+                trangThai: '01',
+              };
+              this.chiTieuKeHoachNamService.updateStatus(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                this.redirectChiTieuKeHoachNam();
+              }
+              else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              this.redirectChiTieuKeHoachNam();
+            }
           }
           else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1132,5 +1157,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
+  }
+  convertTrangThai(status: string) {
+    if (status == '00') {
+      return 'Mới tạo';
+    } else if (status == '01') {
+      return 'Chờ duyệt';
+    } else if (status == '02') {
+      return 'Đã duyệt';
+    } else if (status == '03') {
+      return 'Từ chối';
+    }
   }
 }

@@ -368,8 +368,35 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc =
                   tempData.khLuongThuc;
+                if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc && this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.length > 0) {
+                  for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.length; i++) {
+                    this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].khGaoId = null;
+                    this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].khThocId = null;
+                    if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnGao && this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnGao.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnGao.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnGao[j].id = null;
+                      }
+                    }
+                    if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnThoc && this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnThoc.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnThoc.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc[i].xtnThoc[j].id = null;
+                      }
+                    }
+                  }
+                }
+
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi =
                   tempData.khMuoiDuTru;
+                if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi && this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.length > 0) {
+                  for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.length; i++) {
+                    if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi[i].xtnMuoi && this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi[i].xtnMuoi.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi[i].xtnMuoi.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi[i].xtnMuoi[j].id = null;
+                      }
+                    }
+                  }
+                }
+
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu =
                   tempData.khVatTu;
 
