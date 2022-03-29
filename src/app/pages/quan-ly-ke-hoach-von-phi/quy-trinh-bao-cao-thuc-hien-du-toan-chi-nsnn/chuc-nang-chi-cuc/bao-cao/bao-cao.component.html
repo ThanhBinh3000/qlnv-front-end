@@ -25,10 +25,10 @@
               <td>{{baoCao?.thangBcao}}</td>
               <td>{{baoCao?.ngayTao}}</td>
               <td>{{baoCao?.congVan}}</td>
-              <td>{{baoCao?.ngayTrinhDuyet}}</td>
+              <td>{{baoCao?.ngayTrinh}}</td>
               <td>{{baoCao?.ngayDuyet}}</td>
               <td>{{baoCao?.ngayPheDuyet}}</td>
-              <td>{{baoCao?.ngayCapTrenTraKq}}</td>
+              <td>{{baoCao?.ngayTraKq}}</td>
               <td>{{getStatusName(baoCao?.trangThai)}}</td>
             </tr>
           </tbody>
@@ -40,7 +40,7 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-main" (click)="onSubmit('2')" [hidden]="statusBtnApprove">
+        <button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -48,39 +48,38 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Copy</span>
         </button>
-        <button class="btn btn-main" routerLink="../">
+        <button class="btn btn-main" routerLink="/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Đóng</span>
         </button>
-        <button class="btn btn-main" (click)="onSubmit('3')"
-          [hidden]="statusBtnTBP">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Trưởng BP trả lại</span>
-        </button>
-        <a class="btn btn-main" (click)="onSubmit('4')" [hidden]="statusBtnTBP">
+        <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Trưởng BP phê duyệt</span>
+          <span>Trưởng BP trả lại</span>
         </a>
-        <button class="btn btn-main" (click)="onSubmit('5')"
+        <button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Trưởng BP phê duyệt</span>
+        </button>
+        <button class="btn btn-main" (click)="tuChoi('5')"
           [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo trả lại</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('6')" [hidden]="statusBtnLD">
+        <a class="btn btn-main" (click)="onSubmit('6',null)" [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
-        <button class="btn btn-main" (click)="onSubmit('7')"
+        <button class="btn btn-main" (click)="onSubmit('7',null)"
           [hidden]="statusBtnGuiDVCT">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-main" (click)="onSubmit('8')"
+        <button class="btn btn-main" (click)="tuChoi('8')"
           [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>ĐV cấp trên trả lại</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('9')"
+        <a class="btn btn-main" (click)="onSubmit('9',null)"
           [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
@@ -123,6 +122,9 @@
                 <button type="button" class="btn btn-main">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
+                <!-- <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)">
+                  <span>Kiểm tra</span>
+                </button> -->
               </td>
               <td [hidden]="status">
                 <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -131,21 +133,13 @@
             </tr>
           </tbody>
         </nz-table>
-        <div class="tab-content tab-menu" id="myTabContent">
-          <div class="tab-pane fade show active justify-content-between">
-            <div class="trai">
-
-            </div>
-            <div class="canphai">
-              <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
-                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
-                <ng-template #rangeTemplate let-range="range" let-total>
-                  {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
-                </ng-template>
-              </nz-pagination>
-              <!-- end phân trang  -->
+        <div class="container">
+          <div class="row justify-content-md-center">
+            <div class="col-md-auto" style="display: flex;">
+              <input class="search__input" nz-input/>
+              <button class="btn btn-main" style="width: 200px;">
+                <span>Nhập số công văn</span>
+              </button>
             </div>
           </div>
         </div>
@@ -581,6 +575,12 @@
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status">
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status">
+          <span>Not OK</span>
         </button>
       </ng-template>
       <!-- Table phụ lục II -->
@@ -1213,6 +1213,12 @@
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status">
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status">
+          <span>Not OK</span>
         </button>
       </ng-template>
       <!-- Table danh sách văn bản đính k -->
