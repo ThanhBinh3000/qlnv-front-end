@@ -19,10 +19,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(
-     'http://192.168.1.110:8094/bao-cao/danh-sach',
-      request,
-    );
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
+    return this.httpClient.post('http://192.168.1.110:8094/bao-cao/danh-sach', request)
   }
 
   //search list bao cao
@@ -130,14 +128,6 @@ export class QuanLyVonPhiService extends BaseService {
   updatelistGiaoDuToan(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/cap-nhat',
-      request,
-    );
-  }
-
-  // upload bao cao thuc hien du toan chi
-  updateBaoCaoThucHienDTC(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
       request,
     );
   }
@@ -382,15 +372,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv', req)
   }
 
-
-  //tim kiem danh sach bao cao ket qua thuc hien von phi hang DTQG tại tong cuc DTNN
-  timkiemdanhsachketquathuchienvonphi(request: any): Observable<any> {
-    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
-    return this.httpClient.post('http://192.168.1.110:8094/bao-cao/danh-sach', request)
-
-  }
-
-
   //lay danh sach vật tư hàng hóa
   dmVattuhanghoa(): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
@@ -416,21 +397,6 @@ export class QuanLyVonPhiService extends BaseService {
         "str": "",
         "trangThai": "",
       })
-  }
-
-  //thêm mới báo cáo (dung chung cho cac mau bao cao 02-05)
-  themmoibaocaoketquathuchien(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi', request);
-  }
-
-  //lay chi tiet cac mau bao cao
-  chitietmaubaocao(id: any): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id)
-  }
-
-  //capnhat baocao (dung chung cho cac mau bao cao 02-05)
-  capnhatbaocao(request: any): Observable<any> {
-    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat', request);
   }
 
   //get list danh muc loai bao cao ket qua thuc hien von phi hang DTQG
@@ -512,7 +478,26 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,
     );
+    // return this.httpClient.get('http://192.168.0.161:8094/bao-cao/chi-tiet/' + id)
   }
+
+  // call api nút chức năng
+  approveBaoCao(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/bao-cao/chuc-nang',
+      'http://192.168.1.110:8094/bao-cao/chuc-nang',
+      request,
+    );
+  }
+
+  // upload bao cao thuc hien du toan chi
+  updateBaoCaoThucHienDTC(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+      request,
+    );
+  }
+
   // call api chi tiết báo cáo
   sinhMaVban(): Observable<any> {
     return this.httpClient.get(

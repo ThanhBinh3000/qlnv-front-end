@@ -134,7 +134,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       return;
     }
     this.searchFilter.maLoaiBcao='91';
-    this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
