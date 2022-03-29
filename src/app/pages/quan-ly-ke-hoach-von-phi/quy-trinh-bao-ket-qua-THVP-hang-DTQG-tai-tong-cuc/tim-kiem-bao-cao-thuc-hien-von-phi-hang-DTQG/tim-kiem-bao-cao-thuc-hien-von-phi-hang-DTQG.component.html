@@ -22,51 +22,44 @@
     <div class="main-content">
       <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="12">
-            <label class="search__label">Đơn vị tạo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a unit" [(ngModel)]="searchFilter.maDvi">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Ngày lập từ</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a status" [(ngModel)]="searchFilter.trangThai">
-              <nz-option nzValue="1" nzLabel="Đang soạn"></nz-option>
-              <nz-option nzValue="2" nzLabel="Trình duyệt"></nz-option>
-              <nz-option nzValue="7" nzLabel="Gửi ĐV cấp trên"></nz-option>
-              <nz-option nzValue="8" nzLabel="ĐV cấp trên yêu cầu chỉnh sửa"></nz-option>
-              <nz-option nzValue="9" nzLabel="ĐV cấp trên duyệt"></nz-option>
-            </nz-select>
-          </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Mã báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person"  [(ngModel)]="searchFilter.maLoaiBcao" (ngModelChange)="setUrl($event)">
-              <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
-            </nz-select>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Năm báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBcao" />
+            <label class="search__label">Năm báo cáo </label>
+            <input class="search__input" nz-input  [(ngModel)]="searchFilter.namBaoCao"/>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đợt báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBaoCao" />
           </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày lập từ</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayLap"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Trạng thái</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+              <nz-option *ngFor="let t of listTrangThai" [nzValue]="t.id" [nzLabel]="t.tenDm"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6">
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" ></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Loại báo cáo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl(searchFilter.loaiBaoCao)">
+              <nz-option *ngFor="let bc of listLoaiBcao" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6"></div>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm" [nzExtra]="tableCard1"
+      <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
           <p>Tìm thấy tổng số {{lenght}} bản ghi</p>
@@ -76,18 +69,22 @@
             <tr>
               <th width="60px">STT</th>
               <th width="130px">Mã báo cáo</th>
-              <th width="175px">Ngày lập</th>
-              <th width="175px">Năm báo cáo</th>
+              <th width="130px">Báo cáo năm</th>
               <th>Báo cáo đợt</th>
+              <th width="175px">Ngày lập</th>
+              <th width="175px">Ngày trình duyệt</th>
+              <th width="175px">Ngày duyệt <br>(Ngày trưởng bộ phận kế toán duyệt)</th>
+              <th width="175px">Ngày phê duyệt <br> (Lãnh đạo chi cục phê duyệt)</th>
+              <th width="175px">Ngày cấp trên <br>trả kết quả</th>
               <th width="175px" class="text-center">Trạng thái</th>
-              <th width="" class="text-center">Đơn vị lập</th>
+              <th width="" class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
-              <td>{{item.ngayTao}}</td>
+              <td>{{item.ngayTao | date}}</td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
@@ -114,7 +111,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <button type="button" class="btn btn-main" (click)="themmoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

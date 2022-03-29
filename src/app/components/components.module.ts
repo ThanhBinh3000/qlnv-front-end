@@ -76,6 +76,7 @@ import { DialogThemBienbanNghiemThuKeLotComponent } from './dialog/dialog-them-b
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import { DialogChonThemKhoanMucComponent } from './dialog/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
+import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import { DialogChonThemKhoanMucComponent } from './dialog/dialog-chon-them-khoan
     //
     DialogLuaChonThemPhuLucComponent,
     DialogChonThemKhoanMucComponent,
+    DialogChonThemBieuMauBaoCaoComponent
 
   ],
   imports: [
