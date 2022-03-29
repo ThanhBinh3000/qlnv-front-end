@@ -39,6 +39,7 @@ export class superMiniData {
   col!: string;
 }
 
+
 export class miniData {
   id!: any;
   stt!: string;
