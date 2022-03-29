@@ -38,6 +38,7 @@ export class superMiniData {
   id!: any;
   maDvi!: string;
   sl!: number;
+  col!: any;
 }
 
 export class miniData {
@@ -45,7 +46,13 @@ export class miniData {
   stt!: string;
   checked!: boolean;
   maVtu!: string;
-  SL: superMiniData[] = [];
+  SL: any[] = [];
+  tong: number;
+  cphiXuatCoDmuc!: number;
+  cphiXuatChuaDmuc!: number;
+  thanhTienCoDmuc!: number;
+  thanhTienKhongDmuc!: number;
+  thanhTienCong!: number;
 }
 
 @Component({
@@ -102,6 +109,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   indeterminate = true;                       // properties allCheckBox
   editCache1: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
   editCache2: { [key: string]: { edit: boolean; data: miniData } } = {};
+  editCache3: { [key: string]: { edit: boolean; data: any } } = {};
 
   fileList: NzUploadFile[] = [];
 
@@ -209,6 +217,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.donVis = this.donVis.filter(item => item.capDvi === "2");
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -311,7 +320,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
-          if ( data.statusCode == 0 ){
+          if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -407,6 +416,12 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
               checked: false,
               maVtu: this.chiTietBcaos[0].listCtiet[i].maVtuTbi,
               SL: [],
+              tong: 0,
+              cphiXuatCoDmuc: 0,
+              cphiXuatChuaDmuc: 0,
+              thanhTienCoDmuc: 0,
+              thanhTienKhongDmuc: 0,
+              thanhTienCong: 0,
             }
             this.lstCTiet.push(vatTu);
           }
@@ -434,9 +449,10 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
             this.lstCTietBCao.push(nDung);
             //tao danh sach cac cot cua bang phu
             let mn: superMiniData = {
-              id:nDung.id,
+              id: nDung.id,
               maDvi: item.maCucDtnnKvuc,
-              sl:0,
+              sl: 0,
+              col: nDung.id,
             }
             this.bangDvi.push(mn);
             //them du lieu vao cac cot cua bang phu
@@ -445,6 +461,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
                 id: nDung.id,
                 maDvi: item.maCucDtnnKvuc,
                 sl: item.listCtiet[i].sl,
+                col: nDung.id,
               }
               this.lstCTiet[i].SL.push(mini);
             }
@@ -519,7 +536,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   redirectChiTieuKeHoachNam() {
@@ -558,10 +575,10 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // xoa dong
   deleteById1(id: any): void {
-    this.bangDvi = this.bangDvi.filter(item => item.id != id);
+    this.bangDvi = this.bangDvi.filter(item => item.col != id);
 
     this.lstCTiet.forEach(item => {
-      item.SL = item.SL.filter(data => data.id != id);
+      item.SL = item.SL.filter(data => data.col != id);
     })
 
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
@@ -577,9 +594,9 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     // add list delete id
     this.lstCTietBCao.forEach(item => {
       if (item.checked) {
-        this.bangDvi = this.bangDvi.filter(data => data.id != item.id);
+        this.bangDvi = this.bangDvi.filter(data => data.col != item.id);
         this.lstCTiet.forEach(data => {
-          data.SL = data.SL.filter(e => e.id != item.id);
+          data.SL = data.SL.filter(e => e.col != item.id);
         })
       }
       if (item.checked == true && typeof item.id == "number") {
@@ -643,9 +660,10 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);                          // lay vi tri hang minh sua
     if (this.lstCTietBCao[index].maCucDtnnKvuc == "") {
       let mini: superMiniData = {
-        id: id,
+        id: uuid.v4(),
         maDvi: this.editCache1[id].data.maCucDtnnKvuc,
         sl: 0,
+        col: id,
       }
       this.bangDvi.splice(index, 0, mini);
       this.lstCTiet.forEach(item => {
@@ -654,7 +672,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     }
     else {
       if (this.lstCTietBCao[index].maCucDtnnKvuc != this.editCache1[id].data.maCucDtnnKvuc) {
-        const ind = this.bangDvi.findIndex(item => item.id == this.lstCTietBCao[index].id);
+        const ind = this.bangDvi.findIndex(item => item.col == this.lstCTietBCao[index].id);
         this.bangDvi[ind].maDvi = this.editCache1[id].data.maCucDtnnKvuc;
         this.lstCTiet.forEach(item => {
           item.SL[ind].maDvi = this.bangDvi[ind].maDvi;
@@ -692,24 +710,57 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     let data: superMiniData[] = [];
     this.bangDvi.forEach(item => {
       let mm: superMiniData = {
-        id: item.id,
+        id: uuid.v4(),
         maDvi: item.maDvi,
         sl: 0,
+        col: item.id,
       }
       data.push(mm);
     })
+    let data1: superMiniData[] = [];
+    this.bangDvi.forEach(item => {
+      let mm: superMiniData = {
+        id: uuid.v4(),
+        maDvi: item.maDvi,
+        sl: 0,
+        col: item.id,
+      }
+      data1.push(mm);
+    })
+    
     let item: miniData = {
       maVtu: "",
       SL: data,
       stt: "",
       id: uuid.v4(),
       checked: false,
+      tong: 0,
+      cphiXuatCoDmuc: 0,
+      cphiXuatChuaDmuc: 0,
+      thanhTienCoDmuc: 0,
+      thanhTienKhongDmuc: 0,
+      thanhTienCong: 0,
+    }
+
+    let item1: miniData = {
+      maVtu: "",
+      SL: data1,
+      stt: "",
+      id: item.id,
+      checked: false,
+      tong: 0,
+      cphiXuatCoDmuc: 0,
+      cphiXuatChuaDmuc: 0,
+      thanhTienCoDmuc: 0,
+      thanhTienKhongDmuc: 0,
+      thanhTienCong: 0,
     }
 
     this.lstCTiet.splice(id, 0, item);
     this.editCache2[item.id] = {
       edit: true,
-      data: { ...item }
+      data: { ...item1,
+      }
     };
   }
 
@@ -772,8 +823,31 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   // huy thay doi
   cancelEdit2(id: string): void {
     const index = this.lstCTiet.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    let mm: superMiniData[] = [];
+    this.lstCTiet[index].SL.forEach(item => {
+      let ss: superMiniData = {
+        id: item.id,
+        maDvi: item.maDvi,
+        sl: item.sl,
+        col: item.col,
+      }
+      mm.push(ss);
+    })
+    let data: miniData = {
+      maVtu: this.lstCTiet[index].maVtu,
+      SL: mm,
+      stt: this.lstCTiet[index].stt,
+      id: this.lstCTiet[index].id,
+      checked: this.lstCTiet[index].checked,
+      tong: this.lstCTiet[index].tong,
+      cphiXuatCoDmuc: this.lstCTiet[index].cphiXuatCoDmuc,
+      cphiXuatChuaDmuc: this.lstCTiet[index].cphiXuatChuaDmuc,
+      thanhTienCoDmuc: this.lstCTiet[index].thanhTienCoDmuc,
+      thanhTienKhongDmuc: this.lstCTiet[index].thanhTienKhongDmuc,
+      thanhTienCong: this.lstCTiet[index].thanhTienCong,
+    }
     this.editCache2[id] = {
-      data: { ...this.lstCTiet[index] },
+      data: { ...data},
       edit: false
     };
   }
@@ -781,8 +855,32 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   // luu thay doi
   saveEdit2(id: string): void {
     this.editCache2[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+    let mm: superMiniData[] = [];
+    this.editCache2[id].data.SL.forEach(item => {
+      let ss: superMiniData = {
+        id: item.id,
+        maDvi: item.maDvi,
+        sl: item.sl,
+        col: item.col,
+      }
+      mm. push(ss);
+    })
+    let data: miniData = {
+      maVtu: this.editCache2[id].data.maVtu,
+      SL: mm,
+      stt: this.editCache2[id].data.stt,
+      id: this.editCache2[id].data.id,
+      checked: this.editCache2[id].data.checked,
+      tong: this.editCache2[id].data.tong,
+      cphiXuatCoDmuc: this.editCache2[id].data.cphiXuatCoDmuc,
+      cphiXuatChuaDmuc: this.editCache2[id].data.cphiXuatChuaDmuc,
+      thanhTienCoDmuc: this.editCache2[id].data.thanhTienCoDmuc,
+      thanhTienKhongDmuc: this.editCache2[id].data.thanhTienKhongDmuc,
+      thanhTienCong: this.editCache2[id].data.thanhTienCong,
+    }
+    
     const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-    Object.assign(this.lstCTiet[index], this.editCache2[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.lstCTiet[index] = data;
     this.editCache2[id].edit = false;  // CHUYEN VE DANG TEXT
   }
 
@@ -794,6 +892,21 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  tongSl(id: any){
+    
+    this.editCache2[id].data.tong = 0;
+    this.editCache2[id].data.SL.forEach(item => {
+      this.editCache2[id].data.tong += item.sl;
+    })
+    this.thanhTien(id);
+  }
+
+  thanhTien(id: any){
+    this.editCache2[id].data.thanhTienCoDmuc = this.editCache2[id].data.cphiXuatCoDmuc * this.editCache2[id].data.tong;
+    this.editCache2[id].data.thanhTienKhongDmuc = this.editCache2[id].data.cphiXuatChuaDmuc * this.editCache2[id].data.tong;
+    this.editCache2[id].data.thanhTienCong = this.editCache2[id].data.thanhTienCoDmuc + this.editCache2[id].data.thanhTienKhongDmuc;
   }
 
 

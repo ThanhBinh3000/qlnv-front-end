@@ -8,11 +8,11 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -89,7 +89,16 @@
               <nz-descriptions-item nzTitle="Loại báo cáo">
                 Xây dựng Kế hoạch quỹ tiền lương giai đoạn 03 năm
               </nz-descriptions-item>
+              <!-- <nz-descriptions-item nzTitle="Số VB gửi TC" [hidden]="checkDv">
+                <input class="search__input" nz-input [(ngModel)]="soVban" disabled />
+              </nz-descriptions-item> -->
             </nz-descriptions>
+            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+              <div nz-col nzSpan="3" >
+                <label class="search__label">Số VB gửi TC</label>
+                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
+              </div>
+            </div>
           </div>
         </div>
       </nz-card>
@@ -327,7 +336,7 @@
                     <td>{{ i + 1 }}</td>
                     <td [hidden]="checkKV">
                       <div *ngFor="let item of donVis">
-                        <div *ngIf="item.id == data.maDvi">
+                        <div *ngIf="item.maDvi == data.maDvi">
                           {{item.tenDvi}}
                         </div>
                       </div>
@@ -390,7 +399,7 @@
                     <td>{{ i + 1 }}</td>
                     <td [hidden]="checkKV">
                       <div *ngFor="let item of donVis">
-                        <div *ngIf="item.id == editCache[data.id].data.maDvi">
+                        <div *ngIf="item.maDvi == editCache[data.id].data.maDvi">
                           {{item.tenDvi}}
                         </div>
                       </div>
@@ -404,6 +413,7 @@
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongQuyLuongCoTchatLuongN" />
                     </td>
+
                     <td>
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN}}
                     </td>
@@ -429,6 +439,7 @@
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongQuyLuongCoTchatLuongThienN" />
                     </td>
+
                     <td>
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheThienN}}
                     </td>
@@ -444,6 +455,7 @@
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.cacKhoanDgopThienN"
                         (change)="changeModel(data.id)" />
                     </td>
+
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongCboN1" />
                     </td>
@@ -453,6 +465,7 @@
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongQuyLuongCoTchatLuongN1" />
                     </td>
+
                     <td>
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN1}}
                     </td>
@@ -478,6 +491,7 @@
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongQuyLuongCoTchatLuongN2" />
                     </td>
+
                     <td>
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN2}}
                     </td>
@@ -503,6 +517,7 @@
                     <td>
                       <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tongQuyLuongCoTchatLuongN3" />
                     </td>
+
                     <td>
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN3}}
                     </td>

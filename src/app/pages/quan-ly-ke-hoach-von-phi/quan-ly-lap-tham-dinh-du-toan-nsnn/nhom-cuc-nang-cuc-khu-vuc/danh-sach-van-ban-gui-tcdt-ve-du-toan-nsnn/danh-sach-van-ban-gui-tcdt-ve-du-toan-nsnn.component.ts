@@ -12,6 +12,7 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
+import { ItemDanhSach } from '../../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 @Component({
      selector: 'app-danh-sach-van-ban-gui-tcdt-ve-du-toan-nsnn',
@@ -69,11 +70,11 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           let userName = this.userService.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
 
-          this.danhMucService.dMCucKhuVuc().toPromise().then(
+          this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         console.log(data);
-                         this.cucKhuVucs = data.data?.content;
+                         this.cucKhuVucs = data.data;
+                         this.cucKhuVucs = this.cucKhuVucs.filter(item => item.capDvi === "2");
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

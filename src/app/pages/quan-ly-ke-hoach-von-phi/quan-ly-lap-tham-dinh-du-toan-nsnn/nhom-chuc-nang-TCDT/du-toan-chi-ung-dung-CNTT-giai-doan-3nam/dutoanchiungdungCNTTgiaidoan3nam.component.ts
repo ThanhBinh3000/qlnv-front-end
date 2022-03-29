@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -19,6 +19,7 @@ export class ItemData {
   ndung!: String;
   maLoaiKhoach!: String;
   maLoaiDan!: String;
+  maDvi: string;
   tongDtoanSl!: number;
   tongDtoanGtri!: number;
   thienNamTruoc!: number;
@@ -56,7 +57,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '26';
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -67,6 +68,16 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
+
+  cucKhuVucs: any = [];
+
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+  statusDvi: boolean;
+
 
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
@@ -138,7 +149,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '26';
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -181,11 +192,40 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-      if(res.statusCode==0){
-        this.donViTaos =res.data;
+    //lay danh sach danh muc don vi
+    this.quanLyVonPhiService.dMDonVi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donViTaos = data.data;
+          this.donViTaos.forEach(e => {
+            if (e.maDvi == this.donvitao) {
+              this.capDvi = e.capDvi;
+            }
+          })
+          // xac dinh cap tong cuc
+          if (this.capDvi == '1') {
+            this.statusDvi = false;
+          } else {
+            this.statusDvi = true;
+          }
+          //lay danh muc cuc khu vuc
+          this.cucKhuVucs = this.donViTaos.filter(item => item.capDvi === '2');
+
+          var Dvi = this.donViTaos.find(e => e.maDvi == this.donvitao);
+          this.capDv = Dvi.capDvi;
+          if (this.capDv == '2') {
+            this.checkDv = false;
+          } else {
+            this.checkDv = true;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-    })
+    );
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -350,6 +390,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       ndung!: '',
       maLoaiKhoach!: '',
       maLoaiDan!: '',
+      maDvi: '',
       tongDtoanSl!: 0,
       tongDtoanGtri!: 0,
       thienNamTruoc!: 0,

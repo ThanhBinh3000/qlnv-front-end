@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -44,7 +44,10 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '30';
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -61,7 +64,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   lstFile: any[] = [];
   listIdFiles: string;
   errorMessage: any;
-  donViTaos: any[] = [];
+  donVis: any[] = [];
   donvitien: string;
 
   allChecked = false; // check all checkbox
@@ -75,6 +78,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
+  capDvi: any;
 
   constructor(
     private nguoiDungSerivce: UserService,
@@ -170,11 +174,32 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-      if(res.statusCode==0){
-        this.donViTaos =res.data;
+    //lay danh sach danh muc don vi
+    await this.quanLyVonPhiService.dMDonVi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if(e.maDvi==this.donvitao){
+              this.capDvi = e.capDvi;
+            }
+          })
+          var Dvi = this.donVis.find(e => e.maDvi == this.donvitao);
+          this.capDv = Dvi.capDvi;
+          if( this.capDv == '2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
+
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = "err.error.message";
       }
-    })
+    );
     //check role cho các nut trinh duyet
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(
@@ -249,7 +274,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = '30';
+          this.maLoaiBacao = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -257,6 +282,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.mabaocao = data.data.maBcao;
           this.namBcaohienhanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.soVban = data.data.soVban
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -283,7 +309,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
   //lay ten don vi tạo
   getUnitName() {
-     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
+     return this.donVis.find(item => item.maDvi== this.donvitao)?.tenDvi;
   }
 
   getStatusName() {

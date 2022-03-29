@@ -29,6 +29,8 @@ export class QuanLyVonPhiService extends BaseService {
   timBaoCaoLapThamDinh(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach',
+
+      // 'http://192.168.0.161:8094/lap-tham-dinh-du-toan/danh-sach',
       request,
     );
   }
