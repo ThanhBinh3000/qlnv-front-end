@@ -1090,7 +1090,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           console.log(res);
-          this.router.navigate(['kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          if (res.statusCode == 1) {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          } else {
+            this.router.navigate([
+              'kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc',
+            ]);
+          }
         })
         .catch((e) => {
           console.error('error: ', e);
@@ -1106,19 +1112,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!startValue || !this.formData.controls['ngayHieuLuc'].value) {
       return false;
     }
-    return (
-      startValue.getTime() >
-      this.formData.controls['ngayHieuLuc'].value.getTime()
-    );
+    return startValue.getTime() > this.formData.controls['ngayHieuLuc'].value;
   };
 
   disabledEndDate = (endValue: Date): boolean => {
     if (!endValue || !this.formData.controls['ngayKy'].value) {
       return false;
     }
-    return (
-      endValue.getTime() <= this.formData.controls['ngayKy'].value.getTime()
-    );
+    return endValue.getTime() <= this.formData.controls['ngayKy'].value;
   };
   downloadTemplate() {
     this.chiTieuKeHoachNamService.downloadFile().subscribe((blob) => {
