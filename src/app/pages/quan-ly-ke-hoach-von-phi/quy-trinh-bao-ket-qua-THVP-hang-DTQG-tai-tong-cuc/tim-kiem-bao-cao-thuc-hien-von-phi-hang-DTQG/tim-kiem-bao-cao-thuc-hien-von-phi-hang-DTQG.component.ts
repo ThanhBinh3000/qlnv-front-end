@@ -37,20 +37,68 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   noParent = true;
   searchValue = '';
 
+  listTrangThai:any []=[
+    {
+      id:'1',
+      tenDm:'Đang soạn'
+    },
+    {
+      id:'2',
+      tenDm:'Trình duyệt'
+    },
+    {
+      id:'3',
+      tenDm:'Trưởng BP từ chối'
+    },
+    {
+      id:'4',
+      tenDm:'Trưởng BP duyệt'
+    },
+    {
+      id:'5',
+      tenDm:'Lãnh đạo từ chối'
+    },
+    {
+      id:'6',
+      tenDm:'Lãnh đạo duyệt'
+    },
+    {
+      id:'7',
+      tenDm:'Gửi ĐV cấp trên'
+    },
+    {
+      id:'8',
+      tenDm:'ĐV cấp trên từ chối'
+    },
+    {
+      id:'9',
+      tenDm:'ĐV cấp trên duyệt'
+    },
+  ]
+
+  listLoaiBcao:any[]=[
+    {
+      id:'1',
+      tenDm:'Đợt'
+    },
+    {
+      id:'2',
+      tenDm:'Năm'
+    }
+  ]
 
   listBcaoKqua:any []=[];
   lenght:any=0;
 
 
   searchFilter = {
-    maDvi:'235',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
+    maBaoCao:'',
+    namBaoCao:'',
+    dotBaoCao:'',
+    ngayLap:'',
+    denNgay:'',
     trangThai:'',
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
-    dotBcao:'',
+    loaiBaoCao:2,
     paggingReq: {
       limit: 20,
       page: 1
@@ -129,11 +177,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   
   timkiem(){
     console.log(this.searchFilter);
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.searchFilter.maLoaiBcao='91';
+    // if(this.searchFilter.maLoaiBcao==''){
+    //   this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+    //   return;
+    // }
+    // this.searchFilter.maLoaiBcao='91';
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         
@@ -154,29 +202,26 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
-   console.log(lbaocao);
+      switch (lbaocao) {
+        case '1':
+          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
+          break;
+        case '2':
+          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
+          break;
+        default:
+          this.url = null;
+          break;
+      }
+  }
 
+  themmoi(){
+    if(this.url==null){
+      this.notifi.error(MESSAGE.ERROR, 'Bạn chưa chọn loại báo cáo');
+      return;
+    }else{
+      this.router.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/'+this.url]);
+    }
   }
 
   //doi so trang
