@@ -110,6 +110,8 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -225,7 +227,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     );
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
@@ -251,11 +253,11 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
             this.checkDv = true;
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.errorMessage = "err.error.message";
       }
     );
 

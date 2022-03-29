@@ -127,6 +127,7 @@
                                           <th rowspan="2" nzWidth="200px">Loại</th>
                                           <th rowspan="2" nzWidth="200px">Khoản</th>
                                           <th rowspan="2" nzWidth="200px">Chỉ mục</th>
+                                          <th rowspan="2" nzWidth="200px" [hidden]="checkKV">Đơn vị</th>
                                           <th colspan="2">
                                                Năm N + 1
                                           </th>
@@ -167,26 +168,11 @@
                                 </thead>
                                 <tbody>
                                      <tr>
-                                          <td>A</td>
-                                          <td style="width: 50px;">B</td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td width="2.25%" [hidden]="status"></td>
-                                          <td width="2.25%" [hidden]="status"></td>
-                                          <td width="2.25%" [hidden]="status"></td>
-                                          <td width="2.25%" [hidden]="status"></td>
-                                     </tr>
-                                     <tr>
                                           <td></td>
                                           <td>Tổng nhu cầu</td>
                                           <td></td>
                                           <td></td>
+                                          <td [hidden]="checkKV"></td>
                                           <td></td>
                                           <td></td>
                                           <td></td>
@@ -223,6 +209,13 @@
                                                          </div>
                                                     </div>
                                                </td>
+                                               <td [hidden]="checkKV">
+                                                <div *ngFor="let item of donVis">
+                                                  <div *ngIf="item.id == data.maDvi">
+                                                    {{item.tenDvi}}
+                                                  </div>
+                                                </div>
+                                              </td>
                                                <td>{{ data.soLuotNguoiN1 }}</td>
                                                <td>{{ data.thanhTienN1 }}</td>
                                                <td>{{ data.soLuotNguoiN2 }}</td>
@@ -256,7 +249,7 @@
                                                </td>
                                                <td>
                                                     <nz-select nzShowSearch nzAllowClear
-                                                         nzPlaceHolder="Chọn nhóm chi"
+                                                         nzPlaceHolder="Chọn khoản"
                                                          [(ngModel)]="editCache[data.id].data.maKhoan">
                                                          <nz-option *ngFor="let item of maKhoans" [nzValue]="item.id"
                                                               [nzLabel]="item.tenDm"></nz-option>
@@ -264,10 +257,18 @@
                                                </td>
                                                <td>
                                                     <nz-select nzShowSearch nzAllowClear
-                                                         nzPlaceHolder="Chọn loại chi"
+                                                         nzPlaceHolder="Chọn chỉ mục"
                                                          [(ngModel)]="editCache[data.id].data.maChiMuc">
                                                          <nz-option *ngFor="let item of maChiMucs" [nzValue]="item.id"
                                                               [nzLabel]="item.tenDm"></nz-option>
+                                                    </nz-select>
+                                               </td>
+                                               <td [hidden]="checkKV">
+                                                    <nz-select nzShowSearch nzAllowClear
+                                                         nzPlaceHolder="Chọn loại đơn vị"
+                                                         [(ngModel)]="editCache[data.id].data.maDvi">
+                                                         <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
+                                                              [nzLabel]="item.tenDvi"></nz-option>
                                                     </nz-select>
                                                </td>
                                                <td>

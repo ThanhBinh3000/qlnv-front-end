@@ -14,6 +14,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
+  maDvi!: String;
   id: any;
   stt!: string;
   maLoai: string;
@@ -79,6 +80,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
+  checkKV:boolean;                       // trang thai
+  capDvi:any;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -194,19 +197,31 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       }
     );
 
-    //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+   //lay danh sach danh muc don vi
+   await this.danhMucService.dMDonVi().toPromise().then(
+    (data) => {
+      if (data.statusCode == 0) {
+        this.donVis = data.data;
+        this.donVis.forEach(e => {
+          if(e.id==this.maDonViTao){
+            this.capDvi = e.capDvi;
+
+          }
+        })
+      } else {
+        this.errorMessage = "Có lỗi trong quá trình vấn tin!";
       }
-    );
+    },
+    (err) => {
+      this.errorMessage = "err.error.message";
+    }
+  );
+
+  if(this.capDvi==3){
+    this.checkKV=true;
+  }else{
+    this.checkKV = false;
+  }
     this.spinner.hide();
   }
 
@@ -402,6 +417,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item: ItemData = {
+      maDvi!: "",
       id: uuid.v4(),
       stt: '',
       maLoai: '',
@@ -421,6 +437,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
+    if(this.capDvi==3){
+      this.checkKV=true;
+    }else{
+      this.checkKV=false;
+    }
   }
 
   // xoa dong
@@ -506,7 +527,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
   }
 
   // start edit
