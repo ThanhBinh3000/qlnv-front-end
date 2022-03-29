@@ -37,20 +37,68 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   noParent = true;
   searchValue = '';
 
+  listTrangThai:any []=[
+    {
+      id:'1',
+      tenDm:'Đang soạn'
+    },
+    {
+      id:'2',
+      tenDm:'Trình duyệt'
+    },
+    {
+      id:'3',
+      tenDm:'Trưởng BP từ chối'
+    },
+    {
+      id:'4',
+      tenDm:'Trưởng BP duyệt'
+    },
+    {
+      id:'5',
+      tenDm:'Lãnh đạo từ chối'
+    },
+    {
+      id:'6',
+      tenDm:'Lãnh đạo duyệt'
+    },
+    {
+      id:'7',
+      tenDm:'Gửi ĐV cấp trên'
+    },
+    {
+      id:'8',
+      tenDm:'ĐV cấp trên từ chối'
+    },
+    {
+      id:'9',
+      tenDm:'ĐV cấp trên duyệt'
+    },
+  ]
+
+  listLoaiBcao:any[]=[
+    {
+      id:'1',
+      tenDm:'Đợt'
+    },
+    {
+      id:'2',
+      tenDm:'Năm'
+    }
+  ]
 
   listBcaoKqua:any []=[];
   lenght:any=0;
 
 
   searchFilter = {
-    maDvi:'235',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
+    maBaoCao:'',
+    namBaoCao:'',
+    dotBaoCao:'',
+    ngayLap:'',
+    denNgay:'',
     trangThai:'',
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
-    dotBcao:'',
+    loaiBaoCao:2,
     paggingReq: {
       limit: 20,
       page: 1
@@ -129,11 +177,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   
   timkiem(){
     console.log(this.searchFilter);
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.searchFilter.maLoaiBcao='91';
+    // if(this.searchFilter.maLoaiBcao==''){
+    //   this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+    //   return;
+    // }
+    // this.searchFilter.maLoaiBcao='91';
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         
