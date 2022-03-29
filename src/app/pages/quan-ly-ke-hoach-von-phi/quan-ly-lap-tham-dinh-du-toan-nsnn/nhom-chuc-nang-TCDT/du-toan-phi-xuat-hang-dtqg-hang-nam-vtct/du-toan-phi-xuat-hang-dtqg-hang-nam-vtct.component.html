@@ -191,7 +191,7 @@
                                              <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
-                                                       <div *ngFor="let item of donVis">
+                                                       <div *ngFor="let item of cucKhuVucs">
                                                             <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
                                                                  {{item.tenDvi}}
                                                             </div>
@@ -231,7 +231,7 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache1[data.id].data.maCucDtnnKvuc">
-                                                            <nz-option *ngFor="let item of donVis"
+                                                            <nz-option *ngFor="let item of cucKhuVucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                                                             </nz-option>
                                                        </nz-select>
@@ -292,9 +292,9 @@
                                                        <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit1(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
-                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
@@ -450,9 +450,9 @@
                                                        <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit2(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
-                                                            (nzOnConfirm)="cancelEdit2(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit2(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                            (nzOnConfirm)="cancelEdit2(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine2(i + 1)"></i>

@@ -102,7 +102,7 @@
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
-                                        Kế hoạch Bảo quản hàng năm
+                                        Kế hoạch Bảo quản hàng năm N+1
                                    </nz-descriptions-item>
 
                               </nz-descriptions>
@@ -159,24 +159,12 @@
                                              <td width="2.25%" [hidden]="status"></td>
                                         </tr>
 
-                                        <tr>
-                                             <td></td>
-                                             <td>Tổng cộng</td>
-                                             <td>{{tong.thocTx}}</td>
-                                             <td>{{tong.thocLd}}</td>
-                                             <td>{{tong.gaoTx}}</td>
-                                             <td>{{tong.gaoLd}}</td>
-                                             <td width="2.25%" [hidden]="status"></td>
-                                             <td width="2.25%" [hidden]="status"></td>
-                                             <td width="2.25%" [hidden]="status"></td>
-                                             <td width="2.25%" [hidden]="status"></td>
-                                        </tr>
-
+                                       
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
-                                                       <div *ngFor="let item of donVis">
+                                                       <div *ngFor="let item of cucKhuVucs">
                                                             <div *ngIf="item.maDvi == data.maDvi">
                                                                  {{item.tenDvi}}
                                                             </div>
@@ -208,7 +196,7 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache1[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis"
+                                                            <nz-option *ngFor="let item of cucKhuVucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                                                             </nz-option>
                                                        </nz-select>
@@ -235,9 +223,9 @@
                                                        <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit1(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
-                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
@@ -248,6 +236,20 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
+
+                                        <tr>
+                                             <td></td>
+                                             <td>Tổng cộng</td>
+                                             <td>{{tong.thocTx}}</td>
+                                             <td>{{tong.thocLd}}</td>
+                                             <td>{{tong.gaoTx}}</td>
+                                             <td>{{tong.gaoLd}}</td>
+                                             <td width="2.25%" [hidden]="status"></td>
+                                             <td width="2.25%" [hidden]="status"></td>
+                                             <td width="2.25%" [hidden]="status"></td>
+                                             <td width="2.25%" [hidden]="status"></td>
+                                        </tr>
+
                                    </tbody>
                               </nz-table>
                          </nz-tab>
@@ -276,20 +278,48 @@
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
-                                             <th nzWidth="50px">STT</th>
-                                             <th nzWidth="170px">Nhập vật tư</th>
+                                             <th nzWidth="50px">
+                                                  STT
+                                             </th>
+
+                                             <th nzWidth="170px">
+                                                  Nhập vật tư
+                                             </th>
 
                                              <th nzWidth="150px" *ngFor="let data of bangDvi">
-                                                  <div *ngFor="let item of donVis">
+                                                  <div *ngFor="let item of cucKhuVucs">
                                                        <div *ngIf="item.maDvi == data.maDvi">
                                                             {{item.tenDvi}}
                                                        </div>
                                                   </div>
                                              </th>
-                                             <th nzWidth="200px">Định mức nhập <br /> VTTB các đơn vị</th>
-                                             <th nzWidth="200px">Định mức nhập <br /> VTTB Văn phòng</th>
+
+                                             <th nzWidth="100px">
+                                                  Tổng cục KV
+                                             </th>
+
+                                             <th nzWidth="100px">
+                                                  Tổng Văn phòng
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Định mức nhập <br /> VTTB các đơn vị
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Định mức nhập <br /> VTTB Văn phòng
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Thành tiền nhập <br /> VTTB các đơn vị
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Thành tiền nhập <br /> VTTB Văn phòng
+                                             </th>
 
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
+
                                              <th rowspan="2" [hidden]="status">
                                                   <label nz-checkbox [(ngModel)]="allChecked2"
                                                        (ngModelChange)="updateAllChecked2()"
@@ -314,8 +344,19 @@
                                                   <td *ngFor="let item of data.SL">
                                                        {{item.sl}}
                                                   </td>
+
                                                   <td></td>
+
                                                   <td></td>
+
+                                                  <td></td>
+                                                  
+                                                  <td></td>
+
+                                                  <td></td>
+
+                                                  <td></td>
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
                                                   </td>
@@ -346,16 +387,26 @@
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="item.sl" />
                                                   </td>
+                                                  
                                                   <td></td>
+
+                                                  <td></td>
+
+                                                  <td></td>
+                                                  
+                                                  <td></td>
+
+                                                  <td></td>
+
                                                   <td></td>
 
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit2(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
-                                                            (nzOnConfirm)="cancelEdit2(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit2(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                            (nzOnConfirm)="cancelEdit2(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine2(i + 1)"></i>
@@ -394,20 +445,48 @@
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
-                                             <th nzWidth="50px">STT</th>
-                                             <th nzWidth="170px">Nhập vật tư</th>
+                                             <th nzWidth="50px">
+                                                  STT
+                                             </th>
+
+                                             <th nzWidth="170px">
+                                                  Nhập vật tư
+                                             </th>
 
                                              <th nzWidth="150px" *ngFor="let data of bangDvi">
-                                                  <div *ngFor="let item of donVis">
+                                                  <div *ngFor="let item of cucKhuVucs">
                                                        <div *ngIf="item.maDvi == data.maDvi">
                                                             {{item.tenDvi}}
                                                        </div>
                                                   </div>
                                              </th>
-                                             <th nzWidth="200px">Định mức nhập <br /> VTTB các đơn vị</th>
-                                             <th nzWidth="200px">Định mức nhập <br /> VTTB Văn phòng</th>
+                                             
+                                             <th nzWidth="100px">
+                                                  Tổng cục KV
+                                             </th>
+
+                                             <th nzWidth="100px">
+                                                  Tổng Văn phòng
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Định mức nhập <br /> VTTB các đơn vị
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Định mức nhập <br /> VTTB Văn phòng
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Thành tiền nhập <br /> VTTB các đơn vị
+                                             </th>
+
+                                             <th nzWidth="150px">
+                                                  Thành tiền nhập <br /> VTTB Văn phòng
+                                             </th>
 
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
+
                                              <th rowspan="2" [hidden]="status">
                                                   <label nz-checkbox [(ngModel)]="allChecked2"
                                                        (ngModelChange)="updateAllChecked2()"
@@ -432,8 +511,19 @@
                                                   <td *ngFor="let item of data.SL">
                                                        {{item.sl}}
                                                   </td>
+                                                 
                                                   <td></td>
+
                                                   <td></td>
+
+                                                  <td></td>
+                                                  
+                                                  <td></td>
+
+                                                  <td></td>
+
+                                                  <td></td>
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById3(data.id)"></i>
                                                   </td>
@@ -464,16 +554,26 @@
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="item.sl" />
                                                   </td>
+                                                  
                                                   <td></td>
+
+                                                  <td></td>
+
+                                                  <td></td>
+                                                  
+                                                  <td></td>
+
+                                                  <td></td>
+
                                                   <td></td>
 
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById3(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit3(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
-                                                            (nzOnConfirm)="cancelEdit3(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit3(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                            (nzOnConfirm)="cancelEdit3(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine3(i + 1)"></i>
