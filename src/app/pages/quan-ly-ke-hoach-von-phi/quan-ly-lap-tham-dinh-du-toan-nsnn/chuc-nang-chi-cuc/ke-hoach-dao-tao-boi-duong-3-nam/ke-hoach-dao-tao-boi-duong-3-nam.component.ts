@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -19,6 +19,7 @@ export class ItemData {
   maLoai: string;
   maKhoan: string;
   maChiMuc: string;
+  maDvi: string;
   soLuotNguoiN1: number;
   thanhTienN1: number;
   soLuotNguoiN2: number;
@@ -39,6 +40,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   donVis: any = [];
   maKhoans: any = [];
   maChiMucs: any = [];
+  cucKhuVucs: any = [];
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   userInfo: any;
   errorMessage!: String;                      //
@@ -51,7 +53,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
-  maBaoCao!: string;                          // ma bao cao
+  maBaoCao: string = QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
   maLoaiBaoCao: string = "26";                // nam bao cao
@@ -73,6 +75,13 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   listIdFiles: string;                        // id file luc call chi tiet
 
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+
+  statusDvi: boolean;
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -199,6 +208,24 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if (e.maDvi == this.maDonViTao) {
+              this.capDvi = e.capDvi;
+            }
+          })
+          if (this.capDvi == '1') {
+            this.statusDvi = false;
+          } else {
+            this.statusDvi = true;
+          }
+          this.cucKhuVucs = this.donVis.filter(item => item.capDvi === '2');
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if (this.capDv == '2') {
+            this.checkDv = false;
+          } else {
+            this.checkDv = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -207,6 +234,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+    
     this.spinner.hide();
   }
 
@@ -270,7 +298,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
-          if (data.statusCode == 0){
+          if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -351,6 +379,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.soVban = data.data.soVban;
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -407,6 +436,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       maLoai: '',
       maKhoan: '',
       maChiMuc: '',
+      maDvi: '',
       soLuotNguoiN1: 0,
       thanhTienN1: 0,
       soLuotNguoiN2: 0,
@@ -506,7 +536,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   // start edit
