@@ -7,7 +7,7 @@
       <nz-form-control>
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
           <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-            [nzAutocomplete]="auto" />
+            [nzAutocomplete]="auto" [readonly]="isEdit" />
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
@@ -19,6 +19,7 @@
           </nz-auto-option>
         </nz-autocomplete>
       </nz-form-control>
+      <div class="error" *ngIf="errorDonVi">Dữ liệu không được để trống</div>
     </nz-form-item>
   </div>
   <div nz-col [nzSpan]="8">

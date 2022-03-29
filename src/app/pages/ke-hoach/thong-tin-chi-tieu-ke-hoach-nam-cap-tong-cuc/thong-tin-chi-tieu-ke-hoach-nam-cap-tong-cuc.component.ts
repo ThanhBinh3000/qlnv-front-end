@@ -79,7 +79,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     private helperService: HelperService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
@@ -1023,9 +1023,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save() {
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
-      this.formData.get('soQD').value
-    }${this.qdTCDT}`;
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
+      }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1073,7 +1072,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
-          console.log(res);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         })
         .catch((e) => {
           console.error('error: ', e);
@@ -1089,13 +1094,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
-          console.log(res);
-          if (res.statusCode == 1) {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
+          else {
             this.notification.error(MESSAGE.ERROR, res.msg);
-          } else {
-            this.router.navigate([
-              'kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            ]);
           }
         })
         .catch((e) => {
