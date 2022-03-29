@@ -7,23 +7,26 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
+
 export class ItemData {
   maDvi!: String;
-  bcheGiao_N1!: number;
-  duKienSoCcvcCoMat_N1!: number;
-  duKienSoHdongCoMat_N1!: number;
+  bcheGiaoN1!: number;
+  duKienSoCcvcCoMatN1!: number;
+  duKienSoHdongCoMatN1!: number;
   bcheChuaSdung!: number;
   tongquyLuongPcapTheoLuongCcvcHdld!: number;
   tongSo!: number;
-  ccvcDuKienCoMat_N1_Cong!: number;
-  ccvcDuKienCoMat_N1_LuongTheoBac!: number;
-  ccvcDuKienCoMat_N1_Pcap!: number;
-  ccvcDuKienCoMat_N1_Ckdg!: number;
-  quyLuongTangNangBacLuong_N1!: number;
+  ccvcDuKienCoMatN1Cong!: number;
+  ccvcDuKienCoMatN1LuongTheoBac!: number;
+  ccvcDuKienCoMatN1Pcap!: number;
+  ccvcDuKienCoMatN1Ckdg!: number;
+  quyLuongTangNangBacLuongN1!: number;
   bcheChuaSdungCong!: number;
   bcheChuaSdungLuong!: number;
   bcheChuaSdungCkdg!: number;
@@ -57,7 +60,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -117,6 +120,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
               private sanitizer: DomSanitizer,
               private userSerivce: UserService,
               private danhMucService: DanhMucHDVService,
+              private notification: NzNotificationService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -257,13 +261,13 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.IMPORT_NUMBER_SUCCESS_2);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           console.log(err);
         },
       );
@@ -367,17 +371,17 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       maDvi: "",
-      bcheGiao_N1: 0,
-      duKienSoCcvcCoMat_N1: 0,
-      duKienSoHdongCoMat_N1: 0,
+      bcheGiaoN1: 0,
+      duKienSoCcvcCoMatN1: 0,
+      duKienSoHdongCoMatN1: 0,
       bcheChuaSdung: 0,
       tongquyLuongPcapTheoLuongCcvcHdld: 0,
       tongSo: 0,
-      ccvcDuKienCoMat_N1_Cong: 0,
-      ccvcDuKienCoMat_N1_LuongTheoBac: 0,
-      ccvcDuKienCoMat_N1_Pcap: 0,
-      ccvcDuKienCoMat_N1_Ckdg: 0,
-      quyLuongTangNangBacLuong_N1: 0,
+      ccvcDuKienCoMatN1Cong: 0,
+      ccvcDuKienCoMatN1LuongTheoBac: 0,
+      ccvcDuKienCoMatN1Pcap: 0,
+      ccvcDuKienCoMatN1Ckdg: 0,
+      quyLuongTangNangBacLuongN1: 0,
       bcheChuaSdungCong: 0,
       bcheChuaSdungLuong: 0,
       bcheChuaSdungCkdg: 0,
@@ -513,11 +517,10 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    debugger
-    this.editCache[id].data.bcheChuaSdung = Number(this.editCache[id].data.bcheGiao_N1) - Number(this.editCache[id].data.duKienSoCcvcCoMat_N1);
-    this.editCache[id].data.tongquyLuongPcapTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvcDuKienCoMat_N1_Ckdg)  + Number(this.editCache[id].data.quyLuongTangNangBacLuong_N1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
-    this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvcDuKienCoMat_N1_Cong) + Number(this.editCache[id].data.quyLuongTangNangBacLuong_N1) + Number(this.editCache[id].data.bcheChuaSdungCong);
-    this.editCache[id].data.ccvcDuKienCoMat_N1_Cong = Number(this.editCache[id].data.ccvcDuKienCoMat_N1_LuongTheoBac) + Number(this.editCache[id].data.ccvcDuKienCoMat_N1_Pcap) + Number(this.editCache[id].data.ccvcDuKienCoMat_N1_Ckdg);
+    this.editCache[id].data.bcheChuaSdung = Number(this.editCache[id].data.bcheGiaoN1) - Number(this.editCache[id].data.duKienSoCcvcCoMatN1);
+    this.editCache[id].data.tongquyLuongPcapTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Ckdg)  + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
+    this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvcDuKienCoMatN1Cong) + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCong);
+    this.editCache[id].data.ccvcDuKienCoMatN1Cong = Number(this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Pcap) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Ckdg);
     this.editCache[id].data.bcheChuaSdungCong = Number(this.editCache[id].data.bcheChuaSdungLuong) + Number(this.editCache[id].data.bcheChuaSdungCkdg) + Number(this.editCache[id].data.quyLuongPcapTheoHdld);
   }
 }
