@@ -103,7 +103,7 @@
                                                   <a routerLink="#">Xem</a>
                                              </td>
                                              <td>
-                                                  <a routerLink="#">Sửa</a>
+                                                  <a routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
                                              </td>
                                              <td>
                                                   <a routerLink="#">Xóa</a>
@@ -138,7 +138,7 @@
                               <span>Xuất</span>
                          </button>
                          <button type="button" class="btn btn-main"
-                              routerLink="#" [hidden]="statusBtnTaoMoi">
+                              routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn" [hidden]="statusBtnTaoMoi">
                               <span>Tạo mới</span>
                          </button>
                     </div>
@@ -182,3 +182,4 @@
      <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
      
      <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
+     

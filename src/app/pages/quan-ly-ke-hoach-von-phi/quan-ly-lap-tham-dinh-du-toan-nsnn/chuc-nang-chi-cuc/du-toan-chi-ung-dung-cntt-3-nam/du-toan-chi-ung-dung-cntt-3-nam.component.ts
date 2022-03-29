@@ -16,6 +16,7 @@ import { MESSAGE } from '../../../../../constants/message';
 export class ItemData {
   id!: any;
   maBcao!: String;
+  maDvi!: string;
   stt!: String;
   loaiKhoach!: String;
   loaiDuan!: String;
@@ -49,6 +50,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   loaiKhoachs: any = [];
   loaiDans: any = [];
   donVis: any = [];
+  cucKhuVucs: any = [];
   listBaoCao: ItemData[] = [];
   lstCTietBCao: ItemData[] = [];
   id!: any;
@@ -76,6 +78,13 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   namBaoCao!: any;
   listId: string = "";
   listIdDelete: string = "";                  // list id delete
+
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+  statusDvi: boolean;
 
 
   currentFile?: File;
@@ -220,6 +229,27 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if (e.maDvi == this.maDonViTao) {
+              this.capDvi = e.capDvi;
+            }
+          })
+          // xac dinh cap tong cuc
+          if (this.capDvi == '1') {
+            this.statusDvi = false;
+          } else {
+            this.statusDvi = true;
+          }
+          //lay danh muc cuc khu vuc
+          this.cucKhuVucs = this.donVis.filter(item => item.capDvi === '2');
+
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if (this.capDv == '2') {
+            this.checkDv = false;
+          } else {
+            this.checkDv = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -293,7 +323,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         (data) => {
-          if (data.statusCode == 0){
+          if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -425,6 +455,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   addLine(id: number): void {
     let item: ItemData = {
       loaiKhoach: "",
+      maDvi: '',
       loaiDuan: "",
       tongDtoanSl: 0,
       tongDtoanGtri: 0,
@@ -535,7 +566,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   // start edit

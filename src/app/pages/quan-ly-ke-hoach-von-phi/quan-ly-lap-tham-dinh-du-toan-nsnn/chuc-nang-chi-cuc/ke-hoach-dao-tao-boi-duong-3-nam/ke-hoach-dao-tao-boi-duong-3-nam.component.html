@@ -98,6 +98,11 @@
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
+                                   <ng-container *ngIf="!checkDv">
+                                        <nz-descriptions-item nzTitle="Số VB gửi TC">
+                                             {{soVban}}
+                                        </nz-descriptions-item>
+                                   </ng-container>
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
                                         Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm
                                    </nz-descriptions-item>
@@ -127,6 +132,7 @@
                                              <th rowspan="2" nzWidth="200px">Loại</th>
                                              <th rowspan="2" nzWidth="200px">Khoản</th>
                                              <th rowspan="2" nzWidth="200px">Chỉ mục</th>
+                                             <th rowspan="2" nzWidth="200px" [hidden]="statusDvi">Đơn vị</th>
                                              <th colspan="2">
                                                   Năm N + 1
                                              </th>
@@ -171,6 +177,7 @@
                                              <td style="width: 50px;">B</td>
                                              <td></td>
                                              <td></td>
+                                             <td [hidden]="statusDvi"></td>
                                              <td></td>
                                              <td></td>
                                              <td></td>
@@ -187,6 +194,7 @@
                                              <td>Tổng nhu cầu</td>
                                              <td></td>
                                              <td></td>
+                                             <td [hidden]="statusDvi"></td>
                                              <td></td>
                                              <td></td>
                                              <td></td>
@@ -220,6 +228,13 @@
                                                        <div *ngFor="let item of maChiMucs">
                                                             <div *ngIf="item.id == data.maChiMuc">
                                                                  {{item.tenDm}}
+                                                            </div>
+                                                       </div>
+                                                  </td>
+                                                  <td [hidden]="statusDvi">
+                                                       <div *ngFor="let item of cucKhuVucs">
+                                                            <div *ngIf="item.maDvi == data.maDvi">
+                                                                 {{item.tenDvi}}
                                                             </div>
                                                        </div>
                                                   </td>
@@ -268,6 +283,14 @@
                                                             [(ngModel)]="editCache[data.id].data.maChiMuc">
                                                             <nz-option *ngFor="let item of maChiMucs" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
+                                                       </nz-select>
+                                                  </td>
+                                                  <td [hidden]="statusDvi">
+                                                       <nz-select nzShowSearch nzAllowClear
+                                                            nzPlaceHolder="Chọn đơn vị"
+                                                            [(ngModel)]="editCache[data.id].data.maDvi">
+                                                            <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                                                                 [nzLabel]="item.tenDvi"></nz-option>
                                                        </nz-select>
                                                   </td>
                                                   <td>
@@ -418,3 +441,4 @@
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
    
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
+   

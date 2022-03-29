@@ -34,7 +34,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      denNgay: string;                             //tim kiem den ngay
      tenDvi: string;
      nam: number;                                 //nam tim kiem
-     idDvi: number;                               //id don vi tim kiem
+     maDvi: number;                               //id don vi tim kiem
      lstCTietBCao: any = [];                      // list chi tiet bao cao
      userInfo: any;
      status: boolean = false;                     // trang thai an/ hien cua cot noi dung
@@ -81,6 +81,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
+                         console.log(this.donVis);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -102,13 +103,13 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                }
           })
 
-          this.idDvi = userInfo?.dvql;
-          if (this.chiCucs.findIndex(item => item.id == this.idDvi) != -1) {
+          this.maDvi = userInfo?.dvql;
+          if (this.chiCucs.findIndex(item => item.maDvi == this.maDvi) != -1) {
                this.donVis = this.chiCucs;
                this.status = false;
           } else {
                this.status = true;
-               if (this.cucKhuVucs.findIndex(item => item.id == this.idDvi) != -1) {
+               if (this.cucKhuVucs.findIndex(item => item.maDvi == this.maDvi) != -1) {
                     this.donVis = this.cucKhuVucs;
                } else {
                     this.donVis = this.tongCucs;
@@ -167,7 +168,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           this.spinner.show();
 
           let request = {
-               maDvi: this.idDvi,
+               maDvi: this.maDvi,
                ngayTaoTu: this.datePipe.transform(this.tuNgay, 'dd/MM/yyyy',),
                ngayTaoDen: this.datePipe.transform(this.denNgay, 'dd/MM/yyyy',),
                namHienHanh: this.nam,
@@ -210,7 +211,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
 
      // lay ten don vi tao
      getUnitName() {
-          return this.donVis.find(item => item.id == this.idDvi)?.tenDvi;
+          return this.donVis.find(item => item.maDvi == this.maDvi)?.tenDvi;
      }
 
      // lay ten trang thai

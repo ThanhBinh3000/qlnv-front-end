@@ -18,7 +18,7 @@
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Trình phê duyệt</span>
                     </button>
-                    
+
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
                          [hidden]="statusBtnDuyet">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -32,7 +32,7 @@
                     <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
                          <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>Từ chối</span>
-                         
+
                     </button>
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()">
                          <i class="icon htvbdh_tcdt_save"></i>
@@ -69,6 +69,38 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                               </div>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                                   <div nz-col nzSpan="3">
+                                        <br />
+                                        <button class="btn btn-main" type="button">
+                                             Chọn từ phân bổ
+                                        </button>
+                                   </div>
+                                   <div nz-col nzSpan="3">
+                                        <br />
+                                        <button class="btn btn-main" type="button">
+                                             Gửi báo cáo
+                                        </button>
+                                   </div>
+                                   <div nz-col nzSpan="5">
+                                        <label class="search__label">Mã ngân sách</label>
+                                        <input class="search__input" nz-input [(ngModel)]="maNganSach" />
+                                   </div>
+                                   <div nz-col nzSpan="5">
+                                        <label class="search__label">Mã số KBNN</label>
+                                        <input class="search__input" nz-input [(ngModel)]="maSoKbnn" />
+                                   </div>
+                                   <div nz-col nzSpan="4">
+                                        <label class="search__label">Trạng thái</label>
+                                        <input class="search__input" nz-input [(ngModel)]="trangThaiBanGhi" />
+                                   </div>
+                                   <div nz-col nzSpan="4">
+                                        <label class="search__label">Đơn vị tiền</label>
+                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tiền"
+                                             [(ngModel)]="dviTien">
+                                             <nz-option *ngFor="let item of dviTiens" [nzValue]="item.id"
+                                                  [nzLabel]="item.tenDm"></nz-option>
+                                        </nz-select>
+                                   </div>
                               </div>
                               <nz-table nzBordered class="table__body">
                                    <thead>
@@ -147,17 +179,21 @@
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.uocThien" (change)="changeUocThien(data.id)" />
+                                                            [(ngModel)]="editCache[data.id].data.uocThien"
+                                                            (change)="changeUocThien(data.id)" />
                                                   </td>
                                                   <input class="search__input" nz-input type="number"
-                                                       [(ngModel)]="editCache[data.id].data.dtoanGiao" (change)="changeDtoanGiao(data.id)"/>
+                                                       [(ngModel)]="editCache[data.id].data.dtoanGiao"
+                                                       (change)="changeDtoanGiao(data.id)" />
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.dcTang" (change)="changeDcTang(data.id)"/>
+                                                            [(ngModel)]="editCache[data.id].data.dcTang"
+                                                            (change)="changeDcTang(data.id)" />
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.dcGiam" (change)="changeDcGiam(data.id)"/>
+                                                            [(ngModel)]="editCache[data.id].data.dcGiam"
+                                                            (change)="changeDcGiam(data.id)" />
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input
@@ -170,7 +206,7 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
-                                        
+
                                         <tr>
                                              <td></td>
                                              <td>Tổng cộng</td>
@@ -240,7 +276,7 @@
                          <button type="button" class="btn btn-main" (click)="addKmuc()">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
-                            </button>
+                         </button>
                     </div>
                </div>
                <div class="ghi-chu">
