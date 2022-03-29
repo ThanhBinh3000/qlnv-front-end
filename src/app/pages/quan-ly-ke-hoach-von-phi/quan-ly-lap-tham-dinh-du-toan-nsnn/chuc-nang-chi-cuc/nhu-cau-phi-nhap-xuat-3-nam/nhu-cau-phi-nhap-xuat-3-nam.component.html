@@ -104,6 +104,9 @@
                                    <nz-descriptions-item nzTitle="Năm BC">
                                         {{namBaoCaoHienHanh + 1}}
                                    </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv">
+                                        {{soVban}}
+                                   </nz-descriptions-item>
                               </nz-descriptions>
                          </div>
                     </div>

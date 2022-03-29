@@ -29,7 +29,7 @@
               <td>{{baoCao?.ngayDuyet}}</td>
               <td>{{baoCao?.ngayPheDuyet}}</td>
               <td>{{baoCao?.ngayCapTrenTraKq}}</td>
-              <td>{{baoCao?.trangThai}}</td>
+              <td>{{getStatusName(baoCao?.trangThai)}}</td>
             </tr>
           </tbody>
         </nz-table>
@@ -112,7 +112,7 @@
               <td>{{ i + 1 }}</td>
               <td>{{item.tenPhuLuc}}</td>
               <td>{{item.tieuDe}}</td>
-              <td>{{item.trangThai}}</td>
+              <td>{{getStatusName(item.trangThai)}}</td>
               <td>
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)">
                   <span>Nhập dữ liệu</span>

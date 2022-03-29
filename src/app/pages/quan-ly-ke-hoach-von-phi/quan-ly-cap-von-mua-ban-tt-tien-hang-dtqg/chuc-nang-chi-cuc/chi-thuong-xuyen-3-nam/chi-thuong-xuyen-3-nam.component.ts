@@ -573,6 +573,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
+
   // start edit
   startEdit(id: string): void {
     this.editCache[id].edit = true;
