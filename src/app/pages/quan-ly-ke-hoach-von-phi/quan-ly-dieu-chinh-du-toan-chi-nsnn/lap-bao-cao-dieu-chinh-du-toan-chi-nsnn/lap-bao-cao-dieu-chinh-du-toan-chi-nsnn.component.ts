@@ -39,6 +39,8 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      chiCucs: any = [];                           //danh muc don vi cap chi cuc
      cucKhuVucs: any = [];                        //danh muc don vi cap cuc khu vuc
      tongCucs: any = [];                           //danh muc don vi cap tong cuc
+     dviTiens: any = [];
+     dviTien: any;
 
      khoanMucs: any = KHOANMUCLIST;
 
@@ -56,6 +58,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           ghiChu: "",
           checked: true,
      };
+
+     maNganSach: string;
+     maSoKbnn: string;
 
      noiDung: string;
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
@@ -149,6 +154,18 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
                          console.log(this.donVis);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+               }
+          );
+          await this.danhMucService.dMDonViTien().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.dviTiens = data.data?.content;
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -293,7 +310,6 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           });
           modalIn.afterClose.subscribe((res) => {
                if (res) {
-                    console.log(res);
                     res.forEach(item => {
                          if (item.status) {
                               this.lstCTietBCao.push({
@@ -355,6 +371,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
                          this.noiDung = this.chiTietBcaos.noiDung;
+                         this.trangThaiBanGhi = data.data.trangThai;
+                         this.maNganSach = data.data.maNganSach;
+                         this.maSoKbnn = data.data.maSoKbnn;
                          this.trangThaiBanGhi = data.data.trangThai;
                          // set list id file ban dau
                          this.lstFile.filter(item => {

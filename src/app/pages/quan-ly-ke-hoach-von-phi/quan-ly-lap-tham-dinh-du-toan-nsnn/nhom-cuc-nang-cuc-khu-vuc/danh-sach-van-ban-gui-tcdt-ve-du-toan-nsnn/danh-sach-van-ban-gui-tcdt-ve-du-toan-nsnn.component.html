@@ -36,8 +36,8 @@
                          <div nz-col nzSpan="12">
                               <label class="search__label">Đơn vị tạo</label>
                               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDvi">
-                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.id"
-                                        [nzLabel]="item.tenDm"></nz-option>
+                                   <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                                        [nzLabel]="item.tenDvi"></nz-option>
                               </nz-select>
                          </div>
                          <div nz-col nzSpan="12">
@@ -183,3 +183,5 @@
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
    
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
+   
+   
