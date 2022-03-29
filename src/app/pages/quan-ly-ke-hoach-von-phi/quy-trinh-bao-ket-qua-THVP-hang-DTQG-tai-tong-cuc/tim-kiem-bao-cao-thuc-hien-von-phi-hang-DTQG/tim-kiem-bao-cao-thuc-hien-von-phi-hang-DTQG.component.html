@@ -52,8 +52,8 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.loaiBaoCao">
-              <nz-option  nzValue="id" nzLabel="tenDm"></nz-option>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl(searchFilter.loaiBaoCao)">
+              <nz-option *ngFor="let bc of listLoaiBcao" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="6"></div>
@@ -84,7 +84,7 @@
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
-              <td>{{item.ngayTao}}</td>
+              <td>{{item.ngayTao | date}}</td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
@@ -111,7 +111,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <button type="button" class="btn btn-main" (click)="themmoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>
