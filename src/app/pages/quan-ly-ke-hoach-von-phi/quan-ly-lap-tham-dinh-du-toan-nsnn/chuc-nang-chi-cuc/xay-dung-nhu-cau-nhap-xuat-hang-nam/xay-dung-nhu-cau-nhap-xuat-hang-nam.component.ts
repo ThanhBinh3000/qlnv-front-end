@@ -173,7 +173,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           var Dvi = this.donVis.find(e =>  e.maDvi == this.maDonViTao);
-          this.capDv = Dvi.capDvi;
+          // this.capDv = Dvi.capDvi;
           if(this.capDv=='2'){
             this.checkDv = false;
           }else{

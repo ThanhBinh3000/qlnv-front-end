@@ -102,6 +102,12 @@
                                                 Xây dựng Dự toán chi ứng dụng CNTT giai đoạn 03 năm
                                           </nz-descriptions-item>
                                     </nz-descriptions>
+                                    <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+                                      <div nz-col nzSpan="3" >
+                                        <label class="search__label">Số VB gửi TC</label>
+                                        <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
+                                      </div>
+                                    </div>
                               </div>
                         </div>
                   </nz-card>
@@ -347,7 +353,7 @@
                                                             <td>{{ data.thDtuN3 }}</td>
 
                                                             <td>{{ data.ghiChu }}</td>
-                                                            
+
                                                             <td [hidden]="status">
                                                                   <i class="fa fa-trash-o do"
                                                                         (click)="deleteById(data.id)"></i>
@@ -577,7 +583,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-    
+
     <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-    
+
     <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

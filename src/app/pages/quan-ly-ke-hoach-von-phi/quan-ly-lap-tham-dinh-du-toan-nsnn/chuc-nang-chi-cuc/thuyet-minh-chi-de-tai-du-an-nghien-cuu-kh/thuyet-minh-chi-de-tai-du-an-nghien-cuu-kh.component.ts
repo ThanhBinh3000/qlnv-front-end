@@ -78,6 +78,12 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -149,11 +155,25 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-    //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+
+     //lay danh sach danh muc don vi
+     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if(e.maDvi==this.maDonViTao){
+              this.capDvi = e.capDvi;
+            }
+          })
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if( this.capDv == '2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
+
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -162,6 +182,12 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
         this.errorMessage = "err.error.message";
       }
     );
+
+    if(this.capDvi=='3'){
+      this.checkKV=true;
+    }else{
+      this.checkKV = false;
+    }
     this.spinner.hide();
   }
 
@@ -212,6 +238,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namBcao: this.namBaoCaoHienHanh,
+      soVban: this.soVban
     };
     this.spinner.show();
     this.quanLyVonPhiService.trinhDuyetService(request).subscribe(

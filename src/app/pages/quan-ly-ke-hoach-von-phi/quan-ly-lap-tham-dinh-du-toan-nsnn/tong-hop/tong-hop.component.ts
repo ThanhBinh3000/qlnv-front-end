@@ -47,7 +47,7 @@ export class TongHopComponent implements OnInit {
         if (data.statusCode == 0) {
           console.log(data);
           this.donViTaos = data.data;
-          
+
         } else {
           this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -75,7 +75,7 @@ export class TongHopComponent implements OnInit {
           console.log(data);
           this.userInfo = data?.data
           this.maDonViTao = this.userInfo?.dvql;
-          
+
           return data?.data;
         } else {
 
@@ -93,8 +93,8 @@ export class TongHopComponent implements OnInit {
   setUrl() {
     console.log(this.loaiBaocao);
     switch (this.loaiBaocao) {
-      
-     
+
+
       case 207:
         this.url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
         break;
@@ -123,7 +123,7 @@ export class TongHopComponent implements OnInit {
           this.url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
           break;
       case 314:
-          this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
+          this.url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc';
           break;
       case '16':
           this.url = '/nhu-cau-ke-hoach-dtxd3-nam/';

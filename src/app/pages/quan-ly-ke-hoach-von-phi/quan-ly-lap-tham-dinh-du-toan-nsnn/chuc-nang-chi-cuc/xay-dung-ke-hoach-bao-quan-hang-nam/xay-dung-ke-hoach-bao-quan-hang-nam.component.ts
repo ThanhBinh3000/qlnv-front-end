@@ -32,6 +32,14 @@ export class AllItemData {
   lstCTiet: ItemData[] = [];
 }
 
+export class AllData {
+  kphiBquanThocTx!: number;                   // kinh phi bao quan thoc thuong xuyen
+  kphiBquanThocLd!: number;                   // kinh phi bao quan thoc lan dau
+  kphiBquanGaoTx!: number;                    // kinh phi bao quan gao thuong xuyen
+  kphiBquanGaoLd!: number;
+  lstCTiet: ItemData[] = [];
+}
+
 @Component({
   selector: 'app-xay-dung-ke-hoach-bao-quan-hang-nam',
   templateUrl: './xay-dung-ke-hoach-bao-quan-hang-nam.component.html',
@@ -42,8 +50,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   errorMessage!: String;                      //
   nhoms: any = [];                            // danh muc nhom
   matHangs: any = [];                         // danh muc mat hang
-  lstCTietBCao: AllItemData[] = [];
-  lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
+  lstCTietBCao: AllItemData[] = [];           // list chi tiet bao cao
+  lstCTiet: ItemData[] = [];                  // list chi tiet
   kphiBquanThocTx!: number;                   // kinh phi bao quan thoc thuong xuyen
   kphiBquanThocLd!: number;                   // kinh phi bao quan thoc lan dau
   kphiBquanGaoTx!: number;                    // kinh phi bao quan gao thuong xuyen
@@ -334,8 +342,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
+          console.log(this.lstCTiet);
 
           // set thong tin chung bao cao
           this.ngayNhap = data.data.ngayTao;
@@ -344,6 +354,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
+          console.log(this.lstCTietBCao);
+
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -522,9 +534,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     });
   }
 
-  changeModel(id: string): void {
-    // this.editCache[id].data.qdDuyetTkDtoanTong = this.editCache[id].data.qdDuyetTkDtoanXl + this.editCache[id].data.qdDuyetTkDtoanTb + this.editCache[id].data.qdDuyetTkDtoanCk;
-  }
    //tinh tong kinh phi
    sum(){
     this.tongSo = 0;

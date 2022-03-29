@@ -79,6 +79,12 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
+  capDvi:any;
+  checkKV:boolean;                            // check khu vuc
+  soVban:any;
+  capDv:any;
+  checkDv:boolean;
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -151,21 +157,6 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-
-    //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
-
     this.danhMucService.dMHinhThucVanBan().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -191,6 +182,32 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       }
     );
 
+    //lay danh sach danh muc don vi
+    await this.danhMucService.dMDonVi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donVis = data.data;
+          this.donVis.forEach(e => {
+            if(e.maDvi==this.maDonViTao){
+              this.capDvi = e.capDvi;
+            }
+          })
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi.capDvi;
+          if( this.capDv == '2'){
+            this.checkDv = false;
+          }else{
+            this.checkDv = true;
+          }
+
+        } else {
+          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+        }
+      },
+      (err) => {
+        this.errorMessage = "err.error.message";
+      }
+    );
     this.spinner.hide();
   }
 
