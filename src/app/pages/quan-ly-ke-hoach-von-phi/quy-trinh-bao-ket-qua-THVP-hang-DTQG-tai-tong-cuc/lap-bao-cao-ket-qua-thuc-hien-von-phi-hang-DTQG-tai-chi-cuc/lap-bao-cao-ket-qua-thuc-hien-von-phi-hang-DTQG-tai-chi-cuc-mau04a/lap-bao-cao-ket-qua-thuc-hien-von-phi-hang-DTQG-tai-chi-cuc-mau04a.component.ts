@@ -510,6 +510,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
    
    this.updateEditCache02();
    this.updateEditCache03();
+   this.updateEditCache();
   }
 
 
@@ -518,7 +519,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     
     if(this.tabSelected==1){
       this.saveMau02();
-      console.log(this.lstCTietBCao02);
       this.baoCao?.lstBCao.forEach(item => {
         if(item.maLoai == this.tabSelected){
           item.lstCTietBCao = this.lstCTietBCao02;
