@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 export class ItemData {
   id: any;
@@ -66,6 +67,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private sanitizer: DomSanitizer,
     private nguoiDungSerivce: UserService,
@@ -78,7 +80,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
     this.cols = 3;
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-   
+
 
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -106,7 +108,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-           
+
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -127,7 +129,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            
+
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -174,17 +176,17 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
       userInfor?.roles[0]?.id,
     );
     //get danh muc noi dung
-    this.quanLyVonPhiService.dmVattuhanghoa().subscribe(
+    this.danhMuc.dmVattuhanghoa().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-       
+
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
@@ -572,7 +574,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -627,13 +629,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
           this.updateLstCTietBCao();
           this.cols = this.cols + this.listColTrongDot.length;
           this.status = true;
-          
+
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg
           );
@@ -706,7 +708,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
         this.updateLstCTietBCao();
 
         this.notification.success(MESSAGE.SUCCESS, res?.msg);
-       
+
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -968,7 +970,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
 
   // xoa dong theo so thu tu
   deleteByStt(idx: any): void {
-    
+
     this.delete(this.chiTietBcaos, idx);
     this.stt = 0;
     this.updateSTT(this.chiTietBcaos);
@@ -997,7 +999,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
         this.listIdDelete += this.lstCTietBCao[data.vt-1].id + ',';
       }
     }
-    
+
     if (data.next.length == 0) return;
     data.next.forEach(item => {
       this.getListIdDelete(item);
@@ -1218,9 +1220,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
         tonglstChitietVtuTrongDot +=e.sl;
       })
     }
-    
+
     this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
-    
+
     let tonglstChitietVtuLuyke =0;
     if(this.editCache[id].data.listCtiet.length!=0){
       this.editCache[id].data.listCtiet.forEach(e => {

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
@@ -33,6 +34,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     private userService: UserService,
      private router: Router,
      private quankhoachvon :QuanLyVonPhiService,
+     private danhmuc :DanhMucHDVService,
      private datepipe:DatePipe,
      private notification: NzNotificationService,
      ) {
@@ -48,17 +50,17 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
       }else{
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-      
-      
+
+
     })
-    this.quankhoachvon.dmDonViNhan().subscribe(res =>{
+    this.danhmuc.dmDonViNhan().subscribe(res =>{
         if(res.statusCode==0){
           this.listDvnhan= res.data.content;
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
-        
-      
+
+
   })
   }
 
@@ -117,11 +119,11 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
-        
+
     })
   }
-   
-  
+
+
   //
   dong(){
       this.router.navigate(['/'])

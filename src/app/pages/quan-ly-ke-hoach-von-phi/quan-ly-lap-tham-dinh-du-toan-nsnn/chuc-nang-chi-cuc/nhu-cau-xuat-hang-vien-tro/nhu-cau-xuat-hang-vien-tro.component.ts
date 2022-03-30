@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -14,9 +14,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
-  maVtuTbi!: number;
+  maVtuTbi!: string;
   sl!: number;
-  maDviVtuTbi!: number;
+  maDviVtuTbi!: string;
   id!: any;
   maBcao!: String;
   stt!: String;
@@ -42,7 +42,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   errorMessage!: String;                      //
   chiTieus: any = [];           // danh muc chi tieu
   donVis: any = [];             // danh muc don vi
-  lstCTietBCao: AllItemData[] = [];
+  donViTinhs: any = [];
+  lstCTietBCao: AllItemData = new AllItemData;
   lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
   tongSo: number = 0;                            // tong kinh phi
   luongXuatGaoVtro!: number;
@@ -59,7 +60,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -84,7 +85,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
-  soVBGuiTC:any;
+  soVban:any;
   capDv:any;
   checkDv:boolean;
 
@@ -173,6 +174,19 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    //get danh muc noi dung
+    this.danhMucService.dMDviTinh().subscribe(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donViTinhs = data.data?.content;
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
 
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
@@ -180,7 +194,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-          this.capDv = Dvi.capDvi;
+          this.capDv = Dvi?.capDvi;
           if( this.capDv=='2'){
             this.checkDv = false;
           }else{
@@ -224,7 +238,9 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   xoa() {
     this.lstCTiet = [];
     this.lstFile = [];
-    this.listFile = []
+    this.listFile = [];
+    this.luongXuatGaoVtro = 0;
+    this.luongXuatThocVtro = 0;
   }
 
   // trinh duyet
@@ -234,6 +250,12 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       listFile.push(await this.uploadFile(iterator));
     }
 
+    let ob =[{
+      luongXuatGaoVtro : this.luongXuatGaoVtro,
+      luongXuatThocVtro : this.luongXuatThocVtro,
+      lstCTiet : this.lstCTiet
+    }]
+
     // replace nhung ban ghi dc them moi id thanh null
     this.lstCTiet.filter(item => {
       if (typeof item.id != "number") {
@@ -241,26 +263,19 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       }
     })
 
-    let object = {
-      luongXuatGaoVtro : this.luongXuatGaoVtro,
-      luongXuatThocVtro : this.luongXuatThocVtro,
-      lstCTiet : this.lstCTiet
-    }
-
-    this.lstCTietBCao.push(object);
-
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao:ob,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
+      soVban:"",
     };
 
     //call service them moi
@@ -269,23 +284,25 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           console.log(err);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
+      },err =>{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
     this.lstCTiet.filter(item => {
@@ -293,6 +310,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         item.id = uuid.v4();
       }
     });
+    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -324,8 +342,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.luongXuatGaoVtro = this.lstCTietBCao.luongXuatGaoVtro;
+          this.luongXuatThocVtro = this.lstCTietBCao.luongXuatThocVtro;
+          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -334,9 +354,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
+          this.soVban = data.data.soVban;
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -389,9 +410,9 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      maVtuTbi: 0,
+      maVtuTbi: "",
       sl: 0,
-      maDviVtuTbi: 0,
+      maDviVtuTbi: "",
       stt: "",
       id: uuid.v4(),
       checked:false,

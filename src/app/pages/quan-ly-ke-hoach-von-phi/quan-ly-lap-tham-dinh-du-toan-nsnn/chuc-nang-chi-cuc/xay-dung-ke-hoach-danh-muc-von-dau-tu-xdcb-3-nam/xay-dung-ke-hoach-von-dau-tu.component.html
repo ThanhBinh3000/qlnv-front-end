@@ -160,80 +160,80 @@
                   </th>
               </tr>
               <tr class="text-title">
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       KC
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       HT
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       Tổng vốn <br> đầu tư
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       Tổng vốn <br> đầu tư
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       Tổng
                   </th>
-                  <th colspan="3"  nzWidth="50px">
+                  <th colspan="3"  nzWidth="50%">
                       Trong đó
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th colspan="3"  nzWidth="50px">
+                  <th colspan="3"  nzWidth="50%">
                       Trong đó
                   </th>
-                  <th rowspan="3"  nzWidth="50px">
+                  <th rowspan="3"  nzWidth="50%">
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th colspan="3"  nzWidth="50px">
+                  <th colspan="3"  nzWidth="50%">
                       Trong đó
                   </th>
               </tr>
               <tr>
-                  <th rowspan="2"  nzWidth="25px">
+                  <th rowspan="2"  nzWidth="25%">
                       XL
                   </th>
-                  <th rowspan="2"  nzWidth="25px">
+                  <th rowspan="2"  nzWidth="25%">
                       TB
                   </th>
-                  <th rowspan="2"  nzWidth="25px">
+                  <th rowspan="2"  nzWidth="25%">
                       CK
                   </th>
-                  <th rowspan="2"  nzWidth="25px">
+                  <th rowspan="2"  nzWidth="25%">
                       NSTT
                   </th>
-                  <th colspan="2"  nzWidth="25px">
+                  <th colspan="2"  nzWidth="25%">
                       Khác
                   </th>
-                  <th rowspan="2"  nzWidth="25px">
+                  <th rowspan="2"  nzWidth="25%">
                       NSTT
                   </th>
-                  <th colspan="2"  nzWidth="25px">
+                  <th colspan="2"  nzWidth="25%">
                       Khác
                   </th>
               </tr>
               <tr>
-                  <th  nzWidth="25px">
+                  <th  nzWidth="25%">
                       DT chi TX
                   </th>
-                  <th  nzWidth="25px">
+                  <th  nzWidth="25%">
                       Quỹ khác
                   </th>
-                  <th  nzWidth="25px">
+                  <th  nzWidth="25%">
                       DT chi TX
                   </th>
-                  <th  nzWidth="25px">
+                  <th  nzWidth="25%">
                       Quỹ khác
                   </th>
               </tr>
@@ -352,7 +352,7 @@
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenDan" />
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.tenDan" />
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
@@ -373,10 +373,10 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ddiemMoTaikhoan" />
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.ddiemMoTaikhoan" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.masoDan" />
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.masoDan" />
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã ngành KT"
@@ -384,80 +384,80 @@
                         <nz-option *ngFor="let item of maNganhKinhTes" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
-                    <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.nlucTke"/>
+                    <td style="width: 50px">
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.nlucTke"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.namKcTte"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.namKcTte"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.namHtTte"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.namHtTte"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetDanDtuSongaythang"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetDanDtuSongaythang"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetDanDtuTongVon"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetDanDtuTongVon"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuSongaythang"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuSongaythang"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuTongVon"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuTongVon"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanSongaythang"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanSongaythang"/>
                     </td>
                     <td>
                       {{editCache[data.id].data.qdDuyetTkDtoanTong}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl"
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanTb"
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanTb"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanCk"
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanCk"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Songaythang"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Songaythang"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Nstt"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Nstt"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006DtoanChiTx"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006DtoanChiTx"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Quykhac"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3006Quykhac"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Songaythang"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Songaythang"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Nstt"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Nstt"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112DtoanChiTx"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112DtoanChiTx"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Quykhac"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.klthCapDen3112Quykhac"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN1"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN1"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN2"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN2"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN3"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.ncauVonN3"/>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu"/>
+                      <input class="search__input" style="width: 100px;" nz-input [(ngModel)]="editCache[data.id].data.ghiChu"/>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

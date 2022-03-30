@@ -1,19 +1,17 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { MESSAGE } from 'src/app/constants/message';
 import { Utils } from 'src/app/Utility/utils';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { UserService } from 'src/app/services/user.service';
+import { DatePipe } from '@angular/common';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ActivatedRoute } from '@angular/router';
+import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-
-
 
 export class ItemData {
   id: any;
@@ -58,13 +56,19 @@ export class linkList {
   next: linkList[];
   checked: boolean;
 }
-@Component({
-  selector: 'app-lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b',
-  templateUrl: './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b.component.html',
-  styleUrls: ['./lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04b.component.scss']
-})
-export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent implements OnInit {
 
+@Component({
+  selector:
+    'app-lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a',
+  templateUrl:
+    './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a.component.html',
+  styleUrls: [
+    './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a.component.scss',
+  ],
+})
+export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
+  implements OnInit
+{
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -74,7 +78,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
     private datepipe: DatePipe,
     private notification: NzNotificationService,
     private router: ActivatedRoute,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.cols = 3;
@@ -102,7 +106,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBaocao = '93';
+      this.maLoaiBaocao = '92';
       this.trangThaiBanGhi='1';
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -124,7 +128,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       this.donvitao = userInfor?.dvql;
       this.namBcao = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBaocao = '93';
+      this.maLoaiBaocao = '92';
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
@@ -349,14 +353,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       thangBcao: null,
       trangThai: this.trangThaiBanGhi,
       dotBcao: this.dotbaocao,
-      loaiBaoCao: 2,
+      loaiBaoCao: 1,
     };
 
     this.spinner.show();
     console.log(request);
 
     if (this.id != null) {
-      this.quanLyVonPhiService.updateBaoCaoThucHienDTC(request).subscribe((res) => {
+      this.quanLyVonPhiService.capnhatbaocao(request).subscribe((res) => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
@@ -366,7 +370,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
-      this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(request).subscribe(
+      this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
         (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -516,7 +520,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.baoCaoChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
       (data) => {
         console.log(data);
         if (data.statusCode == 0) {
@@ -524,7 +528,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.lstCTietBCao = data.data.lstCTietBCao;
 
           this.lstFile = data.data.lstFile;
-          this.maLoaiBaocao = '93';
+          this.maLoaiBaocao = '92';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -555,9 +559,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.lstCTietBCao.forEach((item) => {
             this.transformToLinkList(item);
           });
-
+          console.log(this.chiTietBcaos);
           this.updateLstCTietBCao();
-
+          console.log(this.lstCTietBCao);
           this.cols = this.cols + this.listColTrongDot.length;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -588,14 +592,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
 
   getDetailReportToExportFile(){
     this.spinner.hide();
-    this.quanLyVonPhiService.baoCaoChiTiet(this.id).subscribe(
+    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
       (data) => {
         console.log(data);
         if (data.statusCode == 0) {
           // this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.lstFile = data.data.lstFile;
-          this.maLoaiBaocao = '93';
+          this.maLoaiBaocao = '92';
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -677,7 +681,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       if(res.statusCode==0){
         this.lstCTietBCao = res.data;
         this.lstFile = res.data.lstFile;
-        this.maLoaiBaocao = '93';
+        this.maLoaiBaocao = '92';
         let e = this.lstCTietBCao[0];
         e.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
@@ -1220,9 +1224,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         tonglstChitietVtuTrongDot +=e.sl;
       })
     }
-    this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
-    let tonglstChitietVtuLuyke =0;
 
+    this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
+
+    let tonglstChitietVtuLuyke =0;
     if(this.editCache[id].data.listCtiet.length!=0){
       this.editCache[id].data.listCtiet.forEach(e => {
         tonglstChitietVtuLuyke +=e.sl;

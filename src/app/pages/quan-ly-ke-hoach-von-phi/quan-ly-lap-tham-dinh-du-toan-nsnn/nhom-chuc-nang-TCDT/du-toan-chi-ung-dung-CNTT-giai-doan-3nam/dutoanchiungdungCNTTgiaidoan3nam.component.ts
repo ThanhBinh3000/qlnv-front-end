@@ -11,6 +11,7 @@ import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 export class ItemData {
 
@@ -102,6 +103,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMucService: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private router: ActivatedRoute,
     private datepipe: DatePipe,
@@ -164,7 +166,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         },
       );
     }
-    this.quanLyVonPhiService.dMKeHoachVon().subscribe(
+    this.danhMucService.dMKeHoachVon().subscribe(
       (res) => {
         if (res.statusCode == 0) {
           console.log(res);
@@ -179,7 +181,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       },
     );
     //get danh muc dự án
-    this.quanLyVonPhiService.dMKhoiDuAn().subscribe(
+    this.danhMucService.dMKhoiDuAn().subscribe(
       (data) => {
           if (data.statusCode == 0) {
               this.listLoaiduan = data.data?.content;
