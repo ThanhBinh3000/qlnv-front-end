@@ -7,6 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-khai-thac-bao-cao',
@@ -62,7 +63,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = [];
+  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -73,21 +74,6 @@ export class KhaiThacBaoCaoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-
-        } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(

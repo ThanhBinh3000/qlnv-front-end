@@ -129,6 +129,7 @@ export class Utils {
         return !(Utils.btnRoleDVCT.status.includes(status) && Utils.btnRoleDVCT.unit.includes(unit) && Utils.btnRoleDVCT.role.includes(role));
     }
 
+    // lay quyen
     public getRole(id: number) {
         let role;
         switch (id) {
@@ -152,6 +153,7 @@ export class Utils {
         return role;
     }
 
+    // lay ten don vi theo ma don vi
     public getUnitLevel(id: number) {
         let unitLevel;
         switch (id) {
@@ -171,6 +173,7 @@ export class Utils {
         return unitLevel;
     }
 
+    // lay ten trang thai theo ma trang thai
     public getStatusName(id: string) {
         let statusName;
         switch (id) {
@@ -207,12 +210,9 @@ export class Utils {
         }
         return statusName;
     }
-
-
-    
-
 }
 
+// loai bao cao quan ly von phi
 export const LOAIBAOCAO =[
     {
         id:'12',
@@ -408,6 +408,7 @@ export const LOAIBAOCAO =[
     export	const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N:string = "31";
     export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
     
+    // loai bao cao quy trinh thuc hien du toan chi
     export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
         {
             id:526,
@@ -418,7 +419,20 @@ export const LOAIBAOCAO =[
             tenDm:'Báo cáo giải ngân cả năm'
         },
     ]
-    
+
+    // loai bao cao ket qua thuc hien hang du tru quoc gia
+    export const LBCKETQUATHUCHIENHANGDTQG =[
+        {
+            id:1,
+            tenDm:'Đợt'
+        },
+        {
+            id:2,
+            tenDm:'Năm'
+        },
+    ]
+
+    // trang thai ban ghi
     export const TRANGTHAI =[
         {
             id:0,
@@ -465,4 +479,7 @@ export const LOAIBAOCAO =[
             tenDm:'Lãnh đạo yêu cầu điều chỉnh'
         },
     ]
-     
+
+    // trang thai chi tiet bao cao
+    export	const OK = "1";
+    export	const NOTOK = "0";
