@@ -33,7 +33,6 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     this.oninitForm();
 
     this.spinner.show();
@@ -139,31 +138,35 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     this.chiTieuKeHoachNamService
       .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['04'] })
       .then((res) => {
-        res.data.forEach((tonKho) => {
-          if (tonKho.maVthh == '04') {
-            switch (tonKho.nam) {
-              case (this.yearNow - 1).toString():
-                this.formData.patchValue({
-                  tkdnSoLuong1: tonKho.slHienThoi,
-                });
-                break;
-              case (this.yearNow - 2).toString():
-                this.formData.patchValue({
-                  tkdnSoLuong2: tonKho.slHienThoi,
-                });
-                break;
-              case (this.yearNow - 3).toString():
-                this.formData.patchValue({
-                  tkdnSoLuong3: tonKho.slHienThoi,
-                });
-                break;
-              default:
-                break;
+        if (res.msg == MESSAGE.SUCCESS) {
+          res?.data.forEach((tonKho) => {
+            if (tonKho.maVthh == '04') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.formData.patchValue({
+                    tkdnSoLuong1: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.formData.patchValue({
+                    tkdnSoLuong2: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 3).toString():
+                  this.formData.patchValue({
+                    tkdnSoLuong3: tonKho.slHienThoi,
+                  });
+                  break;
+                default:
+                  break;
+              }
             }
-          }
-          this.calculatorTkdnTongMuoi();
-          this.loadTonKhoCuoiNam();
-        });
+            this.calculatorTkdnTongMuoi();
+            this.loadTonKhoCuoiNam();
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       });
   }
   calculatorTkdnTongMuoi() {

@@ -66,7 +66,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   formData: FormGroup;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listNam: any[] = [];
-
   mapOfExpandedData: { [key: string]: any[] } = {};
 
   constructor(
@@ -79,7 +78,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     private helperService: HelperService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
@@ -380,8 +379,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          // totalRecord: this.totalRecord,
-          // date: event,
           yearNow: this.yearNow,
         },
       });
@@ -558,10 +555,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.thongTinChiTieuKeHoachNam.khVatTu = this.updateDataListVatTu(
             this.thongTinChiTieuKeHoachNam.khVatTu,
           );
+          this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           this.initForm();
           this.formData.patchValue({
             soQD: this.formData.get('soQD').value.split('/')[0],
           });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       });
   }
@@ -772,9 +772,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               );
             }
           }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       }
-      console.log('1:', this.thongTinChiTieuKeHoachNam.khVatTu);
 
       element.value = null;
       this.spinner.hide();
@@ -936,14 +937,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             trangThai: '01',
           };
           if (this.id == 0) {
-            await this.save();
+            await this.save(true);
           } else {
             const res = await this.chiTieuKeHoachNamService.updateStatus(body);
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.TRINH_DUYET_SUCCESS,
+              );
               this.redirectChiTieuKeHoachNam();
-            }
-            else {
+            } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
           }
@@ -975,7 +978,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: '02',
           };
-          await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1005,10 +1014,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lyDoTuChoi: text,
             trangThai: '03',
           };
-          await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
           this.spinner.hide();
         } catch (e) {
-          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -1031,9 +1045,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
   }
 
-  save() {
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
-      }${this.qdTCDT}`;
+  save(isGuiDuyet?: boolean) {
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
+      this.formData.get('soQD').value
+    }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1084,8 +1099,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.redirectChiTieuKeHoachNam();
-          }
-          else {
+          } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         })
@@ -1104,7 +1118,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (this.id == 0) {
+            if (isGuiDuyet) {
               let body = {
                 id: res.data.id,
                 lyDoTuChoi: null,
@@ -1112,18 +1126,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               };
               this.chiTieuKeHoachNamService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                 this.redirectChiTieuKeHoachNam();
-              }
-              else {
+              } else {
                 this.notification.error(MESSAGE.ERROR, res.msg);
               }
             } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam();
             }
-          }
-          else {
+          } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         })
@@ -1157,6 +1169,30 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
+    if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
+      this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
+        luongThuc.tkdnGao[0].nam = this.yearNow - 1;
+        luongThuc.tkdnGao[1].nam = this.yearNow - 2;
+        luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
+        luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
+        luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
+        luongThuc.xtnGao[0].nam = this.yearNow - 1;
+        luongThuc.xtnGao[1].nam = this.yearNow - 2;
+        luongThuc.xtnThoc[0].nam = this.yearNow - 1;
+        luongThuc.xtnThoc[1].nam = this.yearNow - 2;
+        luongThuc.xtnThoc[2].nam = this.yearNow - 3;
+      });
+    }
+    if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
+      this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
+        muoi.tkdnMuoi[0].nam = this.yearNow - 1;
+        muoi.tkdnMuoi[1].nam = this.yearNow - 2;
+        muoi.tkdnMuoi[2].nam = this.yearNow - 3;
+        muoi.xtnMuoi[0].nam = this.yearNow - 1;
+        muoi.xtnMuoi[1].nam = this.yearNow - 2;
+        muoi.xtnMuoi[2].nam = this.yearNow - 3;
+      });
+    }
   }
   convertTrangThai(status: string) {
     if (status == '00') {

@@ -27,6 +27,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
   optionsDonViTinh: any[] = [];
   yearNow: number = 0;
   listDonViTinh: any[] = [];
+  donViTinhModel: string;
   constructor(
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -35,7 +36,7 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private danhMucService: DanhMucService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     //treeview
@@ -168,27 +169,31 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
         maVthhList: [`"${this.formData.get('maVatTuCha').value}"`],
       })
       .then((res) => {
-        res?.data.forEach((tonKho) => {
-          switch (tonKho.nam) {
-            case (this.yearNow - 1).toString():
-              this.formData.patchValue({
-                soLuongTheoNam1: tonKho.slHienThoi,
-              });
-              break;
-            case (this.yearNow - 2).toString():
-              this.formData.patchValue({
-                soLuongTheoNam2: tonKho.slHienThoi,
-              });
-              break;
-            case (this.yearNow - 3).toString():
-              this.formData.patchValue({
-                soLuongTheoNam3: tonKho.slHienThoi,
-              });
-              break;
-            default:
-              break;
-          }
-        });
+        if (res.msg == MESSAGE.SUCCESS) {
+          res?.data.forEach((tonKho) => {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1).toString():
+                this.formData.patchValue({
+                  soLuongTheoNam1: tonKho.slHienThoi,
+                });
+                break;
+              case (this.yearNow - 2).toString():
+                this.formData.patchValue({
+                  soLuongTheoNam2: tonKho.slHienThoi,
+                });
+                break;
+              case (this.yearNow - 3).toString():
+                this.formData.patchValue({
+                  soLuongTheoNam3: tonKho.slHienThoi,
+                });
+                break;
+              default:
+                break;
+            }
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       });
   }
 
@@ -202,14 +207,8 @@ export class DialogThemThongTinVatTuTrongNamComponent implements OnInit {
       );
     }
   }
-  donViTinhModel: string;
   selectDonViTinh(donViTinh) {
-    console.log(donViTinh);
     this.donViTinhModel = donViTinh;
-    // this.formData.patchValue({
-    //   donViTinh: donViTinh,
-    // });
-    // console.log(this.formData);
   }
   setValueDonViTinh() {
     this.formData.patchValue({

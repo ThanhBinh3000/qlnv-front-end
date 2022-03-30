@@ -214,8 +214,16 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.chiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-            await this.search();
+          this.chiTieuKeHoachNamService.deleteData(item.id).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           });
         } catch (e) {

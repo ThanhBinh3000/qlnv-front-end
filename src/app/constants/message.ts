@@ -27,4 +27,5 @@ export const MESSAGE = {
   TRINH_DUYET_SUCCESS: 'Trình duyệt thành công',
   QD_TCDT: '/QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
+  TU_CHOI_SUCCESS: 'Từ chối thành công.',
 };

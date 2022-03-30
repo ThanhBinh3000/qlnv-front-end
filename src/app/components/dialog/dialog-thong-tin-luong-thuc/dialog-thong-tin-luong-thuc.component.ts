@@ -139,46 +139,50 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     this.chiTieuKeHoachNamService
       .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['010103', '010101'] })
       .then((res) => {
-        res.data.forEach((tonKho) => {
-          if (tonKho.maVthh == '010101') {
-            switch (tonKho.nam) {
-              case (this.yearNow - 1).toString():
-                this.formData.patchValue({
-                  tkdnThocSoLuong1: tonKho.slHienThoi,
-                });
-                break;
-              case (this.yearNow - 2).toString():
-                this.formData.patchValue({
-                  tkdnThocSoLuong2: tonKho.slHienThoi,
-                });
-                break;
-              case (this.yearNow - 3).toString():
-                this.formData.patchValue({
-                  tkdnThocSoLuong3: tonKho.slHienThoi,
-                });
-                break;
-              default:
-                break;
+        if (res.msg == MESSAGE.SUCCESS) {
+          res.data.forEach((tonKho) => {
+            if (tonKho.maVthh == '010101') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong1: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong2: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 3).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong3: tonKho.slHienThoi,
+                  });
+                  break;
+                default:
+                  break;
+              }
+            } else if (tonKho.maVthh == '010103') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.formData.patchValue({
+                    tkdnGaoSoLuong1: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.formData.patchValue({
+                    tkdnGaoSoLuong2: tonKho.slHienThoi,
+                  });
+                  break;
+                default:
+                  break;
+              }
             }
-          } else if (tonKho.maVthh == '010103') {
-            switch (tonKho.nam) {
-              case (this.yearNow - 1).toString():
-                this.formData.patchValue({
-                  tkdnGaoSoLuong1: tonKho.slHienThoi,
-                });
-                break;
-              case (this.yearNow - 2).toString():
-                this.formData.patchValue({
-                  tkdnGaoSoLuong2: tonKho.slHienThoi,
-                });
-                break;
-              default:
-                break;
-            }
-          }
-          this.calculatorTkdnTongQuyThoc();
-          this.loadTonKhoCuoiNam();
-        });
+            this.calculatorTkdnTongQuyThoc();
+            this.loadTonKhoCuoiNam();
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       });
   }
 

@@ -127,7 +127,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     ]);
   }
   editCanCuTaiLieuDinhKem(data: CanCuXacDinh, type?: string) {
-    console.log(data);
     const modal = this.modal.create({
       nzTitle: 'Chỉnh sửa căn cứ xác định giá',
       nzContent: UploadComponent,
@@ -140,7 +139,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       },
     });
     modal.afterClose.subscribe((res) => {
-      console.log(res);
       if (res) {
       }
     });
@@ -157,16 +155,10 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       nzComponentParams: {},
     });
     modal.afterClose.subscribe((res) => {
-      console.log(res);
       if (res) {
         this.uploadFileService
           .uploadFile(res.file, res.tenTaiLieu)
           .then((resUpload) => {
-            console.log(
-              'this.chiTietThongTinDXKHLCNT',
-              this.chiTietThongTinDXKHLCNT,
-            );
-
             const fileDinhKem = new FileDinhKem();
             fileDinhKem.fileName = resUpload.filename;
             fileDinhKem.fileSize = resUpload.size;
@@ -196,12 +188,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
                   ...this.canCuKhacList,
                   taiLieuBaoGiaThiTruong,
                 ];
-
-                console.log(
-                  'this.baoGiaThiTruongList: ',
-                  this.baoGiaThiTruongList,
-                );
-
                 break;
               case 'can-cu-khac':
                 const taiLieuCanCuKhac = new CanCuXacDinh();
@@ -214,7 +200,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
                 ];
                 this.chiTietThongTinDXKHLCNT?.children3.push(taiLieuCanCuKhac);
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
-                console.log('this.canCuKhacList: ', this.canCuKhacList);
                 break;
               default:
                 break;
@@ -512,9 +497,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       delete this.thongTinDXKHLCNTInput.children1;
       delete this.thongTinDXKHLCNTInput.children2;
       delete this.thongTinDXKHLCNTInput.children3;
-
-      console.log('123: ', this.thongTinDXKHLCNTInput);
-
       this.spinner.show();
       this.dauThauService
         .themThongTinKeHoachLCNT(this.thongTinDXKHLCNTInput)
