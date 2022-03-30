@@ -56,7 +56,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     str: "",
   };
 
-  
+
   pages = {
     size: 10,
     page: 1,
@@ -74,12 +74,12 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
+    this.danhMuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-         
+
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -94,7 +94,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-         
+
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -124,9 +124,9 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     ]);
   }
 
-  
+
   timkiem(){
-   
+
     if(this.searchFilter.maLoaiBcao==''){
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo');
       return;
@@ -148,7 +148,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
       this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
- 
+
 
   //set url khi
   setUrl(lbaocao:any) {

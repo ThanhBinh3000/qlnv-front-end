@@ -11,6 +11,7 @@ import * as fileSaver from 'file-saver';
 import { MESSAGE } from 'src/app/constants/message';
 import { Utils } from 'src/app/Utility/utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 
 
@@ -66,6 +67,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private sanitizer: DomSanitizer,
     private nguoiDungSerivce: UserService,
@@ -78,7 +80,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
     this.cols = 3;
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-   
+
 
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -174,7 +176,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
       userInfor?.roles[0]?.id,
     );
     //get danh muc noi dung
-    this.quanLyVonPhiService.dmVattuhanghoa().subscribe(
+    this.danhMuc.dmVattuhanghoa().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
@@ -184,7 +186,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         }
       },
       (err) => {
-       
+
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
@@ -553,9 +555,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.lstCTietBCao.forEach((item) => {
             this.transformToLinkList(item);
           });
-      
+
           this.updateLstCTietBCao();
-        
+
           this.cols = this.cols + this.listColTrongDot.length;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -572,7 +574,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -627,13 +629,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
           this.updateLstCTietBCao();
           this.cols = this.cols + this.listColTrongDot.length;
           this.status = true;
-          
+
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
           this.updateLstCTietBCao();
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg
           );
@@ -705,8 +707,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         });
         this.updateLstCTietBCao();
 
-        
-       
+
+
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -968,7 +970,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
 
   // xoa dong theo so thu tu
   deleteByStt(idx: any): void {
-    
+
     this.delete(this.chiTietBcaos, idx);
     this.stt = 0;
     this.updateSTT(this.chiTietBcaos);
@@ -997,7 +999,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04bComponent imple
         this.listIdDelete += this.lstCTietBCao[data.vt-1].id + ',';
       }
     }
-    
+
     if (data.next.length == 0) return;
     data.next.forEach(item => {
       this.getListIdDelete(item);

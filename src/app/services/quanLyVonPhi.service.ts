@@ -98,6 +98,7 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
   }
@@ -149,159 +150,12 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  //get list danh muc loai bao cao
-  dMLoaiBaoCao(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/7',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
   //tong hop
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
-  }
-
-  //danh muc ke hoach von
-  dMMaHthucVban(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/258',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc ke hoach von
-  mDMaDviChuTri(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/85',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc ke hoach von
-  dMKeHoachVon(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/32',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc khối dự án
-  dMKhoiDuAn(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/40',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc chi tieu
-  dMChiTieu(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/241',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc noi dung
-  dMNoiDung(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/1',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //danh muc nhom chi
-  dMNhomChi(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/3',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-  //linh vuc chi
-  linhvucchi(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/262',
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      });
-  }
-
-  //muc chi
-  mucchi(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/135',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
   }
 
   //tao ma PA
@@ -351,20 +205,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/dsach-giao-so', request)
   }
 
-  //lay danh sach don vi nhan
-  dmDonViNhan(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
-  }
-
   //list danh sach phuong an da duoc duyet
   danhsachphuonganduocduyet(): Observable<any> {
     return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach');
@@ -390,20 +230,6 @@ export class QuanLyVonPhiService extends BaseService {
 
   }
 
-
-  //lay danh sach vật tư hàng hóa
-  dmVattuhanghoa(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
-  }
 
   //dm đơn vị tính
   dmDonvitinh(): Observable<any> {
@@ -433,20 +259,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat', request);
   }
 
-  //get list danh muc loai bao cao ket qua thuc hien von phi hang DTQG
-  dMLoaiBaoCaoKetQuaThucHienHangDTQG(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/406',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
 
   themmoi325(request: any): Observable<any> {
     return this.httpClient.post('http://192.168.1.110:8094/dieu-chinh-du-toan-chi/them-moi', request);

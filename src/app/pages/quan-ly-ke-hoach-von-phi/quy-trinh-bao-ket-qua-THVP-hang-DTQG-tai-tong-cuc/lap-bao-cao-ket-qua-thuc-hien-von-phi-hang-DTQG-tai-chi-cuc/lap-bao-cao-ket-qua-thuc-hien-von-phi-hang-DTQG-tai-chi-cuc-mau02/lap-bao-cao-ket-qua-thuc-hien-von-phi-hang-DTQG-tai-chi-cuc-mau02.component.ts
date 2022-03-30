@@ -11,6 +11,7 @@ import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 
 
@@ -81,7 +82,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   allChecked = false; // check all checkbox
   allChecked1 = false;
   allChecked2 = false;
-  indeterminate = true; 
+  indeterminate = true;
   indeterminate1 = true;
   indeterminate2 = true;// properties allCheckBox
   editCache1: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
@@ -99,6 +100,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private router: ActivatedRoute,
     private datepipe: DatePipe,
@@ -110,7 +112,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   async ngOnInit() {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-   
+
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -121,13 +123,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     //xem chi tiet xuất file exel;
     this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
 
-    
+
     if ( this.id!=null && this.checkxemkhaithac!=null) {
       debugger
       this.getDetailReportToExportFile();
       // this.updateEditCache();
     }else if(this.id!=null){
-     
+
       this.getDetailReport();
     }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
       this.callTonghop();
@@ -140,7 +142,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            
+
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg);
           }
@@ -149,7 +151,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
         },
       );
-    
+
     }
      else {
       this.trangThaiBanGhi = '1';
@@ -163,7 +165,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
-            
+
           } else {
             this.notification.error(MESSAGE.ERROR,res?.msg);
           }
@@ -175,11 +177,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       // this.updateEditCache();
     }
     //get danh muc noi dung
-    this.quanLyVonPhiService.dmVattuhanghoa().subscribe(
+    this.danhMuc.dmVattuhanghoa().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -192,7 +194,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       (data) => {
         if (data.statusCode == 0) {
           this.listDonvitinh = data.data?.content;
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -204,7 +206,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
         this.donViTaos =res.data;
-        
+
       } else {
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -256,7 +258,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
   }
 
-  
+
 
   //get user info
   async getUserInfo(username: string) {
@@ -320,7 +322,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-          
+
         } else {
           this.notification.error(MESSAGE.SUCCESS,data?.msg);
         }
@@ -359,17 +361,17 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           this.namBcao = data.data.namBcao;
           this.dotbaocao = data.data.dotBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-          
-          
+
+
           this.status = true;
           this.flagXuatFile = false;
-          
-          
+
+
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
-         
+
         } else {
           this.notification.error(MESSAGE.SUCCESS,data?.msg);
         }
@@ -411,7 +413,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   updateAllChecked(): void {
     this.indeterminate = false;
     if(this.allChecked){
-    
+
       this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
         ...item,
         checked: true,
@@ -430,7 +432,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         checked: false,
       }));
     }
-  
+
   }
 
 
@@ -441,7 +443,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       if (typeof id == 'number') {
         this.listIdDelete += id + ',';
       }
-    
+
   }
   //chọn row cần sửa và trỏ vào template
   startEdit1(id: string): void {
@@ -474,7 +476,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       edit: true,
       data: { ...item },
     };
-    
+
   }
 
    //update khi sửa
@@ -550,7 +552,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       edit: true,
       data: { ...item },
     };
-    
+
   }
 
    //update khi sửa
@@ -572,7 +574,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     };
   }
 
-  
+
 
   updateEditCache2(): void {
     this.lstCTietBCao2.forEach((item) => {
@@ -584,7 +586,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   }
 
 
-  
+
 
 
   //checkox trên tùng row
@@ -741,7 +743,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
           }else{
             this.notification.error(MESSAGE.ERROR,data?.msg)
           }
-         
+
         },
         (err) => {
           this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
@@ -779,7 +781,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     return temp;
   }
 
-  
+
   changeModel1(id: string): void {
     this.editCache1[id].data.khTtien = Number(this.editCache1[id].data.khSoLuong) * Number(this.editCache1[id].data.khGiaMuaTd);
     this.editCache1[id].data.thTtien = Number(this.editCache1[id].data.thSoLuong) * Number(this.editCache1[id].data.thGiaMuaTd);
@@ -789,7 +791,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     this.editCache2[id].data.khTtien = Number(this.editCache2[id].data.khSoLuong) * Number(this.editCache2[id].data.khGiaMuaTd);
     this.editCache2[id].data.thTtien = Number(this.editCache2[id].data.thSoLuong) * Number(this.editCache2[id].data.thGiaMuaTd);
   }
-  
+
   callTonghop(){
     if(Number(this.maLoaiBaocao) == 407){
       this.maLoaiBaocao ='90';
@@ -822,7 +824,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
               this.lstCTietBCao2.push(element);
             }
           });
-          
+
           this.updateEditCache1();
           this.updateEditCache2();
         }else{

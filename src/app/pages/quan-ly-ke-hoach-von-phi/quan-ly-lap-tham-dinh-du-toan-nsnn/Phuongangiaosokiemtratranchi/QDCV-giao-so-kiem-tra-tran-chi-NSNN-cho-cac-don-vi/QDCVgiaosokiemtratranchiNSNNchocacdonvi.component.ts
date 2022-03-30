@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 @Component({
   selector: 'app-QDCVgiaosokiemtratranchiNSNNchocacdonvi',
@@ -42,6 +43,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
     private userService: UserService,
      private router: Router,
      private quankhoachvon :QuanLyVonPhiService,
+     private danhmuc :DanhMucHDVService,
      private datepipe:DatePipe,
      private sanitizer: DomSanitizer,
      private notification: NzNotificationService,
@@ -56,14 +58,14 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
       this.donviTaos = res.data;
       console.log(this.donviTaos);
     })
-    this.quankhoachvon.dmDonViNhan().subscribe(res =>{
+    this.danhmuc.dmDonViNhan().subscribe(res =>{
       this.listDvi= res.data.content;
       console.log(res)
     })
     this.quankhoachvon.danhsachphuonganduocduyet().subscribe(res => {
       if(res.statusCode==0){
         this.listPhuongAn = res.data;
-        
+
       }else{
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
@@ -91,11 +93,11 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
 
 
 
-//xoa 
+//xoa
 xoaquyetdinh(){
 
   let objectXoa={
-    
+
       fileDinhKems:[],
       listIdFiles: null,
       maDvi: null,
@@ -113,11 +115,11 @@ xoaquyetdinh(){
     if(res.statusCode==0){
       this.msg = 'Xóa thành công';
       this.notification.success('Xóa QĐ-CV',this.msg)
-      
+
     }else{
       this.notification.error('Xóa QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
     }
-    
+
   },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   })
@@ -170,7 +172,7 @@ async luu(){
       }else{
         this.notification.error('Lưu QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
       }
-      
+
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
     })
@@ -189,7 +191,7 @@ async luu(){
       })
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/'+id])
     }
-    
+
   }
   //lay ten don vi tạo
   getUnitName(mdv:any):string {
@@ -224,7 +226,7 @@ async luu(){
     return temp;
   }
 
-  
+
     // xoa file trong bang file
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
@@ -232,7 +234,7 @@ async luu(){
       (a: any) => a?.lastModified.toString() !== id,
     );
   }
-  
+
 
   //download file về máy tính
   downloadFile(id: string) {

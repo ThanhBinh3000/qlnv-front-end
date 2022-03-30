@@ -149,7 +149,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         },
       );
     }
-    this.quanLyVonPhiService.dMMaHthucVban().subscribe(
+    this.danhMucService.dMMaHthucVban().subscribe(
       (res) => {
         if (res.statusCode == 0) {
           this.listHinhThucVanBan = res.data?.content;
@@ -162,7 +162,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.quanLyVonPhiService.mDMaDviChuTri().subscribe(
+    this.danhMucService.mDMaDviChuTri().subscribe(
       (res) => {
         if (res.statusCode == 0) {
           this.listDviChuTri = res.data?.content;

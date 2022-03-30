@@ -58,7 +58,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     str: "",
   };
 
-  
+
   pages = {
     size: 10,
     page: 1,
@@ -76,12 +76,12 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   ngOnInit(): void {
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
+    this.danhMuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
       data => {
         console.log(data);
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-         
+
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -96,7 +96,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-         
+
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -126,7 +126,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     ]);
   }
 
-  
+
   timkiem(){
     console.log(this.searchFilter);
     if(this.searchFilter.maLoaiBcao==''){
@@ -136,7 +136,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     this.searchFilter.maLoaiBcao='91';
     this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-        
+
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){

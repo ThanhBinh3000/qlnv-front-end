@@ -18,6 +18,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhmuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private nguoiDungSerivce: UserService,
@@ -44,12 +45,12 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
-    this.quanLyVonPhiService.dMLoaiBaoCaoKetQuaThucHienHangDTQG().subscribe(
+    this.danhmuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().subscribe(
       data => {
-        
+
         if (data.statusCode == 0) {
           this.baoCaos = data.data?.content;
-         
+
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }
@@ -65,7 +66,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
         if (data.statusCode == 0) {
           console.log(data);
           this.donViTaos = data.data;
-          
+
         } else {
           this.notifi.error(MESSAGE.ERROR,data?.msg);
         }

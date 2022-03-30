@@ -52,10 +52,18 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')" [hidden] = "statusBtnDVCT">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Điều chỉnh theo số kiểm tra</span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <button type="button" class="btn btn-main" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem">
+          <i class="icon htvbdh_dong"></i>
+          <span>Đóng</span>
+        </button>
       </div>
     </div>
   </div>
@@ -113,32 +121,30 @@
                 </nz-select> -->
               </div>
             </div>
-            <div class="row" >
-              <div class="col-md-6 form-group">
-                  <label for="">Lượng xuất Thóc (tấn)</label>
-                  <input type="number" min="0" class="form-control form-control-sm" id="" value="{{chiTietBcaos?.thocXuat}}" name="luongThocXuat" [(ngModel)]="luongThocXuat">
+            <div class="search__body" nz-row [nzGutter]="[16, 12]">
+              <div nz-col nzSpan="12">
+                   <label class="search__label">Lượng thóc xuất</label>
+                   <input class="search__input" type="number" nz-input [(ngModel)]="luongThocXuat" />
               </div>
-              <div class="col-md-6 form-group">
-                  <label for="">Lượng nhập Thóc (tấn)</label>
-                  <input type="number" min="0" class="form-control form-control-sm" id="" value="{{chiTietBcaos?.thocNhap}}" [(ngModel)]="luongThocNhap">
+              <div nz-col nzSpan="12">
+                   <label class="search__label">Lượng thóc nhập</label>
+                   <input class="search__input" type="number" nz-input [(ngModel)]="luongThocNhap" />
               </div>
-          </div>
-          <div class="row">
-              <div class="col-md-6 form-group">
-                  <label for="">Lượng xuất Gạo (tấn)</label>
-                  <input type="number" min="0" class="form-control form-control-sm" id="" value="{{chiTietBcaos?.gaoXuat}}" [(ngModel)]="luongGaoXuat">
+              <div nz-col nzSpan="12">
+                   <label class="search__label">Lượng gạo xuất</label>
+                   <input class="search__input" type="number" nz-input [(ngModel)]="luongGaoXuat" />
               </div>
-              <div class="col-md-6 form-group">
-                  <label for="">Lượng nhập Gạo (tấn)</label>
-                  <input type="number" min="0" class="form-control form-control-sm" id="" value="{{chiTietBcaos?.gaoNhap}}" [(ngModel)]="luongGaoNhap">
+              <div nz-col nzSpan="12">
+                   <label class="search__label">Lượng gạo nhập</label>
+                   <input class="search__input" type="number" nz-input [(ngModel)]="luongGaoNhap" />
               </div>
-          </div>
+            </div>
           <div class="row">
               <div class="col-lg-12 form-group">
                   <label for="">Nhu cầu nhập thiết bị vật tư</label>
               </div>
           </div>
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body">
+            <nz-table #editRowTable nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="" style="width: 2%">STT</th>
@@ -153,15 +159,12 @@
               </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td></td>
-                </tr>
-                <tr *ngFor="let data of lstCTietBCao; let i = index">
+                <tr *ngFor="let data of lstCTiet; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>{{ i + 1 }}</td>
                     <td>
                       <div *ngFor="let item of tenTbis">
-                        <div *ngIf="item.id == data.tenTbi">
+                        <div *ngIf="item.id == data.maTbi">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -180,13 +183,12 @@
                       <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                         (ngModelChange)="updateSingleChecked()"></label>
                     </td>
-
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Thiết bị"
-                        [(ngModel)]="editCache[data.id].data.tenTbi">
+                        [(ngModel)]="editCache[data.id].data.maTbi">
                         <nz-option *ngFor="let item of tenTbis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -228,7 +230,7 @@
               </div>
             </div>
 
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body"  nzWidth="600px">
+            <nz-table #editRowTable nzBordered class="table__body"  nzWidth="600px">
               <thead>
                 <tr>
                   <th nzWidth="50">STT</th>
@@ -257,7 +259,7 @@
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
