@@ -446,19 +446,6 @@ dMMaCucDtnnKvucs(): Observable<any> {
   );
 }
 
-dMTrangThai(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/382",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
     // lay danh sach cuc khu vuc
     dMCucKhuVuc():Observable<any>{
       return this.httpClient.post(
@@ -498,7 +485,7 @@ dMTrangThai(): Observable<any> {
   // địa điểm kho
   dMDiaDiemKho(): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/465",
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/541",
       {
         "paggingReq": {
           "limit": 1000,
@@ -596,20 +583,7 @@ dMDviHangQDGiaoDT(): Observable<any> {
       }
   );
 }
-// danh muc don vi tien qd giao du toan
-dMDviTienQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/438",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
+
 //danh muc noi dung
 dMDonViTien(): Observable<any> {
   return this.httpClient.post(
