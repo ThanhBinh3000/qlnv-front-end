@@ -409,13 +409,60 @@ export const LOAIBAOCAO =[
     export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
     
     export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
-    {
-        id:526,
-        tenDm:'Báo cáo giải ngân định kỳ tháng'
-    },
-    {
-        id:527,
-        tenDm:'Báo cáo giải ngân cả năm'
-    },
-]    
+        {
+            id:526,
+            tenDm:'Báo cáo giải ngân định kỳ tháng'
+        },
+        {
+            id:527,
+            tenDm:'Báo cáo giải ngân cả năm'
+        },
+    ]
+    
+    export const TRANGTHAI =[
+        {
+            id:0,
+            tenDm:'Đã xóa'
+        },
+        {
+            id:1,
+            tenDm:'Đang soạn'
+        },
+        {
+            id:2,
+            tenDm:'Trình duyệt'
+        },
+        {
+            id:3,
+            tenDm:'Trưởng BP từ chối'
+        },
+        {
+            id:4,
+            tenDm:'Trưởng BP duyệt'
+        },
+        {
+            id:5,
+            tenDm:'Lãnh đạo từ chối'
+        },
+        {
+            id:6,
+            tenDm:'Lãnh đạo duyệt'
+        },
+        {
+            id:7,
+            tenDm:'Gửi ĐV cấp trên'
+        },
+        {
+            id:8,
+            tenDm:'ĐV cấp trên từ chối'
+        },
+        {
+            id:9,
+            tenDm:'Đv cấp trên duyệt'
+        },
+        {
+            id:10,
+            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
+        },
+    ]
      
