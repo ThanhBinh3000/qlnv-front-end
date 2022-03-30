@@ -283,7 +283,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+    this.quanLyVonPhiService.baoCaoChiTiet(this.id).subscribe(
       (data) => {
         console.log(data);
         if (data.statusCode == 0) {
@@ -336,7 +336,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
   // call chi tiet bao cao
   getDetailReportToExportFile() {
     this.spinner.hide();
-    this.quanLyVonPhiService.chitietmaubaocao(this.id).subscribe(
+    this.quanLyVonPhiService.baoCaoChiTiet(this.id).subscribe(
       (data) => {
         console.log(data);
         if (data.statusCode == 0) {
@@ -728,7 +728,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
     console.log(request);
 
     if (this.id != null) {
-      this.quanLyVonPhiService.capnhatbaocao(request).subscribe((res) => {
+      this.quanLyVonPhiService.updateBaoCaoThucHienDTC(request).subscribe((res) => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS,MESSAGE.UPDATE_SUCCESS)
         } else {
@@ -736,7 +736,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
         }
       });
     } else {
-      this.quanLyVonPhiService.themmoibaocaoketquathuchien(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(request).subscribe(
         (data) => {
           if(data.statusCode==0){
             this.notification.success(MESSAGE.SUCCESS,MESSAGE.ADD_SUCCESS)

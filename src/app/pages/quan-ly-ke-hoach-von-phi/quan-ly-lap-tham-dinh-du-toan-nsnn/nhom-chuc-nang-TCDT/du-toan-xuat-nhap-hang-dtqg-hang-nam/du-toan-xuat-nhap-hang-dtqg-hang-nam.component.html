@@ -73,32 +73,34 @@
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <div class="widget-body">
           <div>
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
-                {{ngayNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" >
-                {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đơn vị tạo">
-                {{getUnitName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Mã báo cáo">
-                {{maBaoCao}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                {{getStatusName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Loại báo cáo">
-                Dự toán Phí nhập xuất hàng DTQG hàng năm
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC" [nzSpan]="4">
-                {{namBcao}}
-              </nz-descriptions-item>
-            </nz-descriptions>
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+                                   [nzColon]="false">
+                                   <nz-descriptions-item nzTitle="Ngày nhập">
+                                        {{ngayNhap}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+                                        {{nguoiNhap}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Đơn vị tạo">
+                                        {{getUnitName()}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Mã báo cáo">
+                                        {{maBaoCao}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
+                                        {{namBaoCaoHienHanh}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Năm BC">
+                                        {{namBcao}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Trạng thái">
+                                        {{getStatusName()}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Loại báo cáo">
+                                        Dự toán Phí nhập xuất hàng DTQG hàng năm
+                                   </nz-descriptions-item>
+
+                              </nz-descriptions>
           </div>
         </div>
       </nz-card>
@@ -179,7 +181,7 @@
                   <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate">
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <div *ngFor="let item of donVis">
+                      <div *ngFor="let item of cucKhuVucs">
                         <div *ngIf="item.maDvi == data.maDvi">
                           {{item.tenDvi}}
                         </div>
@@ -217,7 +219,7 @@
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                         [(ngModel)]="editCache1[data.id].data.maDvi">
-                        <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                        <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                         </nz-option>
                       </nz-select>
                     </td>
@@ -271,9 +273,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit1(data.id)" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit1(data.id)"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?" (nzOnConfirm)="cancelEdit1(data.id)"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
@@ -341,6 +343,30 @@
                     </div>
                   </th>
 
+                  <th nzWidth="100px">
+                    Tổng cục KV
+                  </th>
+
+                  <th nzWidth="100px">
+                    Tổng Văn phòng
+                  </th>
+
+                  <th nzWidth="150px">
+                    Định mức nhập <br/> VTTB các đơn vị
+                  </th>
+
+                  <th nzWidth="150px">
+                    Định mức nhập <br/> VTTB Văn phòng
+                  </th>
+
+                  <th nzWidth="150px">
+                    Thành tiền nhập <br/> VTTB các đơn vị
+                  </th>
+
+                  <th nzWidth="150px">
+                    Thành tiền nhập <br/> VTTB Văn phòng
+                  </th>
+
                   <th colspan="3" rowspan="2" [hidden]="status"></th>
                   <th rowspan="2" [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked2" (ngModelChange)="updateAllChecked2()"
@@ -353,7 +379,10 @@
               <tbody>
                 <tr *ngFor="let data of lstCTiet; let i = index">
                   <ng-container *ngIf="!editCache2[data.id].edit; else editTemplate1">
-                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{ i + 1 }}
+                    </td>
+
                     <td>
                       <div *ngFor="let item of vatTus">
                         <div *ngIf="item.id == data.maVtu">
@@ -365,6 +394,18 @@
                     <td *ngFor="let item of data.SL">
                       {{item.sl}}
                     </td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
 
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
@@ -394,14 +435,26 @@
                     <td *ngFor="let item of editCache2[data.id].data.SL">
                       <input class="search__input" nz-input type="number" [(ngModel)]="item.sl" />
                     </td>
+                    
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
+
+                    <td></td>
 
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit2(data.id)" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit2(data.id)"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit2(data.id)" class="save">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?" (nzOnConfirm)="cancelEdit2(data.id)"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine2(i + 1)"></i>

@@ -119,7 +119,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);

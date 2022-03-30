@@ -133,7 +133,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     }
     this.searchFilter.maLoaiBcao='91';
     console.log(this.searchFilter);
-    this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         this.listBcaoKqua = res.data.content;
         this.notifi.success(MESSAGE.SUCCESS,res?.msg);

@@ -18,6 +18,7 @@ import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dial
 import * as fileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as uuid from "uuid";
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 export class ItemData {
   id!: any;
@@ -41,10 +42,10 @@ export class ItemDanhSach {
   maDviTien!:string;
   maDvi:number;
   congVan!:string;
-  ngayTrinhDuyet!:string;
+  ngayTrinh!:string;
   ngayDuyet!:string;
   ngayPheDuyet!:string;
-  ngayCapTrenTraKq!:string;
+  ngayTraKq!:string;
 
   // dung cho request
   fileDinhKems!: any[];
@@ -394,10 +395,8 @@ async getDetailReport() {
             item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
           }
         })
-        debugger
         this.baoCao?.lstBCao?.forEach((item) => {
           if(item.maLoai == PHULUCLIST[0].maPhuLuc){
-            debugger
             this.lstCTietBCaoPL1 = item?.lstCTietBCao;
             item?.lstCTietBCao.filter(item1 =>{
               this.transformToLinkList(item1);
@@ -538,8 +537,24 @@ addToLinkList(data: linkList, item: linkList) {
   onPageSizeChange(size) {
     this.pages.size = size;
   }
-  onSubmit(id) {
-
+  onSubmit(mcn: String, lyDoTuChoi: string) {
+    const requestGroupButtons = {
+      id: this.id,
+      maChucNang: mcn,
+      lyDoTuChoi: lyDoTuChoi,
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).subscribe((data) => {
+      if (data.statusCode == 0) {
+        this.getDetailReport();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    });
+    this.spinner.hide();
   }
 
   //get user info
@@ -744,7 +759,6 @@ addToLinkList(data: linkList, item: linkList) {
       edit: true,
       data: { ...item }
     };
-    console.log(this.editCache[item.id]);
   }
 
   // huy thay doi
@@ -1568,5 +1582,23 @@ addToLinkList(data: linkList, item: linkList) {
   getStatusName(id){
     const utils = new Utils();
     return utils.getStatusName(id);
+  }
+
+  //show popup tu choi
+  tuChoi(mcn:string) {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.onSubmit(mcn,text);
+      }
+    });
   }
 }

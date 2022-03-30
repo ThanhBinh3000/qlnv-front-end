@@ -133,6 +133,7 @@
                                                       <th rowspan="2" nzWidth="150px">Nội dung</th>
                                                       <th rowspan="2" nzWidth="100px">Loại kế hoạch</th>
                                                       <th rowspan="2" nzWidth="100px">Loại dự án</th>
+                                                      <th rowspan="2" nzWidth="200px" [hidden]="statusDvi">Đơn vị thực hiện</th>
                                                       <th colspan="2" nzWidth="100px">
                                                             Tổng dự toán
                                                       </th>
@@ -201,6 +202,7 @@
                                                       <td>Tổng cộng</td>
                                                       <td></td>
                                                       <td></td>
+                                                      <td [hidden]="statusDvi"></td>
                                                       <td></td>
                                                       <td></td>
                                                       <td></td>
@@ -224,6 +226,7 @@
                                                             đơn vị thuộc tổng cục</td>
                                                       <td></td>
                                                       <td></td>
+                                                      <td [hidden]="statusDvi"></td>
                                                       <td></td>
                                                       <td></td>
                                                       <td></td>
@@ -247,6 +250,7 @@
                                                             dịch vụ hạ tầng</td>
                                                       <td></td>
                                                       <td></td>
+                                                      <td [hidden]="statusDvi"></td>
                                                       <td></td>
                                                       <td></td>
                                                       <td></td>
@@ -269,6 +273,7 @@
                                                       <td>Nâng cấp hệ thống thông tin ngành dự trữ 1</td>
                                                       <td></td>
                                                       <td></td>
+                                                      <td [hidden]="statusDvi"></td>
                                                       <td></td>
                                                       <td></td>
                                                       <td></td>
@@ -291,6 +296,7 @@
                                                       <td>Nâng cấp hệ thống thông tin ngành dự trữ 2</td>
                                                       <td></td>
                                                       <td></td>
+                                                      <td [hidden]="statusDvi"></td>
                                                       <td></td>
                                                       <td></td>
                                                       <td></td>
@@ -329,6 +335,14 @@
                                                                         </div>
                                                                   </div>
                                                             </td>
+
+                                                            <td [hidden]="statusDvi">
+                                                                  <div *ngFor="let item of cucKhuVucs">
+                                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                                                            {{item.tenDvi}}
+                                                                       </div>
+                                                                  </div>
+                                                             </td>
 
                                                             <td>{{ data.tongDtoanSl }}</td>
 
@@ -399,6 +413,15 @@
                                                                               [nzLabel]="item.tenDm"></nz-option>
                                                                   </nz-select>
                                                             </td>
+
+                                                            <td [hidden]="statusDvi">
+                                                                  <nz-select nzShowSearch nzAllowClear
+                                                                       nzPlaceHolder="Chọn đơn vị"
+                                                                       [(ngModel)]="editCache[data.id].data.maDvi">
+                                                                       <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                                                                            [nzLabel]="item.tenDvi"></nz-option>
+                                                                  </nz-select>
+                                                             </td>
 
                                                             <td>
                                                                   <input class="search__input" nz-input type="number"
@@ -583,7 +606,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-
     <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-
+    
     <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
+    
