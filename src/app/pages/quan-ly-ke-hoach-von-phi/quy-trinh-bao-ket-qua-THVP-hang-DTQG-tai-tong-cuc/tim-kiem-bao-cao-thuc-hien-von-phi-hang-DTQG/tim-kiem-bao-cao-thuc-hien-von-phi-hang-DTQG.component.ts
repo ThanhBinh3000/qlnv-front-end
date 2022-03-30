@@ -7,7 +7,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-
+import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
+import { TRANGTHAI } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
   templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
@@ -37,55 +38,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   noParent = true;
   searchValue = '';
 
-  listTrangThai:any []=[
-    {
-      id:'1',
-      tenDm:'Đang soạn'
-    },
-    {
-      id:'2',
-      tenDm:'Trình duyệt'
-    },
-    {
-      id:'3',
-      tenDm:'Trưởng BP từ chối'
-    },
-    {
-      id:'4',
-      tenDm:'Trưởng BP duyệt'
-    },
-    {
-      id:'5',
-      tenDm:'Lãnh đạo từ chối'
-    },
-    {
-      id:'6',
-      tenDm:'Lãnh đạo duyệt'
-    },
-    {
-      id:'7',
-      tenDm:'Gửi ĐV cấp trên'
-    },
-    {
-      id:'8',
-      tenDm:'ĐV cấp trên từ chối'
-    },
-    {
-      id:'9',
-      tenDm:'ĐV cấp trên duyệt'
-    },
-  ]
-
-  listLoaiBcao:any[]=[
-    {
-      id:'1',
-      tenDm:'Đợt'
-    },
-    {
-      id:'2',
-      tenDm:'Năm'
-    }
-  ]
+  listTrangThai:any = TRANGTHAI;
 
   listBcaoKqua:any []=[];
   lenght:any=0;
@@ -112,7 +65,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = [];
+  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -123,21 +76,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-
-        } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(

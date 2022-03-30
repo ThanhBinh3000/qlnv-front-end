@@ -176,7 +176,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau05Component implem
       userInfor?.roles[0]?.id,
     );
     //get danh muc noi dung
-    this.danhMuc.dmVattuhanghoa().subscribe(
+    this.danhMuc.dMVatTu().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;

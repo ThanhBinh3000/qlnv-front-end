@@ -227,20 +227,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv', req)
   }
 
-  //lay danh sach vật tư hàng hóa
-  dmVattuhanghoa(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
-  }
-
   //dm đơn vị tính
   dmDonvitinh(): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-dvi-tinh/danh-sach',
@@ -252,21 +238,6 @@ export class QuanLyVonPhiService extends BaseService {
         "str": "",
         "trangThai": "",
       })
-  }
-
-  //get list danh muc loai bao cao ket qua thuc hien von phi hang DTQG
-  dMLoaiBaoCaoKetQuaThucHienHangDTQG(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/406',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
   }
 
   themmoi325(request: any): Observable<any> {
