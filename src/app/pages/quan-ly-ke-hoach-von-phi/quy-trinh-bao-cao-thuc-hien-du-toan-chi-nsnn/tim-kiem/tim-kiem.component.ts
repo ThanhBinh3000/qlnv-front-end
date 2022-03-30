@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-
+import { TRANGTHAI } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -53,7 +53,7 @@ export class TimKiemComponent implements OnInit {
   }
   donViTaos: any = [];
   baoCaos: any = [];
-  trangThais: any = [];
+  trangThais: any = TRANGTHAI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -73,22 +73,6 @@ export class TimKiemComponent implements OnInit {
         }
       },
       err => {
-        this.errorMessage = "err.error.message";
-      }
-    );
-
-    //lay danh sach loai bao cao
-    this.danhMuc.dMTrangThai().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.trangThais = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        console.log(err);
         this.errorMessage = "err.error.message";
       }
     );
