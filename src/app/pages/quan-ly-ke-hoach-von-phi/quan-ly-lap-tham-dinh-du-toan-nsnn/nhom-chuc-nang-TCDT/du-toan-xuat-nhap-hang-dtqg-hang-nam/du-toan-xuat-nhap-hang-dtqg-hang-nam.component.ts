@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -48,9 +48,9 @@ export class miniData {
   SL: superMiniData[] = [];
   tongDvi!: number;
   tongVphong!: number;
-  dmucVTTVDvi!: number;
+  dmucVTTBDvi!: number;
   dmucVTTBVphong!: number;
-  thanhTienVTTbDvi!: number;
+  thanhTienVTTBDvi!: number;
   thanhTienVTTBVphong!: number;
 }
 
@@ -70,6 +70,38 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   donVis: any = [];                            // danh muc don vi
   cucKhuVucs: any = [];
   bangDvi: superMiniData[] = [];
+  vanPhongs: any = [
+    {
+      maDvi : "101",
+      capDvi: "1.5",
+      tenDvi: "Phòng Tổng hợp - Thư ký",
+    },
+    {
+      maDvi : "102",
+      capDvi: "1.5",
+      tenDvi: "Phòng hành chính",
+    },
+    {
+      maDvi : "103",
+      capDvi: "1.5",
+      tenDvi: "Phòng Lưu trữ - Thư viện",
+    },
+    {
+      maDvi : "104",
+      capDvi: "1.5",
+      tenDvi: "Phòng Báo chí - Tuyên truyền",
+    },
+    {
+      maDvi : "105",
+      capDvi: "1.5",
+      tenDvi: "Cơ quan đại diện Văn phòng Bộ tài chính tại thành phố HCM",
+    },
+    {
+      maDvi : "106",
+      capDvi: "1.5",
+      tenDvi: "Phòng Cải cách hành chính và kiểm soát thủ tục tài chính",
+    },
+  ];
   tong: ItemData = {
     maDvi: "",
     lxuatThoc: 0,
@@ -100,7 +132,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -231,6 +263,10 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.cucKhuVucs = this.donVis.filter(item => item.capDvi === '2');
+          this.vanPhongs.forEach(item => {
+            this.cucKhuVucs.push(item);
+          })
+          console.log(this.cucKhuVucs);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -741,7 +777,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         id: uuid.v4(),
         maDvi: item.maDvi,
         sl: 0,
-        col: item.id,
+        col: item.col,
       }
       data.push(mm);
     })
@@ -752,7 +788,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         id: uuid.v4(),
         maDvi: item.maDvi,
         sl: 0,
-        col: item.id,
+        col: item.col,
       }
       data.push(mm);
     })
@@ -764,9 +800,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       checked: false,
       tongDvi: 0,
       tongVphong: 0,
-      dmucVTTVDvi: 0,
+      dmucVTTBDvi: 0,
       dmucVTTBVphong: 0,
-      thanhTienVTTbDvi: 0,
+      thanhTienVTTBDvi: 0,
       thanhTienVTTBVphong: 0,
     }
 
@@ -778,9 +814,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       checked: false,
       tongDvi: 0,
       tongVphong: 0,
-      dmucVTTVDvi: 0,
+      dmucVTTBDvi: 0,
       dmucVTTBVphong: 0,
-      thanhTienVTTbDvi: 0,
+      thanhTienVTTBDvi: 0,
       thanhTienVTTBVphong: 0,
     }
 
@@ -868,9 +904,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       checked: this.lstCTiet[index].checked,
       tongDvi: this.lstCTiet[index].tongDvi,
       tongVphong: this.lstCTiet[index].tongVphong,
-      dmucVTTVDvi: this.lstCTiet[index].dmucVTTVDvi,
+      dmucVTTBDvi: this.lstCTiet[index].dmucVTTBDvi,
       dmucVTTBVphong: this.lstCTiet[index].dmucVTTBVphong,
-      thanhTienVTTbDvi: this.lstCTiet[index].thanhTienVTTbDvi,
+      thanhTienVTTBDvi: this.lstCTiet[index].thanhTienVTTBDvi,
       thanhTienVTTBVphong: this.lstCTiet[index].thanhTienVTTBVphong,
     }
     this.editCache2[id] = {
@@ -900,9 +936,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       checked: this.editCache2[id].data.checked,
       tongDvi: this.editCache2[id].data.tongDvi,
       tongVphong: this.editCache2[id].data.tongVphong,
-      dmucVTTVDvi: this.editCache2[id].data.dmucVTTVDvi,
+      dmucVTTBDvi: this.editCache2[id].data.dmucVTTBDvi,
       dmucVTTBVphong: this.editCache2[id].data.dmucVTTBVphong,
-      thanhTienVTTbDvi: this.editCache2[id].data.thanhTienVTTbDvi,
+      thanhTienVTTBDvi: this.editCache2[id].data.thanhTienVTTBDvi,
       thanhTienVTTBVphong: this.editCache2[id].data.thanhTienVTTBVphong,
     }
     const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
@@ -931,9 +967,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         SL: mm,
         tongDvi: data.tongDvi,
         tongVphong: data.tongVphong,
-        dmucVTTVDvi: data.dmucVTTVDvi,
+        dmucVTTBDvi: data.dmucVTTBDvi,
         dmucVTTBVphong: data.dmucVTTBVphong,
-        thanhTienVTTbDvi: data.thanhTienVTTbDvi,
+        thanhTienVTTBDvi: data.thanhTienVTTBDvi,
         thanhTienVTTBVphong: data.thanhTienVTTBVphong,
       }
       this.editCache2[data.id] = {
@@ -941,6 +977,24 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         data: { ...ll }
       };
     })
+  }
+
+  //tinh lai tong so luong cho moi lan nhap
+  tongSl(id: any) {
+    this.editCache2[id].data.tongDvi = 0;
+    this.editCache2[id].data.tongVphong = 0;
+    this.editCache2[id].data.SL.forEach(item => {
+      if (this.vanPhongs.findIndex(data => data.maDvi == item.maDvi) != -1){
+        this.editCache2[id].data.tongVphong += item.sl;
+      } else {
+        this.editCache2[id].data.tongDvi += item.sl;
+      }
+    })
+  }
+
+  thanhTien(id: any) {
+    this.editCache2[id].data.thanhTienVTTBDvi = this.editCache2[id].data.tongDvi * this.editCache2[id].data.dmucVTTBDvi;
+    this.editCache2[id].data.thanhTienVTTBVphong = this.editCache2[id].data.tongVphong * this.editCache2[id].data.dmucVTTBVphong;
   }
 
 

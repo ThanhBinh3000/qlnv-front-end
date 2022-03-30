@@ -395,17 +395,29 @@
                       {{item.sl}}
                     </td>
 
-                    <td></td>
+                    <td>
+                      {{data.tongDvi}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{data.tongVphong}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{data.dmucVTTBDvi}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{data.dmucVTTBVphong}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{data.thanhTienVTTBDvi}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{data.thanhTienVTTBVphong}}
+                    </td>
 
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
@@ -433,20 +445,34 @@
                     </td>
 
                     <td *ngFor="let item of editCache2[data.id].data.SL">
-                      <input class="search__input" nz-input type="number" [(ngModel)]="item.sl" />
+                      <input class="search__input" nz-input type="number" [(ngModel)]="item.sl" (change)="tongSl(data.id)"/>
                     </td>
                     
-                    <td></td>
+                    <td>
+                      {{editCache2[data.id].data.tongDvi}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{editCache2[data.id].data.tongVphong}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      <input class="search__input" nz-input type="number"
+                        [(ngModel)]="editCache2[data.id].data.dmucVTTBDvi" (change)="thanhTien(data.id)"/>
+                    </td>
 
-                    <td></td>
+                    <td>
+                      <input class="search__input" nz-input type="number"
+                        [(ngModel)]="editCache2[data.id].data.dmucVTTBVphong" (change)="thanhTien(data.id)"/>
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{editCache2[data.id].data.thanhTienVTTBDvi}}
+                    </td>
 
-                    <td></td>
+                    <td>
+                      {{editCache2[data.id].data.thanhTienVTTBVphong}}
+                    </td>
 
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
