@@ -129,6 +129,7 @@ export class Utils {
         return !(Utils.btnRoleDVCT.status.includes(status) && Utils.btnRoleDVCT.unit.includes(unit) && Utils.btnRoleDVCT.role.includes(role));
     }
 
+    // lay quyen
     public getRole(id: number) {
         let role;
         switch (id) {
@@ -152,6 +153,7 @@ export class Utils {
         return role;
     }
 
+    // lay ten don vi theo ma don vi
     public getUnitLevel(id: number) {
         let unitLevel;
         switch (id) {
@@ -171,6 +173,7 @@ export class Utils {
         return unitLevel;
     }
 
+    // lay ten trang thai theo ma trang thai
     public getStatusName(id: string) {
         let statusName;
         switch (id) {
@@ -207,12 +210,9 @@ export class Utils {
         }
         return statusName;
     }
-
-
-
-
 }
 
+// loai bao cao quan ly von phi
 export const LOAIBAOCAO =[
     {
         id:'12',
@@ -408,13 +408,94 @@ export const LOAIBAOCAO =[
     export	const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N:string = "31";
     export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
 
+    // loai bao cao quy trinh thuc hien du toan chi
     export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
-    {
-        id:526,
-        tenDm:'Báo cáo giải ngân định kỳ tháng'
-    },
-    {
-        id:527,
-        tenDm:'Báo cáo giải ngân cả năm'
-    },
-]
+        {
+            id:526,
+            tenDm:'Báo cáo giải ngân định kỳ tháng'
+        },
+        {
+            id:527,
+            tenDm:'Báo cáo giải ngân cả năm'
+        },
+    ]
+
+    // loai bao cao ket qua thuc hien hang du tru quoc gia
+    export const LBCKETQUATHUCHIENHANGDTQG =[
+        {
+            id:1,
+            tenDm:'Đợt'
+        },
+        {
+            id:2,
+            tenDm:'Năm'
+        },
+    ]
+
+    // trang thai ban ghi
+    export const TRANGTHAI =[
+        {
+            id:0,
+            tenDm:'Đã xóa'
+        },
+        {
+            id:1,
+            tenDm:'Đang soạn'
+        },
+        {
+            id:2,
+            tenDm:'Trình duyệt'
+        },
+        {
+            id:3,
+            tenDm:'Trưởng BP từ chối'
+        },
+        {
+            id:4,
+            tenDm:'Trưởng BP duyệt'
+        },
+        {
+            id:5,
+            tenDm:'Lãnh đạo từ chối'
+        },
+        {
+            id:6,
+            tenDm:'Lãnh đạo duyệt'
+        },
+        {
+            id:7,
+            tenDm:'Gửi ĐV cấp trên'
+        },
+        {
+            id:8,
+            tenDm:'ĐV cấp trên từ chối'
+        },
+        {
+            id:9,
+            tenDm:'Đv cấp trên duyệt'
+        },
+        {
+            id:10,
+            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
+        },
+    ]
+
+    // trang thai chi tiet bao cao
+    export	const OK = "1";
+    export	const NOTOK = "0";
+
+    // loai trang thai gui don vi cap tren
+    export const TRANGTHAIGUIDVCT =[
+        {
+            id:1,
+            ten:'Chấp nhận'
+        },
+        {
+            id:2,
+            ten:'Không chấp nhận'
+        },
+        {
+            id:3,
+            ten:'Chưa đánh giá (để trống)'
+        },
+    ]

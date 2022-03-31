@@ -12,7 +12,6 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
-import { LinkList } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/test-link-list/test-link-list.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export class ItemDataPL2 {

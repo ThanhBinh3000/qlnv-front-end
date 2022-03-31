@@ -7,14 +7,16 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
-import { TRANGTHAI } from 'src/app/Utility/utils';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+
+
 @Component({
-  selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
-  templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
-  styleUrls: ['./tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.scss']
+  selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC',
+  templateUrl: './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.component.html',
+  styleUrls: ['./ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.component.scss']
 })
-export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
+
+export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
@@ -25,38 +27,27 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   errorMessage = "";
   url!: string;
 
-  // phan cu cua teca
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  noParent = true;
-  searchValue = '';
-
-  listTrangThai:any = TRANGTHAI;
-
   listBcaoKqua:any []=[];
   lenght:any=0;
 
+  trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
 
   searchFilter = {
-    maBaoCao:'',
-    namBaoCao:'',
-    dotBaoCao:'',
-    ngayLap:'',
-    denNgay:'',
+    maDvi:'',
+    ngayTaoTu:'',
+    ngayTaoDen:'',
     trangThai:'',
-    loaiBaoCao:2,
+    maBcao:'',
+    maLoaiBcao:'',
+    namBcao:'',
+    thangBCao: '',
+    dotBcao:'',
     paggingReq: {
       limit: 20,
       page: 1
     },
-    str: "",
+    str: '',
+    donVi:'',
   };
 
 
@@ -65,7 +56,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
+  baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -76,13 +67,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-
         } else {
           this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
@@ -114,12 +103,10 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 
   timkiem(){
-    console.log(this.searchFilter);
-    // if(this.searchFilter.maLoaiBcao==''){
-    //   this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-    //   return;
-    // }
-    // this.searchFilter.maLoaiBcao='91';
+    if(this.searchFilter.maLoaiBcao==''){
+      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+      return;
+    }
     this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
@@ -136,29 +123,42 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
-
+  themMoi(){
+    if(this.searchFilter.maLoaiBcao==''){
+      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      return;
+    }
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
+  }
 
   //set url khi
   setUrl(lbaocao:any) {
-      switch (lbaocao) {
-        case '1':
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
-          break;
-        case '2':
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
-          break;
-        default:
-          this.url = null;
-          break;
-      }
-  }
-
-  themmoi(){
-    if(this.url==null){
-      this.notifi.error(MESSAGE.ERROR, 'Bạn chưa chọn loại báo cáo');
-      return;
-    }else{
-      this.router.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/'+this.url]);
+    console.log(lbaocao)
+    switch (lbaocao) {
+      case 526:
+        this.url = '/bao-cao/'
+        break;
+      case 521:
+        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
+        break;
+      case 407:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
+        break;
+      case 408:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
+        break;
+      case 409:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
+        break;
+      case 410:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
+        break;
+      case 411:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
+        break;
+      default:
+        this.url = null;
+        break;
     }
   }
 

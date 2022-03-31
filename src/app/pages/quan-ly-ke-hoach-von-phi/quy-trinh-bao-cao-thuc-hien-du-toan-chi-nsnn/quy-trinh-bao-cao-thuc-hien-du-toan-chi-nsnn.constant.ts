@@ -9,6 +9,12 @@ export const QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN_LIST: QuyTrinhBaoCaoTh
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ chi cục',
+    description: 'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ chi cục',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN}/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-chi-cuc`,
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
     title: 'Danh sách tổng hợp báo cáo điều chỉnh dự toán chi',
     description: 'Danh sách tổng hợp báo cáo điều chỉnh dự toán chi',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN}/tim-kiem`,

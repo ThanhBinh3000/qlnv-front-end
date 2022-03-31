@@ -8,11 +8,11 @@ const routes: Routes = [
     component: QuanLyDieuChinhDuToanChiNSNNComponent,
   },
   {
-    path: 'tim-kiem',
+    path: 'test-link-list',
     loadChildren: () =>
       import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
+        './test-link-list/test-link-list.module'
+      ).then((m) => m.TestLinkListModule),
   },
   {
     path: 'danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
@@ -28,22 +28,6 @@ const routes: Routes = [
         './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.module'
       ).then((m) => m.DanhSachKeHoachPhanBoGiaoDuToanCuaDonViModule),
   },
-
-  {
-    path: 'chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao',
-    loadChildren: () =>
-      import(
-        './chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao/chon-chi-tiet-cua-phan-bo-du-toan-chi-da-giao.module'
-      ).then((m) => m.ChonChiTietCuaPhanBoDuToanChiDaGiaoModule),
-  },
-  {
-    path: 'tong-hop',
-    loadChildren: () =>
-      import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
-  },
-  
   {
     path: 'lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
     loadChildren: () =>
@@ -57,14 +41,6 @@ const routes: Routes = [
       import(
         './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.module'
       ).then((m) => m.LapBaoCaoDieuChinhDuToanChiNsnnModule),
-  },
-  
-  {
-    path: 'test-link-list',
-    loadChildren: () =>
-      import(
-        './test-link-list/test-link-list.module'
-      ).then((m) => m.TestLinkListModule),
   },
 ];
 

@@ -199,7 +199,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     );
 
     //get danh muc đơn vị tiền quyết định giao dự toán
-    this.danhMucService.dMDviTienQDGiaoDT().toPromise().then(
+    this.danhMucService.dMDonViTien().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.maDviTiens = data.data?.content;

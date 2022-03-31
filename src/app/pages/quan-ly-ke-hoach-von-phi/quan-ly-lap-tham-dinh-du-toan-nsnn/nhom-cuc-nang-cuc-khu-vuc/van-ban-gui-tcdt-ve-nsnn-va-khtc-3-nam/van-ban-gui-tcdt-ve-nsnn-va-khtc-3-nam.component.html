@@ -36,38 +36,32 @@
      <div class="contentDetail">
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-                    <div class="search__body" nz-row [nzGutter]="[16, 12]">
-                         <div nz-col nzSpan="6">
-                              <label class="search__label">Ngày lập</label>
-                              <input nz-input class="search__input" [(ngModel)]="ngayNhap"/>
-                         </div>
-                         <div nz-col nzSpan="6">
-                              <label class="search__label">Người nhập</label>
-                              <input class="search__input" nz-input [(ngModel)]="nguoiNhap">
-                         </div>
-                         <div nz-col nzSpan="6">
-                              <label class="search__label">Nơi tạo</label>
-                              <input class="search__input" nz-input [(ngModel)]="noiTao">
-                         </div>
-                         <div nz-col nzSpan="6">
-                              <label class="search__label">Trạng thái</label>
-                              <input class="search__input" nz-input [(ngModel)]="trangThai">
-                         </div>
-                         <div nz-col nzSpan="12">
-                              <label class="search__label">Số văn bản</label>
-                              <input class="search__input" nz-input [(ngModel)]="soVban">
-                         </div>
-                         <div nz-col nzSpan="12" [hidden]="!kt">
-                              <label class="search__label">Ngày duyệt văn bản</label>
-                              <nz-date-picker class="search__input"  [(ngModel)]="ngayDuyetVban"> </nz-date-picker>
-                         </div>
-                         <div nz-col nzSpan="12" [hidden]="kt">
-                              <label class="search__label">Ngày duyệt văn bản</label>
-                              <input nz-input class="search__input"  [(ngModel)]="ngayDuyetVban">
-                         </div>
-
+                    <div class="widget-body">
+                      <div>
+                        <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+                          <nz-descriptions-item nzTitle="Ngày nhập">
+                            {{ngayNhap}}
+                          </nz-descriptions-item>
+                          <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+                            {{nguoiNhap}}
+                          </nz-descriptions-item>
+                          <nz-descriptions-item nzTitle="Nơi tạo">
+                            {{getUnitName()}}
+                          </nz-descriptions-item>
+                          <nz-descriptions-item nzTitle="Trạng thái">
+                              {{getStatusName()}}
+                            </nz-descriptions-item>
+                          <nz-descriptions-item nzTitle="Số văn bản">
+                            {{soVban}}
+                          </nz-descriptions-item>
+                          <nz-descriptions-item nzTitle="Ngày duyệt văn bản">
+                              {{ngayDuyetVban}}
+                            </nz-descriptions-item>
+                        </nz-descriptions>
+                      </div>
                     </div>
-               </nz-card>
+                  </nz-card>
+
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
                          <nz-tab [nzTitle]="'VĂN BẢN GỬI TCDT VỀ NSNN HẰNG NĂM VÀ KHTC 03 NĂM'">

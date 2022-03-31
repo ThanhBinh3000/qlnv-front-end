@@ -142,8 +142,8 @@
                                              </th>
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
                                              <th rowspan="2" [hidden]="status">
-                                                  <label nz-checkbox [(ngModel)]="allChecked1"
-                                                       (ngModelChange)="updateAllChecked1()"
+                                                  <label nz-checkbox [(ngModel)]="allChecked"
+                                                       (ngModelChange)="updateAllChecked()"
                                                        [nzIndeterminate]="indeterminate">
                                                   </label>
                                              </th>
@@ -192,7 +192,7 @@
                                         </tr>
 
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
-                                             <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate">
+                                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <div *ngFor="let item of cucKhuVucs">
@@ -216,17 +216,17 @@
                                                   <td>{{ data.thanhTienCongThoc }}</td>
 
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
+                                                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-pencil" (click)="startEdit1(data.id)"></i>
+                                                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                                   </td>
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
+                                                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked1()"></label>
+                                                            (ngModelChange)="updateSingleChecked()"></label>
                                                   </td>
 
                                              </ng-container>
@@ -234,7 +234,7 @@
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                                            [(ngModel)]="editCache1[data.id].data.maCucDtnnKvuc">
+                                                            [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
                                                             <nz-option *ngFor="let item of cucKhuVucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                                                             </nz-option>
@@ -243,69 +243,69 @@
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.luongGao" />
+                                                            [(ngModel)]="editCache[data.id].data.luongGao" />
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.cphiXuatCoDmucGao" />
+                                                            [(ngModel)]="editCache[data.id].data.cphiXuatCoDmucGao" />
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.cphiXuatChuaDmucGao" />
+                                                            [(ngModel)]="editCache[data.id].data.cphiXuatChuaDmucGao" />
                                                   </td>
 
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienCoDmucGao}}
+                                                       {{editCache[data.id].data.thanhTienCoDmucGao}}
                                                   </td>
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienKhongDmucGao}}
+                                                       {{editCache[data.id].data.thanhTienKhongDmucGao}}
                                                   </td>
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienCongGao}}
-                                                  </td>
-
-                                                  <td>
-                                                       <input class="search__input" nz-input type="number"
-                                                            (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.luongThoc" />
-                                                  </td>
-                                                  <td>
-                                                       <input class="search__input" nz-input type="number"
-                                                            (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.cphiXuatCoDmucThoc" />
-                                                  </td>
-                                                  <td>
-                                                       <input class="search__input" nz-input type="number"
-                                                            (change)="changeModel(data.id)"
-                                                            [(ngModel)]="editCache1[data.id].data.cphiXuatChuaDmucThoc" />
+                                                       {{editCache[data.id].data.thanhTienCongGao}}
                                                   </td>
 
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienCoDmucThoc}}
+                                                       <input class="search__input" nz-input type="number"
+                                                            (change)="changeModel(data.id)"
+                                                            [(ngModel)]="editCache[data.id].data.luongThoc" />
                                                   </td>
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienKhongDmucThoc}}
+                                                       <input class="search__input" nz-input type="number"
+                                                            (change)="changeModel(data.id)"
+                                                            [(ngModel)]="editCache[data.id].data.cphiXuatCoDmucThoc" />
                                                   </td>
                                                   <td>
-                                                       {{editCache1[data.id].data.thanhTienCongThoc}}
+                                                       <input class="search__input" nz-input type="number"
+                                                            (change)="changeModel(data.id)"
+                                                            [(ngModel)]="editCache[data.id].data.cphiXuatChuaDmucThoc" />
+                                                  </td>
+
+                                                  <td>
+                                                       {{editCache[data.id].data.thanhTienCoDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{editCache[data.id].data.thanhTienKhongDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{editCache[data.id].data.thanhTienCongThoc}}
                                                   </td>
 
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
+                                                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
+                                                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                                        <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
-                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
+                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
+                                                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked1()"></label>
+                                                            (ngModelChange)="updateSingleChecked()"></label>
                                                   </td>
                                              </ng-template>
                                         </tr>
@@ -314,15 +314,15 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected1()">
+                         <button type="button" class="btn btn-main" (click)="deleteSelected1()" [hidden]="status">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>
-                         <button type="button" class="btn btn-main" (click)="addLine1(lstCTietBCao.length)">
+                         <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
                          </button>
-                         <button type="button" class="btn btn-sub">
+                         <button type="button" class="btn btn-sub" [hidden]="status">
                               <i class="icon htvbdh_tcdt_import"></i>
                               <span>Import</span>
                          </button>
@@ -337,133 +337,191 @@
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
-                                             <th rowspan="2" nzWidth="50px">STT</th>
-                                             <th rowspan="2" nzWidth="170px">Nhập vật tư</th>
+                                             <th rowspan="2" nzWidth="50px">
+                                                  STT
+                                             </th>
 
-                                             <th rowspan="2" nzWidth="150px" *ngFor="let data of bangDvi">
-                                                  <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                             <th rowspan="2" nzWidth="170px">
+                                                  Nhập vật tư
+                                             </th>
+
+                                             <th rowspan="2" nzWidth="150px" *ngFor="let data of lstCTietBCao">
+                                                  <div *ngFor="let item of cucKhuVucs">
+                                                       <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
                                                             {{item.tenDvi}}
                                                        </div>
                                                   </div>
                                              </th>
 
-                                             <th rowspan="2" nzWidth="100px"> Tổng </th>
-                                             <th rowspan="2" nzWidth="200px"> Chi phí xuất <br /> có định mức </th>
-                                             <th rowspan="2" nzWidth="200px"> Chi phí xuất <br /> chưa có định mức </th>
-                                             <th colspan="3" > Thành Tiền (triệu đồng làm tròn) </th>
+                                             <th rowspan="2" nzWidth="100px">
+                                                  Tổng
+                                             </th>
+
+                                             <th rowspan="2" nzWidth="200px">
+                                                  Chi phí xuất <br /> có định mức
+                                             </th>
+
+                                             <th rowspan="2" nzWidth="200px">
+                                                  Chi phí xuất <br /> chưa có định mức
+                                             </th>
+
+                                             <th colspan="3" >
+                                                  Thành Tiền (triệu đồng làm tròn)
+                                             </th>
+
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
+
                                              <th rowspan="2" [hidden]="status">
-                                                  <label nz-checkbox [(ngModel)]="allChecked2"
-                                                       (ngModelChange)="updateAllChecked2()"
+                                                  <label nz-checkbox [(ngModel)]="allChecked1"
+                                                       (ngModelChange)="updateAllChecked1()"
                                                        [nzIndeterminate]="indeterminate">
                                                   </label>
                                              </th>
                                         </tr>
                                         <tr>
-                                             <th nzWidth="100px">Có định mức</th>
-                                             <th nzWidth="100px">Không định mức</th>
-                                             <th nzWidth="100px">Cộng</th>
+                                             <th nzWidth="100px">
+                                                  Có định mức
+                                             </th>
+
+                                             <th nzWidth="100px">
+                                                  Không định mức
+                                             </th>
+
+                                             <th nzWidth="100px">
+                                                  Cộng
+                                             </th>
                                         </tr>
 
                                    </thead>
                                    <tbody>
-                                        <tr *ngFor="let data of lstCTiet; let i = index">
-                                             <ng-container *ngIf="!editCache2[data.id].edit; else editTemplate1">
-                                                  <td>{{ i + 1 }}</td>
+                                        <tr *ngFor="let data of lstVtu; let i = index">
+                                             <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate1">
+                                                  <td>
+                                                       {{ i + 1 }}
+                                                  </td>
+
                                                   <td>
                                                        <div *ngFor="let item of vatTus">
-                                                            <div *ngIf="item.id == data.maVtu">
+                                                            <div *ngIf="item.id == data.maVtuTbi">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>
                                                   </td>
 
-                                                  <td *ngFor="let item of data.SL">
-                                                       {{item.sl}}
+                                                  <td *ngFor="let item of lstCTietBCao">
+                                                       <div *ngFor="let e of item.listCtiet">
+                                                            <ng-container *ngIf="e.col == data.col">
+                                                                 {{e.sl}}
+                                                            </ng-container>
+                                                       </div>
                                                   </td>
 
                                                   <td>
                                                        {{data.tong}}
                                                   </td>
+
                                                   <td>
                                                        {{data.cphiXuatCoDmuc}}
                                                   </td>
+
                                                   <td>
                                                        {{data.cphiXuatChuaDmuc}}
                                                   </td>
+
                                                   <td>
                                                        {{data.thanhTienCoDmuc}}
                                                   </td>
+
                                                   <td>
                                                        {{data.thanhTienKhongDmuc}}
                                                   </td>
+
                                                   <td>
                                                        {{data.thanhTienCong}}
                                                   </td>
+
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
+                                                       <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
+
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-pencil" (click)="startEdit2(data.id)"></i>
+                                                       <i class="fa fa-pencil" (click)="startEdit1(data.id)"></i>
                                                   </td>
+
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-plus" (click)="addLine2(i + 1)"></i>
+                                                       <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
                                                   </td>
+
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked2()"></label>
+                                                            (ngModelChange)="updateSingleChecked1()"></label>
                                                   </td>
                                              </ng-container>
                                              <ng-template #editTemplate1>
-                                                  <td>{{ i + 1 }}</td>
+                                                  <td>
+                                                       {{ i + 1 }}
+                                                  </td>
 
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư"
-                                                            [(ngModel)]="editCache2[data.id].data.maVtu">
+                                                            [(ngModel)]="editCache1[data.id].data.maVtuTbi">
                                                             <nz-option *ngFor="let item of vatTus" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
 
-                                                  <td *ngFor="let it of editCache2[data.id].data.SL">
+                                                  <td *ngFor="let item of lstCTietBCao">
+                                                       <div *ngFor="let e of editCache[item.id].data.listCtiet">
+                                                            <ng-container *ngIf="e.col == data.col">
+                                                                 <input class="search__input" nz-input type="number"
+                                                                      [(ngModel)]="e.sl" (change)="tongSl(data.id)"/>
+                                                            </ng-container>
+                                                       </div>
+                                                  </td>
+
+                                                  <td>
+                                                       {{editCache1[data.id].data.tong}}
+                                                  </td>
+
+                                                  <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="it.sl" (change)="tongSl(data.id)"/>
+                                                            [(ngModel)]="editCache1[data.id].data.cphiXuatCoDmuc" (change)="thanhTien(data.id)"/>
                                                   </td>
-                                                  <td>
-                                                       {{editCache2[data.id].data.tong}}
-                                                  </td>
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache2[data.id].data.cphiXuatCoDmuc" (change)="thanhTien(data.id)"/>
+                                                       [(ngModel)]="editCache1[data.id].data.cphiXuatChuaDmuc" (change)="thanhTien(data.id)"/>
                                                   </td>
+
                                                   <td>
-                                                       <input class="search__input" nz-input type="number"
-                                                       [(ngModel)]="editCache2[data.id].data.cphiXuatChuaDmuc" (change)="thanhTien(data.id)"/>
+                                                       {{editCache1[data.id].data.thanhTienCoDmuc}}
                                                   </td>
+
                                                   <td>
-                                                       {{editCache2[data.id].data.thanhTienCoDmuc}}
+                                                       {{editCache1[data.id].data.thanhTienKhongDmuc}}
                                                   </td>
+
                                                   <td>
-                                                       {{editCache2[data.id].data.thanhTienKhongDmuc}}
+                                                       {{editCache1[data.id].data.thanhTienCong}}
                                                   </td>
-                                                  <td>
-                                                       {{editCache2[data.id].data.thanhTienCong}}
-                                                  </td>
+
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-trash-o do" (click)="deleteById2(data.id)"></i>
+                                                       <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
+
                                                   <td>
-                                                       <a (click)="saveEdit2(data.id)" class="save">Lưu</a>
+                                                       <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
                                                        <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
-                                                            (nzOnConfirm)="cancelEdit2(data.id)" class="save">Hủy</a>
+                                                            (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
+
                                                   <td [hidden]="status">
-                                                       <i class="fa fa-plus" (click)="addLine2(i + 1)"></i>
+                                                       <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
                                                   </td>
+
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                                            (ngModelChange)="updateSingleChecked2()"></label>
+                                                            (ngModelChange)="updateSingleChecked1()"></label>
                                                   </td>
                                              </ng-template>
                                         </tr>
@@ -472,15 +530,15 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected2()">
+                         <button type="button" class="btn btn-main" (click)="deleteSelected2()" [hidden]="status">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>
-                         <button type="button" class="btn btn-main" (click)="addLine2(lstCTiet.length)">
+                         <button type="button" class="btn btn-main" (click)="addLine1(lstVtu.length)" [hidden]="status">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
                          </button>
-                         <button type="button" class="btn btn-sub">
+                         <button type="button" class="btn btn-sub" [hidden]="status">
                               <i class="icon htvbdh_tcdt_import"></i>
                               <span>Import</span>
                          </button>

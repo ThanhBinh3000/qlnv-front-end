@@ -10,7 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { Utils } from "../../../../../Utility/utils";
+import { LOAIBAOCAO, Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 
 export class ObjResp {
@@ -49,7 +49,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      trangThai: string='6';
      soVban!: string;
      ngayDuyetVban!: string;
-     baoCaos: any = [];
+     baoCaos: any = LOAIBAOCAO;
      cucKhuVucs: any = [];
      lstBcao: any = [];
      trangThais: any = [
@@ -119,6 +119,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
+               this.ngayDuyetVban = this.ngayNhap;
                this.spinner.show();
                this.quanLyVonPhiService.sinhMaVban().toPromise().then(
                     (data) => {
@@ -144,20 +145,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          //get danh muc noi dung
-          this.danhMucService.dMLoaiBaoCao().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.baoCaos = data.data?.content;
-                         console.log(this.baoCaos);
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-               },
-               (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-               }
-          );
+
           this.danhMucService.dMucBcaoDuyet().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
@@ -173,10 +161,10 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           );
 
           //get danh muc nhom chi
-          this.danhMucService.dMCucKhuVuc().toPromise().then(
+          this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.cucKhuVucs = data.data?.content;
+                         this.cucKhuVucs = data.data;
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -220,24 +208,21 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     item.id = null;
                }
           })
-         console.log(this.listIdDelete);
+          let request = {
+               id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+               listIdDeletes: this.listIdDelete,
+               lstCtiet: this.lstCTietBCao,
+               maDonVi: this.maDonViTao,
+               ngayDuyetVban: this.ngayDuyetVban,
+               soVban: this.soVban,
+               stt: "",
+               trangThai: this.trangThai,
+          };
           //call service them moi
           this.spinner.show();
           if (this.id == null) {
-               let request = {
-                    id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-                    listIdDeletes: this.listIdDelete,
-                    lstCtiet: this.lstCTietBCao,
-                    ngayDuyetVban: this.datePipe.transform(this.ngayDuyetVban, Utils.FORMAT_DATE_STR),
-                    ngaySua: this.ngayNhap,
-                    ngayTao: "",
-                    nguoiSua: "",
-                    nguoiTao: this.nguoiNhap,
-                    soVban: this.soVban,
-                    stt: "",
-                    trangThai: this.trangThai,
-               };
-               this.quanLyVonPhiService.themMoiVban(request).subscribe(
+
+               this.quanLyVonPhiService.themMoiVban(request).toPromise().then(
                     data => {
                          console.log(data);
                          if (data.statusCode == 0) {
@@ -252,20 +237,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     },
                );
           } else {
-               let request1 = {
-                    id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-                    listIdDeletes: this.listIdDelete,
-                    lstCtiet: this.lstCTietBCao,
-                    ngayDuyetVban: this.ngayDuyetVban,
-                    ngaySua: this.ngayNhap,
-                    ngayTao: "",
-                    nguoiSua: "",
-                    nguoiTao: this.nguoiNhap,
-                    soVban: this.soVban,
-                    stt: "",
-                    trangThai: this.trangThai,
-               };
-               this.quanLyVonPhiService.capNhatVban(request1).subscribe(res => {
+
+               this.quanLyVonPhiService.capNhatVban(request).toPromise().then(res => {
                     if (res.statusCode == 0) {
                          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                     } else {
@@ -275,7 +248,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                })
           }
-          this.lstCTietBCao.filter(item => {
+          this.lstCTietBCao.forEach(item => {
                if (!item.id) {
                     item.id = uuid.v4();
                }
@@ -450,7 +423,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
 
      // lay ten don vi tao
      getUnitName() {
-          return this.cucKhuVucs.find(item => item.id == this.maDonViTao)?.tenDm;
+          return this.cucKhuVucs.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
      }
 
      // start edit

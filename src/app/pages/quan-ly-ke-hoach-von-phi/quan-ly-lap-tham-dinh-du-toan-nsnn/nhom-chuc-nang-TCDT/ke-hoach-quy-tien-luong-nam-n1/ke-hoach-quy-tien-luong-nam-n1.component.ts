@@ -202,18 +202,6 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-    // this.danhMucService.dMMaCucDtnnKvucs().toPromise().then(
-    //   (data) => {
-    //     if (data.statusCode == 0) {
-    //       this.maCucDtnnKvucs = data.data?.content;
-    //     } else {
-    //       this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-    //     }
-    //   },
-    //   (err) => {
-    //     this.errorMessage = "err.error.message";
-    //   }
-    // );
 
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(

@@ -15,19 +15,20 @@ const routes: Routes = [
       ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamModule),
   },
   {
+    path: 'ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-chi-cuc',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.module'
+      ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamTuCCModule),
+  },
+  {
     path: 'ds-chi-tiet-nhap-lieu-bao-cao',
     loadChildren: () =>
       import(
         './chuc-nang-chi-cuc/ds-chi-tiet-nhap-lieu-bao-cao/ds-chi-tiet-nhap-lieu-bao-cao.module'
       ).then((m) => m.DsChiTietNhapLieuBaoCaoModule),
   },
-  {
-    path: 'tong-hop',
-    loadChildren: () =>
-      import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
-  },
+
   //hung
   {
     path: 'bao-cao',

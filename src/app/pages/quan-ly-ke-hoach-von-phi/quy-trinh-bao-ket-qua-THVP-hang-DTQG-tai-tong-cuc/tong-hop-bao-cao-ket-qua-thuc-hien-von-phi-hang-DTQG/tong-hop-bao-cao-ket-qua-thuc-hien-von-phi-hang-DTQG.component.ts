@@ -8,7 +8,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-
+import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG',
   templateUrl: './tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.component.html',
@@ -27,7 +27,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
   url: any;
   danhSachBaoCao: any = [];
-  baoCaos: any = [];
+  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
   donViTaos: any[] = []
 
   errorMessage: any = '';
@@ -44,21 +44,6 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
-    //lay danh sach loai bao cao
-    this.danhmuc.dMLoaiBaoCaoKetQuaThucHienHangDTQG().subscribe(
-      data => {
-
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-
-        } else {
-          this.notifi.error(MESSAGE.ERROR,data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
 
     //lay danh sach danh muc
     this.quanLyVonPhiService.dMDonVi().subscribe(

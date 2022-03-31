@@ -432,33 +432,7 @@ dMMaNdungChi(): Observable<any> {
       }
   );
 }
-dMMaCucDtnnKvucs(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/244",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
 
-dMTrangThai(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/382",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
     // lay danh sach cuc khu vuc
     dMCucKhuVuc():Observable<any>{
       return this.httpClient.post(
@@ -498,7 +472,7 @@ dMTrangThai(): Observable<any> {
   // địa điểm kho
   dMDiaDiemKho(): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/465",
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/541",
       {
         "paggingReq": {
           "limit": 1000,
@@ -596,20 +570,7 @@ dMDviHangQDGiaoDT(): Observable<any> {
       }
   );
 }
-// danh muc don vi tien qd giao du toan
-dMDviTienQDGiaoDT(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/438",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
+
 //danh muc noi dung
 dMDonViTien(): Observable<any> {
   return this.httpClient.post(
@@ -694,22 +655,6 @@ dMucBcaoDuyet(): Observable<any> {
     );
   }
 
-  //danh muc ke hoach von
-  // dMKeHoachVon(): Observable<any> {
-  //   return this.httpClient.post(
-  //     this.urlDefault + '/qlnv-category/dmuc-khoachvon/32',
-  //     {
-  //       paggingReq: {
-  //         limit: 1000,
-  //         page: 1,
-  //       },
-  //       str: '',
-  //       trangThai: '',
-  //     },
-  //   );
-  // }
-
-
   //danh muc chi tieu
   dMChiTieu(): Observable<any> {
     return this.httpClient.post(
@@ -767,50 +712,5 @@ dMucBcaoDuyet(): Observable<any> {
         "trangThai": "",
       })
   }
-
-
-  //lay danh sach vật tư hàng hóa
-  dmVattuhanghoa(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/147',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
-  }
-
-  //get list danh muc loai bao cao ket qua thuc hien von phi hang DTQG
-  dMLoaiBaoCaoKetQuaThucHienHangDTQG(): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-category/dmuc-khoachvon/406',
-      {
-        paggingReq: {
-          limit: 1000,
-          page: 1,
-        },
-        str: '',
-        trangThai: '',
-      },
-    );
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 

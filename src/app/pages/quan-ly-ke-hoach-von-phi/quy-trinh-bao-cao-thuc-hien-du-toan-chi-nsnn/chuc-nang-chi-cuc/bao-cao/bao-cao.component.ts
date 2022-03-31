@@ -13,13 +13,13 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Utils } from 'src/app/Utility/utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { TAB_SELECTED, PHULUCLIST } from './bao-cao.constant';
+import { TAB_SELECTED, PHULUCLIST, } from './bao-cao.constant';
 import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import * as fileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as uuid from "uuid";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-
+import { OK, NOTOK } from 'src/app/Utility/utils';
 export class ItemData {
   id!: any;
   maLoai!:number;
@@ -922,6 +922,7 @@ addToLinkList(data: linkList, item: linkList) {
     this.baoCao.fileDinhKems = listFile;
     this.baoCao.listIdFiles = this.listIdFiles;
     this.baoCao.trangThai = "1";
+    this.baoCao.maDvi = this.maDonViTao;
     this.lstCTietBCaoPL1.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
@@ -1600,5 +1601,28 @@ addToLinkList(data: linkList, item: linkList) {
         this.onSubmit(mcn,text);
       }
     });
+  }
+
+
+  //show popup tu choi
+  pheDuyetChiTiet(mcn:string) {
+    if(mcn == OK){
+      this.onSubmit(mcn,null);
+    }else if(mcn == NOTOK){
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.subscribe(async (text) => {
+        if (text) {
+          this.onSubmit(mcn,text);
+        }
+      });
+    }
   }
 }

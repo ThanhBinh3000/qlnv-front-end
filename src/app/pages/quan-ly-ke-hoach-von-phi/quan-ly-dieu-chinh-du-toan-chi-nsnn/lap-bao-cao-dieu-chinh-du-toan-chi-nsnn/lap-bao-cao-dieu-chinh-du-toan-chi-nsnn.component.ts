@@ -36,9 +36,7 @@ export class ItemData {
 
 export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      donVis: any = [];                            //don vi se hien thi
-     chiCucs: any = [];                           //danh muc don vi cap chi cuc
-     cucKhuVucs: any = [];                        //danh muc don vi cap cuc khu vuc
-     tongCucs: any = [];                           //danh muc don vi cap tong cuc
+     
      dviTiens: any = [];
      dviTien: any;
 
@@ -73,6 +71,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      userName: any;                              // ten nguoi dang nhap
      maDonViTao!: any;                           // ma don vi tao
      trangThaiBanGhi!: any;
+     capDvi: string;
 
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
@@ -149,11 +148,17 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
 
           //lay danh sach danh muc don vi
+          this.maDvi = userInfo?.dvql;
+
           await this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
-                         console.log(this.donVis);
+                         this.donVis.forEach(e => {
+                              if (e.maDvi == this.maDvi) {
+                                this.capDvi = e.capDvi;
+                              }
+                            })
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -175,30 +180,12 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                }
           );
 
-          await this.donVis.forEach(item => {
-               if ((item.maDvi).length == 4) {
-                    this.cucKhuVucs.push(item);
-               } else {
-                    if ((item.maDvi).length == 6) {
-                         this.chiCucs.push(item);
-                    } else {
-                         this.tongCucs.push(item);
-                    }
-               }
-          })
-
-          this.maDvi = userInfo?.dvql;
-          if (this.chiCucs.findIndex(item => item.maDvi == this.maDvi) != -1) {
-               this.donVis = this.chiCucs;
+          if (this.capDvi == '3'){
                this.status = false;
           } else {
                this.status = true;
-               if (this.cucKhuVucs.findIndex(item => item.maDvi == this.maDvi) != -1) {
-                    this.donVis = this.cucKhuVucs;
-               } else {
-                    this.donVis = this.tongCucs;
-               }
           }
+          this.tenDvi = this.getUnitName();
 
           this.spinner.hide();
      }
