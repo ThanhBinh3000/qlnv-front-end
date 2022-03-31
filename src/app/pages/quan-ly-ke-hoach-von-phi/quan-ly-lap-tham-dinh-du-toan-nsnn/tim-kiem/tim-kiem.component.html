@@ -5,6 +5,11 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
+        
+        <button nz-button class="search__button--search" routerLink="../">
+          <i nz-icon nzType="stop"></i>
+          Đóng
+        </button>
         <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
@@ -13,6 +18,7 @@
           <i nz-icon nzType="close"></i>
           Xóa điều kiện
         </button>
+        
       </div>
     </div>
   </div>
