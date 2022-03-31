@@ -87,7 +87,7 @@ export class Utils {
     public static btnRoleDVCT = {
         "status": ['7'],
         "unit": [1, 2],
-        "role": [4],
+        "role": [3],
     }
 
 
@@ -483,3 +483,19 @@ export const LOAIBAOCAO =[
     // trang thai chi tiet bao cao
     export	const OK = "1";
     export	const NOTOK = "0";
+
+    // loai trang thai gui don vi cap tren
+    export const TRANGTHAIGUIDVCT =[
+        {
+            id:1,
+            ten:'Chấp nhận'
+        },
+        {
+            id:2,
+            ten:'Không chấp nhận'
+        },
+        {
+            id:3,
+            ten:'Chưa đánh giá (để trống)'
+        },
+    ]
