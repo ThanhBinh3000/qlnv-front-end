@@ -120,6 +120,13 @@ const routes: Routes = [
       ).then((m) => m.KeHoachCaiTaoVaSuaChuaLon3NamModule),
   },
   {
+    path: 'ke-hoach-cai-tao-va-sua-chua-lon-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ke-hoach-cai-tao-va-sua-chua-lon-3-nam/ke-hoach-cai-tao-va-sua-chua-lon-3-nam.module'
+      ).then((m) => m.KeHoachCaiTaoVaSuaChuaLon3NamModule),
+  },
+  {
     path: 'ke-hoach-dao-tao-boi-duong-3-nam',
     loadChildren: () =>
       import(
@@ -382,6 +389,13 @@ const routes: Routes = [
       ).then((m) => m.XayDungKeHoachVonDauTuModule),
   },
   {
+    path: 'xay-dung-ke-hoach-von-dau-tu/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/xay-dung-ke-hoach-von-dau-tu.module'
+      ).then((m) => m.XayDungKeHoachVonDauTuModule),
+  },
+  {
     path: 'xay-dung-nhu-cau-nhap-xuat-hang-nam',
     loadChildren: () =>
       import(
@@ -446,6 +460,13 @@ const routes: Routes = [
   },
   {
     path: 'xay-dung-ke-hoach-quy-tien-luong-hang-nam/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/xay-dung-ke-hoach-quy-tien-luong-hang-nam/xay-dung-ke-hoach-quy-tien-luong-hang-nam.module'
+      ).then((m) => m.XayDungKeHoachQuyTienLuongHangNamModule),
+  },
+  {
+    path: 'xay-dung-ke-hoach-quy-tien-luong-hang-nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren: () =>
       import(
         './chuc-nang-chi-cuc/xay-dung-ke-hoach-quy-tien-luong-hang-nam/xay-dung-ke-hoach-quy-tien-luong-hang-nam.module'

@@ -32,8 +32,8 @@ export class ItemData {
   bcheChuaSdungCkdg!: number;
   quyLuongPcapTheoHdld!: number;
   id!: any;
-  maBcao!: String;
-  stt!: String;
+  maBcao!: string;
+  stt!: string;
   checked!:boolean;
 }
 
@@ -83,6 +83,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -127,11 +128,38 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.maBaoCao = '';
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -163,10 +191,12 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
      //lay danh sach danh muc don vi
-     await this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          console.log(this.donVis);
+
           this.donVis.forEach(e => {
             if(e.maDvi==this.maDonViTao){
               this.capDvi = e.capDvi;
@@ -227,7 +257,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.listFile = []
   }
 
-  // trinh duyet
+  // luu
   async luu() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -250,9 +280,10 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao : QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
+      soVban:this.soVban,
     };
 
     //call service them moi
@@ -261,23 +292,24 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.IMPORT_NUMBER_SUCCESS_2);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          console.log(err);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       })
     }
     this.lstCTietBCao.filter(item => {
@@ -300,7 +332,12 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }
@@ -311,9 +348,9 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -328,7 +365,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namBcao;
           this.trangThaiBanGhi = data.data.trangThai;
-
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -341,8 +377,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         console.log(err);
         this.errorMessage = err.error.message;
       }
-    );
-    this.spinner.show();
+      );
+      this.spinner.hide();
   }
 
   //upload file
@@ -370,7 +406,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      maDvi: "",
+      maDvi!: this.maDonViTao,
       bcheGiaoN1: 0,
       duKienSoCcvcCoMatN1: 0,
       duKienSoHdongCoMatN1: 0,
@@ -517,10 +553,35 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    this.editCache[id].data.bcheChuaSdung = Number(this.editCache[id].data.bcheGiaoN1) - Number(this.editCache[id].data.duKienSoCcvcCoMatN1);
-    this.editCache[id].data.tongquyLuongPcapTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Ckdg)  + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
-    this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvcDuKienCoMatN1Cong) + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCong);
+    // 14
+    this.editCache[id].data.bcheChuaSdungCong = Number(this.editCache[id].data.bcheChuaSdungLuong) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
+    // 9
     this.editCache[id].data.ccvcDuKienCoMatN1Cong = Number(this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Pcap) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Ckdg);
-    this.editCache[id].data.bcheChuaSdungCong = Number(this.editCache[id].data.bcheChuaSdungLuong) + Number(this.editCache[id].data.bcheChuaSdungCkdg) + Number(this.editCache[id].data.quyLuongPcapTheoHdld);
+    // 8
+    this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvcDuKienCoMatN1Cong) + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCong);
+    // 7
+    this.editCache[id].data.tongquyLuongPcapTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvcDuKienCoMatN1Ckdg)  + Number(this.editCache[id].data.quyLuongTangNangBacLuongN1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
+    // 6
+    this.editCache[id].data.bcheChuaSdung = Number(this.editCache[id].data.bcheGiaoN1) - Number(this.editCache[id].data.duKienSoCcvcCoMatN1);
+  }
+  //call tong hop
+  async calltonghop(){
+    this.spinner.show();
+    let objtonghop={
+        maDvi: this.maDonViTao,
+        maLoaiBcao: this.maLoaiBaoCao,
+        namHienTai: this.namBaoCaoHienHanh,
+    }
+    await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+        if(res.statusCode==0){
+            this.lstCTietBCao = res.data;
+        }else{
+            alert('co loi trong qua trinh van tin');
+        }
+    },err =>{
+        alert(err.error.message);
+    });
+    this.updateEditCache()
+    this.spinner.hide();
   }
 }

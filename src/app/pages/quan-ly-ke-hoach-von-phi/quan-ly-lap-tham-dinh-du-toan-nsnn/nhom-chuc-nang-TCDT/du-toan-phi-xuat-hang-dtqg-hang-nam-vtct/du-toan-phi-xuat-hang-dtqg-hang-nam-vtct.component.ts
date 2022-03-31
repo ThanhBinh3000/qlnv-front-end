@@ -161,7 +161,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     console.log(userInfo);
-    
+
     if (this.id) {
       await this.getDetailReport();
     } else if (
@@ -286,7 +286,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     this.lstCTietBCao.forEach(item => {
       if (typeof item.id != 'number') {
         item.id = null;
-      } 
+      }
       item.listCtiet.forEach(e => {
         if (typeof e.id != 'number') {
           e.id = null;
@@ -439,7 +439,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           })
           console.log(this.lstCTietBCao);
           this.lstFile = data.data.lstFile;
-          var listVatTu: any = data.data.lstTongVtu; 
+          var listVatTu: any = data.data.lstTongVtu;
           listVatTu.forEach(item => {
             var mm: miniData = {
               maVtuTbi: item.maVtuTbi,
@@ -692,8 +692,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   saveEdit(id: string): void {
     console.log(this.editCache[id]);
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);     
-    var item: ItemData = this.editCache[id].data;   
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    var item: ItemData = this.editCache[id].data;
     this.lstCTietBCao[index].maCucDtnnKvuc = item.maCucDtnnKvuc;
     this.lstCTietBCao[index].luongGao = item.luongGao;
     this.lstCTietBCao[index].cphiXuatCoDmucGao = item.cphiXuatCoDmucGao;
@@ -771,8 +771,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   ////////////////////// CONG VIEC CUA BANG PHU ////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   // them dong moi
-  addLine1(id: number): void {  
-    var mm: string = uuid.v4();  
+  addLine1(id: number): void {
+    var mm: string = uuid.v4();
     let item: miniData = {
       maVtuTbi: "",
       stt:0,

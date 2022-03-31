@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -55,7 +55,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N;                // nam bao cao
   maDviTien: string = "";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -63,6 +63,10 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   box1 = true;                                // bien de an hien box1
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
+  maDvi: any;
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N;
+  nam: any;
+  currentday: Date = new Date();
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -120,30 +124,59 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
 
   async ngOnInit() {
+
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDvi = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBacao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.nam = this.routerActive.snapshot.paramMap.get('nam');
+
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
-    if (this.id) {
-      this.getDetailReport();
-    } else {
-      this.trangThaiBanGhi = "1";
+    if (this.id != null) {
+      await this.getDetailReport();
+    } else if (
+      this.maDvi != null &&
+      this.maLoaiBacao != null &&
+      this.nam != null
+    ) {
+      this.calltonghop();
       this.nguoiNhap = userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
       this.maDonViTao = userInfo?.dvql;
-      this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-        (data) => {
-          if (data.statusCode == 0) {
-            this.maBaoCao = data.data;
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maBaoCao = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
       );
-      this.maBaoCao = '';
-      this.namBaoCaoHienHanh = new Date().getFullYear();
+    }
+    else {
+      this.trangThaiBanGhi = '1';
+      this.nguoiNhap = userInfo?.username;
+      this.maDonViTao = userInfo?.dvql;
+      this.namBaoCaoHienHanh = this.currentday.getFullYear();
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N;
+      this.spinner.show();
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maBaoCao = res.data;
+          } else {
+           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          }
+        },
+        (err) => {
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
     }
 
     const utils = new Utils();
@@ -349,9 +382,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -389,7 +422,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file
@@ -560,5 +593,42 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  //call tong hop
+  calltonghop() {
+    this.spinner.hide();
+    let objtonghop = {
+      maDvi: this.maDvi,
+      maLoaiBcao: this.maLoaiBacao,
+      namHienTai: this.nam,
+    };
+    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(
+      (res) => {
+        if (res.statusCode == 0) {
+          this.lstCTietBCao = res.data;
+          // this.namBaoCao = this.namBcao;
+          this.namBaoCaoHienHanh = this.currentday.getFullYear();
+          if (this.lstCTietBCao == null) {
+            this.lstCTietBCao = [];
+          }
+          console.log(this.lstCTietBCao);
+          this.namBaoCaoHienHanh = this.namBaoCaoHienHanh;
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        alert(err.error.message);
+      },
+    );
+    this.quanLyVonPhiService.sinhMaBaoCao().subscribe((res) => {
+      if (res.statusCode == 0) {
+        this.maBaoCao = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    });
+    this.spinner.show();
   }
 }

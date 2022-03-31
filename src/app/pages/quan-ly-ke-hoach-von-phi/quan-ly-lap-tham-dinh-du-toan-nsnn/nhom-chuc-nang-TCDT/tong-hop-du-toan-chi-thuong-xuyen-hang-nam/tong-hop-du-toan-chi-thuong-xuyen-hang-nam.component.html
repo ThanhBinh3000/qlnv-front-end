@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -243,7 +247,7 @@
                                              <td>{{tong.k341ChiTxKhongDmuc}}</td>
                                              <td>{{tong.k341ChiTxKhongDmuc}}</td>
                                              <td>{{tong.k341ChiTxKhongDmuc}}</td>
-                                             
+
                                              <td width="2.25%" [hidden]="status"></td>
                                              <td width="2.25%" [hidden]="status"></td>
                                              <td width="2.25%" [hidden]="status"></td>
@@ -304,7 +308,7 @@
                                                   <td>{{ data.k341ChiTxKhongDmuc }}</td>
 
                                                   <td>{{ data.k341ChiTxKhongDmuc }}</td>
-                                                  
+
                                                   <td>{{ data.k341ChiTxKhongDmuc }}</td>
 
                                                   <td>{{ data.k341ChiTxKhongDmuc }}</td>
@@ -350,7 +354,7 @@
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucNx" 
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucNx"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -359,10 +363,10 @@
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucVtct"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucBquan" 
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucBquan"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -375,7 +379,7 @@
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucCntt"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucThueKho" />
@@ -383,7 +387,7 @@
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucMsamTsan" 
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucMsamTsan"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -392,16 +396,16 @@
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucBhiemHhoa"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucPhongChongMoiKplb" 
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucPhongChongMoiKplb"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem" 
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -410,14 +414,14 @@
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucSchuaKhoTang"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{editCache[data.id].data.k341Tcong}}
                                                   </td>
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k341Luong" 
+                                                            [(ngModel)]="editCache[data.id].data.k341Luong"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -426,10 +430,10 @@
                                                             [(ngModel)]="editCache[data.id].data.k341TxTheoDmuc"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmuc" 
+                                                            [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmuc"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
 
@@ -440,10 +444,6 @@
                                                   <td>
                                                        {{editCache[data.id].data.k341TxTheoDmuc}}
                                                   </td>
-                                                  
-                                                  <td>
-                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
-                                                  </td>
 
                                                   <td>
                                                        {{editCache[data.id].data.k341ChiTxKhongDmuc}}
@@ -452,7 +452,11 @@
                                                   <td>
                                                        {{editCache[data.id].data.k341ChiTxKhongDmuc}}
                                                   </td>
-                                                  
+
+                                                  <td>
+                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
+                                                  </td>
+
                                                   <td>
                                                        {{editCache[data.id].data.k341ChiTxKhongDmuc}}
                                                   </td>
@@ -474,7 +478,7 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
-                                        
+
                                    </tbody>
                               </nz-table>
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -577,7 +581,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

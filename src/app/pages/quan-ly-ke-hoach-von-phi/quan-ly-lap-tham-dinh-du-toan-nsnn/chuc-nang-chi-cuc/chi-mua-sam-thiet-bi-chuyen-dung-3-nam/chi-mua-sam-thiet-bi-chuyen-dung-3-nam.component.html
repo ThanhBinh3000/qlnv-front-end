@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -161,13 +165,13 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  
+
                                                   <td>{{ data.n1 }}</td>
 
                                                   <td>{{ data.n2 }}</td>
 
                                                   <td>{{ data.n3 }}</td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -194,10 +198,10 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.n1" 
+                                                            [(ngModel)]="editCache[data.id].data.n1"
                                                             (change)="changeModel1(data.id)"/>
                                                   </td>
 
@@ -211,7 +215,7 @@
                                                             [(ngModel)]="editCache[data.id].data.n3"
                                                             (change)="changeModel3(data.id)" />
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -339,7 +343,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

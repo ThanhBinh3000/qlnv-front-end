@@ -123,7 +123,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     this.nam = this.router.snapshot.paramMap.get('nam');
 
     if (this.id != null) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -293,16 +293,16 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
+  async getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = "26";
+          this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;

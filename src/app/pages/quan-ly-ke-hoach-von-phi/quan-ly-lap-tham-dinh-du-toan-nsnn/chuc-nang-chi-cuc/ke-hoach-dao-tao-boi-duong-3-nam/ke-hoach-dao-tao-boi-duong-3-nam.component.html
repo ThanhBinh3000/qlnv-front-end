@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -168,7 +172,7 @@
                                              </th>
                                              <th style="width: 150px">
                                                   Thành tiền
-                                             </th>                                             
+                                             </th>
                                         </tr>
                                    </thead>
                                    <tbody>
@@ -206,7 +210,7 @@
                                              <td [hidden]="status"></td>
                                              <td [hidden]="status"></td>
                                         </tr>
-                                        
+
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
@@ -317,7 +321,7 @@
                                                        <input class="search__input" nz-input
                                                             [(ngModel)]="editCache[data.id].data.thanhTienN3" />
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -437,8 +441,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
-   

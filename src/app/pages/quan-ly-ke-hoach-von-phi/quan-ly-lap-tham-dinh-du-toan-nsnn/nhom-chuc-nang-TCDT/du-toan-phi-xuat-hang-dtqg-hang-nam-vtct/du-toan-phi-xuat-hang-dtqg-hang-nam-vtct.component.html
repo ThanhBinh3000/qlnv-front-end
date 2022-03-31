@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -364,9 +368,9 @@
                                              <th colspan="3" >
                                                   Thành Tiền (triệu đồng làm tròn)
                                              </th>
-                                             
+
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
-                                             
+
                                              <th rowspan="2" [hidden]="status">
                                                   <label nz-checkbox [(ngModel)]="allChecked1"
                                                        (ngModelChange)="updateAllChecked1()"
@@ -378,11 +382,11 @@
                                              <th nzWidth="100px">
                                                   Có định mức
                                              </th>
-                                             
+
                                              <th nzWidth="100px">
                                                   Không định mức
                                              </th>
-                                             
+
                                              <th nzWidth="100px">
                                                   Cộng
                                              </th>
@@ -395,7 +399,7 @@
                                                   <td>
                                                        {{ i + 1 }}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <div *ngFor="let item of vatTus">
                                                             <div *ngIf="item.id == data.maVtuTbi">
@@ -423,35 +427,35 @@
                                                   <td>
                                                        {{data.cphiXuatChuaDmuc}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{data.thanhTienCoDmuc}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{data.thanhTienKhongDmuc}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{data.thanhTienCong}}
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-pencil" (click)="startEdit1(data.id)"></i>
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                             (ngModelChange)="updateSingleChecked1()"></label>
-                                                  </td>                                                  
+                                                  </td>
                                              </ng-container>
                                              <ng-template #editTemplate1>
                                                   <td>
@@ -496,25 +500,25 @@
                                                   <td>
                                                        {{editCache1[data.id].data.thanhTienKhongDmuc}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{editCache1[data.id].data.thanhTienCong}}
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById1(data.id)"></i>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
                                                        <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
                                                             (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine1(i + 1)"></i>
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                             (ngModelChange)="updateSingleChecked1()"></label>
@@ -622,7 +626,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

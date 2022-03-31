@@ -75,7 +75,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
      trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
      maLoaiBaoCao: string = "26";                // nam bao cao
-     newDate = new Date();    
+     newDate = new Date();
      kt: boolean;                   //
 
      statusBtnDel: boolean;                       // trang thai an/hien nut xoa
@@ -145,7 +145,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          
+
           this.danhMucService.dMucBcaoDuyet().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
@@ -207,7 +207,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                if (typeof item.id != "number") {
                     item.id = null;
                }
-          })         
+          })
           let request = {
                id: this.id,                 // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
                listIdDeletes: this.listIdDelete,
@@ -221,7 +221,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           //call service them moi
           this.spinner.show();
           if (this.id == null) {
-               
+
                this.quanLyVonPhiService.themMoiVban(request).toPromise().then(
                     data => {
                          console.log(data);
@@ -237,7 +237,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     },
                );
           } else {
-               
+
                this.quanLyVonPhiService.capNhatVban(request).toPromise().then(res => {
                     if (res.statusCode == 0) {
                          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -287,7 +287,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          console.log(data);
                          this.chiTietBcaos = data.data.lstCtiet;
                          console.log(this.chiTietBcaos);
-                         
+
                          this.chiTietBcaos.forEach(item => {
                               let mm: ItemData = {
                                    id: item.id,
