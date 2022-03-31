@@ -8,6 +8,13 @@ const routes: Routes = [
     component: QuanLyDieuChinhDuToanChiNSNNComponent,
   },
   {
+    path: 'test-link-list',
+    loadChildren: () =>
+      import(
+        './test-link-list/test-link-list.module'
+      ).then((m) => m.TestLinkListModule),
+  },
+  {
     path: 'danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
     loadChildren: () =>
       import(

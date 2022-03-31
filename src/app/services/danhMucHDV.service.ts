@@ -432,19 +432,6 @@ dMMaNdungChi(): Observable<any> {
       }
   );
 }
-dMMaCucDtnnKvucs(): Observable<any> {
-  return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/244",
-      {
-          "paggingReq": {
-              "limit": 1000,
-              "page": 1
-          },
-          "str": "",
-          "trangThai": "",
-      }
-  );
-}
 
     // lay danh sach cuc khu vuc
     dMCucKhuVuc():Observable<any>{

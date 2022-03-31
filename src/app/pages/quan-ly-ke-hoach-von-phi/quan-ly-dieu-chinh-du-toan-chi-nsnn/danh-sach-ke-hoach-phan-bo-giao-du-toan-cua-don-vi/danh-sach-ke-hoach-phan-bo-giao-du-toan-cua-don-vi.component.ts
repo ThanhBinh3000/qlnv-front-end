@@ -82,22 +82,6 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
           this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
 
-
-
-          //lay danh sach danh muc don vi
-          this.danhMucService.dMMaCucDtnnKvucs().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.cucKhuVucs = data.data?.content;
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-               },
-               (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-               }
-          );
-
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
