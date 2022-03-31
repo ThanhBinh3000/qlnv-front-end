@@ -96,7 +96,7 @@
           <thead>
             <tr>
               <th nzWidth="50px">STT</th>
-              <th nzWidth="150px">Phụ lục</th>
+              <th nzWidth="150px">Biểu số</th>
               <th>Tiêu đề</th>
               <th nzWidth="100px">Trạng thái</th>
               <th nzWidth="350px">Hành động</th>
@@ -444,7 +444,7 @@
           <span>Import</span>
         </button>
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
-          <i class="icon htvbdh_tcdt_import"></i>
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </ng-template>
@@ -859,7 +859,7 @@
           <span>Import</span>
         </button>
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
-          <i class="icon htvbdh_tcdt_import"></i>
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </ng-template>
@@ -886,12 +886,12 @@
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
-              <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+              <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
                   (nzOnConfirm)="deleteCol(colname.id,1)">{{colname.colName}}</a> </th>
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
-              <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+              <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
                   (nzOnConfirm)="deleteCol(colname.id,1)">{{colname.colName}}</a></th>
             </tr>
             <tr>
@@ -1081,8 +1081,8 @@
                 </td>
                 <td>
                   <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i,1)" [hidden]="statusB4ax"></i>
-                  <a (click)="saveEdit(item.id,1)" class="save" [hidden]="!statusB4ax">Lưu</a>
-                  <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(item.id,1)"
+                  <a (click)="saveEdit(item.id,1)" class="save" [hidden]="!statusB4ax" style="margin-right:20px">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(item.id,1)"
                     class="save" [hidden]="!statusB4ax">Hủy</a>
                 </td>
                 <td>
@@ -1100,15 +1100,15 @@
       </nz-card>
       <!-- Action Table chi tiết mau 04a-x -->
       <ng-template #tableCard5>
-        <button type="button" class="btn btn-main" (click)="deleteSelected()">
+        <button type="button" class="btn btn-main" (click)="deleteSelected(1)">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
         <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
-            [(ngModel)]="ObjCol">
+            [(ngModel)]="ObjCol4ax">
             <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
           </nz-select>
-        <button type="button" class="btn btn-main" (click)="addCol()">
+        <button type="button" class="btn btn-main" (click)="addCol(1)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
@@ -1121,7 +1121,794 @@
           <span>Import</span>
         </button>
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </ng-template>
+      <!--Table mẫu báo cáo 04a-n -->
+      <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí nhập mua hàng DTQG"
+        [nzExtra]="tableCard6" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao4">
+        <nz-table nzBordered class="table__body">
+          <thead>
+            <tr>
+              <th rowspan="2">STT</th>
+              <th rowspan="2">Nội dung chi</th>
+              <th colspan="{{cols4an}}">Chi tiết theo từng mặt hàng trong đợt</th>
+              <th colspan="{{cols4an}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
+              <th rowspan="2">Ghi chú</th>
+              <th rowspan="2" colspan="3" [hidden]="status"></th>
+              <th rowspan="2" [hidden]="status">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                  [nzIndeterminate]="indeterminate">
+                </label>
+              </th>
+            </tr>
+            <tr>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot4an"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,2)">{{colname.colName}}</a> </th>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot4an"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,2)">{{colname.colName}}</a></th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <th>Tình hình thực hiện nhiệm vụ xuất</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng theo quyết định (kg, bộ chiếc)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng thực hiện gộp</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Trong đó số lượng thực hiện năm trước (đối với quyết định thực hiện năm trước còn đang dang dở
+                chuyển sang năm nay)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th *ngFor="let colname of listColTrongDot4an"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lstCTietBCao04an; let i = index">
+              <ng-container *ngIf="!editCache04an[item.id].edit; else editTemplate4an">
+                <td>{{item.stt}}</td>
+                <td>
+                  <div *ngFor="let vt of listVattu">
+                    <div *ngIf="vt.id == item.maNdungChi">
+                      {{vt.tenDm}}
+                    </div>
+                  </div>
+                </td>
+                <td>{{item.trongDotTcong}}</td>
+                <td>{{item.trongDotThoc}}</td>
+                <td>{{item.trongDotGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.luyKeTcong}}</td>
+                <td>{{item.luyKeThoc}}</td>
+                <td>{{item.luyKeGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.ghiChu}}</td>
+                <ng-container *ngIf="disable4an; else content">
+                  <td>
+                    <i class="fa fa-trash-o do"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus"></i>
+                  </td>
+                </ng-container>
+
+
+                <ng-template #content>
+                  <td>
+                    <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,2)"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil" (click)="startEdit(item.id,2)"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus" (click)="addLine(i + 1,2)"></i>
+                  </td>
+                </ng-template>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate4an>
+                <td>{{editCache04an[item.id].data.stt}}</td>
+                <td>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                    [(ngModel)]="editCache04an[item.id].data.maNdungChi">
+                    <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.trongDotTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.trongDotThoc" (change)="tinhtong(item.id,2)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.trongDotGao" (change)="tinhtong(item.id,2)">
+                </td>
+                <ng-container *ngFor="let kv of editCache04an[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.luyKeTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.luyKeThoc" (change)="tinhtong(item.id,2)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04an[item.id].data.luyKeGao" (change)="tinhtong(item.id,2)">
+                </td>
+                <ng-container *ngFor="let kv of editCache04an[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="text" class="search__input" nz-input [(ngModel)]="editCache04an[item.id].data.ghiChu">
+                </td>
+                <td>
+                  <i class="fa fa-trash-o do"></i>
+                </td>
+                <td>
+                  <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i,2)" [hidden]="statusB4an"></i>
+                  <a (click)="saveEdit(item.id,2)" class="save" [hidden]="!statusB4an" style="margin-right:20px">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(item.id,2)"
+                    class="save" [hidden]="!statusB4an">Hủy</a>
+                </td>
+                <td>
+                  <i class="fa fa-arrow-down" [hidden]="statusB4an" (click)="saveEdit2(item.id, i,2)"></i>
+                  <i class="fa fa-plus" [hidden]="!statusB4an" (click)="addLine(i + 1,2)"></i>
+                </td>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                    (ngModelChange)="updateSingleCheckedBcao(2)"></label>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <!-- Action Table chi tiết mau 04a-n -->
+      <ng-template #tableCard6>
+        <button type="button" class="btn btn-main" (click)="deleteSelected(2)">
+          <i class="fa fa-trash-o"></i>
+          <span>Xóa</span>
+        </button>
+        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+            [(ngModel)]="ObjCol4an">
+            <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+          </nz-select>
+        <button type="button" class="btn btn-main" (click)="addCol(2)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm cột</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04an.length!=0" (click)="addLine(this.lstCTietBCao04an.length,2)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm dòng</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status">
           <i class="icon htvbdh_tcdt_import"></i>
+          <span>Import</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </ng-template>
+      <!--Table mẫu báo cáo 04bx -->
+      <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ"
+        [nzExtra]="tableCard7" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao5">
+        <nz-table nzBordered class="table__body">
+          <thead>
+            <tr>
+              <th rowspan="2">STT</th>
+              <th rowspan="2">Nội dung chi</th>
+              <th colspan="{{cols4bx}}">Chi tiết theo từng mặt hàng trong đợt</th>
+              <th colspan="{{cols4bx}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
+              <th rowspan="2">Ghi chú</th>
+              <th rowspan="2" colspan="3" [hidden]="status"></th>
+              <th rowspan="2" [hidden]="status">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                  [nzIndeterminate]="indeterminate">
+                </label>
+              </th>
+            </tr>
+            <tr>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot4bx"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,3)">{{colname.colName}}</a> </th>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot4bx"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,3)">{{colname.colName}}</a></th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <th>Tình hình thực hiện nhiệm vụ xuất</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng theo quyết định (kg, bộ chiếc)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng thực hiện gộp</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Trong đó số lượng thực hiện năm trước (đối với quyết định thực hiện năm trước còn đang dang dở
+                chuyển sang năm nay)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+              <th *ngFor="let colname of listColTrongDot4bx"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lstCTietBCao04bx; let i = index">
+              <ng-container *ngIf="!editCache04bx[item.id].edit; else editTemplate4bx">
+                <td [nzIndentSize] = "item.level * 8">{{getChiMuc(item.stt)}}</td>
+                <td>
+                  <div *ngFor="let vt of listVattu">
+                    <div *ngIf="vt.id == item.maNdungChi">
+                      {{vt.tenDm}}
+                    </div>
+                  </div>
+                </td>
+                <td>{{item.trongDotTcong}}</td>
+                <td>{{item.trongDotThoc}}</td>
+                <td>{{item.trongDotGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.luyKeTcong}}</td>
+                <td>{{item.luyKeThoc}}</td>
+                <td>{{item.luyKeGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.ghiChu}}</td>
+                <ng-container *ngIf="disable4bx; else content">
+                  <td>
+                    <i class="fa fa-trash-o do"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus"></i>
+                  </td>
+                </ng-container>
+
+
+                <ng-template #content>
+                  <td>
+                    <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,3)"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil" (click)="startEdit(item.id,3)"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus" (click)="addLine(i + 1,3)"></i>
+                  </td>
+                </ng-template>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate4bx>
+                <td></td>
+                <td>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                    [(ngModel)]="editCache04bx[item.id].data.maNdungChi">
+                    <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.trongDotTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.trongDotThoc" (change)="tinhtong(item.id,3)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.trongDotGao" (change)="tinhtong(item.id,3)">
+                </td>
+                <ng-container *ngFor="let kv of editCache04bx[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.luyKeTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.luyKeThoc" (change)="tinhtong(item.id,3)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache04bx[item.id].data.luyKeGao" (change)="tinhtong(item.id,3)">
+                </td>
+                <ng-container *ngFor="let kv of editCache04bx[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="text" class="search__input" nz-input [(ngModel)]="editCache04bx[item.id].data.ghiChu">
+                </td>
+                <td>
+                  <i class="fa fa-trash-o do"></i>
+                </td>
+                <td>
+                  <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i,3)" [hidden]="statusB4bx"></i>
+                  <a (click)="saveEdit(item.id,3)" class="save" [hidden]="!statusB4bx" style="margin-right:20px">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(item.id,3)"
+                    class="save" [hidden]="!statusB4bx">Hủy</a>
+                </td>
+                <td>
+                  <div [hidden]="lessThan(item.level)">
+                    <i class="fa fa-arrow-down" [hidden]="statusB4bx" (click)="saveEdit2(item.id, i,3)"></i>
+                  </div>
+                  <i class="fa fa-plus" [hidden]="!statusB4bx" (click)="addLine(i + 1,3)"></i>
+                </td>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                    (ngModelChange)="updateSingleCheckedBcao(3)"></label>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <!-- Action Table chi tiết mau 04bx -->
+      <ng-template #tableCard7>
+        <button type="button" class="btn btn-main" (click)="deleteSelected(3)">
+          <i class="fa fa-trash-o"></i>
+          <span>Xóa</span>
+        </button>
+        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+            [(ngModel)]="ObjCol4bx">
+            <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+          </nz-select>
+        <button type="button" class="btn btn-main" (click)="addCol(3)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm cột</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04bx.length!=0" (click)="addLine(this.lstCTietBCao04bx.length,3)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm dòng</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status">
+          <i class="icon htvbdh_tcdt_import"></i>
+          <span>Import</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </ng-template>
+      <!--Table mẫu báo cáo 05 -->
+      <nz-card nzTitle="Báo Cáo: - Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG"
+        [nzExtra]="tableCard8" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao6">
+        <nz-table nzBordered class="table__body">
+          <thead>
+            <tr>
+              <th rowspan="2" width="100px">STT</th>
+              <th rowspan="2">Nội dung chi</th>
+              <th colspan="{{cols05}}">Chi tiết theo từng mặt hàng trong đợt</th>
+              <th colspan="{{cols05}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
+              <th rowspan="2">Ghi chú</th>
+              <th rowspan="2" colspan="3" [hidden]="status"></th>
+              <th rowspan="2" [hidden]="status">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                  [nzIndeterminate]="indeterminate">
+                </label>
+              </th>
+            </tr>
+            <tr>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot5"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,4)">{{colname.colName}}</a> </th>
+              <th>Tổng Cộng</th>
+              <th>Thóc</th>
+              <th>Gạo</th>
+              <th *ngFor="let colname of listColTrongDot5"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+                  (nzOnConfirm)="deleteCol(colname.id,4)">{{colname.colName}}</a></th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <th>Tình hình thực hiện nhiệm vụ xuất</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng theo quyết định (kg, bộ chiếc)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Tổng số lượng thực hiện gộp</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Trong đó số lượng thực hiện năm trước (đối với quyết định thực hiện năm trước còn đang dang dở
+                chuyển sang năm nay)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+              <th *ngFor="let colname of listColTrongDot5"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lstCTietBCao05; let i = index">
+              <ng-container *ngIf="!editCache05[item.id].edit; else editTemplate05">
+                <td [nzIndentSize] = "item.level * 8">{{getChiMuc(item.stt)}}</td>
+                <td>
+                  <div *ngFor="let vt of listVattu">
+                    <div *ngIf="vt.id == item.maNdungChi">
+                      {{vt.tenDm}}
+                    </div>
+                  </div>
+                </td>
+                <td>{{item.trongDotTcong}}</td>
+                <td>{{item.trongDotThoc}}</td>
+                <td>{{item.trongDotGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.luyKeTcong}}</td>
+                <td>{{item.luyKeThoc}}</td>
+                <td>{{item.luyKeGao}}</td>
+                <ng-container *ngFor="let kv of item.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      {{kv.sl}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>{{item.ghiChu}}</td>
+                <ng-container *ngIf="disable5; else content">
+                  <td>
+                    <i class="fa fa-trash-o do"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus"></i>
+                  </td>
+                </ng-container>
+
+
+                <ng-template #content>
+                  <td>
+                    <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,4)"></i>
+                  </td>
+                  <td>
+                    <i class="fa fa-pencil" (click)="startEdit(item.id,4)"></i>
+                  </td>
+
+                  <td>
+                    <i class="fa fa-plus" (click)="addLine(i + 1,4)"></i>
+                  </td>
+                </ng-template>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate05>
+                <td></td>
+                <td>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                    [(ngModel)]="editCache05[item.id].data.maNdungChi">
+                    <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.trongDotTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.trongDotThoc" (change)="tinhtong(item.id,4)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.trongDotGao" (change)="tinhtong(item.id,4)">
+                </td>
+                <ng-container *ngFor="let kv of editCache05[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 0">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.luyKeTcong" disabled>
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.luyKeThoc" (change)="tinhtong(item.id,4)">
+                </td>
+                <td>
+                  <input type="number" class="search__input" nz-input
+                    [(ngModel)]="editCache05[item.id].data.luyKeGao" (change)="tinhtong(item.id,4)">
+                </td>
+                <ng-container *ngFor="let kv of editCache05[item.id].data.listCtiet;let i = index">
+                  <ng-container *ngIf="kv.loaiMatHang == 1">
+                    <td>
+                      <input class="search__input" nz-input [(ngModel)]="kv.sl" type="number" />
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <td>
+                  <input type="text" class="search__input" nz-input [(ngModel)]="editCache05[item.id].data.ghiChu">
+                </td>
+                <td>
+                  <i class="fa fa-trash-o do"></i>
+                </td>
+                <td>
+                  <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i,4)" [hidden]="statusB5"></i>
+                  <a (click)="saveEdit(item.id,4)" class="save" [hidden]="!statusB5" style="margin-right:20px">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(item.id,4)"
+                    class="save" [hidden]="!statusB5">Hủy</a>
+                </td>
+                <td>
+                  <div [hidden]="lessThan(item.level)">
+                    <i class="fa fa-arrow-down" [hidden]="statusB5" (click)="saveEdit2(item.id, i,4)"></i>
+                  </div>
+                  <i class="fa fa-plus" [hidden]="!statusB5" (click)="addLine(i + 1,4)"></i>
+                </td>
+                <td [hidden]="status">
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                    (ngModelChange)="updateSingleCheckedBcao(4)"></label>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <!-- Action Table chi tiết mau 05 -->
+      <ng-template #tableCard8>
+        <button type="button" class="btn btn-main" (click)="deleteSelected(4)">
+          <i class="fa fa-trash-o"></i>
+          <span>Xóa</span>
+        </button>
+        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+            [(ngModel)]="ObjCol5">
+            <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+          </nz-select>
+        <button type="button" class="btn btn-main" (click)="addCol(4)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm cột</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao05.length!=0" (click)="addLine(this.lstCTietBCao05.length,4)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm dòng</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status">
+          <i class="icon htvbdh_tcdt_import"></i>
+          <span>Import</span>
+        </button>
+        <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </ng-template>
@@ -1168,6 +1955,29 @@
           </div>
         </div>
       </nz-card>
+      <div class="ghi-chu">
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <ul>
+          <li class="ghi-chu__item">
+            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
+            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+            dựng CSDL về Tài chính
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

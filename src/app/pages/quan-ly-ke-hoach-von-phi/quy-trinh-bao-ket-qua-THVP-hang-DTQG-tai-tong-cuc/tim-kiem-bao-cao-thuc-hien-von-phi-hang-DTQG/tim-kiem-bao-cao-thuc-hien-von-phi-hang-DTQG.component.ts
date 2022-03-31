@@ -39,7 +39,16 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   searchValue = '';
 
   listTrangThai:any = TRANGTHAI;
-
+  // listTrangThai:any =[
+  //   {
+  //     id:'1',
+  //     tenDm:'Đợt',
+  //   },
+  //   {
+  //     id:'2',
+  //     tenDm:'Năm'
+  //   }
+  // ]
   listBcaoKqua:any []=[];
   lenght:any=0;
 
@@ -140,11 +149,13 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
+    // console.log(lbaocao);
+    
       switch (lbaocao) {
-        case '1':
+        case 1:
           this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
           break;
-        case '2':
+        case 2:
           this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
           break;
         default:
@@ -154,10 +165,12 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   }
 
   themmoi(){
-    if(this.url==null){
-      this.notifi.error(MESSAGE.ERROR, 'Bạn chưa chọn loại báo cáo');
-      return;
-    }else{
+    // console.log(this.url)
+
+    if(this.url==undefined){
+      this.router.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/2']);
+    }
+    else{
       this.router.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/'+this.url]);
     }
   }
