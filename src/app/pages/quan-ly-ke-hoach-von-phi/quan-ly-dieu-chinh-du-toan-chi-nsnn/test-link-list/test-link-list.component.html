@@ -1,0 +1,158 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+        </div>
+  
+      </div>
+    </div>
+  </nz-affix>
+  
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+  
+        </nz-card>
+        <div class="tab__container">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Xây dựng Chi thường xuyên giai đoạn 03 năm'">
+  
+              <nz-table nzBordered class="table__body">
+  
+                <tr>
+                  <th nzWidth="200px">STT</th>
+                  <th nzWidth="400px">ABC</th>
+                  <th colspan="3"></th>
+                  <th>
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+                    </label>
+                  </th>
+                </tr>
+                <tbody>
+                  <tr *ngFor="let data of lstCTietBCao; let i = index">
+                    <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                      <td [nzIndentSize] = "data.level * 10">
+                          {{ getChiMuc(data.stt) }}
+                      </td>
+  
+                      <td>
+                        {{data.abc}}
+                      </td>
+  
+                      <ng-container *ngIf="disable; else content">
+                        <td>
+                          <i class="fa fa-trash-o do"></i>
+                        </td>
+                        <td>
+                          <i class="fa fa-pencil"></i>
+                        </td>
+  
+                        <td>
+                          <i class="fa fa-plus"></i>
+                        </td>
+                      </ng-container>
+  
+  
+                      <ng-template #content>
+                        <td>
+                          <i class="fa fa-trash-o do" (click)="deleteByStt(i+1)"></i>
+                        </td>
+                        <td>
+                          <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                        </td>
+  
+                        <td>
+                          <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                        </td>
+                      </ng-template>
+  
+  
+
+                      
+                      <td>
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                          (ngModelChange)="updateChecked()"></label>
+                      </td>
+  
+                    </ng-container>
+                    <ng-template #editTemplate>
+                      <td>{{ getChiMuc(editCache[data.id].data.stt) }}</td>
+                      <td>
+                        <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.abc" />
+                      </td>
+                      <td>
+                        <i class="fa fa-trash-o do"></i>
+                      </td>
+                      <td>
+                        <i class="fa fa-arrows-h" (click)="saveEdit1(data.id, i)" [hidden]="status"></i>
+                        <a (click)="saveEdit(data.id)" class="save" [hidden]="!status">Save</a>
+                        <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
+                          class="save" [hidden]="!status">Cancel</a>
+                      </td>
+                      <td>
+                        <div [hidden]="lessThan(data.level)">
+                          <i class="fa fa-arrow-down" [hidden]="status" (click)="saveEdit2(data.id, i)"></i>
+                        </div>
+                        <i class="fa fa-plus" [hidden]="!status" (click)="addLine(i + 1)"></i>
+                      </td>
+                      <td>
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                          (ngModelChange)="updateChecked()"></label>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </nz-table>
+  
+            </nz-tab>
+          </nz-tabset>
+          <div class="action">
+            <button type="button" class="btn btn-main" (click)="deleteSelected()">
+              <i class="fa fa-trash-o"></i>
+              <span>Xóa</span>
+            </button>
+            <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+          <div class="ghi-chu">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Ghi chú
+            </nz-form-label>
+            <ul>
+              <li class="ghi-chu__item">
+                Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+                chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+                về
+                Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+                CSDL
+                về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+                CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+                dựng CSDL về Tài chính
+              </li>
+              <li class="ghi-chu__item">
+                Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+                2022
+              </li>
+              <li class="ghi-chu__item">
+                Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+                2022
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal -->
+  <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
+     
+     <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
+     
+     <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
