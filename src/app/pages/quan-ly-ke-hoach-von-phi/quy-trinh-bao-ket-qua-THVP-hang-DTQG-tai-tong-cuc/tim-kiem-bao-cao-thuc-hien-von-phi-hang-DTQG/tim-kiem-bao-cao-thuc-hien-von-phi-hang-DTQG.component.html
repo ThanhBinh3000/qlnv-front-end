@@ -53,6 +53,7 @@
           <div nz-col nzSpan="12">
             <label class="search__label">Loại báo cáo</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl(searchFilter.loaiBaoCao)">
+              
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
