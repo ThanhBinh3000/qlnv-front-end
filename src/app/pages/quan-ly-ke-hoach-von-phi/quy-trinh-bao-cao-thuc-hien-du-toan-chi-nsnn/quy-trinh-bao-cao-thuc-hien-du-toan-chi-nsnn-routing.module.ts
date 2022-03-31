@@ -21,13 +21,7 @@ const routes: Routes = [
         './chuc-nang-chi-cuc/ds-chi-tiet-nhap-lieu-bao-cao/ds-chi-tiet-nhap-lieu-bao-cao.module'
       ).then((m) => m.DsChiTietNhapLieuBaoCaoModule),
   },
-  {
-    path: 'tong-hop',
-    loadChildren: () =>
-      import(
-        './tim-kiem/tim-kiem.module'
-      ).then((m) => m.TimKiemModule),
-  },
+
   //hung
   {
     path: 'bao-cao',

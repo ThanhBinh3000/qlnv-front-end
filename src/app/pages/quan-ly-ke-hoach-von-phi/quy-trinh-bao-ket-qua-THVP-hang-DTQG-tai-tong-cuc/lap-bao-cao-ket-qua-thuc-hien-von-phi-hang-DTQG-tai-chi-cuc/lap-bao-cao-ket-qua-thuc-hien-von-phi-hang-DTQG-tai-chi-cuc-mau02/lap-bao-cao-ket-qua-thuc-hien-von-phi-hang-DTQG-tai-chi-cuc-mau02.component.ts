@@ -177,7 +177,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau02Component implem
       // this.updateEditCache();
     }
     //get danh muc noi dung
-    this.danhMuc.dmVattuhanghoa().subscribe(
+    this.danhMuc.dMVatTu().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listVattu = data.data?.content;
