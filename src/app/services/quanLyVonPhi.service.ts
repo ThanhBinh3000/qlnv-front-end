@@ -63,21 +63,7 @@ export class QuanLyVonPhiService extends BaseService {
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
-  //lay chi tiet man 3.2.4.5.6
-  bCLapThamDinhDuToanChiTiet1(id: any): Observable<any> {
-    return this.httpClient.get(
-      'http://192.168.1.110:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
-    );
-  }
-  //them moi man 3.2.4.5.6
-  trinhDuyetService1(request: any): Observable<any> {
-    return this.httpClient.post(
-      'http://192.168.1.110:8094/lap-tham-dinh-du-toan/them-moi/',
-      request,
-    );
-  }
-
-
+  
   // call api chi tiết báo cáo
   QDGiaoChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
@@ -140,6 +126,7 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     );
   }
+  
   // update list giao du toan
   updatelistGiaoDuToan(request: any): Observable<any> {
     return this.httpClient.put(
@@ -277,18 +264,18 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
   timDsachVban(request: any): Observable<any> {
-    return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
+    return this.httpClient.post( this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
       request,
     );
   }
 
   ctietVban(id: number): Observable<any> {
-    return this.httpClient.get('http://192.168.1.125:8094/lap-tham-dinh-du-toan/chi-tiet-van-ban/' + id
+    return this.httpClient.get(  this.urlDefault +'/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet-van-ban/' + id
     );
   }
 
   themMoiVban(request: any): Observable<any> {
-    return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi-van-ban',
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi-van-ban',
       request
     );
   }
