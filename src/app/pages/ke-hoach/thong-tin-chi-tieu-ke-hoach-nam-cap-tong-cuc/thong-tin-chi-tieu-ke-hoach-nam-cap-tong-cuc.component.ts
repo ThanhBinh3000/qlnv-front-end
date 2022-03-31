@@ -93,7 +93,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.formData.patchValue({
       namKeHoach: (this.yearNow = dayjs().get('year')),
     });
-    this.loadThongTinChiTieuKeHoachNam(this.id);
+    if (this.id > 0) {
+      this.loadThongTinChiTieuKeHoachNam(this.id);
+    }
   }
 
   updateDataListVatTu(data: any) {
@@ -383,6 +385,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         },
       });
       modalVatTu.afterClose.subscribe((vatTu) => {
+        console.log(vatTu);
+
         if (vatTu) {
           this.keHoachVatTuDialog = new KeHoachVatTu();
           this.keHoachVatTuDialog.tenDonVi = vatTu.value.tenDonVi;
@@ -578,7 +582,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     indexRow: number,
     stringReplace: string,
     idTable: string,
-  ): number {
+  ): string {
     let sumVal = 0;
     const listTable = document
       .getElementById(idTable)
@@ -603,7 +607,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-    return sumVal;
+    return Intl.NumberFormat('en-US').format(sumVal);
   }
 
   reduceRowDataVatTu(
@@ -1081,7 +1085,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khVatTu.forEach((vatTu) => {
       delete vatTu.listDisplay;
       delete vatTu.maDonVi;
-      vatTu.vatTuThietBi.forEach((thietbi) => {
+      vatTu.vatTuThietBi.forEach((thietbi, index) => {
         delete thietbi.cacNamTruoc;
         delete thietbi.maVatTu;
         delete thietbi.maVatTuCha;
@@ -1091,6 +1095,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         delete thietbi.tongNhap;
       });
     });
+    console.log('123: ', this.thongTinChiTieuKeHoachNamInput);
 
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
@@ -1111,9 +1116,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      this.thongTinChiTieuKeHoachNamInput?.khVatTu?.forEach((chiTieu) => {
-        delete chiTieu.listDisplay;
-      });
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
