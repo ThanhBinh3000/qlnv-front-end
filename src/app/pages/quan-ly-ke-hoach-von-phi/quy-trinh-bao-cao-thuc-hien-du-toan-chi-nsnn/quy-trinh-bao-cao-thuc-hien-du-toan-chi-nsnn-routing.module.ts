@@ -15,6 +15,13 @@ const routes: Routes = [
       ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamModule),
   },
   {
+    path: 'ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-chi-cuc',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.module'
+      ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamTuCCModule),
+  },
+  {
     path: 'ds-chi-tiet-nhap-lieu-bao-cao',
     loadChildren: () =>
       import(
