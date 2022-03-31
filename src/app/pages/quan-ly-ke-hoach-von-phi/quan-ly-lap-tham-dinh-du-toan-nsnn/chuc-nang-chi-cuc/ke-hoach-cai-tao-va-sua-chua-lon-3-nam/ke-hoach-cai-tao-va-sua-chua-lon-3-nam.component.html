@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -106,7 +110,7 @@
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
                                         Xây dựng Kế hoạch cải tạo và sửa chữa lớn giai đoạn 03 năm
                                    </nz-descriptions-item>
-                                   
+
                               </nz-descriptions>
                          </div>
                     </div>
@@ -295,7 +299,7 @@
                                                   <td>{{ data.tsoN3 }}</td>
                                                   <td>{{ data.ttoanN3 }}</td>
                                                   <td>{{ data.phatSinhN3 }}</td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -325,7 +329,7 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear
                                                             nzPlaceHolder="Chọn loại công trình"
@@ -334,13 +338,13 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  
+
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input style="width: 100px"
                                                             [(ngModel)]="editCache[data.id].data.tgianKc" />
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input style="width: 100px"
                                                             [(ngModel)]="editCache[data.id].data.tgianHt"/>
                                                   </td>
                                                   <td>
@@ -395,7 +399,7 @@
                                                        <input class="search__input" nz-input
                                                             [(ngModel)]="editCache[data.id].data.phatSinhN2"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input
                                                             [(ngModel)]="editCache[data.id].data.tsoN3"/>
@@ -408,8 +412,8 @@
                                                        <input class="search__input" nz-input
                                                             [(ngModel)]="editCache[data.id].data.phatSinhN3"/>
                                                   </td>
-                                                  
-                                                  
+
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -529,8 +533,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
-   

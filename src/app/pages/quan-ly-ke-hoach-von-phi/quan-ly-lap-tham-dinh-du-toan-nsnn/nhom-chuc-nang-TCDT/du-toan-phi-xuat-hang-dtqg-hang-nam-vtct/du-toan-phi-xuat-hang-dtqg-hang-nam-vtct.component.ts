@@ -160,7 +160,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -283,7 +283,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     this.lstCTietBCao.forEach(item => {
       if (typeof item.id != 'number') {
         item.id = null;
-      } 
+      }
     })
 
     let listCTBC: any = [];
@@ -338,7 +338,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     })
 
     console.log(listCTBC);
-        
+
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -433,9 +433,9 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
+  async getDetailReport() {
     this.spinner.show();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet1(this.id).subscribe(
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet1(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data.data);
@@ -781,7 +781,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
       data1.push(mm);
     })
-    
+
     let item: miniData = {
       maVtu: "",
       SL: data,
@@ -932,7 +932,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       thanhTienKhongDmuc: this.editCache2[id].data.thanhTienKhongDmuc,
       thanhTienCong: this.editCache2[id].data.thanhTienCong,
     }
-    
+
     const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     this.lstCTiet[index] = data;
     this.editCache2[id].edit = false;  // CHUYEN VE DANG TEXT
@@ -972,7 +972,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   tongSl(id: any){
-    
+
     this.editCache2[id].data.tong = 0;
     this.editCache2[id].data.SL.forEach(item => {
       this.editCache2[id].data.tong += item.sl;

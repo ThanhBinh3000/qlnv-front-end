@@ -56,6 +56,10 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+          <i class="icon htvbdh_dong"></i>
+          <span>Đóng</span>
+        </a>
       </div>
     </div>
   </div>
@@ -352,7 +356,7 @@
                     <td>{{ data.tongCboThienN }}</td>
                     <td>{{ data.tongBcheDuocPdThienN }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongThienN }}</td>
-                    <td>{{ data.tuongCbanThienN }}</td>
+                    <td>{{ data.luongCbanThienN }}</td>
                     <td>{{ data.phuCapThienN }}</td>
                     <td>{{ data.cacKhoanDgopThienN }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongTheoBcheThienN }}</td>
@@ -360,7 +364,7 @@
                     <td>{{ data.tongCboN1 }}</td>
                     <td>{{ data.tongBcheDuocPdN1 }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongN1 }}</td>
-                    <td>{{ data.tuongCbanN1 }}</td>
+                    <td>{{ data.luongCbanN1 }}</td>
                     <td>{{ data.phuCapN1 }}</td>
                     <td>{{ data.cacKhoanDgopN1 }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongTheoBcheN1 }}</td>
@@ -368,7 +372,7 @@
                     <td>{{ data.tongCboN2 }}</td>
                     <td>{{ data.tongBcheDuocPdN2 }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongN2 }}</td>
-                    <td>{{ data.tuongCbanN2 }}</td>
+                    <td>{{ data.luongCbanN2 }}</td>
                     <td>{{ data.phuCapN2 }}</td>
                     <td>{{ data.cacKhoanDgopN2 }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongTheoBcheN2 }}</td>
@@ -376,10 +380,10 @@
                     <td>{{ data.tongCboN3 }}</td>
                     <td>{{ data.tongBcheDuocPdN3 }}</td>
                     <td>{{ data.tongQuyLuongCoTchatLuongN3 }}</td>
-                    <td>{{ data.tuongCbanN3 }}</td>
+                    <td>{{ data.tongQuyLuongCoTchatLuongTheoBcheN3 }}</td>
+                    <td>{{ data.luongCbanN3 }}</td>
                     <td>{{ data.phuCapN3 }}</td>
                     <td>{{ data.cacKhoanDgopN3 }}</td>
-                    <td>{{ data.tongQuyLuongCoTchatLuongTheoBcheN3 }}</td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -444,7 +448,7 @@
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheThienN}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tuongCbanThienN"
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.luongCbanThienN"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
@@ -470,7 +474,7 @@
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN1}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tuongCbanN1"
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.luongCbanN1"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
@@ -496,7 +500,7 @@
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN2}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tuongCbanN2"
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.luongCbanN2"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>
@@ -522,7 +526,7 @@
                       {{editCache[data.id].data.tongQuyLuongCoTchatLuongTheoBcheN3}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.tuongCbanN3"
+                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.luongCbanN3"
                         (change)="changeModel(data.id)" />
                     </td>
                     <td>

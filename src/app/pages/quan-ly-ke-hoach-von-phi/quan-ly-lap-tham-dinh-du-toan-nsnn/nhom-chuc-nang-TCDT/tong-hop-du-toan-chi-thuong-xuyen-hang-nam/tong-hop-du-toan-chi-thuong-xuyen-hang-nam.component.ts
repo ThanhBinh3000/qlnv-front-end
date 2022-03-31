@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -69,7 +69,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   maBaoCao!: string;
   namBaoCaoHienHanh!: any;
   trangThaiBanGhi: string = "1";
-  maLoaiBaoCao: string = "01";
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM;
   maDviTien: string = "01";
   newDate = new Date();
   fileToUpload!: File;
@@ -151,7 +151,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.maLoaiBacao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
     this.nam = this.routerActive.snapshot.paramMap.get('nam');
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -277,7 +277,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao = "01",
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maLoaiBcao: this.maLoaiBaoCao,
       namBcao: this.namBcao,
       namHienHanh: this.namBaoCaoHienHanh,
     };
@@ -350,9 +350,9 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -394,7 +394,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file

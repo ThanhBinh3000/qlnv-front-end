@@ -90,7 +90,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
-  
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -330,9 +330,9 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
@@ -341,7 +341,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           if(this.lstCTietBCao.length!=null){
             this.updateEditCache();
           }
-         
+
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
@@ -363,7 +363,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
-          
+
           if(this.lstCTietBCao.length!=0){
             this.lstCTietBCao.forEach(e => {
               this.tong1 += e.n1;
@@ -371,7 +371,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
               this.tong3 += e.n3;
             })
           }
-          
+
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -384,7 +384,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file

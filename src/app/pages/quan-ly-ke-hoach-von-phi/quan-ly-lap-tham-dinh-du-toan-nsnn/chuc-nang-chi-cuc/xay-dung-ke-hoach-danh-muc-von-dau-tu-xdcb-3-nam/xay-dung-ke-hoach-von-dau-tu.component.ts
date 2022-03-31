@@ -106,6 +106,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -144,12 +145,39 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     console.log(userInfo);
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.maBaoCao = '';
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -364,7 +392,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR,data?.msg);
       }
@@ -379,9 +407,9 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -409,7 +437,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file
@@ -596,4 +624,24 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   changeModel(id: string): void {
     this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) + Number(this.editCache[id].data.qdDuyetTkDtoanCk);
   }
+ //call tong hop
+ async calltonghop(){
+  this.spinner.show();
+  let objtonghop={
+      maDvi: this.maDonViTao,
+      maLoaiBcao: this.maLoaiBaoCao,
+      namHienTai: this.namBaoCaoHienHanh,
+  }
+  await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+      if(res.statusCode==0){
+          this.lstCTietBCao = res.data;
+      }else{
+          alert('co loi trong qua trinh van tin');
+      }
+  },err =>{
+      alert(err.error.message);
+  });
+  this.updateEditCache()
+  this.spinner.hide();
+}
 }

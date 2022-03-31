@@ -75,7 +75,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
      trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
      maLoaiBaoCao: string = "26";                // nam bao cao
-     newDate = new Date();    
+     newDate = new Date();
      kt: boolean;                   //
 
      statusBtnDel: boolean;                       // trang thai an/hien nut xoa
@@ -219,7 +219,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                if (typeof item.id != "number") {
                     item.id = null;
                }
-          })         
+          })
          console.log(this.listIdDelete);
           //call service them moi
           this.spinner.show();
@@ -314,7 +314,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          console.log(data);
                          this.chiTietBcaos = data.data.lstCtiet;
                          console.log(this.chiTietBcaos);
-                         
+
                          this.chiTietBcaos.forEach(item => {
                               let mm: ItemData = {
                                    id: item.id,

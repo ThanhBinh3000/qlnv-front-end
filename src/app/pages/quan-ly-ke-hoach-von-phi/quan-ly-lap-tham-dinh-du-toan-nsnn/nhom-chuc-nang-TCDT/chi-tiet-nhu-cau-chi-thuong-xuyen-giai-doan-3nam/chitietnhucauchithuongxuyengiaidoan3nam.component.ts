@@ -104,7 +104,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
     this.nam = this.router.snapshot.paramMap.get('nam');
 
     if (this.id != null) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -126,24 +126,25 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    } else {
+    }
+    else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = userInfor?.username;
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '30';
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     }
@@ -267,9 +268,9 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -307,6 +308,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.spinner.hide();
   }
 
   //lay ten don vi tạo

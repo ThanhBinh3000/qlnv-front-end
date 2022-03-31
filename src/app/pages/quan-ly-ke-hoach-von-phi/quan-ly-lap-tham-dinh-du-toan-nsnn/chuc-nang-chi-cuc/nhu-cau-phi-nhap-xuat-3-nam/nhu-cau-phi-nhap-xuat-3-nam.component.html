@@ -67,6 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+                      <i class="icon htvbdh_dong"></i>
+                      <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -152,7 +156,7 @@
                                              <th nzWidth="100px">
                                                   Định mức phí TC giao
                                              </th>
-                                             
+
                                              <th nzWidth="100px">
                                                   Thành tiền
                                              </th>
@@ -169,7 +173,7 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <div *ngFor="let item of nhomChis">
                                                             <div *ngIf="item.id == data.maNhomChi">
@@ -191,11 +195,11 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  
+
                                                   <td>{{ data.sl}}</td>
                                                   <td>{{ data.dmucPhiTc }}</td>
                                                   <td>{{ data.thanhTien }}</td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -245,10 +249,10 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.sl" 
+                                                            [(ngModel)]="editCache[data.id].data.sl"
                                                             (change)="changeModel(data.id)"/>
                                                   </td>
                                                   <td>
@@ -259,7 +263,7 @@
                                                   <td>
                                                        {{editCache[data.id].data.thanhTien}}
                                                   </td>
-                                                  
+
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
@@ -379,7 +383,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

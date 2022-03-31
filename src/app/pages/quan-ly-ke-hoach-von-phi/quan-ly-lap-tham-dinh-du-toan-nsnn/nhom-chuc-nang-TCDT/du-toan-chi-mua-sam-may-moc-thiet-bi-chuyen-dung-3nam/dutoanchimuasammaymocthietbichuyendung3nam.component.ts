@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -44,7 +44,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '27';
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -98,7 +98,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.nam = this.router.snapshot.paramMap.get('nam');
 
     if (this.id != null) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -126,7 +126,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '27';
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -225,16 +225,16 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = "27";
+          this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;
@@ -259,6 +259,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.spinner.hide();
   }
 
   //lay ten don vi tạo

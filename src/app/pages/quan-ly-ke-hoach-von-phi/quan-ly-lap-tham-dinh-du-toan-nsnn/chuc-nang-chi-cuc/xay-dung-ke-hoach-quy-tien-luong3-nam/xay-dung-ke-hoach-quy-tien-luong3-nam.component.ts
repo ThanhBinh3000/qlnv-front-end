@@ -26,7 +26,7 @@ export class ItemData {
   tongCboThienN!: number;
   tongBcheDuocPdThienN!: number;
   tongQuyLuongCoTchatLuongThienN!: number;
-  tuongCbanThienN!: number;
+  luongCbanThienN!: number;
   phuCapThienN!: number;
   cacKhoanDgopThienN!: number;
   tongQuyLuongCoTchatLuongTheoBcheThienN!: number;
@@ -34,7 +34,7 @@ export class ItemData {
   tongCboN1!: number;
   tongBcheDuocPdN1!: number;
   tongQuyLuongCoTchatLuongN1!: number;
-  tuongCbanN1!: number;
+  luongCbanN1!: number;
   phuCapN1!: number;
   cacKhoanDgopN1!: number;
   tongQuyLuongCoTchatLuongTheoBcheN1!: number;
@@ -42,7 +42,7 @@ export class ItemData {
   tongCboN2!: number;
   tongBcheDuocPdN2!: number;
   tongQuyLuongCoTchatLuongN2!: number;
-  tuongCbanN2!: number;
+  luongCbanN2!: number;
   phuCapN2!: number;
   cacKhoanDgopN2!: number;
   tongQuyLuongCoTchatLuongTheoBcheN2!: number;
@@ -50,7 +50,7 @@ export class ItemData {
   tongCboN3!: number;
   tongBcheDuocPdN3!: number;
   tongQuyLuongCoTchatLuongN3!: number;
-  tuongCbanN3!: number;
+  luongCbanN3!: number;
   phuCapN3!: number;
   cacKhoanDgopN3!: number;
   tongQuyLuongCoTchatLuongTheoBcheN3!: number;
@@ -155,7 +155,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -338,9 +338,9 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -369,7 +369,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file
@@ -409,7 +409,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       tongCboThienN: 0,
       tongBcheDuocPdThienN: 0,
       tongQuyLuongCoTchatLuongThienN: 0,
-      tuongCbanThienN: 0,
+      luongCbanThienN: 0,
       phuCapThienN: 0,
       cacKhoanDgopThienN: 0,
       tongQuyLuongCoTchatLuongTheoBcheThienN: 0,
@@ -417,7 +417,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       tongCboN1: 0,
       tongBcheDuocPdN1: 0,
       tongQuyLuongCoTchatLuongN1: 0,
-      tuongCbanN1: 0,
+      luongCbanN1: 0,
       phuCapN1: 0,
       cacKhoanDgopN1: 0,
       tongQuyLuongCoTchatLuongTheoBcheN1: 0,
@@ -425,7 +425,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       tongCboN2: 0,
       tongBcheDuocPdN2: 0,
       tongQuyLuongCoTchatLuongN2: 0,
-      tuongCbanN2: 0,
+      luongCbanN2: 0,
       phuCapN2: 0,
       cacKhoanDgopN2: 0,
       tongQuyLuongCoTchatLuongTheoBcheN2: 0,
@@ -433,7 +433,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       tongCboN3: 0,
       tongBcheDuocPdN3: 0,
       tongQuyLuongCoTchatLuongN3: 0,
-      tuongCbanN3: 0,
+      luongCbanN3: 0,
       phuCapN3: 0,
       cacKhoanDgopN3: 0,
       tongQuyLuongCoTchatLuongTheoBcheN3: 0,
@@ -568,9 +568,9 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
 
   changeModel(id: string): void {
     this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN = Number(this.editCache[id].data.tuongCbanN) + Number(this.editCache[id].data.phuCapN) + Number(this.editCache[id].data.cacKhoanDgopN);
-    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheThienN = Number(this.editCache[id].data.tuongCbanThienN) + Number(this.editCache[id].data.phuCapThienN) + Number(this.editCache[id].data.cacKhoanDgopThienN);
-    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN1 = Number(this.editCache[id].data.tuongCbanN1) + Number(this.editCache[id].data.phuCapN1) + Number(this.editCache[id].data.cacKhoanDgopN1);
-    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN2 = Number(this.editCache[id].data.tuongCbanN2) + Number(this.editCache[id].data.phuCapN2) + Number(this.editCache[id].data.cacKhoanDgopN2);
-    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN3 = Number(this.editCache[id].data.tuongCbanN3) + Number(this.editCache[id].data.phuCapN3) + Number(this.editCache[id].data.cacKhoanDgopN3);
+    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheThienN = Number(this.editCache[id].data.luongCbanThienN) + Number(this.editCache[id].data.phuCapThienN) + Number(this.editCache[id].data.cacKhoanDgopThienN);
+    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN1 = Number(this.editCache[id].data.luongCbanN1) + Number(this.editCache[id].data.phuCapN1) + Number(this.editCache[id].data.cacKhoanDgopN1);
+    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN2 = Number(this.editCache[id].data.luongCbanN2) + Number(this.editCache[id].data.phuCapN2) + Number(this.editCache[id].data.cacKhoanDgopN2);
+    this.editCache[id].data.tongQuyLuongCoTchatLuongTheoBcheN3 = Number(this.editCache[id].data.luongCbanN3) + Number(this.editCache[id].data.phuCapN3) + Number(this.editCache[id].data.cacKhoanDgopN3);
   }
 }

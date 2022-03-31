@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -52,7 +52,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -129,7 +129,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+      await this.getDetailReport();
     }
     else if (
       this.maDvi != null &&
@@ -154,24 +154,25 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       );
     }
     else {
-      this.trangThaiBanGhi = "1";
+      this.trangThaiBanGhi = '1';
       this.nguoiNhap = userInfo?.username;
       this.maDonViTao = userInfo?.dvql;
+      this.namBcaohienhanh = this.currentday.getFullYear();
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-        (data) => {
-          if (data.statusCode == 0) {
-            this.maBaoCao = data.data;
+        (res) => {
+          if (res.statusCode == 0) {
+            this.mabaocao = res.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
-        }
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
       );
-      this.maBaoCao = '';
-      this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
     const utils = new Utils();
@@ -341,9 +342,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -372,7 +373,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file

@@ -68,10 +68,10 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      ngayNhap!: any;
      nguoiNhap!: string;
      maDonViTao!: any;
-     maBaoCao: string = QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N;
+     maBaoCao!: string;
      namBaoCaoHienHanh!: any;
      trangThaiBanGhi: string = "1";
-     maLoaiBaoCao: string = "01";
+     maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N;
      maDviTien: string = "01";
      newDate = new Date();
      fileToUpload!: File;                        // file tai o input
@@ -102,6 +102,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
+     currentday: Date = new Date();
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -140,11 +141,38 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
 
 
      async ngOnInit() {
+          //check param dieu huong router
           this.id = this.routerActive.snapshot.paramMap.get('id');
+          this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+          this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+          this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
           let userName = this.userSerivce.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
           if (this.id) {
-               this.getDetailReport();
+              await this.getDetailReport();
+          }else if (
+            this.maDonViTao != null &&
+            this.maLoaiBaoCao != null &&
+            this.namBaoCaoHienHanh != null
+          ) {
+            await this.calltonghop();
+            this.nguoiNhap = userInfo?.username;
+            this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+            this.maDonViTao = userInfo?.dvql;
+            this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+              (data) => {
+                if (data.statusCode == 0) {
+                  this.maBaoCao = data.data;
+                } else {
+                  this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+                }
+              },
+              (err) => {
+                this.errorMessage = err.error.message;
+              }
+            );
+            this.maBaoCao = '';
+            this.namBaoCaoHienHanh = new Date().getFullYear();
           } else {
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
@@ -270,68 +298,69 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           this.listFile = []
      }
 
-     // luu
-     async luu() {
-          let listFile: any = [];
-          for (const iterator of this.listFile) {
-               listFile.push(await this.uploadFile(iterator));
-          }
+    // luu
+  async luu() {
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
 
-          this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
-                    item.id = null;
-               }
-          })
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
 
-          // gui du lieu trinh duyet len server
-          let request = {
-               id: this.id,
-               idFileDinhKem: listFile,
-               lstCTietBCao: this.lstCTietBCao,
-               maBcao: this.maBaoCao,
-               maDvi: this.maDonViTao = "01",
-               maDviTien: this.maDviTien = "01",
-               maLoaiBcao: this.maLoaiBaoCao = "01",
-               namBcao: this.namBaoCaoHienHanh,
-               namHienHanh: this.namBaoCaoHienHanh,
-          };
-          //console.log(this.lstCTietBCao);
-          this.spinner.show();
-          if (this.id == null) {
-               this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, data?.msg);
-                         }
-                    },
-                    (err) => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    })
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: this.id,
+      fileDinhKems: listFile,
+      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: this.maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: '14',
+      namHienHanh: this.namBaoCaoHienHanh,
+      namBcao: this.namBcao,
+      soVban:this.soVban,
+    };
+
+    //call service them moi
+    this.spinner.show();
+    if (this.id == null) {
+      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+        data => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(
-                    res => {
-                         if (res.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, res?.msg);
-                         }
-                    },
-                    err => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    }
-               )
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-
-          this.lstCTietBCao.filter(item => {
-               if (!item.id) {
-                    item.id = uuid.v4();
-               }
-          });
-          this.updateEditCache();
-          this.spinner.hide();
-     }
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        },
+      );
+    } else {
+      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      })
+    }
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+    this.spinner.hide();
+    this.updateEditCache()
+  }
 
 
      // chuc nang check role
@@ -364,9 +393,9 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      }
 
      // call chi tiet bao cao
-     getDetailReport() {
-          this.spinner.hide();
-          this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+     async getDetailReport() {
+          this.spinner.show();
+          await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
@@ -405,7 +434,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          this.spinner.show();
+          this.spinner.hide();
      }
 
      //upload file
@@ -585,4 +614,24 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           });
      }
 
+      //call tong hop
+    async calltonghop(){
+      this.spinner.show();
+      let objtonghop={
+          maDvi: this.maDonViTao,
+          maLoaiBcao: this.maLoaiBaoCao,
+          namHienTai: this.namBaoCaoHienHanh,
+      }
+      await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+          if(res.statusCode==0){
+              this.lstCTietBCao = res.data;
+          }else{
+              alert('co loi trong qua trinh van tin');
+          }
+      },err =>{
+          alert(err.error.message);
+      });
+      this.updateEditCache()
+      this.spinner.hide();
+  }
 }

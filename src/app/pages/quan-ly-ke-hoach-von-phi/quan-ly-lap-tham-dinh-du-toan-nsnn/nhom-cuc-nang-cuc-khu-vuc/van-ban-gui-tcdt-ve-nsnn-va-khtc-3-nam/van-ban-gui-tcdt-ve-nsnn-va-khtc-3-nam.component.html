@@ -24,6 +24,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+
+                      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" >
+                           <span>Đóng</span>
+                      </a>
                </div>
           </div>
      </div>
@@ -61,7 +65,7 @@
                               <label class="search__label">Ngày duyệt văn bản</label>
                               <input nz-input class="search__input"  [(ngModel)]="ngayDuyetVban">
                          </div>
-                         
+
                     </div>
                </nz-card>
                <div class="tab__container">
@@ -89,7 +93,7 @@
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <a routerLink="../{{data.url}}">{{data.objResp.maBcao}}</a>
-                                                       
+
                                                   </td>
                                                   <td>
                                                        <div *ngFor="let item of baoCaos">
@@ -113,10 +117,10 @@
                                              <ng-template #editTemplate>
                                                   <td>{{ i + 1 }}</td>
                                                   <td >
-                                                       <nz-select nzShowSearch nzAllowClear 
+                                                       <nz-select nzShowSearch nzAllowClear
                                                             nzPlaceHolder="Chọn báo cáo"
                                                             [(ngModel)]="editCache[data.id].data.objResp.maBcao" (ngModelChange)="changeModel(data.id)">
-                                                            <nz-option *ngFor="let item of lstBcao" [nzValue]="item.maBcao" 
+                                                            <nz-option *ngFor="let item of lstBcao" [nzValue]="item.maBcao"
                                                                  [nzLabel]="item.maBcao"></nz-option>
                                                        </nz-select>
                                                   </td>
@@ -195,7 +199,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

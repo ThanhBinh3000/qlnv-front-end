@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -65,7 +65,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -96,7 +96,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
     return false;
   };
   maDvi: string;
-  maLoaiBacao: string;
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N;
   nam: string;
   namBcaohienhanh: any;
   mabaocao: any;
@@ -143,35 +143,17 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
-      this.getDetailReport();
+     await this.getDetailReport();
     }
     else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
       this.nam != null
     ) {
-      this.calltonghop();
+      await this.calltonghop();
       this.nguoiNhap = userInfo?.username;
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
       this.maDonViTao = userInfo?.dvql;
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.maBaoCao = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
-    }
-    else {
-      this.trangThaiBanGhi = "1";
-      this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
-      this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
@@ -186,6 +168,27 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+    }
+    else {
+      this.trangThaiBanGhi = '1';
+      this.nguoiNhap = userInfo?.username;
+      this.maDonViTao = userInfo?.dvql;
+      this.namBaoCaoHienHanh = this.currentday.getFullYear();
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N ;
+      this.spinner.show();
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maBaoCao = res.data;
+          } else {
+           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          }
+        },
+        (err) => {
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
     }
 
     const utils = new Utils();
@@ -214,8 +217,6 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.nguonVons = data.data?.content;
-          console.log(this.nguonVons);
-
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -366,9 +367,9 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -406,7 +407,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
         this.errorMessage = err.error.message;
       }
     );
-    this.spinner.show();
+    this.spinner.hide();
   }
 
   //upload file
@@ -579,37 +580,24 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
   }
 
   //call tong hop
-  calltonghop(){
-    this.spinner.hide();
+  async calltonghop(){
+    this.spinner.show();
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
         namHienTai: this.nam,
     }
-    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
+    await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
-            // this.namBaoCao = this.namBcao;
-            this.namBcaohienhanh = this.currentday.getFullYear();
-            if(this.lstCTietBCao==null){
-                this.lstCTietBCao =[];
-            }
-            console.log(this.lstCTietBCao)
-            this.namBcaohienhanh = this.namBcaohienhanh
         }else{
             alert('co loi trong qua trinh van tin');
         }
     },err =>{
         alert(err.error.message);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
-        if (res.statusCode == 0) {
-            this.mabaocao = res.data;
-        } else {
-            this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
-        }
-    })
-    this.spinner.show();
+    this.updateEditCache()
+    this.spinner.hide();
 }
 
 }

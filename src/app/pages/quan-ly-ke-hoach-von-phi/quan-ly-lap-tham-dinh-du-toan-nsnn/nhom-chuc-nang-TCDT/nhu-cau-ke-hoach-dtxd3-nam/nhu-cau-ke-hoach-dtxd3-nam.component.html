@@ -56,6 +56,10 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+          <i class="icon htvbdh_dong"></i>
+          <span>Đóng</span>
+        </a>
       </div>
     </div>
   </div>
@@ -108,7 +112,7 @@
                 <!-- </div> -->
               </div>
             </div>
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body">
+            <nz-table #editRowTable  nzBordered class="table__body">
               <thead>
                 <tr>
                   <th rowspan="4" style="width: 35px">STT</th>
@@ -213,7 +217,7 @@
                     <td>{{ data.tenDan }}</td>
                     <td>
                       <div *ngFor="let item of maLoaiKhoachs">
-                        <div *ngIf="item.id == data.maLoaiKhoach">
+                        <div *ngIf="item.id == data.maKhoach">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -227,7 +231,7 @@
                     </td>
                     <td>
                       <div *ngFor="let item of maDdiemXdungs">
-                        <div *ngIf="item.id == data.maDdiemXdung">
+                        <div *ngIf="item.id == data.maDdiemXd">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -287,7 +291,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
-                        [(ngModel)]="editCache[data.id].data.maLoaiKhoach">
+                        [(ngModel)]="editCache[data.id].data.maKhoach">
                         <nz-option *ngFor="let item of maLoaiKhoachs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -299,7 +303,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa điểm xây dựng"
-                        [(ngModel)]="editCache[data.id].data.maDdiemXdung">
+                        [(ngModel)]="editCache[data.id].data.maDdiemXd">
                         <nz-option *ngFor="let item of maDdiemXdungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

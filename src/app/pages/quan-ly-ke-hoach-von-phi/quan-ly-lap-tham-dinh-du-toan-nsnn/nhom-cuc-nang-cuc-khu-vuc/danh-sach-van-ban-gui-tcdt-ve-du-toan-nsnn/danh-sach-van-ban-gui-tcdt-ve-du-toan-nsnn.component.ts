@@ -120,7 +120,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                soVban: null,//this.soVanBan,
                trangThai: this.maTrangThai,
           }
-          await this.quanLyVonPhiService.timDsachVban(request).subscribe(
+          await this.quanLyVonPhiService.timDsachVban(request).toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;

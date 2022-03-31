@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -51,7 +51,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   //////
   id: any;
   maDvi: any;
-  maLoaiBacao: string = '25';
+  maLoaiBacao: string = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
   nam: any;
   userInfor: any;
   status: boolean = false;
@@ -106,7 +106,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.nam = this.router.snapshot.paramMap.get('nam');
 
     if (this.id != null) {
-      this.getDetailReport();
+      await this.getDetailReport();
     } else if (
       this.maDvi != null &&
       this.maLoaiBacao != null &&
@@ -134,7 +134,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.donvitao = userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maLoaiBacao = '25';
+      this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -261,16 +261,16 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
+  async getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+    await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          this.maLoaiBacao = "25";
+          this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
           // set thong tin chung bao cao
           this.ngaynhap = data.data.ngayTao;
           this.nguoinhap = data.data.nguoiTao;

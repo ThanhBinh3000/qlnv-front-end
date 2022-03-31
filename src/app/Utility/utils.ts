@@ -87,7 +87,7 @@ export class Utils {
     public static btnRoleDVCT = {
         "status": ['7'],
         "unit": [1, 2],
-        "role": [4],
+        "role": [3],
     }
 
 
@@ -209,7 +209,7 @@ export class Utils {
     }
 
 
-    
+
 
 }
 
@@ -342,7 +342,7 @@ export const LOAIBAOCAO =[
         id:'32',
         tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
     }
-]    
+]
 // Loai bao cao
 	// 3.2.4.3.1
     export	const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N:string = "01";
@@ -407,7 +407,7 @@ export const LOAIBAOCAO =[
     export	const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N:string = "30";
     export	const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N:string = "31";
     export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
-    
+
     export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
     {
         id:526,
@@ -417,5 +417,4 @@ export const LOAIBAOCAO =[
         id:527,
         tenDm:'Báo cáo giải ngân cả năm'
     },
-]    
-     
+]

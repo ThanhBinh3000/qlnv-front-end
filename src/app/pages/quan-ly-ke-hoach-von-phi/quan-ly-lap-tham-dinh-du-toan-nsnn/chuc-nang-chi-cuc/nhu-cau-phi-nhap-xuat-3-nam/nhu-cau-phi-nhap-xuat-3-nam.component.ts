@@ -127,7 +127,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           let userName = this.userSerivce.getUserName();
           let userInfo: any = await this.getUserInfo(userName); //get user info
           if (this.id) {
-               this.getDetailReport();
+              await this.getDetailReport();
           } else {
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
@@ -360,9 +360,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      }
 
      // call chi tiet bao cao
-     getDetailReport() {
+    async getDetailReport() {
           this.spinner.hide();
-          this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
+          await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;

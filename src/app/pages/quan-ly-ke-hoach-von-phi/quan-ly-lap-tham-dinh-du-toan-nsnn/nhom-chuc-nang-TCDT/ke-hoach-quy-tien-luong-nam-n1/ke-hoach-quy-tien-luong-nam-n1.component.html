@@ -56,6 +56,10 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+          <i class="icon htvbdh_dong"></i>
+          <span>Đóng</span>
+        </a>
       </div>
     </div>
   </div>
@@ -179,9 +183,9 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <div *ngFor="let item of maCucDtnnKvucs">
-                        <div *ngIf="item.id == data.maCucDtnnKvuc">
-                          {{item.tenDm}}
-                        </div>
+                           <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
+                                {{item.tenDvi}}
+                           </div>
                       </div>
                     </td>
                     <td>{{ data.bcheGia0N1 }}</td>
@@ -218,10 +222,18 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
-                    <td>
+                    <!-- <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
                         [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
                         <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td> -->
+                    <td >
+                      <nz-select nzShowSearch nzAllowClear
+                           nzPlaceHolder="Chọn đơn vị"
+                           [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
+                           <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi"
+                                [nzLabel]="item.tenDvi"></nz-option>
                       </nz-select>
                     </td>
                     <td>

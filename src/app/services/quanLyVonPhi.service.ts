@@ -52,7 +52,9 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approve(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang',
+      // 'http://192.168.1.110:8094/lap-tham-dinh-du-toan/chuc-nang',
+      'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang',
       request,
     );
   }
@@ -109,8 +111,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
   }
@@ -158,7 +160,8 @@ export class QuanLyVonPhiService extends BaseService {
   //tong hop
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      'http://192.168.1.125:8094/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
   }
