@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
+import { linkList } from '../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 
 export class ItemData {
@@ -39,7 +40,7 @@ export class LinkList {
 export class TestLinkListComponent implements OnInit {
     lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
     chiTietBcaos: LinkList = {
-        vt: 0,
+        vt: 0,  
         abc: 0,
         checked: false,
         next: [],
@@ -124,23 +125,77 @@ export class TestLinkListComponent implements OnInit {
 
 
     async ngOnInit() {
-        let value = {
-            abc: 0,
-            vt: 1,
-            checked: false,
-            next: [],
-        }
-        let value2 = {
-            abc: 1,
-            vt: 2,
-            checked: false,
-            next: [],
-        }
-        this.chiTietBcaos.next.push(value);
-        this.chiTietBcaos.next.push(value2);
-        console.log(this.chiTietBcaos);
+
+        this.lstCTietBCao = [
+            
+            {
+                abc: 0,
+                checked: false,
+                id: 4,
+                level: 2,
+                stt: "2.1.1",
+            },
+            {
+                abc: 1,
+                checked: false,
+                id: 2,
+                level: 0,
+                stt: "2",
+            },
+            {
+                abc: 0,
+                checked: false,
+                id: 3,
+                level: 1,
+                stt: "2.1",
+            },
+            
+            {
+                abc: 0,
+                checked: false,
+                id: 5,
+                level: 1,
+                stt: "2.2",
+            },
+            {
+                abc: 0,
+                checked: false,
+                id: 6,
+                level: 0,
+                stt: "3",
+            },
+            {
+                abc: 0,
+                checked: false,
+                id: 1,
+                level: 0,
+                stt: "1",
+            },
+        ];
+        
+        this.getLinkList(this.chiTietBcaos, "", 0);
+        this.updateSTT(this.chiTietBcaos);
         this.updateLstCTietBCao();
-        console.log(this.lessThan(5));
+    }
+
+    getLinkList(data: LinkList, head: string, lvl: number){
+        var lst: ItemData[] = [];
+        this.lstCTietBCao.forEach(item =>  {
+            if ((item.level == lvl) && (item.stt.indexOf(head) == 0)){
+                lst.push(item);
+            }
+        });
+        if (lst.length == 0) return;
+        lst.forEach(item => {
+            var obj: LinkList = {
+                abc: item.abc,
+                vt: 0,
+                checked: false,
+                next: [],
+            }
+            this.getLinkList(obj, item.stt, lvl + 1);
+            data.next.push(obj);
+        })
     }
     //khoi tao
     duyet(data: LinkList, str: string, index: number, le: number) {
@@ -159,7 +214,7 @@ export class TestLinkListComponent implements OnInit {
             if (index == 0) {
                 this.duyet(data.next[i], str, i + 1, le + 1);
             } else {
-                this.duyet(data.next[i], str + index.toString() + ".", i + 1, le +1);
+                this.duyet(data.next[i], str + index.toString() + ".", i + 1, le + 1);
             }
 
         }
@@ -188,7 +243,7 @@ export class TestLinkListComponent implements OnInit {
         let item: ItemData = {
             abc: 0,
             stt: "",
-            level: this.lstCTietBCao[id-1].level,
+            level: this.lstCTietBCao[id - 1].level,
             id: uuid.v4(),
             checked: false,
         }
@@ -346,9 +401,10 @@ export class TestLinkListComponent implements OnInit {
         }
         this.stt = 0;
         this.updateSTT(this.chiTietBcaos);
-        console.log(this.chiTietBcaos);
+
         this.updateLstCTietBCao();
         this.disable = false;
+        console.log(this.lstCTietBCao);
     }
 
     // luu thay doi
@@ -366,9 +422,9 @@ export class TestLinkListComponent implements OnInit {
         }
         this.stt = 0;
         this.updateSTT(this.chiTietBcaos);
-        console.log(this.chiTietBcaos);
         this.updateLstCTietBCao();
         this.disable = false;
+        console.log(this.lstCTietBCao);
     }
 
 
@@ -424,29 +480,29 @@ export class TestLinkListComponent implements OnInit {
         let chiSo: any = str.split('.');
         var n: number = chiSo.length - 1;
         var k: number = parseInt(chiSo[n], 10);
-        if (n == 0){
-            for(var i = 0; i < this.soLaMa.length; i++){
-                while (k >= this.soLaMa[i].gTri){
+        if (n == 0) {
+            for (var i = 0; i < this.soLaMa.length; i++) {
+                while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
                     k -= this.soLaMa[i].gTri;
                 }
             }
         };
-        if (n == 1)  {
+        if (n == 1) {
             xau = chiSo[n];
         };
-        if (n==2) {
-            xau = chiSo[n-1].toString() + "." + chiSo[n].toString();
+        if (n == 2) {
+            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         };
         if (n == 3) {
-            xau = String.fromCharCode(k+96);
+            xau = String.fromCharCode(k + 96);
         }
         if (n == 4) {
             xau = "-";
         }
         return xau;
     }
-    
+
     lessThan(level: number): boolean {
         return level > 3;
     }
