@@ -291,10 +291,10 @@ export class QuanLyVonPhiService extends BaseService {
 
   // call api chi tiết báo cáo
   baoCaoChiTiet(id: any): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,
-    );
-    // return this.httpClient.get('http://192.168.0.161:8094/bao-cao/chi-tiet/' + id)
+    // return this.httpClient.get(
+    //   this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,
+    // );
+    return this.httpClient.get('http://192.168.1.110:8094/bao-cao/chi-tiet/' + id)
   }
 
   // call api nút chức năng
