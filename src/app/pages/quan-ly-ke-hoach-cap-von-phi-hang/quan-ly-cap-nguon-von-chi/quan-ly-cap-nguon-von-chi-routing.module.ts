@@ -8,6 +8,14 @@ const routes: Routes = [
     component: QuanLyCapNguonVonChiNSNNComponent,
   },
   {
+    path: 'danh-sach-cong-can-de-nghi-cap-von',
+    loadChildren: () =>
+      import(
+        './danh-sach-cong-can-de-nghi-cap-von/danh-sach-cong-can-de-nghi-cap-von.module'
+      ).then((m) => m.DanhSachCongVanDeNghiCapVonComponentModule),
+  },
+  //////////////////////////////////////////////////////////////////////////////////
+  {
     path: 'tim-kiem-danh-sach-cong-van-de-nghi-cap-von',
     loadChildren: () =>
       import(
