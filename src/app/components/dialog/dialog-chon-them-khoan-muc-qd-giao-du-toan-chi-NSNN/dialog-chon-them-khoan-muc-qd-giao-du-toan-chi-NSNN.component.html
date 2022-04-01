@@ -1,0 +1,30 @@
+
+<div class="modal__content">
+
+  <div nz-col nzSpan="12">
+    <label class="search__label">Khoản mục</label>
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khoản mục" [(ngModel)]="searchFilter.khoanMuc">
+      <nz-option *ngFor="let item of khoanMucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+    </nz-select>
+  </div>
+
+  <label *ngFor="let item of danhSachKhoanMuc" nz-checkbox [(ngModel)]="item.status" class="check-box">{{item.tenKmuc}}
+    - {{item.tieuDe}}
+  </label>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="plus"></i>
+        Thêm
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

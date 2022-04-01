@@ -12,19 +12,18 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
+import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
 
 export class ItemData {
-  duToan!: number;
-  giaTri!: number;
-  maDviTien!: string;
-  maDviTinh!: string;
-  maLoai!: string;
-  maMatHang!: string;
-  maNhom!: string;
-  namThien!: number;
-  soLuong!: number;
+  maNdung!: string;
+  nguonNSNN!: number;
+  nguonKhac!: number;
+  tong!: number;
   id!: any;
   checked!:boolean;
+  stt!: string;
 }
 
 @Component({
@@ -47,7 +46,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   soQd!: any;                                 // so quyet dinh
   vanBan!: any;                               // noi dung
   nguoiKy!: any;                              // nguoi ky
-
+  ghiChu!: string;
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -76,7 +75,16 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
   listIdFiles: string;                        // id file luc call chi tiet
-
+  tongCong: ItemData = {
+    id: "",
+    stt: "",
+    maNdung: "",
+    nguonNSNN: 0,
+    nguonKhac: 0,
+    tong: 0,
+    checked: true,
+  };
+  khoanMucs: any = KHOANMUCLIST;
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -117,6 +125,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
               private danhMucService: DanhMucHDVService,
               private userService: UserService,
               private notification: NzNotificationService,
+              private modal: NzModalService,
               ) {
               }
 
@@ -421,15 +430,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      duToan: 0,
-      giaTri: 0,
-      maDviTien: "",
-      maDviTinh: "",
-      maLoai: "",
-      maMatHang: "",
-      maNhom: "",
-      namThien: 0,
-      soLuong: 0,
+      stt: "",
+      maNdung: "",
+      nguonNSNN: 0,
+      nguonKhac: 0,
+      tong: 0,
       id: uuid.v4(),
       checked:false,
     }
@@ -561,10 +566,46 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     });
   }
 
-  //gia tri cac o input thay doi thi tinh toan lai
-  // changeModel(id: string): void {
-  //   this.editCache[id].data.clechTranChiVsNcauN1 = Number(this.editCache[id].data.ncauChiCuaDviN1) - Number(this.editCache[id].data.tranChiDuocTbN1);
-  //   this.editCache[id].data.clechTranChiVsNcauN2 = Number(this.editCache[id].data.ncauChiCuaDviN2) - Number(this.editCache[id].data.tranChiDuocTbN2);
-  //   this.editCache[id].data.clechTranChiVsNcauN3 = Number(this.editCache[id].data.ncauChiCuaDviN3) - Number(this.editCache[id].data.tranChiDuocTbN3);
-  // }
+  addKmuc() {
+    KHOANMUCLIST.forEach(item => item.status = false);
+    var danhSach = KHOANMUCLIST.filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
+
+    const modalIn = this.modal.create({
+         nzTitle: 'Danh sách khoản mục',
+         nzContent: DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
+         nzMaskClosable: false,
+         nzClosable: false,
+         nzWidth: '600px',
+         nzFooter: null,
+         nzComponentParams: {
+              danhSachKhoanMuc: danhSach
+         },
+    });
+    modalIn.afterClose.subscribe((res) => {
+         if (res) {
+              res.forEach(item => {
+                   if (item.status) {
+                        this.lstCTietBCao.push({
+                             id: uuid.v4(),
+                             stt: "",
+                             maNdung: item.maKmuc,
+                             nguonKhac: 0,
+                             nguonNSNN: 0,
+                             tong: 0,
+                             checked: false,
+                        });
+                   }
+              })
+              this.updateEditCache();
+         }
+    });
+}
+
+  changeTong(id: string): void {
+    let index = this.lstCTietBCao.findIndex(item => item.id == id);
+    this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
+    // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
+  }
+
+
 }
