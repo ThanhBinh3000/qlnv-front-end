@@ -18,7 +18,7 @@ const routes: Routes = [
     path: 'ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-chi-cuc',
     loadChildren: () =>
       import(
-        './chuc-nang-chi-cuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.module'
+        './chuc-nang-cuc-khu-vuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.module'
       ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamTuCCModule),
   },
   {
@@ -44,7 +44,13 @@ const routes: Routes = [
         './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
       ).then((m) => m.BaoCaoModule),
   },
-
+  {
+    path: 'tong-hop',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC.module'
+      ).then((m) => m.TongHopBCTinhHinhSuDungDuToanTuCCModule),
+  },
 ];
 
 @NgModule({
