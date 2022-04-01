@@ -236,6 +236,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           ? this.thongTinChiTieuKeHoachNam.trichYeu
           : null,
       ],
+      ghiChu: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.ghiChu
+          : null,
+        [Validators.required],
+      ],
     });
   }
 
@@ -385,8 +391,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         },
       });
       modalVatTu.afterClose.subscribe((vatTu) => {
-        console.log(vatTu);
-
         if (vatTu) {
           this.keHoachVatTuDialog = new KeHoachVatTu();
           this.keHoachVatTuDialog.tenDonVi = vatTu.value.tenDonVi;
@@ -1060,6 +1064,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.get('namKeHoach').value;
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
+    this.thongTinChiTieuKeHoachNam.ghiChu = this.formData.get('ghiChu').value;
 
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
@@ -1095,8 +1100,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         delete thietbi.tongNhap;
       });
     });
-    console.log('123: ', this.thongTinChiTieuKeHoachNamInput);
-
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)

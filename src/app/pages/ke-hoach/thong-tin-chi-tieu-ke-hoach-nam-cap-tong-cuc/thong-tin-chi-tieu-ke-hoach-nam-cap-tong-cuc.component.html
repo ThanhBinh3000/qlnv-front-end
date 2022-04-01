@@ -513,7 +513,7 @@
                       {{item.tenVatTu}}
                     </td>
                     <td>{{item.donViTinh}}</td>
-                    <td>{{item.tongNhap}}</td>
+                    <td>{{item.tongCacNamTruoc + item.nhapTrongNam}}</td>
                     <td>{{item.tongCacNamTruoc}}</td>
                     <td>{{item.cacNamTruoc[0].soLuong}}</td>
                     <td>{{item.cacNamTruoc[1].soLuong}}</td>
@@ -577,12 +577,25 @@
         </div>
       </div>
       <div class="ghi-chu">
-        <nz-form-label nzRequired [nzNoColon]="true">
-          Ghi chú
-        </nz-form-label>
-        <textarea rows="3" class="search__input" nz-input [(ngModel)]="thongTinChiTieuKeHoachNam.ghiChu"
-          [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' || thongTinChiTieuKeHoachNam.trangThai == '03'"
-          [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' || thongTinChiTieuKeHoachNam.trangThai == '03' ? 'disable' : ''"></textarea>
+        <form nz-form [formGroup]="formData" class="mt-16">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item class="form-item-ghi-chu">
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ghi chú
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+                  <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' || thongTinChiTieuKeHoachNam.trangThai == '03'"
+                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' || thongTinChiTieuKeHoachNam.trangThai == '03' ? 'disable' : ''"></textarea>
+                  <ng-template #soQDError let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
