@@ -52,7 +52,7 @@ export class ItemDanhSach {
   listIdDeletes!: string;
   listIdFiles!: string;
   maLoaiBcao!: string;
-
+  maPhanBcao: string = "0";
 
   stt!: String;
   checked!:boolean;

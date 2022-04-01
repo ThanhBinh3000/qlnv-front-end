@@ -478,24 +478,29 @@ export const LOAIBAOCAO =[
             id:10,
             tenDm:'Lãnh đạo yêu cầu điều chỉnh'
         },
+        {
+            id:11,
+            tenDm:'Chưa đánh giá'
+        },
     ]
 
     // trang thai chi tiet bao cao
     export	const OK = "1";
     export	const NOTOK = "0";
+    export	const CHUADANHGIA = "2";
 
     // loai trang thai gui don vi cap tren
     export const TRANGTHAIGUIDVCT =[
         {
-            id:1,
+            id:9,
             ten:'Chấp nhận'
         },
         {
-            id:2,
+            id:8,
             ten:'Không chấp nhận'
         },
         {
-            id:3,
+            id:11,
             ten:'Chưa đánh giá (để trống)'
         },
     ]
