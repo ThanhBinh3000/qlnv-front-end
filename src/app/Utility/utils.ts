@@ -487,15 +487,15 @@ export const LOAIBAOCAO =[
     // loai trang thai gui don vi cap tren
     export const TRANGTHAIGUIDVCT =[
         {
+            id:0,
+            ten:'Không chấp nhận'
+        },
+        {
             id:1,
             ten:'Chấp nhận'
         },
         {
             id:2,
-            ten:'Không chấp nhận'
-        },
-        {
-            id:3,
             ten:'Chưa đánh giá (để trống)'
         },
     ]
