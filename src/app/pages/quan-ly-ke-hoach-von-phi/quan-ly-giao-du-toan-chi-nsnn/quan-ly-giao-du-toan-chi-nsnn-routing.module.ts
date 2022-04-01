@@ -273,23 +273,6 @@ const routes: Routes = [
         './chuc-nang-cuc-khu-vuc/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan.module'
       ).then((m) => m.DsNhanGhiNhanThongTinPboDuAnModule),
   },
-  {
-    path: 'chon-khoan-muc',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/chon-khoan-muc/chon-khoan-muc.module'
-      ).then((m) => m.ChonKhoanMucModule),
-  },
-  {
-    path: 'chon-khoan-muc/:id',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/chon-khoan-muc/chon-khoan-muc.module'
-      ).then((m) => m.ChonKhoanMucModule),
-  },
-
-
-
 ];
 
 @NgModule({
