@@ -68,32 +68,17 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     {
       maDvi : "101",
       capDvi: "1.5",
-      tenDvi: "Phòng Tổng hợp - Thư ký",
+      tenDvi: "Phòng Tổng hợp",
     },
     {
       maDvi : "102",
       capDvi: "1.5",
-      tenDvi: "Phòng hành chính",
+      tenDvi: "Phòng Hành chính - Quản trị",
     },
     {
       maDvi : "103",
       capDvi: "1.5",
-      tenDvi: "Phòng Lưu trữ - Thư viện",
-    },
-    {
-      maDvi : "104",
-      capDvi: "1.5",
-      tenDvi: "Phòng Báo chí - Tuyên truyền",
-    },
-    {
-      maDvi : "105",
-      capDvi: "1.5",
-      tenDvi: "Cơ quan đại diện Văn phòng Bộ tài chính tại thành phố HCM",
-    },
-    {
-      maDvi : "106",
-      capDvi: "1.5",
-      tenDvi: "Phòng Cải cách hành chính và kiểm soát thủ tục tài chính",
+      tenDvi: "Phòng Tài chính - Kế toán",
     },
   ];
   tong: ItemData = {
