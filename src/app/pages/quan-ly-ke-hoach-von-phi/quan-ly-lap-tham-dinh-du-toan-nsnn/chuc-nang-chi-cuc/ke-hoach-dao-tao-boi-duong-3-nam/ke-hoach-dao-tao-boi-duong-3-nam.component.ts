@@ -53,11 +53,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
-  maBaoCao: string = QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N;                          // ma bao cao
+  maBaoCao!: string ;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
-  maDviTien: string = "";                   // ma don vi tien
+  maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N;                // nam bao cao
+  maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -80,6 +80,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   statusDvi: boolean;
 
@@ -126,11 +127,38 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.maBaoCao = '';
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
@@ -288,9 +316,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
-      maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maDvi: this.maDonViTao ,
+      maDviTien: this.maDviTien ,
+      maLoaiBcao : QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
@@ -436,7 +464,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       maLoai: '',
       maKhoan: '',
       maChiMuc: '',
-      maDvi: '',
+      maDvi!: this.maDonViTao,
       soLuotNguoiN1: 0,
       thanhTienN1: 0,
       soLuotNguoiN2: 0,
@@ -569,5 +597,26 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  //call tong hop
+  async calltonghop(){
+    this.spinner.show();
+    let objtonghop={
+        maDvi: this.maDonViTao,
+        maLoaiBcao: this.maLoaiBaoCao,
+        namHienTai: this.namBaoCaoHienHanh,
+    }
+    await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+        if(res.statusCode==0){
+            this.lstCTietBCao = res.data;
+        }else{
+            alert('co loi trong qua trinh van tin');
+        }
+    },err =>{
+        alert(err.error.message);
+    });
+    this.updateEditCache()
+    this.spinner.hide();
   }
 }

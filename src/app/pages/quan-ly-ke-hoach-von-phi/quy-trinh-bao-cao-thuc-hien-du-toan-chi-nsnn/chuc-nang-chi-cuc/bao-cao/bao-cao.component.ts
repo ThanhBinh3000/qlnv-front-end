@@ -20,13 +20,14 @@ import * as XLSX from 'xlsx';
 import * as uuid from "uuid";
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { OK, NOTOK } from 'src/app/Utility/utils';
+import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.constant';
 export class ItemData {
   id!: any;
-  maLoai!:number;
+  maLoai!: number;
   lstCTietBCao!: any;
   trangThai!: string;
-  
-  checked!:boolean;
+
+  checked!: boolean;
   tieuDe!: string;
   tenPhuLuc!: string;
 }
@@ -36,16 +37,18 @@ export class ItemDanhSach {
   maBcao!: String;
   namBcao!: Number;
   thangBcao!: Number;
-  trangThai!:string;
+  trangThai!: string;
   ngayTao!: string;
-  nguoiTao!:string;
-  maDviTien!:string;
-  maDvi:number;
-  congVan!:string;
-  ngayTrinh!:string;
-  ngayDuyet!:string;
-  ngayPheDuyet!:string;
-  ngayTraKq!:string;
+  nguoiTao!: string;
+  maDviTien!: string;
+  maDvi: number;
+  congVan!: string;
+  ngayTrinh!: string;
+  ngayDuyet!: string;
+  ngayPheDuyet!: string;
+  ngayTraKq!: string;
+
+  
 
   // dung cho request
   fileDinhKems!: any[];
@@ -55,7 +58,7 @@ export class ItemDanhSach {
   maPhanBcao: string = "0";
 
   stt!: String;
-  checked!:boolean;
+  checked!: boolean;
   lstBCao: ItemData[] = [];
   lstFile: any[] = [];
 }
@@ -104,18 +107,16 @@ export class ItemDataPL1 {
   luyKeGiaiNganNsttTle: number;
   luyKeGiaiNganCk: number;
   luyKeGiaiNganCkTle: number;
+  level!: number;
   id!: any;
-  parent!: number;
-  own!: number;
   stt!: any;
-  checked!:boolean;
+  checked!: boolean;
 }
 
 
 export class linkList {
   id: any;
   vt: number;
-  stt: any;
   maNdung: string;
   kphiSdungTcong: number;
   kphiSdungDtoan: number;
@@ -160,8 +161,6 @@ export class linkList {
   luyKeGiaiNganCk: number;
   luyKeGiaiNganCkTle: number;
   // listCtiet: vatTu[] = [];
-  parent: any;            // id cha no
-  own!: any;              // id chhinh no
   next: linkList[];
   checked: boolean;
 }
@@ -172,7 +171,7 @@ export class linkList {
   styleUrls: ['./bao-cao.component.scss']
 })
 export class BaoCaoComponent implements OnInit {
-
+  soLaMa: any = SOLAMA;
   baoCao: ItemDanhSach = new ItemDanhSach();
   totalElements = 0;
   totalPages = 0;
@@ -190,10 +189,10 @@ export class BaoCaoComponent implements OnInit {
 
   userInfo: any;
   noiDungs: any = [];                         // danh muc noi dung
-  nhomChis:any = [];                          // danh muc nhom chi
-  loaiChis:any = [];                          // danh muc loai chi
-  donVis:any = [];                            // danh muc don vi
-  donViTiens:any = [];                        // danh muc don vi tien
+  nhomChis: any = [];                          // danh muc nhom chi
+  loaiChis: any = [];                          // danh muc loai chi
+  donVis: any = [];                            // danh muc don vi
+  donViTiens: any = [];                        // danh muc don vi tien
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
@@ -206,8 +205,8 @@ export class BaoCaoComponent implements OnInit {
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
 
-  maDans: any=[];
-  ddiemXdungs: any=[];
+  maDans: any = [];
+  ddiemXdungs: any = [];
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -221,7 +220,7 @@ export class BaoCaoComponent implements OnInit {
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
-  allCheckedTemp  = false;                    // check all checkbox temp
+  allCheckedTemp = false;                    // check all checkbox temp
   indeterminateTemp = true;                   // properties allCheckBox temp
   editCache: { [key: string]: { edit: boolean; data: any } } = {};     // phuc vu nut chinh
   fileList: NzUploadFile[] = [];
@@ -246,7 +245,7 @@ export class BaoCaoComponent implements OnInit {
   ) {
   }
 
-  async ngOnInit(){
+  async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
@@ -274,9 +273,9 @@ export class BaoCaoComponent implements OnInit {
       PHULUCLIST.forEach(item => {
         this.baoCao.lstBCao.push({
           id: uuid.v4(),
-          checked:false,
+          checked: false,
           tieuDe: item.tieuDe,
-          maLoai:item.maPhuLuc,
+          maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
           trangThai: '1',
           lstCTietBCao: []
@@ -381,136 +380,120 @@ export class BaoCaoComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-// call chi tiet bao cao
-async getDetailReport() {
-  this.spinner.show();
-  await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
-    (data) => {
-      if (data.statusCode == 0) {
-        this.baoCao = data.data;
-        this.baoCao?.lstBCao?.forEach(item => {
-          let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
-          if(index !== -1){
-            item.tieuDe = PHULUCLIST[index].tieuDe;
-            item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+  // call chi tiet bao cao
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.baoCao = data.data;
+          this.baoCao?.lstBCao?.forEach(item => {
+            let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
+            if (index !== -1) {
+              item.tieuDe = PHULUCLIST[index].tieuDe;
+              item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+            }
+          })
+          this.baoCao?.lstBCao?.forEach((item) => {
+            if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
+              this.lstCTietBCaoPL1 = item?.lstCTietBCao;
+              this.lstCTietBCaoPL1.forEach(item => {
+                item.level = item.stt.split('.').length - 1;
+              })
+              this.getLinkList(this.chiTietBcaosPL1, "", 0);
+              this.updateSTT(this.chiTietBcaosPL1);
+              this.updateLstCTietBCaoPL1();
+            }
+          });
+
+          this.updateEditCache();
+          this.updateEditCachePL1();
+          this.lstFile = data.data.lstFile;
+
+          // set list id file ban dau
+          this.lstFile.filter(item => {
+            this.listIdFiles += item.id + ",";
+          })
+
+          if (this.baoCao.trangThai == '1' || this.baoCao.trangThai == '3' || this.baoCao.trangThai == '5' || this.baoCao.trangThai == '8') {
+            this.status = false;
+          } else {
+            this.status = true;
           }
-        })
-        this.baoCao?.lstBCao?.forEach((item) => {
-          if(item.maLoai == PHULUCLIST[0].maPhuLuc){
-            this.lstCTietBCaoPL1 = item?.lstCTietBCao;
-            item?.lstCTietBCao.filter(item1 =>{
-              this.transformToLinkList(item1);
-            })
-          }
-        });
-
-        this.updateEditCache();
-        this.updateEditCachePL1();
-        this.lstFile = data.data.lstFile;
-
-        // set list id file ban dau
-        this.lstFile.filter(item => {
-          this.listIdFiles += item.id + ",";
-        })
-
-        if (this.baoCao.trangThai == '1' || this.baoCao.trangThai == '3' || this.baoCao.trangThai == '5' || this.baoCao.trangThai == '8') {
-          this.status = false;
         } else {
-          this.status = true;
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-    },
-    (err) => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-    }
-  );
-  this.spinner.hide();
-}
+    );
+    this.spinner.hide();
+  }
 
-transformToLinkList(item: ItemDataPL1) {
-  var obj: linkList = {
-  id: item.id,
-  vt: item.own,
-  stt: item.stt,
-  maNdung: item.maNdung,
-  kphiSdungTcong: item.kphiSdungTcong,
-  kphiSdungDtoan: item.kphiSdungDtoan,
-  kphiSdungNguonKhac: item.kphiSdungNguonKhac,
-  kphiSdungNguonQuy: item.kphiSdungNguonQuy,
-  kphiSdungNstt: item.kphiSdungNstt,
-  kphiSdungCk: item.kphiSdungCk,
-  kphiChuyenSangTcong: item.kphiChuyenSangTcong,
-  kphiChuyenSangDtoan: item.kphiChuyenSangDtoan,
-  kphiChuyenSangNguonKhac: item.kphiChuyenSangNguonKhac,
-  kphiChuyenSangNguonQuy: item.kphiChuyenSangNguonQuy,
-  kphiChuyenSangNstt: item.kphiChuyenSangNstt,
-  kphiChuyenSangCk: item.kphiChuyenSangCk,
-  dtoanGiaoTcong: item.dtoanGiaoTcong,
-  dtoanGiaoDtoan: item.dtoanGiaoDtoan,
-  dtoanGiaoNguonKhac: item.dtoanGiaoNguonKhac,
-  dtoanGiaoNguonQuy: item.dtoanGiaoNguonQuy,
-  dtoanGiaoNstt: item.dtoanGiaoNstt,
-  dtoanGiaoCk: item.dtoanGiaoCk,
-  giaiNganThangBcaoTcong: item.giaiNganThangBcaoTcong,
-  giaiNganThangBcaoTcongTle: item.giaiNganThangBcaoTcongTle,
-  giaiNganThangBcaoDtoan: item.giaiNganThangBcaoDtoan,
-  giaiNganThangBcaoDtoanTle: item.giaiNganThangBcaoDtoanTle,
-  giaiNganThangBcaoNguonKhac: item.giaiNganThangBcaoNguonKhac,
-  giaiNganThangBcaoNguonKhacTle: item.giaiNganThangBcaoNguonKhacTle,
-  giaiNganThangBcaoNguonQuy: item.giaiNganThangBcaoNguonQuy,
-  giaiNganThangBcaoNguonQuyTle: item.giaiNganThangBcaoNguonQuyTle,
-  giaiNganThangBcaoNstt: item.giaiNganThangBcaoNstt,
-  giaiNganThangBcaoNsttTle: item.giaiNganThangBcaoNsttTle,
-  giaiNganThangBcaoCk: item.giaiNganThangBcaoCk,
-  giaiNganThangBcaoCkTle: item.giaiNganThangBcaoCkTle,
-  luyKeGiaiNganTcong: item.luyKeGiaiNganTcong,
-  luyKeGiaiNganTcongTle: item.luyKeGiaiNganTcongTle,
-  luyKeGiaiNganDtoan: item.luyKeGiaiNganDtoan,
-  luyKeGiaiNganDtoanTle: item.luyKeGiaiNganDtoanTle,
-  luyKeGiaiNganNguonKhac: item.luyKeGiaiNganNguonKhac,
-  luyKeGiaiNganNguonKhacTle: item.luyKeGiaiNganNguonKhacTle,
-  luyKeGiaiNganNguonQuy: item.luyKeGiaiNganNguonQuy,
-  luyKeGiaiNganNguonQuyTle: item.luyKeGiaiNganNguonQuyTle,
-  luyKeGiaiNganNstt: item.luyKeGiaiNganNstt,
-  luyKeGiaiNganNsttTle: item.luyKeGiaiNganNsttTle,
-  luyKeGiaiNganCk: item.luyKeGiaiNganCk,
-  luyKeGiaiNganCkTle: item.luyKeGiaiNganCkTle,
-  // listCtiet: vatTu[] = [];
-  parent: item.parent,
-  own : item.own,
-  next: [],
-  checked: false,
-  };
-  this.nho = false;
-  this.addToLinkList(this.chiTietBcaosPL1, obj);
-  if (!this.nho) {
-    this.chiTietBcaosPL1.next.forEach((item) => {
-      if (item.parent == obj.own) {
-        obj.next.push(item);
+  getLinkList(data: linkList, head: string, lvl: number) {
+    var lst: ItemDataPL1[] = [];
+    this.lstCTietBCaoPL1.forEach(item => {
+      if ((item.level == lvl) && (item.stt.indexOf(head) == 0)) {
+        lst.push(item);
       }
     });
-    obj.next = obj.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
-    obj.next.forEach((item) => {
-      let idx = this.chiTietBcaosPL1.next.findIndex((e) => e.vt == item.vt);
-      this.chiTietBcaosPL1.next.splice(idx, 1);
-    });
+    if (lst.length == 0) return;
+    lst.forEach(item => {
+      var obj: linkList = {
+        id: item.id,
+        vt: 0,
+        maNdung: item.maNdung,
+        kphiSdungTcong: item.kphiSdungTcong,
+        kphiSdungDtoan: item.kphiSdungDtoan,
+        kphiSdungNguonKhac: item.kphiSdungNguonKhac,
+        kphiSdungNguonQuy: item.kphiSdungNguonQuy,
+        kphiSdungNstt: item.kphiSdungNstt,
+        kphiSdungCk: item.kphiSdungCk,
+        kphiChuyenSangTcong: item.kphiChuyenSangTcong,
+        kphiChuyenSangDtoan: item.kphiChuyenSangDtoan,
+        kphiChuyenSangNguonKhac: item.kphiChuyenSangNguonKhac,
+        kphiChuyenSangNguonQuy: item.kphiChuyenSangNguonQuy,
+        kphiChuyenSangNstt: item.kphiChuyenSangNstt,
+        kphiChuyenSangCk: item.kphiChuyenSangCk,
+        dtoanGiaoTcong: item.dtoanGiaoTcong,
+        dtoanGiaoDtoan: item.dtoanGiaoDtoan,
+        dtoanGiaoNguonKhac: item.dtoanGiaoNguonKhac,
+        dtoanGiaoNguonQuy: item.dtoanGiaoNguonQuy,
+        dtoanGiaoNstt: item.dtoanGiaoNstt,
+        dtoanGiaoCk: item.dtoanGiaoCk,
+        giaiNganThangBcaoTcong: item.giaiNganThangBcaoTcong,
+        giaiNganThangBcaoTcongTle: item.giaiNganThangBcaoTcongTle,
+        giaiNganThangBcaoDtoan: item.giaiNganThangBcaoDtoan,
+        giaiNganThangBcaoDtoanTle: item.giaiNganThangBcaoDtoanTle,
+        giaiNganThangBcaoNguonKhac: item.giaiNganThangBcaoNguonKhac,
+        giaiNganThangBcaoNguonKhacTle: item.giaiNganThangBcaoNguonKhacTle,
+        giaiNganThangBcaoNguonQuy: item.giaiNganThangBcaoNguonQuy,
+        giaiNganThangBcaoNguonQuyTle: item.giaiNganThangBcaoNguonQuyTle,
+        giaiNganThangBcaoNstt: item.giaiNganThangBcaoNstt,
+        giaiNganThangBcaoNsttTle: item.giaiNganThangBcaoNsttTle,
+        giaiNganThangBcaoCk: item.giaiNganThangBcaoCk,
+        giaiNganThangBcaoCkTle: item.giaiNganThangBcaoCkTle,
+        luyKeGiaiNganTcong: item.luyKeGiaiNganTcong,
+        luyKeGiaiNganTcongTle: item.luyKeGiaiNganTcongTle,
+        luyKeGiaiNganDtoan: item.luyKeGiaiNganDtoan,
+        luyKeGiaiNganDtoanTle: item.luyKeGiaiNganDtoanTle,
+        luyKeGiaiNganNguonKhac: item.luyKeGiaiNganNguonKhac,
+        luyKeGiaiNganNguonKhacTle: item.luyKeGiaiNganNguonKhacTle,
+        luyKeGiaiNganNguonQuy: item.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganNguonQuyTle: item.luyKeGiaiNganNguonQuyTle,
+        luyKeGiaiNganNstt: item.luyKeGiaiNganNstt,
+        luyKeGiaiNganNsttTle: item.luyKeGiaiNganNsttTle,
+        luyKeGiaiNganCk: item.luyKeGiaiNganCk,
+        luyKeGiaiNganCkTle: item.luyKeGiaiNganCkTle,
+        // listCtiet: vatTu[] = [];
+        next: [],
+        checked: false,
+      };
+      this.getLinkList(obj, item.stt, lvl + 1);
+      data.next.push(obj);
+    })
   }
-}
-// let sortedCompany = company.sort((a, b) => (a.name < b.name) ? -1 : 1);
-
-addToLinkList(data: linkList, item: linkList) {
-  if (item.parent == data.vt) {
-    data.next.push(item);
-    data.next = data.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
-  }
-  data.next.forEach((e) => {
-    this.addToLinkList(e, item);
-  });
-  if (data.next.length == 0) return;
-}
-
 
   //set url khi
   setUrl(lbaocao: any) {
@@ -548,10 +531,10 @@ addToLinkList(data: linkList, item: linkList) {
       if (data.statusCode == 0) {
         this.getDetailReport();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -704,21 +687,21 @@ addToLinkList(data: linkList, item: linkList) {
   }
 
   // doi tab
-  changeTab(maPhuLuc){
+  changeTab(maPhuLuc) {
     this.tabSelected = maPhuLuc;
-   this.danhSachChiTietPhuLucTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
+    this.danhSachChiTietPhuLucTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
   }
 
-  changeModel(id){
+  changeModel(id) {
 
   }
-  changeModelPL1(id){
+  changeModelPL1(id) {
 
   }
-  changeModelPL2(id){
+  changeModelPL2(id) {
 
   }
-  changeModelPL3(id){
+  changeModelPL3(id) {
 
   }
 
@@ -738,20 +721,20 @@ addToLinkList(data: linkList, item: linkList) {
   // them dong moi
   addLine(id: number): void {
     let item;
-    if(this.tabSelected == TAB_SELECTED.phuLuc1){
+    if (this.tabSelected == TAB_SELECTED.phuLuc1) {
       item = {
         id: uuid.v4(),
-        checked:false,
+        checked: false,
       }
-    }else if(this.tabSelected == TAB_SELECTED.phuLuc2){
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
       item = {
         id: uuid.v4(),
-        checked:false,
+        checked: false,
       }
-    }else if(this.tabSelected == TAB_SELECTED.phuLuc3){
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
       item = {
         id: uuid.v4(),
-        checked:false,
+        checked: false,
       }
     }
     this.danhSachChiTietPhuLucTemp.splice(id, 0, item);
@@ -782,19 +765,19 @@ addToLinkList(data: linkList, item: linkList) {
   deleteSelected() {
     // add list delete id
     this.danhSachChiTietPhuLucTemp.filter(item => {
-      if(item.checked == true && typeof item.id == "number"){
+      if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.danhSachChiTietPhuLucTemp = this.danhSachChiTietPhuLucTemp.filter(item => item.checked != true )
+    this.danhSachChiTietPhuLucTemp = this.danhSachChiTietPhuLucTemp.filter(item => item.checked != true)
     this.allCheckedTemp = false;
   }
 
   // luu temp vao bang chinh
-  saveTemp(){
+  saveTemp() {
     this.baoCao?.lstBCao.forEach(item => {
-      if(item.maLoai == this.tabSelected){
+      if (item.maLoai == this.tabSelected) {
         item.lstCTietBCao = this.danhSachChiTietPhuLucTemp;
       }
     });
@@ -802,9 +785,9 @@ addToLinkList(data: linkList, item: linkList) {
   }
 
   // xoa phu luc
-  deletePhuLucList(){
+  deletePhuLucList() {
     this.baoCao.lstBCao = this.baoCao?.lstBCao.filter(item => item.checked == false);
-    if(this.baoCao?.lstBCao?.findIndex(item => item.maLoai == this.tabSelected) == -1){
+    if (this.baoCao?.lstBCao?.findIndex(item => item.maLoai == this.tabSelected) == -1) {
       this.tabSelected = null;
     }
     this.allChecked = false;
@@ -814,7 +797,7 @@ addToLinkList(data: linkList, item: linkList) {
   addPhuLuc() {
     PHULUCLIST.forEach(item => item.status = false);
     var danhSach = PHULUCLIST.filter(item => this.baoCao?.lstBCao?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
-    
+
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách phụ lục',
       nzContent: DialogLuaChonThemPhuLucComponent,
@@ -829,12 +812,12 @@ addToLinkList(data: linkList, item: linkList) {
     modalIn.afterClose.subscribe((res) => {
       if (res) {
         res.forEach(item => {
-          if(item.status){
+          if (item.status) {
             this.baoCao.lstBCao.push({
               id: uuid.v4(),
-              checked:false,
+              checked: false,
               tieuDe: item.tieuDe,
-              maLoai:item.maPhuLuc,
+              maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
               trangThai: '1',
               lstCTietBCao: []
@@ -901,7 +884,7 @@ addToLinkList(data: linkList, item: linkList) {
       item?.lstCTietBCao.filter(data => {
         if (typeof data.id != "number") {
           data.id = null;
-        } 
+        }
       })
     })
 
@@ -926,10 +909,10 @@ addToLinkList(data: linkList, item: linkList) {
     this.lstCTietBCaoPL1.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
-      } 
+      }
     })
     this.baoCao?.lstBCao.filter(item => {
-      if(item.maLoai == PHULUCLIST[0].maPhuLuc){
+      if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
         item.lstCTietBCao = this.lstCTietBCaoPL1;
       }
     })
@@ -958,7 +941,7 @@ addToLinkList(data: linkList, item: linkList) {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-      },err =>{
+      }, err => {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
@@ -967,10 +950,10 @@ addToLinkList(data: linkList, item: linkList) {
       if (!item.id) {
         item.id = uuid.v4();
       }
-      item?.lstCTietBCao.filter(item1 =>{
+      item?.lstCTietBCao.filter(item1 => {
         if (!item1.id) {
           item1.id = uuid.v4();
-        } 
+        }
       })
     });
     this.lstCTietBCaoPL1.filter(item => {
@@ -1006,11 +989,10 @@ addToLinkList(data: linkList, item: linkList) {
   }
 
   lstCTietBCaoPL1: ItemDataPL1[] = [];        // list chi tiet bao cao
-  
+
   chiTietBcaosPL1: linkList = {
     id: uuid.v4(),
     vt: 0,
-    stt: null,
     maNdung: '',
     kphiSdungTcong: null,
     kphiSdungDtoan: null,
@@ -1054,8 +1036,6 @@ addToLinkList(data: linkList, item: linkList) {
     luyKeGiaiNganNsttTle: null,
     luyKeGiaiNganCk: null,
     luyKeGiaiNganCkTle: null,
-    parent: null,
-    own: null,
     next: [],
     checked: false,
   };
@@ -1099,8 +1079,12 @@ addToLinkList(data: linkList, item: linkList) {
 
   // them dong moi phu luc 2
   addLinePL1(id: number): void {
-    let item : ItemDataPL1 = {
-      maNdung:"",
+    var lv: number = 0;
+    if (id > 0) {
+      lv = this.lstCTietBCaoPL1[id - 1].level;
+    }
+    let item: ItemDataPL1 = {
+      maNdung: "",
       kphiSdungTcong: 0,
       kphiSdungDtoan: 0,
       kphiSdungNguonKhac: 0,
@@ -1143,11 +1127,10 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganNsttTle: 0,
       luyKeGiaiNganCk: 0,
       luyKeGiaiNganCkTle: 0,
+      level: lv,
       stt: 0,
-      parent: null,
-      own: null,
       id: uuid.v4(),
-      checked:false,
+      checked: false,
     }
 
     this.lstCTietBCaoPL1.splice(id, 0, item);
@@ -1164,7 +1147,6 @@ addToLinkList(data: linkList, item: linkList) {
     var item: linkList = {
       id: uuid.v4(),
       vt: 0,
-      stt: this.editCachePL1[id].data.stt,
       maNdung: this.editCachePL1[id].data.maNdung,
       kphiSdungTcong: this.editCachePL1[id].data.kphiSdungTcong,
       kphiSdungDtoan: this.editCachePL1[id].data.kphiSdungDtoan,
@@ -1208,8 +1190,6 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganNsttTle: this.editCachePL1[id].data.luyKeGiaiNganNsttTle,
       luyKeGiaiNganCk: this.editCachePL1[id].data.luyKeGiaiNganCk,
       luyKeGiaiNganCkTle: this.editCachePL1[id].data.luyKeGiaiNganCkTle,
-      parent: this.editCachePL1[id].data.parent,
-      own: this.editCachePL1[id].data.own,
       next: [],
       checked: false,
     };
@@ -1231,7 +1211,7 @@ addToLinkList(data: linkList, item: linkList) {
     console.log(this.lstCTietBCaoPL1);
     this.disable = false;
   }
-  
+
   addLess(data: linkList, value: linkList, idx: number) {
     if (data.next.length == 0) return;
     var index = data.next.findIndex((item) => item.vt == idx);
@@ -1267,62 +1247,61 @@ addToLinkList(data: linkList, item: linkList) {
 
   updateLstCTietBCaoPL1() {
     this.lstCTietBCaoPL1 = [];
-    this.duyet(this.chiTietBcaosPL1, '', 0, 0);
+    this.duyet(this.chiTietBcaosPL1, '', 0, 0, -1);
     this.updateEditCachePL1();
   }
 
   //khoi tao
-  duyet(data: linkList, str: string, index: number, parent: number) {
+  duyet(data: linkList, str: string, index: number, parent: number, le: number) {
     if (index != 0) {
       let mm = {
         id: data.id,
         stt: str + index.toString(),
-        maNdung:data.maNdung,
-        kphiSdungTcong:data.kphiSdungTcong,
-        kphiSdungDtoan:data.kphiSdungDtoan,
-        kphiSdungNguonKhac:data.kphiSdungNguonKhac,
-        kphiSdungNguonQuy:data.kphiSdungNguonQuy,
-        kphiSdungNstt:data.kphiSdungNstt,
-        kphiSdungCk:data.kphiSdungCk,
-        kphiChuyenSangTcong:data.kphiChuyenSangTcong,
-        kphiChuyenSangDtoan:data.kphiChuyenSangDtoan,
-        kphiChuyenSangNguonKhac:data.kphiChuyenSangNguonKhac,
-        kphiChuyenSangNguonQuy:data.kphiChuyenSangNguonQuy,
-        kphiChuyenSangNstt:data.kphiChuyenSangNstt,
-        kphiChuyenSangCk:data.kphiChuyenSangCk,
-        dtoanGiaoTcong:data.dtoanGiaoTcong,
-        dtoanGiaoDtoan:data.dtoanGiaoDtoan,
-        dtoanGiaoNguonKhac:data.dtoanGiaoNguonKhac,
-        dtoanGiaoNguonQuy:data.dtoanGiaoNguonQuy,
-        dtoanGiaoNstt:data.dtoanGiaoNstt,
-        dtoanGiaoCk:data.dtoanGiaoCk,
-        giaiNganThangBcaoTcong:data.giaiNganThangBcaoTcong,
-        giaiNganThangBcaoTcongTle:data.giaiNganThangBcaoTcongTle,
-        giaiNganThangBcaoDtoan:data.giaiNganThangBcaoDtoan,
-        giaiNganThangBcaoDtoanTle:data.giaiNganThangBcaoDtoanTle,
-        giaiNganThangBcaoNguonKhac:data.giaiNganThangBcaoNguonKhac,
-        giaiNganThangBcaoNguonKhacTle:data.giaiNganThangBcaoNguonKhacTle,
-        giaiNganThangBcaoNguonQuy:data.giaiNganThangBcaoNguonQuy,
-        giaiNganThangBcaoNguonQuyTle:data.giaiNganThangBcaoNguonQuyTle,
-        giaiNganThangBcaoNstt:data.giaiNganThangBcaoNstt,
-        giaiNganThangBcaoNsttTle:data.giaiNganThangBcaoNsttTle,
-        giaiNganThangBcaoCk:data.giaiNganThangBcaoCk,
-        giaiNganThangBcaoCkTle:data.giaiNganThangBcaoCkTle,
-        luyKeGiaiNganTcong:data.luyKeGiaiNganTcong,
-        luyKeGiaiNganTcongTle:data.luyKeGiaiNganTcongTle,
-        luyKeGiaiNganDtoan:data.luyKeGiaiNganDtoan,
-        luyKeGiaiNganDtoanTle:data.luyKeGiaiNganDtoanTle,
-        luyKeGiaiNganNguonKhac:data.luyKeGiaiNganNguonKhac,
-        luyKeGiaiNganNguonKhacTle:data.luyKeGiaiNganNguonKhacTle,
-        luyKeGiaiNganNguonQuy:data.luyKeGiaiNganNguonQuy,
-        luyKeGiaiNganNguonQuyTle:data.luyKeGiaiNganNguonQuyTle,
-        luyKeGiaiNganNstt:data.luyKeGiaiNganNstt,
-        luyKeGiaiNganNsttTle:data.luyKeGiaiNganNsttTle,
-        luyKeGiaiNganCk:data.luyKeGiaiNganCk,
-        luyKeGiaiNganCkTle:data.luyKeGiaiNganCkTle,
+        maNdung: data.maNdung,
+        kphiSdungTcong: data.kphiSdungTcong,
+        kphiSdungDtoan: data.kphiSdungDtoan,
+        kphiSdungNguonKhac: data.kphiSdungNguonKhac,
+        kphiSdungNguonQuy: data.kphiSdungNguonQuy,
+        kphiSdungNstt: data.kphiSdungNstt,
+        kphiSdungCk: data.kphiSdungCk,
+        kphiChuyenSangTcong: data.kphiChuyenSangTcong,
+        kphiChuyenSangDtoan: data.kphiChuyenSangDtoan,
+        kphiChuyenSangNguonKhac: data.kphiChuyenSangNguonKhac,
+        kphiChuyenSangNguonQuy: data.kphiChuyenSangNguonQuy,
+        kphiChuyenSangNstt: data.kphiChuyenSangNstt,
+        kphiChuyenSangCk: data.kphiChuyenSangCk,
+        dtoanGiaoTcong: data.dtoanGiaoTcong,
+        dtoanGiaoDtoan: data.dtoanGiaoDtoan,
+        dtoanGiaoNguonKhac: data.dtoanGiaoNguonKhac,
+        dtoanGiaoNguonQuy: data.dtoanGiaoNguonQuy,
+        dtoanGiaoNstt: data.dtoanGiaoNstt,
+        dtoanGiaoCk: data.dtoanGiaoCk,
+        giaiNganThangBcaoTcong: data.giaiNganThangBcaoTcong,
+        giaiNganThangBcaoTcongTle: data.giaiNganThangBcaoTcongTle,
+        giaiNganThangBcaoDtoan: data.giaiNganThangBcaoDtoan,
+        giaiNganThangBcaoDtoanTle: data.giaiNganThangBcaoDtoanTle,
+        giaiNganThangBcaoNguonKhac: data.giaiNganThangBcaoNguonKhac,
+        giaiNganThangBcaoNguonKhacTle: data.giaiNganThangBcaoNguonKhacTle,
+        giaiNganThangBcaoNguonQuy: data.giaiNganThangBcaoNguonQuy,
+        giaiNganThangBcaoNguonQuyTle: data.giaiNganThangBcaoNguonQuyTle,
+        giaiNganThangBcaoNstt: data.giaiNganThangBcaoNstt,
+        giaiNganThangBcaoNsttTle: data.giaiNganThangBcaoNsttTle,
+        giaiNganThangBcaoCk: data.giaiNganThangBcaoCk,
+        giaiNganThangBcaoCkTle: data.giaiNganThangBcaoCkTle,
+        luyKeGiaiNganTcong: data.luyKeGiaiNganTcong,
+        luyKeGiaiNganTcongTle: data.luyKeGiaiNganTcongTle,
+        luyKeGiaiNganDtoan: data.luyKeGiaiNganDtoan,
+        luyKeGiaiNganDtoanTle: data.luyKeGiaiNganDtoanTle,
+        luyKeGiaiNganNguonKhac: data.luyKeGiaiNganNguonKhac,
+        luyKeGiaiNganNguonKhacTle: data.luyKeGiaiNganNguonKhacTle,
+        luyKeGiaiNganNguonQuy: data.luyKeGiaiNganNguonQuy,
+        luyKeGiaiNganNguonQuyTle: data.luyKeGiaiNganNguonQuyTle,
+        luyKeGiaiNganNstt: data.luyKeGiaiNganNstt,
+        luyKeGiaiNganNsttTle: data.luyKeGiaiNganNsttTle,
+        luyKeGiaiNganCk: data.luyKeGiaiNganCk,
+        luyKeGiaiNganCkTle: data.luyKeGiaiNganCkTle,
+        level: le,
         // listCtiet: data.listCtiet,
-        parent: parent,
-        own: data.vt,
         checked: false,
       };
       this.lstCTietBCaoPL1.push(mm);
@@ -1330,9 +1309,9 @@ addToLinkList(data: linkList, item: linkList) {
     if (data.next.length == 0) return;
     for (var i = 0; i < data.next.length; i++) {
       if (index == 0) {
-        this.duyet(data.next[i], str, i + 1, data.vt);
+        this.duyet(data.next[i], str, i + 1, data.vt, le + 1);
       } else {
-        this.duyet(data.next[i], str + index.toString() + '.', i + 1, data.vt);
+        this.duyet(data.next[i], str + index.toString() + '.', i + 1, data.vt, le + 1);
       }
     }
   }
@@ -1380,63 +1359,60 @@ addToLinkList(data: linkList, item: linkList) {
 
   tranferData(data: linkList, item: ItemDataPL1) {
     data.id = item.id;
-    data.maNdung= item.maNdung;
+    data.maNdung = item.maNdung;
 
-    data.kphiSdungTcong= item.kphiSdungTcong;
-    data.kphiSdungDtoan= item.kphiSdungDtoan;
-    data.kphiSdungNguonKhac= item.kphiSdungNguonKhac;
-    data.kphiSdungNguonQuy= item.kphiSdungNguonQuy;
-    data.kphiSdungNstt= item.kphiSdungNstt;
-    data.kphiSdungCk= item.kphiSdungCk;
+    data.kphiSdungTcong = item.kphiSdungTcong;
+    data.kphiSdungDtoan = item.kphiSdungDtoan;
+    data.kphiSdungNguonKhac = item.kphiSdungNguonKhac;
+    data.kphiSdungNguonQuy = item.kphiSdungNguonQuy;
+    data.kphiSdungNstt = item.kphiSdungNstt;
+    data.kphiSdungCk = item.kphiSdungCk;
 
-    data.kphiChuyenSangTcong= item.kphiChuyenSangTcong;
-    data.kphiChuyenSangDtoan= item.kphiChuyenSangDtoan;
-    data.kphiChuyenSangNguonKhac= item.kphiChuyenSangNguonKhac;
-    data.kphiChuyenSangNguonQuy= item.kphiChuyenSangNguonQuy;
-    data.kphiChuyenSangNstt= item.kphiChuyenSangNstt;
-    data.kphiChuyenSangCk= item.kphiChuyenSangCk;
+    data.kphiChuyenSangTcong = item.kphiChuyenSangTcong;
+    data.kphiChuyenSangDtoan = item.kphiChuyenSangDtoan;
+    data.kphiChuyenSangNguonKhac = item.kphiChuyenSangNguonKhac;
+    data.kphiChuyenSangNguonQuy = item.kphiChuyenSangNguonQuy;
+    data.kphiChuyenSangNstt = item.kphiChuyenSangNstt;
+    data.kphiChuyenSangCk = item.kphiChuyenSangCk;
 
-    data.dtoanGiaoTcong= item.dtoanGiaoTcong;
-    data.dtoanGiaoDtoan= item.dtoanGiaoDtoan;
-    data.dtoanGiaoNguonKhac= item.dtoanGiaoNguonKhac;
-    data.dtoanGiaoNguonQuy= item.dtoanGiaoNguonQuy;
-    data.dtoanGiaoNstt= item.dtoanGiaoNstt;
-    data.dtoanGiaoCk= item.dtoanGiaoCk;
+    data.dtoanGiaoTcong = item.dtoanGiaoTcong;
+    data.dtoanGiaoDtoan = item.dtoanGiaoDtoan;
+    data.dtoanGiaoNguonKhac = item.dtoanGiaoNguonKhac;
+    data.dtoanGiaoNguonQuy = item.dtoanGiaoNguonQuy;
+    data.dtoanGiaoNstt = item.dtoanGiaoNstt;
+    data.dtoanGiaoCk = item.dtoanGiaoCk;
 
-    data.giaiNganThangBcaoTcong= item.giaiNganThangBcaoTcong;
-    data.giaiNganThangBcaoTcongTle= item.giaiNganThangBcaoTcongTle;
-    data.giaiNganThangBcaoDtoan= item.giaiNganThangBcaoDtoan;
-    data.giaiNganThangBcaoDtoanTle= item.giaiNganThangBcaoDtoanTle;
-    data.giaiNganThangBcaoNguonKhac= item.giaiNganThangBcaoNguonKhac;
-    data.giaiNganThangBcaoNguonKhacTle= item.giaiNganThangBcaoNguonKhacTle;
-    data.giaiNganThangBcaoNguonQuy= item.giaiNganThangBcaoNguonQuy;
-    data.giaiNganThangBcaoNguonQuyTle= item.giaiNganThangBcaoNguonQuyTle;
-    data.giaiNganThangBcaoNstt= item.giaiNganThangBcaoNstt;
-    data.giaiNganThangBcaoNsttTle= item.giaiNganThangBcaoNsttTle;
-    data.giaiNganThangBcaoCk= item.giaiNganThangBcaoCk;
-    data.giaiNganThangBcaoCkTle= item.giaiNganThangBcaoCkTle;
+    data.giaiNganThangBcaoTcong = item.giaiNganThangBcaoTcong;
+    data.giaiNganThangBcaoTcongTle = item.giaiNganThangBcaoTcongTle;
+    data.giaiNganThangBcaoDtoan = item.giaiNganThangBcaoDtoan;
+    data.giaiNganThangBcaoDtoanTle = item.giaiNganThangBcaoDtoanTle;
+    data.giaiNganThangBcaoNguonKhac = item.giaiNganThangBcaoNguonKhac;
+    data.giaiNganThangBcaoNguonKhacTle = item.giaiNganThangBcaoNguonKhacTle;
+    data.giaiNganThangBcaoNguonQuy = item.giaiNganThangBcaoNguonQuy;
+    data.giaiNganThangBcaoNguonQuyTle = item.giaiNganThangBcaoNguonQuyTle;
+    data.giaiNganThangBcaoNstt = item.giaiNganThangBcaoNstt;
+    data.giaiNganThangBcaoNsttTle = item.giaiNganThangBcaoNsttTle;
+    data.giaiNganThangBcaoCk = item.giaiNganThangBcaoCk;
+    data.giaiNganThangBcaoCkTle = item.giaiNganThangBcaoCkTle;
 
-    data.luyKeGiaiNganTcong= item.luyKeGiaiNganTcong;
-    data.luyKeGiaiNganTcongTle= item.luyKeGiaiNganTcongTle;
-    data.luyKeGiaiNganDtoan= item.luyKeGiaiNganDtoan;
-    data.luyKeGiaiNganDtoanTle= item.luyKeGiaiNganDtoanTle;
-    data.luyKeGiaiNganNguonKhac= item.luyKeGiaiNganNguonKhac;
-    data.luyKeGiaiNganNguonKhacTle= item.luyKeGiaiNganNguonKhacTle;
-    data.luyKeGiaiNganNguonQuy= item.luyKeGiaiNganNguonQuy;
-    data.luyKeGiaiNganNguonQuyTle= item.luyKeGiaiNganNguonQuyTle;
-    data.luyKeGiaiNganNstt= item.luyKeGiaiNganNstt;
-    data.luyKeGiaiNganNsttTle= item.luyKeGiaiNganNsttTle;
-    data.luyKeGiaiNganCk= item.luyKeGiaiNganCk;
-    data.luyKeGiaiNganCkTle= item.luyKeGiaiNganCkTle;
-    data.parent = item.parent;
-    data.own = item.own;
+    data.luyKeGiaiNganTcong = item.luyKeGiaiNganTcong;
+    data.luyKeGiaiNganTcongTle = item.luyKeGiaiNganTcongTle;
+    data.luyKeGiaiNganDtoan = item.luyKeGiaiNganDtoan;
+    data.luyKeGiaiNganDtoanTle = item.luyKeGiaiNganDtoanTle;
+    data.luyKeGiaiNganNguonKhac = item.luyKeGiaiNganNguonKhac;
+    data.luyKeGiaiNganNguonKhacTle = item.luyKeGiaiNganNguonKhacTle;
+    data.luyKeGiaiNganNguonQuy = item.luyKeGiaiNganNguonQuy;
+    data.luyKeGiaiNganNguonQuyTle = item.luyKeGiaiNganNguonQuyTle;
+    data.luyKeGiaiNganNstt = item.luyKeGiaiNganNstt;
+    data.luyKeGiaiNganNsttTle = item.luyKeGiaiNganNsttTle;
+    data.luyKeGiaiNganCk = item.luyKeGiaiNganCk;
+    data.luyKeGiaiNganCkTle = item.luyKeGiaiNganCkTle;
   }
 
   saveEdit1(id: string, index: number): void {
     var item: linkList = {
       id: uuid.v4(),
       vt: 0,
-      stt: this.editCachePL1[id].data.stt,
       maNdung: this.editCachePL1[id].data.maNdung,
       kphiSdungTcong: this.editCachePL1[id].data.kphiSdungTcong,
       kphiSdungDtoan: this.editCachePL1[id].data.kphiSdungDtoan,
@@ -1480,8 +1456,6 @@ addToLinkList(data: linkList, item: linkList) {
       luyKeGiaiNganNsttTle: this.editCachePL1[id].data.luyKeGiaiNganNsttTle,
       luyKeGiaiNganCk: this.editCachePL1[id].data.luyKeGiaiNganCk,
       luyKeGiaiNganCkTle: this.editCachePL1[id].data.luyKeGiaiNganCkTle,
-      parent: this.editCachePL1[id].data.parent,
-      own: this.editCachePL1[id].data.own,
       next: [],
       checked: false,
     };
@@ -1554,10 +1528,10 @@ addToLinkList(data: linkList, item: linkList) {
     }
   }
 
-  getListIdDelete(data: linkList){
-    if(data.vt>0){
-      if (typeof this.lstCTietBCaoPL1[data.vt-1].id == 'number'){
-        this.listIdDelete += this.lstCTietBCaoPL1[data.vt-1].id + ',';
+  getListIdDelete(data: linkList) {
+    if (data.vt > 0) {
+      if (typeof this.lstCTietBCaoPL1[data.vt - 1].id == 'number') {
+        this.listIdDelete += this.lstCTietBCaoPL1[data.vt - 1].id + ',';
       }
     }
 
@@ -1580,13 +1554,13 @@ addToLinkList(data: linkList, item: linkList) {
   }
 
   // lay ten trang thai ban ghi
-  getStatusName(id){
+  getStatusName(id) {
     const utils = new Utils();
     return utils.getStatusName(id);
   }
 
   //show popup tu choi
-  tuChoi(mcn:string) {
+  tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -1598,17 +1572,17 @@ addToLinkList(data: linkList, item: linkList) {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn,text);
+        this.onSubmit(mcn, text);
       }
     });
   }
 
 
   //show popup tu choi
-  pheDuyetChiTiet(mcn:string) {
-    if(mcn == OK){
-      this.onSubmit(mcn,null);
-    }else if(mcn == NOTOK){
+  pheDuyetChiTiet(mcn: string) {
+    if (mcn == OK) {
+      this.onSubmit(mcn, null);
+    } else if (mcn == NOTOK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
         nzContent: DialogTuChoiComponent,
@@ -1620,9 +1594,44 @@ addToLinkList(data: linkList, item: linkList) {
       });
       modalTuChoi.afterClose.subscribe(async (text) => {
         if (text) {
-          this.onSubmit(mcn,text);
+          this.onSubmit(mcn, text);
         }
       });
     }
+  }
+
+  //lay ra chi muc chi tung dong
+  getChiMuc(str: string): string {
+    var xau: string = "";
+    let chiSo: any = str.split('.');
+    var n: number = chiSo.length - 1;
+    var k: number = parseInt(chiSo[n], 10);
+    if (n == 0) { 
+      for (var i = 0; i < this.soLaMa.length; i++) {
+        while (k >= this.soLaMa[i].gTri) {
+          xau += this.soLaMa[i].kyTu;
+          k -= this.soLaMa[i].gTri;
+        }
+      }
+    };
+    SOLAMA
+    if (n == 1) {
+      xau = chiSo[n];
+    };
+    if (n == 2) {
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    };
+    if (n == 3) {
+      xau = String.fromCharCode(k + 96);
+    }
+    if (n == 4) {
+      xau = "-";
+    }
+    return xau;
+  }
+
+  // xac dinh da xuong toi cap toi da chua
+  lessThan(level: number): boolean {
+    return level > 3;
   }
 }

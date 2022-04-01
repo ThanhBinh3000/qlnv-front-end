@@ -235,12 +235,12 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  <td [hidden]="statusDvi">
-                                                       <div *ngFor="let item of cucKhuVucs">
-                                                            <div *ngIf="item.maDvi == data.maDvi">
-                                                                 {{item.tenDvi}}
-                                                            </div>
-                                                       </div>
+                                                  <td>
+                                                    <div *ngFor="let item of cucKhuVucs">
+                                                         <div *ngIf="item.maDvi == data.maDvi">
+                                                              {{item.tenDvi}}
+                                                         </div>
+                                                    </div>
                                                   </td>
                                                   <td>{{ data.soLuotNguoiN1 }}</td>
                                                   <td>{{ data.thanhTienN1 }}</td>
@@ -289,13 +289,13 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  <td [hidden]="statusDvi">
-                                                       <nz-select nzShowSearch nzAllowClear
-                                                            nzPlaceHolder="Chọn đơn vị"
-                                                            [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
-                                                                 [nzLabel]="item.tenDvi"></nz-option>
-                                                       </nz-select>
+                                                  <td >
+                                                    <nz-select nzShowSearch nzAllowClear
+                                                         nzPlaceHolder="Chọn đơn vị"
+                                                         [(ngModel)]="editCache[data.id].data.maDvi">
+                                                         <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi"
+                                                              [nzLabel]="item.tenDvi"></nz-option>
+                                                    </nz-select>
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input

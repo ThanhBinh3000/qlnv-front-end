@@ -122,7 +122,7 @@ export class TongHopComponent implements OnInit {
       case '14':
           this.url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
           break;
-      case 314:
+      case '32':
           this.url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc';
           break;
       case '16':
@@ -175,6 +175,9 @@ export class TongHopComponent implements OnInit {
         break;
       case '06':
         this.url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam';
+        break;
+      case '15':
+        this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
         break;
       default:
         break;

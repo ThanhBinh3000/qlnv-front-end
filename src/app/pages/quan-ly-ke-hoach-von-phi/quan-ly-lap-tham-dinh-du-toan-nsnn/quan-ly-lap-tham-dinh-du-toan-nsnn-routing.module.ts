@@ -141,6 +141,13 @@ const routes: Routes = [
       ).then((m) => m.KeHoachDaoTaoBoiDuong3NamModule),
   },
   {
+    path: 'ke-hoach-dao-tao-boi-duong-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ke-hoach-dao-tao-boi-duong-3-nam/ke-hoach-dao-tao-boi-duong-3-nam.module'
+      ).then((m) => m.KeHoachDaoTaoBoiDuong3NamModule),
+  },
+  {
     path:'ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam',
     loadChildren: () =>
       import(
