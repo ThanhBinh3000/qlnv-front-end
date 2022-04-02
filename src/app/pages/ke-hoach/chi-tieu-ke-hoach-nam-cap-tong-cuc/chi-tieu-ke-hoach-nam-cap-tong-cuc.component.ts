@@ -42,7 +42,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -97,6 +97,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   async search() {
     let maDonVi = null;
     let tenDvi = null;
+    let donviId = null;
     this.dataTable = [];
 
     if (this.inputDonVi && this.inputDonVi.length > 0) {
@@ -106,6 +107,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       if (getDonVi && getDonVi.length > 0) {
         maDonVi = getDonVi[0].maDvi;
         tenDvi = getDonVi[0].tenDvi;
+        donviId = getDonVi[0].id;
       }
     }
     let body = {
@@ -113,7 +115,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
       id: 0,
-      donViId: maDonVi,
+      donViId: donviId,
       tenDvi: tenDvi,
       pageNumber: this.page,
       pageSize: this.pageSize,

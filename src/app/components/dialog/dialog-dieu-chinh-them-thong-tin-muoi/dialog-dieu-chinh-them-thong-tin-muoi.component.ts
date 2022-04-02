@@ -257,10 +257,10 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
 
     this.data.tenDonVi = this.selectedDonVi.tenDvi;
     this.data.maDonVi = this.selectedDonVi.maDvi;
-    this.data.donViId = this.selectedDonVi.donViId;
+    this.data.donViId = this.selectedDonVi.donViId ?? this.selectedDonVi.id;
     this.data.khGaoId = this.data ? this.data.khGaoId : null;
     this.data.khThocId = this.data ? this.data.khThocId : null;
-    this.data.donViTinh = this.data ? this.data.donViTinh : null;
+    this.data.donViTinh = "Tấn";
 
     //ton kho dau nam
     const tkdnMuoi1 = {

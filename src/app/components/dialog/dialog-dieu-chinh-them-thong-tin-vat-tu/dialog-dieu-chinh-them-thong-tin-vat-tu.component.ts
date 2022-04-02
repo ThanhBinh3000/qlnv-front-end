@@ -321,7 +321,7 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
 
     this.data.tenDonVi = this.selectedDonVi.tenDvi;
     this.data.maDonVi = this.selectedDonVi.maDvi;
-    this.data.donViId = this.selectedDonVi.id;
+    this.data.donViId = this.selectedDonVi.donViId ?? this.selectedDonVi.id;
     this.data.donViTinh = this.donViTinhModel;
 
     this.data.vatTuThietBi = [];
