@@ -1,16 +1,15 @@
-import { saveAs } from 'file-saver';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
-import * as XLSX from 'xlsx';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -158,12 +157,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
-      return "Đã duyệt";
-    }
-    else {
-      return "Chưa duyệt";
-    }
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {

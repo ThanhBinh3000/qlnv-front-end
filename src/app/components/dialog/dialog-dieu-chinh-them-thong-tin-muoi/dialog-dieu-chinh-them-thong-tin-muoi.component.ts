@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
 import { DonviService } from 'src/app/services/donvi.service';
+import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 
 @Component({
   selector: 'dialog-dieu-chinh-them-thong-tin-muoi',
@@ -48,6 +49,8 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
   errorDonVi: boolean = false;
 
   data: any = null;
+  qdGocId: number = 0;
+
   thocIdDefault: number = 2;
   gaoIdDefault: number = 6;
   muoiIdDefault: number = 78;
@@ -58,16 +61,18 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
     private donViService: DonviService,
+    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.loadDonVi();
-      this.loadChiTiet();
+      await Promise.all([
+        this.loadDonVi(),
+        this.loadChiTiet(),
+      ]);
       this.spinner.hide();
     }
     catch (e) {
@@ -77,7 +82,7 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
     }
   }
 
-  loadChiTiet() {
+  async loadChiTiet() {
     this.isEdit = false;
     if (this.data) {
       this.isEdit = true;
@@ -85,6 +90,7 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
       this.selectedDonVi.maDvi = this.data.maDonVi;
       this.selectedDonVi.donViId = this.data.donViId;
       this.inputDonVi = this.data.tenDonvi ?? this.data.tenDonVi;
+      await this.getSoLuongTruocDieuChinh(this.selectedDonVi.donViId);
 
       this.data.tkdnMuoi.forEach(element => {
         switch (element.nam) {
@@ -105,7 +111,6 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
       this.data.xtnMuoi.forEach(element => {
         switch (element.nam) {
           case (this.yearNow - 1):
-            this.xuatSLMuoiTruoc3 = 10;
             if (this.xuatSLMuoiTruoc3 - element.soLuong > 0) {
               this.xuatSLMuoiGiam3 = this.xuatSLMuoiTruoc3 - element.soLuong;
             }
@@ -114,7 +119,6 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
             }
             break;
           case (this.yearNow - 2):
-            this.xuatSLMuoiTruoc2 = 10;
             if (this.xuatSLMuoiTruoc2 - element.soLuong > 0) {
               this.xuatSLMuoiGiam2 = this.xuatSLMuoiTruoc2 - element.soLuong;
             }
@@ -123,7 +127,6 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
             }
             break;
           case (this.yearNow - 3):
-            this.xuatSLMuoiTruoc1 = 10;
             if (this.xuatSLMuoiTruoc1 - element.soLuong > 0) {
               this.xuatSLMuoiGiam1 = this.xuatSLMuoiTruoc1 - element.soLuong;
             }
@@ -136,7 +139,6 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
         }
       });
 
-      this.slMuoiTruocDieuChinh = 10;
       if (this.data.ntnTongSoMuoi && this.data.ntnTongSoMuoi - this.slMuoiTruocDieuChinh > 0) {
         this.slMuoiTang = this.data.ntnTongSoMuoi - this.slMuoiTruocDieuChinh;
       }
@@ -173,10 +175,73 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
     }
   }
 
-  selectDonVi(donVi) {
+  async selectDonVi(donVi) {
     this.errorDonVi = false;
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
+    await this.getSoLuongTruocDieuChinh(this.selectedDonVi.id);
+  }
+
+  async getSoLuongTruocDieuChinh(donviId: number) {
+    this.spinner.show();
+    try {
+      let body = {
+        "donViId": donviId,
+        "ctkhnId": this.qdGocId,
+        "vatTuIds": [this.muoiIdDefault]
+      }
+      let data = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(body);
+      if (data && data.msg == MESSAGE.SUCCESS) {
+        if (data.data && data.data.tonKhoDauNam && data.data.tonKhoDauNam.length > 0) {
+          data.data.tonKhoDauNam.forEach((tonKho) => {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1):
+                this.slMuoi3 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 2):
+                this.slMuoi2 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 3):
+                this.slMuoi1 = tonKho.soLuong;
+                break;
+              default:
+                break;
+            }
+          });
+        }
+        if (data.data && data.data.nhapTrongNam && data.data.nhapTrongNam.length > 0) {
+          data.data.nhapTrongNam.forEach((tonKho) => {
+            this.slMuoiTruocDieuChinh = tonKho.soLuong;
+          });
+        }
+        if (data.data && data.data.xuatTrongNam && data.data.xuatTrongNam.length > 0) {
+          data.data.xuatTrongNam.forEach((tonKho) => {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1):
+                this.xuatSLMuoiTruoc3 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 2):
+                this.xuatSLMuoiTruoc2 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 3):
+                this.xuatSLMuoiTruoc1 = tonKho.soLuong;
+                break;
+              default:
+                break;
+            }
+          });
+        }
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, data.msg);
+      }
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   handleOk() {

@@ -170,12 +170,12 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     }
   }
 
-  selectDonVi(donVi) {
+  async selectDonVi(donVi) {
     this.errorDonVi = false;
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
     if (this.selectedHangHoa && this.selectedHangHoa.ma) {
-      this.getSoLuongTruocDieuChinh();
+      await this.getSoLuongTruocDieuChinh();
     }
   }
 
@@ -238,13 +238,13 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     }
   }
 
-  selectHangHoa(vatTu: any) {
+  async selectHangHoa(vatTu: any) {
     this.errorMaHangHoa = false;
     this.selectedHangHoa = vatTu;
     this.maHangHoa = vatTu.ma;
     this.tenHangHoa = vatTu.ten;
     if (this.selectedDonVi && this.selectedDonVi.maDvi) {
-      this.getSoLuongTruocDieuChinh();
+      await this.getSoLuongTruocDieuChinh();
     }
   }
 
@@ -257,22 +257,48 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
   }
 
   async getSoLuongTruocDieuChinh() {
-    // this.spinner.show();
-    // try {
-    //   let body = {
-    //     "donViId": this.selectedDonVi.id,
-    //     "ctkhnId": this.qdGocId,
-    //     "vatTuIds": [this.selectedHangHoa.id]
-    //   }
-    //   let data = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(body);
-    //   console.log(data);
-    //   this.spinner.hide();
-    // }
-    // catch (e) {
-    //   console.log('error: ', e);
-    //   this.spinner.hide();
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // }
+    this.spinner.show();
+    try {
+      let body = {
+        "donViId": this.selectedDonVi.id,
+        "ctkhnId": this.qdGocId,
+        "vatTuIds": [this.selectedHangHoa.id]
+      }
+      let data = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(body);
+      if (data && data.msg == MESSAGE.SUCCESS) {
+        if (data.data && data.data.keHoachVatTuNamTruoc && data.data.keHoachVatTuNamTruoc.length > 0) {
+          data.data.keHoachVatTuNamTruoc.forEach((tonKho) => {
+            switch (tonKho.nam) {
+              case (this.yearNow - 1):
+                this.soLuongTheoNam3 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 2):
+                this.soLuongTheoNam2 = tonKho.soLuong;
+                break;
+              case (this.yearNow - 3):
+                this.soLuongTheoNam1 = tonKho.soLuong;
+                break;
+              default:
+                break;
+            }
+          });
+        }
+        if (data.data && data.data.nhapTrongNam && data.data.nhapTrongNam.length > 0) {
+          data.data.nhapTrongNam.forEach((tonKho) => {
+            this.soLuongTruoc = tonKho.soLuong;
+          });
+        }
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, data.msg);
+      }
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   handleOk() {

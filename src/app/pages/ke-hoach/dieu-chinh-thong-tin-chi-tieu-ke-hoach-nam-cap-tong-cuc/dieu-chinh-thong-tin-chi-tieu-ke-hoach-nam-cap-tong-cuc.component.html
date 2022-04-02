@@ -8,23 +8,22 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [disabled]="!formData.valid">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)" [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          [disabled]="!formData.valid"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03'">
+          [disabled]="!formData.valid" *ngIf="dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '01'">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '01'">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -56,8 +55,8 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Số QĐ </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
-                  <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
-                    <input class="search__input" nz-input formControlName="soQD" />
+                  <nz-input-group [nzAddOnAfter]="qdTCDT">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD" [nzMin]="0"></nz-input-number>
                   </nz-input-group>
                   <ng-template #soQDError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -861,6 +860,37 @@
                         </tr>
                       </ng-container>
                     </ng-container>
+                    <tr *ngIf="groupingTableVatTuSau?.data?.length > 0">
+                      <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                      <td class="background-last-row">
+                      </td>
+                      <td class="background-last-row">
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 2, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 3, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 4, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 5, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 6, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                      <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 7, 3,
+                        ',','table-vat-tu-tong-hop') : 0 |
+                        number: '1.0-1'}}
+                      </td>
+                    </tr>
                   </tbody>
                 </nz-table>
               </nz-card>

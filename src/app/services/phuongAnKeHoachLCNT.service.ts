@@ -23,4 +23,9 @@ export class PhuongAnKeHoachLCNTService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/tra-cuu/ds-chua-qd`
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
+    return this.httpClient.delete(url).toPromise();
+  }
 }
