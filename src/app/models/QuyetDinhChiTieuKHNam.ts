@@ -13,4 +13,5 @@ export class QuyetDinhChiTieuKHNam {
     trichYeu: string;
     ghiChu: string;
     trangThai: string;
+    tenTrangThai: string;
 }

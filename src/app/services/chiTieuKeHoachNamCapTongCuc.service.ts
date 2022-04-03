@@ -35,6 +35,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ += 'pageNumber=' + encodeURIComponent('' + body.pageNumber) + '&';
     if (body.pageSize)
       url_ += 'pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }

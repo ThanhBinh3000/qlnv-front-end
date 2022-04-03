@@ -439,6 +439,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu && this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.length > 0) {
                   for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.length; i++) {
                     this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[i].id = null;
+                    if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[i].vatTuThietBi && this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[i].vatTuThietBi.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[i].vatTuThietBi.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu[i].vatTuThietBi[j].id = null;
+                      }
+                    }
                   }
                 }
                 this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu = this.updateDataListVatTu(this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu);

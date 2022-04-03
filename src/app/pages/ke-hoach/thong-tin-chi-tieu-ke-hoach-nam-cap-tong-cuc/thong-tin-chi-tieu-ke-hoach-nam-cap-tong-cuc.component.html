@@ -131,7 +131,8 @@
         </nz-tabset>
         <div id="table-luong-thuc"
           [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTable [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body">
+          <nz-table #groupingTable [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body"
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th rowspan="4">STT</th>
@@ -344,7 +345,8 @@
         </div>
         <div id="table-muoi"
           [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTableMuoi [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body">
+          <nz-table #groupingTableMuoi [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body"
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th rowspan="3">STT</th>
@@ -471,7 +473,8 @@
         </div>
         <div id="table-vat-tu"
           [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTableVatTu [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body">
+          <nz-table #groupingTableVatTu [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body"
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th rowspan="3">STT</th>

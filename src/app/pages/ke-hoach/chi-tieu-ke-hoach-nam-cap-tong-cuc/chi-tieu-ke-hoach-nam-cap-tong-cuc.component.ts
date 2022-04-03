@@ -98,8 +98,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
-    this.dataTable = [];
-
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(
         (x) => x.labelDonVi == this.inputDonVi,
@@ -125,14 +123,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    this.totalRecord = 0;
-
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

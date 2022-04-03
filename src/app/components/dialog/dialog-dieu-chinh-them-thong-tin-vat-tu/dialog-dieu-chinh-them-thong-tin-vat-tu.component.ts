@@ -317,7 +317,7 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
     if (!this.data) {
       this.data = new KeHoachVatTu();
     }
-    let nhapTrongNam = (this.soLuongTruoc ?? 0) + (this.soLuongTang ?? 0) - (this.soLuongGiam ?? 0)
+    let nhapTrongNam = (this.soLuongTruoc ?? 0) + (this.soLuongTang ?? 0) - (this.soLuongGiam ?? 0);
 
     this.data.tenDonVi = this.selectedDonVi.tenDvi;
     this.data.maDonVi = this.selectedDonVi.maDvi;
@@ -365,7 +365,6 @@ export class DialogDieuChinhThemThongTinVatTuComponent implements OnInit {
         this.data.vatTuThietBi.push(vatTuThietBi1);
       }
     }
-    console.log(this.data);
 
     this._modalRef.close(this.data);
   }

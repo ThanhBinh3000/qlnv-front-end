@@ -44,7 +44,12 @@
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                <nz-input-group nzAddOnAfterIcon="folder-open"
+                  *ngIf="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
+                  <input nz-input [readonly]="true" formControlName="canCu" />
+                </nz-input-group>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()"
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
                   <input nz-input [readonly]="true" formControlName="canCu" />
                 </nz-input-group>
               </nz-form-item>
@@ -56,7 +61,9 @@
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Số QĐ </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
                   <nz-input-group [nzAddOnAfter]="qdTCDT">
-                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD" [nzMin]="0"></nz-input-number>
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD" [nzMin]="0"
+                      [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
+                    </nz-input-number>
                   </nz-input-group>
                   <ng-template #soQDError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -69,7 +76,8 @@
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ngày ký </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
                   <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                    formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)">
+                    formControlName="ngayKy" nzPlaceHolder="Ngày ký" (nzOnOpenChange)="handleEndOpenChange($event)"
+                    [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
                   </nz-date-picker>
                   <ng-template #ngayKyError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -83,7 +91,8 @@
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayHieuLucError">
                   <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                     formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
-                    (nzOnOpenChange)="handleEndOpenChange($event)">
+                    (nzOnOpenChange)="handleEndOpenChange($event)"
+                    [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
                   </nz-date-picker>
                   <ng-template #ngayHieuLucError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -95,7 +104,8 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKeHoachError">
-                  <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()">
+                  <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                    [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                   <ng-template #namKeHoachError let-control>
@@ -107,14 +117,16 @@
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
-                <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+                <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input
+                  [readonly]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)"></textarea>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
               <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
                 (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"
                 nzAccept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                <button class="btn btn-tep btn-sm waves-effect waves-light">
+                <button class="btn btn-tep btn-sm waves-effect waves-light"
+                  [disabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
                   <i class="icon htvbdh_tcdt_tep"></i>
                   <span>File đính kèm</span>
                 </button>
@@ -148,7 +160,7 @@
               <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16 table-dieu-chinh">
                 <nz-table #groupingTableThocTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khLuongThuc" nzBordered
-                  class="table__body">
+                  class="table__body" [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th rowspan="4">STT</th>
@@ -273,7 +285,7 @@
                       </td>
                       <td>{{data.tkcnTongGao | number: '1.0-1'}}
                       </td>
-                      <td>Đã duyệt</td>
+                      <td>{{dieuChinhThongTinChiTieuKHNam.qdDc.tenTrangThai}}</td>
                       <td>
                         <a (click)="themMoi(data)">
                           <i class="fa fa-pencil"></i>
@@ -291,7 +303,7 @@
               <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16">
                 <nz-table #groupingTableThocSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khLuongThuc" nzBordered
-                  class="table__body">
+                  [nzFrontPagination]="false" [nzShowPagination]="false" class="table__body">
                   <thead>
                     <tr>
                       <th rowspan="4">STT</th>
@@ -519,7 +531,7 @@
               <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16 table-dieu-chinh">
                 <nz-table #groupingTableMuoiTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khMuoi" nzBordered
-                  class="table__body">
+                  [nzFrontPagination]="false" [nzShowPagination]="false" class="table__body">
                   <thead>
                     <tr>
                       <th rowspan="3">STT</th>
@@ -583,7 +595,7 @@
                         <td>0</td>
                       </ng-container>
                       <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
-                      <td>Đã duyệt</td>
+                      <td>{{dieuChinhThongTinChiTieuKHNam.qdDc.tenTrangThai}}</td>
                       <td>
                         <a (click)="themMoi(dataMuoi)">
                           <i class="fa fa-pencil"></i>
@@ -601,7 +613,7 @@
               <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16">
                 <nz-table #groupingTableMuoiSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khMuoi" nzBordered
-                  class="table__body">
+                  [nzFrontPagination]="false" [nzShowPagination]="false" class="table__body">
                   <thead>
                     <tr>
                       <th rowspan="3">STT</th>
@@ -750,7 +762,7 @@
               <nz-card nzTitle="THÔNG TIN DỮ LIỆU CỦA CÁC CỤC DTNNKV ĐƯỢC ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16 table-dieu-chinh">
                 <nz-table #groupingTableVatTuTruoc [nzData]="dieuChinhThongTinChiTieuKHNam?.qdDc?.khVatTu" nzBordered
-                  class="table__body">
+                  [nzFrontPagination]="false" [nzShowPagination]="false" class="table__body">
                   <thead>
                     <tr>
                       <th rowspan="3">STT</th>
@@ -809,7 +821,7 @@
               <nz-card nzTitle="TỔNG HỢP DỮ LIỆU CHỈ TIÊU KẾ HOẠCH NĂM SAU MỖI LẦN ĐIỀU CHỈNH"
                 class="mt16 flex-card p-lr16">
                 <nz-table #groupingTableVatTuSau [nzData]="dieuChinhThongTinChiTieuKHNam?.qd?.khVatTu" nzBordered
-                  class="table__body">
+                  [nzFrontPagination]="false" [nzShowPagination]="false" class="table__body">
                   <thead>
                     <tr>
                       <th rowspan="3">STT</th>
@@ -901,11 +913,13 @@
             <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
           </div>
           <div class="action">
-            <button type="button" class="btn btn-main" (click)="themMoi()">
+            <button type="button" class="btn btn-main" (click)="themMoi()"
+              *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')">
+            <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
+              *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)">
               <i class="icon htvbdh_tcdt_import"></i>
               <span>Import</span>
             </button>
@@ -924,7 +938,8 @@
           <nz-form-item>
             <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Ghi chú </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ghiChuError">
-              <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"></textarea>
+              <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
+                [readonly]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)"></textarea>
               <ng-template #ghiChuError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
               </ng-template>

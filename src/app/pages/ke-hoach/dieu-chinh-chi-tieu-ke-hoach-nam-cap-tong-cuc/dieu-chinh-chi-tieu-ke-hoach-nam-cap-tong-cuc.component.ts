@@ -101,7 +101,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async search() {
-    this.dataTable = [];
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
@@ -115,13 +114,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     }
-    this.totalRecord = 0;
     let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

@@ -41,4 +41,5 @@ export class VatTuThietBi {
   vatTuChaId: number;
   vatTuId: number;
   cacNamTruoc: Array<CacNamTruoc>;
+  id: number;
 }

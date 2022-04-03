@@ -378,7 +378,7 @@ export class DialogDieuChinhThemThongTinLuongThucComponent implements OnInit {
     this.data.donViId = this.selectedDonVi.donViId ?? this.selectedDonVi.id;
     this.data.khGaoId = this.data ? this.data.khGaoId : null;
     this.data.khThocId = this.data ? this.data.khThocId : null;
-    this.data.donViTinh = this.data ? this.data.donViTinh : "Tấn";
+    this.data.donViTinh = "Tấn";
 
     //ton kho dau nam
     this.data.tkdnTongThoc =

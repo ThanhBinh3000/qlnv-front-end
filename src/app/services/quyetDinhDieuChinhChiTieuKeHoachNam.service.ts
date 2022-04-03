@@ -39,7 +39,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
       tempUrl = tempUrl + "ngayKyTuNgay=" + param.ngayKyTuNgay + "&";
     }
     if (tempUrl && tempUrl != "") {
-      url = url + "?" + tempUrl;
+      url = url + "?" + tempUrl.substring(0, tempUrl.length - 1);
     }
     return this.httpClient.get<any>(url).toPromise();
   }

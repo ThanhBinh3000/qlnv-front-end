@@ -285,7 +285,8 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
     this.data.tkdnTongSoMuoi = (this.slMuoi3 ?? 0) + (this.slMuoi2 ?? 0) + (this.slMuoi1 ?? 0);
 
     //nhap trong nam
-    this.data.ntnTongSoMuoi = (this.slMuoiTruocDieuChinh ?? 0) + (this.slMuoiTang ?? 0) - (this.slMuoiGiam ?? 0);
+    this.data.nhapTrongNam = (this.slMuoiTruocDieuChinh ?? 0) + (this.slMuoiTang ?? 0) - (this.slMuoiGiam ?? 0);
+    this.data.ntnTongSoMuoi = this.data.nhapTrongNam;
 
     //xuat trong nam
     const xtnMuoi1 = {
@@ -306,6 +307,7 @@ export class DialogDieuChinhThemThongTinMuoiComponent implements OnInit {
       soLuong: (this.xuatSLMuoiTruoc1 ?? 0) + (this.xuatSLMuoiTang1 ?? 0) - (this.xuatSLMuoiGiam1 ?? 0),
       vatTuId: null,
     };
+    this.data.xuatTrongNam = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
     this.data.xtnMuoi = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
     this.data.xtnTongSoMuoi = (this.xuatSLMuoiTruoc1 ?? 0) + (this.xuatSLMuoiTang1 ?? 0) - (this.xuatSLMuoiGiam1 ?? 0) + (this.xuatSLMuoiTruoc2 ?? 0) + (this.xuatSLMuoiTang2 ?? 0) - (this.xuatSLMuoiGiam2 ?? 0) + (this.xuatSLMuoiTruoc3 ?? 0) + (this.xuatSLMuoiTang3 ?? 0) - (this.xuatSLMuoiGiam3 ?? 0);
 
