@@ -8,7 +8,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI } from 'src/app/Utility/utils';
-
+import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
@@ -27,19 +27,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   errorMessage = "";
   url!: string;
 
-  // phan cu cua teca
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  noParent = true;
-  searchValue = '';
-
+  trangThais: any = TRANGTHAITIMKIEM;
 
   listBcaoKqua:any []=[];
   lenght:any=0;

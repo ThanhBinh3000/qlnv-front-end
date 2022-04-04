@@ -28,11 +28,11 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBcao" />
+            <nz-input-number class="search__input" [nzSize]="'small'" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.thangBCao" />
+            <nz-input-number class="search__input" [nzSize]="'small'" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
@@ -45,11 +45,7 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a status" [(ngModel)]="searchFilter.trangThai">
-              <nz-option nzValue="1" nzLabel="Đang soạn"></nz-option>
-              <nz-option nzValue="2" nzLabel="Trình duyệt"></nz-option>
-              <nz-option nzValue="7" nzLabel="Gửi ĐV cấp trên"></nz-option>
-              <nz-option nzValue="8" nzLabel="ĐV cấp trên yêu cầu chỉnh sửa"></nz-option>
-              <nz-option nzValue="9" nzLabel="ĐV cấp trên duyệt"></nz-option>
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="13"></div>
@@ -71,7 +67,7 @@
         <div style="margin: 15px;">
           
         </div>
-        <nz-table #basicTable >
+        <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
               <th nzWidth="60px">STT</th>
