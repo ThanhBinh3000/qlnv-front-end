@@ -26,4 +26,10 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
     description: 'Tổng hợp số liệu dự toán NSNN hàng năm và KHTC 03 năm',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-so-kiem-tra-tran-chi-nsnn-cua-cac-don-vi`,
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Tìm kiếm văn bản',
+    description: 'Danh sách văn bản gửi tổng cục dự trữ về dự toán ngân sách nhà nước',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/danh-sach-van-ban-gui-tcdt-ve-du-toan-nsnn`,
+  },
 ];

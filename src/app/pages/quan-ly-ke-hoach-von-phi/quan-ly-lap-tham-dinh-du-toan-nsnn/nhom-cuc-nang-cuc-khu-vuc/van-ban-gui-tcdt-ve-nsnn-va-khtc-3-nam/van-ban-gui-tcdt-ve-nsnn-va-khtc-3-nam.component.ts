@@ -46,7 +46,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      ngayNhap!: string;                             // ngay nhap
      nguoiNhap!: string;                         // nguoi nhap
      noiTao!: string;
-     trangThai: string='6';
+     trangThai: string = '6';
      soVban!: string;
      ngayDuyetVban!: string;
      baoCaos: any = LOAIBAOCAO;
@@ -116,7 +116,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                await this.getDetailReport();
                this.kt = false;
           } else {
-               this.kt=true;
+               this.kt = true;
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = userInfo?.username;
                this.maDonViTao = userInfo?.dvql;
@@ -477,86 +477,108 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           console.log(this.editCache[id].data);
      }
 
+     //set url khi
      getUrl(maLoaiBcao: string) {
           var url: string;
-          switch (Number(maLoaiBcao)) {
-               case 207:
-                    url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
+          switch (maLoaiBcao) {
+               case '12':
+                    url = '/chi-thuong-xuyen-3-nam/'
                     break;
-               case 204:
-                    url = '/quan-ly-dcdtc-nsnn/ke-hoach-bao-quan-hang-nam';
+               case '01':
+                    url = '/xay-dung-ke-hoach-von-dau-tu/'
                     break;
-               case 307:
-                    url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/';
+               case '02':
+                    url = '/xay-dung-nhu-cau-nhap-xuat-hang-nam/'
                     break;
-               case 308:
-                    url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam';
+               case '03':
+                    url = '/xay-dung-ke-hoach-bao-quan-hang-nam/'
                     break;
-               case 309:
-                    url = '/du-toan-chi-ung-dung-cntt-3-nam';
+               case '04':
+                    url = '/nhu-cau-xuat-hang-vien-tro/'
                     break;
-               case 310:
-                    url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam';
+               case '05':
+                    url = '/xay-dung-ke-hoach-quy-tien-luong3-nam/'
                     break;
-               case 311:
-                    url = '/chi-ngan-sach-nha-nuoc-3-nam';
+               case '06':
+                    url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam/'
                     break;
-               case 312:
-                    url = '/nhu-cau-phi-nhap-xuat-3-nam';
+               case '07':
+                    url = '/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh/'
                     break;
-               case 313:
-                    url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
+               case '08':
+                    url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/'
                     break;
-               case 314:
-                    url = '/ke-hoach-dao-tao-boi-duong-3-nam';
+               case '09':
+                    url = '/du-toan-chi-ung-dung-cntt-3-nam/'
                     break;
-               case 315:
-                    url = '/nhu-cau-ke-hoach-dtxd3-nam/';
+               case '10':
+                    url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/'
                     break;
-               case 316:
-                    url = '/tong-hop-du-toan-chi-thuong-xuyen-hang-nam';
+               case '11':
+                    url = '/chi-ngan-sach-nha-nuoc-3-nam/'
                     break;
-               case 317:
-                    url = '/du-toan-xuat-nhap-hang-dtqg-hang-nam';
+               case '13':
+                    url = '/nhu-cau-phi-nhap-xuat-3-nam/'
                     break;
-               case 318:
-                    url = '/ke-hoach-bao-quan-hang-nam';
+               case '14':
+                    url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam/'
                     break;
-               case 319:
-                    url = '/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct';
+               case '15':
+                    url = '/ke-hoach-dao-tao-boi-duong-3-nam/'
                     break;
-               case 320:
-                    url = '/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/';
+               case '16':
+                    url = '/nhu-cau-ke-hoach-dtxd3-nam/'
                     break;
-               case 321:
-                    url = '/ke-hoach-quy-tien-luong-nam-n1/';
+               case '17':
+                    url = '/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/'
                     break;
-               case 322:
-                    url = '/du-toan-chi-du-tru-quoc-gia-gd3-nam/';
+               case '18':
+                    url = '/du-toan-xuat-nhap-hang-dtqg-hang-nam/'
                     break;
-               case 324:
-                    url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam';
+               case '19':
+                    url = '/ke-hoach-bao-quan-hang-nam/'
                     break;
-               case 325:
-                    url = '/du-toan-chi-ung-dung-cntt-giai-doan-3nam';
+               case '20':
+                    url = '/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/'
                     break;
-               case 326:
-                    url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam';
+               case '21':
+                    url = '/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/'
                     break;
-               case 327:
-                    url = '/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam';
+               case '22':
+                    url = '/ke-hoach-quy-tien-luong-nam-n1/'
                     break;
-               case 328:
-                    url = '/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+               case '23':
+                    url = '/du-toan-chi-du-tru-quoc-gia-gd3-nam/'
                     break;
-               case 329:
-                    url = '/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
+               case '24':
+                    url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/'
                     break;
-               case 330:
-                    url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
+               case '25':
+                    url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/'
+                    break;
+               case '26':
+                    url = '/du-toan-chi-ung-dung-cntt-giai-doan-3nam/'
+                    break;
+               case '27':
+                    url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/'
+                    break;
+               case '28':
+                    url = '/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/'
+                    break;
+               case '29':
+                    url = '/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/'
+                    break;
+               case '30':
+                    url = '/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/'
+                    break;
+               case '31':
+                    url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/'
+                    break;
+               case '32':
+                    url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc/'
                     break;
                default:
-                    url = "";
+                    url = null;
                     break;
           }
           return url;

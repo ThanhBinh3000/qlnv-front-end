@@ -232,15 +232,15 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   themmoi325(request: any): Observable<any> {
-    return this.httpClient.post('http://192.168.1.110:8094/dieu-chinh-du-toan-chi/them-moi', request);
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/them-moi', request);
   }
 
   update325(request: any): Observable<any> {
-    return this.httpClient.put('http://192.168.1.110:8094/dieu-chinh-du-toan-chi/cap-nhat', request);
+    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/cap-nhat', request);
   }
 
   chitiet325(id: any): Observable<any> {
-    return this.httpClient.get('http://192.168.1.110:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id);
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id);
   }
 
   timkiem325(request: any): Observable<any> {
@@ -285,7 +285,7 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   capNhatVban(request: any): Observable<any> {
-    return this.httpClient.post('http://192.168.1.125:8094/lap-tham-dinh-du-toan/cap-nhat-van-ban',
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat-van-ban',
       request
     );
   }
@@ -318,7 +318,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   sinhMaVban(): Observable<any> {
     return this.httpClient.get(
-      'http://192.168.1.125:8094/lap-tham-dinh-du-toan/sinh-ma-vban'
+      this.urlDefault + 
+      '/qlnv-khoachphi/lap-tham-dinh-du-toan/sinh-ma-vban'
     );
   }
 
