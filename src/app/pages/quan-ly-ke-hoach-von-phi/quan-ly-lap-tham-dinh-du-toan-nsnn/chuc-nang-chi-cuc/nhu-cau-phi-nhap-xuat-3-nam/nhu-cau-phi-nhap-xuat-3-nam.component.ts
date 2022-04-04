@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -85,6 +85,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      soVban:any;
      capDv:any;
      checkDv:boolean;
+     tong: number = 0;
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -117,6 +118,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           private userSerivce: UserService,
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
+          private location: Location,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -367,6 +369,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.lstCTietBCao.forEach(e => {
+                              this.tong += e.thanhTien;
+                         })
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
 
@@ -449,6 +454,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      // xoa dong
      deleteById(id: any): void {
+          this.tong -= this.lstCTietBCao.find(e => e.id == id).thanhTien;
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
           if (typeof id == "number") {
                this.listIdDelete += id + ",";
@@ -459,6 +465,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      deleteSelected() {
           // add list delete id
           this.lstCTietBCao.filter(item => {
+               if (item.checked){
+                    this.tong -= item.thanhTien;
+               }
                if (item.checked == true && typeof item.id == "number") {
                     this.listIdDelete += item.id + ","
                }
@@ -519,8 +528,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      }
 
      redirectChiTieuKeHoachNam() {
-          this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
-     }
+      // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+      this.location.back()
+    }
 
      // lay ten trang thai
      getStatusName() {
@@ -551,6 +561,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      saveEdit(id: string): void {
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+          this.tong += this.editCache[id].data.thanhTien - this.lstCTietBCao[index].thanhTien;
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
      }

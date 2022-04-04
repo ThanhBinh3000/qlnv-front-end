@@ -237,4 +237,13 @@ export class TimKiemComponent implements OnInit {
     this.pages.size = size;
     this.onSubmit();
   }
+  xoaDieuKien(){
+    this.searchFilter.nam = ""
+    this.searchFilter.tuNgay = ""
+    this.searchFilter.denNgay = ""
+    this.searchFilter.maBaoCao = ""
+    this.searchFilter.donViTao = ""
+    this.searchFilter.loaiBaoCao = ""
+    this.trangThai = ""
+  }
 }

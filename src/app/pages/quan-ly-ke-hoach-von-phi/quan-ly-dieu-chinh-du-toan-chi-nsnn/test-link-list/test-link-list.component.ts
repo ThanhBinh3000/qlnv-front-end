@@ -174,6 +174,7 @@ export class TestLinkListComponent implements OnInit {
         ];
         
         this.getLinkList(this.chiTietBcaos, "", 0);
+        this.stt = 0;
         this.updateSTT(this.chiTietBcaos);
         this.updateLstCTietBCao();
     }
@@ -341,6 +342,7 @@ export class TestLinkListComponent implements OnInit {
     // gan tat ca con cua nó co cung trang thai
     subUpdateChecked(data: LinkList, kt: boolean) {
         data.checked = kt;
+        
         if (data.vt > 0)
             this.lstCTietBCao[data.vt - 1].checked = kt;
         if (data.next.length == 0) return;

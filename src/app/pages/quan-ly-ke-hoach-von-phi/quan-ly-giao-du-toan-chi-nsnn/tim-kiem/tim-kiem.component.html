@@ -24,21 +24,20 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoTu" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Nơi ra quyết định</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.noiQd">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.noiQd" disabled/>
           </div>
           <div nz-col nzSpan="24">
             <label class="search__label">Về việc</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.vanBan" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.veViec" />
           </div>
         </div>
       </nz-card>

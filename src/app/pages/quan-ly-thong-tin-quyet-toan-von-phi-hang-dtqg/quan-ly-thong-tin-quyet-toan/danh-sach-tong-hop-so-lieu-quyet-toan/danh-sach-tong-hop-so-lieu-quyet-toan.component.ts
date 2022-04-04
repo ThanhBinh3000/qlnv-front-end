@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -63,18 +63,19 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
+    private location: Location
   ) {
   }
 
   ngOnInit(): void {
-   
+
 
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-         
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -198,19 +199,7 @@ export class DanhSachTongHopSoLieuQuyetToanComponent implements OnInit {
     this.onSubmit();
   }
 
-    // click o checkbox all
-    // updateAllChecked(): void {
-    //   this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    //   if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({
-    //       ...item,
-    //       checked: true
-    //     }));
-    //   } else {
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
-    //       ...item,
-    //       checked: false
-    //     }));
-    //   }
-    // }
+  redirectChiTieuKeHoachNam() {
+    this.location.back()
+  }
 }

@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -96,6 +96,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
     private sanitizer: DomSanitizer,
     private route:Router,
     private notification:NzNotificationService,
+    private location: Location,
   ) {}
 
   async ngOnInit() {
@@ -224,7 +225,8 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
   }
 
   redirectkehoachvonphi() {
-    this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
+    // this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
+    this.location.back()
   }
 
   //get user info

@@ -29,7 +29,7 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
               </button>
-              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
                 <i nz-icon nzType="close"></i>
                 <span>Đóng</span>
               </button>
@@ -64,15 +64,15 @@
                        <nz-descriptions-item nzTitle="Đơn vị lập">
                          {{getUnitName()}}
                        </nz-descriptions-item>
-                      
+
                        <nz-descriptions-item nzTitle="Quyết định số">
                          <input class="search__input" nz-input [(ngModel)]="soQd" />
                        </nz-descriptions-item>
                        <nz-descriptions-item nzTitle="Ngày quyết định">
                          <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
                        </nz-descriptions-item>
-                       
-                    </nz-descriptions> 
+
+                    </nz-descriptions>
                  </div>
             </nz-card>
             <div class="tab__container">
@@ -154,7 +154,7 @@
                                                   <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                   (ngModelChange)="updateSingleChecked()"></label>
                                                 </td>
-                                        </ng-container> 
+                                        </ng-container>
                                         <ng-template #editTemplate>
                                              <td>{{i + 1}}</td>
                                              <td>
@@ -210,7 +210,7 @@
                                                   <label nz-checkbox  [nzValue]="data.id" [(ngModel)]="data.checked"
                                                   (ngModelChange)="updateSingleChecked()"></label>
                                                 </td>
-                                        </ng-template>  
+                                        </ng-template>
                                      </tr>
                                      <tr *ngIf="lstCTietBCao.length!=0">
                                         <td></td>

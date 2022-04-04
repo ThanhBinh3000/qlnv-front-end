@@ -246,6 +246,24 @@
                     </td>
                   </ng-template>
                 </tr>
+                <ng-container *ngIf="lstCTietBCao.length != 0">
+                  <tr>
+                    <td></td>
+                    <td>Tổng</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      {{tong}}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </ng-container>
               </tbody>
             </nz-table>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

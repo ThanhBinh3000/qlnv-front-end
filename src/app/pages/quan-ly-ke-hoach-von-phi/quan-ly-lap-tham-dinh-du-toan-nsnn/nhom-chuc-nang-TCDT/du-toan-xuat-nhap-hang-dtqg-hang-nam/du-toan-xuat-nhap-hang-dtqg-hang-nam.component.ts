@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -180,6 +180,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     private userSerivce: UserService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
+    private location: Location
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
   }
@@ -312,7 +313,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     this.lstCTietBCao.forEach(item => {
       if (typeof item.id != 'number') {
         item.id = null;
-      } 
+      }
       item.listCtiet.forEach(e => {
         if (typeof e.id != 'number') {
           e.id = null;
@@ -461,7 +462,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
           })
           console.log(this.lstCTietBCao);
           this.lstFile = data.data.lstFile;
-          var listVatTu: any = data.data.lstTongVtu; 
+          var listVatTu: any = data.data.lstTongVtu;
           listVatTu.forEach(item => {
             var mm: miniData = {
               maVtuTbi: item.maVtuTbi,
@@ -549,7 +550,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+    this.location.back()
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////// CONG VIEC CUA BANG CHINH //////////////////////////////////////////////
@@ -707,10 +709,10 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.tongCong(1, this.editCache[id].data);
-    this.tongCong(-1, this.lstCTietBCao[index]);   
-    var item: ItemData = this.editCache[id].data;   
+    this.tongCong(-1, this.lstCTietBCao[index]);
+    var item: ItemData = this.editCache[id].data;
     this.lstCTietBCao[index].maCucDtnnKvuc = item.maCucDtnnKvuc;
     this.lstCTietBCao[index].nxuatThocLuongNhap = item.nxuatThocLuongNhap;
     this.lstCTietBCao[index].nxuatThocLuongXuat = item.nxuatThocLuongXuat;
@@ -788,7 +790,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   ////////////////////// CONG VIEC CUA BANG PHU ////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   // them dong moi
-  addLine1(id: number): void {    
+  addLine1(id: number): void {
     let item: miniData = {
       maVtuTbi: "",
       stt:"",

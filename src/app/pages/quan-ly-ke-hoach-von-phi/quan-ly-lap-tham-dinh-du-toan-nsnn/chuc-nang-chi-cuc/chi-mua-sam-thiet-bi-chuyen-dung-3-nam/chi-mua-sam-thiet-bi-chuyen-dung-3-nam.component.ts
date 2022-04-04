@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -122,6 +122,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     private userSerivce: UserService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
+    private location: Location,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
   }
@@ -366,9 +367,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
           if(this.lstCTietBCao.length!=0){
             this.lstCTietBCao.forEach(e => {
-              this.tong1 += e.n1;
-              this.tong2 += e.n2;
-              this.tong3 += e.n3;
+              this.tinhTong(1, e);
             })
           }
 
@@ -431,10 +430,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   // xoa dong
   deleteById(id: any): void {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.tong1 -= this.lstCTietBCao[index].n1;
-    this.tong2 -= this.lstCTietBCao[index].n2;
-    this.tong3 -= this.lstCTietBCao[index].n3;
-
+    this.tinhTong(-1, this.lstCTietBCao[index]);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
@@ -446,9 +442,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     // add list delete id
     this.lstCTietBCao.filter(item => {
       if (item.checked == true) {
-        this.tong1 -= item.n1;
-        this.tong2 -= item.n2;
-        this.tong3 -= item.n3;
+        this.tinhTong(-1, item);
       }
       if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
@@ -510,7 +504,8 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+    this.location.back()
   }
 
   // lay ten trang thai
@@ -532,9 +527,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   // huy thay doi
   cancelEdit(id: string): void {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
-    this.tong1 -= this.editCache[id].data.n1 - this.lstCTietBCao[index].n1;
-    this.tong2 -= this.editCache[id].data.n2 - this.lstCTietBCao[index].n2;
-    this.tong3 -= this.editCache[id].data.n3 - this.lstCTietBCao[index].n3;
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -545,6 +537,8 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   saveEdit(id: string): void {
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    this.tinhTong(-1, this.lstCTietBCao[index]);
+    this.tinhTong(1, this.editCache[id].data);
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   }
@@ -559,18 +553,10 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     });
   }
 
-  //gia tri cac o input thay doi thi tinh toan lai
-  changeModel1(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.tong1 += this.editCache[id].data.n1 - this.lstCTietBCao[index].n1;
-  }
-  changeModel2(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.tong2 += this.editCache[id].data.n2 - this.lstCTietBCao[index].n2;
-  }
-  changeModel3(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.tong3 += this.editCache[id].data.n3 - this.lstCTietBCao[index].n3;
+  tinhTong(heSo: number, item: ItemData){
+    this.tong1 += heSo * item.n1;
+    this.tong2 += heSo * item.n2;
+    this.tong3 += heSo * item.n3;
   }
 
 }

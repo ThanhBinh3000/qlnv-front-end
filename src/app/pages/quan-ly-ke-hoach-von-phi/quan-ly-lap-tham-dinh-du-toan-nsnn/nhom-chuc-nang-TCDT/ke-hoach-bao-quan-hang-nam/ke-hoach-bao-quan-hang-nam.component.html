@@ -80,31 +80,31 @@
                          <div>
                               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
                                    [nzColon]="false">
-                                   <nz-descriptions-item nzTitle="Ngày nhập">
+                                   <nz-descriptions-item nzTitle="Ngày nhập" [nzSpan]="2">
                                         {{ngayNhap}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+                                   <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="2">
                                         {{nguoiNhap}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Năm BC">
-                                        {{namBaoCaoHienHanh + 1}}
-                                   </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Đơn vị tạo">
+
+                                   <nz-descriptions-item nzTitle="Đơn vị tạo" [nzSpan]="2">
                                         {{getUnitName()}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Mã báo cáo">
+                                   <nz-descriptions-item nzTitle="Mã báo cáo" [nzSpan]="1">
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
+                                   <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)" [nzSpan]="1">
                                         {{namBaoCaoHienHanh}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Trạng thái">
+                                   <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Loại báo cáo">
+                                   <nz-descriptions-item nzTitle="Loại báo cáo" [nzSpan]="2">
                                         Kế hoạch Bảo quản hàng năm N+1
                                    </nz-descriptions-item>
-
+                                   <nz-descriptions-item nzTitle="Năm BC" [nzSpan]="1">
+                                    {{namBaoCaoHienHanh + 1}}
+                                   </nz-descriptions-item>
                               </nz-descriptions>
                          </div>
                     </div>
@@ -159,7 +159,7 @@
                                              <td width="2.25%" [hidden]="status"></td>
                                         </tr>
 
-                                       
+
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
@@ -361,7 +361,7 @@
                                                   <td>
                                                        {{data.dmucNhapVttbDvi}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{data.dmucNhapVttbVphong}}
                                                   </td>
@@ -408,7 +408,7 @@
                                                             </ng-container>
                                                        </div>
                                                      </td>
-                                                  
+
                                                   <td>
                                                        {{editCache1[data.id].data.tongDvi}}
                                                   </td>
@@ -421,7 +421,7 @@
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache1[data.id].data.dmucNhapVttbDvi" (change)="thanhTien(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache1[data.id].data.dmucNhapVttbVphong"  (change)="thanhTien(data.id)"/>
@@ -564,7 +564,7 @@
                                                   <td>
                                                        {{data.dmucNhapVttbDvi}}
                                                   </td>
-                                                  
+
                                                   <td>
                                                        {{data.dmucNhapVttbVphong}}
                                                   </td>
@@ -611,7 +611,7 @@
                                                             </ng-container>
                                                        </div>
                                                      </td>
-                                                  
+
                                                   <td>
                                                        {{editCache1[data.id].data.tongDvi}}
                                                   </td>
@@ -624,7 +624,7 @@
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache1[data.id].data.dmucNhapVttbDvi" (change)="thanhTien(data.id)"/>
                                                   </td>
-                                                  
+
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
                                                             [(ngModel)]="editCache1[data.id].data.dmucNhapVttbVphong"  (change)="thanhTien(data.id)"/>
@@ -758,8 +758,7 @@
 </div>
 <!-- modal -->
 <!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-   
+
    <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-   
+
    <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
-   

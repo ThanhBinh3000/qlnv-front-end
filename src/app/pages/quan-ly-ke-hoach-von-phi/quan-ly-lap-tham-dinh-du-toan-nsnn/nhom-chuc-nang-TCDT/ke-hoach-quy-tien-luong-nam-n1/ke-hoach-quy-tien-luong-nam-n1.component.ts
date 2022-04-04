@@ -12,6 +12,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { Location } from '@angular/common'
 
 export class ItemData {
   maCucDtnnKvuc!:string;
@@ -134,6 +135,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
               private nguoiDungSerivce: UserService,
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
+              private location: Location,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -504,7 +506,8 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    // this.router.navigate(['..']);
+    this.location.back()
   }
 
   getStatusName(){
