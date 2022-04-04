@@ -104,13 +104,13 @@
                                              </td>
                                              <td>
                                                   <div *ngFor="let item of cucKhuVucs">
-                                                       <div *ngIf="item.id == data.maDonVi">
-                                                            {{item.tenDm}}
+                                                       <div *ngIf="item.maDvi == data.maDonVi">
+                                                            {{item.tenDvi}}
                                                        </div>
                                                   </div>
                                              </td>
                                              <td>
-                                                  <a routerLink="#">Xem</a>
+                                                  <a routerLink="../van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/{{data.id}}">Xem</a>
                                              </td>
                                         </tr>
                                    </tbody>
@@ -138,7 +138,7 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" routerLink="#">
+                         <button type="button" class="btn btn-main" routerLink="../van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Tạo mới</span>
                          </button>
