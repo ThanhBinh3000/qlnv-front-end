@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -41,8 +41,8 @@ export class ItemData {
 })
 
 export class TongHopSoLieuQuyetToanComponent implements OnInit {
-     
-     
+
+
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
@@ -129,6 +129,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           private danhMucService: DanhMucHDVService,
           private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
           private notification :NzNotificationService,
+          private location: Location
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -158,7 +159,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
           this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
 
-          
+
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
@@ -253,14 +254,14 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          }else{
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
-                         
+
                     },
                     (err) => {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           } else {
                this.tonghopSolieuQtoan.capnhattonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(res => {
-                    
+
                          if(res.statusCode==0){
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                          }else{
@@ -276,7 +277,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                }
           });
           this.updateEditCache();
-          
+
           this.spinner.hide();
      }
 
@@ -312,7 +313,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          this.tongcol();
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
-                         
+
                          // set thong tin chung bao cao
                          this.ngayNhap = this.datePipe.transform( data.data.ngayTao,'dd/MM/yyyy');
                          this.nguoiNhap = data.data.nguoiTao;
@@ -334,7 +335,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
                          })
-                         
+
                     } else {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     }
@@ -470,7 +471,8 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      }
 
      redirectChiTieuKeHoachNam() {
-          this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          // this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          this.location.back()
      }
 
      // lay ten trang thai
@@ -518,14 +520,14 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      }
 
 
-   
-     
-     
+
+
+
      tinhtong(id:any){
           this.editCache[id].data.ctmtTong = this.editCache[id].data.ctmtVonCap + this.editCache[id].data.ctmtVonUng;
           this.editCache[id].data.ctmgTong = this.editCache[id].data.ctmgVonCap + this.editCache[id].data.ctmgVonUng;
           this.editCache[id].data.tcvmltTong = this.editCache[id].data.tcvmltVonCap + this.editCache[id].data.tcvmltVonUng;
-     
+
           this.tongcol()
 
      }

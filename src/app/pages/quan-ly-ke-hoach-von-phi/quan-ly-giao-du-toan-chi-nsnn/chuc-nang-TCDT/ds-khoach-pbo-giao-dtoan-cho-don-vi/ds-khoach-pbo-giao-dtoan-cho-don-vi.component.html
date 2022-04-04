@@ -5,18 +5,6 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Trình duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </button>
         <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
@@ -37,24 +25,30 @@
           <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayTaoTu" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
           <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayTaoDen" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
-
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đơn vị lập</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.noiQd">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="3"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Số quyết định BTC</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
+          </div>
+          <div nz-col nzSpan="3"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày q/đ từ</label>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayQdTu" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayQdTu" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="3"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayQdDen" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayQdDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
         </div>
       </nz-card>
@@ -63,7 +57,7 @@
         <nz-table #basicTable >
           <thead>
             <tr>
-              <th width="60px" class="text-center">Chọn</th>
+              <th width="60px" class="text-center">STT</th>
               <th width="130px" class="text-center">Số quyết định</th>
               <th width="175px" class="text-center">Ngày quyết định</th>
               <th width="175px" class="text-center">Năm</th>
@@ -78,15 +72,11 @@
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
               <td style="display: none">{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td class="text-center">
-                <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                  (ngModelChange)="updateSingleChecked()"></label>
-              </td>
               <td class="text-center">{{ item.soQd }}</td>
               <td class="text-center">{{item.ngayQd}}</td>
               <td class="text-center">{{item.nam}}</td>
-              <td class="text-center">{{item.tuNgay}}</td>
-              <td class="text-center">{{item.maDvi}}</td>
+              <td class="text-center">{{item.ngayTaoTu}}</td>
+              <td class="text-center">{{item.lanLapThu}}</td>
               <td class="text-center">{{item.trangThai}}</td>
               <td class="text-center">
                 <a routerLink="../{{url}}/{{ item.id }}">

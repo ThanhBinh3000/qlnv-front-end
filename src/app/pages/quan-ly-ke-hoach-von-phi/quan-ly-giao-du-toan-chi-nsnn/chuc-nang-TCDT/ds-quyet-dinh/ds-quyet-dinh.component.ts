@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
-
 @Component({
   selector: 'app-ds-quyet-dinh',
   templateUrl: './ds-quyet-dinh.component.html',
@@ -37,14 +36,14 @@ export class DsQuyetDinhComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    tuNgay: "",
-    denNgay: "",
+    ngayTaoTu: "",
+    ngayTaoDen: "",
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
     noiQd: "",
     soQd: "",
-    vanBan: "",
+    veViec: "",
   };
   pages = {
     size: 10,
@@ -113,14 +112,15 @@ export class DsQuyetDinhComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      ngayTaoDen: this.searchFilter.denNgay,
-      ngayTaoTu: this.searchFilter.tuNgay,
+      ngayTaoDen: this.searchFilter.ngayTaoDen,
+      ngayTaoTu: this.searchFilter.ngayTaoTu,
       noiQd: this.searchFilter.noiQd,
       paggingReq: {
         limit: this.pages.size,
         page: this.pages.page
       },
       soQd: this.searchFilter.soQd,
+      veViec: this.searchFilter.veViec,
       str: "",
       trangThai: ""
     };

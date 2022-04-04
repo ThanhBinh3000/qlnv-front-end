@@ -538,6 +538,10 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     });
   }
 
+  redirectQLGiaoDTChi() {
+    this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn']);
+  }
+
   //gia tri cac o input thay doi thi tinh toan lai
   // changeModel(id: string): void {
   //   this.editCache[id].data.clechTranChiVsNcauN1 = Number(this.editCache[id].data.ncauChiCuaDviN1) - Number(this.editCache[id].data.tranChiDuocTbN1);

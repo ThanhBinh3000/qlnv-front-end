@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -102,6 +102,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           private danhMucService: DanhMucHDVService,
           private userService: UserService,
           private notification: NzNotificationService,
+          private location: Location
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
      }
@@ -413,7 +414,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      }
 
      redirectChiTieuKeHoachNam() {
-          this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          // this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          this.location.back()
      }
 
      // lay ten trang thai

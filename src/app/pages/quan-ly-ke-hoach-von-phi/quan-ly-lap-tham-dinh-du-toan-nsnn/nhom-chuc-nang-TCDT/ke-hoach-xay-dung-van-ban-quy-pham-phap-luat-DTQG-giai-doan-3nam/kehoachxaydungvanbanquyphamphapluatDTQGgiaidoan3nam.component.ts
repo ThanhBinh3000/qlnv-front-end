@@ -4,7 +4,7 @@ import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import * as uuid from "uuid";
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -93,6 +93,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     private sanitizer: DomSanitizer,
     private route:Router,
     private notification:NzNotificationService,
+    private location: Location,
   ) {}
 
   async ngOnInit() {
@@ -237,7 +238,8 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   }
 
   redirectkehoachvonphi() {
-    this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
+    // this.route.navigate(['./']);
+    this.location.back()
   }
 
   //get user info
