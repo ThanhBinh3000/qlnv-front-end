@@ -10,18 +10,6 @@
       <div class="canphai phai">
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê duyệt</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Duyệt</span>
-        </button>
-        <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i  class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Nhập quyết định của tổng cục</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
@@ -40,17 +28,15 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectQLGiaoDTChi()">
           <i nz-icon nzType="close"></i>
           <span>Đóng</span>
         </button>
-
-
         <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a> -->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')" [hidden] = "statusBtnTBP">
+        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')" [hidden] = "statusBtnTBP">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP trả lại</span>
         </button>
@@ -77,7 +63,7 @@
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')" [hidden] = "statusBtnDVCT">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
-        </a>
+        </a> -->
         <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>

@@ -37,14 +37,11 @@ export class TimKiemComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    tuNgay: "",
-    denNgay: "",
-    maBaoCao: "",
-    donViTao: "",
-    loaiBaoCao: "",
-    noiQd: "",
+    ngayTaoDen: "",
+    ngayTaoTu: "",
+    noiQd: "Bộ tài chính",
     soQd: "",
-    vanBan: "",
+    veViec: "",
   };
   pages = {
     size: 10,
@@ -113,8 +110,9 @@ export class TimKiemComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      ngayTaoDen: this.searchFilter.denNgay,
-      ngayTaoTu: this.searchFilter.tuNgay,
+      id: 0,
+      ngayTaoDen: this.searchFilter.ngayTaoDen,
+      ngayTaoTu: this.searchFilter.ngayTaoTu,
       noiQd: this.searchFilter.noiQd,
       paggingReq: {
         limit: this.pages.size,
@@ -122,7 +120,8 @@ export class TimKiemComponent implements OnInit {
       },
       soQd: this.searchFilter.soQd,
       str: "",
-      trangThai: ""
+      trangThai: "",
+      veViec: ""
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

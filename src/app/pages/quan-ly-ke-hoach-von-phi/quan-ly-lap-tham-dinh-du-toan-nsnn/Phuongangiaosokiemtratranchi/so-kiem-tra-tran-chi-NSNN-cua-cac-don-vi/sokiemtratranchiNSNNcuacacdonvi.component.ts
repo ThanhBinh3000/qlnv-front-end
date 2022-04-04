@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -80,6 +80,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private route: Router,
     private notification : NzNotificationService,
+    private location: Location
   ) {}
 
   async ngOnInit() {
@@ -100,7 +101,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
                       this.tongso += e.soDuocGiao;
                   });
               }
-              
+
           } else {
             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
               this.checkdata = false;
@@ -111,7 +112,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           this.checkdata = false;
       },
   );
-    
+
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -153,7 +154,8 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   }
 
   redirectkehoachvonphi() {
-    this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
+    // this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
+    this.location.back()
   }
 
   //get user info
@@ -176,7 +178,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     return userInfo;
   }
 
-  
+
 
   //lay ten don vi tạo
   getUnitName() {
@@ -188,5 +190,5 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     return utils.getStatusName(this.trangThaiBanGhi);
   }
 
-  
+
 }

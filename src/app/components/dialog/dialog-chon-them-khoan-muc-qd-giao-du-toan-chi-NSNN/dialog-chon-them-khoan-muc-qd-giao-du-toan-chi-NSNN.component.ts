@@ -16,6 +16,7 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   searchFilter = {
     khoanMuc: "",
   };
+  quanLyVonPhiService: any;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -26,16 +27,39 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   async ngOnInit() {
     console.log(this.danhSachKhoanMuc);
     //get danh muc nhom chi
-    this.danhMucService.dMKhoanChi().toPromise().then(
+    this.danhMucService.dMKhoanMuc().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.khoanMucs = data.data?.content;
+          console.log(this.khoanMucs);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+  }
+
+  timKiemKhoanMuc(){
+    let requestReport = {
+      khoanMuc: this.searchFilter.khoanMuc,
+    };
+
+    //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
+    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.danhSachKhoanMuc = data.data.content;
+          console.log(this.danhSachKhoanMuc);
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, err?.msg);
       }
     );
   }
