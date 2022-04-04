@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
+import { TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { DatePipe } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -204,8 +204,24 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   
   listIdDelete: string = '';
   allChecked = false; // check all checkbox
+  allChecked02 = false; // check all checkbox
+  allChecked03 = false; // check all checkbox
+  allChecked1 = false; // check all checkbox
+  allChecked2 = false; // check all checkbox
+  allChecked3= false; // check all checkbox
+  allChecked4= false; // check all checkbox
+
   indeterminate = true; // properties allCheckBox
+  indeterminate02 = true; // properties allCheckBox
+  indeterminate03 = true; // properties allCheckBox
+  indeterminate1 = true; // properties allCheckBox
+  indeterminate2 = true; // properties allCheckBox
+  indeterminate3 = true; // properties allCheckBox
+  indeterminate4 = true; // properties allCheckBox
+
   status: boolean = false;
+  checkXem:boolean = false;
+
   donViTaos: any[] = [];
   userInfor: any;
   currentday: Date = new Date();
@@ -235,7 +251,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   checkxemkhaithac:any;
   
 
-  danhSachChiTietPhuLucTemp: any = [];
+  lstDeleteCTietBCao: any = [];
+  lstIdDeleteMau02:string= '';
+  lstIdDeleteMau03:string='';
+  lstIdDeleteMau04ax:string='';
+  lstIdDeleteMau04an:string='';
+  lstIdDeleteMau04bx:string='';
+  lstIdDeleteMau05:string='';
+
+  lstIdDeleteCols:string='';
   soLaMa: any = SOLAMA;
     
 
@@ -412,7 +436,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.nam = this.currentday.getFullYear();
     //khởi tạo trạng thái tạo mới
     this.baoCao.trangThai = '1';
-
+    console.log(this.baoCao);
     if(this.loaiBaoCaoParam=='1'){
       //thiếu service lấy đợt báo cáo
 
@@ -425,7 +449,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             tieuDe: e.tieuDe+this.baoCao.dotBcao,
             maLoai:e.maPhuLuc.toString(),
             tenPhuLuc: e.tenPhuLuc,
-            trangThai: '1',
+            trangThai: '2',
             lstCTietBCao: []
           }
         )
@@ -440,7 +464,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             tieuDe: e.tieuDe+this.baoCao.namBcao,
             maLoai:e.maPhuLuc.toString(),
             tenPhuLuc: e.tenPhuLuc,
-            trangThai: '1',
+            trangThai: '2',
             lstCTietBCao: []
           }
         )
@@ -566,7 +590,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
               tieuDe: item.tieuDe,
               maLoai:item.maPhuLuc.toString(),
               tenPhuLuc: item.tenPhuLuc,
-              trangThai: '1',
+              trangThai: '2',
               lstCTietBCao: []
             });
           }
@@ -580,7 +604,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if(this.baoCao?.lstBCao?.findIndex(item => Number(item.maLoai) == this.tabSelected) == -1){
       this.tabSelected = null;
     }
-    this.allChecked = false;
+    // this.allChecked = false;
   }
  
   // doi tab
@@ -666,6 +690,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       if (typeof e.id != 'number') {
         e.id = null;
       }
+
       e.lstCTietBCao.forEach(el => {
         if (typeof el.id != 'number') {
           el.id = null;
@@ -678,9 +703,51 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           })
         }
       })
+      console.log(e.maLoai)
+        if(e.maLoai=='4'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau02,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
+        if(e.maLoai=='5'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau03,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
+        if(e.maLoai=='6'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau04ax,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
+        if(e.maLoai=='7'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau04an,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
+        if(e.maLoai=='8'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau04bx,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
+        if(e.maLoai=='9'){
+          let objectDelete ={
+            maLoai:e.maLoai,
+            lstIdDelete:this.lstIdDeleteMau05,
+          }
+          this.lstDeleteCTietBCao.push(objectDelete);
+        }
     });
   
-    console.log(this.baoCao);
     
     // donvi tien
     if (this.donvitien == undefined) {
@@ -699,11 +766,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       listFileUploaded.push(await this.uploadFile(iterator));
     }
 
+    console.log(this.baoCao);
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFileUploaded,
-      listIdDeletes: this.listIdDelete,
+      lstDeleteCTietBCao: this.lstDeleteCTietBCao,
+      listColDeleteVtus:this.lstIdDeleteCols,
       listIdFiles: idFileDinhKems,
       lstBCao: this.baoCao.lstBCao,
       maBcao:this.baoCao.maBcao,
@@ -820,8 +889,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       };
   
       this.listColTrongDot4ax.push(objTrongdot);
-  
-  
       this.addColLL(this.chiTietBcao4ax, objTrongdot);
       this.updateLstCTietBCao(maLoai);
       this.cols4ax++;
@@ -891,6 +958,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       this.addColLL(this.chiTietBcao5, objTrongdot);
       this.updateLstCTietBCao(maLoai);
       this.cols05++;
+      console.log(this.listColTrongDot5);
     }
     
   }
@@ -1089,60 +1157,71 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
 
   //xóa cột
-  deleteCol(id: any,maLoai:any) {
+  deleteCol(col: any,maLoai:any) {
     if(maLoai==1){
-      let idx = this.listColTrongDot4ax.findIndex((e) => e.id == id);
-        this.listColTrongDot4ax.splice(idx, 1);
-        this.listColLuyke4ax.splice(idx, 1);
+       var itemCol= this.listColTrongDot4ax.find((item) => item.col==col);
+       if(typeof itemCol.id=="number"){
+        this.lstIdDeleteCols += itemCol.col + ',';
+       }
+      this.listColTrongDot4ax =  this.listColTrongDot4ax.filter(item => item.col!=col);
+      this.listColLuyke4ax =  this.listColLuyke4ax.filter(item => item.col!=col);
         this.lstCTietBCao04ax.forEach((e) => {
-          e.listCtiet.splice(2 * id, 1);
-          e.listCtiet.splice(2 * id, 1);
+          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
       });
-  
-      this.deleteColLL(this.chiTietBcao4ax, 2 * id);
+      
+      this.deleteColLL(this.chiTietBcao4ax, col);
       this.cols4ax = this.cols4ax - 1;
+    
     }else if(maLoai ==2){
-      let idx = this.listColTrongDot4an.findIndex((e) => e.id == id);
-        this.listColTrongDot4an.splice(idx, 1);
-        this.listColLuyke4an.splice(idx, 1);
+      var itemCol= this.listColTrongDot4an.find((item) => item.col==col);
+       if(typeof itemCol.id=="number"){
+        this.lstIdDeleteCols += itemCol.col + ',';
+       }
+      
+      this.listColTrongDot4an =  this.listColTrongDot4an.filter(item => item.col!=col);
+      this.listColLuyke4an =  this.listColLuyke4an.filter(item => item.col!=col);
         this.lstCTietBCao04an.forEach((e) => {
-        e.listCtiet.splice(2 * id, 1);
-        e.listCtiet.splice(2 * id, 1);
+          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
       });
-
-      this.deleteColLL(this.chiTietBcao4an, 2 * id);
+      
+      this.deleteColLL(this.chiTietBcao4an, col);
       this.cols4an = this.cols4an - 1;
     }else if(maLoai==3){
-      let idx = this.listColTrongDot4bx.findIndex((e) => e.id == id);
-        this.listColTrongDot4bx.splice(idx, 1);
-        this.listColLuyke4bx.splice(idx, 1);
+      var itemCol= this.listColTrongDot4bx.find((item) => item.col==col);
+       if(typeof itemCol.id=="number"){
+        this.lstIdDeleteCols += itemCol.col + ',';
+       }
+     
+      this.listColTrongDot4bx =  this.listColTrongDot4bx.filter(item => item.col!=col);
+      this.listColLuyke4bx =  this.listColLuyke4bx.filter(item => item.col!=col);
         this.lstCTietBCao04bx.forEach((e) => {
-          e.listCtiet.splice(2 * id, 1);
-          e.listCtiet.splice(2 * id, 1);
+          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
       });
-  
-      this.deleteColLL(this.chiTietBcao4bx, 2 * id);
+      
+      this.deleteColLL(this.chiTietBcao4bx, col);
       this.cols4bx = this.cols4bx - 1;
     }else if(maLoai==4){
-      let idx = this.listColTrongDot5.findIndex((e) => e.id == id);
-        this.listColTrongDot5.splice(idx, 1);
-        this.listColLuyke5.splice(idx, 1);
+      var itemCol= this.listColTrongDot5.find((item) => item.col==col);
+       if(typeof itemCol.id=="number"){
+        this.lstIdDeleteCols += itemCol.col + ',';
+       }
+     
+      this.listColTrongDot5 =  this.listColTrongDot5.filter(item => item.col!=col);
+      this.listColLuyke5 =  this.listColLuyke5.filter(item => item.col!=col);
         this.lstCTietBCao05.forEach((e) => {
-          e.listCtiet.splice(2 * id, 1);
-          e.listCtiet.splice(2 * id, 1);
+          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
       });
-  
-      this.deleteColLL(this.chiTietBcao5, 2 * id);
+      
+      this.deleteColLL(this.chiTietBcao5, col);
       this.cols05 = this.cols05 - 1;
     }
-    
   }
 
-  deleteColLL(data: linkList, id: any) {
-    data.listCtiet.splice(id, 1);
+  deleteColLL(data: linkList, col: any) {
+    data.listCtiet = data.listCtiet.filter(item => item.col != col);
     if (data.next.length == 0) return;
     data.next.forEach((item) => {
-      this.deleteColLL(item, id);
+      this.deleteColLL(item, col);
     });
   }
 
@@ -1211,13 +1290,16 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             item.level = item.stt.split('.').length -1;
           })
           this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
+          this.stt = 0;
           this.updateSTT(this.chiTietBcao4ax);
+          
           //-----mẫu 04a nhập
           this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
           this.lstCTietBCao04an.forEach(item => {
             item.level = item.stt.split('.').length -1;
           })
           this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
+          this.stt = 0;
           this.updateSTT(this.chiTietBcao4an);
           //-- mẫu 04b xuất
           this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
@@ -1225,6 +1307,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             item.level = item.stt.split('.').length -1;
           })
           this.getLinkList(this.chiTietBcao4bx,'',0,this.lstCTietBCao04bx);
+          this.stt = 0;
           this.updateSTT(this.chiTietBcao4bx);
           //-- mẫu 05
           this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCTietBCao;
@@ -1232,6 +1315,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             item.level = item.stt.split('.').length -1;
           })
           this.getLinkList(this.chiTietBcao5,'',0,this.lstCTietBCao05);
+          this.stt = 0;
           this.updateSTT(this.chiTietBcao5);
 
 
@@ -1247,6 +1331,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
                     loaiMatHang: el.loaiMatHang,
                     colName: vt.tenDm,
                     sl: el.sl,
+                    col:el.col,
                   };
                   this.listColTrongDot4ax.push(objTrongdot);
                 }
@@ -1266,6 +1351,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
                     loaiMatHang: el.loaiMatHang,
                     colName: vt.tenDm,
                     sl: el.sl,
+                    col:el.col,
                   };
                   this.listColTrongDot4an.push(objTrongdot);
                 }
@@ -1285,6 +1371,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
                     loaiMatHang: el.loaiMatHang,
                     colName: vt.tenDm,
                     sl: el.sl,
+                    col:el.col,
                   };
                   this.listColTrongDot4bx.push(objTrongdot);
                 }
@@ -1304,6 +1391,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
                     loaiMatHang: el.loaiMatHang,
                     colName: vt.tenDm,
                     sl: el.sl,
+                    col:el.col,
                   };
                   this.listColTrongDot5.push(objTrongdot);
                 }
@@ -1322,6 +1410,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           } else {
             this.status = true;
           }
+          this.checkXem= true;
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
@@ -1526,60 +1615,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         data.next.push(obj);
     })
 }
-  // transformToLinkList(item: ItemDataMau04a1) {
-  //   var obj: linkList = {
-  //     id: item.id,
-  //     vt: item.parentId,
-  //     stt: item.stt,
-  //     maNdungChi: item.maNdungChi,
-  //     maNdungChiParent: item.maNdungChiParent,
-  //     trongDotTcong: item.trongDotTcong,
-  //     trongDotThoc: item.trongDotThoc,
-  //     trongDotGao: item.trongDotGao,
-  //     luyKeTcong: item.luyKeTcong,
-  //     luyKeThoc: item.luyKeThoc,
-  //     luyKeGao: item.luyKeGao,
-  //     listCtiet: item.listCtiet,
-  //     parentId: item.parentId,
-  //     ghiChu: item.ghiChu,
-  //     next: [],
-  //     checked: false,
-  //     maLoai: item.maLoai,
-  //   };
-
-   
-  //   this.addToLinkList(this.chiTietBcao4ax, obj);
-  //   if (!this.nho) {
-  //     this.chiTietBcao4ax.next.push(obj);
-  //     this.chiTietBcao4ax.next.forEach((item) => {
-  //       if (item.maNdungChiParent == obj.parentId.toString()) {
-  //         obj.next.push(item);
-  //       }
-  //     });
-  //     obj.next = obj.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
-  //   }
-  //   this.chiTietBcao4ax.next = this.chiTietBcao4ax.next.filter(item => item.maNdungChiParent != obj.parentId.toString());
-  // }
-  // let sortedCompany = company.sort((a, b) => (a.name < b.name) ? -1 : 1);
-  //tim kiem trong linklist xem có cha cua item ko
-  // addToLinkList(data: linkList, item: linkList) {
-  //   if (item.maNdungChiParent == data.parentId.toString()) {
-  //     data.next.push(item);
-  //     this.chiTietBcao4ax.next.forEach(e => {
-  //       if (e.maNdungChiParent == item.parentId.toString()){
-  //         item.next.push(e);
-  //       }
-  //     })
-  //     item.next = item.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
-  //     data.next = data.next.sort((a, b) => (a.vt < b.vt ? -1 : 1));
-  //     this.nho = true;
-  //     return;
-  //   }
-  //   data.next.forEach((e) => {
-  //     this.addToLinkList(e, item);
-  //   });
-  //   if (data.next.length == 0) return;
-  // }
+  
 
   updateEditCache(): void {
     if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
@@ -1783,7 +1819,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   //lay ten trang thai biểu mẫu
   getStatusNameBieuMau(status:any):string {
-    return TRANGTHAIGUIDVCT.find(item => item.id ==status)?.ten;
+    return TRANGTHAIPHULUC.find(item => item.id ==Number(status))?.ten;
   }
 
   //lay ten don vi tạo
@@ -1941,127 +1977,205 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   // xoa dong theo so thu tu
   deleteByStt(idx: any,maLoai:any): void {
     if(maLoai==1){
-      this.delete(this.chiTietBcao4ax, idx);
+      this.delete(this.chiTietBcao4ax, idx,maLoai);
       this.stt = 0;
       this.updateSTT(this.chiTietBcao4ax);
       this.updateLstCTietBCao(maLoai);
     }else if(maLoai==2){
-      this.delete(this.chiTietBcao4an, idx);
+      this.delete(this.chiTietBcao4an, idx,maLoai);
       this.stt = 0;
       this.updateSTT(this.chiTietBcao4an);
       this.updateLstCTietBCao(maLoai);
     }else if(maLoai==3){
-      this.delete(this.chiTietBcao4bx, idx);
+      this.delete(this.chiTietBcao4bx, idx,maLoai);
       this.stt = 0;
       this.updateSTT(this.chiTietBcao4bx);
       this.updateLstCTietBCao(maLoai);
     }else if(maLoai==4){
-      this.delete(this.chiTietBcao5, idx);
+      this.delete(this.chiTietBcao5, idx,maLoai);
       this.stt = 0;
       this.updateSTT(this.chiTietBcao5);
       this.updateLstCTietBCao(maLoai);
     }
-    
+  
+    console.log(this.lstIdDeleteMau04bx);
+
   }
 
   //xoa theo so thu tu
-  delete(data: linkList, idx: number) {
+  delete(data: linkList, idx: number, maLoai:any) {
     if (data.next.length == 0) return;
     var index = data.next.findIndex((item) => item.vt == idx);
     if (index == -1) {
       data.next.forEach((item) => {
-        this.delete(item, idx);
+        this.delete(item, idx,maLoai);
       });
     } else {
       this.kt = true;
-      this.getListIdDelete(data.next[index]);
+      this.getListIdDelete(data.next[index],maLoai);
       data.next = data.next.filter((item) => item.vt != idx);
       return;
     }
   }
 
-  getListIdDelete(data: linkList){
+  getListIdDelete(data: linkList,maLoai:any){
     if(data.vt>0){
-      if (typeof this.lstCTietBCao04ax[data.vt-1].id == 'number'){
-        this.listIdDelete += this.lstCTietBCao04ax[data.vt-1].id + ',';
+      if(maLoai==1){
+        if (typeof this.lstCTietBCao04ax[data.vt-1].id == 'number'){
+          this.lstIdDeleteMau04ax += this.lstCTietBCao04ax[data.vt-1].id + ',';
+        }
+      }else if(maLoai==2){
+        if (typeof this.lstCTietBCao04an[data.vt-1].id == 'number'){
+          this.lstIdDeleteMau04an += this.lstCTietBCao04an[data.vt-1].id + ',';
+        }
+      }else if(maLoai==3){
+        if (typeof this.lstCTietBCao04bx[data.vt-1].id == 'number'){
+          this.lstIdDeleteMau04bx += this.lstCTietBCao04bx[data.vt-1].id + ',';
+        }
+      }else if(maLoai==4){
+        if (typeof this.lstCTietBCao05[data.vt-1].id == 'number'){
+          this.lstIdDeleteMau05 += this.lstCTietBCao05[data.vt-1].id + ',';
+        }
       }
     }
 
     if (data.next.length == 0) return;
     data.next.forEach(item => {
-      this.getListIdDelete(item);
+      this.getListIdDelete(item, maLoai);
     })
+    
   }
 
   //xoa bằng checkbox
   deleteSelected(maLoai:any) {
     if(maLoai==1){
-      this.deleteAllSelected(this.chiTietBcao4ax);
+      this.deleteAllSelected(this.chiTietBcao4ax,maLoai);
       this.updateSTT(this.chiTietBcao4ax);
       this.updateLstCTietBCao(maLoai);
       this.allChecked = false;
       this.chiTietBcao4ax.checked = false;
     }else if(maLoai==2){
-      this.deleteAllSelected(this.chiTietBcao4an);
+      this.deleteAllSelected(this.chiTietBcao4an,maLoai);
       this.updateSTT(this.chiTietBcao4an);
       this.updateLstCTietBCao(maLoai);
-      this.allChecked = false;
+      this.allChecked1 = false;
       this.chiTietBcao4an.checked = false;
+    }else if(maLoai==3){
+      this.deleteAllSelected(this.chiTietBcao4bx,maLoai);
+      this.updateSTT(this.chiTietBcao4bx);
+      this.updateLstCTietBCao(maLoai);
+      this.allChecked2 = false;
+      this.chiTietBcao4bx.checked = false;
+    }else if(maLoai==4){
+      this.deleteAllSelected(this.chiTietBcao5,maLoai);
+      this.updateSTT(this.chiTietBcao5);
+      this.updateLstCTietBCao(maLoai);
+      this.allChecked3 = false;
+      this.chiTietBcao5.checked = false;
     }
-    
   }
 
-  deleteAllSelected(data: linkList) {
+  deleteAllSelected(data: linkList,maLoai:any) {
     if (data.next.length == 0) {
       return;
     }
 
     if(data.checked==true){
-      this.getListIdDelete(data);
+      this.getListIdDelete(data,maLoai);
     }
     data.next = data.next.filter((item) => item.checked == false);
     this.stt = 0;
-    data.next.forEach((item) => this.deleteAllSelected(item));
+    data.next.forEach((item) => this.deleteAllSelected(item,maLoai));
   }
 
   // click o checkbox all
-  updateAllChecked(): void {
-    this.subUpdateChecked(this.chiTietBcao4ax, this.allChecked);
+  updateAllChecked(maLoai:any): void {
+    if(maLoai==1){
+      this.subUpdateChecked(this.chiTietBcao4ax, this.allChecked1,maLoai);
+    }else if(maLoai==2){
+      this.subUpdateChecked(this.chiTietBcao4an, this.allChecked2,maLoai);
+    }else if(maLoai==3){
+      this.subUpdateChecked(this.chiTietBcao4bx, this.allChecked3,maLoai);
+    }else if(maLoai==4){
+      this.subUpdateChecked(this.chiTietBcao5, this.allChecked4,maLoai);
+    }
   }
 
-  updateChecked() {
-    this.updateCheckedLL(this.chiTietBcao4ax);
+  updateChecked(maLoai:any) {
+    if(maLoai==1){
+      this.updateCheckedLL(this.chiTietBcao4ax,maLoai);
+    }else if(maLoai==2){
+      this.updateCheckedLL(this.chiTietBcao4an,maLoai);
+    }else if(maLoai==3){
+      this.updateCheckedLL(this.chiTietBcao4bx,maLoai);
+    }else if(maLoai==4){
+      this.updateCheckedLL(this.chiTietBcao5,maLoai);
+    }
+        
   }
 
-  updateCheckedLL(data: linkList) {
+  updateCheckedLL(data: linkList,maLoai:any) {
     if (data.vt != 0) {
-      if (data.checked != this.lstCTietBCao04ax[data.vt - 1].checked) {
-        this.subUpdateChecked(data, !data.checked);
-        return;
+      if(maLoai==1){
+        if (data.checked != this.lstCTietBCao04ax[data.vt - 1].checked) {
+          this.subUpdateChecked(data, !data.checked,maLoai);
+          return;
+        }
+      }else if(maLoai==2){
+        if (data.checked != this.lstCTietBCao04an[data.vt - 1].checked) {
+          this.subUpdateChecked(data, !data.checked,maLoai);
+          return;
+        }
+      }else if(maLoai==3){
+        if (data.checked != this.lstCTietBCao04bx[data.vt - 1].checked) {
+          this.subUpdateChecked(data, !data.checked,maLoai);
+          return;
+        }
+      }else if(maLoai==4){
+        if (data.checked != this.lstCTietBCao05[data.vt - 1].checked) {
+          this.subUpdateChecked(data, !data.checked,maLoai);
+          return;
+        }
       }
     }
 
     if (data.next.length == 0) return;
     var kt = true;
     data.next.forEach((item) => {
-      this.updateCheckedLL(item);
+      this.updateCheckedLL(item,maLoai);
       if (!item.checked) kt = false;
     });
-
-    if (kt) {
-      data.checked = true;
-      this.lstCTietBCao04ax[data.vt - 1].checked = true;
-    } else {
-      data.checked = false;
-      this.lstCTietBCao04ax[data.vt - 1].checked = false;
+    data.checked = kt;
+    if(maLoai==1){
+        this.lstCTietBCao04ax[data.vt - 1].checked = kt;
     }
+    if(maLoai==2){
+        this.lstCTietBCao04an[data.vt - 1].checked = kt;
+    }
+    if(maLoai==3){
+        this.lstCTietBCao04bx[data.vt - 1].checked = kt;
+    }
+    if(maLoai==4){
+        this.lstCTietBCao05[data.vt - 1].checked = kt;
+    }
+    
   }
 
-  subUpdateChecked(data: linkList, kt: boolean) {
+  subUpdateChecked(data: linkList, kt: boolean,maLoai:any) {
     data.checked = kt;
-    if (data.vt > 0) this.lstCTietBCao04ax[data.vt - 1].checked = kt;
+    if (data.vt > 0){
+      if(maLoai==1){
+        this.lstCTietBCao04ax[data.vt - 1].checked = kt;
+      }else if(maLoai==2){
+        this.lstCTietBCao04an[data.vt - 1].checked = kt;
+      }else if(maLoai==3){
+        this.lstCTietBCao04bx[data.vt - 1].checked = kt;
+      }else if(maLoai==4){
+        this.lstCTietBCao05[data.vt - 1].checked = kt;
+      }
+    }
     if (data.next.length == 0) return;
-    data.next.forEach((item) => this.subUpdateChecked(item, kt));
+    data.next.forEach((item) => this.subUpdateChecked(item, kt,maLoai));
   }
 
   saveEditLL(data: linkList, idx: number) {
@@ -2467,23 +2581,43 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 updateSingleCheckedBcao(maLoai:any): void {
   if(maLoai==1){
     if (this.lstCTietBCao04ax.every((item) => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
+      this.allChecked1 = false;
+      // this.indeterminate1 = false;
     } else if (this.lstCTietBCao04ax.every((item) => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
+      this.allChecked1 = true;
+      // this.indeterminate1 = false;
     } else {
-      this.indeterminate = true;
+      // this.indeterminate1 = true;
     }
   }else if(maLoai==2){
     if (this.lstCTietBCao04an.every((item) => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
+      this.allChecked2 = false;
+      // this.indeterminate2 = false;
     } else if (this.lstCTietBCao04an.every((item) => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
+      this.allChecked2 = true;
+      // this.indeterminate2 = false;
     } else {
-      this.indeterminate = true;
+      // this.indeterminate2 = true;
+    }
+  }else if(maLoai==3){
+    if (this.lstCTietBCao04bx.every((item) => !item.checked)) {
+      this.allChecked3 = false;
+      // this.indeterminate3 = false;
+    } else if (this.lstCTietBCao04bx.every((item) => item.checked)) {
+      this.allChecked3 = true;
+      // this.indeterminate3 = false;
+    } else {
+      // this.indeterminate3 = true;
+    }
+  }else if(maLoai==4){
+    if (this.lstCTietBCao05.every((item) => !item.checked)) {
+      this.allChecked4 = false;
+      // this.indeterminate4 = false;
+    } else if (this.lstCTietBCao05.every((item) => item.checked)) {
+      this.allChecked4 = true;
+      // this.indeterminate4 = false;
+    } else {
+      // this.indeterminate4 = true;
     }
   }
   
@@ -2501,8 +2635,8 @@ updateSingleCheckedBcao(maLoai:any): void {
 
   //check all input
   updateAllChecked02(): void {
-    this.indeterminate = false;
-    if(this.allChecked){
+    this.indeterminate02 = false;
+    if(this.allChecked02){
 
       this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
         ...item,
@@ -2528,14 +2662,14 @@ updateSingleCheckedBcao(maLoai:any): void {
   // xoa dong
   deleteById02(id: any,loaiList:any): void {
     if(loaiList=='1'){
-      this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item.id != id);
+      this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item?.id != id);
       if (typeof id == 'number') {
-        this.listIdDelete += id + ',';
+        this.lstIdDeleteMau02 += id + ',';
       }
     }else{
-      this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item.id != id);
+      this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item?.id != id);
       if (typeof id == 'number') {
-        this.listIdDelete += id + ',';
+        this.lstIdDeleteMau02 += id + ',';
       }
     }
   }
@@ -2597,13 +2731,13 @@ updateSingleCheckedBcao(maLoai:any): void {
   //checkox trên tùng row
   updateSingleChecked02(): void {
     if ((this.lstCTietBCao1.every((item) => !item.checked)) && (this.lstCTietBCao2.every((item)=> !item.checked))) {
-      this.allChecked = false;
-      this.indeterminate = true;
+      this.allChecked02 = false;
+      this.indeterminate02 = true;
     } else if ((this.lstCTietBCao1.every((item) => item.checked)) && (this.lstCTietBCao2.every((item) => item.checked)) ) {
-      this.allChecked = true;
-      this.indeterminate = false;
+      this.allChecked02 = true;
+      this.indeterminate02 = false;
     } else {
-      this.indeterminate = true;
+      this.indeterminate02 = true;
     }
   }
 
@@ -2660,13 +2794,13 @@ updateSingleCheckedBcao(maLoai:any): void {
     // add list delete id
     this.lstCTietBCao1.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
-        this.listIdDelete += item.id + ',';
+        this.lstIdDeleteMau02 += item.id + ',';
       }
 
     });
     this.lstCTietBCao2.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
-        this.listIdDelete += item.id + ',';
+        this.lstIdDeleteMau02 += item.id + ',';
       }
 
     });
@@ -2677,7 +2811,7 @@ updateSingleCheckedBcao(maLoai:any): void {
     this.lstCTietBCao2 = this.lstCTietBCao2.filter(
       (item) => item.checked != true,
     );
-    this.allChecked = false;
+    this.allChecked02 = false;
   }
 
   updateEditCache02(): void {
@@ -2726,8 +2860,8 @@ updateSingleCheckedBcao(maLoai:any): void {
 
   //check all input
   updateAllChecked03(): void {
-    this.indeterminate = false;
-    if(this.allChecked){
+    this.indeterminate03 = false;
+    if(this.allChecked03){
 
       this.lstCTietBCao031 = this.lstCTietBCao031.map((item) => ({
         ...item,
@@ -2762,20 +2896,19 @@ updateSingleCheckedBcao(maLoai:any): void {
     if(loaiList=='1'){
       this.lstCTietBCao031 = this.lstCTietBCao031.filter((item) => item.id != id);
       if (typeof id == 'number') {
-        this.listIdDelete += id + ',';
+        this.lstIdDeleteMau03 += id + ',';
       }
     }else if(loaiList=='2'){
       this.lstCTietBCao032 = this.lstCTietBCao032.filter((item) => item.id != id);
       if (typeof id == 'number') {
-        this.listIdDelete += id + ',';
+        this.lstIdDeleteMau03 += id + ',';
       }
     }else{
       this.lstCTietBCao033 = this.lstCTietBCao033.filter((item)=> item.id!=id);
       if(typeof id =='number'){
-        this.listIdDelete +=id +',';
+        this.lstIdDeleteMau03 +=id +',';
       }
-    }
-    console.log(this.listIdDelete);
+    }    
   }
 
 
@@ -2847,13 +2980,13 @@ updateSingleCheckedBcao(maLoai:any): void {
  //checkox trên tùng row
  updateSingleChecked03(): void {
     if ((this.lstCTietBCao031.every((item) => !item.checked)) && (this.lstCTietBCao032.every((item)=> !item.checked)) && (this.lstCTietBCao033.every((item)=> !item.checked))) {
-      this.allChecked = false;
-      this.indeterminate = true;
+      this.allChecked03 = false;
+      this.indeterminate03 = true;
     } else if ((this.lstCTietBCao031.every((item) => item.checked)) && (this.lstCTietBCao032.every((item) => item.checked)) && (this.lstCTietBCao033.every((item) => item.checked))) {
-      this.allChecked = true;
-      this.indeterminate = false;
+      this.allChecked03 = true;
+      this.indeterminate03 = false;
     } else {
-      this.indeterminate = true;
+      this.indeterminate03 = true;
     }
   }
 
@@ -2928,19 +3061,19 @@ updateSingleCheckedBcao(maLoai:any): void {
     // add list delete id
     this.lstCTietBCao031.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
-        this.listIdDelete += item.id + ',';
+        this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
     this.lstCTietBCao032.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
-        this.listIdDelete += item.id + ',';
+        this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
     this.lstCTietBCao033.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
-        this.listIdDelete += item.id + ',';
+        this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
@@ -2954,7 +3087,7 @@ updateSingleCheckedBcao(maLoai:any): void {
     this.lstCTietBCao033 = this.lstCTietBCao033.filter(
       (item) => item.checked != true,
     );
-    this.allChecked = false;
+    this.allChecked03 = false;
   }
 
   updateEditCache03(): void {
