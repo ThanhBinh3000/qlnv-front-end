@@ -504,3 +504,17 @@ export const LOAIBAOCAO =[
             ten:'Chưa đánh giá (để trống)'
         },
     ]
+    export const TRANGTHAIPHULUC =[
+        {
+            id:0,
+            ten:'NOT OK'
+        },
+        {
+            id:1,
+            ten:'OK'
+        },
+        {
+            id:2,
+            ten:'Chưa đánh giá (để trống)'
+        }
+    ]

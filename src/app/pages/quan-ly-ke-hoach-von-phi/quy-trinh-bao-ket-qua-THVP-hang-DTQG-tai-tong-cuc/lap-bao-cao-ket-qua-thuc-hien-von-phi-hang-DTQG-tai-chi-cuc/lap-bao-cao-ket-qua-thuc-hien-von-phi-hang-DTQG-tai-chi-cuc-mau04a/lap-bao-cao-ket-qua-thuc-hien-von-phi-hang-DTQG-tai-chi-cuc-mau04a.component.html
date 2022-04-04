@@ -114,13 +114,13 @@
               <td>{{item.tieuDe}}</td>
               <td>{{getStatusNameBieuMau(item.trangThai)}}</td>
               <td>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="checkXem">
                   <span>Nhập dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="!checkXem">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" [hidden]="checkXem">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
               </td>
@@ -175,8 +175,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked02()"
-                [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked02" (ngModelChange)="updateAllChecked02()">
                 </label>
               </th>
             </tr>
@@ -209,8 +208,8 @@
           </thead>
           <tbody>
             <tr>
-              <td>I</td>
-              <td>Đơn vị mua</td>
+              <td><b>I</b></td>
+              <td><b>Đơn vị mua</b></td>
               <td></td>
               <td></td>
               <td></td>
@@ -273,7 +272,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache1[item.id].data.maDviTinh">
                         <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh"></nz-option>
                       </nz-select>
@@ -306,9 +305,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'1')"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit02(item.id,'1')" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit02(item.id,'1')"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit02(item.id,'1')" class="save" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?" (nzOnConfirm)="cancelEdit02(item.id,'1')"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine02(i+1,'1')"></i>
@@ -320,8 +319,8 @@
               </ng-template>
             </tr>
             <tr>
-              <td>II</td>
-              <td>Tổng cục mua</td>
+              <td> <b>II</b></td>
+              <td> <b>Tổng cục mua</b></td>
               <td></td>
               <td></td>
               <td></td>
@@ -384,7 +383,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache2[item.id].data.maDviTinh">
                         <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh"></nz-option>
                       </nz-select>
@@ -417,9 +416,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'2')"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit02(item.id,'2')" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit02(item.id,'2')"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit02(item.id,'2')" class="save" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit02(item.id,'2')"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine02(i+1,'2')"></i>
@@ -464,8 +463,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked03()"
-                [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked03" (ngModelChange)="updateAllChecked03()">
                 </label>
               </th>
             </tr>
@@ -498,8 +496,8 @@
           </thead>
           <tbody>
             <tr>
-              <td>I</td>
-              <td>Xuất bản</td>
+              <td><b>I</b></td>
+              <td><b>Xuất bản</b></td>
               <td></td>
               <td></td>
               <td></td>
@@ -564,7 +562,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache031[item.id].data.maDviTinh">
                         <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh"></nz-option>
                       </nz-select>
@@ -600,9 +598,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'1')"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit03(item.id,'1')" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit03(item.id,'1')"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit03(item.id,'1')" class="save" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit03(item.id,'1')"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine03(i+1,'1')"></i>
@@ -614,8 +612,8 @@
               </ng-template>
             </tr>
             <tr>
-              <td>II</td>
-              <td>Xuất CTVT</td>
+              <td> <b>II</b> </td>
+              <td> <b>Xuất CTVT</b></td>
               <td></td>
               <td></td>
               <td></td>
@@ -680,7 +678,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache032[item.id].data.maDviTinh">
                         <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh"></nz-option>
                       </nz-select>
@@ -716,9 +714,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'2')"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit03(item.id,'2')" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit03(item.id,'2')"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit03(item.id,'2')" class="save" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit03(item.id,'2')"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine03(i+1,'2')"></i>
@@ -730,8 +728,8 @@
               </ng-template>
             </tr>
             <tr>
-              <td>III</td>
-              <td>Xuất khác</td>
+              <td><b>III</b></td>
+              <td><b>Xuất khác</b></td>
               <td></td>
               <td></td>
               <td></td>
@@ -796,7 +794,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
                         [(ngModel)]="editCache033[item.id].data.maDviTinh">
                         <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh"></nz-option>
                       </nz-select>
@@ -832,9 +830,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'3')"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit03(item.id,'3')" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit03(item.id,'3')"
-                        class="save">Cancel</a>
+                      <a (click)="saveEdit03(item.id,'3')" class="save" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit03(item.id,'3')"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine03(i+1,'3')"></i>
@@ -877,8 +875,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                  [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked1" (ngModelChange)="updateAllChecked(1)">
                 </label>
               </th>
             </tr>
@@ -887,12 +884,12 @@
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,1)">{{colname.colName}}</a> </th>
+                  (nzOnConfirm)="deleteCol(colname.col,1)">{{colname.colName}}</a> </th>
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4ax"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,1)">{{colname.colName}}</a></th>
+                  (nzOnConfirm)="deleteCol(colname.col,1)">{{colname.colName}}</a></th>
             </tr>
             <tr>
               <th>A</th>
@@ -1023,7 +1020,7 @@
                   </td>
                 </ng-template>
                 <td [hidden]="status">
-                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked" (ngModelChange)="updateChecked(1)"></label>
                 </td>
               </ng-container>
               <ng-template #editTemplate4ax>
@@ -1093,7 +1090,7 @@
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                    (ngModelChange)="updateSingleCheckedBcao(1)"></label>
+                    (ngModelChange)="updateChecked(1)"></label>
                 </td>
               </ng-template>
             </tr>
@@ -1140,8 +1137,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                  [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked2" (ngModelChange)="updateAllChecked(2)">
                 </label>
               </th>
             </tr>
@@ -1150,12 +1146,12 @@
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4an"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,2)">{{colname.colName}}</a> </th>
+                  (nzOnConfirm)="deleteCol(colname.col,2)">{{colname.colName}}</a> </th>
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4an"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,2)">{{colname.colName}}</a></th>
+                  (nzOnConfirm)="deleteCol(colname.col,2)">{{colname.colName}}</a></th>
             </tr>
             <tr>
               <th>A</th>
@@ -1286,7 +1282,7 @@
                   </td>
                 </ng-template>
                 <td [hidden]="status">
-                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked" (ngModelChange)="updateChecked(2)"></label>
                 </td>
               </ng-container>
               <ng-template #editTemplate4an>
@@ -1356,7 +1352,7 @@
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                    (ngModelChange)="updateSingleCheckedBcao(2)"></label>
+                    (ngModelChange)="updateChecked(2)"></label>
                 </td>
               </ng-template>
             </tr>
@@ -1403,8 +1399,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                  [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked3" (ngModelChange)="updateAllChecked(3)">
                 </label>
               </th>
             </tr>
@@ -1413,12 +1408,12 @@
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4bx"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,3)">{{colname.colName}}</a> </th>
+                  (nzOnConfirm)="deleteCol(colname.col,3)">{{colname.colName}}</a> </th>
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot4bx"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,3)">{{colname.colName}}</a></th>
+                  (nzOnConfirm)="deleteCol(colname.col,3)">{{colname.colName}}</a></th>
             </tr>
             <tr>
               <th>A</th>
@@ -1549,7 +1544,7 @@
                   </td>
                 </ng-template>
                 <td [hidden]="status">
-                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked" (ngModelChange)="updateChecked(3)"></label>
                 </td>
               </ng-container>
               <ng-template #editTemplate4bx>
@@ -1619,7 +1614,7 @@
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                    (ngModelChange)="updateSingleCheckedBcao(3)"></label>
+                    (ngModelChange)="updateChecked(3)"></label>
                 </td>
               </ng-template>
             </tr>
@@ -1666,8 +1661,7 @@
               <th rowspan="2">Ghi chú</th>
               <th rowspan="2" colspan="3" [hidden]="status"></th>
               <th rowspan="2" [hidden]="status">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                  [nzIndeterminate]="indeterminate">
+                <label nz-checkbox [(ngModel)]="allChecked4" (ngModelChange)="updateAllChecked(4)">
                 </label>
               </th>
             </tr>
@@ -1676,12 +1670,12 @@
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot5"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,4)">{{colname.colName}}</a> </th>
+                  (nzOnConfirm)="deleteCol(colname.col,4)">{{colname.colName}}</a> </th>
               <th>Tổng Cộng</th>
               <th>Thóc</th>
               <th>Gạo</th>
               <th *ngFor="let colname of listColTrongDot5"> <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(colname.id,4)">{{colname.colName}}</a></th>
+                  (nzOnConfirm)="deleteCol(colname.col,4)">{{colname.colName}}</a></th>
             </tr>
             <tr>
               <th>A</th>
@@ -1812,7 +1806,7 @@
                   </td>
                 </ng-template>
                 <td [hidden]="status">
-                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"></label>
+                  <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked" (ngModelChange)="updateChecked(4)"></label>
                 </td>
               </ng-container>
               <ng-template #editTemplate05>
@@ -1882,7 +1876,7 @@
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-                    (ngModelChange)="updateSingleCheckedBcao(4)"></label>
+                    (ngModelChange)="updateChecked(4)"></label>
                 </td>
               </ng-template>
             </tr>

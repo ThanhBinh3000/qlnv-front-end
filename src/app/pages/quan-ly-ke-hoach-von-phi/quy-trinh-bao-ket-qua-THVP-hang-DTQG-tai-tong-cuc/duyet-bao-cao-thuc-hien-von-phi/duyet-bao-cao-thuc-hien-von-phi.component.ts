@@ -4,17 +4,17 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
-import { TRANGTHAI } from 'src/app/Utility/utils';
+import { TRANGTHAI, LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
+
 @Component({
-  selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
-  templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
-  styleUrls: ['./tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.scss']
+  selector: 'app-duyet-bao-cao-thuc-hien-von-phi',
+  templateUrl: './duyet-bao-cao-thuc-hien-von-phi.component.html',
+  styleUrls: ['./duyet-bao-cao-thuc-hien-von-phi.component.scss']
 })
-export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
+export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
