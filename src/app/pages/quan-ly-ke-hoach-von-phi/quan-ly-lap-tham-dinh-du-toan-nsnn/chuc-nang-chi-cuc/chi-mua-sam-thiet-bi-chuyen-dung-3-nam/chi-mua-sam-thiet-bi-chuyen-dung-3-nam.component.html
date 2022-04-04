@@ -201,19 +201,16 @@
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.n1"
-                                                            (change)="changeModel1(data.id)"/>
+                                                            [(ngModel)]="editCache[data.id].data.n1"/>
                                                   </td>
 
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.n2"
-                                                            (change)="changeModel2(data.id)" />
+                                                            [(ngModel)]="editCache[data.id].data.n2"/>
                                                   </td>
                                                   <td>
                                                        <input class="search__input" nz-input type="number"
-                                                            [(ngModel)]="editCache[data.id].data.n3"
-                                                            (change)="changeModel3(data.id)" />
+                                                            [(ngModel)]="editCache[data.id].data.n3"/>
                                                   </td>
 
                                                   <td [hidden]="status">
@@ -233,14 +230,17 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
-                                        <tr>
-                                             <td></td>
-                                             <td>Tổng cộng</td>
-                                             <td>{{tong1}}</td>
-                                             <td>{{tong2}}</td>
-                                             <td>{{tong3}}</td>
-                                             <td colspan="4"></td>
-                                        </tr>
+                                        <ng-container *ngIf="lstCTietBCao.length != 0">
+                                             <tr>
+                                                  <td></td>
+                                                  <td>Tổng cộng</td>
+                                                  <td>{{tong1}}</td>
+                                                  <td>{{tong2}}</td>
+                                                  <td>{{tong3}}</td>
+                                                  <td colspan="4"></td>
+                                             </tr>
+                                        </ng-container>
+                                        
                                    </tbody>
                               </nz-table>
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

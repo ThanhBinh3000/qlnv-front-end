@@ -41,16 +41,13 @@ export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
   searchValue = '';
 
   searchFilter = {
-    tuNgay: "",
-    denNgay: "",
+    ngayTaoTu: "",
+    ngayTaoDen: "",
+    ngayQdTu: "",
+    ngayQdDen: "",
     maBaoCao: "",
-    donViTao: "",
-    loaiBaoCao: "",
-    noiQd: "",
     soQd: "",
-    vanBan: "",
     nam: "",
-    maDvi: "",
   };
   pages = {
     size: 10,
@@ -115,9 +112,11 @@ export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
   //search list bao cao theo tieu chi
   onSubmit() {
     let requestReport = {
-      ngayTaoDen: this.searchFilter.denNgay,
-      ngayTaoTu: this.searchFilter.tuNgay,
-      noiQd: this.searchFilter.noiQd,
+      ngayTaoDen: this.searchFilter.ngayTaoDen,
+      ngayTaoTu: this.searchFilter.ngayTaoTu,
+      ngayQdTu: this.searchFilter.ngayQdTu,
+      ngayQdDen: this.searchFilter.ngayQdDen,
+      nam: this.searchFilter.nam,
       paggingReq: {
         limit: this.pages.size,
         page: this.pages.page
@@ -125,8 +124,6 @@ export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
       soQd: this.searchFilter.soQd,
       str: "",
       trangThai: "",
-      maDvi: this.searchFilter.maDvi,
-
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

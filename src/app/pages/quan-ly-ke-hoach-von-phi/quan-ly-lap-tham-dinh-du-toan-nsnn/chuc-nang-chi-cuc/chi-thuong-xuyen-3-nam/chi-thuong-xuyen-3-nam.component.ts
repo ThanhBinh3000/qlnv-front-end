@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -120,6 +120,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
               private danhMucService: DanhMucHDVService,
               private userService: UserService,
               private notification: NzNotificationService,
+              private location: Location,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -536,7 +537,8 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+    this.location.back()
   }
 
   // lay ten trang thai

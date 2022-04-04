@@ -24,11 +24,13 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayTaoTu" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoTu" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
+            <!-- <input class="search__input" nz-input [(ngModel)]="searchFilter.ngayTaoDen" /> -->
+            <nz-date-picker [(ngModel)]="searchFilter.ngayTaoDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Đơn vị ra quyết định</label>
@@ -38,7 +40,7 @@
           </div>
           <div nz-col nzSpan="24">
             <label class="search__label">Về việc</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.vanBan" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.veViec" />
           </div>
         </div>
       </nz-card>

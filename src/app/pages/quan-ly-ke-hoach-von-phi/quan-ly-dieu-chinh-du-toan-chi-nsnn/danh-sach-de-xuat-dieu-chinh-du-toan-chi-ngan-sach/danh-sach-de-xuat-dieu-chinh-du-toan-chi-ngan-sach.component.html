@@ -9,16 +9,23 @@
                     </a>
                </div>
                <div class="canphai phai">
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                         [hidden]="statusBtnDuyet">
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4','')"
+                         [hidden]="statusBtnTBP">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Duyệt</span>
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnPheDuyet">
+                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTBP"
+                         (click)="tuChoi('3')">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
+                         <span>Từ chối</span>
+                    </button>
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnLD"
+                         (click)="onSubmit('6','')">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
                          <span>Phê duyệt</span>
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTuChoi">
+                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnLD"
+                         (click)="tuChoi('5')">
                          <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>Từ chối</span>
                     </button>
@@ -29,8 +36,7 @@
 <div class="contentBor chi-tieu__body">
      <div class="contentDetail">
           <div class="main-content">
-               <nz-card nzTitle="Thông tin tìm kiếm"
-                    class="mt16 flex-card p-lr16">
+               <nz-card nzTitle="Thông tin tìm kiếm" class="mt16 flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[16, 12]">
                          <div nz-col nzSpan="4">
                               <label class="search__label">Ngày lập từ</label>
@@ -46,7 +52,7 @@
                          </div>
                          <div nz-col nzSpan="12">
                               <label class="search__label">Đơn vị</label>
-                              <input class="search__input" nz-input [(ngModel)]="tenDvi" disabled/>
+                              <input class="search__input" nz-input [(ngModel)]="tenDvi" disabled />
                          </div>
                          <div nz-col nzSpan="4">
                               <button type="button" class="btn btn-main"
@@ -60,7 +66,7 @@
                     <nz-tabset nzType="card" class="tab__container">
                          <nz-tab [nzTitle]="'Chi tiết'">
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                   
+
                               </div>
                               <div class="search__body" nz-row [nzGutter]="[18, 12]">
                                    Tổng số bản ghi được tìm thấy: {{totalElements}}
@@ -74,21 +80,26 @@
                                              <th nzWidth="100px">Năm</th>
                                              <th nzWidth="300px" [hidden]="status">Nội dung</th>
                                              <th nzWidth="200px">Trạng thái</th>
-                                             <th nzWidth="100px"></th>
-                                             <th nzWidth="100px"></th>
-                                             <th nzWidth="100px"></th>
+                                             <th nzWidth="100px" [hidden]="!statusBtnSave"></th>
+                                             <th nzWidth="100px" [hidden]="statusBtnSave"></th>
+                                             <th nzWidth="100px" [hidden]="statusBtnDel"></th>
                                         </tr>
                                    </thead>
                                    <tbody>
                                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                                              <td>
-                                                  {{ (i + 1) + (pages.page - 1)*pages.size }}
+                                                  <label nz-checkbox [nzValue]="data.id"
+                                                       [(ngModel)]="data.checked"></label>
                                              </td>
                                              <td>
                                                   {{data.ngayTao}}
                                              </td>
                                              <td>
-                                                  {{data.tenDvi}}
+                                                  <div *ngFor="let item of donVis">
+                                                       <div *ngIf="item.maDvi == data.maDvi">
+                                                            {{item.tenDvi}}
+                                                       </div>
+                                                  </div>
                                              </td>
                                              <td>
                                                   {{data.namPb}}
@@ -99,13 +110,15 @@
                                              <td>
                                                   {{getStatusName(data.trangThai)}}
                                              </td>
-                                             <td>
-                                                  <a routerLink="#">Xem</a>
+                                             <td [hidden]="!statusBtnSave">
+                                                  <a
+                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Xem</a>
                                              </td>
-                                             <td>
-                                                  <a routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
+                                             <td [hidden]="statusBtnSave">
+                                                  <a
+                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
                                              </td>
-                                             <td>
+                                             <td [hidden]="statusBtnDel">
                                                   <a routerLink="#">Xóa</a>
                                              </td>
                                         </tr>
@@ -130,7 +143,7 @@
                                         </div>
                                    </div>
                               </div>
-                              
+
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
@@ -138,7 +151,7 @@
                               <span>Xuất</span>
                          </button>
                          <button type="button" class="btn btn-main"
-                              routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn" [hidden]="statusBtnTaoMoi">
+                              routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn" [hidden]="statusBtnSave">
                               <span>Tạo mới</span>
                          </button>
                     </div>
@@ -182,4 +195,3 @@
      <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
      
      <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->
-     
