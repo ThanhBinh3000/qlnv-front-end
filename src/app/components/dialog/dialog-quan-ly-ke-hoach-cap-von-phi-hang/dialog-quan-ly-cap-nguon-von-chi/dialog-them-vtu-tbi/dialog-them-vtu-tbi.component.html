@@ -1,0 +1,58 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="12">
+            <label class="search__label">Loại giá:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại giá" [(ngModel)]="objVtu.maLoaiGia">
+                <nz-option *ngFor="let item of loaiGias" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Mặt hàng:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại mặt hàng" [(ngModel)]="objVtu.maVtu">
+                <nz-option *ngFor="let item of vatTus" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Chủng loại:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chủng loại" [(ngModel)]="objVtu.maCloai">
+                <nz-option *ngFor="let item of chungLoais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Đơn giá:</label>
+            <nz-input-number nzSize="small" class="search__input" [(ngModel)]="objVtu.donGia"></nz-input-number>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Chi phí liên quan:</label>
+            <nz-input-number nzSize="small" class="search__input" [(ngModel)]="objVtu.chiPhiLquan"></nz-input-number>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Đơn vị tính:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [(ngModel)]="objVtu.maDviTinh">
+                <nz-option *ngFor="let item of dviTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="24">
+            <label class="search__label">Địa điểm:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa điểm" [(ngModel)]="objVtu.maKho">
+                <nz-option *ngFor="let item of maKhos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+              </nz-select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Lưu
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close"></i>
+                Hủy
+            </button>
+        </div>
+    </div>
+</div>

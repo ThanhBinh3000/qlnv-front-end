@@ -66,17 +66,17 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   cucKhuVucs: any = [];
   vanPhongs: any = [
     {
-      maDvi : "101",
+      maDvi: "101",
       capDvi: "1.5",
       tenDvi: "Phòng Tổng hợp",
     },
     {
-      maDvi : "102",
+      maDvi: "102",
       capDvi: "1.5",
       tenDvi: "Phòng Hành chính - Quản trị",
     },
     {
-      maDvi : "103",
+      maDvi: "103",
       capDvi: "1.5",
       tenDvi: "Phòng Tài chính - Kế toán",
     },
@@ -530,7 +530,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   redirectChiTieuKeHoachNam() {
@@ -730,7 +730,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     });
   }
 
-  tongCong(heSo: number, item: ItemData){
+  tongCong(heSo: number, item: ItemData) {
     this.tong.kphiBquanCoDmucThocLd += heSo * item.kphiBquanCoDmucThocLd;
     this.tong.kphiBquanCoDmucThocTx += heSo * item.kphiBquanCoDmucThocTx;
     this.tong.kphiBquanCoDmucGaoLd += heSo * item.kphiBquanCoDmucGaoLd;
@@ -744,7 +744,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   addLine1(id: number): void {
     let item: miniData = {
       maVtuTbi: "",
-      stt:"",
+      stt: "",
       id: uuid.v4(),
       checked: false,
       col: this.sinhMa(),
@@ -781,7 +781,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById1(id: any): void {
-    var ll : any = this.lstVtu.find(item => item.id === id );
+    var ll: any = this.lstVtu.find(item => item.id === id);
 
     this.lstCTietBCao.forEach(item => {
       item.listCtiet = item.listCtiet.filter(e => e.col != ll.col);
@@ -798,7 +798,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   deleteSelected1() {
     // add list delete id
     this.lstVtu.filter(item => {
-      if (item.checked){
+      if (item.checked) {
         this.lstCTietBCao.forEach(data => {
           data.listCtiet = data.listCtiet.filter(e => e.col != item.col);
         })
@@ -855,7 +855,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTietBCao.forEach(item => {
       var ind: number = item.listCtiet.findIndex(e => e.col == this.lstVtu[index].col);
       this.editCache[item.id].data.listCtiet.forEach(data => {
-        if (data.col == this.lstVtu[index].col){
+        if (data.col == this.lstVtu[index].col) {
           data.maVtuTbi = item.listCtiet[ind].maVtuTbi;
           data.sl = item.listCtiet[ind].sl;
         }
@@ -872,7 +872,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTietBCao.forEach(item => {
       var ind: number = item.listCtiet.findIndex(e => e.col == this.lstVtu[index].col);
       this.editCache[item.id].data.listCtiet.forEach(data => {
-        if (data.col == this.lstVtu[index].col){
+        if (data.col == this.lstVtu[index].col) {
           item.listCtiet[ind].maVtuTbi = data.maVtuTbi;
           item.listCtiet[ind].sl = data.sl;
         }
@@ -880,14 +880,14 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     })
   }
 
-  tinhLaiTongSl(){
+  tinhLaiTongSl() {
     this.lstVtu.forEach(item => {
       item.tongDvi = 0;
       item.tongVphong = 0;
       this.lstCTietBCao.forEach(data => {
         data.listCtiet.forEach(e => {
-          if (item.col == e.col){
-            if (this.vanPhongs.findIndex(et => et.maDvi === data.maCucDtnnKvuc) != -1){
+          if (item.col == e.col) {
+            if (this.vanPhongs.findIndex(et => et.maDvi === data.maCucDtnnKvuc) != -1) {
               item.tongVphong += e.col;
             } else {
               item.tongDvi += e.col;
@@ -900,14 +900,14 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     })
   }
 
-  tongSl(id: any){
+  tongSl(id: any) {
     var col: any = this.editCache1[id].data.col;
     this.editCache1[id].data.tongDvi = 0;
     this.editCache1[id].data.tongVphong = 0;
     this.lstCTietBCao.forEach(item => {
       this.editCache[item.id].data.listCtiet.forEach(e => {
         if (e.col == col) {
-          if (this.vanPhongs.findIndex(et => et.maDvi === item.maCucDtnnKvuc) != -1){
+          if (this.vanPhongs.findIndex(et => et.maDvi === item.maCucDtnnKvuc) != -1) {
             this.editCache1[id].data.tongVphong += e.sl;
           } else {
             this.editCache1[id].data.tongDvi += e.sl;
@@ -918,7 +918,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.thanhTien(id);
   }
 
-  thanhTien(id: any){
+  thanhTien(id: any) {
     this.editCache1[id].data.ttienNhapVttbDvi = this.editCache1[id].data.tongDvi * this.editCache1[id].data.dmucNhapVttbDvi;
     this.editCache1[id].data.ttienNhapVttbVphong = this.editCache1[id].data.tongVphong * this.editCache1[id].data.dmucNhapVttbVphong;
   }
@@ -930,7 +930,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   addLine2(id: number): void {
     let item: miniData = {
       maVtuTbi: "",
-      stt:"",
+      stt: "",
       id: uuid.v4(),
       checked: false,
       col: this.sinhMa(),
@@ -965,8 +965,8 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     };
   }
 
-   // click o checkbox all
-   updateAllChecked2(): void {
+  // click o checkbox all
+  updateAllChecked2(): void {
     this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
     this.lstVtu.forEach(item => {
       if (item.maTableVtu == 0) {
@@ -991,10 +991,10 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
 
   //sinh ma cho cot
-  sinhMa(): number{
+  sinhMa(): number {
     var i: number = 1;
     var kt: boolean = true;
-    while (kt){
+    while (kt) {
       var index: number = this.lstVtu.findIndex(item => item.col == i);
       if (index > -1) {
         i++;
@@ -1023,18 +1023,22 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         console.log(this.lstCTietBCao)
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
-        alert('co loi trong qua trinh van tin');
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
-      alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
-      if (res.statusCode == 0) {
-        this.maBaoCao = res.data;
-      } else {
-        this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
-      }
-    })
+    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+      res => {
+        if (res.statusCode == 0) {
+          this.maBaoCao = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      });
     this.spinner.show();
   }
 }

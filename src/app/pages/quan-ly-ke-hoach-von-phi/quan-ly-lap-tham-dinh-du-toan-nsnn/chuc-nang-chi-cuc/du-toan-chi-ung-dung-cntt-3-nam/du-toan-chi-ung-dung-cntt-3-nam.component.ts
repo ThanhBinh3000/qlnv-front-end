@@ -31,7 +31,7 @@ export class ItemData {
   thDtuN2!: Number;
   cbDtuN3!: Number;
   thDtuN3!: Number;
-  ghiChu!: Number;
+  ghiChu!: string;
   ndung!: String;
   checked!: boolean;
 }
@@ -471,7 +471,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       thDtuN2: 0,
       cbDtuN3: 0,
       thDtuN3: 0,
-      ghiChu: 0,
+      ghiChu: "",
       ndung: "",
       maBcao: "",
       stt: "",
