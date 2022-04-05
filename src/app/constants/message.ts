@@ -28,4 +28,5 @@ export const MESSAGE = {
   QD_TCDT: '/QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   ERROR_CALL_SERVICE: 'Có lỗi trong quá trình vấn tin',
+  SEARCH_VALIDATE: 'Bạn chưa chọn loại báo cáo',
 };

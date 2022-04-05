@@ -28,11 +28,11 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
