@@ -5,14 +5,17 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;">
+        <!-- <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-        <button nz-button class="search__button--clear">
+        <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
           <i nz-icon nzType="close"></i>
           Xóa điều kiện
-        </button>
+        </button> -->
+        <button  nz-button class="search__button--search" routerLink="../{{url}}/{{maDonViTao}}/{{loaiBaocao}}/{{namhientai}}">Tổng hợp</button>
+        <button  nz-button routerLink="../{{url}}" class="search__button--search" >Tạo mới</button>
+        <button  nz-button (click)="redirectChiTieuKeHoachNam()" class="search__button--search" >Đóng</button>
       </div>
     </div>
   </div>
@@ -24,7 +27,7 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="12">
             <label class="search__label">Năm hiện tại (N)</label>
-            <input class="search__input" nz-input [(ngModel)]="namhientai" />
+            <input class="search__input" nz-input [(ngModel)]="namhientai" (change)="tinhnam()"/>
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Kế hoạch 03</label>
@@ -41,14 +44,12 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="12" style="display: flex;justify-content: space-around;">
-              <button  nz-button routerLink="../{{url}}/{{maDonViTao}}/{{loaiBaocao}}/{{namhientai}}">Tổng hợp</button>
-              <button  nz-button routerLink="" >Đóng</button>
-              <button  nz-button routerLink="../{{url}}" >Tạo mới</button>
+
           </div>
         </div>
       </nz-card>
-      
-      
+
+
     </div>
   </div>
 </div>

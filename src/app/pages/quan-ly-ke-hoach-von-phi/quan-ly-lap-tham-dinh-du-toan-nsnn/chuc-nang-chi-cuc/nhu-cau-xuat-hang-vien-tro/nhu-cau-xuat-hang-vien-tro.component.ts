@@ -375,12 +375,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
             this.listIdFiles += item.id + ",";
           })
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.hide();

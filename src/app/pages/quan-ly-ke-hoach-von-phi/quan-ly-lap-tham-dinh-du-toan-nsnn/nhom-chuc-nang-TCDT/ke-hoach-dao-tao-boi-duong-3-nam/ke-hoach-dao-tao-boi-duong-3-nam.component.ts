@@ -154,11 +154,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
@@ -618,10 +618,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
         }else{
-            alert('co loi trong qua trinh van tin');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-        alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(err);
     });
     this.updateEditCache()
     this.spinner.hide();

@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -37,6 +37,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
      private danhmuc :DanhMucHDVService,
      private datepipe:DatePipe,
      private notification: NzNotificationService,
+     private location: Location
      ) {
     this.namgiao = this.currentYear.getFullYear();
   }
@@ -126,7 +127,8 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
 
   //
   dong(){
-      this.router.navigate(['/'])
+      // this.router.navigate(['/'])
+    this.location.back()
   }
 
 }

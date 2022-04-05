@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -20,7 +20,8 @@ export class TongHopComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private nguoiDungSerivce: UserService,
-    private notifi : NzNotificationService
+    private notifi : NzNotificationService,
+    private location: Location
   ) { }
 
   url: any;
@@ -197,5 +198,16 @@ export class TongHopComponent implements OnInit {
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+  }
+  redirectChiTieuKeHoachNam(){
+    this.location.back()
+  }
+  xoaDieuKien(){
+    this.namhientai = ''
+    this.kehoach = ''
+    this.loaiBaocao = ''
+  }
+  tinhnam(){
+    this.kehoach= Number(this.namhientai) + 3
   }
 }

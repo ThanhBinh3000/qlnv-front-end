@@ -3,6 +3,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
 
 @Component({
   selector: 'dialog-chon-them-khoan-muc',
@@ -16,12 +17,12 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   searchFilter = {
     khoanMuc: "",
   };
-  quanLyVonPhiService: any;
 
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
+    private QuanLyVonPhiService: QuanLyVonPhiService,
   ) { }
 
   async ngOnInit() {
@@ -44,11 +45,11 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
 
   timKiemKhoanMuc(){
     let requestReport = {
-      khoanMuc: this.searchFilter.khoanMuc,
+      id: this.searchFilter.khoanMuc,
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachKhoanMuc = data.data.content;
