@@ -3,8 +3,16 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import * as dayjs from 'dayjs';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 
 interface ItemData {
   id: string;
@@ -31,65 +39,223 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   visibleTab: boolean = false;
   formData: FormGroup;
   i = 0;
+  id: number;
   editId: string | null = null;
   listOfData: ItemData[] = [];
+  loaiVTHH: number = 0;
+  chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
+  listNam: any[] = [];
+  yearNow: number = 0;
 
-  constructor(private router: Router) { }
+  thocIdDefault: number = 2;
+  gaoIdDefault: number = 6;
+  muoiIdDefault: number = 78;
 
-  startEdit(id: string): void {
-    this.editId = id;
+  listPhuongThucDauThau: any[] = [];
+  listNguonVon: any[] = [];
+  listHinhThucDauThau: any[] = [];
+  listLoaiHopDong: any[] = [];
+
+  startPH: Date | null = null;
+  endPH: Date | null = null;
+
+  startDT: Date | null = null;
+  endDT: Date | null = null;
+
+  startHS: Date | null = null;
+  endHS: Date | null = null;
+
+  startHTN: Date | null = null;
+  endHTN: Date | null = null;
+
+  errorGhiChu: boolean = false;
+  errorInputRequired: string = null;
+
+  constructor(
+    private modal: NzModalService,
+    private router: Router,
+    private routerActive: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private danhMucService: DanhMucService,
+    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
+  ) { }
+
+  async ngOnInit() {
+    this.spinner.show();
+    try {
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
+      this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
+      this.id = +this.routerActive.snapshot.paramMap.get('id');
+      this.isVisibleChangeTab$.subscribe((value: boolean) => {
+        this.visibleTab = value;
+      });
+      this.listOfData = [
+        ...this.listOfData,
+        {
+          id: `${this.i}`,
+          stt: `${this.i}`,
+          cuc: 'Cục DTNN KV Vĩnh phú',
+          soGoiThau: `4`,
+          soDeXuat: 'DX_KHCNT_01',
+          ngayDeXuat: `10/03/2022`,
+          tenDuAn: `Mua gạo dự trữ A`,
+          soLuong: `2000`,
+          tongTien: `42.000.000`,
+        },
+      ];
+      await Promise.all([
+        this.phuongThucDauThauGetAll(),
+        this.nguonVonGetAll(),
+        this.hinhThucDauThauGetAll(),
+        this.loaiHopDongGetAll(),
+        this.loadChiTiet(),
+      ]);
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
-  stopEdit(): void {
-    this.editId = null;
+  disabledStartPH = (startValue: Date): boolean => {
+    if (!startValue || !this.endPH) {
+      return false;
+    }
+    return startValue.getTime() > this.endPH.getTime();
+  };
+
+  disabledEndPH = (endValue: Date): boolean => {
+    if (!endValue || !this.startPH) {
+      return false;
+    }
+    return endValue.getTime() <= this.startPH.getTime();
+  };
+
+  disabledStartDT = (startValue: Date): boolean => {
+    if (!startValue || !this.endDT) {
+      return false;
+    }
+    return startValue.getTime() > this.endDT.getTime();
+  };
+
+  disabledEndDT = (endValue: Date): boolean => {
+    if (!endValue || !this.startDT) {
+      return false;
+    }
+    return endValue.getTime() <= this.startDT.getTime();
+  };
+
+  disabledStartHS = (startValue: Date): boolean => {
+    if (!startValue || !this.endHS) {
+      return false;
+    }
+    return startValue.getTime() > this.endHS.getTime();
+  };
+
+  disabledEndHS = (endValue: Date): boolean => {
+    if (!endValue || !this.startHS) {
+      return false;
+    }
+    return endValue.getTime() <= this.startHS.getTime();
+  };
+
+  disabledStartHTN = (startValue: Date): boolean => {
+    if (!startValue || !this.endHTN) {
+      return false;
+    }
+    return startValue.getTime() > this.endHTN.getTime();
+  };
+
+  disabledEndHTN = (endValue: Date): boolean => {
+    if (!endValue || !this.startHTN) {
+      return false;
+    }
+    return endValue.getTime() <= this.startHTN.getTime();
+  };
+
+  validateGhiChu() {
+    if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
+      this.errorGhiChu = false;
+    }
+    else {
+      this.errorGhiChu = true;
+    }
   }
 
-  addRow(): void {
-    this.i++;
-    this.listOfData = [
-      ...this.listOfData,
-      {
-        id: `${this.i}`,
-        stt: `${this.i}`,
-        cuc: '',
-        soGoiThau: '',
-        soDeXuat: '',
-        ngayDeXuat: '',
-        tenDuAn: '',
-        soLuong: '',
-        tongTien: ''
-      },
-    ];
+  async loadChiTiet() {
+
   }
 
-  deleteRow(id: string): void {
-    this.listOfData = this.listOfData.filter((d) => d.id !== id);
+  async phuongThucDauThauGetAll() {
+    this.listPhuongThucDauThau = [];
+    let res = await this.danhMucService.phuongThucDauThauGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPhuongThucDauThau = res.data;
+    }
   }
 
-  tongHopDeXuatTuCuc(id: string): void {
-    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, id])
+  async nguonVonGetAll() {
+    this.listNguonVon = [];
+    let res = await this.danhMucService.nguonVonGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNguonVon = res.data;
+    }
   }
 
-  ngOnInit(): void {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-    this.listOfData = [
-      ...this.listOfData,
-      {
-        id: `${this.i}`,
-        stt: `${this.i}`,
-        cuc: 'Cục DTNN KV Vĩnh phú',
-        soGoiThau: `4`,
-        soDeXuat: 'DX_KHCNT_01',
-        ngayDeXuat: `10/03/2022`,
-        tenDuAn: `Mua gạo dự trữ A`,
-        soLuong: `2000`,
-        tongTien: `42.000.000`,
-      },
-    ];
+  async hinhThucDauThauGetAll() {
+    this.listHinhThucDauThau = [];
+    let res = await this.danhMucService.hinhThucDauThauGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucDauThau = res.data;
+    }
   }
+
+  async loaiHopDongGetAll() {
+    this.listLoaiHopDong = [];
+    let res = await this.danhMucService.loaiHopDongGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHopDong = res.data;
+    }
+  }
+
+  async tongHopDeXuatTuCuc() {
+    this.spinner.show();
+    try {
+      let body = {
+        "hthucLcnt": this.chiTiet.hthucLcnt,
+        "loaiHdong": this.chiTiet.loaiHdong,
+        "loaiVthh": this.chiTiet.loaiVthh,
+        "namKhoach": this.chiTiet.namKhoach,
+        "nguonVon": this.chiTiet.nguonVon,
+        "pthucLcnt": this.chiTiet.pthucLcnt
+      }
+      let data = await this.tongHopDeXuatKHLCNTService.dsChuaTongHop(body);
+      console.log(data);
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  phuongAnTrinhTongCuc() {
+    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, 0])
+  }
+
   back() {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
+  }
+
+  save() {
+
   }
 }
