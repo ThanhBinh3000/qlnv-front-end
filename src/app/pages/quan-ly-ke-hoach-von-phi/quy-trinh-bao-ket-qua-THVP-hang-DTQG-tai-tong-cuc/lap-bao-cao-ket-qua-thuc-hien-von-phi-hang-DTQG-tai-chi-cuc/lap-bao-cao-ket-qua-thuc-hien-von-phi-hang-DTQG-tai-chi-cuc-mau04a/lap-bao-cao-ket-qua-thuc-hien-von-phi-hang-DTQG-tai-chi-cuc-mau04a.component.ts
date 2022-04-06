@@ -5,16 +5,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
+import { NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MESSAGE } from '../../../../../constants/message';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, SOLAMA, TAB_SELECTED } from './lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 
 export class ItemDanhSach {
@@ -167,6 +168,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     private router: ActivatedRoute,
     private modal: NzModalService,
     private danhMucService :DanhMucHDVService,
+    private location : Location,
+    private route:Router,
   ) {}
 
 
@@ -177,6 +180,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
+
+  statusBtnDuyetBieuMau:boolean = true;
   userInfo: any;
   //-------------
   id: any;
@@ -392,9 +397,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-
     this.maDonViTao = userInfor?.dvql;
-
+    
     //check router
     this.id = this.router.snapshot.paramMap.get('id');
     // this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -438,7 +442,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
     if(this.loaiBaoCaoParam=='1'){
       //thiếu service lấy đợt báo cáo
-
+     await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
+        if(res.statusCode==0){
+          this.baoCao.dotBcao = res.data;
+        }else{
+          this.notification.error(MESSAGE.ERROR,res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
       this.maLoaiBaocao = '1';
       LISTBIEUMAUDOT.forEach(e => {
         this.baoCao.lstBCao.push(
@@ -502,6 +514,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, 2, userInfor?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, 2, userInfor?.roles[0]?.id);
 
+    if(userInfor.roles[0]?.id==2){
+      this.statusBtnDuyetBieuMau= false;
+    }
     //lay danh sach cac đơn vị quản lý (hn, thái nguyên,...)
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
@@ -522,14 +537,18 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     const requestGroupButtons = {
       id: this.id,
       maChucNang: mcn,
-      type: '',
+      lyDoTuChoi: '',
     };
     this.spinner.show();
     this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
-        console.log(data);
         this.getDetailReport();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err =>{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }
@@ -554,7 +573,55 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     return userInfo;
   }
 
+  //show popup tu choi
+  pheDuyetChiTiet(mcn: string) {
+    if (mcn == OK) {
+      // this.onSubmit(mcn, null);
+    } else if (mcn == NOTOK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.subscribe(async (text) => {
+        if (text) {
+          // this.onSubmit(mcn, text);
+        }
+      });
+    }
+  }
 
+  pheDuyetBieuMau(mcn,lyDo:string){
+    const requestPheDuyetBieuMau = {
+      id: this.id,
+      maChucNang: mcn,
+      lyDoTuChoi: lyDo,
+    };
+    this.spinner.show();
+    // this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res )
+  }
+
+  //show popup tu choi
+  tuChoi(mcn: string) {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        // this.onSubmit(mcn, text);
+      }
+    });
+  }
 
   //xử lý phần phụ lục
   // them phu luc
@@ -682,8 +749,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.updateEditCache();
     this.tabSelected = null;
   }
-  xoa(){};
+  
   ///////////////////////////////xử lý chung /////////////////////// lưu vào CSDL
+  xoa(){};
+  dong(){
+    // this.location.back();  
+    this.route.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/'])
+  }
   async luu() {
     this.baoCao.lstBCao.forEach((e) => {
       
@@ -1186,11 +1258,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
 
   // call chi tiet bao cao
-  getDetailReport() {
+  async getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
+    await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
       (data) => {
-        console.log(data);
         if (data.statusCode == 0) {
           // set thong tin chung bao cao
           this.baoCao.lstBCao = data.data.lstBCao;

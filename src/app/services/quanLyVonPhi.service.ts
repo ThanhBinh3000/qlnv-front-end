@@ -306,6 +306,11 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  // call api chức năng duyet bieu mau
+  approveBieuMau(request:any):Observable<any>{
+    return this.httpClient.put(this.urlDefault+'/qlnv-khoachphi/bao-cao/phe-duyet-chi-tiet',request);
+  }
+
   // upload bao cao thuc hien du toan chi
   updateBaoCaoThucHienDTC(request: any): Observable<any> {
     // return this.httpClient.put(
@@ -322,6 +327,11 @@ export class QuanLyVonPhiService extends BaseService {
       this.urlDefault +
       '/qlnv-khoachphi/lap-tham-dinh-du-toan/sinh-ma-vban'
     );
+  }
+
+  //sinh đợt báo cáo 3.2.9
+  sinhDotBaoCao():Observable<any>{
+    return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao')
   }
 
   //tim kiem so giao kiem tra tran chi
