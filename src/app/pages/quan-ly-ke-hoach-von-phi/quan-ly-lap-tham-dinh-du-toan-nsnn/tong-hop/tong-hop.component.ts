@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LOAIBAOCAO, Utils } from 'src/app/Utility/utils';
+import { LISTTONGHOP } from 'src/app/Utility/utils';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
@@ -64,7 +64,7 @@ export class TongHopComponent implements OnInit {
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
-    this.baoCaos = LOAIBAOCAO;
+    this.baoCaos = LISTTONGHOP;
 
 
     //lay danh sach danh muc

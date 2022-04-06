@@ -287,70 +287,6 @@ export const LOAIBAOCAO =[
         tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'
     },
     {
-        id:'16',
-        tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
-    },
-    {
-        id:'17',
-        tenDm:'Tổng hợp dự toán chi thường xuyên hàng năm'
-    },
-    {
-        id:'18',
-        tenDm:'Dự toán phí nhập xuất hàng DTQG hàng năm'
-    },
-    {
-        id:'19',
-        tenDm:'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
-    },
-    {
-        id:'20',
-        tenDm:'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
-    },
-    {
-        id:'21',
-        tenDm:'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
-    },
-    {
-        id:'22',
-        tenDm:'Kế hoạch quỹ tiền lương năm N+1'
-    },
-    {
-        id:'23',
-        tenDm:'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
-    },
-    {
-        id:'24',
-        tenDm:'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
-    },
-    {
-        id:'25',
-        tenDm:'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
-    },
-    {
-        id:'26',
-        tenDm:'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
-    },
-    {
-        id:'27',
-        tenDm:'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
-    },
-    {
-        id:'28',
-        tenDm:'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
-    },
-    {
-        id:'29',
-        tenDm:'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
-    },
-    {
-        id:'30',
-        tenDm:'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
-    },
-    {
-        id:'31',
-        tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
-    },
-    {
         id:'32',
         tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
     }
@@ -569,4 +505,71 @@ export const LOAIBAOCAO =[
             id:2,
             ten:'Chưa đánh giá (để trống)'
         }
+    ]
+
+    export const LISTTONGHOP =[
+        {
+            id:'16',
+            tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
+        },
+        {
+            id:'17',
+            tenDm:'Tổng hợp dự toán chi thường xuyên hàng năm'
+        },
+        {
+            id:'18',
+            tenDm:'Dự toán phí nhập xuất hàng DTQG hàng năm'
+        },
+        {
+            id:'19',
+            tenDm:'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
+        },
+        {
+            id:'20',
+            tenDm:'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
+        },
+        {
+            id:'21',
+            tenDm:'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
+        },
+        {
+            id:'22',
+            tenDm:'Kế hoạch quỹ tiền lương năm N+1'
+        },
+        {
+            id:'23',
+            tenDm:'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
+        },
+        {
+            id:'24',
+            tenDm:'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
+        },
+        {
+            id:'25',
+            tenDm:'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
+        },
+        {
+            id:'26',
+            tenDm:'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
+        },
+        {
+            id:'27',
+            tenDm:'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
+        },
+        {
+            id:'28',
+            tenDm:'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
+        },
+        {
+            id:'29',
+            tenDm:'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
+        },
+        {
+            id:'30',
+            tenDm:'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
+        },
+        {
+            id:'31',
+            tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
+        },
     ]
