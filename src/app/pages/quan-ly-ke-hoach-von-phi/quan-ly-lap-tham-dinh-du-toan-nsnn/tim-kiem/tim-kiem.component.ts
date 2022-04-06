@@ -3,11 +3,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 
@@ -17,14 +17,13 @@ import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
   styleUrls: ['./tim-kiem.component.scss'],
 })
 export class TimKiemComponent implements OnInit {
-  // @ViewChild('nzTreeComponent', { static: false })
-  // nzTreeComponent!: NzTreeComponent;
+
   danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
   url!: string;
-
+  messageValidate:any = MESSAGEVALIDATE
 
   trangThais: any = TRANGTHAITIMKIEM;
 
@@ -49,7 +48,7 @@ export class TimKiemComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
+      // console.log('submit', this.validateForm.value);
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -73,6 +72,7 @@ export class TimKiemComponent implements OnInit {
     this.validateForm = this.fb.group({
       namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
       loaiBaocao: [null, [Validators.required]],
+      temp: [null],
     });
 
     //lay danh sach loai bao cao

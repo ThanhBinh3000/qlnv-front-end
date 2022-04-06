@@ -25,39 +25,40 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
+      
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <form nz-form [formGroup]="validateForm">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="12">
               <label class="search__label">Năm hiện tại (N)</label>
               <nz-form-item>
-                <nz-form-control nzErrorTip="Vui lòng nhập năm báo cáo!">
+                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
                   <input nz-input  [(ngModel)]="searchFilter.nam" formControlName="namhientai"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày lập từ</label>
-              <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Đến ngày</label>
-              <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Đơn vị tạo</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao" formControlName="temp">
                 <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Mã báo cáo</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" />
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" formControlName="temp"/>
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Loại báo cáo</label>
               <nz-form-item>
-                <nz-form-control nzErrorTip="Vui lòng nhập năm báo cáo!">
+                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao"
                     [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
                     <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
@@ -67,11 +68,10 @@
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Trạng thái</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" formControlName="temp">
                 <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
               </nz-select>
             </div>
-
           </div>
         </form>
       </nz-card>
