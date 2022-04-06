@@ -200,10 +200,10 @@
               <th>6</th>
               <th>7=5*6</th>
               <th>D</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
             </tr>
           </thead>
           <tbody>
@@ -219,10 +219,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"></td>
               <td [hidden]="status"><i class="fa fa-plus" (click)="addLine02(1,'1')"></i></td>
-              <td></td>
+              <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCTietBCao1; let i = index">
               <ng-container *ngIf="!editCache1[item.id].edit; else editTemplate01">
@@ -330,10 +330,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"></td>
               <td [hidden]="status" ><i class="fa fa-plus" (click)="addLine02(1,'2')"></i></td>
-              <td></td>
+              <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCTietBCao2; let i = index">
               <ng-container *ngIf="!editCache2[item.id].edit; else editTemplate02">
@@ -446,6 +446,12 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
+        </button>
       </ng-template>
       <!--Table mẫu báo cáo 03 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo xuất hàng dự trữ quốc gia"
@@ -488,10 +494,10 @@
               <th>7=2*5</th>
               <th>8=7-6</th>
               <th>D</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
             </tr>
           </thead>
           <tbody>
@@ -508,10 +514,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td ><i class="fa fa-plus" (click)="addLine03(1,'1')"></i></td>
-              <td></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'1')"></i></td>
+              <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCTietBCao031; let i = index">
               <ng-container *ngIf="!editCache031[item.id].edit; else editTemplate1">
@@ -624,10 +630,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td ><i class="fa fa-plus" (click)="addLine03(1,'2')"></i></td>
-              <td></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'2')"></i></td>
+              <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCTietBCao032; let i = index">
               <ng-container *ngIf="!editCache032[item.id].edit; else editTemplate2">
@@ -740,10 +746,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td ><i class="fa fa-plus" (click)="addLine03(1,'3')"></i></td>
-              <td></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'3')"></i></td>
+              <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCTietBCao033; let i = index">
               <ng-container *ngIf="!editCache033[item.id].edit; else editTemplate3">
@@ -860,6 +866,12 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
+        </button>
       </ng-template>
 
       <!--Table mẫu báo cáo 04a-x -->
@@ -901,12 +913,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -918,12 +930,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -935,12 +947,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -953,12 +965,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
-              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
           </thead>
           <tbody>
@@ -993,7 +1005,7 @@
                   </ng-container>
                 </ng-container>
                 <td>{{item.ghiChu}}</td>
-                <ng-container *ngIf="disable4ax; else content">
+                <ng-container *ngIf="disable4ax; else content" >
                   <td>
                     <i class="fa fa-trash-o do"></i>
                   </td>
@@ -1007,15 +1019,15 @@
                 </ng-container>
 
 
-                <ng-template #content>
-                  <td>
+                <ng-template #content >
+                  <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,1)"></i>
                   </td>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEdit(item.id,1)"></i>
                   </td>
 
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(i + 1,1)"></i>
                   </td>
                 </ng-template>
@@ -1122,6 +1134,12 @@
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
         </button>
       </ng-template>
       <!--Table mẫu báo cáo 04a-n -->
@@ -1385,6 +1403,12 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
+        </button>
       </ng-template>
       <!--Table mẫu báo cáo 04bx -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ"
@@ -1647,6 +1671,12 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
+        </button>
       </ng-template>
       <!--Table mẫu báo cáo 05 -->
       <nz-card nzTitle="Báo Cáo: - Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG"
@@ -1908,6 +1938,12 @@
         <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="status" >
+          <span>Not OK</span>
         </button>
       </ng-template>
       <!-- Table danh sách văn bản đính kem -->

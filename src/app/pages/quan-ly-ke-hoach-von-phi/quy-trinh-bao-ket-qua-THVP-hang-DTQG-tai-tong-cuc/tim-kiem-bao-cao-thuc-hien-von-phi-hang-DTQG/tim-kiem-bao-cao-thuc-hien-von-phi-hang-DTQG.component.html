@@ -96,7 +96,7 @@
               <td>{{item.ngayTraKq}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main" [hidden]="btnPheDuyet">
+                <button type="button" class="btn btn-main" routerLink="../{{urlChiTiet}}/{{ item.id }}" [hidden]="btnPheDuyet">
                   <span>Phê duyệt</span>
                 </button>
                 <button type="button" class="btn btn-main" [hidden]="!btnPheDuyet">

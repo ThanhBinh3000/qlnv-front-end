@@ -1361,10 +1361,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.cols05 = this.cols05 + this.listColTrongDot5.length;
           
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.baoCao.trangThai == '1' ||
+            this.baoCao.trangThai == '3' ||
+            this.baoCao.trangThai == '5' ||
+            this.baoCao.trangThai == '8'
           ) {
             this.status = false;
           } else {
