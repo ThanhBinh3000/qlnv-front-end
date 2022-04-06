@@ -29,7 +29,7 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="12">
             <label class="search__label">Năm hiện tại (N)</label>
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="searchFilter.nam" ></nz-input-number>
+            <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.nam" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>

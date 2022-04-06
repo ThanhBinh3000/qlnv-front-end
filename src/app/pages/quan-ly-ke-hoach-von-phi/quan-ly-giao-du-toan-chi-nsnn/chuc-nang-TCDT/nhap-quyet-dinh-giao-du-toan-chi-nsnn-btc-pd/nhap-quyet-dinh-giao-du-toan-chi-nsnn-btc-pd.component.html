@@ -108,15 +108,11 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
+                      {{data.stt}}
+                    </td>
+                    <div>
                       {{data.maNdung}}
-                    </td>
-                    <td>
-                          <div *ngFor="let item of khoanMucs">
-                              <div *ngIf="item.maKmuc == data.maNdung">
-                                    {{item.tieuDe}}
-                              </div>
-                          </div>
-                    </td>
+                    </div>
                     <td>{{data.tong}}</td>
                     <td>{{data.nguonNSNN}}</td>
                     <td>{{data.nguonKhac}}</td>
@@ -133,27 +129,30 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.maNdung}}
+                      {{editCache[data.id].data.stt}}
                     </td>
                     <td>
+                      {{editCache[data.id].data.maNdung}}
+                    </td>
+                    <!-- <td>
                           <div *ngFor="let item of khoanMucs">
                               <div *ngIf="item.maKmuc == editCache[data.id].data.maNdung">
                                     {{item.tieuDe}}
                               </div>
                           </div>
-                    </td>
+                    </td> -->
                     <td>
                            {{editCache[data.id].data.tong}}
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number"
+                      <nz-input-number nzSize="small" class="search__input"
                            [(ngModel)]="editCache[data.id].data.nguonNSNN"
-                           (change)="changeTong(data.id)" />
+                           (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number"
+                      <nz-input-number nzSize="small" class="search__input"
                            [(ngModel)]="editCache[data.id].data.nguonKhac"
-                           (change)="changeTong(data.id)" />
+                           (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Save</a>

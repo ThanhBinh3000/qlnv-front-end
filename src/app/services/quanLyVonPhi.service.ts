@@ -21,6 +21,7 @@ export class QuanLyVonPhiService extends BaseService {
   timBaoCao(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
     // return this.httpClient.post('http://192.168.1.110:8094/bao-cao/danh-sach', request)
+    // return this.httpClient.post('http://192.168.1.111:8094/bao-cao/danh-sach', request)
   }
 
   //search list bao cao
@@ -307,10 +308,12 @@ export class QuanLyVonPhiService extends BaseService {
 
   // upload bao cao thuc hien du toan chi
   updateBaoCaoThucHienDTC(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
-      request,
-    );
+    // return this.httpClient.put(
+    //   this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+    //   request,
+    // );
+    return this.httpClient.put('http://192.168.1.111:8094/bao-cao/cap-nhat',
+      request)
   }
 
   // call api chi tiết báo cáo

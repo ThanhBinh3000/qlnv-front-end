@@ -120,11 +120,11 @@
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                    <label class="search__label">Lượng xuất gạo viện trợ (tấn)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="luongXuatGaoVtro" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongXuatGaoVtro" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                    <label class="search__label">Lượng xuất thóc viện trợ (tấn)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="luongXuatThocVtro" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongXuatThocVtro" ></nz-input-number>
               </div>
             </div>
           <div class="row">
@@ -190,7 +190,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.sl" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.sl" ></nz-input-number>
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư thiết bị "
