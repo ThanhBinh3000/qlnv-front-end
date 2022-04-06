@@ -68,17 +68,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     {
       maDvi: "101",
       capDvi: "1.5",
-      tenDvi: "Phòng Tổng hợp",
-    },
-    {
-      maDvi: "102",
-      capDvi: "1.5",
-      tenDvi: "Phòng Hành chính - Quản trị",
-    },
-    {
-      maDvi: "103",
-      capDvi: "1.5",
-      tenDvi: "Phòng Tài chính - Kế toán",
+      tenDvi: "Văn phòng",
     },
   ];
   tong: ItemData = {
@@ -134,7 +124,6 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   indeterminate = true;                       // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
   editCache1: { [key: string]: { edit: boolean; data: miniData } } = {};
-
   fileList: NzUploadFile[] = [];
 
   beforeUpload = (file: NzUploadFile): boolean => {

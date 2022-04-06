@@ -28,4 +28,6 @@ export const MESSAGE = {
   QD_TCDT: '/QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   ERROR_CALL_SERVICE: 'Có lỗi trong quá trình vấn tin',
+  ERROR_ADD_VTU: 'Không được chọn trùng loại vật tư',
+  ERROR_ADD_UNIT: 'Không được chọn trùng Cục DTNN KV',
 };

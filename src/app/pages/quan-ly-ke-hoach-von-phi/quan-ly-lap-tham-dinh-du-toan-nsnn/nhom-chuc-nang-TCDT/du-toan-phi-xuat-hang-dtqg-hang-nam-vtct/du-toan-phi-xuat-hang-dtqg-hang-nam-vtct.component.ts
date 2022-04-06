@@ -996,5 +996,32 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     this.spinner.show();
   }
+  //liem tra xem vat tu da duoc chon hay chua
+  checkVtu(id: any){
+    var name: any = this.editCache1[id].data.maVtuTbi;
+    var kt: boolean = false;
+    this.lstVtu.forEach(item => {
+      if (item.maVtuTbi == name) {
+        kt = true;
+      }
+    })
+    if (kt) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
+      this.cancelEdit1(id);
+    }
+  }
 
+  checkCucKV(id: any){
+    var name: any = this.editCache[id].data.maCucDtnnKvuc;
+    var kt: boolean = false;
+    this.lstCTietBCao.forEach(item => {
+      if (item.maCucDtnnKvuc == name) {
+        kt = true;
+      }
+    })
+    if (kt) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
+      this.cancelEdit(id);
+    }
+  }
 }
