@@ -24,8 +24,18 @@ export class PhuongAnKeHoachLCNTService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  deleteData(id: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
-    return this.httpClient.delete(url).toPromise();
+  them(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/them-moi`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  sua(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/cap-nhat`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  xoa(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/xoa`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 }

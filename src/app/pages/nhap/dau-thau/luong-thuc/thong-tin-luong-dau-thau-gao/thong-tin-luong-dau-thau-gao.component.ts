@@ -73,6 +73,8 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   startHTN: Date | null = null;
   endHTN: Date | null = null;
 
+  idPA: number = 0;
+
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
 
@@ -288,12 +290,7 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   }
 
   phuongAnTrinhTongCuc() {
-    if (this.id > 0) {
-      this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.id]);
-    }
-    else {
-      this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, 0]);
-    }
+    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.idPA], { queryParams: { idHdr: this.id } });
   }
 
   async save(isPhuongAn) {

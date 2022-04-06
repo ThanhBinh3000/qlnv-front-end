@@ -172,7 +172,11 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.phuongAnKeHoachLCNTService.deleteData(item.id).then(async () => {
+          let body = {
+            "id": item.id,
+            "maDvi": ""
+          }
+          this.phuongAnKeHoachLCNTService.xoa(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });

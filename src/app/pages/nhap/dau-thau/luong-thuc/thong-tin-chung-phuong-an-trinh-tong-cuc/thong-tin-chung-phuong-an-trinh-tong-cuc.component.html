@@ -66,7 +66,8 @@
                           <nz-form-label [nzNoColon]="true">
                             Loại hàng DTQG
                           </nz-form-label>
-                          <nz-select nzPlaceHolder="Loại hàng DTQG" [nzDisabled]="true">
+                          <nz-select nzPlaceHolder="Loại hàng DTQG" [nzDisabled]="true"
+                            [(ngModel)]="chiTietTongHop.loaiVthh">
                             <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
                             <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
                           </nz-select>
@@ -80,7 +81,8 @@
                           <nz-form-label [nzNoColon]="true">
                             Hình thức lựa chọn nhà thầu
                           </nz-form-label>
-                          <nz-select nzPlaceHolder="Hình thức lựa chọn nhà thầu" [nzDisabled]="true">
+                          <nz-select nzPlaceHolder="Hình thức lựa chọn nhà thầu" [nzDisabled]="true"
+                            [(ngModel)]="chiTietTongHop.hthucLcnt">
                             <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                             </nz-option>
                           </nz-select>
@@ -91,7 +93,8 @@
                           <nz-form-label [nzNoColon]="true">
                             Phương thức đấu thầu
                           </nz-form-label>
-                          <nz-select nzPlaceHolder="Phương thức đấu thầu" [nzDisabled]="true">
+                          <nz-select nzPlaceHolder="Phương thức đấu thầu" [nzDisabled]="true"
+                            [(ngModel)]="chiTietTongHop.pthucLcnt">
                             <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                             </nz-option>
                           </nz-select>
@@ -102,7 +105,8 @@
                           <nz-form-label [nzNoColon]="true">
                             Loại hợp đồng
                           </nz-form-label>
-                          <nz-select nzPlaceHolder="Loại hợp đồng" [nzDisabled]="true">
+                          <nz-select nzPlaceHolder="Loại hợp đồng" [nzDisabled]="true"
+                            [(ngModel)]="chiTietTongHop.loaiHdong">
                             <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                             </nz-option>
                           </nz-select>
@@ -113,7 +117,8 @@
                           <nz-form-label [nzNoColon]="true">
                             Nguồn vốn
                           </nz-form-label>
-                          <nz-select nzPlaceHolder="Nguồn vốn" [nzDisabled]="true">
+                          <nz-select nzPlaceHolder="Nguồn vốn" [nzDisabled]="true"
+                            [(ngModel)]="chiTietTongHop.nguonVon">
                             <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                           </nz-select>
                         </nz-form-item>
@@ -124,7 +129,7 @@
                             Ngày phát hành từ ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Ngày phát hành từ ngày">
+                            [(ngModel)]="chiTietTongHop.tuTgianMthau" nzPlaceHolder="Ngày phát hành từ ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -134,7 +139,7 @@
                             Đến ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Đến ngày">
+                            [(ngModel)]="chiTietTongHop.denTgianMthau" nzPlaceHolder="Đến ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -144,7 +149,7 @@
                             Thời điểm đóng thầu từ ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Thời điểm đóng thầu từ ngày">
+                            [(ngModel)]="chiTietTongHop.tuTgianDthau" nzPlaceHolder="Thời điểm đóng thầu từ ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -154,7 +159,7 @@
                             Đến ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Đến ngày">
+                            [(ngModel)]="chiTietTongHop.denTgianDthau" nzPlaceHolder="Đến ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -164,7 +169,7 @@
                             Thời điểm mở HSKT từ ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Thời điểm mở HSKT từ ngày">
+                            [(ngModel)]="chiTietTongHop.tuTgianTbao" nzPlaceHolder="Thời điểm mở HSKT từ ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -174,7 +179,7 @@
                             Đến ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Đến ngày">
+                            [(ngModel)]="chiTietTongHop.denTgianTbao" nzPlaceHolder="Đến ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -184,7 +189,7 @@
                             Hoàn thành nhập từ ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Hoàn thành nhập từ ngày">
+                            [(ngModel)]="chiTietTongHop.tuTgianNhang" nzPlaceHolder="Hoàn thành nhập từ ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -194,7 +199,7 @@
                             Đến ngày
                           </nz-form-label>
                           <nz-date-picker class="search__input" [nzDisabled]="true" nzFormat="yyyy-MM-dd"
-                            nzPlaceHolder="Đến ngày">
+                            [(ngModel)]="chiTietTongHop.denTgianNhang" nzPlaceHolder="Đến ngày">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
@@ -265,83 +270,54 @@
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Ngày phát hành từ ngày
+                            Ngày phát hành
                           </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledStartPH"
-                            [(ngModel)]="startPH" nzPlaceHolder="Ngày phát hành từ ngày">
+                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startPH"
+                            nzPlaceHolder="Ngày phát hành">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                          <nz-form-label [nzNoColon]="true">
-                            Đến ngày
-                          </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledEndPH"
-                            [(ngModel)]="endPH" nzPlaceHolder="Đến ngày">
-                          </nz-date-picker>
-                        </nz-form-item>
+
                       </div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Thời điểm đóng thầu từ ngày
+                            Thời điểm đóng thầu
                           </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledStartDT"
-                            [(ngModel)]="startDT" nzPlaceHolder="Thời điểm đóng thầu từ ngày">
+                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startDT"
+                            nzPlaceHolder="Thời điểm đóng thầu">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                          <nz-form-label [nzNoColon]="true">
-                            Đến ngày
-                          </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledEndDT"
-                            [(ngModel)]="endDT" nzPlaceHolder="Đến ngày">
-                          </nz-date-picker>
-                        </nz-form-item>
+
                       </div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Thời điểm mở HSKT từ ngày
+                            Thời điểm mở HSKT
                           </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [nzDisabledDate]="disabledStartHS"
-                            [(ngModel)]="startHS" nzPlaceHolder="Thời điểm mở HSKT từ ngày">
+                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startHS"
+                            nzPlaceHolder="Thời điểm mở HSKT">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                          <nz-form-label [nzNoColon]="true">
-                            Đến ngày
-                          </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Đến ngày"
-                            [nzDisabledDate]="disabledEndHS" [(ngModel)]="endHS">
-                          </nz-date-picker>
-                        </nz-form-item>
+
                       </div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Hoàn thành nhập từ ngày
+                            Hoàn thành nhập
                           </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd"
-                            [nzDisabledDate]="disabledStartHTN" [(ngModel)]="startHTN"
-                            nzPlaceHolder="Hoàn thành nhập từ ngày">
+                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startHTN"
+                            nzPlaceHolder="Hoàn thành nhập">
                           </nz-date-picker>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                          <nz-form-label [nzNoColon]="true">
-                            Đến ngày
-                          </nz-form-label>
-                          <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Đến ngày"
-                            [nzDisabledDate]="disabledEndHTN" [(ngModel)]="endHTN">
-                          </nz-date-picker>
-                        </nz-form-item>
+
                       </div>
                     </div>
                   </div>

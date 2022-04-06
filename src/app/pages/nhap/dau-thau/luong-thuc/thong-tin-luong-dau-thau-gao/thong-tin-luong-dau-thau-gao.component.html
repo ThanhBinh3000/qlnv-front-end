@@ -16,7 +16,8 @@
                   <i class="icon htvbdh_tcdt_save"></i>
                   <span>Lưu</span>
                 </button>
-                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="phuongAnTrinhTongCuc()">
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="phuongAnTrinhTongCuc()"
+                  *ngIf="id > 0">
                   <i class="icon htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet"></i>
                   <span>Phương án trình tổng cục đã duyệt</span>
                 </button>

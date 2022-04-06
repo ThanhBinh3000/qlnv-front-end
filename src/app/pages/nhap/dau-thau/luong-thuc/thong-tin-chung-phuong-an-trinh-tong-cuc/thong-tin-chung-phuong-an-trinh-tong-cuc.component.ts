@@ -13,6 +13,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
 
 interface ItemData {
   id: string;
@@ -57,21 +60,16 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   chiTiet: ThongTinPhuongAnTrinhTongCuc = new ThongTinPhuongAnTrinhTongCuc();
 
   startPH: Date | null = null;
-  endPH: Date | null = null;
-
   startDT: Date | null = null;
-  endDT: Date | null = null;
-
   startHS: Date | null = null;
-  endHS: Date | null = null;
-
   startHTN: Date | null = null;
-  endHTN: Date | null = null;
 
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
 
   thongTinChung: any;
+  idHdr: number = 0;
+  chiTietTongHop: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
 
   constructor(
     private modal: NzModalService,
@@ -80,11 +78,16 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
+    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
+    private phuongAnKeHoachLCNTService: PhuongAnKeHoachLCNTService,
   ) {
     this.isFromTongHop = false;
     if (this.router.url.indexOf('luong-dau-thau-gao') != -1) {
       this.isFromTongHop = true;
     }
+    this.routerActive.queryParams.subscribe(params => {
+      this.idHdr = +params['idHdr'];
+    });
   }
 
   async ngOnInit() {
@@ -114,6 +117,7 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
         this.nguonVonGetAll(),
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
+        this.loadChiTiet(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -123,67 +127,27 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     }
   }
 
-  loadChiTiet() {
+  async loadChiTiet() {
     if (this.id > 0) {
 
     }
+    else {
+      this.chiTiet.idThHdr = this.idHdr;
+    }
+    await this.loadChiTietTongHop();
   }
 
-  disabledStartPH = (startValue: Date): boolean => {
-    if (!startValue || !this.endPH) {
-      return false;
+  async loadChiTietTongHop() {
+    if (this.id > 0) {
+      let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.idHdr);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.chiTietTongHop = res.data;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
-    return startValue.getTime() > this.endPH.getTime();
-  };
-
-  disabledEndPH = (endValue: Date): boolean => {
-    if (!endValue || !this.startPH) {
-      return false;
-    }
-    return endValue.getTime() <= this.startPH.getTime();
-  };
-
-  disabledStartDT = (startValue: Date): boolean => {
-    if (!startValue || !this.endDT) {
-      return false;
-    }
-    return startValue.getTime() > this.endDT.getTime();
-  };
-
-  disabledEndDT = (endValue: Date): boolean => {
-    if (!endValue || !this.startDT) {
-      return false;
-    }
-    return endValue.getTime() <= this.startDT.getTime();
-  };
-
-  disabledStartHS = (startValue: Date): boolean => {
-    if (!startValue || !this.endHS) {
-      return false;
-    }
-    return startValue.getTime() > this.endHS.getTime();
-  };
-
-  disabledEndHS = (endValue: Date): boolean => {
-    if (!endValue || !this.startHS) {
-      return false;
-    }
-    return endValue.getTime() <= this.startHS.getTime();
-  };
-
-  disabledStartHTN = (startValue: Date): boolean => {
-    if (!startValue || !this.endHTN) {
-      return false;
-    }
-    return startValue.getTime() > this.endHTN.getTime();
-  };
-
-  disabledEndHTN = (endValue: Date): boolean => {
-    if (!endValue || !this.startHTN) {
-      return false;
-    }
-    return endValue.getTime() <= this.startHTN.getTime();
-  };
+  }
 
   validateGhiChu() {
     if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
@@ -195,11 +159,41 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   async save() {
-    if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
-      this.errorGhiChu = false;
-    }
-    else {
-      this.errorGhiChu = true;
+    this.spinner.show();
+    try {
+      if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
+        this.errorGhiChu = false;
+      }
+      else {
+        this.errorGhiChu = true;
+      }
+      if (!this.errorGhiChu) {
+        if (this.id > 0) {
+          let res = await this.phuongAnKeHoachLCNTService.sua(this.chiTiet);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back(this.idHdr);
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+        else {
+          let res = await this.phuongAnKeHoachLCNTService.them(this.chiTiet);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back(this.idHdr);
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
