@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -17,9 +17,8 @@ import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
   styleUrls: ['./tim-kiem.component.scss'],
 })
 export class TimKiemComponent implements OnInit {
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
+  // @ViewChild('nzTreeComponent', { static: false })
+  // nzTreeComponent!: NzTreeComponent;
   danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
@@ -39,22 +38,43 @@ export class TimKiemComponent implements OnInit {
     loaiBaoCao: "",
     trangThai: "",
   };
-  pages = {
+  pages = {                           // page
     size: 10,
     page: 1,
   }
   donViTaos: any = [];
   baoCaos: any = [];
+
+  validateForm!: FormGroup;           // form
+
+  submitForm(): void {
+    if (this.validateForm.valid) {
+      console.log('submit', this.validateForm.value);
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
+    private fb: FormBuilder
   ) {
   }
 
   ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
+      loaiBaocao: [null, [Validators.required]],
+    });
+
     //lay danh sach loai bao cao
     this.baoCaos = LOAIBAOCAO;
     //lay danh sach danh muc
