@@ -251,14 +251,14 @@
                                                   </td>
 
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.sl"
-                                                            (change)="changeModel(data.id)"/>
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.dmucPhiTc"
-                                                            (change)="changeModel(data.id)" />
+                                                            (change)="changeModel(data.id)" ></nz-input-number>
                                                   </td>
                                                   <td>
                                                        {{editCache[data.id].data.thanhTien}}

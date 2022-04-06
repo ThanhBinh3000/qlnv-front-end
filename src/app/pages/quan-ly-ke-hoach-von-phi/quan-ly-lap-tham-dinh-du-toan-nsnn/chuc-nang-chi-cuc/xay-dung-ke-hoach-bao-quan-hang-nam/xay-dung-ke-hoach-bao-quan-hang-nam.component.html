@@ -124,20 +124,20 @@
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                    <label class="search__label"> Kinh phí bảo quản Thóc (thường xuyên)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="kphiBquanThocTx" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiBquanThocTx" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                    <label class="search__label">Kinh phí bảo quản Gạo (thường xuyên)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="kphiBquanGaoTx" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiBquanGaoTx" ></nz-input-number>
 
               </div>
               <div nz-col nzSpan="12">
                    <label class="search__label">Kinh phí bảo quản Thóc (lần đầu)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="kphiBquanThocLd" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiBquanThocLd" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                    <label class="search__label">Kinh phí bảo quản Gạo (lần đầu)</label>
-                   <input class="search__input" type="number" nz-input [(ngModel)]="kphiBquanGaoLd" />
+                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="kphiBquanGaoLd" ></nz-input-number>
               </div>
             </div>
           <div class="row">
@@ -217,7 +217,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.kphi" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphi" ></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

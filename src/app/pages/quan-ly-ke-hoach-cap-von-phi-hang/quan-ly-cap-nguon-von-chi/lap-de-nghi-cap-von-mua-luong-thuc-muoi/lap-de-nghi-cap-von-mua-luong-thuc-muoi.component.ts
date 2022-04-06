@@ -13,6 +13,9 @@ import { Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogMuaLuongThucMuoiComponent } from 'src/app/components/dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-luong-thuc-muoi/dialog-mua-luong-thuc-muoi.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 
 export class ItemData {
@@ -25,9 +28,7 @@ export class ItemData {
   giaTtruong!: number;
   giaTdaTthieu!: number;
   thanhTien!: number;
-
   id!: any;
-  maBcao!: String;
   stt!: String;
   checked!:boolean;
 }
@@ -40,17 +41,55 @@ export class ItemData {
 export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
   userInfo: any;
-  errorMessage!: String;                      //
 
-  nguonHangs: any = [];
-  matHangs: any = [];
-  hinhThucs: any = [];
+  nguonHangs: any = [
+    {
+      id: 1,
+      tenDm: "Dự trữ đầu năm",
+    },
+    {
+      id: 2,
+      tenDm: "Bố sung",
+    },
+    {
+      id: 3,
+      tenDm: "Mua ngoài thị trường",
+    },
+    {
+      id: 4,
+      tenDm: "Viện trợ",
+    },
+  ];
+  matHangs: any = [
+    {
+      id: 1,
+      tenDm: "Muối",
+    },
+    {
+      id: 2,
+      tenDm: "Gạo",
+    },
+  ];
+  hinhThucs: any = [
+    {
+      id: 1,
+      tenDm: "Chuyển sang",
+    },
+    {
+      id: 2,
+      tenDm: "Tái nhập",
+    },
+    {
+      id: 3,
+      tenDm: "Mua",
+    },
+    {
+      id: 4,
+      tenDm: "Miễn phí",
+    },
+  ];
   donViTinhs: any = [];
 
-
-  noiDungs: any = [];                         // danh muc noi dung
-  nhomChis:any = [];                          // danh muc nhom chi
-  loaiChis:any = [];                          // danh muc loai chi
   donVis:any = [];                            // danh muc don vi
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
@@ -122,7 +161,7 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
               private danhMucService: DanhMucHDVService,
               private userService: UserService,
               private notification: NzNotificationService,
-
+              private modal: NzModalService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
@@ -166,18 +205,18 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
 
       //get danh muc nguon hang
-      this.danhMucService.dMNguonHang().toPromise().then(
-        (data) =>{
-          if (data.statusCode == 0) {
-            this.nguonHangs = data.data?.content;
-          }else{
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        (err) =>{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      );
+      // this.danhMucService.dMNguonHang().toPromise().then(
+      //   (data) =>{
+      //     if (data.statusCode == 0) {
+      //       this.nguonHangs = data.data?.content;
+      //     }else{
+      //       this.notification.error(MESSAGE.ERROR, data?.msg);
+      //     }
+      //   },
+      //   (err) =>{
+      //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      //   }
+      // );
 
       //get mat hang
       this.danhMucService.dMVatTu().toPromise().then(
@@ -194,27 +233,45 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
       );
 
       //get hinh thuc
-      this.danhMucService.dMHinhThuc().toPromise().then(
-        (data) =>{
+      // this.danhMucService.dMHinhThuc().toPromise().then(
+      //   (data) =>{
+      //     if (data.statusCode == 0) {
+      //       this.hinhThucs = data.data?.content;
+      //     }else{
+      //       this.notification.error(MESSAGE.ERROR, data?.msg);
+      //     }
+      //   },
+      //   (err) =>{
+      //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      //   }
+      // );
+
+      this.danhMucService.dMDviTinh().toPromise().then(
+        (data) => {
           if (data.statusCode == 0) {
-            this.hinhThucs = data.data?.content;
-          }else{
+            this.donViTinhs = data.data?.content;
+          } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
-        (err) =>{
+        (err) => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
 
-      //get don vi tinh
-      this.quanLyVonPhiService.dMDonVi().subscribe(res => {
-        if(res.statusCode==0){
-          this.donVis = res.data;
+      this.danhMucService.dMDonVi().toPromise().then(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.donVis = data.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
-      })
+      );
 
-    
     this.spinner.hide();
   }
 
@@ -308,30 +365,48 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
         item.id = uuid.v4();
       }
     });
-    this.updateEditCache();
     this.spinner.hide();
   }
 
   // chuc nang check role
-  onSubmit(mcn: String) {
+  onSubmit(mcn: String, lyDoTuChoi: string) {
     const requestGroupButtons = {
       id: this.id,
       maChucNang: mcn,
-      type: "",
+      lyDotuChoi: lyDoTuChoi,
     };
-    debugger
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
-      if (data.statusCode == 0) {
-        this.getDetailReport();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
+    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          //this.getDetailReport();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
+    );
     this.spinner.hide();
+  }
+
+  tuChoi(mcn: string) {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.onSubmit(mcn, text);
+      }
+    });
   }
 
   //thay doi trang thai
@@ -347,7 +422,6 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
@@ -373,7 +447,6 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
         }
       },
       (err) => {
-        console.log(err);
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
@@ -413,17 +486,46 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
       giaTtruong: 0,
       giaTdaTthieu: 0,
       thanhTien: 0,
-      maBcao: "",
       stt: "",
       id: uuid.v4(),
       checked:false,
     }
 
-    this.lstCTietBCao.splice(id, 0, item);
-    this.editCache[item.id] = {
-      edit: true,
-      data: { ...item }
-    };
+    const modalIn = this.modal.create({
+      nzTitle: 'Danh mục hàng hóa đề xuất',
+      nzContent: DialogMuaLuongThucMuoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        obj: item
+      },
+    });
+    modalIn.afterClose.subscribe((res) => {
+      if (res) {
+        this.lstCTietBCao.splice(id, 0, res);
+      }
+    });
+  }
+
+  editLine(id: number): void {
+    const modalIn = this.modal.create({
+      nzTitle: 'Danh mục hàng hóa đề xuất',
+      nzContent: DialogMuaLuongThucMuoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        obj: this.lstCTietBCao[id]
+      },
+    });
+    modalIn.afterClose.subscribe((res) => {
+      if (res) {
+        Object.assign(this.lstCTietBCao[id], res);
+      }
+    });
   }
 
   // xoa dong
@@ -510,44 +612,6 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
   // lay ten don vi tao
   getUnitName(){
     return this.donVis.find(item => item.id == this.maDonViTao)?.tenDvi;
-  }
-
-  // start edit
-  startEdit(id: string): void {
-    this.editCache[id].edit = true;
-  }
-
-  // huy thay doi
-  cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
-    this.editCache[id] = {
-      data: { ...this.lstCTietBCao[index] },
-      edit: false
-    };
-  }
-
-  // luu thay doi
-  saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-  }
-
-  // gan editCache.data == lstCTietBCao
-  updateEditCache(): void {
-    this.lstCTietBCao.forEach(item => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    });
-  }
-
-  //gia tri cac o input thay doi thi tinh toan lai
-  changeModel(id: string): void {
-    this.editCache[id].data.thanhTien = Number(this.editCache[id].data.soLuong) * Number(this.editCache[id].data.giaTdaTthieu);
-
   }
 
 }

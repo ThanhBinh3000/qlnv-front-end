@@ -8,57 +8,44 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
+        <!-- <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()">
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
+        </button> -->
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
-          <i class="icon htvbdh_tcdt_close"></i>
-          <span>Đóng</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2','')"
+          [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
-        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4','')"
+          [hidden]="statusBtnTBP">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6','')"
+          [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a> -->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')" [hidden] = "statusBtnTBP">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Trưởng BP trả lại</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')" [hidden] = "statusBtnTBP">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Trưởng BP phê duyệt</span>
-        </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')" [hidden] = "statusBtnLD">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Lãnh đạo trả lại</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')" [hidden] = "statusBtnLD">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi('5')" [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
-        </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')" [hidden] = "statusBtnGuiDVCT">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('8')" [hidden] = "statusBtnDVCT">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>ĐV cấp trên trả lại</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')" [hidden] = "statusBtnDVCT">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>ĐV cấp trên duyệt</span>
-        </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()">
+          <i class="icon htvbdh_tcdt_close"></i>
+          <span>Đóng</span>
         </a>
       </div>
     </div>
@@ -92,13 +79,13 @@
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Căn cứ" [nzSpan]="2">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn hàng">
-                <nz-option *ngFor="let item of nguonHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                  <nz-option *ngFor="let item of nguonHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Hợp đồng mua bán" >
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hợp đồng" >
+              <nz-descriptions-item nzTitle="Hợp đồng mua bán">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hợp đồng">
                   <nz-option *ngFor="let item of nguonHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
+                </nz-select>
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
@@ -107,48 +94,7 @@
       <div class="tab__container">
         <nz-card nzTitle="Danh mục hàng hóa đề xuất" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="8">
-              <label class="search__label">Nguồn hàng</label>
-              <input class="search__input" nz-input  />
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Số lương</label>
-              <input class="search__input" nz-input  />
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Đơn vị</label>
-              <input class="search__input" nz-input  />
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Mật hàng</label>
-              <input class="search__input" nz-input  />
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Thành tiền</label>
-              <input class="search__input" nz-input  />
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label"></label>
-              <button class="search__input" nz-button nzType="primary" style="margin-top:20px">Thêm vào danh sách</button>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Hình thức</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
-                <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-              </nz-select>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Giá thị trường</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
-                <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-              </nz-select>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Giá tối đa/ tối thiểu</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" >
-                <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-              </nz-select>
-            </div>
+            
           </div>
           <nz-tabset nzType="card" class="tab__container">
             <nz-tab>
@@ -184,114 +130,52 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of lstCTietBCao; let i = index">
-                    <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                      <td>{{ i + 1 }}</td>
-                      <td>
-                        <div *ngFor="let item of nguonHangs">
-                          <div *ngIf="item.id == data.maNguonHang">
-                            {{item.tenDm}}
-                          </div>
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <div *ngFor="let item of nguonHangs">
+                        <div *ngIf="item.id == data.maNguonHang">
+                          {{item.tenDm}}
                         </div>
-                      </td>
-                      <td>
-                        <div *ngFor="let item of matHangs">
-                          <div *ngIf="item.id == data.maMatHang">
-                            {{item.tenDm}}
-                          </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let item of matHangs">
+                        <div *ngIf="item.id == data.maMatHang">
+                          {{item.tenDm}}
                         </div>
-                      </td>
-                      <td>
-                        <div *ngFor="let item of hinhThucs">
-                          <div *ngIf="item.id == data.maHinhThuc">
-                            {{item.tenDm}}
-                          </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let item of hinhThucs">
+                        <div *ngIf="item.id == data.maHinhThuc">
+                          {{item.tenDm}}
                         </div>
-                      </td>
-                      <td>{{ data.soLuong }}</td>
-                      <td>
-                        <div *ngFor="let item of donViTinhs">
-                          <div *ngIf="item.id == data.maDviTinh">
-                            {{item.tenDm}}
-                          </div>
+                      </div>
+                    </td>
+                    <td>{{ data.soLuong }}</td>
+                    <td>
+                      <div *ngFor="let item of donViTinhs">
+                        <div *ngIf="item.id == data.maDviTinh">
+                          {{item.tenDm}}
                         </div>
-                      </td>
-                      <td>{{ data.giaTtruong }}</td>
-                      <td>{{ data.giaTdaTthieu }}</td>
-                      <td>{{ data.thanhTien }}</td>
-                      <td [hidden]="status">
-                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
-                      </td>
-                      <td [hidden]="status">
-                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                      </td>
-                      <td [hidden]="status">
-                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                      </td>
-                      <td [hidden]="status">
-                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                          (ngModelChange)="updateSingleChecked()"></label>
-                      </td>
-  
-                    </ng-container>
-                    <ng-template #editTemplate>
-                      <td>{{ i + 1 }}</td>
-                      <td>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn hàng"
-                          [(ngModel)]="editCache[data.id].data.maNguonHang">
-                          <nz-option *ngFor="let item of nguonHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                        </nz-select>
-                      </td>
-                      <td>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mặt hàng"
-                          [(ngModel)]="editCache[data.id].data.maMatHang">
-                          <nz-option *ngFor="let item of matHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                        </nz-select>
-                      </td>
-                      <td>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức"
-                          [(ngModel)]="editCache[data.id].data.maHinhThuc">
-                          <nz-option *ngFor="let item of hinhThucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                        </nz-select>
-                      </td>
-                      <td>
-                        <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.soLuong"
-                        (change)="changeModel(data.id)" />
-                      </td>
-                      <td>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
-                          [(ngModel)]="editCache[data.id].data.maDviTinh">
-                          <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                        </nz-select>
-                      </td>
-                      <td>
-                        <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.giaTtruong"
-                          (change)="changeModel(data.id)" />
-                      </td>
-                      <td>
-                        <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.giaTdaTthieu"
-                          (change)="changeModel(data.id)" />
-                      </td>
-                      <td>
-                        <!-- <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.thanhTien"
-                        (change)="changeModel(data.id)" /> -->
-                        {{editCache[data.id].data.thanhTien}}
-                      </td>
-                      <td [hidden]="status">
-                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
-                      </td>
-                      <td>
-                        <a (click)="saveEdit(data.id)" class="save">Save</a>
-                        <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
-                          class="save">Cancel</a>
-                      </td>
-                      <td [hidden]="status">
-                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                      </td>
-                      <td [hidden]="status">
-                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                          (ngModelChange)="updateSingleChecked()"></label>
-                      </td>
-                    </ng-template>
+                      </div>
+                    </td>
+                    <td>{{ data.giaTtruong }}</td>
+                    <td>{{ data.giaTdaTthieu }}</td>
+                    <td>{{ data.thanhTien }}</td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-pencil" (click)="editLine(i)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
                   </tr>
                 </tbody>
               </nz-table>
@@ -310,7 +194,7 @@
                   </button>
                 </div>
               </div>
-  
+
               <nz-table [nzData]="lstCTietBCao" nzBordered class="table__body" style="width: 600px">
                 <thead>
                   <tr>
@@ -335,20 +219,9 @@
               </nz-table>
             </nz-tab>
           </nz-tabset>
-          <div nz-col nzSpan="24">
-            <label class="search__label">Lý do từ chối</label>
-            <input class="search__input" nz-input  />
-          </div>
-          <div style="margin:20px ;">
-            <button type="button" class="btn btn-main">
-              Phê duyệt
-            </button>
-            <button type="button" class="btn btn-main" >
-              Từ chối
-            </button>
-          </div>
+          
         </nz-card>
-        
+
         <div class="action">
           <button type="button" class="btn btn-main" (click)="deleteSelected()">
             <i class="fa fa-trash-o"></i>
