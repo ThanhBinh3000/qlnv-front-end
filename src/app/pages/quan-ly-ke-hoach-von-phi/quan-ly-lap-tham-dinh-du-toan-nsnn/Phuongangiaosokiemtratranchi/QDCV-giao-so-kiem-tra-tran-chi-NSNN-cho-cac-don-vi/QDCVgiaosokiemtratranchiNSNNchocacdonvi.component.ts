@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -47,6 +47,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
      private datepipe:DatePipe,
      private sanitizer: DomSanitizer,
      private notification: NzNotificationService,
+     private location: Location
      ) {
     this.namgiao = this.currentYear.getFullYear();
   }
@@ -274,7 +275,8 @@ async luu(){
 
   //
   dong(){
-      this.router.navigate(['/'])
+      // this.router.navigate(['/'])
+      this.location.back()
   }
 
 }

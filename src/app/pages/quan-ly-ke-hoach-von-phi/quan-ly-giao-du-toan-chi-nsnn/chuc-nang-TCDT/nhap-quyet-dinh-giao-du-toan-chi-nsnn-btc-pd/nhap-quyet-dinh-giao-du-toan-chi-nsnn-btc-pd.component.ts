@@ -12,7 +12,7 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
-import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
+// import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
 
@@ -84,7 +84,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     tong: 0,
     checked: true,
   };
-  khoanMucs: any = KHOANMUCLIST;
+    khoanMucs: any = [];
 
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
@@ -96,6 +96,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  maKhoanMucs: any = [];
 
 
   // upload file
@@ -221,6 +222,19 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       }
     );
 
+    //get danh muc nhom chi
+    this.danhMucService.dMKhoanMuc().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.maKhoanMucs = data.data?.content;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
 
 
     //lay danh sach danh muc don vi
@@ -567,8 +581,10 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   }
 
   addKmuc() {
-    KHOANMUCLIST.forEach(item => item.status = false);
-    var danhSach = KHOANMUCLIST.filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
+    // KHOANMUCLIST.forEach(item => item.status = false);
+    // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
+
+    var danhSach = this.khoanMucs
 
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
@@ -583,12 +599,27 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     });
     modalIn.afterClose.subscribe((res) => {
          if (res) {
-              res.forEach(item => {
+           this.maKhoanMucs.forEach(e => {
+             if(res.id == e.id){
+                 return res.id = e.tenDm
+             }
+           })
+
+          this.lstCTietBCao.push({
+            id: uuid.v4(),
+            stt: "I",
+            maNdung: res.id,
+            nguonKhac: 0,
+            nguonNSNN: 0,
+            tong: 0,
+            checked: false,
+       });
+              res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({
                              id: uuid.v4(),
                              stt: "",
-                             maNdung: item.maKmuc,
+                             maNdung: item.tenDm,
                              nguonKhac: 0,
                              nguonNSNN: 0,
                              tong: 0,

@@ -54,7 +54,7 @@ export class TongHopComponent implements OnInit {
   loaiBaocao: any;
 
   // validateForm!: FormGroup;
-  
+
   async ngOnInit() {
     this.validateForm = this.fb.group({
       namhientai: [null, [Validators.required]],
@@ -92,8 +92,8 @@ export class TongHopComponent implements OnInit {
     size: 10,
     page: 1,
   }
- 
-  
+
+
   //get user info
   async getUserInfor(username: string) {
     let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
@@ -116,19 +116,19 @@ export class TongHopComponent implements OnInit {
   }
 
   tonghop(){
-    
+
     if(this.namhientai==undefined || this.loaiBaocao ==null){
-      
+
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
     } else{
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
     }
-    
+
   }
 
   taomoi(){
     if(this.namhientai==undefined || this.loaiBaocao ==null){
-      
+
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
     } else{
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
@@ -249,5 +249,16 @@ export class TongHopComponent implements OnInit {
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+  }
+  redirectChiTieuKeHoachNam(){
+    this.location.back()
+  }
+  xoaDieuKien(){
+    this.namhientai = ''
+    this.kehoach = ''
+    this.loaiBaocao = ''
+  }
+  tinhnam(){
+    this.kehoach= Number(this.namhientai) + 3
   }
 }

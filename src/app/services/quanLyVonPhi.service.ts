@@ -148,8 +148,8 @@ export class QuanLyVonPhiService extends BaseService {
   //tong hop
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
-      'http://192.168.1.125:8094/lap-tham-dinh-du-toan/tong-hop',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
   }
@@ -320,9 +320,17 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   sinhMaVban(): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + 
+      this.urlDefault +
       '/qlnv-khoachphi/lap-tham-dinh-du-toan/sinh-ma-vban'
     );
   }
 
+  //tim kiem so giao kiem tra tran chi
+  timDanhSachBCGiaoBTCPD(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/dsach-giao-so',
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
+      request
+    )
+  }
 }

@@ -815,4 +815,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
       })
   }
+  dong(){
+    this.location.back()
+  }
 }

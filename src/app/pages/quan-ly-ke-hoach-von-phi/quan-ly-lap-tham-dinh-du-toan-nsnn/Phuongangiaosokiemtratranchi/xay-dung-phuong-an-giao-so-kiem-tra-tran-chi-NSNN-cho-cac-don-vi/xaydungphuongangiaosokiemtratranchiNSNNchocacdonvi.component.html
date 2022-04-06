@@ -48,7 +48,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" >
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="dong()" >
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Đóng</span>
         </button>
@@ -111,7 +111,7 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien"> 
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien">
                   <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                   <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                   <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
