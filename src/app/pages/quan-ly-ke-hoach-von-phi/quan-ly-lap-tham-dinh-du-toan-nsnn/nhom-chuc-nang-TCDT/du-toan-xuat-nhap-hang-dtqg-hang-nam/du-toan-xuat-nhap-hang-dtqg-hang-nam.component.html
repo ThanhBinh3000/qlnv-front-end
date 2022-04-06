@@ -62,6 +62,10 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+          <i class="icon htvbdh_dong"></i>
+          <span>Đóng</span>
+        </a>
       </div>
     </div>
   </div>
@@ -218,7 +222,7 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                        [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
+                        [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc" (ngModelChange)="checkCucKV(data.id)">
                         <nz-option *ngFor="let item of cucKhuVucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                         </nz-option>
                       </nz-select>
@@ -347,7 +351,7 @@
                     Tổng cục KV
                   </th>
 
-                  <th nzWidth="100px">
+                  <th nzWidth="100px" [hidden]="true">
                     Tổng Văn phòng
                   </th>
 
@@ -403,7 +407,7 @@
                       {{data.tongDvi}}
                     </td>
 
-                    <td>
+                    <td [hidden]="true">
                       {{data.tongVphong}}
                     </td>
 
@@ -443,7 +447,7 @@
 
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư"
-                        [(ngModel)]="editCache1[data.id].data.maVtuTbi">
+                        [(ngModel)]="editCache1[data.id].data.maVtuTbi" (ngModelChange)="checkVtu(data.id)">
                         <nz-option *ngFor="let item of vatTus" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -461,7 +465,7 @@
                       {{editCache1[data.id].data.tongDvi}}
                     </td>
 
-                    <td>
+                    <td [hidden]="true">
                       {{editCache1[data.id].data.tongVphong}}
                     </td>
 

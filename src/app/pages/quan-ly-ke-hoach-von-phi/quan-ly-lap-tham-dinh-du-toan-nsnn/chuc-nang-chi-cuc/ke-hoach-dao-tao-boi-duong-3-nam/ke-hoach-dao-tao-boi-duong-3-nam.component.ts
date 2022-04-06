@@ -53,7 +53,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
-  maBaoCao!: string ;                          // ma bao cao
+  maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N;                // nam bao cao
@@ -75,11 +75,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   listIdFiles: string;                        // id file luc call chi tiet
 
-  capDvi:any;
-  checkKV:boolean;                            // check khu vuc
-  soVban:any;
-  capDv:any;
-  checkDv:boolean;
+  capDvi: any;
+  checkKV: boolean;                            // check khu vuc
+  soVban: any;
+  capDv: any;
+  checkDv: boolean;
   currentday: Date = new Date();
 
   statusDvi: boolean;
@@ -118,7 +118,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private userSerivce: UserService,
+    private userService: UserService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
     private location: Location,
@@ -133,19 +133,19 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
     this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
-    let userName = this.userSerivce.getUserName();
-    let userInfo: any = await this.getUserInfo(userName); //get user info
+    let userName = this.userService.getUserName();
+    await this.getUserInfo(userName);
     if (this.id) {
       await this.getDetailReport();
-    }else if (
+    } else if (
       this.maDonViTao != null &&
       this.maLoaiBaoCao != null &&
       this.namBaoCaoHienHanh != null
     ) {
       await this.calltonghop();
-      this.nguoiNhap = userInfo?.username;
+      this.nguoiNhap = this.userInfo?.username;
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maDonViTao = userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
@@ -162,8 +162,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
-      this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
+      this.nguoiNhap = this.userInfo?.username;
+      this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -181,15 +181,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+    this.getStatusButton();
     //get danh muc noi dung
     this.danhMucService.dMMaLoaiBoiDuong().toPromise().then(
       (data) => {
@@ -267,9 +259,20 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     this.spinner.hide();
   }
 
+  getStatusButton() {
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  }
+
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
+    await this.userService.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
@@ -282,7 +285,6 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    return userInfo;
   }
 
   //
@@ -317,15 +319,15 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao ,
-      maDviTien: this.maDviTien ,
-      maLoaiBcao : QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -337,18 +339,18 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(
-        res => {
-          if (res.statusCode == 0) {
+      this.quanLyVonPhiService.updatelist(request).toPromise().then(
+        async data => {
+          if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-        },
-        err => {
+        }, err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      )
+        })
     }
 
     this.lstCTietBCao.filter(item => {
@@ -362,26 +364,24 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
 
   // chuc nang check role
-  onSubmit(mcn: String) {
+  async onSubmit(mcn: String) {
     const requestGroupButtons = {
       id: this.id,
       maChucNang: mcn,
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.getDetailReport();
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+      if (data.statusCode == 0) {
+        await this.getDetailReport();
+        this.getStatusButton();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      } else {
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    );
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    });
     this.spinner.hide();
   }
 
@@ -602,21 +602,21 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   //call tong hop
-  async calltonghop(){
+  async calltonghop() {
     this.spinner.show();
-    let objtonghop={
-        maDvi: this.maDonViTao,
-        maLoaiBcao: this.maLoaiBaoCao,
-        namHienTai: this.namBaoCaoHienHanh,
+    let objtonghop = {
+      maDvi: this.maDonViTao,
+      maLoaiBcao: this.maLoaiBaoCao,
+      namHienTai: this.namBaoCaoHienHanh,
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
-        if(res.statusCode==0){
-            this.lstCTietBCao = res.data;
-        }else{
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-    },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      if (res.statusCode == 0) {
+        this.lstCTietBCao = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
     this.updateEditCache()
     this.spinner.hide();

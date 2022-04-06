@@ -601,7 +601,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         }
       },
       (err) => {
-        alert(err.error.message);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       },
     );
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe((res) => {

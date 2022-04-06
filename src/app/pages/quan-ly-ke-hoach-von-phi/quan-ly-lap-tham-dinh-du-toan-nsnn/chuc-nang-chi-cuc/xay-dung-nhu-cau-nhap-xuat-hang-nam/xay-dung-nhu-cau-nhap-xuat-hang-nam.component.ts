@@ -47,6 +47,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   luongThocNhap!: number;
   luongGaoXuat!: number;
   luongGaoNhap!: number;
+  tong: number = 0;
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
@@ -115,7 +116,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
               private quanLyVonPhiService: QuanLyVonPhiService,
               private datePipe: DatePipe,
               private sanitizer: DomSanitizer,
-              private userSerivce: UserService,
+              private userService: UserService,
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
               private location : Location,
@@ -126,14 +127,14 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = this.userSerivce.getUserName();
-    let userInfo: any = await this.getUserInfo(userName); //get user info
+    let userName = this.userService.getUserName();
+    await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
     } else {
       this.trangThaiBanGhi = "1";
-      this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
+      this.nguoiNhap = this.userInfo?.username;
+      this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -151,14 +152,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+    this.getStatusButton();
 
     //get danh muc noi dung
     this.danhMucService.dMVatTu().subscribe(
@@ -197,9 +191,20 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     this.spinner.hide();
   }
 
+getStatusButton(){
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  }
+
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
+    let userInfo = await this.userService.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
           this.userInfo = data?.data
@@ -272,10 +277,13 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        data => {
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -286,9 +294,11 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+      this.quanLyVonPhiService.updatelist(request).toPromise().then( async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          await this.getDetailReport();
+            this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -313,9 +323,10 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then( async (data) => {
       if (data.statusCode == 0) {
-        this.getDetailReport();
+        await this.getDetailReport();
+        this.getStatusButton();
       }
     });
     this.spinner.hide();
@@ -338,7 +349,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-
+          this.lstCTietBCao.lstCTiet.forEach(e => {
+            this.tong += e.slNhap;
+          })
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -421,6 +434,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tong -= this.lstCTietBCao.lstCTiet.find(e => e.id==id).slNhap;
     this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -431,6 +445,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTiet.filter(item => {
+      if (item.checked){
+        this.tong -= item.slNhap;
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -517,6 +534,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   saveEdit(id: string): void {
     const index = this.lstCTiet.findIndex(item => item.id === id);
+    this.tong += this.editCache[id].data.slNhap - this.lstCTiet[index].slNhap;
     this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
     Object.assign(this.lstCTiet[index], this.editCache[id].data);
     this.editCache[id].edit = false;
@@ -529,5 +547,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  tongCong(){
+    this.tong
   }
 }

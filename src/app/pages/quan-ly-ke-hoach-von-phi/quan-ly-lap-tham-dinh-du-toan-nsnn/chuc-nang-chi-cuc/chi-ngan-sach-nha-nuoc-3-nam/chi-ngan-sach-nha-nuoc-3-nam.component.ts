@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DatePipe,Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -90,9 +90,9 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
-     soVban:any;
-     capDv:any;
-     checkDv:boolean;
+     soVban: any;
+     capDv: any;
+     checkDv: boolean;
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
           return false;
@@ -121,7 +121,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           private quanLyVonPhiService: QuanLyVonPhiService,
           private datePipe: DatePipe,
           private sanitizer: DomSanitizer,
-          private userSerivce: UserService,
+          private userService: UserService,
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
           private location: Location,
@@ -132,14 +132,14 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      async ngOnInit() {
           this.id = this.routerActive.snapshot.paramMap.get('id');
-          let userName = this.userSerivce.getUserName();
-          let userInfo: any = await this.getUserInfo(userName); //get user info
+          let userName = this.userService.getUserName();
+          await this.getUserInfo(userName);
           if (this.id) {
-          await this.getDetailReport();
+               await this.getDetailReport();
           } else {
                this.trangThaiBanGhi = "1";
-               this.nguoiNhap = userInfo?.username;
-               this.maDonViTao = userInfo?.dvql;
+               this.nguoiNhap = this.userInfo?.username;
+               this.maDonViTao = this.userInfo?.dvql;
                this.spinner.show();
                this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
                     (data) => {
@@ -156,16 +156,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
-
-          const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+          this.getStatusButton();
           this.danhMucService.dMNoiDung().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
@@ -235,10 +226,10 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                          this.donVis = data.data;
                          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
                          this.capDv = Dvi.capDvi;
-                         if( this.capDv=='2'){
-                         this.checkDv = false;
-                         }else{
-                         this.checkDv = true;
+                         if (this.capDv == '2') {
+                              this.checkDv = false;
+                         } else {
+                              this.checkDv = true;
                          }
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -251,9 +242,20 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           this.spinner.hide();
      }
 
+     getStatusButton() {
+          const utils = new Utils();
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+     }
+
      //get user info
      async getUserInfo(username: string) {
-          let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
+          await this.userService.getUserInfo(username).toPromise().then(
                (data) => {
                     if (data?.statusCode == 0) {
                          this.userInfo = data?.data
@@ -266,7 +268,6 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          return userInfo;
      }
 
      //
@@ -295,8 +296,8 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                }
           })
 
-          if(this.maDviTien !=""){
-               this.maDviTien='01';
+          if (this.maDviTien != "") {
+               this.maDviTien = '01';
           }
           // gui du lieu trinh duyet len server
           let request = {
@@ -305,38 +306,38 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien ,
-               maLoaiBcao: this.maLoaiBaoCao ,
+               maDviTien: this.maDviTien,
+               maLoaiBcao: this.maLoaiBaoCao,
                namBcao: this.namBaoCaoHienHanh,
                namHienHanh: this.namBcao,
-               soVban:this.soVban,
+               soVban: this.soVban,
           };
           this.spinner.show();
-          if (this.id == null){
-          this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-               (data) => {
-                    if (data.statusCode == 0){
-                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-               },
-               (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-               })
-          } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(
-                    res => {
-                         if (res.statusCode == 0) {
+          if (this.id == null) {
+               this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+                    (data) => {
+                         if (data.statusCode == 0) {
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                          } else {
-                              this.notification.error(MESSAGE.ERROR, res?.msg);
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     },
-                    err => {
+                    (err) => {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    }
-               )
+                    })
+          } else {
+               this.quanLyVonPhiService.updatelist(request).toPromise().then(
+                    async data => {
+                         if (data.statusCode == 0) {
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                              await this.getDetailReport();
+                              this.getStatusButton();
+                         } else {
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
+                    }, err => {
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    })
           }
 
           this.lstCTietBCao.filter(item => {
@@ -349,26 +350,24 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      }
 
      // chuc nang check role
-     onSubmit(mcn: String) {
+     async onSubmit(mcn: String) {
           const requestGroupButtons = {
                id: this.id,
                maChucNang: mcn,
                type: "",
           };
           this.spinner.show();
-          this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.getDetailReport();
-                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-               },
-               err => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+               if (data.statusCode == 0) {
+                    await this.getDetailReport();
+                    this.getStatusButton();
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+               } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                }
-          );
+          }, err => {
+               this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          });
           this.spinner.hide();
      }
 
@@ -401,11 +400,11 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                               this.trangThaiBanGhi == '3' ||
                               this.trangThaiBanGhi == '5' ||
                               this.trangThaiBanGhi == '8'
-                            ) {
+                         ) {
                               this.status = false;
-                            } else {
+                         } else {
                               this.status = true;
-                            }
+                         }
                          // set list id file ban dau
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
@@ -548,9 +547,9 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      }
 
      redirectChiTieuKeHoachNam() {
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
-      this.location.back()
-    }
+          this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+          this.location.back()
+     }
 
      // lay ten trang thai
      getStatusName() {
@@ -560,7 +559,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // lay ten don vi tao
      getUnitName() {
-       return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+          return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
      }
 
      // start edit
