@@ -54,7 +54,7 @@
           </div>
         </nz-card>
         <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
-          class="mt16 flex-card p-lr16">
+          class="mt-16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable">
             <thead>
               <tr>
@@ -85,7 +85,7 @@
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                  <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

@@ -49,7 +49,7 @@
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
                   <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
                     <nz-input-number formControlName="soQD" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                      [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai == '01'">
+                      [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
                     </nz-input-number>
                   </nz-input-group>
                   <ng-template #soQDError let-control>
@@ -593,7 +593,9 @@
                     [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'"
                     [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' ? 'disable' : ''"></textarea>
                   <ng-template #soQDError let-control>
-                    <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">{{control.hasError('required')}}
+                      {{errorInputRequired}}
+                    </ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>

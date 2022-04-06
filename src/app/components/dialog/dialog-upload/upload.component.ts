@@ -1,3 +1,4 @@
+import { cloneDeep, isEqual } from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   Component,
@@ -23,11 +24,11 @@ export class UploadComponent implements OnInit {
   nameFile: string;
   file: File;
   dataCanCuXacDinh: CanCuXacDinh;
-  constructor(
-    private _modalRef: NzModalRef,
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef,
-  ) {}
+  formTaiLieu: any;
+  formTaiLieuClone: any;
+  type: string;
+  isSave: boolean = false;
+  constructor(private _modalRef: NzModalRef, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -35,7 +36,15 @@ export class UploadComponent implements OnInit {
       this.nameFile = this.dataCanCuXacDinh.children[0]?.fileName;
       this.formData.patchValue({
         tenTaiLieu: this.dataCanCuXacDinh.tenTlieu,
+        file: this.dataCanCuXacDinh.tenTlieu,
       });
+      if (this.type) {
+        this.formTaiLieu = {
+          tenTaiLieu: this.dataCanCuXacDinh.tenTlieu,
+          file: this.nameFile,
+        };
+        this.formTaiLieuClone = cloneDeep(this.formTaiLieu);
+      }
     }
   }
 
@@ -57,6 +66,7 @@ export class UploadComponent implements OnInit {
   }
 
   getNameFile(event?: any) {
+    this.isSave = true;
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
     if (fileList) {
@@ -65,12 +75,23 @@ export class UploadComponent implements OnInit {
     this.formData.patchValue({
       file: event.target.files[0] as File,
     });
+    if (this.dataCanCuXacDinh) {
+      this.formTaiLieuClone.file = this.nameFile;
+      this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
+    }
   }
 
   initForm() {
     this.formData = this.fb.group({
       tenTaiLieu: [null, [Validators.required]],
-      file: [null],
+      file: [null, [Validators.required]],
     });
+  }
+  changeValue(event: any) {
+    this.isSave = true;
+    if (this.dataCanCuXacDinh) {
+      this.formTaiLieuClone.tenTaiLieu = event.target.value;
+      this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
+    }
   }
 }

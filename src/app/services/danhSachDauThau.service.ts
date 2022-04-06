@@ -55,4 +55,8 @@ export class DanhSachDauThauService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt-gao/phe-duyet`;
     return this.httpClient.post(url, body).toPromise();
   }
+  deleteKeHoachLCNT(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt-gao/xoa`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }

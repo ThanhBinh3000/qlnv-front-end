@@ -2,6 +2,7 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
   ldoTuchoi: string;
   loaiVthh: string;
+  maHangHoa: string;
   maDvi: string;
   namKhoach: number;
   ngayGuiDuyet: string;
@@ -62,6 +63,7 @@ export class FileDinhKem {
   fileType: string;
   fileUrl: string;
   id: number;
+  idVirtual: number;
 }
 
 export class ThongTinChung {
@@ -97,6 +99,7 @@ export class DanhSachGoiThau {
 }
 export class CanCuXacDinh {
   id: number;
+  idVirtual: number;
   loaiCanCu: string;
   tenTlieu: string;
   fileDinhKems: Array<FileDinhKem>;

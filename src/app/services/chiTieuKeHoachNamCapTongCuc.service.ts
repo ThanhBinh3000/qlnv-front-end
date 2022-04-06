@@ -31,10 +31,14 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDonVi) + '&';
     if (body.trichYeu)
       url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
-    if (body.pageNumber)
-      url_ += 'pageNumber=' + encodeURIComponent('' + body.pageNumber) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ +=
+        'paggingReq.page=' +
+        encodeURIComponent('' + (body.pageNumber - 1)) +
+        '&';
     if (body.pageSize)
-      url_ += 'pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ +=
+        'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
     if (body.trangThai)
       url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     url_ = url_.replace(/[?&]$/, '');

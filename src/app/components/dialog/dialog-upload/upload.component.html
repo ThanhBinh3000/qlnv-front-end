@@ -4,7 +4,7 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên tài liệu </nz-form-label>
         <nz-form-control nzErrorTip="Vui lòng nhập tên tài liệu">
-          <input nz-input formControlName="tenTaiLieu" />
+          <input nz-input formControlName="tenTaiLieu" (input)="changeValue($event)" />
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -36,7 +36,7 @@
     </div>
     <div class="canphai">
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onSave()"
-        [disabled]="!formData.valid">
+        [disabled]="!formData.valid || !isSave">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>

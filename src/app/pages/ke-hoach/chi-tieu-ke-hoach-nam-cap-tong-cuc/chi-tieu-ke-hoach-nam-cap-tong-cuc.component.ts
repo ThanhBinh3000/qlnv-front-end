@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -42,7 +43,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -187,15 +188,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    if (status == '00') {
-      return 'Mới tạo';
-    } else if (status == '01') {
-      return 'Chờ duyệt';
-    } else if (status == '02') {
-      return 'Đã duyệt';
-    } else if (status == '03') {
-      return 'Từ chối';
-    }
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
