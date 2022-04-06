@@ -236,34 +236,34 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.namHhanhN" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.namHhanhN" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tranChiN1" (change)="changeModel(data.id)" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tranChiN1" (change)="changeModel(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauChiN1" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauChiN1" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN1" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN1" disabled></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tranChiN2" (change)="changeModel(data.id)" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tranChiN2" (change)="changeModel(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauChiN2" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauChiN2" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN2" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN2" disabled></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tranChiN3" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tranChiN3" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauChiN3" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauChiN3" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN3" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.clechTranChiVsNcauChiN3" disabled></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

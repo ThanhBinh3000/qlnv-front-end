@@ -35,7 +35,7 @@ export const KHOANMUCLIST = [
         {
           maKmuc:"2.3",
           tenKmuc: 'Khoản mục 2.3',
-          tieuDe: 'Chi hôx trợ đảm bảo chi thường xuyên của đơn vị sự nghiệp',
+          tieuDe: 'Chi hỗ trợ đảm bảo chi thường xuyên của đơn vị sự nghiệp',
           status: false,
         },
         {

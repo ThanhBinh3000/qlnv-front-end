@@ -169,13 +169,13 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.tcongN1" (ngModelChange)="tinhtong1()" />
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tcongN1" (ngModelChange)="tinhtong1()" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tcongN2" (ngModelChange)="tinhtong2()" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN2" (ngModelChange)="tinhtong2()" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tcongN3" (ngModelChange)="tinhtong3()" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN3" (ngModelChange)="tinhtong3()" ></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

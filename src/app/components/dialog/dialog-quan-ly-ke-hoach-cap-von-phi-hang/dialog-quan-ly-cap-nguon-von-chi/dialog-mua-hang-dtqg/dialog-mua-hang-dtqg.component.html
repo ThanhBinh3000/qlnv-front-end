@@ -1,0 +1,52 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div nz-col nzSpan="12">
+            <label class="search__label">Loại:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại vốn" [(ngModel)]="obj.maLoai">
+                <nz-option *ngFor="let item of loaiVons" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Mặt hàng:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại mặt hàng" [(ngModel)]="obj.maMatHang">
+                <nz-option *ngFor="let item of matHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Số lượng:</label>
+            <nz-input-number nzSize="small" class="search__input" [(ngModel)]="obj.soLuong"></nz-input-number>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Đơn vị tính:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [(ngModel)]="obj.maDviTinh">
+                <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Thành tiền:</label>
+            <nz-input-number nzSize="small" class="search__input" [(ngModel)]="obj.thanhTien"></nz-input-number>
+        </div>
+        <div nz-col nzSpan="12">
+            <label class="search__label">Đơn tiền:</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn tiền" [(ngModel)]="obj.maDviTien">
+                <nz-option *ngFor="let item of dviTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Lưu
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close"></i>
+                Hủy
+            </button>
+        </div>
+    </div>
+</div>

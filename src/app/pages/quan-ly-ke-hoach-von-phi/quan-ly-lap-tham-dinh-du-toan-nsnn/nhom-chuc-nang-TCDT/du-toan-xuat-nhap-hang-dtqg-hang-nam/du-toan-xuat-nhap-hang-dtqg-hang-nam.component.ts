@@ -1009,17 +1009,20 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
         }
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
-        alert('co loi trong qua trinh van tin');
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
-      alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
       if (res.statusCode == 0) {
         this.maBaoCao = res.data;
       } else {
-        this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
+    },
+    err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     })
     this.spinner.show();
   }

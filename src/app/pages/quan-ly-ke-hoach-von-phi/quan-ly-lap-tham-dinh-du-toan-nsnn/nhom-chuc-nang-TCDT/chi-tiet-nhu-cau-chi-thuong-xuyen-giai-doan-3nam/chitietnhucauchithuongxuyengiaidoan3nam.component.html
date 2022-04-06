@@ -229,13 +229,13 @@
                       <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.thienNamHhanhN" />
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauDtoanN1"  />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauDtoanN1"  ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauDtoanN2"  />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauDtoanN2"  ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ncauDtoanN3"  />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauDtoanN3"  ></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

@@ -235,7 +235,7 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="statusDvi">
                                                     <div *ngFor="let item of cucKhuVucs">
                                                          <div *ngIf="item.maDvi == data.maDvi">
                                                               {{item.tenDvi}}
@@ -289,7 +289,7 @@
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
-                                                  <td >
+                                                  <td [hidden]="statusDvi">
                                                     <nz-select nzShowSearch nzAllowClear
                                                          nzPlaceHolder="Chọn đơn vị"
                                                          [(ngModel)]="editCache[data.id].data.maDvi">
@@ -298,28 +298,28 @@
                                                     </nz-select>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN1" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN1" ></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN1" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN1" ></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN2" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN2" ></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN2" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN2" ></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN3" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN3" ></nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <input class="search__input" nz-input
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN3" />
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN3" ></nz-input-number>
                                                   </td>
 
                                                   <td [hidden]="status">
