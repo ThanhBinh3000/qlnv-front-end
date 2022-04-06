@@ -48,42 +48,41 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Copy</span>
         </button>
-        <button class="btn btn-main" routerLink="../">
+        <button class="btn btn-main" (click)="dong()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Đóng</span>
         </button>
-        <button class="btn btn-main" (click)="onSubmit('3')"
+        <button class="btn btn-main" (click)="tuChoi('3')"
           [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP trả lại</span>
         </button>
         <a class="btn btn-main" (click)="onSubmit('4')" [hidden]="statusBtnTBP">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP phê duyệt</span>
         </a>
-        <button class="btn btn-main" (click)="onSubmit('5')"
+        <button class="btn btn-main" (click)="tuChoi('5')"
           [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo trả lại</span>
         </button>
         <a class="btn btn-main" (click)="onSubmit('6')" [hidden]="statusBtnLD">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
-        <button class="btn btn-main" (click)="onSubmit('7')"
+        <!-- <button class="btn btn-main" (click)="onSubmit('7')"
           [hidden]="statusBtnGuiDVCT">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
-        </button>
-        <button class="btn btn-main" (click)="onSubmit('8')"
-          [hidden]="statusBtnDVCT">
+        </button> -->
+        <button class="btn btn-main" (click)="tuChoi('8')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>ĐV cấp trên trả lại</span>
+          <span>Từ chối</span>
         </button>
         <a class="btn btn-main" (click)="onSubmit('9')"
           [hidden]="statusBtnDVCT">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>ĐV cấp trên duyệt</span>
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Cục khu vực chấp thuận</span>
         </a>
         <a class="btn btn-main" (click)="xoa()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
@@ -434,7 +433,7 @@
       </nz-card>
       <!-- Action Table chi tiết mẫu báo cáo 02 -->
       <ng-template #tableCard3>
-        <button type="button" class="btn btn-main" (click)="deleteSelected02()">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected02()">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
@@ -446,10 +445,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="status" >
+        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1');">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="status" >
+        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0');">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -917,8 +916,8 @@
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -934,8 +933,8 @@
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -951,8 +950,8 @@
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
             <tr>
               <th></th>
@@ -969,8 +968,8 @@
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
               <th [hidden]="status"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
-              <th [hidden]="status" *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
+              <th *ngFor="let colname of listColTrongDot4ax"></th>
             </tr>
           </thead>
           <tbody>
@@ -1181,10 +1180,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot4an"></th>
               <th *ngFor="let colname of listColTrongDot4an"></th>
             </tr>
@@ -1198,12 +1197,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4an"></th>
-              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th  *ngFor="let colname of listColTrongDot4an"></th>
+              <th  *ngFor="let colname of listColTrongDot4an"></th>
             </tr>
             <tr>
               <th></th>
@@ -1215,10 +1214,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot4an"></th>
               <th *ngFor="let colname of listColTrongDot4an"></th>
             </tr>
@@ -1233,12 +1232,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4an"></th>
-              <th *ngFor="let colname of listColTrongDot4an"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th  *ngFor="let colname of listColTrongDot4an"></th>
+              <th  *ngFor="let colname of listColTrongDot4an"></th>
             </tr>
           </thead>
           <tbody>
@@ -1288,14 +1287,14 @@
 
 
                 <ng-template #content>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,2)"></i>
                   </td>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEdit(item.id,2)"></i>
                   </td>
 
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(i + 1,2)"></i>
                   </td>
                 </ng-template>
@@ -1449,10 +1448,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
             </tr>
@@ -1466,12 +1465,12 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th *ngFor="let colname of listColTrongDot4bx"></th>
-              <th *ngFor="let colname of listColTrongDot4bx"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th  *ngFor="let colname of listColTrongDot4bx"></th>
+              <th  *ngFor="let colname of listColTrongDot4bx"></th>
             </tr>
             <tr>
               <th></th>
@@ -1483,10 +1482,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
             </tr>
@@ -1501,10 +1500,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
               <th *ngFor="let colname of listColTrongDot4bx"></th>
             </tr>
@@ -1556,14 +1555,13 @@
 
 
                 <ng-template #content>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,3)"></i>
                   </td>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEdit(item.id,3)"></i>
                   </td>
-
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(i + 1,3)"></i>
                   </td>
                 </ng-template>
@@ -1717,10 +1715,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
             </tr>
@@ -1734,10 +1732,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
             </tr>
@@ -1751,10 +1749,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
             </tr>
@@ -1769,10 +1767,10 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
+              <th [hidden]="status"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
               <th *ngFor="let colname of listColTrongDot5"></th>
             </tr>
@@ -1821,17 +1819,14 @@
                     <i class="fa fa-plus"></i>
                   </td>
                 </ng-container>
-
-
                 <ng-template #content>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteByStt(i+1,4)"></i>
                   </td>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEdit(item.id,4)"></i>
                   </td>
-
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(i + 1,4)"></i>
                   </td>
                 </ng-template>
