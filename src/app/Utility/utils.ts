@@ -30,7 +30,7 @@ export class Utils {
     public static TT_BC_7 = "7"; // Gửi ĐV cấp trên,
     public static TT_BC_8 = "8"; // ĐV cấp trên từ chối,
     public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
-
+    public static TT_BC_10 = "10"; // Lãnh đạo điều chỉnh,
     // Danh sach quyen
     public static LANH_DAO = 1;// "Lãnh Đạo";
     public static TRUONG_BO_PHAN = 2;// "Trưởng Bộ Phận";
@@ -90,6 +90,13 @@ export class Utils {
         "role": [3],
     }
 
+    //role don vi cap tren
+    public static btnRoleLDDC = {
+        "status": ['5','6','7'],
+        "unit": [1, 2],
+        "role": [3],
+    }
+
 
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
@@ -127,6 +134,11 @@ export class Utils {
     //get role button don vi cap tren
     public getRoleDVCT(status: any, unit: any, role: any) {
         return !(Utils.btnRoleDVCT.status.includes(status) && Utils.btnRoleDVCT.unit.includes(unit) && Utils.btnRoleDVCT.role.includes(role));
+    }
+
+    //get role button don vi cap tren
+    public getRoleLDDC(status: any, unit: any, role: any) {
+        return !(Utils.btnRoleLDDC.status.includes(status) && Utils.btnRoleLDDC.unit.includes(unit) && Utils.btnRoleLDDC.role.includes(role));
     }
 
     // lay quyen

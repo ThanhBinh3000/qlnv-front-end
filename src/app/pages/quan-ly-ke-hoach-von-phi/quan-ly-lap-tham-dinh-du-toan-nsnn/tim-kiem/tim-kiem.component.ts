@@ -238,13 +238,13 @@ export class TimKiemComponent implements OnInit {
     this.onSubmit();
   }
   xoaDieuKien() {
-    this.searchFilter.nam = ""
-    this.searchFilter.tuNgay = ""
-    this.searchFilter.denNgay = ""
-    this.searchFilter.maBaoCao = ""
-    this.searchFilter.donViTao = ""
-    this.searchFilter.loaiBaoCao = ""
-    this.trangThais = ""
+    this.searchFilter.nam = null
+    this.searchFilter.tuNgay = null
+    this.searchFilter.denNgay = null
+    this.searchFilter.maBaoCao = null
+    this.searchFilter.donViTao = null
+    this.searchFilter.loaiBaoCao = null
+    this.searchFilter.trangThai = null
   }
 
   taoMoi() {
