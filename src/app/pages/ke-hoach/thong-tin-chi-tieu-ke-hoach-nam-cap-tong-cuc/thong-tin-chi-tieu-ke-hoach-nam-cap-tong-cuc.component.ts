@@ -939,26 +939,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: '01',
-          };
-          if (this.id == 0) {
-            await this.save(true);
-          } else {
-            const res = await this.chiTieuKeHoachNamService.updateStatus(body);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.TRINH_DUYET_SUCCESS,
-              );
-              this.redirectChiTieuKeHoachNam();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          }
-
+          this.save(true);
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1105,8 +1086,23 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.redirectChiTieuKeHoachNam();
+            if (isGuiDuyet) {
+              let body = {
+                id: res.data.id,
+                lyDoTuChoi: null,
+                trangThai: '01',
+              };
+              this.chiTieuKeHoachNamService.updateStatus(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                this.redirectChiTieuKeHoachNam();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.redirectChiTieuKeHoachNam();
+            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

@@ -412,9 +412,9 @@
                 </ng-container>
                 <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
                 <td *ngIf="dataMuoi.stt">{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td>
-                <td
-                  *ngIf="dataMuoi.stt || thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai === '03'">
-                  <a (click)="themMoi(dataMuoi)">
+                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
+                  thongTinChiTieuKeHoachNam.trangThai==='03'">
+                  <a (click)=" themMoi(dataMuoi)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">

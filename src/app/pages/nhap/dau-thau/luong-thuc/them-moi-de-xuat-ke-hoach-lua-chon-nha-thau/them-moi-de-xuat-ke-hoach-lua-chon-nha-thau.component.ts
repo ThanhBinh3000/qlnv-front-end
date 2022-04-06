@@ -107,7 +107,17 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       this.chiTietThongTinDXKHLCNT.children2[index],
       this.dsGoiThauClone[index],
     );
+
     this.dsGoiThauClone[index].isEdit = false;
+    this.dsGoiThauClone?.forEach((goiThau) => {
+      goiThau.thanhTien = (goiThau.donGia * goiThau.soLuong * 1000).toString();
+      this.tongGiaTriCacGoiThau += +goiThau.thanhTien;
+    });
+    if (this.tongGiaTriCacGoiThau > 10000000000) {
+      this.thongTinChungDXKHLCNT.blanhDthau = '3%';
+    } else {
+      this.thongTinChungDXKHLCNT.blanhDthau = '1%';
+    }
   }
   deleteRow(idVirtual: number): void {
     this.chiTietThongTinDXKHLCNT.children2 =
@@ -392,7 +402,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
           this.chiTietThongTinDXKHLCNT.children = [];
           this.chiTietThongTinDXKHLCNT = res.data;
           this.tenTaiLieuDinhKem =
-            this.chiTietThongTinDXKHLCNT.children[0].fileName;
+            this.chiTietThongTinDXKHLCNT.children[0]?.fileName;
           this.chiTietThongTinDXKHLCNT.soDxuat =
             this.chiTietThongTinDXKHLCNT.soDxuat.split('/')[0];
           this.thongTinChungDXKHLCNT =
@@ -407,8 +417,10 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
           this.initForm();
         }
       })
-      .catch(() => {
-        //TODO
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
   convertDataCanCuXacDinh() {
@@ -498,7 +510,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
   }
-  saveThongTinDeXuatKeHoachLCNT() {
+  saveThongTinDeXuatKeHoachLCNT(isGuiDuyet?: boolean) {
     this.chiTietThongTinDXKHLCNT.qdCanCu = this.formData.get('canCu').value;
     this.chiTietThongTinDXKHLCNT.soDxuat = this.formData.get('soDeXuat').value;
     this.chiTietThongTinDXKHLCNT.loaiVthh = this.formData.get('hangHoa').value;
@@ -553,7 +565,6 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     delete this.thongTinDXKHLCNTInput.children2;
     delete this.thongTinDXKHLCNTInput.children3;
 
-    // this.chiTietThongTinDXKHLCNT.loaiVthh = '00';
     this.thongTinDXKHLCNTInput?.detail2?.forEach((thongTin) => {
       delete thongTin.idVirtual;
     });
@@ -563,7 +574,28 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       this.dauThauService
         .suaThongTinKeHoachLCNT(this.thongTinDXKHLCNTInput)
         .then((res) => {
-          this.router.navigate(['/nhap/dau-thau/danh-sach-dau-thau']);
+          if (res.msg == MESSAGE.SUCCESS) {
+            if (isGuiDuyet) {
+              let body = {
+                id: res.data.id,
+                lyDoTuChoi: null,
+                trangThai: '01',
+              };
+              this.dauThauService.updateStatus(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                this.redirectChiTieuKeHoachNam();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.redirectChiTieuKeHoachNam();
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.redirectChiTieuKeHoachNam();
         })
         .catch((err) => {})
         .finally(() => {
@@ -574,7 +606,23 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       this.dauThauService
         .themThongTinKeHoachLCNT(this.thongTinDXKHLCNTInput)
         .then((res) => {
-          this.router.navigate(['/nhap/dau-thau/danh-sach-dau-thau']);
+          if (isGuiDuyet) {
+            let body = {
+              id: res.data.id,
+              lyDoTuChoi: null,
+              trangThai: '01',
+            };
+            this.dauThauService.updateStatus(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.redirectChiTieuKeHoachNam();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          }
         })
         .catch((err) => {})
         .finally(() => {
@@ -618,21 +666,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: '01',
-          };
-          const res = await this.dauThauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.TRINH_DUYET_SUCCESS,
-            );
-            this.redirectChiTieuKeHoachNam();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
+          this.saveThongTinDeXuatKeHoachLCNT(true);
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
