@@ -156,7 +156,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.maLoaiBacao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
     this.nam = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.nguoiDungSerivce.getUserName();
-    let userInfo: any = await this.getUserInfo(userName); //get user info
+    await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
     }
@@ -166,9 +166,9 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.nam != null
     ) {
       await this.calltonghop();
-      this.nguoiNhap = userInfo?.username;
+      this.nguoiNhap = this.userInfo?.username;
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maDonViTao = userInfo?.dvql;
+      this.maDonViTao =this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
@@ -186,8 +186,8 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     }
     else {
       this.trangThaiBanGhi = '1';
-      this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
+      this.nguoiNhap = this.userInfo?.username;
+      this.maDonViTao = this.userInfo?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
       this.maLoaiBacao = QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N;
@@ -208,15 +208,8 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+    
+    this.getStatusButton()
     //get danh muc noi dung
     this.danhMucService.dMLoaiKeHoach().subscribe(
       (data) => {
@@ -297,16 +290,25 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.userInfo = data?.data
           return data?.data;
         } else {
-
+          this.notification.error(MESSAGE.ERROR, data?.msg)
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-    return userInfo;
   }
 
+  getStatusButton(){
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  }
   //
   selectFile(files: FileList): void {
     this.fileToUpload = files.item(0);
@@ -351,26 +353,32 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        data => {
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+      this.quanLyVonPhiService.updatelist(request).subscribe(async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.id = res.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       }, err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
     this.lstCTietBCao.filter(item => {
@@ -390,10 +398,16 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
       if (data.statusCode == 0) {
-        this.getDetailReport();
+        await this.getDetailReport();
+        this.getStatusButton();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }

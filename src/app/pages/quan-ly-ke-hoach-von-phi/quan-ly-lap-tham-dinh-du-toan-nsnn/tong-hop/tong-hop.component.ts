@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LISTTONGHOP } from 'src/app/Utility/utils';
+import { LISTBAOCAOTONGHOP } from 'src/app/Utility/utils';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
@@ -57,14 +57,14 @@ export class TongHopComponent implements OnInit {
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      namhientai: [null, [Validators.required]],
+      namhientai: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
       loaiBaocao: [null, [Validators.required]],
     });
     console.log(this.validateForm);
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
-    this.baoCaos = LISTTONGHOP;
+    this.baoCaos = LISTBAOCAOTONGHOP;
 
 
     //lay danh sach danh muc

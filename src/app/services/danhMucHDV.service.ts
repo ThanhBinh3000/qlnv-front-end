@@ -451,7 +451,7 @@ dMMaNdungChi(): Observable<any> {
                   },
                   str: "string",
                   tenDvi: "string",
-                  trangThai: "00"
+                  trangThai: "01"
           }
           );
   }
