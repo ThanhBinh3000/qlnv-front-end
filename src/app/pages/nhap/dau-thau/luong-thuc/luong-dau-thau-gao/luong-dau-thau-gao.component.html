@@ -5,29 +5,36 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
             <label class="search__label">Loại hàng DTQG</label>
-            <nz-select>
-              <nz-option nzValue="Gạo/Thóc" nzLabel="Gạo/Thóc"></nz-option>
+            <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="loaiVTHH">
+              <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
+              <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Từ ngày tạo phương án</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.soQD"></nz-date-picker>
+            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="startValue" nzPlaceHolder="Từ ngày tạo phương án">
+            </nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày tạo phương án</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.soQD"></nz-date-picker>
+            <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="endValue" nzPlaceHolder="Đến ngày tạo phương án">
+            </nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label"> Năm kế hoạch </label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+            <nz-select [(ngModel)]="namKeHoach">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="cangiua group-button-search">
-          <button nz-button class="search__button--search">
+          <button nz-button class="search__button--search" (click)="searchByTab()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
-          <button nz-button class="search__button--clear">
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
             <i nz-icon nzType="close"></i>
             Xóa điều kiện
           </button>
@@ -75,7 +82,7 @@
                     tại nam bộ</td>
                   <td>Tổng cục đã duyệt</td>
                   <td>
-                    <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
+                    <a (click)="redirectToChiTiet(1)">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a>
@@ -91,10 +98,11 @@
                 </div>
                 <div class="canphai">
                   <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
-                    [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
                     <ng-template #rangeTemplate let-range="range" let-total>
-                      3-3 of 4 items
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
                     </ng-template>
                   </nz-pagination>
                   <!-- end phân trang  -->
@@ -125,36 +133,8 @@
                   <td>DX_KHCNT_01</td>
                   <td>10/03/2022</td>
                   <td>Mua gạo dự trữ A </td>
-                  <td>
-                    2000
-                  </td>
+                  <td>2000</td>
                   <td>42.000.000 </td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <label nz-checkbox></label>
-                  </td>
-                  <td>10/03/2022</td>
-                  <td>2022</td>
-                  <td>QDPD CTKH_01</td>
-                  <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
-                  <td>Một giai đoạn, Hai túi hồ sơ </td>
-                  <td>
-                    Hợp đồng trọn gói
-                  </td>
-                  <td>NSNN </td>
-                  <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
-                    tại nam bộ</td>
-                  <td>Tổng cục đã duyệt</td>
-                  <td>
-                    <a (click)="redirectSuaThongTinChiTieuKeHoachNam(1)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a>
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
                 </tr>
               </tbody>
             </nz-table>
@@ -164,10 +144,11 @@
                 </div>
                 <div class="canphai">
                   <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
-                    [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
                     <ng-template #rangeTemplate let-range="range" let-total>
-                      3-3 of 4 items
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
                     </ng-template>
                   </nz-pagination>
                   <!-- end phân trang  -->
@@ -198,9 +179,7 @@
                   <td>DX_KHCNT_01</td>
                   <td>10/03/2022</td>
                   <td>Mua gạo dự trữ A </td>
-                  <td>
-                    2000
-                  </td>
+                  <td>2000</td>
                   <td>42.000.000 </td>
                 </tr>
               </tbody>
@@ -211,10 +190,11 @@
                 </div>
                 <div class="canphai">
                   <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
-                    [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
                     <ng-template #rangeTemplate let-range="range" let-total>
-                      3-3 of 4 items
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
                     </ng-template>
                   </nz-pagination>
                   <!-- end phân trang  -->
@@ -224,7 +204,7 @@
           </nz-tab>
         </nz-tabset>
         <div class="action" *ngIf="tabSelected == 'phuong-an-tong-hop'">
-          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam()">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
