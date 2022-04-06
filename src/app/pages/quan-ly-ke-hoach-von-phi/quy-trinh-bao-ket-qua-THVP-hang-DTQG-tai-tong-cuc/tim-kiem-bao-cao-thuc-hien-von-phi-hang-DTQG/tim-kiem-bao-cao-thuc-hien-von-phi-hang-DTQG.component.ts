@@ -7,8 +7,9 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
+import { LBCKETQUATHUCHIENHANGDTQG, Utils} from 'src/app/Utility/utils';
 import { TRANGTHAI } from 'src/app/Utility/utils';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
   templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
@@ -39,20 +40,11 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   searchValue = '';
 
   listTrangThai:any = TRANGTHAI;
-  // listTrangThai:any =[
-  //   {
-  //     id:'1',
-  //     tenDm:'Đợt',
-  //   },
-  //   {
-  //     id:'2',
-  //     tenDm:'Năm'
-  //   }
-  // ]
+  
   listBcaoKqua:any []=[];
   lenght:any=0;
-
-
+  userInfor:any;
+  btnPheDuyet:boolean = true;
   
   searchFilter = {
     maBcao: "",
@@ -71,6 +63,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     
   }
 
+
   pages = {
     size: 10,
     page: 1,
@@ -83,11 +76,20 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private notifi:NzNotificationService,
+    private nguoiDungSerivce:UserService,
   ) {
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
 
+    let userName = this.nguoiDungSerivce.getUserName();
+    let userInfor: any = await this.getUserInfo(userName); //get user info
+    console.log(userInfor);
+    const utils = new Utils();
+    var role = utils.getRole(Number(userInfor.roles[0]?.code));
+    if(role=='TRUONG_BO_PHAN'){
+      this.btnPheDuyet = false;
+    }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -104,6 +106,25 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     );
   }
 
+//get user info
+async getUserInfo(username: string) {
+  let userInfo = await this.nguoiDungSerivce
+    .getUserInfo(username)
+    .toPromise()
+    .then(
+      (data) => {
+        if (data?.statusCode == 0) {
+          this.userInfor = data?.data;
+          return data?.data;
+        } else {
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+  return userInfo;
+}
   // lay ten don vi tao
   getUnitName(dvitao:any){
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
@@ -125,6 +146,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 
   timkiem(){
+    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen,'dd/MM/yyyy');
+    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu,'dd/MM/yyyy');
     this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         console.log(res);
