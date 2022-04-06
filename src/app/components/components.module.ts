@@ -78,6 +78,9 @@ import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-
 import { DialogChonThemKhoanMucComponent } from './dialog/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
 import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component'
+import { DialogThemVtuTbiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-them-vtu-tbi/dialog-them-vtu-tbi.component';
+import { DialogMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-luong-thuc-muoi/dialog-mua-luong-thuc-muoi.component';
+import { DialogMuaHangDtqgComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-hang-dtqg/dialog-mua-hang-dtqg.component';
 @NgModule({
   declarations: [
     // components
@@ -106,7 +109,11 @@ import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialo
     DialogLuaChonThemPhuLucComponent,
     DialogChonThemKhoanMucComponent,
     DialogChonThemBieuMauBaoCaoComponent,
-    DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent
+    DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
+    //
+    DialogThemVtuTbiComponent,
+    DialogMuaLuongThucMuoiComponent,
+    DialogMuaHangDtqgComponent,
   ],
   imports: [
     CommonModule,

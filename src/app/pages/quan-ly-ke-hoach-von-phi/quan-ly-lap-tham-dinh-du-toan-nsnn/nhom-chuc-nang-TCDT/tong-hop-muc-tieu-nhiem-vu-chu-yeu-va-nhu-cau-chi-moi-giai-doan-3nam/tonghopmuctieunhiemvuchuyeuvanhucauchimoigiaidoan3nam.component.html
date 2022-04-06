@@ -232,43 +232,43 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.mtieuNvu" />
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.mtieuNvu" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.csPhapLyThien" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.csPhapLyThien" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.hdongChuYeu"  />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.hdongChuYeu"  ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.nguonKphi" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.nguonKphi" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tongSo" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tongSo" disabled></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.chiCs" (change)="changeModel(data.id)" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiCs" (change)="changeModel(data.id)" disabled></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.chiMoi" (change)="changeModel(data.id)" disabled />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiMoi" (change)="changeModel(data.id)" disabled ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dtuPtrien" disabled/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtuPtrien" disabled></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dtuPtrienChiCs" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtuPtrienChiCs" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dtuPtrienChiMoi" (change)="changeModel(data.id)" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtuPtrienChiMoi" (change)="changeModel(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.chiTx" disabled />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTx" disabled ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.chiTxChiCs" (change)="changeModel(data.id)"/>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTxChiCs" (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.chiTxChiMoi" (change)="changeModel(data.id)" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTxChiMoi" (change)="changeModel(data.id)" ></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
