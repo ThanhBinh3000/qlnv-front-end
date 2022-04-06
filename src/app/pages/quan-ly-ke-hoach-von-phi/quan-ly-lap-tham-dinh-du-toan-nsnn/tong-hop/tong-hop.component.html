@@ -5,14 +5,15 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
+        <button nz-button class="search__button--search" (click)="tonghop();submitForm()">
+         Tổng hợp
         </button>
-        <button nz-button class="search__button--clear">
-          <i nz-icon nzType="close"></i>
-          Xóa điều kiện
+        <button nz-button class="search__button--search" (click)="taomoi();submitForm()">
+         Tạo mới
         </button>
+        <button nz-button class="search__button--search" (click)="dong()">
+          Đóng
+         </button>
       </div>
     </div>
   </div>
@@ -20,35 +21,40 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Tổng hợp báo cáo KHTC NS 3 năm và hàng năm" class="mt16 flex-card p-lr16">
+        <form nz-form  [formGroup]="validateForm" class="login-form" >
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-control nzErrorTip="Vui lòng nhập năm báo cáo!">
+                  <label class="search__label">Năm hiện tại (N)</label>
+                  <nz-input-number   formControlName="namhientai" [nzMin]="0" [(ngModel)]="namhientai" (change)="setkeHoach()" nzSize="small"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-control nzErrorTip="Vui lòng chọn loại báo cáo!">
+                  <label class="search__label">Loại báo cáo</label>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn báo cáo" formControlName="loaiBaocao" [(ngModel)]="loaiBaocao" (ngModelChange)="setUrl()" >
+                    <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="12">
-            <label class="search__label">Năm hiện tại (N)</label>
-            <input class="search__input" nz-input [(ngModel)]="namhientai" />
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Kế hoạch 03</label>
-            <input class="search__input" nz-input [(ngModel)]="kehoach">
-          </div>
-          <div nz-col nzSpan="12">
+            <div nz-col nzSpan="12">
+              <label class="search__label">Kế hoạch 03</label>
+              <input class="search__input" nz-input [(ngModel)]="kehoach">
+            </div>
+            <div nz-col nzSpan="12">
               <label class="search__label">Đơn vị tạo</label>
               <input class="search__input" nz-input value="{{getUnitName()}}"  [(ngModel)]="maDonViTao" disabled />
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a report" [(ngModel)]="loaiBaocao" (ngModelChange)="setUrl()" >
-              <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="12" style="display: flex;justify-content: space-around;">
-              <button  nz-button routerLink="../{{url}}/{{maDonViTao}}/{{loaiBaocao}}/{{namhientai}}">Tổng hợp</button>
-              <button  nz-button routerLink="" >Đóng</button>
-              <button  nz-button routerLink="../{{url}}" >Tạo mới</button>
-          </div>
+            </div>
         </div>
       </nz-card>
-      
-      
     </div>
   </div>
 </div>

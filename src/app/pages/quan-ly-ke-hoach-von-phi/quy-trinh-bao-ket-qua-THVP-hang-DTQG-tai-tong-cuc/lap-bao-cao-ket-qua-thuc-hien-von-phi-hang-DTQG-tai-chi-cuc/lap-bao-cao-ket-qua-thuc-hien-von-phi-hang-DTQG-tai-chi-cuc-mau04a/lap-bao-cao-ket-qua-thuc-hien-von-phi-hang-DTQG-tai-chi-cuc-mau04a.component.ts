@@ -71,7 +71,7 @@ export class ItemDataMau02 {
   thGiaMuaTd:any;
   thTtien:any;
   ghiChu:any;
-  maVtuParent:any;
+  maVtuHeader:any;
   loai:any;
   checked!: boolean;
 }
@@ -90,7 +90,7 @@ export class ItemDataMau03 {
   ttGiaBanTte:any;
   ttClechGiaTteVaGiaHtoan
   ghiChu:any;
-  maVtuParent:any;
+  maVtuHeader:any;
   loai:any;
   checked!: boolean;
 }
@@ -389,7 +389,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.updateLstCTietBCao(2);
     this.updateLstCTietBCao(3);
     this.updateLstCTietBCao(4);
-    console.log(this.lstCTietBCao05.length);
     
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
@@ -436,7 +435,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.nam = this.currentday.getFullYear();
     //khởi tạo trạng thái tạo mới
     this.baoCao.trangThai = '1';
-    console.log(this.baoCao);
+
     if(this.loaiBaoCaoParam=='1'){
       //thiếu service lấy đợt báo cáo
 
@@ -526,9 +525,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       type: '',
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
-        // this.getDetailReport();
+        console.log(data);
+        this.getDetailReport();
       }
     });
     this.spinner.hide();
@@ -703,49 +703,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           })
         }
       })
-      console.log(e.maLoai)
-        if(e.maLoai=='4'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau02,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
-        if(e.maLoai=='5'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau03,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
-        if(e.maLoai=='6'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau04ax,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
-        if(e.maLoai=='7'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau04an,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
-        if(e.maLoai=='8'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau04bx,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
-        if(e.maLoai=='9'){
-          let objectDelete ={
-            maLoai:e.maLoai,
-            lstIdDelete:this.lstIdDeleteMau05,
-          }
-          this.lstDeleteCTietBCao.push(objectDelete);
-        }
     });
   
     
@@ -790,7 +747,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     console.log(request);
 
     if (this.id != null) {
-      this.quanLyVonPhiService.updatelist(request).subscribe((res) => {
+      this.quanLyVonPhiService.updateBaoCaoThucHienDTC(request).subscribe((res) => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
@@ -1223,6 +1180,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     data.next.forEach((item) => {
       this.deleteColLL(item, col);
     });
+    this.updateEditCache02();
+    this.updateEditCache03();
+    this.updateEditCache();
   }
 
   // call chi tiet bao cao
@@ -1268,7 +1228,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           //set data cho cac bieu mau
           this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
           this.lstCTietBCao02.forEach(e => {
-            if(e.maVtuParent =='1'){
+            if(e.maVtuHeader =='1'){
               this.lstCTietBCao1.push(e);
             }else{
               this.lstCTietBCao2.push(e);
@@ -1276,9 +1236,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           })
           this.lstCTietBCao03 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_XUAT_HANG_DTQG)?.lstCTietBCao; // xuất hàng
           this.lstCTietBCao03.forEach(e => {
-            if(e.maVtuParent=='1'){
+            if(e.maVtuHeader=='1'){
               this.lstCTietBCao031.push(e);
-            }else if(e.maVtuParent=='2'){
+            }else if(e.maVtuHeader=='2'){
               this.lstCTietBCao032.push(e);
             }else{
               this.lstCTietBCao033.push(e);
@@ -1401,10 +1361,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.cols05 = this.cols05 + this.listColTrongDot5.length;
           
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.baoCao.trangThai == '1' ||
+            this.baoCao.trangThai == '3' ||
+            this.baoCao.trangThai == '5' ||
+            this.baoCao.trangThai == '8'
           ) {
             this.status = false;
           } else {
@@ -2023,18 +1983,38 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       if(maLoai==1){
         if (typeof this.lstCTietBCao04ax[data.vt-1].id == 'number'){
           this.lstIdDeleteMau04ax += this.lstCTietBCao04ax[data.vt-1].id + ',';
+          let objectDele ={
+            maLoai:'6',
+            lstIdDelete:this.lstIdDeleteMau04ax
+          }
+          this.lstDeleteCTietBCao.push(objectDele);
         }
       }else if(maLoai==2){
         if (typeof this.lstCTietBCao04an[data.vt-1].id == 'number'){
           this.lstIdDeleteMau04an += this.lstCTietBCao04an[data.vt-1].id + ',';
+          let objectDele ={
+            maLoai:'7',
+            lstIdDelete:this.lstIdDeleteMau04an
+          }
+          this.lstDeleteCTietBCao.push(objectDele);
         }
       }else if(maLoai==3){
         if (typeof this.lstCTietBCao04bx[data.vt-1].id == 'number'){
           this.lstIdDeleteMau04bx += this.lstCTietBCao04bx[data.vt-1].id + ',';
+          let objectDele ={
+            maLoai:'8',
+            lstIdDelete:this.lstIdDeleteMau04bx
+          }
+          this.lstDeleteCTietBCao.push(objectDele);
         }
       }else if(maLoai==4){
         if (typeof this.lstCTietBCao05[data.vt-1].id == 'number'){
           this.lstIdDeleteMau05 += this.lstCTietBCao05[data.vt-1].id + ',';
+          let objectDele ={
+            maLoai:'9',
+            lstIdDelete:this.lstIdDeleteMau05
+          }
+          this.lstDeleteCTietBCao.push(objectDele);
         }
       }
     }
@@ -2665,11 +2645,21 @@ updateSingleCheckedBcao(maLoai:any): void {
       this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item?.id != id);
       if (typeof id == 'number') {
         this.lstIdDeleteMau02 += id + ',';
+        let objecDele ={
+          maLoai:'4',
+          lstIdDelete:this.lstIdDeleteMau02
+        }
+        this.lstDeleteCTietBCao.push(objecDele);
       }
     }else{
       this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item?.id != id);
       if (typeof id == 'number') {
         this.lstIdDeleteMau02 += id + ',';
+        let objecDele ={
+          maLoai:'4',
+          lstIdDelete:this.lstIdDeleteMau02
+        }
+        this.lstDeleteCTietBCao.push(objecDele);
       }
     }
   }
@@ -2709,7 +2699,7 @@ updateSingleCheckedBcao(maLoai:any): void {
       thGiaMuaTd:null,
       thTtien:null,
       ghiChu:null,
-      maVtuParent:parentID,
+      maVtuHeader:parentID,
       loai:loaiDonVi,
       checked!: false,
     };
@@ -2897,16 +2887,31 @@ updateSingleCheckedBcao(maLoai:any): void {
       this.lstCTietBCao031 = this.lstCTietBCao031.filter((item) => item.id != id);
       if (typeof id == 'number') {
         this.lstIdDeleteMau03 += id + ',';
+        let objecDele = {
+          maLoai:'5',
+          lstIdDelete:this.lstIdDeleteMau03,
+        }
+        this.lstDeleteCTietBCao.push(objecDele);
       }
     }else if(loaiList=='2'){
       this.lstCTietBCao032 = this.lstCTietBCao032.filter((item) => item.id != id);
       if (typeof id == 'number') {
         this.lstIdDeleteMau03 += id + ',';
+        let objecDele = {
+          maLoai:'5',
+          lstIdDelete:this.lstIdDeleteMau03,
+        }
+        this.lstDeleteCTietBCao.push(objecDele);
       }
     }else{
       this.lstCTietBCao033 = this.lstCTietBCao033.filter((item)=> item.id!=id);
       if(typeof id =='number'){
         this.lstIdDeleteMau03 +=id +',';
+        let objecDele = {
+          maLoai:'5',
+          lstIdDelete:this.lstIdDeleteMau03,
+        }
+        this.lstDeleteCTietBCao.push(objecDele);
       }
     }    
   }
@@ -2951,7 +2956,7 @@ updateSingleCheckedBcao(maLoai:any): void {
       ttGiaBanTte:0,
       ttClechGiaTteVaGiaHtoan:0,
       ghiChu:0,
-      maVtuParent:parentId,
+      maVtuHeader:parentId,
       loai:loai,
       checked: false,
     };

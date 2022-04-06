@@ -155,5 +155,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           this.pages.size = size;
           this.getDetailReport();
      }
-
+     dong(){
+       this.location.back()
+     }
 }

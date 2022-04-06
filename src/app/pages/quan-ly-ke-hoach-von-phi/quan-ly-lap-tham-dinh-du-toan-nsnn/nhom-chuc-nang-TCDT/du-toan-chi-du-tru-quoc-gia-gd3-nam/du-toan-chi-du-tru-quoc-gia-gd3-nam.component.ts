@@ -191,11 +191,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.maNdungChis = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -205,11 +205,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTiets = data.data?.content;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
 
@@ -219,11 +219,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.errorMessage = "err.error.message";
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.hide();
@@ -293,22 +293,22 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            alert('trinh duyet thanh cong!');
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
-            alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          alert('trinh duyet that bai!');
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           console.log(err);
         },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          alert('trinh duyet thanh cong!');
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         } else {
-          alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       })
     }
@@ -366,12 +366,12 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             this.listIdFiles += item.id + ",";
           })
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
         console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
     this.spinner.hide();
@@ -556,16 +556,17 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             }
 
         }else{
-            alert('co loi trong qua trinh van tin');
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-        alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(err);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {
             this.mabaocao = res.data;
         } else {
-            this.errorMessage = 'Có lỗi trong quá trình vấn tin!';
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     })
     this.spinner.show();

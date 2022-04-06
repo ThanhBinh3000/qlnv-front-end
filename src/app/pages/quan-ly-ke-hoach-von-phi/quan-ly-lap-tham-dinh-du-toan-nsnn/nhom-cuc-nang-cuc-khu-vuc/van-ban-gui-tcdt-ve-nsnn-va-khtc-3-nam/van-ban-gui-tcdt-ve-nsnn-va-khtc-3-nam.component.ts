@@ -583,4 +583,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           }
           return url;
      }
+
+     dong(){
+       this.location.back()
+     }
 }

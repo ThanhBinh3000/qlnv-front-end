@@ -231,6 +231,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+
+    
     this.spinner.hide();
   }
 
@@ -552,7 +554,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       data1.push(mini1);
     })
     let item: ItemData = {
-      maCucDtnnKvuc: "",
+      maCucDtnnKvuc: null,
       luongGao: 0,
       cphiXuatCoDmucGao: 0,
       cphiXuatChuaDmucGao: 0,
@@ -998,30 +1000,38 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
   //liem tra xem vat tu da duoc chon hay chua
   checkVtu(id: any){
-    var name: any = this.editCache1[id].data.maVtuTbi;
+    var index: number = this.lstVtu.findIndex(e => e.id === id);
+    var ma: any = this.editCache1[id].data.maVtuTbi;
     var kt: boolean = false;
     this.lstVtu.forEach(item => {
-      if (item.maVtuTbi == name) {
+      if ((id != item.id)&&(this.editCache1[id].data.maVtuTbi == ma)) {
         kt = true;
       }
     })
     if (kt) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
-      this.cancelEdit1(id);
+      this.deleteById1(id);
+      this.addLine1(index + 1);
+    }
+  }
+  //kiem tra xe cuc DTNN KV duoc chon hay chua
+  checkCucKV(id: any){
+    var index: number = this.lstCTietBCao.findIndex(e => e.id === id);
+    var ma: any = this.editCache[id].data.maCucDtnnKvuc;
+    var kt: boolean = false;
+    this.lstCTietBCao.forEach(item => {
+      if ((id != item.id)&&(this.editCache[item.id].data.maCucDtnnKvuc == ma)) {
+        kt = true;
+      }
+    })
+    if (kt) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_UNIT);
+      this.deleteById(id);
+      this.addLine(index + 1);
     }
   }
 
-  checkCucKV(id: any){
-    var name: any = this.editCache[id].data.maCucDtnnKvuc;
-    var kt: boolean = false;
-    this.lstCTietBCao.forEach(item => {
-      if (item.maCucDtnnKvuc == name) {
-        kt = true;
-      }
-    })
-    if (kt) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
-      this.cancelEdit(id);
-    }
+  getName(maDvi: string): string {
+    return this.cucKhuVucs.find(e => e.maDvi === maDvi)?.tenDvi;
   }
 }

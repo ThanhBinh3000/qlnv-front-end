@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -7,6 +7,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { LOAIBAOCAO, Utils } from 'src/app/Utility/utils';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-tong-hop',
@@ -15,13 +17,29 @@ import { LOAIBAOCAO, Utils } from 'src/app/Utility/utils';
 })
 export class TongHopComponent implements OnInit {
 
+  validateForm!: FormGroup;
+
+  submitForm(): void {
+    if (this.validateForm.valid) {
+      console.log('submit', this.validateForm.value);
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
     private datePipe: DatePipe,
     private nguoiDungSerivce: UserService,
-    private notifi : NzNotificationService
-  ) { }
+    private notifi : NzNotificationService,
+    private fb:FormBuilder,
+    private location: Location,
+  ) {}
 
   url: any;
   danhSachBaoCao: any = [];
@@ -34,12 +52,20 @@ export class TongHopComponent implements OnInit {
   kehoach: any;
   maDonViTao: any;
   loaiBaocao: any;
-  async ngOnInit() {
 
+  // validateForm!: FormGroup;
+
+  async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namhientai: [null, [Validators.required]],
+      loaiBaocao: [null, [Validators.required]],
+    });
+    console.log(this.validateForm);
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
     this.baoCaos = LOAIBAOCAO;
+
 
     //lay danh sach danh muc
     this.quanLyVonPhiService.dMDonVi().subscribe(
@@ -67,6 +93,7 @@ export class TongHopComponent implements OnInit {
     page: 1,
   }
 
+
   //get user info
   async getUserInfor(username: string) {
     let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
@@ -88,13 +115,37 @@ export class TongHopComponent implements OnInit {
     return userInfo;
   }
 
+  tonghop(){
 
+    if(this.namhientai==undefined || this.loaiBaocao ==null){
+
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
+    } else{
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
+    }
+
+  }
+
+  taomoi(){
+    if(this.namhientai==undefined || this.loaiBaocao ==null){
+
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
+    } else{
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
+    }
+  }
+  dong(){
+    // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+    this.location.back();
+  }
+
+  setkeHoach(){
+    this.kehoach=0;
+    this.kehoach = Number(this.namhientai)+3
+  }
   //set url khi
   setUrl() {
-    console.log(this.loaiBaocao);
     switch (this.loaiBaocao) {
-
-
       case 207:
         this.url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
         break;
@@ -180,6 +231,7 @@ export class TongHopComponent implements OnInit {
         this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
         break;
       default:
+        this.url=null;
         break;
     }
 
@@ -197,5 +249,16 @@ export class TongHopComponent implements OnInit {
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+  }
+  redirectChiTieuKeHoachNam(){
+    this.location.back()
+  }
+  xoaDieuKien(){
+    this.namhientai = ''
+    this.kehoach = ''
+    this.loaiBaocao = ''
+  }
+  tinhnam(){
+    this.kehoach= Number(this.namhientai) + 3
   }
 }

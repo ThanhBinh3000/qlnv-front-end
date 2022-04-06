@@ -341,7 +341,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_DM_VONDT_XDCBGD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
       soVban:this.soVban,
@@ -638,10 +638,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       if(res.statusCode==0){
           this.lstCTietBCao = res.data;
       }else{
-          alert('co loi trong qua trinh van tin');
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
   },err =>{
-      alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
   });
   this.updateEditCache()
   this.spinner.hide();

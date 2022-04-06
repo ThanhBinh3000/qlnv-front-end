@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -35,6 +36,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
      private router: Router,
      private quankhoachvon :QuanLyVonPhiService,
      private notification : NzNotificationService,
+     private location: Location
      ) {
     this.namPa = this.currentYear.getFullYear().toString();
   }
@@ -123,6 +125,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
 
   //
   dong(){
-      this.router.navigate(['/'])
+      // this.router.navigate(['/'])
+      this.location.back()
   }
 }

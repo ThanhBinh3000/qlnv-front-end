@@ -6,11 +6,11 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBcao" />
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.thangBCao" />
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đơn vị lập</label>

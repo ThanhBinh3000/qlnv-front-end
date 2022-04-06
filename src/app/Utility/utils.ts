@@ -487,39 +487,39 @@ export const LOAIBAOCAO =[
     // trang thai ban ghi
     export const TRANGTHAITIMKIEM =[
         {
-            id:1,
+            id:"1",
             tenDm:'Đang soạn'
         },
         {
-            id:2,
+            id:"2",
             tenDm:'Trình duyệt'
         },
         {
-            id:3,
+            id:"3",
             tenDm:'Trưởng BP từ chối'
         },
         {
-            id:4,
+            id:"4",
             tenDm:'Trưởng BP duyệt'
         },
         {
-            id:5,
+            id:"5",
             tenDm:'Lãnh đạo từ chối'
         },
         {
-            id:6,
+            id:"6",
             tenDm:'Lãnh đạo duyệt'
         },
         {
-            id:7,
+            id:"7",
             tenDm:'Gửi ĐV cấp trên'
         },
         {
-            id:8,
+            id:"8",
             tenDm:'ĐV cấp trên từ chối'
         },
         {
-            id:9,
+            id:"9",
             tenDm:'Đv cấp trên duyệt'
         },
     ]
