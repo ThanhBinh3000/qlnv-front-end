@@ -28,4 +28,5 @@ export const MESSAGE = {
   QD_TCDT: '/QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   TU_CHOI_SUCCESS: 'Từ chối thành công.',
+  DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
 };

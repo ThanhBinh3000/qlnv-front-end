@@ -48,7 +48,8 @@
                 <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Số QĐ </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
                   <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
-                    <nz-input-number formControlName="soQD" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                    <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                      [nzSize]="'small'"
                       [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
                     </nz-input-number>
                   </nz-input-group>

@@ -1045,7 +1045,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.get('namKeHoach').value;
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
-    this.thongTinChiTieuKeHoachNam.ghiChu = this.formData.get('ghiChu').value;
+    this.thongTinChiTieuKeHoachNam.ghiChu = this.formData
+      .get('ghiChu')
+      .value.trim();
 
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
@@ -1142,7 +1144,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         })
         .catch((e) => {
           console.error('error: ', e);
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(
+            MESSAGE.ERROR,
+            e.error.errors[0].defaultMessage,
+          );
         })
         .finally(() => {
           this.spinner.hide();

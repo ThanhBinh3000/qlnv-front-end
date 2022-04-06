@@ -70,7 +70,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Số ĐX </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
                     <nz-input-group nzAddOnAfter="/QĐ-TCDT">
-                      <nz-input-number formControlName="soDeXuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                      <nz-input-number formControlName="soDeXuat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                        [nzSize]="'small'"
                         [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
                       </nz-input-number>
                     </nz-input-group>
@@ -192,8 +193,8 @@
                         <nz-form-label [nzNoColon]="true">
                           Tổng mức đầu tư
                         </nz-form-label>
-                        <nz-input-number nz-input [(ngModel)]="thongTinChungDXKHLCNT.tongMucDt" [nzMin]="1" [nzStep]="1"
-                          [nzSize]="'small'"
+                        <nz-input-number nz-input [(ngModel)]="thongTinChungDXKHLCNT.tongMucDt" [nzMin]="1"
+                          [nzMax]="100000000000000000000" [nzStep]="1" [nzSize]="'small'"
                           [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
                         </nz-input-number>
                       </nz-form-item>
