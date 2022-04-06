@@ -235,7 +235,8 @@
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                                            [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc" (ngModelChange)="checkCucKV(data.id)">
+                                                            [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc"
+                                                            (ngModelChange)="checkCucKV(data.id)">
                                                             <nz-option *ngFor="let item of cucKhuVucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                                                             </nz-option>
@@ -352,15 +353,13 @@
                                              <th rowspan="2" nzWidth="170px">
                                                   Nhập vật tư
                                              </th>
-                                             
-                                             <th rowspan="2" nzWidth="150px" *ngFor="let data of lstCTietBCao">
-                                                  <ng-container *ngIf="!data?.maCucDtnnKvuc">
-                                                       <div *ngFor="let item of cucKhuVucs">
-                                                            <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
-                                                                 {{item.tenDvi}}
-                                                            </div>
+
+                                             <th rowspan="2" nzWidth="150px" *ngFor="let data of lstBang">
+                                                  <div *ngFor="let item of cucKhuVucs">
+                                                       <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
+                                                            {{item.tenDvi}}
                                                        </div>
-                                                  </ng-container>
+                                                  </div>
                                              </th>
 
                                              <th rowspan="2" nzWidth="100px">
@@ -418,9 +417,9 @@
                                                        </div>
                                                   </td>
 
-                                                  <td *ngFor="let item of lstCTietBCao">
+                                                  <td *ngFor="let item of lstBang">
                                                        <div *ngFor="let e of item.listCtiet">
-                                                            <ng-container *ngIf="e.col == data.col">
+                                                            <ng-container *ngIf="e.vitri == data.id">
                                                                  {{e.sl}}
                                                             </ng-container>
                                                        </div>
@@ -474,15 +473,16 @@
 
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư"
-                                                            [(ngModel)]="editCache1[data.id].data.maVtuTbi" (ngModelChange)="checkVtu(data.id)"> 
+                                                            [(ngModel)]="editCache1[data.id].data.maVtuTbi"
+                                                            (ngModelChange)="checkVtu(data.id)">
                                                             <nz-option *ngFor="let item of vatTus" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
 
-                                                  <td *ngFor="let item of lstCTietBCao">
+                                                  <td *ngFor="let item of lstBang">
                                                        <div *ngFor="let e of editCache[item.id].data.listCtiet">
-                                                            <ng-container *ngIf="e.col == data.col">
+                                                            <ng-container *ngIf="e.vitri == data.id">
                                                                  <nz-input-number class="search__input" nzSize="small"
                                                                       [(ngModel)]="e.sl" (change)="tongSl(data.id)">
                                                                  </nz-input-number>

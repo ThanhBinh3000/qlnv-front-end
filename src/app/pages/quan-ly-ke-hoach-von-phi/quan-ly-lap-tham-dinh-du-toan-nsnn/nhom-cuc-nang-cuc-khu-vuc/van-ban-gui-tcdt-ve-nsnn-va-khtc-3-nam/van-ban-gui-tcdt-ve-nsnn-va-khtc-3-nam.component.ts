@@ -111,15 +111,15 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      async ngOnInit() {
           this.id = this.routerActive.snapshot.paramMap.get('id');
           let userName = this.userService.getUserName();
-          let userInfo: any = await this.getUserInfo(userName); //get user info
+          await this.getUserInfo(userName);
           if (this.id) {
                await this.getDetailReport();
                this.kt = false;
           } else {
                this.kt = true;
                this.trangThaiBanGhi = "1";
-               this.nguoiNhap = userInfo?.username;
-               this.maDonViTao = userInfo?.dvql;
+               this.nguoiNhap = this.userInfo?.username;
+               this.maDonViTao = this.userInfo?.dvql;
                this.ngayDuyetVban = this.ngayNhap;
                this.spinner.show();
                this.quanLyVonPhiService.sinhMaVban().toPromise().then(
@@ -137,16 +137,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
-
-          const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+          this.getStatusButton();
           this.danhMucService.dMucBcaoDuyet().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
@@ -181,9 +172,20 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           this.spinner.hide();
      }
 
+     getStatusButton() {
+          const utils = new Utils();
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+     }
+
      //get user info
      async getUserInfo(username: string) {
-          let userInfo = await this.userService.getUserInfo(username).toPromise().then(
+          await this.userService.getUserInfo(username).toPromise().then(
                (data) => {
                     if (data?.statusCode == 0) {
                          this.userInfo = data?.data
@@ -196,7 +198,6 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          return userInfo;
      }
 
 
@@ -239,15 +240,18 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                );
           } else {
 
-               this.quanLyVonPhiService.capNhatVban(request).toPromise().then(res => {
-                    if (res.statusCode == 0) {
-                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-               }, err => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-               })
+               this.quanLyVonPhiService.updatelist(request).toPromise().then(
+                    async data => {
+                         if (data.statusCode == 0) {
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                              await this.getDetailReport();
+                              this.getStatusButton();
+                         } else {
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
+                    }, err => {
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    })
           }
           this.lstCTietBCao.forEach(item => {
                if (!item.id) {
@@ -259,16 +263,17 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      }
 
      // chuc nang check role
-     onSubmit(mcn: String) {
+     async onSubmit(mcn: String) {
           const requestGroupButtons = {
                id: this.id,
                maChucNang: mcn,
                type: "",
           };
           this.spinner.show();
-          this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+          this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
                if (data.statusCode == 0) {
-                    this.getDetailReport();
+                    await this.getDetailReport();
+                    this.getStatusButton();
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -584,7 +589,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           return url;
      }
 
-     dong(){
-       this.location.back()
+     dong() {
+          this.location.back()
      }
 }

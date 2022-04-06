@@ -31,4 +31,5 @@ export const MESSAGE = {
   SEARCH_VALIDATE: 'Bạn chưa chọn loại báo cáo',
   ERROR_ADD_VTU: 'Không được chọn trùng loại vật tư',
   ERROR_ADD_UNIT: 'Không được chọn trùng Cục DTNN KV',
+  NULL_ERROR: 'Không được để trống',
 };
