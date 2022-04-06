@@ -32,7 +32,6 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
       (data) => {
         if (data.statusCode == 0) {
           this.khoanMucs = data.data?.content;
-          console.log(this.khoanMucs);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -48,13 +47,16 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
       id: this.searchFilter.khoanMuc,
     };
 
-    //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
     this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.danhSachKhoanMuc = data.data.content;
-          console.log(this.danhSachKhoanMuc);
-
+          var tempArr = data.data;
+          tempArr.forEach(e =>{
+            this.danhSachKhoanMuc.push(e);
+            e.lstQlnvDmKhoachVonPhi.forEach( el => {
+            this.danhSachKhoanMuc.push(el);
+            })
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -66,7 +68,11 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   }
 
   handleOk() {
-    this._modalRef.close(this.danhSachKhoanMuc);
+    let req ={
+      danhSachKhoanMuc : this.danhSachKhoanMuc,
+      id: this.searchFilter.khoanMuc
+    }
+    this._modalRef.close(req);
   }
 
   handleCancel() {
