@@ -621,7 +621,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
     },err =>{
-        alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {

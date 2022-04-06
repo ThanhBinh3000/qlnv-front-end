@@ -152,8 +152,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
     this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
-    let userInfo: any = await this.getUserInfo(userName); //get user info
-    console.log(userInfo);
+    await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
     }else if (
@@ -162,9 +161,9 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.namBaoCaoHienHanh != null
     ) {
       await this.calltonghop();
-      this.nguoiNhap = userInfo?.username;
+      this.nguoiNhap = this.userInfo?.username;
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
-      this.maDonViTao = userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
@@ -181,8 +180,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
-      this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
+      this.nguoiNhap = this.userInfo?.username;
+      this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -200,15 +199,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-
+    this.getStatusButton();
     //get danh muc noi dung
     this.danhMucService.dMLoaiKeHoach().subscribe(
       (data) => {
@@ -288,6 +279,17 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.spinner.hide();
   }
 
+  getStatusButton(){
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  }
+
   //get user info
   async getUserInfo(username: string) {
     let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
@@ -350,10 +352,13 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        data => {
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -363,9 +368,11 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+      this.quanLyVonPhiService.updatelist(request).toPromise().then( async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          await this.getDetailReport();
+            this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -390,9 +397,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
       if (data.statusCode == 0) {
-        this.getDetailReport();
+        await this.getDetailReport();
+        this.getStatusButton();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR,data?.msg);

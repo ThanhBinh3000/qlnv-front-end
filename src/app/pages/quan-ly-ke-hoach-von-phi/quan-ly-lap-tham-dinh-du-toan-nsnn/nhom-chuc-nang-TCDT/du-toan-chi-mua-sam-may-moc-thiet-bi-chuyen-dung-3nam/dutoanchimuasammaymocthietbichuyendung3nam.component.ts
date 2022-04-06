@@ -556,7 +556,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-        alert(err.error.message);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {

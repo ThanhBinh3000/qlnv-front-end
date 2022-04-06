@@ -40,7 +40,7 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" > 
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" >
                   <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                   <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                   <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
@@ -72,6 +72,12 @@
             </nz-table>
           </nz-tab>
         </nz-tabset>
+        <div class="action">
+          <button type="button" class="btn btn-sub" (click)="redirectkehoachvonphi()">
+            <i class="icon htvbdh_tcdt_close"></i>
+            <span>Đóng</span>
+          </button>
+        </div>
       </div>
       <div class="ghi-chu">
         <nz-form-label nzRequired [nzNoColon]="true">
