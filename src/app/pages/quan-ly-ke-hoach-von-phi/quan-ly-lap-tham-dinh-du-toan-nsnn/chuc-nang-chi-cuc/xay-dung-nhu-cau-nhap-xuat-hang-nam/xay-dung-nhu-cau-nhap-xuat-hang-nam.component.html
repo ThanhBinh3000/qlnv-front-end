@@ -67,7 +67,7 @@
           <span>Xóa</span>
         </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+        (click)="redirectChiTieuKeHoachNam()">
           <i class="icon htvbdh_dong"></i>
           <span>Đóng</span>
         </a>
@@ -135,19 +135,19 @@
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng thóc xuất</label>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongThocXuat" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0"  [(ngModel)]="luongThocXuat" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng thóc nhập</label>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongThocNhap" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongThocNhap" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng gạo xuất</label>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongGaoXuat" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoXuat" ></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng gạo nhập</label>
-                <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongGaoNhap" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoNhap" ></nz-input-number>
               </div>
             </div>
             <div class="row">
@@ -204,7 +204,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.slNhap" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="editCache[data.id].data.slNhap"></nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -222,6 +222,15 @@
                         (ngModelChange)="updateSingleChecked()"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Tổng cộng</td>
+                  <td>{{tong}}</td>
+                  <td [hidden]="status">
+                  <td [hidden]="status">
+                  <td [hidden]="status">
+                  <td [hidden]="status">
                 </tr>
               </tbody>
             </nz-table>

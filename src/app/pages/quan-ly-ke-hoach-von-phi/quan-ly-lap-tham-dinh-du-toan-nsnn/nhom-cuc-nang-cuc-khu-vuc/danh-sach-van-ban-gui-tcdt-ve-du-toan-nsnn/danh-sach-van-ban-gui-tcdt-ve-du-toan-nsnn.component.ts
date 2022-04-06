@@ -133,7 +133,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                     }
                },
                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
                }
           );
           this.spinner.hide();

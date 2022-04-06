@@ -47,6 +47,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   luongThocNhap!: number;
   luongGaoXuat!: number;
   luongGaoNhap!: number;
+  tong: number = 0;
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
@@ -338,7 +339,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-
+          this.lstCTietBCao.lstCTiet.forEach(e => {
+            this.tong += e.slNhap;
+          })
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -421,6 +424,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tong -= this.lstCTietBCao.lstCTiet.find(e => e.id==id).slNhap;
     this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -431,6 +435,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTiet.filter(item => {
+      if (item.checked){
+        this.tong -= item.slNhap;
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -517,6 +524,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   saveEdit(id: string): void {
     const index = this.lstCTiet.findIndex(item => item.id === id);
+    this.tong += this.editCache[id].data.slNhap - this.lstCTiet[index].slNhap;
     this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
     Object.assign(this.lstCTiet[index], this.editCache[id].data);
     this.editCache[id].edit = false;
@@ -529,5 +537,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  tongCong(){
+    this.tong
   }
 }

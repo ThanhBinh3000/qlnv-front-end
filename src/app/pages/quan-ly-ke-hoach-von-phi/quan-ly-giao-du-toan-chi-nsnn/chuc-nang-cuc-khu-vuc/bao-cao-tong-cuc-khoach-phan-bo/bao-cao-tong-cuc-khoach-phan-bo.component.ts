@@ -11,6 +11,8 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
      id: any;
@@ -120,6 +122,8 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
           private danhMucService: DanhMucHDVService,
+          private notification: NzNotificationService,
+
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -137,17 +141,17 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                this.maDonViTao = userInfo?.dvql;
                this.spinner.show();
                this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
-                         }
-                    },
-                    (err) => {
-                         this.errorMessage = err.error.message;
-                    }
-               );
+                (data) => {
+                  if (data.statusCode == 0) {
+                    this.maBaoCao = data.data;
+                  } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                  }
+                },
+                (err) => {
+                  this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+              );
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
@@ -167,12 +171,12 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                          this.noiDungs = data.data?.content;
                          console.log(this.noiDungs);
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
                     console.log(err);
-                    this.errorMessage = err.error.message;
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
           this.danhMucService.dMLoaiChi().toPromise().then(
@@ -181,12 +185,12 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                          this.loaiChis = data.data?.content;
                          console.log(this.loaiChis);
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
                     console.log(err);
-                    this.errorMessage = err.error.message;
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
           this.danhMucService.dMKhoanChi().toPromise().then(
@@ -195,12 +199,12 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                          this.khoanChis = data.data?.content;
                          console.log(this.khoanChis);
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
                     console.log(err);
-                    this.errorMessage = err.error.message;
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
           // this.danhMucService.dMMucChi().toPromise().then(
@@ -209,12 +213,12 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           //                this.mucChis = data.data?.content;
           //                console.log(this.mucChis);
           //           } else {
-          //                this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          //                this.notification.error(MESSAGE.ERROR, data?.msg);
           //           }
           //      },
           //      (err) => {
           //           console.log(err);
-          //           this.errorMessage = err.error.message;
+          //           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
           //      }
           // );
 
@@ -224,11 +228,11 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
-                    this.errorMessage = "err.error.message";
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
           this.spinner.hide();
@@ -293,21 +297,26 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           if (this.id == null) {
                this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
                     (data) => {
-                         alert("trinh duyet thanh cong!");
-                         console.log(data);
+                      if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                      } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                      }
                     },
                     (err) => {
-                         alert("trinh duyet that bai!");
-                         console.log();
+                      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                      console.log(err);
                     })
-          } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(res => {
-                    if (res.statusCode == 0) {
-                         alert('trinh duyet thanh cong!');
-                    } else {
-                         alert('đã có lỗi xảy ra, vui lòng thử lại sau!');
-                    }
-               })
+          }else {
+            this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+              if (res.statusCode == 0) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+              }
+            },err =>{
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            })
           }
 
           this.lstCTietBCao.filter(item => {
@@ -373,12 +382,12 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                               this.listIdFiles += item.id + ",";
                          })
                     } else {
-                         this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
                },
                (err) => {
                     console.log(err);
-                    this.errorMessage = err.error.message;
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
           this.spinner.show();

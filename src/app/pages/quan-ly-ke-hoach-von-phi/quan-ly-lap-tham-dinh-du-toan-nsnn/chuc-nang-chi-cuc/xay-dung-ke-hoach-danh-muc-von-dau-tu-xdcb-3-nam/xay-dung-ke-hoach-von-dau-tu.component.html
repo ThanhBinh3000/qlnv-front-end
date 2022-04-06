@@ -56,7 +56,7 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem/">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="icon htvbdh_dong"></i>
           <span>Đóng</span>
         </a>
@@ -118,44 +118,44 @@
             <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body">
               <thead>
                 <tr>
-                  <th rowspan="4"  nzWidth="5%">STT</th>
-                  <th rowspan="4"  nzWidth="12%">Tên dự án</th>
-                  <th rowspan="4"  nzWidth="12%">Loại kế hoạch</th>
-                  <th rowspan="4"  nzWidth="12%">Khối dự án</th>
-                  <th rowspan="4"  nzWidth="12%">Địa Điểm Xây Dựng</th>
-                  <th rowspan="4"  nzWidth="5%">
+                  <th rowspan="4" >STT</th>
+                  <th rowspan="4"  >Tên dự án</th>
+                  <th rowspan="4"  >Loại kế hoạch</th>
+                  <th rowspan="4"  >Khối dự án</th>
+                  <th rowspan="4"  >Địa Điểm Xây Dựng</th>
+                  <th rowspan="4" >
                       Địa Điểm<br />
                       mở tài <br>
                       khoản
                   </th>
-                  <th rowspan="4"  nzWidth="5%">
+                  <th rowspan="4" >
                       Mã số dự<br />
                       án
                   </th>
-                  <th rowspan="4"  nzWidth="12%">Mã ngành kinh tế <br /> (Loại, Khoản)</th>
-                  <th rowspan="4"  nzWidth="12%">Năng lực thiết kế</th>
-                  <th colspan="2"  nzWidth="12%">Năm KC-HT thực tế</th>
-                  <th colspan="2"  nzWidth="12%">QĐ duyệt dự án <br /> đầu tư</th>
-                  <th colspan="2"  nzWidth="12%">QĐ điều chỉnh dự DA <br /> (lần cuối) <br /> đầu tư</th>
-                  <th colspan="5"  nzWidth="12%">Quyết định duyệt thiết kế dự toán</th>
-                  <th colspan="4"  nzWidth="12%">KL TH, cấp phát đến 30/06 năm thực hiện</th>
-                  <th colspan="4"  nzWidth="12%">KL TH, cấp phát đến 31/12 năm thực hiện</th>
-                  <th rowspan="4"  nzWidth="5%">
+                  <th rowspan="4"  >Mã ngành kinh tế <br /> (Loại, Khoản)</th>
+                  <th rowspan="4"  >Năng lực thiết kế</th>
+                  <th colspan="2"  >Năm KC-HT thực tế</th>
+                  <th colspan="2"  >QĐ duyệt dự án <br /> đầu tư</th>
+                  <th colspan="2"  >QĐ điều chỉnh DA <br /> (lần cuối) <br /></th>
+                  <th colspan="5"  >Quyết định duyệt thiết kế dự toán</th>
+                  <th colspan="4"  >KL TH, cấp phát đến 30/06 năm thực hiện</th>
+                  <th colspan="4"  >KL TH, cấp phát đến 31/12 năm thực hiện</th>
+                  <th rowspan="4" >
                       Nhu cầu <br />
                       vốn năm<br />
                       N + 1
                   </th>
-                  <th rowspan="4"  nzWidth="5%">
+                  <th rowspan="4" >
                       Nhu cầu <br />
                       vốn năm<br />
                       N + 2
                   </th>
-                  <th rowspan="4"  nzWidth="5%">
+                  <th rowspan="4" >
                       Nhu cầu <br />
                       vốn năm<br />
                       N + 3
                   </th>
-                  <th rowspan="4"  nzWidth="12%">Ghi chú: Ghi rõ công<br /> trình thuộc loại <br /> hoàn thành hay dự <br /> kiến hoàn thành</th>
+                  <th rowspan="4"  >Ghi chú: Ghi rõ công<br /> trình thuộc loại <br /> hoàn thành hay dự <br /> kiến hoàn thành</th>
                   <th colspan="3" rowspan="4" [hidden]="status"></th>
                   <th rowspan="4" [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -164,80 +164,80 @@
                   </th>
               </tr>
               <tr class="text-title">
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       KC
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       HT
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       Tổng vốn <br> đầu tư
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
-                      CQ duyệt,<br /> số, ngày <br /> tháng
+                  <th rowspan="3" >
+                      CQ duyệt, số, ngày tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       Tổng vốn <br> đầu tư
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       Tổng
                   </th>
-                  <th colspan="3"  nzWidth="50%">
+                  <th colspan="3" >
                       Trong đó
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th colspan="3"  nzWidth="50%">
+                  <th colspan="3" >
                       Trong đó
                   </th>
-                  <th rowspan="3"  nzWidth="50%">
+                  <th rowspan="3" >
                       CQ duyệt,<br /> số, ngày <br /> tháng
                   </th>
-                  <th colspan="3"  nzWidth="50%">
+                  <th colspan="3" >
                       Trong đó
                   </th>
               </tr>
               <tr>
-                  <th rowspan="2"  nzWidth="25%">
+                  <th rowspan="2">
                       XL
                   </th>
-                  <th rowspan="2"  nzWidth="25%">
+                  <th rowspan="2">
                       TB
                   </th>
-                  <th rowspan="2"  nzWidth="25%">
+                  <th rowspan="2">
                       CK
                   </th>
-                  <th rowspan="2"  nzWidth="25%">
+                  <th rowspan="2">
                       NSTT
                   </th>
-                  <th colspan="2"  nzWidth="25%">
+                  <th colspan="2">
                       Khác
                   </th>
-                  <th rowspan="2"  nzWidth="25%">
+                  <th rowspan="2">
                       NSTT
                   </th>
-                  <th colspan="2"  nzWidth="25%">
+                  <th colspan="2">
                       Khác
                   </th>
               </tr>
               <tr>
-                  <th  nzWidth="25%">
+                  <th>
                       DT chi TX
                   </th>
-                  <th  nzWidth="25%">
+                  <th>
                       Quỹ khác
                   </th>
-                  <th  nzWidth="25%">
+                  <th>
                       DT chi TX
                   </th>
-                  <th  nzWidth="25%">
+                  <th>
                       Quỹ khác
                   </th>
               </tr>
@@ -415,9 +415,9 @@
                     <td>
                       {{editCache[data.id].data.qdDuyetTkDtoanTong}}
                     </td>
-                    <td>
-                      <nz-input-number class="search__input" style="width: 100px;" nzSize="small" [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                    <td  >
+                      <input nz-input style="width: 100px;" class="search__input"[(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl"
+                        (change)="changeModel(data.id)" />
                     </td>
                     <td>
                       <nz-input-number class="search__input" style="width: 100px;" nzSize="small" [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanTb"
