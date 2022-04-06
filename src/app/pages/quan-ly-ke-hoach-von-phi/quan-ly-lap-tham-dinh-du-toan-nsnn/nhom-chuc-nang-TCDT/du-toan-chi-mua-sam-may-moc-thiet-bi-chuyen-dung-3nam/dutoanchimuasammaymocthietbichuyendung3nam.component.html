@@ -118,6 +118,8 @@
                 <tr>
                   <th rowspan="2" nzWidth="35px" >STT</th>
                   <th rowspan="2" nzWidth="200px">Chỉ tiêu</th>
+                  <th colspan="3" >Cục khu vực Hà Nội</th>
+                  <th colspan="3" >Cục khu vực Đông Bắc</th>
                   <th colspan="3" >Tổng cộng</th>
                   <th rowspan="2" colspan="3" [hidden]="status"></th>
                   <th rowspan="2" [hidden]="status">
@@ -127,6 +129,12 @@
                   </th>
                 </tr>
                 <tr>
+                  <th>Năm N+1</th>
+                  <th>Năm N+2</th>
+                  <th>Năm N+3</th>
+                  <th>Năm N+1</th>
+                  <th>Năm N+2</th>
+                  <th>Năm N+3</th>
                   <th>Năm N+1</th>
                   <th>Năm N+2</th>
                   <th>Năm N+3</th>
@@ -143,6 +151,12 @@
                         </div>
                       </div>
                     </td>
+                    <td>{{data.tcongN1}}</td>
+                    <td>{{data.tcongN2}}</td>
+                    <td>{{data.tcongN3}}</td>
+                    <td>{{data.tcongN1}}</td>
+                    <td>{{data.tcongN2}}</td>
+                    <td>{{data.tcongN3}}</td>
                     <td>{{data.tcongN1}}</td>
                     <td>{{data.tcongN2}}</td>
                     <td>{{data.tcongN3}}</td>
@@ -167,6 +181,24 @@
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maVtuTbi">
                         <nz-option *ngFor="let item of listChitieu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tcongN1" (ngModelChange)="tinhtong1()" ></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN2" (ngModelChange)="tinhtong2()" ></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN3" (ngModelChange)="tinhtong3()" ></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tcongN1" (ngModelChange)="tinhtong1()" ></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN2" (ngModelChange)="tinhtong2()" ></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tcongN3" (ngModelChange)="tinhtong3()" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tcongN1" (ngModelChange)="tinhtong1()" ></nz-input-number>

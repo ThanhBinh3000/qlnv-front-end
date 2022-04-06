@@ -507,7 +507,7 @@ export const LOAIBAOCAO =[
         }
     ]
 
-    export const LISTTONGHOP =[
+    export const LISTBAOCAOTONGHOP =[
         {
             id:'16',
             tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
