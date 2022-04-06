@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { ThongTinPhuongAnTrinhTongCuc } from './../../../../../models/ThongTinPhuongAnTrinhTongCuc';
 import {
   Component,
@@ -43,9 +44,9 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   listOfData: ItemData[] = [];
   loaiVTHH: number = 0;
 
-  thocIdDefault: number = 2;
-  gaoIdDefault: number = 6;
-  muoiIdDefault: number = 78;
+  thocIdDefault: string = "01";
+  gaoIdDefault: string = "00";
+  muoiIdDefault: string = "02";
 
   isFromTongHop: boolean = false;
   listPhuongThucDauThau: any[] = [];
@@ -69,6 +70,8 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
 
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
+
+  thongTinChung: any;
 
   constructor(
     private modal: NzModalService,
@@ -117,6 +120,12 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  loadChiTiet() {
+    if (this.id > 0) {
+
     }
   }
 
@@ -265,7 +274,7 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     }
   }
 
-  openDialogThongTinPhuLucKLCNT(data: any) {
+  openDialogThongTinPhuLucKLCNT(data?: any) {
     this.modal.create({
       nzTitle: 'Thông tin phụ lục KH LCNT cho các Cục DTNN KV',
       nzContent: DialogThongTinPhuLucKHLCNTComponent,

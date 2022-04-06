@@ -41,15 +41,20 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   i = 0;
   id: number;
   editId: string | null = null;
-  listOfData: ItemData[] = [];
   loaiVTHH: number = 0;
   chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
   listNam: any[] = [];
   yearNow: number = 0;
 
-  thocIdDefault: number = 2;
-  gaoIdDefault: number = 6;
-  muoiIdDefault: number = 78;
+  loaiVthh: string = "";
+  hthucLcnt: string = "";
+  pthucLcnt: string = "";
+  loaiHdong: string = "";
+  nguonVon: string = "";
+
+  thocIdDefault: string = "01";
+  gaoIdDefault: string = "00";
+  muoiIdDefault: string = "02";
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -96,20 +101,6 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
       });
-      this.listOfData = [
-        ...this.listOfData,
-        {
-          id: `${this.i}`,
-          stt: `${this.i}`,
-          cuc: 'Cục DTNN KV Vĩnh phú',
-          soGoiThau: `4`,
-          soDeXuat: 'DX_KHCNT_01',
-          ngayDeXuat: `10/03/2022`,
-          tenDuAn: `Mua gạo dự trữ A`,
-          soLuong: `2000`,
-          tongTien: `42.000.000`,
-        },
-      ];
       await Promise.all([
         this.phuongThucDauThauGetAll(),
         this.nguonVonGetAll(),
@@ -191,7 +182,31 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   }
 
   async loadChiTiet() {
+    if (this.id > 0) {
+      let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.chiTiet = res.data;
 
+        if (res.data.namKhoach) {
+          this.chiTiet.namKhoach = +res.data.namKhoach;
+        }
+
+        this.startPH = dayjs(this.chiTiet.tuTgianMthau).toDate();
+        this.endPH = dayjs(this.chiTiet.denTgianMthau).toDate();
+
+        this.startDT = dayjs(this.chiTiet.tuTgianDthau).toDate();
+        this.endDT = dayjs(this.chiTiet.denTgianDthau).toDate();
+
+        this.startHS = dayjs(this.chiTiet.tuTgianTbao).toDate();
+        this.endHS = dayjs(this.chiTiet.denTgianTbao).toDate();
+
+        this.startHTN = dayjs(this.chiTiet.tuTgianNhang).toDate();
+        this.endHTN = dayjs(this.chiTiet.denTgianNhang).toDate();
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
   }
 
   async phuongThucDauThauGetAll() {
@@ -230,15 +245,36 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "hthucLcnt": this.chiTiet.hthucLcnt,
-        "loaiHdong": this.chiTiet.loaiHdong,
-        "loaiVthh": this.chiTiet.loaiVthh,
+        "hthucLcnt": this.hthucLcnt,
+        "loaiHdong": this.loaiHdong,
+        "loaiVthh": '00',
         "namKhoach": this.chiTiet.namKhoach,
-        "nguonVon": this.chiTiet.nguonVon,
-        "pthucLcnt": this.chiTiet.pthucLcnt
+        "nguonVon": this.nguonVon,
+        "pthucLcnt": this.pthucLcnt,
       }
-      let data = await this.tongHopDeXuatKHLCNTService.dsChuaTongHop(body);
-      console.log(data);
+      let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.chiTiet = res.data;
+
+        if (res.data.namKhoach) {
+          this.chiTiet.namKhoach = +res.data.namKhoach;
+        }
+
+        this.startPH = dayjs(this.chiTiet.tuTgianMthau).toDate();
+        this.endPH = dayjs(this.chiTiet.denTgianMthau).toDate();
+
+        this.startDT = dayjs(this.chiTiet.tuTgianDthau).toDate();
+        this.endDT = dayjs(this.chiTiet.denTgianDthau).toDate();
+
+        this.startHS = dayjs(this.chiTiet.tuTgianTbao).toDate();
+        this.endHS = dayjs(this.chiTiet.denTgianTbao).toDate();
+
+        this.startHTN = dayjs(this.chiTiet.tuTgianNhang).toDate();
+        this.endHTN = dayjs(this.chiTiet.denTgianNhang).toDate();
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -247,15 +283,68 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
     }
   }
 
-  phuongAnTrinhTongCuc() {
-    this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, 0])
-  }
-
   back() {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
   }
 
-  save() {
+  phuongAnTrinhTongCuc() {
+    if (this.id > 0) {
+      this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.id]);
+    }
+    else {
+      this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, 0]);
+    }
+  }
 
+  async save(isPhuongAn) {
+    this.spinner.show();
+    try {
+      let body = {
+        "hthucLcnt": this.chiTiet.hthucLcnt,
+        "id": this.id,
+        "loaiHdong": this.chiTiet.loaiHdong,
+        "loaiVthh": this.chiTiet.loaiVthh,
+        "namKhoach": this.chiTiet.namKhoach,
+        "nguonVon": this.chiTiet.nguonVon,
+        "pthucLcnt": this.chiTiet.pthucLcnt,
+        "veViec": this.chiTiet.veViec,
+      }
+      if (this.id > 0) {
+        let res = await this.tongHopDeXuatKHLCNTService.sua(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (isPhuongAn) {
+            this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.id]);
+          }
+          else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
+          }
+        }
+        else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+      else {
+        let res = await this.tongHopDeXuatKHLCNTService.them(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (isPhuongAn) {
+            console.log(res);
+            this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.id]);
+          }
+          else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
+          }
+        }
+        else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 }

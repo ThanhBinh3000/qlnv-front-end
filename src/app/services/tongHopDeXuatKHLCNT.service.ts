@@ -33,9 +33,9 @@ export class TongHopDeXuatKHLCNTService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  exportList(body: any): Observable<Blob> {
+  deXuatCuc(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/dx-cuc`
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body).toPromise();
   }
 
   them(body: any): Promise<any> {
