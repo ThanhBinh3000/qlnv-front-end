@@ -278,7 +278,7 @@
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?" (nzOnConfirm)="cancelEdit(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                         class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
@@ -492,7 +492,7 @@
                     </td>
                     <td>
                       <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?" (nzOnConfirm)="cancelEdit1(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit1(data.id)"
                         class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">

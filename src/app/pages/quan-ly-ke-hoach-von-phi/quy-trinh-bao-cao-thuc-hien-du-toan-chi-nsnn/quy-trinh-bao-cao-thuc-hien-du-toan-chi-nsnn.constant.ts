@@ -21,8 +21,14 @@ export const QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN_LIST: QuyTrinhBaoCaoTh
   // },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ chi cục',
+    title: 'Kiểm tra báo cáo thực hiện dự toán (giải ngân) tháng/năm từ các chi cục',
     description: 'Danh sách tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ chi cục',
+    url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN}/tong-hop`,
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm',
+    description: 'Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_TRINH_BAO_CAO_THUC_HIEN_DU_TOAN_CHI_NSNN}/tong-hop`,
   },
 ];
