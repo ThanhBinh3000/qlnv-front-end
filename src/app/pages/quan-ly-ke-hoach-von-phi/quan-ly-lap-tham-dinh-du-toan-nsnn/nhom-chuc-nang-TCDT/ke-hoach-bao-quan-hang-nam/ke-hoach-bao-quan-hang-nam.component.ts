@@ -30,6 +30,7 @@ export class ItemData {
 export class superMiniData {
   vitri!: any;
   maVtuTbi!: string;
+  loaiDmuc!: number;
   sl!: number;
 }
 
@@ -82,7 +83,6 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   };
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
-  lstBang: ItemData[] = [];
   lstVtu: miniData[] = [];
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
@@ -446,11 +446,9 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
           this.lstCTietBCao.forEach(data => {
             data.listCtiet.forEach( item => {
-              item.vitri = this.lstVtu.find(e => e.maVtuTbi==item.maVtuTbi).id;
+              item.vitri = this.lstVtu.find(e => (e.maVtuTbi==item.maVtuTbi)&&(e.loaiDmuc == e.loaiDmuc)).id;
             })
           })
-
-          this.lstBang = this.lstCTietBCao;
 
           this.updateEditCache();
           // set list id file ban dau
@@ -539,11 +537,13 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         maVtuTbi: item.maVtuTbi,
         sl: 0,
         vitri: item.id,
+        loaiDmuc: item.loaiDmuc,
       }
       var mini1: superMiniData = {
         maVtuTbi: item.maVtuTbi,
         sl: 0,
         vitri: item.id,
+        loaiDmuc: item.loaiDmuc,
       }
       data.push(mini);
       data1.push(mini1);
@@ -582,8 +582,6 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstBang = this.lstBang.filter(item => item.id != id);
-
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.tongCong(-1, this.lstCTietBCao[index]);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
@@ -592,7 +590,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.listIdDelete += id + ",";
     }
 
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -613,11 +611,10 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       }
     })
     // delete object have checked = true
-    this.lstBang = this.lstBang.filter(item => item.checked != true);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
 
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -704,9 +701,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTietBCao[index].checked = false;
     this.editCache[id].edit = false;
 
-    this.lstBang.splice(index, 0, this.lstCTietBCao[index]);
-
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -722,6 +717,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           maVtuTbi: item.maVtuTbi,
           sl: item.sl,
           vitri: item.vitri,
+          loaiDmuc: item.loaiDmuc,
         }
         mm.push(ss);
       })
@@ -779,11 +775,13 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         maVtuTbi: item.maVtuTbi,
         vitri: item.id,
         sl: 0,
+        loaiDmuc: item.loaiDmuc,
       }
       var mm1: superMiniData = {
         maVtuTbi: item.maVtuTbi,
         vitri: item.id,
         sl: 0,
+        loaiDmuc: item.loaiDmuc,
       }
       data.listCtiet.push(mm);
       this.editCache[data.id].data.listCtiet.push(mm1);
@@ -793,8 +791,6 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
-
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
   }
 
   // xoa dong
@@ -974,11 +970,13 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         maVtuTbi: item.maVtuTbi,
         vitri: item.id,
         sl: 0,
+        loaiDmuc: item.loaiDmuc,
       }
       var mm1: superMiniData = {
         maVtuTbi: item.maVtuTbi,
         vitri: item.id,
         sl: 0,
+        loaiDmuc: item.loaiDmuc,
       }
       data.listCtiet.push(mm);
       this.editCache[data.id].data.listCtiet.push(mm1);
@@ -988,7 +986,6 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
   }
 
   // click o checkbox all

@@ -50,6 +50,13 @@ const routes: Routes = [
       ).then((m) => m.KeHoachXayDungVanBanQpplDtqg3NamModule),
   },
   {
+    path: 'ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam.module'
+      ).then((m) => m.KeHoachXayDungVanBanQpplDtqg3NamModule),
+  },
+  {
     path: 'du-toan-chi-ung-dung-cntt-3-nam',
     loadChildren: () =>
       import(
@@ -58,6 +65,13 @@ const routes: Routes = [
   },
   {
     path: 'du-toan-chi-ung-dung-cntt-3-nam/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/du-toan-chi-ung-dung-cntt-3-nam/du-toan-chi-ung-dung-cntt-3-nam.module'
+      ).then((m) => m.DuToanChiUngDungCntt3NamModule),
+  },
+  {
+    path: 'du-toan-chi-ung-dung-cntt-3-nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren: () =>
       import(
         './chuc-nang-chi-cuc/du-toan-chi-ung-dung-cntt-3-nam/du-toan-chi-ung-dung-cntt-3-nam.module'
@@ -78,6 +92,13 @@ const routes: Routes = [
       ).then((m) => m.ChiMuaSamThietBiChuyenDung3NamModule),
   },
   {
+    path: 'chi-mua-sam-thiet-bi-chuyen-dung-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/chi-mua-sam-thiet-bi-chuyen-dung-3-nam.module'
+      ).then((m) => m.ChiMuaSamThietBiChuyenDung3NamModule),
+  },
+  {
     path: 'chi-ngan-sach-nha-nuoc-3-nam',
     loadChildren: () =>
       import(
@@ -92,6 +113,13 @@ const routes: Routes = [
       ).then((m) => m.ChiNganSachNhaNuoc3NamModule),
   },
   {
+    path: 'chi-ngan-sach-nha-nuoc-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/chi-ngan-sach-nha-nuoc-3-nam/chi-ngan-sach-nha-nuoc-3-nam.module'
+      ).then((m) => m.ChiNganSachNhaNuoc3NamModule),
+  },
+  {
     path: 'nhu-cau-phi-nhap-xuat-3-nam',
     loadChildren: () =>
       import(
@@ -100,6 +128,13 @@ const routes: Routes = [
   },
   {
     path: 'nhu-cau-phi-nhap-xuat-3-nam/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/nhu-cau-phi-nhap-xuat-3-nam/nhu-cau-phi-nhap-xuat-3-nam.module'
+      ).then((m) => m.NhuCauPhiNhapXuat3NamModule),
+  },
+  {
+    path: 'nhu-cau-phi-nhap-xuat-3-nam/:maDvi/:maLoaiBacao/:nam',
     loadChildren: () =>
       import(
         './chuc-nang-chi-cuc/nhu-cau-phi-nhap-xuat-3-nam/nhu-cau-phi-nhap-xuat-3-nam.module'

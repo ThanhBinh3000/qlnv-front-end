@@ -94,7 +94,6 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   };
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
-  lstBang: ItemData[] = [];
   lstVtu: miniData[] = [];
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
@@ -466,8 +465,6 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
             })
           })
 
-          this.lstBang = this.lstCTietBCao;
-
           this.updateEditCache();
           // set list id file ban dau
           this.lstFile.filter(item => {
@@ -607,7 +604,6 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstBang = this.lstBang.filter(item => item.id != id);
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.tongCong(-1, this.lstCTietBCao[index]);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
@@ -615,7 +611,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
     }
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -636,10 +632,9 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       }
     })
     // delete object have checked = true
-    this.lstBang = this.lstBang.filter(item => item.checked != true);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -715,7 +710,6 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
-    this.lstBang = this.lstBang.filter(e => e.id != id);
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.tongCong(1, this.editCache[id].data);
@@ -736,9 +730,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     this.lstCTietBCao[index].id = item.id;
     this.lstCTietBCao[index].checked = false;
     this.editCache[id].edit = false;
-    this.lstBang.splice(index, 0, this.lstCTietBCao[index]);
 
-    if (this.lstBang.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -836,7 +829,6 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
   }
 
   // xoa dong
