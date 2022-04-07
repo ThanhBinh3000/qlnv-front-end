@@ -102,7 +102,6 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
   }
@@ -167,7 +166,6 @@ export class QuanLyVonPhiService extends BaseService {
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
   }

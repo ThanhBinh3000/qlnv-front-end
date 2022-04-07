@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LISTBAOCAOTONGHOP } from 'src/app/Utility/utils';
+import { LISTBAOCAOTONGHOP, LOAIBAOCAO } from 'src/app/Utility/utils';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
@@ -66,7 +66,7 @@ export class TongHopComponent implements OnInit {
     let username = this.nguoiDungSerivce.getUserName();
     await this.getUserInfor(username);
     //lay danh sach loai bao cao
-    this.baoCaos = LISTBAOCAOTONGHOP;
+    this.baoCaos = LOAIBAOCAO;
 
 
     //lay danh sach danh muc
@@ -118,9 +118,9 @@ export class TongHopComponent implements OnInit {
   }
 
   tonghop(){
-    
+
       // if(this.namhientai==undefined || this.loaiBaocao ==null){
-          
+
       //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
       // } else{
         if(this.validateForm.valid){
@@ -128,10 +128,10 @@ export class TongHopComponent implements OnInit {
         }else{
           return;
         }
-        
+
       // }
-  
-    
+
+
   }
 
   taomoi(){
@@ -159,35 +159,50 @@ export class TongHopComponent implements OnInit {
   //set url khi
   setUrl() {
     switch (this.loaiBaocao) {
-      case 207:
-        this.url = '/quan-ly-dcdtc-nsnn/du-toan-phi-xuat-hang/';
+      case '01':
+        this.url = '/xay-dung-ke-hoach-von-dau-tu';
         break;
-      case 204:
-        this.url = '/quan-ly-dcdtc-nsnn/ke-hoach-bao-quan-hang-nam';
+      case '02':
+        this.url = '/xay-dung-nhu-cau-nhap-xuat-hang-nam';
         break;
-      case '24':
-          this.url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/';
-          break;
-      case 308:
-          this.url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam';
-          break;
-      case 309:
-          this.url = '/du-toan-chi-ung-dung-cntt-3-nam';
-          break;
-      case 310:
-          this.url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam';
-          break;
-      case 311:
-          this.url = '/chi-ngan-sach-nha-nuoc-3-nam';
-          break;
-      case 312:
-          this.url = '/nhu-cau-phi-nhap-xuat-3-nam';
-          break;
+      case '03':
+        this.url = '/xay-dung-ke-hoach-bao-quan-hang-nam';
+        break;
+      case '04':
+        this.url = '/nhu-cau-xuat-hang-vien-tro';
+        break;
+      case '05':
+        this.url = '/xay-dung-ke-hoach-quy-tien-luong3-nam';
+        break;
+      case '06':
+        this.url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam';
+        break;
+      case '07':
+        this.url = '/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh';
+        break;
+      case '08':
+        this.url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam';
+        break;
+      case '09':
+        this.url = '/du-toan-chi-ung-dung-cntt-3-nam';
+        break;
+      case '10':
+        this.url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam';
+        break;
+      case '11':
+        this.url = '/chi-ngan-sach-nha-nuoc-3-nam';
+        break;
+      case '12':
+        this.url = '/chi-thuong-xuyen-3-nam';
+        break;
+      case '13':
+        this.url = '/nhu-cau-phi-nhap-xuat-3-nam';
+        break;
       case '14':
           this.url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
           break;
-      case '32':
-          this.url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc';
+      case '15':
+          this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
           break;
       case '16':
           this.url = '/nhu-cau-ke-hoach-dtxd3-nam/';
@@ -213,6 +228,9 @@ export class TongHopComponent implements OnInit {
       case '23':
           this.url ='/du-toan-chi-du-tru-quoc-gia-gd3-nam/';
         break;
+      case '24':
+        this.url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/';
+        break;
       case '25':
         this.url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam';
         break;
@@ -234,14 +252,8 @@ export class TongHopComponent implements OnInit {
       case '31':
         this.url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
         break;
-      case '01':
-        this.url = '/xay-dung-ke-hoach-von-dau-tu';
-        break;
-      case '06':
-        this.url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam';
-        break;
-      case '15':
-        this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
+      case '32':
+        this.url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc';
         break;
       default:
         this.url=null;
