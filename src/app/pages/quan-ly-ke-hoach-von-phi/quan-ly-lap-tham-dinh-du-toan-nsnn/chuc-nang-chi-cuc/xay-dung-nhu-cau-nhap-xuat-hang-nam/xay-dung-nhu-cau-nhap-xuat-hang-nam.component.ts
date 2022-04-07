@@ -434,7 +434,7 @@ getStatusButton(){
 
   // xoa dong
   deleteById(id: any): void {
-    this.tong -= this.lstCTietBCao.lstCTiet.find(e => e.id==id).slNhap;
+    this.tong -= this.lstCTiet.find(e => e.id==id).slNhap;
     this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -524,6 +524,10 @@ getStatusButton(){
   }
 
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -533,6 +537,10 @@ getStatusButton(){
   }
 
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
     this.tong += this.editCache[id].data.slNhap - this.lstCTiet[index].slNhap;
     this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
