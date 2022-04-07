@@ -116,7 +116,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   async ngOnInit() {
     let userName = this.userService.getUserName();
-    let userInfor: any = await this.getUserInfo(userName); //get user info
+    await this.getUserInfo(userName); //get user info
 
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
@@ -125,8 +125,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.getDetailReport();
     } else {
       this.trangThaiBanGhi = '1';
-      this.nguoinhap = userInfor?.username;
-      this.donvitao = userInfor?.dvql;
+      this.nguoinhap = this.userInfor?.username;
+      this.donvitao = this.userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
       this.nampa = this.currentday.getFullYear();
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
@@ -136,7 +136,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.maphuongan = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
@@ -148,9 +148,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       (res) => {
         if (res.statusCode == 0) {
           this.listNoidung = res.data?.content;
-          console.log(this.listNoidung);
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },
       (err) => {
@@ -163,7 +162,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
@@ -176,44 +175,10 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         this.donViTaos = res.data;
       }
     })
+    this.getStatusButton();
     this.spinner.hide();
-    //check role cho các nut trinh duyet
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnSave = utils.getRoleSave(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnApprove = utils.getRoleApprove(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnTBP = utils.getRoleTBP(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnLD = utils.getRoleLD(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
-    this.statusBtnDVCT = utils.getRoleDVCT(
-      this.trangThaiBanGhi,
-      2,
-      userInfor?.roles[0]?.id,
-    );
+    
+    
   }
 
   redirectkehoachvonphi() {
@@ -223,7 +188,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //get user info
   async getUserInfo(username: string) {
-    let userInfo = await this.userService
+    await this.userService
       .getUserInfo(username)
       .toPromise()
       .then(
@@ -232,15 +197,53 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
             this.userInfor = data?.data;
             return data?.data;
           } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          console.log(err);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    return userInfo;
   }
 
+//check role cho các nut trinh duyet
+  getStatusButton(){
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnSave = utils.getRoleSave(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnApprove = utils.getRoleApprove(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnTBP = utils.getRoleTBP(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnLD = utils.getRoleLD(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(
+      this.trangThaiBanGhi,
+      2,
+      this.userInfor?.roles[0]?.id,
+    );
+    this.statusBtnDVCT = utils.getRoleDVCT(
+      this.trangThaiBanGhi,      2,
+      this.userInfor?.roles[0]?.id,
+    );
+  }
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
@@ -248,7 +251,6 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          console.log(data);
           this.lstCTietBCao = data.data.listCtiet;
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
@@ -355,17 +357,17 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       lstPaGiaoSoKiemTraTcNsnnCtietDvi: [
         {
           id: null,
-          soTranchi: null,
+          soTranchi: 0,
           khuvucId: 342,
         },
         {
           id: null,
-          soTranchi: null,
+          soTranchi: 0,
           khuvucId: 343,
         },
         {
           id: null,
-          soTranchi: null,
+          soTranchi: 0,
           khuvucId: 344,
         },
         {
@@ -444,6 +446,15 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //update khi sửa
   saveEdit(id: string): void {
+
+    if (!this.editCache[id].data.maNoiDung){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if (!this.editCache[id].data.maNhom){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -559,13 +570,17 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       namPa: this.nampa,
       trangThai: this.trangThaiBanGhi,
     };
+    this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.themmoiPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = res.data.id;
+            this.getDetailReport();
+            this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
@@ -577,8 +592,11 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         (res) => {
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.id = res.data.id;
+            this.getDetailReport();
+            this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
@@ -586,9 +604,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         },
       );
     }
-    this.spinner.show();
-    // console.log(request);
-
+    
     this.updateEditCache();
     this.spinner.hide();
   }
@@ -663,7 +679,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
         if(res.statusCode==0){
-          this.notification.success(MESSAGE.SUCCESS, "Giao số trần chi thành công!");
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_SUCCESS);
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -707,9 +723,9 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
         if(res.statusCode==0){
-          this.notification.success(MESSAGE.SUCCESS, "Giao toàn bộ thành công!");
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_TOAN_BO);
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err=> {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -735,7 +751,6 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.lstCTietBCao.filter((item) => {
 
       item.lstPaGiaoSoKiemTraTcNsnnCtietDvi.filter((itemCtiet) => {
-        debugger
         if (itemCtiet.khuvucId == 342) {
           this.tongHaNoi +=
             typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
