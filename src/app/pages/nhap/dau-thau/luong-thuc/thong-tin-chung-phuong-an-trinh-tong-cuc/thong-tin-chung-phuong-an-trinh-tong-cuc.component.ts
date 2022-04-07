@@ -46,6 +46,7 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   editId: string | null = null;
   listOfData: ItemData[] = [];
   loaiVTHH: number = 0;
+  tabSelected: string = 'thong-tin-chung';
 
   thocIdDefault: string = "01";
   gaoIdDefault: string = "00";
@@ -98,20 +99,6 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
       });
-      this.listOfData = [
-        ...this.listOfData,
-        {
-          id: `${this.i}`,
-          stt: `${this.i}`,
-          cuc: 'Cục DTNN KV Vĩnh phú',
-          soGoiThau: `4`,
-          soDeXuat: 'DX_KHCNT_01',
-          ngayDeXuat: `10/03/2022`,
-          tenDuAn: `Mua gạo dự trữ A`,
-          soLuong: `2000`,
-          tongTien: `42.000.000`,
-        },
-      ];
       await Promise.all([
         this.phuongThucDauThauGetAll(),
         this.nguonVonGetAll(),
@@ -138,10 +125,11 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   async loadChiTietTongHop() {
-    if (this.id > 0) {
+    if (this.idHdr > 0) {
       let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.idHdr);
       if (res.msg == MESSAGE.SUCCESS) {
         this.chiTietTongHop = res.data;
+        this.chiTiet.namKhoach = +this.chiTietTongHop.namKhoach;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -269,7 +257,7 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   openDialogThongTinPhuLucKLCNT(data?: any) {
-    this.modal.create({
+    const modalPhuLuc = this.modal.create({
       nzTitle: 'Thông tin phụ lục KH LCNT cho các Cục DTNN KV',
       nzContent: DialogThongTinPhuLucKHLCNTComponent,
       nzMaskClosable: false,
@@ -280,5 +268,32 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
         data: data
       },
     });
+    modalPhuLuc.afterClose.subscribe((res) => {
+      if (res) {
+        console.log(res);
+        this.checkDataExistPhuLuc(res);
+      }
+    });
+  }
+
+  checkDataExistPhuLuc(data: any) {
+    if (this.chiTiet.detail) {
+      let indexExist =
+        this.chiTiet.detail.findIndex(
+          (x) => x.maDvi == data.maDvi,
+        );
+      if (indexExist != -1) {
+        this.chiTiet.detail.splice(
+          indexExist,
+          1,
+        );
+      }
+    } else {
+      this.chiTiet.detail = [];
+    }
+    this.chiTiet.detail = [
+      ...this.chiTiet.detail,
+      data,
+    ];
   }
 }
