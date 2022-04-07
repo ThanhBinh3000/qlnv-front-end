@@ -67,7 +67,7 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectkehoachvonphi()">
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" >
                       <i class="icon htvbdh_dong"></i>
                       <span>Đóng</span>
                     </a>
@@ -304,7 +304,7 @@
                                                   </td>
                                                   <td>
                                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này??"
                                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
@@ -321,7 +321,7 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected1()" [hidden]="status">
+                         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>
@@ -352,14 +352,18 @@
                                              <th rowspan="2" nzWidth="170px">
                                                   Nhập vật tư
                                              </th>
-
-                                             <th rowspan="2" nzWidth="150px" *ngFor="let data of lstBang">
-                                                  <div *ngFor="let item of cucKhuVucs">
-                                                       <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
-                                                            {{item.tenDvi}}
-                                                       </div>
-                                                  </div>
-                                             </th>
+                                             <ng-container *ngFor="let data of lstCTietBCao">
+                                                  <ng-container *ngIf="data.maCucDtnnKvuc">
+                                                       <th rowspan="2" nzWidth="150px">
+                                                            <div *ngFor="let item of cucKhuVucs">
+                                                                 <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
+                                                                      {{item.tenDvi}}
+                                                                 </div>
+                                                            </div>
+                                                       </th>
+                                                  </ng-container>
+                                             </ng-container>
+                                             
 
                                              <th rowspan="2" nzWidth="100px">
                                                   Tổng
@@ -415,14 +419,17 @@
                                                             </div>
                                                        </div>
                                                   </td>
-
-                                                  <td *ngFor="let item of lstBang">
-                                                       <div *ngFor="let e of item.listCtiet">
-                                                            <ng-container *ngIf="e.vitri == data.id">
-                                                                 {{e.sl}}
-                                                            </ng-container>
-                                                       </div>
-                                                  </td>
+                                                  <ng-container *ngFor="let item of lstCTietBCao">
+                                                       <ng-container *ngIf="item.maCucDtnnKvuc">
+                                                            <td>
+                                                                 <div *ngFor="let e of item.listCtiet">
+                                                                      <ng-container *ngIf="e.vitri == data.id">
+                                                                           {{e.sl}}
+                                                                      </ng-container>
+                                                                 </div>
+                                                            </td>
+                                                       </ng-container>
+                                                  </ng-container>
 
                                                   <td>
                                                        {{data.tong}}
@@ -479,15 +486,19 @@
                                                        </nz-select>
                                                   </td>
 
-                                                  <td *ngFor="let item of lstBang">
-                                                       <div *ngFor="let e of editCache[item.id].data.listCtiet">
-                                                            <ng-container *ngIf="e.vitri == data.id">
-                                                                 <nz-input-number class="search__input" nzSize="small"
-                                                                      [(ngModel)]="e.sl" (change)="tongSl(data.id)">
-                                                                 </nz-input-number>
-                                                            </ng-container>
-                                                       </div>
-                                                  </td>
+                                                  <ng-container *ngFor="let item of lstCTietBCao">
+                                                       <ng-container *ngIf="item.maCucDtnnKvuc">
+                                                            <td>
+                                                                 <div *ngFor="let e of editCache[item.id].data.listCtiet">
+                                                                      <ng-container *ngIf="e.vitri == data.id">
+                                                                           <nz-input-number class="search__input" nzSize="small"
+                                                                                [(ngModel)]="e.sl" (change)="tongSl(data.id)">
+                                                                           </nz-input-number>
+                                                                      </ng-container>
+                                                                 </div>
+                                                            </td>
+                                                       </ng-container>
+                                                  </ng-container>
 
                                                   <td>
                                                        {{editCache1[data.id].data.tong}}
@@ -523,7 +534,7 @@
 
                                                   <td>
                                                        <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
+                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này??"
                                                             (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
 
@@ -542,7 +553,7 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected2()" [hidden]="status">
+                         <button type="button" class="btn btn-main" (click)="deleteSelected1()" [hidden]="status">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>

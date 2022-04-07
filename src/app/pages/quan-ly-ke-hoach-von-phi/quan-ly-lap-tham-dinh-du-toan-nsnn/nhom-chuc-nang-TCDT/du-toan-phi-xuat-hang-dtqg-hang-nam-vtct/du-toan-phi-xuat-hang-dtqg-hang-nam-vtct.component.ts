@@ -61,7 +61,6 @@ export class miniData {
 })
 
 export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
-  [x: string]: any;
   userInfo: any;
   maDvi: any;
   maLoaiBacao: string = QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM;
@@ -73,7 +72,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstVtu: miniData[] = [];
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
-  lstBang: ItemData[] = [];
   //lstCTiet: miniData[] = [];
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
@@ -300,7 +298,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       maDviTien: this.maDviTien,
       namHienHanh: 2022,
     };
-    console.log(request);
 
     this.spinner.show();
     if (this.id == null) {
@@ -442,8 +439,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
               item.vitri = this.lstVtu.find(e => e.maVtuTbi==item.maVtuTbi).id;
             })
           })
-
-          this.lstBang = this.lstCTietBCao;
           this.updateEditCache();
 
           // set list id file ban dau
@@ -589,7 +584,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstBang = this.lstBang.filter(item => item.id != id);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id);
 
     if (typeof id == "number") {
@@ -608,7 +602,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         }
     })
     // delete object have checked = true
-    this.lstBang = this.lstBang.filter(item => item.checked != true);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true);
     this.allChecked = false;
     // can cap nhat lai lstCTiet
@@ -653,6 +646,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maCucDtnnKvuc){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+
     const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     var item: ItemData = this.lstCTietBCao[index];
     this.editCache[id].data.maCucDtnnKvuc = item.maCucDtnnKvuc;
@@ -700,7 +698,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     this.lstCTietBCao[index].id = item.id;
     this.lstCTietBCao[index].checked = false;
     this.editCache[id].edit = false;
-    this.lstBang.splice(index, 0, this.lstCTietBCao[index]);
   }
 
   // gan editCache.data == lstCTietBCao
@@ -793,7 +790,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       edit: true,
       data: { ...item }
     };
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
 
   }
 
@@ -805,7 +801,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       item.listCtiet = item.listCtiet.filter(e => e.vitri != id);
     })
 
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
 
     if (typeof id == 'number')
       this.listIdDeleteVtus += ll.maVtuTbi + ",";
@@ -827,7 +822,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         this.listIdDeleteVtus += item.maVtuTbi + ",";
       }
     })
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
 
     // delete object have checked = true
     this.lstVtu = this.lstVtu.filter(item => item.checked != true)
@@ -874,6 +868,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // huy thay doi
   cancelEdit1(id: string): void {
+    if (!this.editCache1[id].data.maVtuTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+
     const index = this.lstVtu.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache1[id] = {
       data: { ...this.lstVtu[index] },
@@ -907,13 +906,12 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
         }
       })
     });
-    this.lstBang = this.lstCTietBCao.filter(item => item.maCucDtnnKvuc);
   }
 
   tinhLaiTongSl() {
     this.lstVtu.forEach(item => {
       item.tong = 0;
-      this.lstBang.forEach(data => {
+      this.lstCTietBCao.forEach(data => {
         data.listCtiet.forEach(e => {
           if (item.id == e.vitri) {
             item.tong += e.sl;
@@ -981,7 +979,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     this.spinner.show();
   }
-  //liem tra xem vat tu da duoc chon hay chua
+  //kiem tra xem vat tu da duoc chon hay chua
   checkVtu(id: any){
     var index: number = this.lstVtu.findIndex(e => e.id === id);
     var ma: any = this.editCache1[id].data.maVtuTbi;

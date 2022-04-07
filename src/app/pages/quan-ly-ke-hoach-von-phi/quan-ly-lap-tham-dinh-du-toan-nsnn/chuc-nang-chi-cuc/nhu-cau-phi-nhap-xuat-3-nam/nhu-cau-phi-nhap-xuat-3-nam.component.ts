@@ -86,6 +86,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      capDv: any;
      checkDv: boolean;
      tong: number = 0;
+     currentday: Date = new Date();
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
@@ -126,10 +127,36 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      async ngOnInit() {
           this.id = this.routerActive.snapshot.paramMap.get('id');
+          this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+          this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+          this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
           let userName = this.userService.getUserName();
-          await this.getUserInfo(userName);
+          await this.getUserInfo(userName); //get user info
           if (this.id) {
                await this.getDetailReport();
+          } else if (
+               this.maDonViTao != null &&
+               this.maLoaiBaoCao != null &&
+               this.namBaoCaoHienHanh != null
+          ) {
+               await this.calltonghop();
+               this.nguoiNhap = this.userInfo?.username;
+               this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+               this.maDonViTao = this.userInfo?.dvql;
+               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+                    (data) => {
+                         if (data.statusCode == 0) {
+                              this.maBaoCao = data.data;
+                         } else {
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
+                    },
+                    (err) => {
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    }
+               );
+               this.maBaoCao = '';
+               this.namBaoCaoHienHanh = new Date().getFullYear();
           } else {
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = this.userInfo?.username;
@@ -579,4 +606,26 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      changeModel(id: string): void {
           this.editCache[id].data.thanhTien = this.editCache[id].data.sl * this.editCache[id].data.dmucPhiTc;
      }
+
+     async calltonghop() {
+          this.spinner.show();
+          let objtonghop = {
+               maDvi: this.maDonViTao,
+               maLoaiBcao: this.maLoaiBaoCao,
+               namHienTai: this.namBaoCaoHienHanh,
+          }
+          await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+               if (res.statusCode == 0) {
+                    this.lstCTietBCao = res.data;
+               } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+               }
+          }, err => {
+               this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          });
+          this.updateEditCache()
+          this.spinner.hide();
+     }
 }
+
+
