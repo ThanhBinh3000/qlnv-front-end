@@ -93,9 +93,9 @@
               <nz-descriptions-item nzTitle="Loại báo cáo" >
                 Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số VB gửi TC" *ngIf="!checkDv">
+              <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
                 {{soVban}}
-              </nz-descriptions-item>
+             </nz-descriptions-item>
               <nz-descriptions-item ></nz-descriptions-item>
               <nz-descriptions-item nzTitle="năm BC">
                   <input class="form-control form-control-sm" id="" value="{{namBcao}}" name="namBcao" [(ngModel)]="namBcao">
@@ -202,9 +202,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

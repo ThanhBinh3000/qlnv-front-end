@@ -42,7 +42,6 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   donVis: any = [];             // danh muc don vi
   lstCTietBCao: AllItemData = new AllItemData;
   lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
-  tongSo: number = 0;                            // tong kinh phi
   luongThocXuat!: number;
   luongThocNhap!: number;
   luongGaoXuat!: number;
@@ -87,6 +86,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -126,11 +126,37 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = this.userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = this.userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -268,7 +294,7 @@ getStatusButton(){
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
       soVban:"",
@@ -349,7 +375,8 @@ getStatusButton(){
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-          this.lstCTietBCao.lstCTiet.forEach(e => {
+          this.tong = 0;
+          this.lstCTiet.forEach(e => {
             this.tong += e.slNhap;
           })
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
@@ -557,7 +584,31 @@ getStatusButton(){
     });
   }
 
-  tongCong(){
-    this.tong
-  }
+    //call tong hop
+    async calltonghop(){
+      this.spinner.show();
+      let objtonghop={
+          maDvi: this.maDonViTao,
+          maLoaiBcao: this.maLoaiBaoCao,
+          namHienTai: this.namBaoCaoHienHanh,
+      }
+      await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+          if(res.statusCode==0){
+              this.luongThocXuat = res.data.luongThocXuat;
+              this.luongThocNhap = res.data.luongThocNhap;
+              this.luongGaoXuat = res.data.luongGaoXuat;
+              this.luongGaoNhap = res.data.luongGaoNhap;
+              this.lstCTiet = res.data.lstCTiet;
+              this.lstCTiet.forEach(e => {
+                this.tong += e.slNhap;
+              })
+          }else{
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+      },err =>{
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      });
+      this.updateEditCache()
+      this.spinner.hide();
+      }
 }

@@ -92,6 +92,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
+  kphi!: number;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -132,10 +134,35 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = this.userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = this.userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -285,7 +312,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
       soVban:"",
@@ -370,8 +397,11 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.kphiBquanGaoTx = this.lstCTietBCao.kphiBquanGaoTx;
           this.kphiBquanThocTx = this.lstCTietBCao.kphiBquanThocTx;
           this.kphiBquanThocLd = this.lstCTietBCao.kphiBquanThocLd;
-
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.tongSo = 0
+          this.lstCTiet.forEach(e => {
+            this.tongSo += e.kphi;
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -384,6 +414,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           this.soVban = data.data.soVban;
+          console.log(this.lstCTiet);
+
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -454,6 +486,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tongSo -= this.lstCTiet.find(e => e.id==id).kphi;
     this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -462,8 +495,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
   // xóa với checkbox
   deleteSelected() {
+
     // add list delete id
     this.lstCTiet.filter(item => {
+      if (item.checked){
+        this.tongSo -= item.kphi;
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -540,6 +577,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maMatHang || !this.editCache[id].data.maNhom){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -549,7 +590,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maMatHang || !this.editCache[id].data.maNhom){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
+    this.tongSo += this.editCache[id].data.kphi - this.lstCTiet[index].kphi;
     this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
     Object.assign(this.lstCTiet[index], this.editCache[id].data);
     this.editCache[id].edit = false;
@@ -564,11 +610,31 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     });
   }
 
-   //tinh tong kinh phi
-   sum(){
-    this.tongSo = 0;
-    this.lstCTiet.forEach((element) => {
-        this.tongSo += element.kphi;
-    });
-}
+//call tong hop
+async calltonghop(){
+  this.spinner.show();
+  let objtonghop={
+      maDvi: this.maDonViTao,
+      maLoaiBcao: this.maLoaiBaoCao,
+      namHienTai: this.namBaoCaoHienHanh,
+  }
+  await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+      if(res.statusCode==0){
+          this.kphiBquanGaoLd = res.data.kphiBquanGaoLd;
+          this.kphiBquanGaoTx= res.data.kphiBquanGaoTx;
+          this.kphiBquanThocLd = res.data.kphiBquanThocLd;
+          this.kphiBquanThocTx = res.data.kphiBquanThocTx;
+          this.lstCTiet = res.data.lstCTiet;
+          this.lstCTiet.forEach(e => {
+            this.tongSo += e.kphi;
+          })
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+  },err =>{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+  });
+  this.updateEditCache()
+  this.spinner.hide();
+  }
 }

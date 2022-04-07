@@ -86,6 +86,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -126,11 +127,38 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
 
   async ngOnInit() {
+    //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = this.userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = this.userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      );
+      this.maBaoCao = '';
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -253,7 +281,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh,
       soVban:this.soVban,
@@ -510,6 +538,10 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maDvi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -519,6 +551,10 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maDvi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
@@ -532,5 +568,26 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  //call tong hop
+  async calltonghop(){
+    this.spinner.show();
+    let objtonghop={
+        maDvi: this.maDonViTao,
+        maLoaiBcao: this.maLoaiBaoCao,
+        namHienTai: this.namBaoCaoHienHanh,
+    }
+    await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+        if(res.statusCode==0){
+            this.lstCTietBCao = res.data;
+        }else{
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+    },err =>{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    });
+    this.updateEditCache()
+    this.spinner.hide();
   }
 }

@@ -68,41 +68,6 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <!-- <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-        <div class="widget-body">
-          <div>
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
-                {{ngayNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
-                {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đơn vị tạo">
-                {{getUnitName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Mã báo cáo">
-                {{maBaoCao}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                {{getStatusName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Loại báo cáo">
-                Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm
-              </nz-descriptions-item>
-            </nz-descriptions>
-            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
-              <div nz-col nzSpan="3" >
-                <label class="search__label">Số VB gửi TC</label>
-                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nz-card> -->
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
         <div class="widget-body">
           <div>
@@ -131,13 +96,10 @@
               <nz-descriptions-item nzTitle="Loại báo cáo">
                 Xây dựng kế hoach quỹ tiền lương hàng năm
               </nz-descriptions-item>
-            </nz-descriptions>
-            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
-              <div nz-col nzSpan="3" >
-                <label class="search__label">Số VB gửi TC</label>
-                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
-              </div>
-            </div>
+              </nz-descriptions>
+              <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
+                {{soVban}}
+            </nz-descriptions-item>
           </div>
         </div>
       </nz-card>
@@ -282,9 +244,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

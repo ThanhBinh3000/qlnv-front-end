@@ -88,6 +88,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  currentday: Date = new Date();
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -128,10 +129,35 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
+    this.namBaoCaoHienHanh = this.routerActive.snapshot.paramMap.get('nam');
     let userName = this.userSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
+    }else if (
+      this.maDonViTao != null &&
+      this.maLoaiBaoCao != null &&
+      this.namBaoCaoHienHanh != null
+    ) {
+      await this.calltonghop();
+      this.nguoiNhap = this.userInfo?.username;
+      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.maDonViTao = this.userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+          }
+        },
+        (err) => {
+          this.errorMessage = err.error.message;
+        }
+      );
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -277,7 +303,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
       soVban:"",
@@ -358,9 +384,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.lstCTietBCao = data.data.lstCTietBCao;
+          console.log(this.lstCTietBCao);
+
           this.luongXuatGaoVtro = this.lstCTietBCao.luongXuatGaoVtro;
           this.luongXuatThocVtro = this.lstCTietBCao.luongXuatThocVtro;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet =  data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -528,6 +556,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maVtuTbi || !this.editCache[id].data.maDviVtuTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -537,6 +569,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maVtuTbi || !this.editCache[id].data.maDviVtuTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
     this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked;
     Object.assign(this.lstCTiet[index], this.editCache[id].data);
@@ -550,5 +586,28 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  //call tong hop
+async calltonghop(){
+  this.spinner.show();
+  let objtonghop={
+      maDvi: this.maDonViTao,
+      maLoaiBcao: this.maLoaiBaoCao,
+      namHienTai: this.namBaoCaoHienHanh,
+  }
+  await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+      if(res.statusCode==0){
+          this.luongXuatGaoVtro = res.data.luongXuatGaoVtro;
+          this.luongXuatThocVtro= res.data.luongXuatThocVtro;
+          this.lstCTiet = res.data.lstCTiet;
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+  },err =>{
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+  });
+  this.updateEditCache()
+  this.spinner.hide();
   }
 }
