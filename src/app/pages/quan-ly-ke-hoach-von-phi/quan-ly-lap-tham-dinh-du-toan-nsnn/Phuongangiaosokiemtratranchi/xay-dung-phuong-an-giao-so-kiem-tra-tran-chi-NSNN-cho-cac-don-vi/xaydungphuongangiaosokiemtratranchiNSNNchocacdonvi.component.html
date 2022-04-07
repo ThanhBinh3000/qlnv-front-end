@@ -1,0 +1,528 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectkehoachvonphi()" >
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" >
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Xóa</span>
+        </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="giaotoanbo()" >
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Giao toàn bộ</span>
+        </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave" >
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Trình duyệt</span>
+        </button>
+        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Phê duyệt</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a> -->
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')" [hidden] = "statusBtnTBP">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Trưởng BP trả lại</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')" [hidden] = "statusBtnTBP">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Trưởng BP phê duyệt</span>
+        </a>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')" [hidden] = "statusBtnLD">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Lãnh đạo trả lại</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')" [hidden] = "statusBtnLD">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Lãnh đạo duyệt</span>
+        </a>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="dong()" >
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Đóng</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" >
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>In</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" >
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Copy</span>
+        </a>
+        <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
+          <i class="icon htvbdh_tcdt_delete"></i>
+          <span>Xóa</span>
+        </a> -->
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
+<!--body-->
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+          <div>
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+              <nz-descriptions-item nzTitle="Ngày nhập">
+                {{ngaynhap}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Người nhập" >
+                {{nguoinhap}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Đơn vị tạo">
+                {{getUnitName()}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Mã Phương án">
+                {{maphuongan}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Năm PA*">
+                {{nampa}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Năm hiện tại (N)">
+                {{namBcaohienhanh}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
+                {{getStatusName()}}
+              </nz-descriptions-item>
+              <!-- <nz-descriptions-item nzTitle="Loại báo cáo">
+                Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị
+               </nz-descriptions-item> -->
+            </nz-descriptions>
+          </div>
+        </div>
+      </nz-card>
+      <div class="tab__container">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab [nzTitle]="'Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị'">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                <!-- <div class="inner-box">Đơn vị: -->
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien">
+                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
+                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
+                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
+                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                </nz-select>
+                <!-- </div> -->
+              </div>
+            </div>
+            <nz-table nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="2">STT</th>
+                  <th rowspan="2">Nội dung</th>
+                  <th rowspan="2">Nhóm</th>
+                  <th rowspan="2">Tổng số</th>
+                  <th colspan="13">Chi tiết theo các đơn vị sử dụng</th>
+                  <th rowspan="2" colspan="3" [hidden]="status"></th>
+                  <th rowspan="2" [hidden]="status">
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                    [nzIndeterminate]="indeterminate">
+                    </label>
+                  </th>
+                </tr>
+                <tr>
+                  <th>Hà Nội</th>
+                  <th>Tây bắc</th>
+                  <th>Hoàng Liên Sơn</th>
+                  <th>Vĩnh Phúc</th>
+                  <th>Bắc Thái</th>
+                  <th>Hà Bắc</th>
+                  <th>Hải Hưng</th>
+                  <th>Đông Bắc</th>
+                  <th>Thái Bình</th>
+                  <th>Hà Nam Ninh</th>
+                  <th>Nghệ Tĩnh </th>
+                  <th>Bình Trị Thiên</th>
+                  <th>Đà Nẵng</th>
+                </tr>
+                <tr>
+                  <th></th>
+                            <th>Tổng số</th>
+                            <th></th>
+                            <th></th>
+                            <th>{{tongHaNoi}}</th>
+                            <th>{{tongtaybac}}</th>
+                            <th>{{tonghoangliension}}</th>
+                            <th>{{tongvinhphuc}}</th>
+                            <th>{{tongbacthai}}</th>
+                            <th>{{tonghabac}}</th>
+                            <th>{{tonghaihung}}</th>
+                            <th>{{tongdongbac}}</th>
+                            <th>{{tongthaibinh}}</th>
+                            <th>{{tonghanamninh}}</th>
+                            <th>{{tongnghetinh}}</th>
+                            <th>{{tongbinhtrithien}}</th>
+                            <th>{{tongdanang}}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstCTietBCao; let i = index">
+                  <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                    <td> {{i + 1}}</td>
+                    <td>
+                      <div *ngFor="let item of listNoidung">
+                        <div *ngIf="item.id == data.maNoiDung">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let item of listNhomchi;">
+                        <div *ngIf="item.id ==data.maNhom">
+                            {{item.tenDm}}
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{data.tongSo}}</td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 342; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 343; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 344; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 345; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 346; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 347; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 348; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 349; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 350; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 351; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 354; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 352; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                          <div *ngIf="kv.khuvucId == 353; then content"></div>
+                          <ng-template #content>
+                            {{kv.soTranchi}}
+                          </ng-template>
+                      </div>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)" ></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                      (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+
+                  </ng-container>
+                  <ng-template #editTemplate>
+                    <td>{{i + 1}}</td>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maNoiDung">
+                        <nz-option *ngFor="let item of listNoidung" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="editCache[data.id].data.maNhom">
+                        <nz-option *ngFor="let item of listNhomchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.tongSo" disabled/>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 342; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 343; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input  type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 344; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 345; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 346; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 347; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 348; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 349; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 350; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 351; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 354; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 352; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
+                        <div *ngIf="kv.khuvucId == 353; then content"></div>
+                        <ng-template #content>
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                        </ng-template>
+                      </div>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td>
+                      <a  class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+                        class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox  [nzValue]="data.id" [(ngModel)]="data.checked"
+                      (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+                  </ng-template>
+                </tr>
+                <tr>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('342')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('343')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('344')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('345')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('346')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('347')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('348')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('349')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('350')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('351')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('354')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('352')">Giao</a></td>
+                  <td [hidden]="checknutgiao"><a (click)="giao('353')">Giao</a></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+                  <td [hidden]="checknutgiao"></td>
+              </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+        </nz-tabset>
+        <div class="action">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+            <i class="fa fa-trash-o"></i>
+            <span>Xóa</span>
+          </button>
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Import</span>
+          </button>
+          <!-- <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button> -->
+          <!-- <button type="button" class="btn btn-sub" (click)="handleOpenModal('luaChonIn')">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button> -->
+        </div>
+      </div>
+      <div class="ghi-chu">
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <ul>
+          <li class="ghi-chu__item">
+            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
+            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+            dựng CSDL về Tài chính
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+            2022
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
