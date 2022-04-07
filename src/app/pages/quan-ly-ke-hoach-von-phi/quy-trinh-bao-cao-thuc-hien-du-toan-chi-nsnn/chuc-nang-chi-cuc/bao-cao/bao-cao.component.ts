@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -241,18 +241,18 @@ export class BaoCaoComponent implements OnInit {
     private datePipe: DatePipe,
     private notifi: NzNotificationService,
     private modal: NzModalService,
-
+    private location: Location,
   ) {
   }
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
-    let userInfo: any = await this.getUserInfo(userName); //get user info
+    await this.getUserInfo(userName); //get user info
     if (this.id) {
       await this.getDetailReport();
     } else {
-      this.maDonViTao = userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -282,20 +282,12 @@ export class BaoCaoComponent implements OnInit {
         });
       })
     }
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, 2, userInfo?.roles[0]?.id);
-    //get danh muc noi dung
+    
+    this.getStatusButton();
 
     //lay danh sach loai bao cao
     this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
       data => {
-        console.log(data);
         if (data.statusCode == 0) {
           this.loaiBaoCaos = data.data?.content;
         } else {
@@ -373,6 +365,17 @@ export class BaoCaoComponent implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+
+  getStatusButton(){
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
   }
 
   // lay ten don vi tao
@@ -527,10 +530,11 @@ export class BaoCaoComponent implements OnInit {
       lyDoTuChoi: lyDoTuChoi,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
       if (data.statusCode == 0) {
-        this.getDetailReport();
+        await this.getDetailReport();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.getStatusButton();
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -919,10 +923,13 @@ export class BaoCaoComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(this.baoCao).subscribe(
-        data => {
+      this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(this.baoCao).toPromise().then(
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
             this.spinner.hide();
@@ -934,9 +941,12 @@ export class BaoCaoComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(this.baoCao).subscribe(res => {
+      this.quanLyVonPhiService.updatelist(this.baoCao).toPromise().then(async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.id = res.data.id
+          await this.getDetailReport();
+          this.getStatusButton();
         } else {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -1633,5 +1643,9 @@ export class BaoCaoComponent implements OnInit {
   // xac dinh da xuong toi cap toi da chua
   lessThan(level: number): boolean {
     return level > 3;
+  }
+
+  close(){
+    this.location.back();
   }
 }

@@ -491,7 +491,7 @@
                     <td>
                       <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i)" [hidden]="statusB"></i>
                       <a (click)="saveEditPL1(item.id)" class="save" [hidden]="!statusB">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEditPL1(item.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEditPL1(item.id)"
                         class="save" [hidden]="!statusB">Cancel</a>
                     </td>
                     <td>
@@ -791,7 +791,7 @@
                     </td>
                     <td>
                       <a (click)="saveEditPL2(data.id)" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEditPL2(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEditPL2(data.id)"
                         class="save">Cancel</a>
                     </td>
                     <td [hidden]="status">
@@ -1100,7 +1100,7 @@
                     </td>
                     <td>
                       <a (click)="saveEditPL3(data.id)" class="save">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEditPL3(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEditPL3(data.id)"
                         class="save">Cancel</a>
                     </td>
                     <td [hidden]="status">
