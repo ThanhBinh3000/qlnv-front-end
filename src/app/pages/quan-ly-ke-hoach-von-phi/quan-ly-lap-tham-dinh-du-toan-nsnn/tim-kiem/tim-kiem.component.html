@@ -10,7 +10,7 @@
           <i nz-icon nzType="stop"></i>
           Đóng
         </button>
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
+        <button nz-button type="submit" class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -28,6 +28,10 @@
 
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <form nz-form [formGroup]="validateForm">
+          <button nz-button type="submit" class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="12">
               <label class="search__label">Năm hiện tại (N)</label>
@@ -58,7 +62,7 @@
             <div nz-col nzSpan="12">
               <label class="search__label">Loại báo cáo</label>
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                <nz-form-control [nzErrorTip]="messageValidate.NOTBLANK">
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao"
                     [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
                     <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
