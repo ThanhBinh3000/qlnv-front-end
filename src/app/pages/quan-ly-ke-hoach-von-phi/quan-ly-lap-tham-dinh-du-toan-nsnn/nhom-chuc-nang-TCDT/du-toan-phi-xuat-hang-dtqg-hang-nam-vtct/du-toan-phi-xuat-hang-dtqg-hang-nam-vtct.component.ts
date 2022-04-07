@@ -300,7 +300,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       maDviTien: this.maDviTien,
       namHienHanh: 2022,
     };
-    console.log(request);
 
     this.spinner.show();
     if (this.id == null) {
@@ -653,6 +652,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maCucDtnnKvuc){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+
     const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     var item: ItemData = this.lstCTietBCao[index];
     this.editCache[id].data.maCucDtnnKvuc = item.maCucDtnnKvuc;
@@ -680,6 +684,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
+    this.lstBang = this.lstBang.filter(e => e.id != id);   
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     var item: ItemData = this.editCache[id].data;
@@ -874,6 +879,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // huy thay doi
   cancelEdit1(id: string): void {
+    if (!this.editCache1[id].data.maVtuTbi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+
     const index = this.lstVtu.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache1[id] = {
       data: { ...this.lstVtu[index] },
@@ -981,7 +991,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     this.spinner.show();
   }
-  //liem tra xem vat tu da duoc chon hay chua
+  //kiem tra xem vat tu da duoc chon hay chua
   checkVtu(id: any){
     var index: number = this.lstVtu.findIndex(e => e.id === id);
     var ma: any = this.editCache1[id].data.maVtuTbi;

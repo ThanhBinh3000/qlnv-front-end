@@ -509,6 +509,10 @@ export const LOAIBAOCAO =[
 
     export const LISTBAOCAOTONGHOP =[
         {
+            id:'01',
+            tenDm:'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
+        },
+        {
             id:'16',
             tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
         },

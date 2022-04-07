@@ -339,7 +339,7 @@
                   <th nzWidth="50px">STT</th>
                   <th nzWidth="170px">Nhập vật tư</th>
 
-                  <th nzWidth="150px" *ngFor="let data of lstCTietBCao">
+                  <th nzWidth="150px" *ngFor="let data of lstBang">
                     <div *ngFor="let item of cucKhuVucs">
                       <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
                         {{item.tenDvi}}
@@ -359,7 +359,7 @@
                     Định mức nhập <br/> VTTB các đơn vị
                   </th>
 
-                  <th nzWidth="150px">
+                  <th nzWidth="150px" [hidden]="statusVP">
                     Định mức nhập <br/> VTTB Văn phòng
                   </th>
 
@@ -367,7 +367,7 @@
                     Thành tiền nhập <br/> VTTB các đơn vị
                   </th>
 
-                  <th nzWidth="150px">
+                  <th nzWidth="150px" [hidden]="statusVP">
                     Thành tiền nhập <br/> VTTB Văn phòng
                   </th>
 
@@ -395,9 +395,9 @@
                       </div>
                     </td>
 
-                    <td *ngFor="let item of lstCTietBCao">
+                    <td *ngFor="let item of lstBang">
                       <div *ngFor="let e of item.listCtiet">
-                           <ng-container *ngIf="e.col == data.col">
+                           <ng-container *ngIf="e.vitri == data.id">
                                 {{e.sl}}
                            </ng-container>
                       </div>
@@ -415,7 +415,7 @@
                       {{data.dmucNhapVttbDvi}}
                     </td>
 
-                    <td>
+                    <td [hidden]="statusVP">
                       {{data.dmucNhapVttbVphong}}
                     </td>
 
@@ -423,7 +423,7 @@
                       {{data.ttienNhapVttbDvi}}
                     </td>
 
-                    <td>
+                    <td [hidden]="statusVP">
                       {{data.ttienNhapVttbVphong}}
                     </td>
 
@@ -452,9 +452,9 @@
                       </nz-select>
                     </td>
 
-                    <td *ngFor="let item of lstCTietBCao">
+                    <td *ngFor="let item of lstBang">
                       <div *ngFor="let e of editCache[item.id].data.listCtiet">
-                           <ng-container *ngIf="e.col == data.col">
+                           <ng-container *ngIf="e.vitri == data.id">
                                 <nz-input-number class="search__input" nzSize="small"
                                      [(ngModel)]="e.sl" (change)="tongSl(data.id)"></nz-input-number>
                            </ng-container>
@@ -474,7 +474,7 @@
                         [(ngModel)]="editCache1[data.id].data.dmucNhapVttbDvi" (change)="thanhTien(data.id)"></nz-input-number>
                     </td>
 
-                    <td>
+                    <td [hidden]="statusVP">
                       <nz-input-number class="search__input" nzSize="small"
                         [(ngModel)]="editCache1[data.id].data.dmucNhapVttbVphong"  (change)="thanhTien(data.id)"></nz-input-number>
                     </td>
@@ -483,7 +483,7 @@
                       {{editCache1[data.id].data.ttienNhapVttbDvi}}
                     </td>
 
-                    <td>
+                    <td [hidden]="statusVP">
                       {{editCache1[data.id].data.ttienNhapVttbVphong}}
                     </td>
 
