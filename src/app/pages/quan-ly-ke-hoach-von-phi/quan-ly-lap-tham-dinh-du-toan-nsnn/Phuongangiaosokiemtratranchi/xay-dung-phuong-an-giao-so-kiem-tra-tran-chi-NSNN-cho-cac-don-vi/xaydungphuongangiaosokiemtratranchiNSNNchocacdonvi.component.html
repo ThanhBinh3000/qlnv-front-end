@@ -325,7 +325,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.tongSo" />
+                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.tongSo" disabled/>
                     </td>
                     <td>
                       <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
@@ -435,9 +435,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a  class="save" (click)="saveEdit(data.id)">Save</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                      <a  class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
