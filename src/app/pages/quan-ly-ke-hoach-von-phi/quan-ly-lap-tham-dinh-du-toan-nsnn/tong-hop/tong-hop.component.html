@@ -26,7 +26,7 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12">
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="messageValidate.KHONGDUNGDINHDANG">
+                <nz-form-control [nzErrorTip]="messageValidate.INVALIDFORMAT">
                   <label class="search__label">Năm hiện tại (N)</label>
                   <nz-input-number   formControlName="namhientai" pattern="^[12][0-9]{3}$" [nzMin]="0" [(ngModel)]="namhientai" (change)="setkeHoach()" nzSize="small"></nz-input-number>
                 </nz-form-control>

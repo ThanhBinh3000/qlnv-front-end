@@ -85,6 +85,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      soVban: any;
      capDv: any;
      checkDv: boolean;
+     currentday: Date = new Date();
 
      statusBtnDel: boolean;                       // trang thai an/hien nut xoa
      statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -102,7 +103,6 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
      fileList: NzUploadFile[] = [];
-     currentday: Date = new Date();
 
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);

@@ -492,10 +492,10 @@
                                                                         (click)="deleteById(data.id)"></i>
                                                             </td>
                                                             <td>
-                                                                  <a (click)="saveEdit(data.id)" class="save">Save</a>
-                                                                  <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?"
+                                                                  <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                                                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này??"
                                                                         (nzOnConfirm)="cancelEdit(data.id)"
-                                                                        class="save">Cancel</a>
+                                                                        class="save">Hủy</a>
                                                             </td>
                                                             <td [hidden]="status">
                                                                   <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
