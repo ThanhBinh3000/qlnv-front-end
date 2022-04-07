@@ -46,9 +46,9 @@ export class TimKiemComponent implements OnInit {
 
   validateForm!: FormGroup;           // form
 
-  submitForm(): void {
+  submitForm(){
     if (this.validateForm.valid) {
-      // console.log('submit', this.validateForm.value);
+      return true;
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -56,6 +56,7 @@ export class TimKiemComponent implements OnInit {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      return false;
     }
   }
   constructor(
@@ -108,6 +109,9 @@ export class TimKiemComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   onSubmit() {
+    if (!this.submitForm()) {
+      return;
+    }
     let requestReport = {
       maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
@@ -268,8 +272,7 @@ export class TimKiemComponent implements OnInit {
   }
 
   taoMoi() {
-    this.submitForm();
-    if (!this.searchFilter.loaiBaoCao) {
+    if (!this.submitForm()) {
       return;
     }
     this.router.navigate([
