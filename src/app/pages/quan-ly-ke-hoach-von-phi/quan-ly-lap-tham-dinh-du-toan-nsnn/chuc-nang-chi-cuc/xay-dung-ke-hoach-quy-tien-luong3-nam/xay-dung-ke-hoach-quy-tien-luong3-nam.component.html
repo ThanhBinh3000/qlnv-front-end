@@ -93,16 +93,10 @@
               <nz-descriptions-item nzTitle="Loại báo cáo">
                 Xây dựng Kế hoạch quỹ tiền lương giai đoạn 03 năm
               </nz-descriptions-item>
-              <!-- <nz-descriptions-item nzTitle="Số VB gửi TC" [hidden]="checkDv">
-                <input class="search__input" nz-input [(ngModel)]="soVban" disabled />
-              </nz-descriptions-item> -->
+              <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
+                {{soVban}}
+             </nz-descriptions-item>
             </nz-descriptions>
-            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
-              <div nz-col nzSpan="3" >
-                <label class="search__label">Số VB gửi TC</label>
-                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
-              </div>
-            </div>
           </div>
         </div>
       </nz-card>
@@ -541,9 +535,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

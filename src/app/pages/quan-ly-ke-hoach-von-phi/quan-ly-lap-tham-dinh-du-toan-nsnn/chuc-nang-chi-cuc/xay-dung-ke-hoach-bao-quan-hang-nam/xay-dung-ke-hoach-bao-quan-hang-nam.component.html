@@ -97,7 +97,7 @@
               <nz-descriptions-item nzTitle="Loại báo cáo" >
                 Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số VB gửi TC" *ngIf="!checkDv">
+              <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
                 {{soVban}}
               </nz-descriptions-item>
               <nz-descriptions-item ></nz-descriptions-item>
@@ -163,7 +163,7 @@
                 <th></th>
                 <th>Tổng số</th>
                 <th></th>
-                <th (click)="sum()">
+                <th>
                     {{tongSo}}
                 </th>
             </tr>
@@ -186,7 +186,7 @@
                         </div>
                       </div>
                     </td>
-                    <td>{{ data.kphi }}</td>
+                    <td>{{data.kphi}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -223,9 +223,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

@@ -35,8 +35,8 @@
                 <nz-date-picker [(ngModel)]="denngay" type="date"></nz-date-picker>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvitao">
-                  <nz-option *ngFor="let op of listDvnhan" [nzValue]="op.id" [nzLabel]="op.tenDm"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao">
+                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.id" [nzLabel]="op.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
@@ -47,7 +47,7 @@
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị nhận">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan">
-                  <nz-option *ngFor="let op of listDvnhan" [nzValue]="op.id" [nzLabel]="op.tenDm"></nz-option>
+                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.id" [nzLabel]="op.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Mã giao">

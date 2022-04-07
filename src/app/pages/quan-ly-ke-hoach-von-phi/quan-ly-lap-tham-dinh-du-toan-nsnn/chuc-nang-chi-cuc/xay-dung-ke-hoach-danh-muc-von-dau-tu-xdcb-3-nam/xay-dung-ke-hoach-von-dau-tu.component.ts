@@ -607,6 +607,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -616,6 +620,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
@@ -634,8 +642,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   changeModel(id: string): void {
     this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) + Number(this.editCache[id].data.qdDuyetTkDtoanCk);
   }
- //call tong hop
- async calltonghop(){
+  //call tong hop
+  async calltonghop(){
   this.spinner.show();
   let objtonghop={
       maDvi: this.maDonViTao,
@@ -653,5 +661,5 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   });
   this.updateEditCache()
   this.spinner.hide();
-}
+  }
 }
