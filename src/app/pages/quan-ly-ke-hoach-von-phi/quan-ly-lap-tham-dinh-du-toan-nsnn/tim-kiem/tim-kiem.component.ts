@@ -268,8 +268,8 @@ export class TimKiemComponent implements OnInit {
   }
 
   taoMoi() {
+    this.submitForm();
     if (!this.searchFilter.loaiBaoCao) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SEARCH_VALIDATE);
       return;
     }
     this.router.navigate([

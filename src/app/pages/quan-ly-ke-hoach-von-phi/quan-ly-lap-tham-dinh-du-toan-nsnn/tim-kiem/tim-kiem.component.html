@@ -58,7 +58,7 @@
             <div nz-col nzSpan="12">
               <label class="search__label">Loại báo cáo</label>
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                <nz-form-control [nzErrorTip]="messageValidate.NOTBLANK">
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao"
                     [(ngModel)]="searchFilter.loaiBaoCao" (ngModelChange)="setUrl($event)">
                     <nz-option *ngFor="let item of baoCaos" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
