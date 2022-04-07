@@ -660,6 +660,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
             // this.namBaoCao = this.namBcao;
+            this.updateEditCache();
             this.namBaoCaoHienHanh = new Date().getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
@@ -679,6 +680,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
     })
+    
     this.spinner.show();
 }
 }

@@ -8,6 +8,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { LISTBAOCAOTONGHOP } from 'src/app/Utility/utils';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class TongHopComponent implements OnInit {
   maDonViTao: any;
   loaiBaocao: any;
 
+  messageValidate:any =MESSAGEVALIDATE;
   // validateForm!: FormGroup;
 
   async ngOnInit() {
@@ -116,23 +118,34 @@ export class TongHopComponent implements OnInit {
   }
 
   tonghop(){
-
-    if(this.namhientai==undefined || this.loaiBaocao ==null){
-
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
-    } else{
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
-    }
-
+    
+      // if(this.namhientai==undefined || this.loaiBaocao ==null){
+          
+      //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
+      // } else{
+        if(this.validateForm.valid){
+          this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
+        }else{
+          return;
+        }
+        
+      // }
+  
+    
   }
 
   taomoi(){
-    if(this.namhientai==undefined || this.loaiBaocao ==null){
-
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
-    } else{
+    if(this.validateForm.valid){
       this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
+    }else{
+      return;
     }
+    // if(this.namhientai==undefined || this.loaiBaocao ==null){
+
+    //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
+    // } else{
+    //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
+    // }
   }
   dong(){
     // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
