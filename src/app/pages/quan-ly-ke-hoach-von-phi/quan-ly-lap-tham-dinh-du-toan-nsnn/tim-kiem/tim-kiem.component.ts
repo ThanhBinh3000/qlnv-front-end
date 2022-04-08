@@ -109,9 +109,7 @@ export class TimKiemComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   onSubmit() {
-    if (!this.submitForm()) {
-      return;
-    }
+
     let requestReport = {
       maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,

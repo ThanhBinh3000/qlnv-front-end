@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DatePipe, Location } from '@angular/common';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU, Utils } from "../../../../../Utility/utils";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
+import * as uuid from "uuid";
+import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
+import { QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU, Utils } from "../../../../../Utility/utils";
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+
+
 
 export class ItemData {
   stt!: string;
@@ -50,7 +54,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao = new Date().getFullYear();         // nam bao cao
+  namBcao : any;         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
@@ -87,6 +91,8 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   capDv:any;
   checkDv:boolean;
   currentday: Date = new Date();
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -120,12 +126,16 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
               private location : Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -215,6 +225,19 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+  submitForm(){
+    if (this.validateForm.valid) {
+      return true;
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return false;
+    }
   }
 
 getStatusButton(){

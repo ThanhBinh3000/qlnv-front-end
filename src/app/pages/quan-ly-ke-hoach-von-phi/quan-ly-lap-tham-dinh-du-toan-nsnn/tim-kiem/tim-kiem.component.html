@@ -28,10 +28,6 @@
 
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <form nz-form [formGroup]="validateForm">
-          <button nz-button type="submit" class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
-            <i nz-icon nzType="search"></i>
-            Tìm kiếm
-          </button>
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="12">
               <label class="search__label">Năm hiện tại (N)</label>
@@ -43,11 +39,11 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày lập từ</label>
-              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Đến ngày</label>
-              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Đơn vị tạo</label>

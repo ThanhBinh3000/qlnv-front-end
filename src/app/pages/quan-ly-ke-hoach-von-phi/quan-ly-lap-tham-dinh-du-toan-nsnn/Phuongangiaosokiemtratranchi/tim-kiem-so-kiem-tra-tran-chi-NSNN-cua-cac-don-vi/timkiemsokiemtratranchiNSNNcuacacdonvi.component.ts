@@ -48,6 +48,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.quankhoachvon.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
         this.donviTaos = res.data;
+        console.log(this.donviTaos)
       }else{
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }

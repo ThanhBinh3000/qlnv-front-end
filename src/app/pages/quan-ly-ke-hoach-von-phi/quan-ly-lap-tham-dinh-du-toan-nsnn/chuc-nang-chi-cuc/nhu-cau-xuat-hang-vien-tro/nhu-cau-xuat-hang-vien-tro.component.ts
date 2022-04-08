@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   maVtuTbi!: string;
@@ -24,6 +26,7 @@ export class ItemData {
 }
 
 export class AllItemData {
+  id!: any;
   luongXuatGaoVtro!: number;
   luongXuatThocVtro!: number;
   lstCTiet: ItemData[] = [];
@@ -52,7 +55,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao = new Date().getFullYear();         // nam bao cao
+  namBcao: any;            // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
@@ -89,6 +92,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   capDv:any;
   checkDv:boolean;
   currentday: Date = new Date();
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -121,13 +126,17 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
               private userSerivce: UserService,
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
-              private location: Location
+              private location: Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -231,6 +240,20 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     this.spinner.hide();
   }
 
+  submitForm(){
+    if (this.validateForm.valid) {
+      return true;
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return false;
+    }
+  }
+
   getStatusButton(){
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -282,6 +305,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     }
 
     let ob =[{
+      id: this.lstCTietBCao.id,
       luongXuatGaoVtro : this.luongXuatGaoVtro,
       luongXuatThocVtro : this.luongXuatThocVtro,
       lstCTiet : this.lstCTiet
@@ -293,6 +317,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         item.id = null;
       }
     })
+
+
 
     // gui du lieu trinh duyet len server
     let request = {

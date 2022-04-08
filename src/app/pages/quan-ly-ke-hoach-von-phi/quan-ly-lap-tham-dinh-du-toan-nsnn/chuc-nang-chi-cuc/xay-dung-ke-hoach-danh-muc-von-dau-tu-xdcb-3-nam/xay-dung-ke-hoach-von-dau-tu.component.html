@@ -96,6 +96,9 @@
               <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
                  {{soVban}}
               </nz-descriptions-item>
+              <nz-descriptions-item *ngIf="!checkDv" ></nz-descriptions-item>
+              <nz-descriptions-item *ngIf="!checkDv" ></nz-descriptions-item>
+              <nz-descriptions-item *ngIf="!checkDv" ></nz-descriptions-item>
           </nz-descriptions>
           </div>
         </div>
@@ -468,7 +471,7 @@
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                         class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">

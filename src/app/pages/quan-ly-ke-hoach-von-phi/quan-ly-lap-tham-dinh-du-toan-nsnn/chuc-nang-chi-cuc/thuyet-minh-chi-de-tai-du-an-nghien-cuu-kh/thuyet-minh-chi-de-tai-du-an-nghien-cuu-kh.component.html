@@ -87,9 +87,6 @@
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
                 {{namBaoCaoHienHanh}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC">
-                {{namBcao}}
-              </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
               </nz-descriptions-item>
@@ -245,7 +242,7 @@
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                         class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">

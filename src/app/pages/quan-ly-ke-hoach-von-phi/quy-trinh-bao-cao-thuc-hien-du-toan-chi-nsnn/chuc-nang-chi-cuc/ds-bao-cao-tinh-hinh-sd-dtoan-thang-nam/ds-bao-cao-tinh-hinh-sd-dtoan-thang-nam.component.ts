@@ -34,6 +34,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 
   searchFilter = {
+    maPhanBcao: '0',
     maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
