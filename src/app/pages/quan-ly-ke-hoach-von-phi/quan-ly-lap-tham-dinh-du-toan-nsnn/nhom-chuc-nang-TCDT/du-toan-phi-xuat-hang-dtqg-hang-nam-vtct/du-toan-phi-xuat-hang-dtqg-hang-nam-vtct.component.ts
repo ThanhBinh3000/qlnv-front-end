@@ -301,7 +301,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -313,7 +313,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist(request).toPromise().then(
+      this.quanLyVonPhiService.updatelist1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -439,7 +439,9 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
               item.vitri = this.lstVtu.find(e => e.maVtuTbi==item.maVtuTbi).id;
             })
           })
+          
           this.updateEditCache();
+
 
           // set list id file ban dau
           this.lstFile.filter(item => {

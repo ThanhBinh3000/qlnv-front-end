@@ -14,6 +14,13 @@ const routes: Routes = [
         './danh-sach-cong-can-de-nghi-cap-von/danh-sach-cong-can-de-nghi-cap-von.module'
       ).then((m) => m.DanhSachCongVanDeNghiCapVonComponentModule),
   },
+  {
+    path: 'danh-sach-de-nghi-cap-von',
+    loadChildren: () =>
+      import(
+        './danh-sach-de-nghi-cap-von/danh-sach-de-nghi-cap-von.module'
+      ).then((m) => m.DanhSachDeNghiCapVonComponentModule),
+  },
   //////////////////////////////////////////////////////////////////////////////////
   {
     path: 'tim-kiem-danh-sach-cong-van-de-nghi-cap-von',

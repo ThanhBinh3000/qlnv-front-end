@@ -319,12 +319,13 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           let request = {
                id: this.id,
                fileDinhKems: listFile,
-               listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+               listIdFiles: this.listIdFiles,  
+               listIdDeletes: this.listIdDelete,                    // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien,
-               maLoaiBcao: '14',
+               maDviTien: this.maDviTien = "01",
+               maLoaiBcao: QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N,
                namHienHanh: this.namBaoCaoHienHanh,
                namBcao: this.namBcao,
                soVban: this.soVban,
@@ -334,17 +335,20 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           this.spinner.show();
           if (this.id == null) {
                this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-                    data => {
-                         if (data.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, data?.msg);
-                         }
+                    async data => {
+                      if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                        this.id = data.data.id;
+                        await this.getDetailReport();
+                        this.getStatusButton();
+                      } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                      }
                     },
                     err => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     },
-               );
+                  );
           } else {
                this.quanLyVonPhiService.updatelist(request).toPromise().then(
                     async data => {

@@ -200,8 +200,7 @@
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                                            [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc"
-                                                            (ngModelChange)="checkCucKV(data.id)">
+                                                            [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc" (ngModelChange)="checkCucKV(data.id)">
                                                             <nz-option *ngFor="let item of cucKhuVucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                                                             </nz-option>
@@ -234,7 +233,7 @@
                                                   </td>
                                                   <td>
                                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                       <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
                                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
@@ -356,19 +355,17 @@
                                                             </div>
                                                        </td>
 
-
                                                        <ng-container *ngFor="let item of lstCTietBCao">
                                                             <ng-container *ngIf="item.maCucDtnnKvuc">
                                                                  <td>
                                                                       <div *ngFor="let e of item.listCtiet">
-                                                                           <ng-container *ngIf="e.vitri == data.id">
+                                                                           <ng-container *ngIf="e.col == data.col">
                                                                                 {{e.sl}}
                                                                            </ng-container>
                                                                       </div>
                                                                  </td>
                                                             </ng-container>
                                                        </ng-container>
-
 
                                                        <td>
                                                             {{data.tongDvi}}
@@ -417,8 +414,7 @@
                                                        <td>
                                                             <nz-select nzShowSearch nzAllowClear
                                                                  nzPlaceHolder="Chọn vật tư"
-                                                                 [(ngModel)]="editCache1[data.id].data.maVtuTbi"
-                                                                 (ngModelChange)="checkVtu(data.id,1)">
+                                                                 [(ngModel)]="editCache1[data.id].data.maVtuTbi" (ngModelChange)="checkVtu(data.id)">
                                                                  <nz-option *ngFor="let item of vatTus"
                                                                       [nzValue]="item.id" [nzLabel]="item.tenDm">
                                                                  </nz-option>
@@ -429,7 +425,7 @@
                                                             <ng-container *ngIf="item.maCucDtnnKvuc">
                                                                  <td>
                                                                       <div *ngFor="let e of editCache[item.id].data.listCtiet">
-                                                                           <ng-container *ngIf="e.vitri == data.id">
+                                                                           <ng-container *ngIf="e.col == data.col">
                                                                                 <nz-input-number class="search__input"
                                                                                      nzSize="small" [(ngModel)]="e.sl"
                                                                                      (change)="tongSl(data.id)"></nz-input-number>
@@ -439,7 +435,6 @@
                                                             </ng-container>
                                                        </ng-container>
                                                        
-
                                                        <td>
                                                             {{editCache1[data.id].data.tongDvi}}
                                                        </td>
@@ -474,8 +469,7 @@
                                                        </td>
                                                        <td>
                                                             <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
-                                                            <a nz-popconfirm
-                                                                 nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này??"
+                                                            <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
                                                                  (nzOnConfirm)="cancelEdit1(data.id)"
                                                                  class="save">Hủy</a>
                                                        </td>
@@ -528,7 +522,7 @@
 
                                              <ng-container *ngFor="let data of lstCTietBCao">
                                                   <ng-container *ngIf="data.maCucDtnnKvuc">
-                                                       <th>
+                                                       <th nzWidth="150px">
                                                             <div *ngFor="let item of cucKhuVucs">
                                                                  <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
                                                                       {{item.tenDvi}}
@@ -537,8 +531,6 @@
                                                        </th>
                                                   </ng-container>
                                              </ng-container>
-
-                                             
 
                                              <th nzWidth="100px">
                                                   Tổng cục KV
@@ -579,7 +571,7 @@
                                         <tr *ngFor="let data of lstVtu; let i = index">
                                              <ng-container *ngIf="data.loaiDmuc == 0">
                                                   <ng-container *ngIf="!editCache1[data.id].edit; else editTemplate2">
-                                                       <td>{{ i + 1 }}</td>
+                                                       <td>{{ getStt(i) }}</td>
                                                        <td>
                                                             <div *ngFor="let item of vatTus">
                                                                  <div *ngIf="item.id == data.maVtuTbi">
@@ -588,20 +580,18 @@
                                                             </div>
                                                        </td>
 
-
-                                                       
                                                        <ng-container *ngFor="let item of lstCTietBCao">
                                                             <ng-container *ngIf="item.maCucDtnnKvuc">
                                                                  <td>
                                                                       <div *ngFor="let e of item.listCtiet">
-                                                                           <ng-container *ngIf="e.vitri == data.id">
+                                                                           <ng-container *ngIf="e.col == data.col">
                                                                                 {{e.sl}}
                                                                            </ng-container>
                                                                       </div>
                                                                  </td>
                                                             </ng-container>
                                                        </ng-container>
-
+                                                       
                                                        <td>
                                                             {{data.tongDvi}}
                                                        </td>
@@ -644,13 +634,12 @@
 
                                                   </ng-container>
                                                   <ng-template #editTemplate2>
-                                                       <td>{{ i + 1 }}</td>
+                                                       <td>{{ getStt(i) }}</td>
 
                                                        <td>
                                                             <nz-select nzShowSearch nzAllowClear
                                                                  nzPlaceHolder="Chọn vật tư"
-                                                                 [(ngModel)]="editCache1[data.id].data.maVtuTbi"
-                                                                 (ngModelChange)="checkVtu(data.id,0)">
+                                                                 [(ngModel)]="editCache1[data.id].data.maVtuTbi" (ngModelChange)="checkVtu(data.id)">
                                                                  <nz-option *ngFor="let item of vatTus"
                                                                       [nzValue]="item.id" [nzLabel]="item.tenDm">
                                                                  </nz-option>
@@ -661,7 +650,7 @@
                                                             <ng-container *ngIf="item.maCucDtnnKvuc">
                                                                  <td>
                                                                       <div *ngFor="let e of editCache[item.id].data.listCtiet">
-                                                                           <ng-container *ngIf="e.vitri == data.id">
+                                                                           <ng-container *ngIf="e.col == data.col">
                                                                                 <nz-input-number class="search__input"
                                                                                      nzSize="small" [(ngModel)]="e.sl"
                                                                                      (change)="tongSl(data.id)"></nz-input-number>
@@ -670,7 +659,7 @@
                                                                  </td>
                                                             </ng-container>
                                                        </ng-container>
-
+                                                       
                                                        <td>
                                                             {{editCache1[data.id].data.tongDvi}}
                                                        </td>
@@ -705,8 +694,7 @@
                                                        </td>
                                                        <td>
                                                             <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
-                                                            <a nz-popconfirm
-                                                                 nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này??"
+                                                            <a nz-popconfirm nzPopconfirmTitle="Chắc chắn hủy?"
                                                                  (nzOnConfirm)="cancelEdit1(data.id)"
                                                                  class="save">Hủy</a>
                                                        </td>

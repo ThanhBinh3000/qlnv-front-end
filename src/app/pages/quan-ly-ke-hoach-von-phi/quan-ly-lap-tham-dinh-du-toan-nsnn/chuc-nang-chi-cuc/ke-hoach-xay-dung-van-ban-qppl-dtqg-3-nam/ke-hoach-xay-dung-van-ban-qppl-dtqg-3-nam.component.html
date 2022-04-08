@@ -152,13 +152,13 @@
 
                     <td>
                       <div *ngFor="let item of loaiVbans">
-                        <div *ngIf="item.id == data.loaiVban">
+                        <div *ngIf="item.id == data.maHthucVban">
                           {{item.tenDm}}
                         </div>
                       </div>
                     </td>
 
-                    <td>{{data.tgianDuKien}}</td>
+                    <td>{{data.tgianDkien}}</td>
 
                     <td>
                       <div *ngFor="let item of maDviChuTris">
@@ -168,7 +168,7 @@
                       </div>
                     </td>
 
-                    <td>{{data.dviPhoiHop}}</td>
+                    <td>{{data.dviPhop}}</td>
 
                     <td>{{data.dtoanKphi}}</td>
 
@@ -200,13 +200,13 @@
 
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản"
-                        [(ngModel)]="editCache[data.id].data.loaiVban">
+                        [(ngModel)]="editCache[data.id].data.maHthucVban">
                         <nz-option *ngFor="let item of loaiVbans" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
 
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDuKien" />
+                      <input class="search__input"  nz-input [(ngModel)]="editCache[data.id].data.tgianDkien" />
                     </td>
 
                     <td>
@@ -217,7 +217,7 @@
                     </td>
 
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dviPhoiHop" />
+                      <input class="search__input ant-input" nz-input  [(ngModel)]="editCache[data.id].data.dviPhop" />
                     </td>
 
                     <td>
