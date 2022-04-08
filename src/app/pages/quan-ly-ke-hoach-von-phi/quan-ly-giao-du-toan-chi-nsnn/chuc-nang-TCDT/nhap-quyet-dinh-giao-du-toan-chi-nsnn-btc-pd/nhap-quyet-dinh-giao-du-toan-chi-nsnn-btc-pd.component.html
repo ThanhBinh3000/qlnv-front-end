@@ -27,24 +27,6 @@
         <div class="widget-body">
           <div>
               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <!-- <nz-descriptions-item nzTitle="Ngày nhập">
-                  {{ngayNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Người nhập" >
-                  {{nguoiNhap}}
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Đơn vị">
-                  {{getUnitName()}}
-                </nz-descriptions-item> -->
-                <!-- <nz-descriptions-item nzTitle="Trạng thái">
-                  {{getStatusName()}}
-                </nz-descriptions-item> -->
-                <!-- <nz-descriptions-item nzSpan="1"></nz-descriptions-item> -->
-                <!-- <nz-descriptions-item nzTitle="Nơi q/đ">
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung">
-                    <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
-                  </nz-select>
-                </nz-descriptions-item> -->
                 <nz-descriptions-item nzTitle="Nơi quyết định">
                   Bộ Tài Chính
                 </nz-descriptions-item>
@@ -76,14 +58,6 @@
           <nz-tab [nzTitle]="'Nhập quyết định giao dự toán chi NSNN do bộ tài chính phê duyệt'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
-                <!-- <div class="inner-box">Đơn vị: -->
-                <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select> -->
-                <!-- </div> -->
               </div>
             </div>
             <nz-table nzBordered class="table__body">
@@ -116,16 +90,9 @@
                     <td>{{data.tong}}</td>
                     <td>{{data.nguonNSNN}}</td>
                     <td>{{data.nguonKhac}}</td>
-
-                    <!-- <td [hidden]="status">
-                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
-                    </td> -->
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                     </td>
-                    <!-- <td [hidden]="status">
-                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                    </td> -->
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
@@ -134,13 +101,6 @@
                     <td>
                       {{editCache[data.id].data.maNdung}}
                     </td>
-                    <!-- <td>
-                          <div *ngFor="let item of khoanMucs">
-                              <div *ngIf="item.maKmuc == editCache[data.id].data.maNdung">
-                                    {{item.tieuDe}}
-                              </div>
-                          </div>
-                    </td> -->
                     <td>
                            {{editCache[data.id].data.tong}}
                     </td>
@@ -177,7 +137,7 @@
                        {{tongCong?.nguonKhac}}
                   </td>
                   <td></td>
-             </tr>
+                </tr>
               </tbody>
             </nz-table>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -225,10 +185,6 @@
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <!-- <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm Mới</span>
-          </button> -->
           <button type="button" class="btn btn-main" (click)="addKmuc()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>

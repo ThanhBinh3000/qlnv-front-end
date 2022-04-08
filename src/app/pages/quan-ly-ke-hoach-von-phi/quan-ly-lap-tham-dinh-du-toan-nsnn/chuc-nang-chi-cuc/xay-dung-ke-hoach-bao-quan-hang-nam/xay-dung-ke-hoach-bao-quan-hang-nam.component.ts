@@ -13,6 +13,9 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 export class ItemData {
   maMatHang!: String;
@@ -25,6 +28,7 @@ export class ItemData {
 }
 
 export class AllItemData {
+  id!: any
   kphiBquanThocTx!: number;                   // kinh phi bao quan thoc thuong xuyen
   kphiBquanThocLd!: number;                   // kinh phi bao quan thoc lan dau
   kphiBquanGaoTx!: number;                    // kinh phi bao quan gao thuong xuyen
@@ -55,7 +59,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao = new Date().getFullYear();         // nam bao cao
+  namBcao: any;         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
@@ -94,7 +98,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   checkDv:boolean;
   currentday: Date = new Date();
   kphi!: number;
-
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -126,13 +131,17 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
               private userService: UserService,
               private danhMucService: DanhMucHDVService,
               private notification :NzNotificationService,
-              private location: Location
+              private location: Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -235,6 +244,20 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+
+  submitForm(){
+    if (this.validateForm.valid) {
+      return true;
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return false;
+    }
   }
 
   getStatusButton(){

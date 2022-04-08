@@ -92,20 +92,6 @@ const routes: Routes = [
       ).then((m) => m.LapPhuongAnPhanBoDuToanChiNsnnChoDviModule),
   },
   {
-    path: 'nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh/nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh.module'
-      ).then((m) => m.NhapQuyetDinhGiaoDuToanChiNsnnDoTcdtBanHanhModule),
-  },
-  {
-    path: 'nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh/:id',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh/nhap-quyet-dinh-giao-du-toan-chi-nsnn-do-tcdt-ban-hanh.module'
-      ).then((m) => m.NhapQuyetDinhGiaoDuToanChiNsnnDoTcdtBanHanhModule),
-  },
-  {
     path: 'ds-khoach-pbo-giao-dtoan-cho-chi-cucDTNN-vpCuc',
     loadChildren: () =>
       import(
@@ -137,14 +123,14 @@ const routes: Routes = [
     path: 'ds-quyet-dinh',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/ds-quyet-dinh/ds-quyet-dinh.module'
+        './chuc-nang-TCDT/ds-quyet-dinh-giao-du-toan-chi-NSNN-do-TCDT-ban-hanh/ds-quyet-dinh.module'
       ).then((m) => m.DsQuyetDinhModule),
   },
   {
     path: 'ds-quyet-dinh/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-TCDT/ds-quyet-dinh/ds-quyet-dinh.module'
+        './chuc-nang-TCDT/ds-quyet-dinh-giao-du-toan-chi-NSNN-do-TCDT-ban-hanh/ds-quyet-dinh.module'
       ).then((m) => m.DsQuyetDinhModule),
   },
   {
@@ -272,6 +258,20 @@ const routes: Routes = [
       import(
         './chuc-nang-cuc-khu-vuc/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan/ds-nhan-ghi-nhan-thong-tin-pbo-du-toan.module'
       ).then((m) => m.DsNhanGhiNhanThongTinPboDuAnModule),
+  },
+  {
+    path: 'nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi/nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi.module'
+      ).then((m) => m.NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViModule),
+  },
+  {
+    path: 'nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi/nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi.module'
+      ).then((m) => m.NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViModule),
   },
 ];
 

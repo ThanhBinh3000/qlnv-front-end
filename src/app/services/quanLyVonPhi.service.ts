@@ -68,7 +68,7 @@ export class QuanLyVonPhiService extends BaseService {
       //'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
-  
+
 
   // call api chi tiết báo cáo
   QDGiaoChiTiet(id: any): Observable<any> {
@@ -108,7 +108,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   trinhDuyetService1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
       // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
@@ -126,8 +127,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet bao cao thuc hien du toan chi 3.2.8
   trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
-      'http://192.168.1.118:8094/bao-cao/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
+      // 'http://192.168.1.118:8094/bao-cao/them-moi',
       request,
     );
   }
@@ -136,13 +137,16 @@ export class QuanLyVonPhiService extends BaseService {
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
 
   updatelist1(request: any): Observable<any> {
     return this.httpClient.put(
-      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }

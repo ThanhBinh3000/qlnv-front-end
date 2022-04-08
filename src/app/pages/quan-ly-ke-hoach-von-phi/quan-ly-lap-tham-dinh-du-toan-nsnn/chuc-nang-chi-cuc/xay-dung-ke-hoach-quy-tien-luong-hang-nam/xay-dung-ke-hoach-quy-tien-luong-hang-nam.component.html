@@ -73,8 +73,8 @@
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <form nz-form  [formGroup]="validateForm" class="login-form" >
         <div class="widget-body">
-          <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle="Ngày nhập">
                 {{ngayNhap}}
@@ -95,14 +95,21 @@
                 {{getStatusName()}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Loại báo cáo">
-                Xây dựng kế hoach quỹ tiền lương hàng năm
+                Xây dựng kế hoạch quỹ tiền lương hàng năm
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
                 {{soVban}}
               </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="năm BC" >
+                <nz-form-item>
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input nz-input  [(ngModel)]="namBcao" formControlName="namBcao"/>
+                  </nz-form-control>
+                </nz-form-item>
+              </nz-descriptions-item>
             </nz-descriptions>
           </div>
-        </div>
+        </form>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">

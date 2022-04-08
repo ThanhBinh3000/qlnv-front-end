@@ -19,14 +19,14 @@ export class ItemData {
   maNoiDung: any;
   maNhom: any;
   tongSo: any;
-  lstPaGiaoSoKiemTraTcNsnnCtietDvi: ItemDvi[] = [];
+  listCtietDvi: ItemDvi[] = [];
   checked!: boolean;
 }
 
 export class ItemDvi {
   id!: any;
-  khuvucId!: any;
-  soTranchi!: any;
+  maKhuVuc!: any;
+  soTranChi!: any;
 }
 
 @Component({
@@ -85,6 +85,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   checknutgiao: boolean = true;
   listId: string = '';
 
+  listDonViQuanLy:any []=[];
   //tinh tong
   tongHaNoi: number = 0;
   tongtaybac: number = 0;
@@ -174,6 +175,29 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
         this.donViTaos = res.data;
       }
+    })
+    let objDonVi ={
+      
+        capDvi: null,
+        kieuDvi: null,
+        loaiDvi: null,
+        maDvi: this.userInfor?.dvql,
+        maKbnn: null,
+        maNsnn: null,
+        maPhuong: null,
+        maQuan: null,
+        maTinh: null,
+        paggingReq: {
+          limit: 20,
+          page: 1
+        },
+        str: null,
+        tenDvi:null,
+        trangThai: '01',
+      
+    }
+    this.danhmuc.dmDonViThuocQuanLy(objDonVi).toPromise().then( res => {
+      console.log(res);
     })
     this.getStatusButton();
     this.spinner.hide();
@@ -354,71 +378,71 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       maNhom: 0,
       maNoiDung: 0,
       tongSo: 0,
-      lstPaGiaoSoKiemTraTcNsnnCtietDvi: [
+      listCtietDvi: [
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 342,
+          soTranChi: 0,
+          maKhuVuc: 342,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 343,
+          soTranChi: 0,
+          maKhuVuc: 343,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 344,
+          soTranChi: 0,
+          maKhuVuc: 344,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 345,
+          soTranChi: 0,
+          maKhuVuc: 345,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 346,
+          soTranChi: 0,
+          maKhuVuc: 346,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 347,
+          soTranChi: 0,
+          maKhuVuc: 347,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 348,
+          soTranChi: 0,
+          maKhuVuc: 348,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 349,
+          soTranChi: 0,
+          maKhuVuc: 349,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 350,
+          soTranChi: 0,
+          maKhuVuc: 350,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 351,
+          soTranChi: 0,
+          maKhuVuc: 351,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 354,
+          soTranChi: 0,
+          maKhuVuc: 354,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 352,
+          soTranChi: 0,
+          maKhuVuc: 352,
         },
         {
           id: null,
-          soTranchi: 0,
-          khuvucId: 353,
+          soTranChi: 0,
+          maKhuVuc: 353,
         },
       ],
       checked: false,
@@ -562,7 +586,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       id: this.id,
       listIdDeletes: this.listId,
       fileDinhKems: this.listFileUploaded,
-      lstPaGiaoSoKiemTraTcNsnnCtiet: this.lstCTietBCao,
+      listCtiet: this.lstCTietBCao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
       maPa: this.maphuongan,
@@ -653,11 +677,11 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.lstCTietBCao.forEach((e) => {
         var manoidung = e.maNoiDung;
         var manhom = e.maNhom;
-        var arr = e.lstPaGiaoSoKiemTraTcNsnnCtietDvi;
+        var arr = e.listCtietDvi;
         var soduocgiao;
         arr.forEach((el) => {
-          if (el.khuvucId == madvinhan) {
-            soduocgiao = el.soTranchi;
+          if (el.maKhuVuc == madvinhan) {
+            soduocgiao = el.soTranChi;
           }
         });
         let ob = {
@@ -697,12 +721,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         var manoidung = e.maNoiDung;
         var nhom = e.maNhom;
         var madonvinhan;
-        var array = e.lstPaGiaoSoKiemTraTcNsnnCtietDvi;
+        var array = e.listCtietDvi;
         var soduocgiao;
 
         array.forEach((el) => {
-          madonvinhan = el.khuvucId;
-          soduocgiao = el.soTranchi;
+          madonvinhan = el.maKhuVuc;
+          soduocgiao = el.soTranChi;
           let ob = {
             maDviNhan: madonvinhan.toString(),
             maDviTao: this.donvitao,
@@ -750,58 +774,58 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
     this.lstCTietBCao.filter((item) => {
 
-      item.lstPaGiaoSoKiemTraTcNsnnCtietDvi.filter((itemCtiet) => {
-        if (itemCtiet.khuvucId == 342) {
+      item.listCtietDvi.filter((itemCtiet) => {
+        if (itemCtiet.maKhuVuc == 342) {
           this.tongHaNoi +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 343) {
+        if (itemCtiet.maKhuVuc == 343) {
           this.tongtaybac +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 344) {
+        if (itemCtiet.maKhuVuc == 344) {
           this.tonghoangliension +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 345) {
+        if (itemCtiet.maKhuVuc == 345) {
           this.tongvinhphuc +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 346) {
+        if (itemCtiet.maKhuVuc == 346) {
           this.tongbacthai +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 347) {
+        if (itemCtiet.maKhuVuc == 347) {
           this.tonghabac +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 348) {
+        if (itemCtiet.maKhuVuc == 348) {
           this.tonghaihung +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 349) {
+        if (itemCtiet.maKhuVuc == 349) {
           this.tongdongbac +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 350) {
+        if (itemCtiet.maKhuVuc == 350) {
           this.tongthaibinh +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 351) {
+        if (itemCtiet.maKhuVuc == 351) {
           this.tonghanamninh +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 354) {
+        if (itemCtiet.maKhuVuc == 354) {
           this.tongnghetinh +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 352) {
+        if (itemCtiet.maKhuVuc == 352) {
           this.tongbinhtrithien +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
-        if (itemCtiet.khuvucId == 353) {
+        if (itemCtiet.maKhuVuc == 353) {
           this.tongdanang +=
-            typeof itemCtiet.soTranchi == 'number' ? itemCtiet.soTranchi : 0;
+            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
         }
       });
     });
@@ -809,8 +833,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   tinhtong(id:any){
     var sum =0;
-    this.editCache[id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi.forEach(e => {
-      sum +=Number(e.soTranchi);
+    this.editCache[id].data.listCtietDvi.forEach(e => {
+      sum +=Number(e.soTranChi);
     })
     this.editCache[id].data.tongSo = sum;
     var index = this.lstCTietBCao.findIndex(item => item.id == id);
@@ -819,10 +843,10 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   updateSumtCache(): void {
     this.lstCTietBCao.forEach((item) => {
-      var arr = item.lstPaGiaoSoKiemTraTcNsnnCtietDvi;
+      var arr = item.listCtietDvi;
       const index = item.id;
       arr.forEach(el => {
-        item.tongSo += Number(el.soTranchi)
+        item.tongSo += Number(el.soTranChi)
       })
        // lay vi tri hang minh sua
      // set lai data cua lstCTietBCao[index] = this.editCache[id].data

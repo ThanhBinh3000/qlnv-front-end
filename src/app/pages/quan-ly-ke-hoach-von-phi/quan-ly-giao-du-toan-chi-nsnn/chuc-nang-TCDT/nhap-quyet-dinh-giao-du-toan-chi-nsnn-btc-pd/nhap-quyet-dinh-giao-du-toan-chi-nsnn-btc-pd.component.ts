@@ -17,13 +17,13 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
 
 export class ItemData {
+  stt!: string;
   maNdung!: string;
   nguonNSNN!: number;
   nguonKhac!: number;
   tong!: number;
   id!: any;
   checked!:boolean;
-  stt!: string;
 }
 
 @Component({
