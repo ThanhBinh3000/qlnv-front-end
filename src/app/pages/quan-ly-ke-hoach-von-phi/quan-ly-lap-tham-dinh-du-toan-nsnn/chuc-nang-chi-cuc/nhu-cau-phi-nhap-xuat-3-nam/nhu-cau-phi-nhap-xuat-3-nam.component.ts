@@ -312,11 +312,12 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           let request = {
                id: this.id,
                idFileDinhKem: listFile,
+               listIdDeletes: this.listIdDelete,
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien,
-               maLoaiBcao: this.maLoaiBaoCao,
+               maDviTien: this.maDviTien ="01",
+               maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N,
                namBcao: this.namBaoCaoHienHanh,
                namHienHanh: this.namBcao,
                soVban: this.soVban,
@@ -324,16 +325,20 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           this.spinner.show();
           if (this.id == null) {
                this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, data?.msg);
-                         }
+                    async data => {
+                      if (data.statusCode == 0) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                        this.id = data.data.id;
+                        await this.getDetailReport();
+                        this.getStatusButton();
+                      } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                      }
                     },
-                    (err) => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    })
+                    err => {
+                      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                  );
           } else {
                this.quanLyVonPhiService.updatelist(request).toPromise().then(
                     async data => {
@@ -389,7 +394,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      // call chi tiet bao cao
      async getDetailReport() {
-          this.spinner.hide();
+          this.spinner.show();
           await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
@@ -431,7 +436,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          this.spinner.show();
+          this.spinner.hide();
      }
 
      //upload file

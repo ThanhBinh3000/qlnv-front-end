@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -19,10 +19,10 @@ export class ItemData {
   id: any;
   stt!: string;
   tenVban: string;
-  loaiVban: string;
-  tgianDuKien: string;
+  maHthucVban: string;
+  tgianDkien: string;
   maDviChuTri: string;
-  dviPhoiHop: string;
+  dviPhop: string;
   dtoanKphi: number;
   ccuLapDtoan: string
 }
@@ -53,7 +53,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
-  maLoaiBaoCao: string = "26";                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;                // nam bao cao
   maDviTien: string = "";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -294,27 +294,32 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       id: this.id,
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
+      listIdDeletes: this.listIdDelete,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
+      maDvi: this.maDonViTao = this.maDonViTao,
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     //console.log(this.lstCTietBCao);
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
-        (data) => {
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
-        (err) => {
+        err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
+        },
+      );
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
@@ -441,10 +446,10 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       id: uuid.v4(),
       stt: '',
       tenVban: '',
-      loaiVban: '',
-      tgianDuKien: '',
+      maHthucVban: '',
+      tgianDkien: '',
       maDviChuTri: '',
-      dviPhoiHop: '',
+      dviPhop: '',
       dtoanKphi: 0,
       ccuLapDtoan: '',
       checked: false,

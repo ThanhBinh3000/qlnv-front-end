@@ -36,6 +36,13 @@ const routes: Routes = [
       ).then((m) => m.ChiThuongXuyen3NamModule),
   },
   {
+    path: 'chi-thuong-xuyen-3-nam/:maDvi/:maLoaiBacao/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/chi-thuong-xuyen-3-nam/chi-thuong-xuyen-3-nam.module'
+      ).then((m) => m.ChiThuongXuyen3NamModule),
+  },
+  {
     path: 'ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam',
     loadChildren: () =>
       import(

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -15,11 +15,11 @@ import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
   id!: any;
-  maBcao!: String;
+  maBcao!: string;
   maDvi!: string;
-  stt!: String;
-  loaiKhoach!: String;
-  loaiDuan!: String;
+  stt!: string;
+  loaiKhoach!: string;
+  loaiDan!: string;
   tongDtoanSl!: Number;
   tongDtoanGtri!: Number;
   thienNamTruoc!: Number;
@@ -32,7 +32,7 @@ export class ItemData {
   cbDtuN3!: Number;
   thDtuN3!: Number;
   ghiChu!: string;
-  ndung!: String;
+  ndung!: string;
   checked!: boolean;
 }
 
@@ -68,7 +68,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   maBaoCao!: string;
   namBaoCaoHienHanh!: any;
   trangThaiBanGhi: string = "1";
-  maLoaiBaoCao: string = "01";
+  maLoaiBaoCao: string = QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N;
   maDviTien: string = "01";
   newDate = new Date();
   fileToUpload!: File;
@@ -344,27 +344,32 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     let request = {
       id: this.id,
       idFileDinhKem: listFile,
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
+      maDvi: this.maDonViTao,
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (data) => {
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
-        (err) => {
+        err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
+        },
+      );
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
@@ -487,7 +492,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     let item: ItemData = {
       loaiKhoach: "",
       maDvi: '',
-      loaiDuan: "",
+      loaiDan: "",
       tongDtoanSl: 0,
       tongDtoanGtri: 0,
       thienNamTruoc: 0,
