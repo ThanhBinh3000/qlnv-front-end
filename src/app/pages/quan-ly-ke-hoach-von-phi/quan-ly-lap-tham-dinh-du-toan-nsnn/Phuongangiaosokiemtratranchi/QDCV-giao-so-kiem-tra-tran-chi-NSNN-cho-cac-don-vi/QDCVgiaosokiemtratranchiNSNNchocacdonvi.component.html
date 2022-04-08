@@ -1,3 +1,26 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button type="button" class="btn btn-main" (click)="xoaquyetdinh()">
+          <i class="fa fa-trash-o"></i>
+          <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="luu()" >
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="dong()">
+          <i class="icon htvbdh_tcdt_close"></i>
+          <span>Đóng</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
 <!--body-->
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
@@ -14,12 +37,12 @@
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Nơi tạo">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao"> 
-                  <nz-option *ngFor="let dvt of listDvi" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  <nz-option *ngFor="let dvt of donviTaos" [nzValue]="dvt.id" [nzLabel]="dvt.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Nơi nhận">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan" > 
-                  <nz-option  *ngFor="let dvn of listDvi" [nzValue]="dvn.id" [nzLabel]="dvn.tenDm"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan"> 
+                  <nz-option *ngFor="let dvn of donviTaos" [nzValue]="dvn.id" [nzLabel]="dvn.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Số QĐ">
@@ -96,18 +119,7 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="xoaquyetdinh()">
-            <i class="fa fa-trash-o"></i>
-            <span>Xóa</span>
-          </button>
-          <button type="button" class="btn btn-main" (click)="luu()" >
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Lưu</span>
-          </button>
-          <button type="button" class="btn btn-sub" (click)="dong()">
-            <i class="icon htvbdh_tcdt_close"></i>
-            <span>Đóng</span>
-          </button>
+          
         </div>
       </div>
       <div class="ghi-chu">

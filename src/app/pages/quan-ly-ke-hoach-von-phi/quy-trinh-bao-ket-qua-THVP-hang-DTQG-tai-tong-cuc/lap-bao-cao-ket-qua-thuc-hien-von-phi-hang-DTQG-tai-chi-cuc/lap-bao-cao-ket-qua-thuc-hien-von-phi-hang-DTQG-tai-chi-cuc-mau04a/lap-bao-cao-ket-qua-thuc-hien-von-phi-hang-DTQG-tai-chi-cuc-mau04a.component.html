@@ -116,8 +116,11 @@
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="checkXem">
                   <span>Nhập dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="!checkXem">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="checkXem">
                   <span>Xem</span>
+                </button>
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="!checkXem">
+                  <span>KIểm tra</span>
                 </button>
                 <button type="button" class="btn btn-main" [hidden]="checkXem">
                   <span>Biểu mẫu nhập số liệu</span>
@@ -853,7 +856,7 @@
       </nz-card>
       <!-- Action Table chi tiết mẫu báo cáo 03 -->
       <ng-template #tableCard4>
-        <button type="button" class="btn btn-main" (click)="deleteSelected03()">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected03()">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
@@ -1110,15 +1113,15 @@
       </nz-card>
       <!-- Action Table chi tiết mau 04a-x -->
       <ng-template #tableCard5>
-        <button type="button" class="btn btn-main" (click)="deleteSelected(1)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected(1)">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+        <nz-select style="width:200px; margin-left: 5px;" [hidden]="status" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
             [(ngModel)]="ObjCol4ax">
             <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
           </nz-select>
-        <button type="button" class="btn btn-main" (click)="addCol(1)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="addCol(1)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
@@ -1378,15 +1381,15 @@
       </nz-card>
       <!-- Action Table chi tiết mau 04a-n -->
       <ng-template #tableCard6>
-        <button type="button" class="btn btn-main" (click)="deleteSelected(2)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected(2)">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+        <nz-select style="width:200px; margin-left: 5px;" [hidden]="status" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
             [(ngModel)]="ObjCol4an">
             <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
           </nz-select>
-        <button type="button" class="btn btn-main" (click)="addCol(2)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="addCol(2)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
@@ -1645,15 +1648,15 @@
       </nz-card>
       <!-- Action Table chi tiết mau 04bx -->
       <ng-template #tableCard7>
-        <button type="button" class="btn btn-main" (click)="deleteSelected(3)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected(3)">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+        <nz-select style="width:200px; margin-left: 5px;" [hidden]="status" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
             [(ngModel)]="ObjCol4bx">
             <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
           </nz-select>
-        <button type="button" class="btn btn-main" (click)="addCol(3)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="addCol(3)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
@@ -1682,7 +1685,7 @@
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
-              <th rowspan="2" width="100px">STT</th>
+              <th rowspan="2">STT</th>
               <th rowspan="2">Nội dung chi</th>
               <th colspan="{{cols05}}">Chi tiết theo từng mặt hàng trong đợt</th>
               <th colspan="{{cols05}}">Chi tiết theo từng mặt hàng lũy kế từ đầu năm</th>
@@ -1910,15 +1913,15 @@
       </nz-card>
       <!-- Action Table chi tiết mau 05 -->
       <ng-template #tableCard8>
-        <button type="button" class="btn btn-main" (click)="deleteSelected(4)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="deleteSelected(4)">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <nz-select style="width:200px; margin-left: 5px;" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+        <nz-select style="width:200px; margin-left: 5px;" [hidden]="status" nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
             [(ngModel)]="ObjCol5">
             <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
           </nz-select>
-        <button type="button" class="btn btn-main" (click)="addCol(4)">
+        <button type="button" class="btn btn-main" [hidden]="status" (click)="addCol(4)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
