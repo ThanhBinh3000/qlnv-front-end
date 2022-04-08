@@ -54,7 +54,8 @@
               </td>
               <td><input nz-input [ngModel]="(itemRow.soLuong ?? 0) * (itemRow.donGia ?? 0)" [readonly]="true" /></td>
               <td>
-                <a (click)="addRow()">
+                <a (click)="addRow()"
+                  [class.disabled]="!itemRow.soGthau || !itemRow.diaDiemNhap || itemRow.soGthau == '' || itemRow.diaDiemNhap == ''">
                   <i class="fa fa-plus"></i>
                 </a>
                 <a (click)="clearItemRow()">
@@ -81,8 +82,8 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td></td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.goiThau" /></td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.diaDiem" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.soGthau" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.diaDiemNhap" /></td>
                 <td>
                   <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.id]?.data.soLuong"
                     [nzMin]="0">
@@ -99,7 +100,8 @@
                     [readonly]="true" />
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id)" class="save">
+                  <a (click)="saveEdit(data.id)" class="save"
+                    [class.disabled]="!editCache[data.id]?.data.soGthau || !editCache[data.id]?.data.diaDiemNhap || editCache[data.id]?.data.soGthau == '' || editCache[data.id]?.data.diaDiemNhap == ''">
                     <i class="fa fa-save"></i>
                   </a>
                   <a (click)="cancelEdit(data.id)">
@@ -110,12 +112,12 @@
             </tr>
             <tr>
               <td colspan="3" class="background-last-row align-right">Tổng</td>
-              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 3, 2, ',','table-goi-thau') : 0) |
-                number: '1.0-1'}}</td>
-              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 4, 2, ',','table-goi-thau') : 0) |
-                number: '1.0-1'}}</td>
-              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 5, 2, ',','table-goi-thau') : 0) |
-                number: '1.0-1'}}</td>
+              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 3, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
+              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 4, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
+              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 5, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
               <td class="background-last-row"></td>
             </tr>
           </tbody>
@@ -137,7 +139,8 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="handleOk()" class="modal__button--save">
+      <button nz-button (click)="handleOk()" class="modal__button--save"
+        [disabled]="!selectedDonVi.maDvi || selectedDonVi.maDvi == '' || !data.tenDuAn || data.tenDuAn == '' || !data.ghiChu || data.ghiChu == ''">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

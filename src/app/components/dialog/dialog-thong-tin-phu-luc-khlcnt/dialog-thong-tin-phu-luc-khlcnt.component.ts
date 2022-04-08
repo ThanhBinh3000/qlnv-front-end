@@ -100,12 +100,14 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach(item => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    });
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(item => {
+        this.editCache[item.id] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
   }
 
   cancelEdit(id: number): void {

@@ -276,6 +276,15 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     });
   }
 
+  deleteItem(data: any) {
+    if (this.chiTiet.detail && this.chiTiet.detail.length > 0) {
+      this.chiTiet.detail = this.chiTiet.detail.filter(x => x.maDvi != data.maDvi);
+    }
+    else {
+      this.chiTiet.detail = [];
+    }
+  }
+
   checkDataExistPhuLuc(data: any) {
     if (this.chiTiet.detail) {
       let indexExist =
