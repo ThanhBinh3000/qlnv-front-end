@@ -712,5 +712,10 @@ dMucBcaoDuyet(): Observable<any> {
         "trangThai": "",
       })
   }
+
+  //lấy danh sach các đơn vị thuộc quyền quản lý bởi tổng cục hoặc khu vực ( Tổng cục lấy các khu vực do tổng cục đó quản lý)
+  dmDonViThuocQuanLy(request:any):Observable<any>{
+    return this.httpClient.post(this.urlDefault+'/qlnv-category/dmuc-donvi/ds-donvi-child',request);
+  }
 }
 
