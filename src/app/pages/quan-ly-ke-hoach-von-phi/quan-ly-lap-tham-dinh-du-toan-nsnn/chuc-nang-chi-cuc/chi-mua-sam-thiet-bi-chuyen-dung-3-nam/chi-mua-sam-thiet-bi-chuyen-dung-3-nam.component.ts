@@ -280,11 +280,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     let request = {
       id: this.id,
       idFileDinhKem: listFile,
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
       soVban: this.soVban,
@@ -292,16 +293,20 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (data) => {
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
-        (err) => {
+        err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
+        },
+      );
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {

@@ -105,7 +105,7 @@
                                    <ng-container *ngIf="!checkDv">
                                         <nz-descriptions-item nzTitle="Số VB gửi TC">
                                              {{soVban}}
-                                        </nz-descriptions-item>
+                                        </nz-descriptions-item> 
                                    </ng-container>
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
                                         Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm
@@ -199,12 +199,24 @@
                                              <td></td>
                                              <td></td>
                                              <td [hidden]="statusDvi"></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
+                                             <td>
+                                                  {{tong.soLuotNguoiN1}}
+                                             </td>
+                                             <td>
+                                                  {{tong.thanhTienN1}}
+                                             </td>
+                                             <td>
+                                                  {{tong.soLuotNguoiN2}}
+                                             </td>
+                                             <td>
+                                                  {{tong.thanhTienN2}}
+                                             </td>
+                                             <td>
+                                                  {{tong.soLuotNguoiN3}}
+                                             </td>
+                                             <td>
+                                                  {{tong.thanhTienN3}}
+                                             </td>
                                              <td [hidden]="status"></td>
                                              <td [hidden]="status"></td>
                                              <td [hidden]="status"></td>

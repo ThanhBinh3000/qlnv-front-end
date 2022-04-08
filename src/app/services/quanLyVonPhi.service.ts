@@ -64,8 +64,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      //'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
   

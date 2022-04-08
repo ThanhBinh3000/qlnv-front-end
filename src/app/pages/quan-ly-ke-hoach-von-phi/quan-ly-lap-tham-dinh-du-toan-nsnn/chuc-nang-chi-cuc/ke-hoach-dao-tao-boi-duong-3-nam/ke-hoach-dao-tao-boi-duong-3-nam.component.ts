@@ -42,6 +42,21 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   maChiMucs: any = [];
   cucKhuVucs: any = [];
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
+  tong: ItemData = {
+    id: uuid.v4(),
+    stt: '',
+    maLoai: '',
+    maKhoan: '',
+    maChiMuc: '',
+    maDvi: '',
+    soLuotNguoiN1: 0,
+    thanhTienN1: 0,
+    soLuotNguoiN2: 0,
+    thanhTienN2: 0,
+    soLuotNguoiN3: 0,
+    thanhTienN3: 0,
+    checked: false,
+  }
   userInfo: any;
   errorMessage!: String;                      //
   id!: any;                                   // id truyen tu router
@@ -317,10 +332,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     let request = {
       id: this.id,
       idFileDinhKem: listFile,
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
+      maDviTien: this.maDviTien='01',
       maLoaiBcao: QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
@@ -328,16 +344,20 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (data) => {
+        async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
-        (err) => {
+        err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
+        },
+      );
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
@@ -398,6 +418,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao.forEach(item => {
+            this.tinhTong(1, item);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -484,6 +507,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    var index: number = this.lstCTietBCao.findIndex(e => e.id === id);
+    this.tinhTong(-1, this.lstCTietBCao[index]);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
@@ -494,6 +519,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if (item.checked){
+        this.tinhTong(-1, item);
+      }
       if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
@@ -587,6 +615,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   saveEdit(id: string): void {
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    this.tinhTong(-1, this.lstCTietBCao[index]);
+    this.tinhTong(1, this.editCache[id].data);
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   }
@@ -599,6 +629,15 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  tinhTong(heSo: number, item: ItemData){
+    this.tong.soLuotNguoiN1 += heSo * item.soLuotNguoiN1; 
+    this.tong.thanhTienN1 += heSo * item.thanhTienN1; 
+    this.tong.soLuotNguoiN2 += heSo * item.soLuotNguoiN2; 
+    this.tong.thanhTienN2 += heSo * item.thanhTienN2; 
+    this.tong.soLuotNguoiN3 += heSo * item.soLuotNguoiN3; 
+    this.tong.thanhTienN3 += heSo * item.thanhTienN3; 
   }
 
   //call tong hop
