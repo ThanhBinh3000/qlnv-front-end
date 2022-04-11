@@ -112,4 +112,17 @@
   .form-item-ghi-chu {
     display: block;
   }
+  .w-300 {
+    width: 300px;
+  }
+  .w-120 {
+    width: 120px !important;
+  }
+  .isDisabled {
+    opacity: 0.5;
+  }
+  .row-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }

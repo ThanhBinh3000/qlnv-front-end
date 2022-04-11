@@ -29,4 +29,5 @@ export const MESSAGE = {
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   TU_CHOI_SUCCESS: 'Từ chối thành công.',
   DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
+  DON_VI_TINH_LUONG_THUC: 'Tấn',
 };

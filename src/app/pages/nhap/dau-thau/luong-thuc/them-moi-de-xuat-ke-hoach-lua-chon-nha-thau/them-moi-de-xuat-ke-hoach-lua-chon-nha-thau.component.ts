@@ -27,6 +27,7 @@ import {
 } from './../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
+import { Globals } from 'src/app/shared/globals';
 
 interface ItemData {
   id: string;
@@ -92,6 +93,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,
     private fb: FormBuilder,
+    public globals: Globals,
   ) {}
 
   startEdit(index: number): void {

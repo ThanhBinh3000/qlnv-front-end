@@ -23,7 +23,7 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
-          <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="100000000000000000000" [nzStep]="1"
+          <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
             [nzSize]="'small'" (input)="calculatorThanhTien()">
           </nz-input-number>
         </nz-form-control>
@@ -32,7 +32,7 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Đơn giá (đồng/kg) </nz-form-label>
-        <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="100000000000000000000" [nzStep]="1"
+        <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
           [nzSize]="'small'" (input)="calculatorThanhTien()">
         </nz-input-number>
       </nz-form-item>
