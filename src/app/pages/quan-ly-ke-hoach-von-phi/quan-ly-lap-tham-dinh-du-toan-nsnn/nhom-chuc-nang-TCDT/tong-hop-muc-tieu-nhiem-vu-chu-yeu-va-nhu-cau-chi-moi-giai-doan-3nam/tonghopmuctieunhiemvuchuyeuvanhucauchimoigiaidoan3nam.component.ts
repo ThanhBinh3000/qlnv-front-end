@@ -491,7 +491,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         async (data) => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -559,8 +559,8 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-
-            this.namBcaohienhanh = this.namBcaohienhanh
+            this.namBcaohienhanh = this.namBcaohienhanh;
+            this.updateEditCache();
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

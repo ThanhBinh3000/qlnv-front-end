@@ -616,7 +616,8 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
                 this.lstCTietBCao =[];
             }
 
-            this.namBcaohienhanh = this.namBcaohienhanh
+            this.namBcaohienhanh = this.namBcaohienhanh;
+            this.updateEditCache();
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

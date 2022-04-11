@@ -181,7 +181,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //chi tiet ma phuong an
   chitietPhuongAn(id: any): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + id);
+    // return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + id);
+    return this.httpClient.get('http://192.168.1.103:8094/pa-giao-so-kt/chi-tiet/'+id);
   }
 
   //tao ma giao
@@ -225,15 +226,15 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //list danh sach phuong an da duoc duyet
-  danhsachphuonganduocduyet(): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach');
+  danhsachphuonganduocduyet(maDvi:string): Observable<any> {
+    // return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach/'+maDvi);
+    return this.httpClient.get('http://192.168.1.103:8094/pa-giao-so-kt/danh-sach/'+maDvi);
   }
 
 
   //xoa quyet dinh cong van
   xoaquyetdinhcongvan(request: any): Observable<any> {
-    console.log(request);
-    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/xoa-qd-cv', request);
+    return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/xoa-qd-cv/'+request);
   }
 
   //nhap so QD-CV

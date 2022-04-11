@@ -370,6 +370,14 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maNdung){
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maNhomChi){
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -505,7 +513,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
@@ -568,8 +576,8 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           if (this.lstCTietBCao == null) {
             this.lstCTietBCao = [];
           }
-          console.log(this.lstCTietBCao);
           this.namBcaohienhanh = this.namBcaohienhanh;
+          this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
