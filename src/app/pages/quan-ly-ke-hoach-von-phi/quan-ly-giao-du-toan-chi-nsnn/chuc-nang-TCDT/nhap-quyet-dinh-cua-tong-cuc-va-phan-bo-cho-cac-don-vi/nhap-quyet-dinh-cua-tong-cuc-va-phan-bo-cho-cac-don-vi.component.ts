@@ -3,17 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from 'src/app/components/dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
+import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
-import { MESSAGE } from '../../../../../constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
 
 export class ItemData {
   stt!: string;
@@ -99,16 +99,26 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     checked: true,
   };
   khoanMucs: any = [];
+  soQd!: any;
+  vanBan!: any;
+  nguoiKy!: any;
+  lyDoTuChoi!: any;
+  nam!: any; // nam btc
+  ngayQdBTC!: any; // ngay qd btc
+  nguoiKyBTC!: any; // nguoi ky BTC
+  ngayQdTC!:any; // ngay qd tong cuc
+  nguoiKyTC!: any; // nguoi ky tai tong cuc
+  veViec!: any; // ve viec
+  ghiChu!: any; // ghi chu
+  qDinhBTCs: any = []; // danh sach qd cua BTC
+  noiNhan!:any; // noi nhan
+  nguoiKyTCs: any = [];
 
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-  soQd!: any;
-  vanBan!: any;
-  nguoiKy!: any;
-  lyDoTuChoi!: any;
 
   // upload file
   addFile() {
@@ -578,7 +588,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
 
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
-         nzContent: DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
+         nzContent: DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
          nzMaskClosable: false,
          nzClosable: false,
          nzWidth: '600px',

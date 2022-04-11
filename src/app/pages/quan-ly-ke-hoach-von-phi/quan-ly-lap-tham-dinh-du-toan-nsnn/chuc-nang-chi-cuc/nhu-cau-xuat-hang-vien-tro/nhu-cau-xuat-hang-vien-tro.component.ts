@@ -318,6 +318,13 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       }
     })
 
+    // // replace nhung ban ghi dc them moi id thanh null
+    // ob.filter(item => {
+    //   if (typeof item.id != "number") {
+    //     item.id = null;
+    //   }
+    // })
+
 
 
     // gui du lieu trinh duyet len server

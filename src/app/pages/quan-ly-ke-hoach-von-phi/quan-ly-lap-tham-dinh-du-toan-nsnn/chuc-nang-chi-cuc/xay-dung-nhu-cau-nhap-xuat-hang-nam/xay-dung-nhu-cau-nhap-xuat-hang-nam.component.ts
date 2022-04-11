@@ -27,6 +27,7 @@ export class ItemData {
 }
 
 export class AllItemData {
+  id!: any;
   luongThocXuat!: number;
   luongThocNhap!: number;
   luongGaoXuat!: number;
@@ -293,6 +294,7 @@ getStatusButton(){
     }
 
     let ob =[{
+      id: this.lstCTietBCao.id,
       luongThocXuat:this.luongThocXuat,
       luongThocNhap:this.luongThocNhap,
       luongGaoXuat:this.luongGaoXuat,

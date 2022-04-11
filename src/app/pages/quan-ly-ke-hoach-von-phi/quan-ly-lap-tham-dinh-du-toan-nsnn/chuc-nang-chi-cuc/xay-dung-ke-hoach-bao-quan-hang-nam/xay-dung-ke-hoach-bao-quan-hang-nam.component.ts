@@ -319,6 +319,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     })
 
     let ob = [{
+      id: this.lstCTietBCao.id,
       kphiBquanThocTx : this.kphiBquanThocTx,
       kphiBquanThocLd : this.kphiBquanThocLd,
       kphiBquanGaoTx : this.kphiBquanGaoTx,
