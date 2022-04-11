@@ -27,6 +27,7 @@ import {
 } from './../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 interface ItemData {
   id: string;
@@ -77,8 +78,10 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: Array<CanCuXacDinh> = [];
   canCuKhacList: Array<CanCuXacDinh> = [];
-  thocIdDefault: string = '01';
-  gaoIdDefault: string = '00';
+
+  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
+  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+
   muoiIdDefault: number = 78;
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
@@ -92,7 +95,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   startEdit(index: number): void {
     this.dsGoiThauClone[index].isEdit = true;
@@ -597,7 +600,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
           }
           this.redirectChiTieuKeHoachNam();
         })
-        .catch((err) => {})
+        .catch((err) => { })
         .finally(() => {
           this.spinner.hide();
         });
@@ -624,7 +627,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
             this.redirectChiTieuKeHoachNam();
           }
         })
-        .catch((err) => {})
+        .catch((err) => { })
         .finally(() => {
           this.spinner.hide();
         });

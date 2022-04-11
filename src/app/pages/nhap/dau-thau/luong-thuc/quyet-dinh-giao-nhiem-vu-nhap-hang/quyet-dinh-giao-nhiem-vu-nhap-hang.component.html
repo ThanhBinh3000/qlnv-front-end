@@ -1,26 +1,4 @@
 <div class="luong-thuc__danh-sach">
-  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
-    <div class="tab-content tab-menu" id="myTabContent">
-      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-        aria-labelledby="banhanh-tab">
-        <div class="trai">
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-            <i class="fa fa-arrow-circle-left"></i>
-          </a>
-        </div>
-        <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-          </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-            <i class="icon htvbdh_trinh"></i>
-            <span>Trình duyệt</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </nz-affix>
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -28,32 +6,46 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="8">
               <label class="search__label">Số QĐ nhập / xuất</label>
-              <input class="search__input" placeholder="Số QĐ nhập / xuất" nz-input
-                [(ngModel)]="searchFilter.soDxuat" />
+              <input class="search__input" placeholder="Số QĐ nhập / xuất" nz-input [(ngModel)]="soQD" />
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Ngày QĐ</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
+              <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startValue"
+                nzPlaceHolder="Ngày QĐ">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Căn cứ trên hợp đồng</label>
-              <input class="search__input" placeholder="Căn cứ trên hợp đồng" nz-input
-                [(ngModel)]="searchFilter.soDxuat" />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                <input nz-input [readonly]="true" [(ngModel)]="canCu" />
+              </nz-input-group>
             </div>
             <div nz-col nzSpan="8">
-              <label class="search__label">Tên đơn vị</label>
-              <input class="search__input" placeholder="Tên đơn vị" nz-input [(ngModel)]="searchFilter.trichYeu" />
+              <label class="search__label">Đơn vị</label>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
+                  [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Mã hàng DTQG</label>
-              <input class="search__input" placeholder="Mã hàng DTQG" nz-input [(ngModel)]="searchFilter.trichYeu" />
+              <nz-select nzPlaceHolder="Mã hàng DTQG" [(ngModel)]="loaiVTHH">
+                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
+                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Loại QĐ</label>
-              <nz-select>
-                <nz-option nzValue="1111" nzLabel="1111"></nz-option>
+              <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiQd">
+                <nz-option [nzValue]="nhapIdDefault" nzLabel="Nhập"></nz-option>
+                <nz-option [nzValue]="xuatIdDefault" nzLabel="Xuất"></nz-option>
               </nz-select>
             </div>
           </div>
@@ -66,9 +58,6 @@
               <i nz-icon nzType="close"></i>
               Xóa điều kiện
             </button>
-          </div>
-          <div class="cangiua" *ngIf="errorMessage && errorMessage != ''">
-            <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
         <nz-card nzTitle="THÔNG TIN QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP /  XUẤT" [nzExtra]="tableCard1"
@@ -92,28 +81,27 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center">1</td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <td>123</td>
-                <td>10/03/2022</td>
-                <td>Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế ...
-                </td>
-                <td>Hợp đồng mua 100 tấn gạo </td>
-                <td>Cục DTNNKV Tây Nam Bộ</td>
-                <td>Nhập</td>
-                <td>Nhập</td>
-                <td>Có phụ lục</td>
+                <td>{{ data.soQd }}</td>
+                <td>{{ data.ngayKy }}</td>
+                <td>{{ data.veViec }}</td>
+                <td></td>
+                <td>{{ data.tenDvi }}</td>
+                <td>{{ data.loaiQd }}</td>
+                <td></td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
-                  <a>
+                  <a (click)="redirectToChiTiet(1)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a>
                     <span class="icon htvbdh_da-xu-ly"></span>
                   </a>
-                  <a>
+                  <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -144,7 +132,7 @@
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" (click)="export()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Kết xuất</span>
           </button>

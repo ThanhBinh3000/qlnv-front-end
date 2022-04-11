@@ -1,4 +1,4 @@
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -32,9 +32,9 @@ export class LuongDauThauGaoComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
-  thocIdDefault: string = "01";
-  gaoIdDefault: string = "00";
-  muoiIdDefault: string = "02";
+  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
+  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
   constructor(
     private router: Router,

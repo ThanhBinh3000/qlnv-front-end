@@ -13,6 +13,7 @@ import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatL
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 interface ItemData {
   id: string;
@@ -52,9 +53,9 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   loaiHdong: string = "";
   nguonVon: string = "";
 
-  thocIdDefault: string = "01";
-  gaoIdDefault: string = "00";
-  muoiIdDefault: string = "02";
+  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
+  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
