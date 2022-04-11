@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import VNnum2words from 'vn-num2words';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -13,7 +14,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   formData: FormGroup;
   thongtinDauThau: DanhSachGoiThau;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-  constructor(private _modalRef: NzModalRef, private fb: FormBuilder) {}
+  constructor(
+    private _modalRef: NzModalRef,
+    private fb: FormBuilder,
+    public globals: Globals,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();

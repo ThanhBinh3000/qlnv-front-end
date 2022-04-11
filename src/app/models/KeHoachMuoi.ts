@@ -1,15 +1,15 @@
-import { ItemDetail } from "./ItemDetail";
+import { ItemDetail } from './ItemDetail';
 
 export class KeHoachMuoi {
   stt: number;
   cucId: number;
   cucDTNNKhuVuc: string;
   tkdnTongSoMuoi: number;
-  tkdnMuoi: ItemDetail[];
+  tkdnMuoi: Array<ItemDetail>;
   ntnTongSoMuoi: number;
   xtnTongSoMuoi: number;
-  xtnMuoi: ItemDetail[];
-  xuatTrongNam: ItemDetail[];
+  xtnMuoi: Array<ItemDetail>;
+  xuatTrongNam: Array<ItemDetail>;
   tkcnTongSoMuoi: number;
   tenDonVi: string;
   maDonVi: string;
@@ -17,4 +17,5 @@ export class KeHoachMuoi {
   donViId: number;
   id: number;
   nhapTrongNam: string;
+  isEdit: boolean;
 }

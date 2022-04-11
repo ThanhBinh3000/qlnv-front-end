@@ -51,7 +51,7 @@ export class KeHoachLuaChonNhaThauVatTuComponent implements OnInit {
       });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
+      if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -156,7 +156,7 @@ export class KeHoachLuaChonNhaThauVatTuComponent implements OnInit {
     };
     this.totalRecord = 10;
     let res = await this.danhSachDauThauService.timKiem(body);
-    if (res.msg == 'Thành công') {
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;

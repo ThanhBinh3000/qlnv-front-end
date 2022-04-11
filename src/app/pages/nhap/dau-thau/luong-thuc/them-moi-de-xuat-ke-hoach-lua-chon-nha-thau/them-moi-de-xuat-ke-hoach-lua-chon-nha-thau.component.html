@@ -194,7 +194,7 @@
                           Tổng mức đầu tư
                         </nz-form-label>
                         <nz-input-number nz-input [(ngModel)]="thongTinChungDXKHLCNT.tongMucDt" [nzMin]="1"
-                          [nzMax]="100000000000000000000" [nzStep]="1" [nzSize]="'small'"
+                          [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                           [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
                         </nz-input-number>
                       </nz-form-item>

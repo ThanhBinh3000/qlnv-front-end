@@ -27,6 +27,7 @@ import {
 } from './../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
+import { Globals } from 'src/app/shared/globals';
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 interface ItemData {
@@ -95,7 +96,8 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,
     private fb: FormBuilder,
-  ) { }
+    public globals: Globals,
+  ) {}
 
   startEdit(index: number): void {
     this.dsGoiThauClone[index].isEdit = true;
