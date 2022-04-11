@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="cangiua group-button-search">
-          <button nz-button class="search__button--search" (click)="searchByTab()">
+          <button nz-button class="search__button--search" (click)="search()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -43,8 +43,8 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container mt-16">
           <nz-tab [nzTitle]="'Thông tin phương án tổng hợp KHLCNT trình Tổng cục'" class="tt-chung__container"
-            (nzClick)="tabSelected = 'phuong-an-tong-hop'">
-            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            (nzClick)="selectTabData('phuong-an-tong-hop')">
+            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
@@ -64,28 +64,25 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                  <th width="45px">
                     <label nz-checkbox></label>
-                  </td>
-                  <td>10/03/2022</td>
-                  <td>2022</td>
-                  <td>QDPD CTKH_01</td>
-                  <td>Đấu thầu rộng rãi trong nước, qua mạng</td>
-                  <td>Một giai đoạn, Hai túi hồ sơ </td>
-                  <td>
-                    Hợp đồng trọn gói
-                  </td>
-                  <td>NSNN </td>
-                  <td>Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
-                    tại nam bộ</td>
-                  <td>Tổng cục đã duyệt</td>
-                  <td>
-                    <a (click)="redirectToChiTiet(1)">
+                  </th>
+                  <td>{{ convertDay(data.ngayTao) }}</td>
+                  <td>{{ data.namKhoach }}</td>
+                  <td></td>
+                  <td>{{ data.tenHthucLcnt }}</td>
+                  <td>{{ data.tenPthucLcnt }}</td>
+                  <td>{{ data.tenLoaiHdong }}</td>
+                  <td>{{ data.tenNguonVon }}</td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-center">
+                    <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a>
+                    <a (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -111,8 +108,8 @@
             </div>
           </nz-tab>
           <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp phương án'" class="tt-chung__container"
-            (nzClick)="tabSelected = 'danh-sach-tong-hop'">
-            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            (nzClick)="selectTabData('danh-sach-tong-hop')">
+            <nz-table #basicTableTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
@@ -126,15 +123,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Cục DTNN KV Vĩnh phú</td>
-                  <td>4</td>
-                  <td>DX_KHCNT_01</td>
-                  <td>10/03/2022</td>
-                  <td>Mua gạo dự trữ A </td>
-                  <td>2000</td>
-                  <td>42.000.000 </td>
+                <tr *ngFor="let data of basicTableTH.data; let i = index">
+                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                  <td>{{ data.tenDvi }}</td>
+                  <td>{{ data.soGthau }}</td>
+                  <td>{{ data.soDxuat }}</td>
+                  <td>{{ data.ngayDxuat }}</td>
+                  <td>{{ data.tenDuAn }}</td>
+                  <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                  <td>{{ data.tongTien | number: '1.0-1' }}</td>
                 </tr>
               </tbody>
             </nz-table>
@@ -157,8 +154,8 @@
             </div>
           </nz-tab>
           <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp phương án'" class="tt-chung__container"
-            (nzClick)="tabSelected = 'danh-sach-chua-tong-hop'">
-            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+            (nzClick)="selectTabData('danh-sach-chua-tong-hop')">
+            <nz-table #basicTableNoTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
@@ -172,15 +169,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Cục DTNN KV Vĩnh phú</td>
-                  <td>4</td>
-                  <td>DX_KHCNT_01</td>
-                  <td>10/03/2022</td>
-                  <td>Mua gạo dự trữ A </td>
-                  <td>2000</td>
-                  <td>42.000.000 </td>
+                <tr *ngFor="let data of basicTableNoTH.data; let i = index">
+                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                  <td>{{ data.tenDvi }}</td>
+                  <td>{{ data.soGthau }}</td>
+                  <td>{{ data.soDxuat }}</td>
+                  <td>{{ data.ngayDxuat }}</td>
+                  <td>{{ data.tenDuAn }}</td>
+                  <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                  <td>{{ data.tongTien | number: '1.0-1' }}</td>
                 </tr>
               </tbody>
             </nz-table>

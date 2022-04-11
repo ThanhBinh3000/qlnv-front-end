@@ -2,6 +2,11 @@ import { cloneDeep } from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { HelperService } from 'src/app/services/helper.service';
+import { ChiTietDuAn } from 'src/app/models/ChiTietDuAn';
+import { DonviService } from 'src/app/services/donvi.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'dialog-thong-tin-phu-luc-khlcnt',
@@ -14,28 +19,79 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
   tableExist: boolean = false;
   itemRow: any = {};
 
+  optionsDonVi: any[] = [];
+  inputDonVi: string = '';
+  optionsDonViShow: any[] = [];
+  selectedDonVi: any = {};
+
+  isEdit: boolean = false;
+
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
     private _modalRef: NzModalRef,
     private helperService: HelperService,
+    private donViService: DonviService,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
   ) { }
 
-  ngOnInit() {
-    if (!this.data) {
-      this.data = {};
-    }
-    this.dataTable = [
-      {
-        id: 1,
-        goiThau: 'Số 1',
-        diaDiem: 'Việt trì, Phú thọ',
-        soLuong: 1330,
-        donGia: 13020,
-        thanhTien: 17316600000,
+  async ngOnInit() {
+    this.spinner.show();
+    try {
+      if (this.data) {
+        this.isEdit = true;
+        this.dataTable = this.data.detail;
+        this.selectedDonVi.tenDvi = this.data.tenDvi;
+        this.selectedDonVi.maDvi = this.data.maDvi;
+        this.inputDonVi = this.data.tenDvi;
       }
-    ];
-    this.updateEditCache();
+      else {
+        this.data = { id: null };
+      }
+      await Promise.all([
+        this.loadDonVi(),
+      ]);
+      this.updateEditCache();
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDonVi() {
+    const res = await this.donViService.layTatCaDonVi();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  onInputDonVi(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.optionsDonViShow = [];
+    } else {
+      this.optionsDonViShow = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  async selectDonVi(donVi) {
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
   }
 
   ngAfterViewChecked(): void {
@@ -44,15 +100,17 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach(item => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    });
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(item => {
+        this.editCache[item.id] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
   }
 
-  cancelEdit(id: string): void {
+  cancelEdit(id: number): void {
     const index = this.dataTable.findIndex(item => item.id === id);
     this.editCache[id] = {
       data: { ...this.dataTable[index] },
@@ -60,7 +118,7 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
     };
   }
 
-  saveEdit(id: string): void {
+  saveEdit(id: number): void {
     const index = this.dataTable.findIndex(item => item.id === id);
     this.editCache[id].data.thanhTien = (this.editCache[id].data.soLuong ?? 0) * (this.editCache[id].data.donGia ?? 0);
     Object.assign(this.dataTable[index], this.editCache[id].data);
@@ -131,7 +189,21 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
     return sumVal;
   }
 
-  onCancel() {
+  handleOk() {
+    if (this.selectedDonVi) {
+      this.data.tenDvi = this.selectedDonVi.tenDvi;
+      this.data.maDvi = this.selectedDonVi.maDvi;
+    }
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.data.detail = this.dataTable;
+      this.data.soGthau = this.dataTable.length;
+      this.data.soLuong = this.dataTable.map(item => item.soLuong).reduce((prev, next) => prev + next);
+      this.data.tongTien = this.dataTable.map(item => item.thanhTien).reduce((prev, next) => prev + next);
+    }
+    this._modalRef.close(this.data);
+  }
+
+  handleCancel() {
     this._modalRef.close();
   }
 }

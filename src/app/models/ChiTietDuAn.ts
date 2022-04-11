@@ -13,5 +13,6 @@ export class ChiTietDuAn {
     tenDuAn: string;
     tenDvi: string;
     tongTien: number;
+    ghiChu: string;
     detail: Array<ChiTietGoiThau>;
 }
