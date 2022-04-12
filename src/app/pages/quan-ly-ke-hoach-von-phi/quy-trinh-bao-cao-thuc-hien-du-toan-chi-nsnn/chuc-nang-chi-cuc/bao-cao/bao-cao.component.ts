@@ -1588,10 +1588,10 @@ export class BaoCaoComponent implements OnInit {
   }
 
 
-  //show popup tu choi
-  pheDuyetChiTiet(mcn: string) {
+  //show popup tu choi dùng cho nut ok - not ok
+  pheDuyetChiTiet(mcn: string,maLoai:any) {
     if (mcn == OK) {
-      this.onSubmit(mcn, null);
+      this.pheDuyetBieuMau(mcn,maLoai, null);
     } else if (mcn == NOTOK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
@@ -1604,10 +1604,32 @@ export class BaoCaoComponent implements OnInit {
       });
       modalTuChoi.afterClose.subscribe(async (text) => {
         if (text) {
-          this.onSubmit(mcn, text);
+          this.pheDuyetBieuMau(mcn,maLoai, text);
         }
       });
     }
+  }
+
+  //call api duyet bieu mau
+  pheDuyetBieuMau(trangThai:any,maLoai:any,lyDo:string){
+    var idBieuMau:any  = this.baoCao.lstBCao.find((item)=> item.maLoai==maLoai).id;
+    const requestPheDuyetBieuMau = {
+      id: idBieuMau,
+      trangThai: trangThai,
+      lyDoTuChoi: lyDo,
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
+          this.getDetailReport();
+        }else{
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.spinner.hide();
   }
 
   //lay ra chi muc chi tung dong
