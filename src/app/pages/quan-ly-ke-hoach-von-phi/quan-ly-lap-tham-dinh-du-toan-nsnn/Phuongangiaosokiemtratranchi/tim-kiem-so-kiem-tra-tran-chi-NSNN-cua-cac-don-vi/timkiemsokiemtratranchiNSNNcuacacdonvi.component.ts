@@ -50,20 +50,20 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         this.donviTaos = res.data;
         console.log(this.donviTaos)
       }else{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
-
-
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.danhmuc.dmDonViNhan().subscribe(res =>{
         if(res.statusCode==0){
           this.listDvnhan= res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-
-
-  })
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 
   //get infor user
@@ -72,13 +72,12 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
       (data) => {
         if (data?.statusCode == 0) {
           this.donvitao = data?.data.dvql;
-
-          console.log(data)
         } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -119,9 +118,11 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           this.length = res.data.totalElements;
           this.listSogiaoTranChi = res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
 
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
 
