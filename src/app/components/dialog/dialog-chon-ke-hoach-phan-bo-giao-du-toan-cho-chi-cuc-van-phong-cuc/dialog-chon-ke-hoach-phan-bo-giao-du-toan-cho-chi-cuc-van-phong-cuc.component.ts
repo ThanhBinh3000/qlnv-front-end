@@ -6,11 +6,12 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
 
 @Component({
-  selector: 'dialog-chon-them-khoan-muc',
-  templateUrl: './dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component.html',
-  styleUrls: ['./dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component.scss'],
+  selector: 'app-dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc',
+  templateUrl: './dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component.html',
+  styleUrls: ['./dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component.scss']
 })
-export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnInit {
+export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent implements OnInit {
+
   @Input() danhSachKhoanMuc:any;
   khoanMucs: any = [];
 
@@ -78,4 +79,5 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   handleCancel() {
     this._modalRef.close();
   }
+
 }

@@ -79,20 +79,41 @@
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Quyết định BTC">
-                <input class="search__input" nz-input [(ngModel)]="qDinhBTC" />
+              <nz-descriptions-item nzTitle=" Căn cứ q/đ BTC">
+                <!-- <input class="search__input" nz-input [(ngModel)]="qDinhBTC" /> -->
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="qDinhBTC" formControlName="temp">
+                <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+              </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayNhap}}
+                {{ngayQdBTC}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
-                {{namBaoCaoHienHanh}}
+                {{nam}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Lần lập thứ">
-                {{lanLapThu}}
+              <nz-descriptions-item nzTitle="Người ký">
+                {{nguoiKyBTC}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ghi chú">
-                <input class="search__input" nz-input [(ngModel)]="qDinhBTC" />
+              <nz-descriptions-item nzTitle="Số quyết định">
+                {{soQd}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Ngày quyết định">
+                {{ngayQdTC}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Năm">
+                <input class="search__input" nz-input [(ngModel)]="nam" />
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Người ký">
+                {{nguoiKyTC}}
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC" formControlName="temp">
+                  <nz-option *ngFor="let item of nguoiKyTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                </nz-select>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Về việc" nzSpan="4">
+                <textarea  class="search__input" nz-input [(ngModel)]="veViec" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Ghi chú" nzSpan="4">
+                <textarea  class="search__input" nz-input [(ngModel)]="ghiChu" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
@@ -100,7 +121,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Lập dự toán chi ngân sách cho đơn vị'">
+          <nz-tab [nzTitle]="'Nhập quyết định của Tổng Cục và phân bổ cho các đơn vị'">
             <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
               <div nz-col nzSpan="6" >
                 <label class="search__label">Đ/v thực hiện:</label>
@@ -117,12 +138,16 @@
                 <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
               </div>
               <div nz-col nzSpan="6">
+                <label class="search__label">Trạng thái</label>
+                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+              </div>
+              <div nz-col nzSpan="6">
                 <div class="search__label">Đơn vị Tiền:
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                  <nz-option nzValue="1" nzLabel="1.000 đồng"></nz-option>
+                  <nz-option nzValue="2" nzLabel="100.000 đồng"></nz-option>
+                  <nz-option nzValue="3" nzLabel="1.000.000 đồng"></nz-option>
+                  <nz-option nzValue="4" nzLabel="1.000.000.000 đồng"></nz-option>
                 </nz-select>
                 </div>
               </div>
@@ -266,6 +291,13 @@
             <div nz-col nzSpan="24">
               <label class="search__label">Lý do từ chối</label>
               <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Nơi nhận</label>
+              <!-- <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" /> -->
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="noiNhan" formControlName="temp">
+                  <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+              </nz-select>
             </div>
           </nz-tab>
         </nz-tabset>

@@ -11,22 +11,21 @@ import { Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from 'src/app/components/dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 export class ItemData {
-     id: any;
-     stt!: string;
-     ngayLap!: any;
-     maDvi!: string;
-     nam!: number;
-     maKhoanMuc!: string;
-     noiDung!: string;
-     maLoaiChi!: string;
-     phanBo!: number;
-     ngayGhiNhan!: any;
-     dieuChinh!: string;
-     ghiChu!: string;
-     checked!: boolean;
+  stt!: string;
+  maNdung!: string;
+  uocThucHienNam!: number;
+  duToanGiao2021!: number;
+  duToanDapBo!: number;
+  pBoChoDviTT!: number;
+  tong!: number;
+  checked!:boolean;
+  id!: any;
 }
+
 
 @Component({
   selector: 'app-tong-hop-lap-khoach-pbo-giao-dtoan-cua-dvi-trinh-tc',
@@ -88,6 +87,32 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
 
      fileList: NzUploadFile[] = [];
 
+     tongCong: ItemData = {
+      id: "",
+      stt: "",
+      maNdung: "",
+      uocThucHienNam: 0,
+      duToanDapBo: 0,
+      duToanGiao2021: 0,
+      pBoChoDviTT: 0,
+      tong: 0,
+      checked: true,
+    };
+    nam!: any;
+    noiDung!: any;
+    maCucDtnnKvucs: any = [];
+    khoanMucs: any = [];
+    vanBan!: any;
+    nguoiKy!: any;
+    lyDoTuChoi!: any;
+    ngayQdBTC!: any; // ngay qd btc
+    nguoiKyBTC!: any; // nguoi ky BTC
+    ngayQdTC!:any; // ngay qd tong cuc
+    nguoiKyTC!: any; // nguoi ky tai tong cuc
+    veViec!: any; // ve viec
+    qDinhBTCs: any = []; // danh sach qd cua BTC
+    nguoiKyTCs: any = [];
+    maKhoanMucs:any = [];
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
           return false;
@@ -118,6 +143,8 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
           private sanitizer: DomSanitizer,
           private userSerivce: UserService,
           private danhMucService: DanhMucHDVService,
+          private modal: NzModalService,
+
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -392,30 +419,30 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
           return temp;
      }
 
-     // them dong moi
-     addLine(id: number): void {
-          let item: ItemData = {
-               id: uuid.v4(),
-               stt: "",
-               ngayLap: this.ngayNhap,
-               maDvi: this.maDonViTao,
-               nam: this.namBcao,
-               maKhoanMuc: "",
-               noiDung: "",
-               maLoaiChi: "",
-               phanBo: 0,
-               ngayGhiNhan: "",
-               dieuChinh: "",
-               ghiChu: "",
-               checked: false,
-          }
+    //  // them dong moi
+    //  addLine(id: number): void {
+    //       let item: ItemData = {
+    //            id: uuid.v4(),
+    //            stt: "",
+    //            ngayLap: this.ngayNhap,
+    //            maDvi: this.maDonViTao,
+    //            nam: this.namBcao,
+    //            maKhoanMuc: "",
+    //            noiDung: "",
+    //            maLoaiChi: "",
+    //            phanBo: 0,
+    //            ngayGhiNhan: "",
+    //            dieuChinh: "",
+    //            ghiChu: "",
+    //            checked: false,
+    //       }
 
-          this.lstCTietBCao.splice(id, 0, item);
-          this.editCache[item.id] = {
-               edit: true,
-               data: { ...item }
-          };
-     }
+    //       this.lstCTietBCao.splice(id, 0, item);
+    //       this.editCache[item.id] = {
+    //            edit: true,
+    //            data: { ...item }
+    //       };
+    //  }
 
      // xoa dong
      deleteById(id: any): void {
@@ -535,4 +562,65 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
           });
      }
 
+     addKmuc() {
+      // KHOANMUCLIST.forEach(item => item.status = false);
+      // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
+
+      var danhSach = this.khoanMucs
+
+      const modalIn = this.modal.create({
+           nzTitle: 'Danh sách khoản mục',
+           nzContent: DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
+           nzMaskClosable: false,
+           nzClosable: false,
+           nzWidth: '600px',
+           nzFooter: null,
+           nzComponentParams: {
+                danhSachKhoanMuc: danhSach
+           },
+      });
+      modalIn.afterClose.subscribe((res) => {
+           if (res) {
+             this.maKhoanMucs.forEach(e => {
+               if(res.id == e.id){
+                   return res.id = e.tenDm
+               }
+             })
+
+            this.lstCTietBCao.push({
+              id: uuid.v4(),
+              stt: "I",
+              maNdung: res.id,
+              uocThucHienNam: 0,
+              duToanGiao2021: 0,
+              duToanDapBo: 0,
+              pBoChoDviTT: 0,
+              tong: 0,
+              checked: false,
+         });
+                res.danhSachKhoanMuc.forEach(item => {
+                     if (item.status) {
+                          this.lstCTietBCao.push({
+                               id: uuid.v4(),
+                               stt: "",
+                               maNdung: item.tenDm,
+                               uocThucHienNam: 0,
+                               duToanGiao2021: 0,
+                               duToanDapBo: 0,
+                               pBoChoDviTT: 0,
+                               tong: 0,
+                               checked: false,
+                          });
+                     }
+                })
+                this.updateEditCache();
+           }
+      });
+  }
+
+     changeTong(id: string): void {
+      let index = this.lstCTietBCao.findIndex(item => item.id == id);
+      // this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
+      // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
+    }
 }
