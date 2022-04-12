@@ -15,6 +15,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { parse } from 'querystring';
 
 
 export class ItemData {
@@ -59,13 +60,13 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao: any;         // nam bao cao
+  namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
+  namBcao!: any;         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
   maBaoCao!: string;                          // ma bao cao
-  namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
@@ -139,9 +140,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.validateForm = this.fb.group({
-      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-    });
+    console.log(this.namBaoCaoHienHanh);
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -191,6 +190,9 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
+      console.log(this.namBaoCaoHienHanh);
+
     }
 
     this.getStatusButton();
@@ -260,6 +262,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     }
   }
 
+  tinhNam(){
+
+    this.namBcao = this.namBaoCaoHienHanh+1;
+  }
   getStatusButton(){
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
