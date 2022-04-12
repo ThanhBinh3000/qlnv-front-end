@@ -158,7 +158,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       this.maLoaiBacao != null &&
       this.nam != null
     ) {
-      this.calltonghop();
+      await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
       this.maDonViTao = this.userInfo?.dvql;
     } else {
@@ -166,7 +166,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       this.nguoiNhap = this.userInfo?.username;
       this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+      this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
@@ -281,18 +281,21 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
+      maDvi: this.maDonViTao,
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM,
       namBcao: this.namBcao,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (data) => {
+        async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }

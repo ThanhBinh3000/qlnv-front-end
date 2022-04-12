@@ -24,32 +24,27 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-        <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6">
-            <label class="search__label">Năm</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
-          </div>
-          <div nz-col nzSpan="3"></div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="3"></div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đơn vị lập</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="3"></div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Số quyết định</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+      <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <div class="widget-body">
+          <div>
+            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+              <nz-descriptions-item nzTitle="Năm">
+                <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+              </nz-descriptions-item>
+              <nz-descriptions-item ></nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Trạng thái">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" formControlName="temp">
+                  <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                </nz-select>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Từ ngày lập">
+                <nz-date-picker [(ngModel)]="searchFilter.ngayTaoTu" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+              </nz-descriptions-item>
+              <nz-descriptions-item ></nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Đến ngày" >
+                <nz-date-picker [(ngModel)]="searchFilter.ngayTaoDen" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+              </nz-descriptions-item>
+            </nz-descriptions>
           </div>
         </div>
       </nz-card>
@@ -58,26 +53,36 @@
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th width="130px">STT</th>
-              <th width="175px">Số quyết định</th>
-              <th width="175px">Ngày quyết định</th>
-              <th width="175px">Đơn vị lập</th>
+              <th width="130px">Chọn</th>
+              <th width="175px">Năm</th>
+              <th width="175px">Ngày lập</th>
+              <th width="175px">Nội dung</th>
               <th width="175px" class="text-center">Trạng thái</th>
+              <th></th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{ item.soQd }}</td>
-              <td>{{item.ngayTao}}</td>
-              <td>{{item.tenDvi}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td>
+                <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td>{{ item.nam }}</td>
+              <td>{{item.ngayTaoTu}}</td>
+              <td>{{item.ngayTaoDen}}</td>
+              <td class="text-center">{{item.noiDung}}</td>
+              <td class="text-center">{{item.trangThai}}</td>
               <td class="text-center">
+                <a routerLink="../{{url}}/{{ item.id }}">
+                  xem
+                </a>
+              </td >
+              <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
                 sửa
               </td>
-              <td class="text-center">
+              <td class="text-center" (click)="redirectThongTinTimKiem()">
                 Xóa
               </td>
             </tr>

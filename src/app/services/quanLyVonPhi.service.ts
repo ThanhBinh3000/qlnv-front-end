@@ -64,8 +64,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-      //'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
 
@@ -101,15 +101,16 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      'http://192.168.1.103:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
   }
 
   trinhDuyetService1(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
+      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+       'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
       // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
@@ -119,7 +120,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan
   trinhDuyetGiaoService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/them-moi',
       request,
     );
   }
@@ -136,17 +138,17 @@ export class QuanLyVonPhiService extends BaseService {
   // upload list
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/cap-nhat',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      'http://192.168.1.103:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
 
   updatelist1(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
 
-      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
+       'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
