@@ -13,19 +13,19 @@
                 {{objChitiet?.nguoiTao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
-                {{objChitiet?.tenDviTao}}
+                {{getUnitName(objChitiet?.maDviTao)}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Mã Phương án">
                 {{objChitiet?.maPa}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Nơi nhận">
-                {{objChitiet?.tenDviNhan}}
+                {{getUnitName(objChitiet?.maDviNhan)}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Mã giao">
                 {{objChitiet?.maGiao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
-                {{objChitiet?.tenTrangThai}}
+                {{getStatusName(objChitiet?.trangThai)}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm hiện tại (N)">
                 {{objChitiet?.namGiao}}
@@ -56,6 +56,12 @@
                   <th>Nội dung</th>
                   <th>Nhóm</th>
                   <th>Số được giao</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>Tổng số</th>
+                  <th></th>
+                  <th>{{tongso}}</th>
                 </tr>
               </thead>
               <tbody>

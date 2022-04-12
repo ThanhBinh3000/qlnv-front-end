@@ -82,6 +82,7 @@
                   <th>Trạng thái</th>
                   <th>Đơn vị tạo</th>
                   <th>Đơn vị nhận</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -94,7 +95,7 @@
                   <td>{{item.tenTrangThai}}</td>
                   <td>{{item.tenDviTao}}</td>
                   <td>{{item.tenDviNhan}}</td>
-                  <td><a routerLink="so-kiem-tra-tran-tri-nsnn/{{item.maGiao}}">xem</a> </td>
+                  <td><a routerLink="../so-kiem-tra-tran-tri-nsnn/{{item.maGiao}}">xem</a> </td>
                 </tr>
                 <tr *ngIf="listSogiaoTranChi.length==0" style="text-align: center;">
                     <td colspan="9"> Không có dữ liệu</td>
