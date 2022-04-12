@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?cqcegt');
-  src:  url('fonts/htvbdh.eot?cqcegt#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?cqcegt') format('truetype'),
-    url('fonts/htvbdh.woff?cqcegt') format('woff'),
-    url('fonts/htvbdh.svg?cqcegt#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?3xyrfz');
+  src:  url('fonts/htvbdh.eot?3xyrfz#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?3xyrfz') format('truetype'),
+    url('fonts/htvbdh.woff?3xyrfz') format('woff'),
+    url('fonts/htvbdh.svg?3xyrfz#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_baocao2:before {
+  content: "\eaf3";
+}
+.htvbdh_tcdt_chitieukehoachnam:before {
+  content: "\eaf4";
+}
+.htvbdh_tcdt_dieuchinhkehoachnam:before {
+  content: "\eaf5";
+}
 .htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet:before {
   content: "\eaf1";
 }

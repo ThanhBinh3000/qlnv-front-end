@@ -3,11 +3,10 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { NHAP_ROUTE_LIST } from './nhap.constant';
-import { NzPlacementType } from 'ng-zorro-antd/dropdown';
-import { timeout } from 'rxjs/operators';
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -16,9 +15,17 @@ import { timeout } from 'rxjs/operators';
 export class NhapComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
-  constructor() { }
+  routerUrl: string = "";
 
-  ngOnInit(): void { }
+  constructor(
+    private router: Router,
+  ) { }
+
+  ngOnInit(): void {
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
+  }
 
   ngAfterViewInit() {
     if (

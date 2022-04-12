@@ -33,7 +33,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: MAIN_ROUTES.danhmuc,
+        path: MAIN_ROUTES.danhMuc,
         loadChildren: () =>
           import('../../pages/danh-muc/danh-muc.module').then(
             (m) => m.DanhMucModule,
@@ -47,4 +47,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MainRoutingModule {}
+export class MainRoutingModule { }

@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="canphai phai">
-          <button class="btn btn-main btn-sm waves-effect waves-light">
+          <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
@@ -21,7 +21,6 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </button>
-
         </div>
       </div>
     </div>
@@ -44,7 +43,7 @@
                 <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày ký </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
                   <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                    nzPlaceHolder="Ngày ký">
+                    nzPlaceHolder="Ngày ký" [(ngModel)]="chiTiet.ngayKy">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -53,8 +52,8 @@
               <nz-form-item>
                 <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                    nzPlaceHolder="Ngày hiệu lực">
+                  <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hiệu lực"
+                    [(ngModel)]="chiTiet.ngayHluc">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -135,8 +134,8 @@
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Thời gian thực hiện từ ngày
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                        nzPlaceHolder="Ngày hiệu lực">
+                      <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                        [(ngModel)]="startValue" nzPlaceHolder="Thời gian thực hiện từ ngày">
                       </nz-date-picker>
                     </nz-form-control>
                   </nz-form-item>
@@ -145,8 +144,8 @@
                   <nz-form-item>
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Đến ngày</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-date-picker #endDatePicker [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                        nzPlaceHolder="Ngày hiệu lực">
+                      <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                        [(ngModel)]="endValue" nzPlaceHolder="Đến ngày">
                       </nz-date-picker>
                     </nz-form-control>
                   </nz-form-item>

@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy, Component,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -23,8 +25,12 @@ import { TAB_SELECTED } from './../../../../ke-hoach/thong-tin-chi-tieu-ke-hoach
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
+  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   tabSelected: string = TAB_SELECTED.luongThuc;
   tab = TAB_SELECTED;
+
+  startValue: Date | null = null;
+  endValue: Date | null = null;
 
   inputDonVi: string = '';
   options: any[] = [];
@@ -69,6 +75,20 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.endValue) {
+      return false;
+    }
+    return startValue.getTime() > this.endValue.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.startValue) {
+      return false;
+    }
+    return endValue.getTime() <= this.startValue.getTime();
+  };
 
   async loadDonVi() {
     const res = await this.donViService.layTatCaDonVi();
@@ -151,5 +171,9 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
       if (text) {
       }
     });
+  }
+
+  async save() {
+
   }
 }
