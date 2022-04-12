@@ -29,13 +29,13 @@ const routes: Routes = [
         './tim-kiem/tim-kiem.module'
       ).then((m) => m.TimKiemModule),
   },
-  {
-    path:'lap-de-nghi-cap-von-mua-vat-tu-thiet-bi',
-    loadChildren: () => 
-    import(
-      './lap-de-nghi-cap-von-mua-vat-tu-thiet-bi/lap-de-nghi-cap-von-mua-vat-tu-thiet-bi.module'
-    ).then((m) => m.LapDeNghiCapVonMuaVatTuThietBiModule),
-  },
+  // {
+  //   path:'lap-de-nghi-cap-von-mua-vat-tu-thiet-bi',
+  //   loadChildren: () => 
+  //   import(
+  //     './lap-de-nghi-cap-von-mua-vat-tu-thiet-bi/lap-de-nghi-cap-von-mua-vat-tu-thiet-bi.module'
+  //   ).then((m) => m.LapDeNghiCapVonMuaVatTuThietBiModule),
+  // },
   {
     path : 'tim-kiem-danh-sach-de-nghi-cap-von',
     loadChildren: () =>

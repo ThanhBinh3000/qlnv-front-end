@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../Utility/utils";
+import { TRANGTHAITIMKIEM, Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -17,57 +17,44 @@ import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_c
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
-export class ItemData {
-    id!: any;
-    checked!: boolean;
-    ngayLap!: string;
-    maDvi!: string;
-    soQd!: string;
-    ngayQd!: string;
-    canCuChiTieuKh!: string;
-    canCuHopDong!: string;
-    trangThai!: string;
-}
-
 @Component({
     selector: 'app-danh-sach-cong-can-de-nghi-cap-von',
     templateUrl: './danh-sach-cong-can-de-nghi-cap-von.component.html',
     styleUrls: ['./danh-sach-cong-can-de-nghi-cap-von.component.scss'],
 })
 
-
-
 export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
-    donVis: any = [];                            //don vi se hien thi
+    lstCTietBCao: any = [];                         // chi tiet nooi dung tim kiem
+    totalElements: number = 0;
+    totalPages: number = 0;
+    trangThais: any = TRANGTHAITIMKIEM;
+    userInfo!: any;
 
-    tuNgay: string;                              //tim kiem tu ngay
-    denNgay: string;                             //tim kiem den ngay
-    tenDvi: string;
-    tenTrangThai: string;
-    trangThai: string = "6";
-    tenPhanLoai: string = "Đề nghị cấp vốn mua vật tư";
-    lyDoTuChoi: string;
-    nam: number;                                 //nam tim kiem
-    maDvi: string;                               //id don vi tim kiem
-    capDvi: string;
-    lstCTietBCao: ItemData[] = [];                      // list chi tiet bao cao
-    userInfo: any;
-    status: boolean = false;                     // trang thai an/ hien cua cot noi dung
-    userName: any;                              // ten nguoi dang nhap
+    phanLoais: any[] = [
+        {
+            id: 1,
+            tenDm: "Đề nghị cấp vốn mua vật tư",
+        },
+        {
+            id: 2,
+            tenDm: "Đề nghị cấp vốn mua lương thực muối",
+        }
+    ];
 
-    //dung de phan trang
+    searchFilter = {
+        tuNgay: "",
+        denNgay: "",
+        trangThai: "",
+        maDviTao: "",
+        phanLoai: 1,
+    }
+
     pages = {
         size: 10,
         page: 1,
     };
-    totalPages!: number;
-    totalElements!: number;
 
-    statusBtnDuyet: boolean;
-    statusBtnPheDuyet: boolean;
-    statusBtnTuChoi: boolean;
-    statusBtnTaoMoi: boolean;
-
+    donVis: any = [];                            //don vi se hien thi
 
     constructor(private router: Router,
         private routerActive: ActivatedRoute,
@@ -75,55 +62,37 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
         private sanitizer: DomSanitizer,
-        private userSerivce: UserService,
+        private userService: UserService,
         private notification: NzNotificationService,
         private danhMucService: DanhMucHDVService,
         private modal: NzModalService,
     ) {
     }
 
-
     async ngOnInit() {
-        let userName = this.userSerivce.getUserName();
-        let userInfo: any = await this.getUserInfo(userName); //get user info
-        this.maDvi = userInfo?.dvql;
-        const utils = new Utils();
-        this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
-        this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
-        this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
-        this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
-        //lay danh sach danh muc don vi
-        // await this.danhMucService.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //             this.donVis.forEach(e => {
-        //                 if (e.maDvi == this.maDvi) {
-        //                     this.capDvi = e.capDvi;
-        //                 }
-        //             })
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, data?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //     }
-        // );
-        // if (this.capDvi == '3') {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
+        let userName = this.userService.getUserName();
+        await this.getUserInfo(userName);
+        this.searchFilter.maDviTao = this.userInfo?.dvql;
 
-        this.tenDvi = this.getUnitName();
-        this.tenTrangThai = this.getStatusName(this.trangThai);
+        //lay danh sach danh muc don vi
+        await this.danhMucService.dMDonVi().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.donVis = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
         this.spinner.hide();
     }
 
     //get user info
     async getUserInfo(username: string) {
-        let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
+        await this.userService.getUserInfo(username).toPromise().then(
             (data) => {
                 if (data?.statusCode == 0) {
                     this.userInfo = data?.data
@@ -136,53 +105,52 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
-        return userInfo;
     }
 
-    // chuc nang check role
-    onSubmit(mcn: String, lyDoTuChoi: string) {
-        this.lstCTietBCao.forEach(item => {
-            if (item.checked) {
-                const requestGroupButtons = {
-                    id: item.id,
-                    maChucNang: mcn,
-                    lyDotuChoi: lyDoTuChoi,
-                };
-                this.spinner.show();
-                this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
-                    (data) => {
-                        if (data.statusCode == 0) {
-                            //this.getDetailReport();
-                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                        } else {
-                            this.notification.error(MESSAGE.ERROR, data?.msg);
-                        }
-                    },
-                    err => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    }
-                );
-                this.spinner.hide();
-            }
-        })
-    }
+    // // chuc nang check role
+    // onSubmit(mcn: String, lyDoTuChoi: string) {
+    //     this.lstCTietBCao.forEach(item => {
+    //         if (item.checked) {
+    //             const requestGroupButtons = {
+    //                 id: item.id,
+    //                 maChucNang: mcn,
+    //                 lyDotuChoi: lyDoTuChoi,
+    //             };
+    //             this.spinner.show();
+    //             this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
+    //                 (data) => {
+    //                     if (data.statusCode == 0) {
+    //                         //this.getDetailReport();
+    //                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+    //                     } else {
+    //                         this.notification.error(MESSAGE.ERROR, data?.msg);
+    //                     }
+    //                 },
+    //                 err => {
+    //                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //                 }
+    //             );
+    //             this.spinner.hide();
+    //         }
+    //     })
+    // }
 
-    tuChoi(mcn: string) {
-        const modalTuChoi = this.modal.create({
-          nzTitle: 'Từ chối',
-          nzContent: DialogTuChoiComponent,
-          nzMaskClosable: false,
-          nzClosable: false,
-          nzWidth: '900px',
-          nzFooter: null,
-          nzComponentParams: {},
-        });
-        modalTuChoi.afterClose.subscribe(async (text) => {
-          if (text) {
-            this.onSubmit(mcn, text);
-          }
-        });
-      }
+    // tuChoi(mcn: string) {
+    //     const modalTuChoi = this.modal.create({
+    //         nzTitle: 'Từ chối',
+    //         nzContent: DialogTuChoiComponent,
+    //         nzMaskClosable: false,
+    //         nzClosable: false,
+    //         nzWidth: '900px',
+    //         nzFooter: null,
+    //         nzComponentParams: {},
+    //     });
+    //     modalTuChoi.afterClose.subscribe(async (text) => {
+    //         if (text) {
+    //             this.onSubmit(mcn, text);
+    //         }
+    //     });
+    // }
 
 
     // call chi tiet bao cao
@@ -190,25 +158,21 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
         this.spinner.show();
 
         let request = {
-            maDvi: this.maDvi,
-            ngayTaoTu: this.datePipe.transform(this.tuNgay, 'dd/MM/yyyy',),
-            ngayTaoDen: this.datePipe.transform(this.denNgay, 'dd/MM/yyyy',),
-            namHienHanh: this.nam,
+            maDvi: this.searchFilter.maDviTao,
+            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+            namHienHanh: new Date().getFullYear(),
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
             },
-            trangThai: this.trangThai,
+            trangThai: this.searchFilter.trangThai,
         }
 
         this.quanLyVonPhiService.timkiem325(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.lstCTietBCao = data.data.content;
-                    this.lstCTietBCao.forEach(e => {
-                        e.ngayLap = this.datePipe.transform(e.ngayLap, Utils.FORMAT_DATE_STR);
-                        e.ngayQd = this.datePipe.transform(e.ngayQd, Utils.FORMAT_DATE_STR);
-                    });
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
 
@@ -230,10 +194,10 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
         this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     }
 
-    // lay ten don vi tao
-    getUnitName() {
-        return this.donVis.find(item => item.maDvi == this.maDvi)?.tenDvi;
-    }
+    // // lay ten don vi tao
+    // getUnitName() {
+    //     return this.donVis.find(item => item.maDvi == this.maDvi)?.tenDvi;
+    // }
 
     // lay ten trang thai
     getStatusName(trangThaiBanGhi: string) {
@@ -241,8 +205,18 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
         return utils.getStatusName(trangThaiBanGhi);
     }
 
+    taoMoi(){
+        
+    }
+
     redirectChiTieuKeHoachNam() {
         this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    }
+
+    xoaDieuKien(){
+        this.searchFilter.tuNgay = null;
+        this.searchFilter.denNgay = null;
+        this.searchFilter.trangThai = null;
     }
 
     //doi so trang
