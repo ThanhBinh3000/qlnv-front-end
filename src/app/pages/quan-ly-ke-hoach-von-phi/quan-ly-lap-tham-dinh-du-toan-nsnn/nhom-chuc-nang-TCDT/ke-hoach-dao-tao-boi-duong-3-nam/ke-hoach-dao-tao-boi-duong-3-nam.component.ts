@@ -57,7 +57,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N;                // nam bao cao
-  maDviTien: string = "";                   // ma don vi tien
+  maDviTien: string = "01";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -318,9 +318,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       idFileDinhKem: listFile,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao = "01",
-      maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = "01",
+      maDvi: this.maDonViTao ,
+      maDviTien: this.maDviTien ,
+      maLoaiBcao: QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh,
       namHienHanh: this.namBaoCaoHienHanh,
     };

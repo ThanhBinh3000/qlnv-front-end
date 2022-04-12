@@ -217,7 +217,7 @@
                     <td>{{ data.tenDan }}</td>
                     <td>
                       <div *ngFor="let item of maLoaiKhoachs">
-                        <div *ngIf="item.id == data.maKhoach">
+                        <div *ngIf="item.id == data.maLoaiKhoach">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -231,7 +231,7 @@
                     </td>
                     <td>
                       <div *ngFor="let item of maDdiemXdungs">
-                        <div *ngIf="item.id == data.maDdiemXd">
+                        <div *ngIf="item.id == data.maDdiemXdung">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -291,7 +291,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
-                        [(ngModel)]="editCache[data.id].data.maKhoach">
+                        [(ngModel)]="editCache[data.id].data.maLoaiKhoach">
                         <nz-option *ngFor="let item of maLoaiKhoachs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -303,7 +303,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa điểm xây dựng"
-                        [(ngModel)]="editCache[data.id].data.maDdiemXd">
+                        [(ngModel)]="editCache[data.id].data.maDdiemXdung">
                         <nz-option *ngFor="let item of maDdiemXdungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

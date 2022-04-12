@@ -15,9 +15,9 @@ import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
   tenDan!:string;
-  maKhoach!:string;
+  maLoaiKhoach!:string;
   maKhoiDan!:string;
-  maDdiemXd!:string;
+  maDdiemXdung!:string;
   ddiemMoTk!:string;
   maSoDan!:string;
   maNganhKte!:string;
@@ -208,7 +208,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    
+
     this.getStatusButton()
     //get danh muc noi dung
     this.danhMucService.dMLoaiKeHoach().subscribe(
@@ -344,7 +344,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh,
     };
@@ -478,9 +478,9 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDan:"",
-      maKhoach:"",
+      maLoaiKhoach:"",
       maKhoiDan:"",
-      maDdiemXd:"",
+      maDdiemXdung:"",
       ddiemMoTk:"",
       maSoDan:"",
       maNganhKte:"",

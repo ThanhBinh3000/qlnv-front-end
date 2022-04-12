@@ -7,6 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { MESSAGE } from '../../../../../constants/message';
+import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-danh-sach-bao-cao',
@@ -40,11 +41,12 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
   searchFilter = {
     nam: "",
-    tuNgay: "",
-    denNgay: "",
+    ngayTaoTu: "",
+    ngayTaoDen: "",
     maBaoCao: "",
     donViTao: "",
     loaiBaoCao: "",
+    trangThai: "",
   };
   pages = {
     size: 10,
@@ -53,6 +55,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
   donViTaos: any = [];
   baoCaos: any = [];
   allChecked: any;
+  trangThais: any = TRANGTHAITIMKIEM;
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -115,8 +119,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
       maDvi: this.searchFilter.donViTao,
       maLoaiBcao: this.searchFilter.loaiBaoCao,
       namBcao: this.searchFilter.nam,
-      ngayTaoDen: this.searchFilter.tuNgay,
-      ngayTaoTu: this.searchFilter.denNgay,
+      ngayTaoDen: this.searchFilter.ngayTaoDen,
+      ngayTaoTu: this.searchFilter.ngayTaoTu,
       paggingReq: {
         limit: this.pages.size,
         page: this.pages.page,

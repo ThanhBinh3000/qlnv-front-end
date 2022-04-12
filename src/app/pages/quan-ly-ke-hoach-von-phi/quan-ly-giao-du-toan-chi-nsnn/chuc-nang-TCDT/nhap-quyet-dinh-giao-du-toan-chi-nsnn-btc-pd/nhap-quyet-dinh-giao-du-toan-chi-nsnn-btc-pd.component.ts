@@ -75,15 +75,20 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
   listIdFiles: string;                        // id file luc call chi tiet
-  tongCong: ItemData = {
-    id: "",
-    stt: "",
-    maNdung: "",
-    nguonNSNN: 0,
-    nguonKhac: 0,
-    tong: 0,
-    checked: true,
-  };
+  // tongCong: ItemData = {
+  //   id: "",
+  //   stt: "",
+  //   maNdung: "",
+  //   nguonNSNN: 0,
+  //   nguonKhac: 0,
+  //   tong: 0,
+  //   checked: true,
+  // };
+
+  tongCong!: number;
+  tongCongNguonNSNN!: number  ;
+  tongCongNguonKhac!: number ;
+
     khoanMucs: any = [];
 
   allChecked = false;                         // check all checkbox
@@ -97,6 +102,13 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     return false;
   };
   maKhoanMucs: any = [];
+  loaiQd!: any;
+  lyDoTuChoi!: any;
+  maQdCha!: any;
+  nam!: any;
+  noiQd!: any;
+  tenDvi!: any;
+  veViec!: any;
 
 
   // upload file
@@ -107,7 +119,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // }
 
   handleUpload(): void {
-    debugger
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
       this.lstFile.push({ id: id, fileName: file?.name });
@@ -304,15 +315,22 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      // maDvi: this.maDonViTao,
+      loaiQd: this.loaiQd = "1",
+      lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      ngayQd: this.ngayQd,
-      noiQd: "12",
+      maDviTien: "01",
+      maNguoiKy: this.nguoiKy,
+      maQdCha: this.maQdCha,
+      nam: this.nam,
+      ngayQD: this.ngayQd,
+      noiDung: "1",
+      noiQd: this.noiQd,
       soQd: this.soQd,
-      trangThai: this.trangThaiBanGhi,
+      tenDvi: this.tenDvi,
+      trangThai: "1",
       vanBan: this.vanBan,
+      veViec: this.veViec,
+      ghiChu: this.ghiChu,
     };
     //call service them moi
     this.spinner.show();
@@ -601,8 +619,10 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
          if (res) {
            this.maKhoanMucs.forEach(e => {
              if(res.id == e.id){
-                 return res.id = e.tenDm
-             }
+                 return res.id = e.thongTin
+
+                }
+                console.log(res);
            })
 
           this.lstCTietBCao.push({
@@ -618,8 +638,8 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
                    if (item.status) {
                         this.lstCTietBCao.push({
                              id: uuid.v4(),
-                             stt: "",
-                             maNdung: item.tenDm,
+                             stt: item.tenDm,
+                             maNdung: item.thongTin,
                              nguonKhac: 0,
                              nguonNSNN: 0,
                              tong: 0,
@@ -635,8 +655,8 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   changeTong(id: string): void {
     let index = this.lstCTietBCao.findIndex(item => item.id == id);
     this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
-    // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
+    // this.lstCTietBCao.forEach(e => {
+    //   this.editCache[id].data.tong = e[index].tong;
+    // })
   }
-
-
 }
