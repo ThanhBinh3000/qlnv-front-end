@@ -649,7 +649,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
         }
-
+        this.updateEditCache();
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -675,5 +675,9 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       this.lstCTietBCao[index].tcongN2 += item.n2;
       this.lstCTietBCao[index].tcongN3 += item.n3;
     })
+  }
+
+  dong(){
+    this.location.back();
   }
 }

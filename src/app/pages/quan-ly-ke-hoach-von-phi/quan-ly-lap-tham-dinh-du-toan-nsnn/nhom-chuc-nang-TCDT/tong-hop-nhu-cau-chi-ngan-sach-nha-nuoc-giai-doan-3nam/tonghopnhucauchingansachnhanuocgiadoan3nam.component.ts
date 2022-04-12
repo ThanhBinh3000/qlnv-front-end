@@ -563,14 +563,15 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
     }
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
+          console.log(res);
             this.lstCTietBCao = res.data;
             // this.namBaoCao = this.namBcao;
             this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-
-            this.namBcaohienhanh = this.namBcaohienhanh
+            this.updateEditCache();
+            
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }

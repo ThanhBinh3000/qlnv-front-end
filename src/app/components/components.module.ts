@@ -81,6 +81,7 @@ import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialo
 import { DialogThemVtuTbiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-them-vtu-tbi/dialog-them-vtu-tbi.component';
 import { DialogMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-luong-thuc-muoi/dialog-mua-luong-thuc-muoi.component';
 import { DialogMuaHangDtqgComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-hang-dtqg/dialog-mua-hang-dtqg.component';
+import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from './dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
 @NgModule({
   declarations: [
     // components
@@ -102,6 +103,7 @@ import { DialogMuaHangDtqgComponent } from './dialog/dialog-quan-ly-ke-hoach-cap
     DialogPhuongAnTrinhTongCucComponent,
     DialogThongTinPhuLucHopDongMuaComponent,
     DialogThemBienbanNghiemThuKeLotComponent,
+    DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
     //pipes
     FilterPipe,
 
