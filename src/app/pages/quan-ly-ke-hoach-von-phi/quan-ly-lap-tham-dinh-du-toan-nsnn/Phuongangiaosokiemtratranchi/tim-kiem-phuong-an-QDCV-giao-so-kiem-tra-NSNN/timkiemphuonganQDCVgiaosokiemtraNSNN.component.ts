@@ -133,7 +133,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         str:null,
         trangThai:this.trangthai,
         paggingReq:{
-            limit: 20,
+            limit: 10,
             page: 1
         }
     }
