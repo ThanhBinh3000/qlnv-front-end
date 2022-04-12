@@ -121,7 +121,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           private danhMucService: DanhMucHDVService,
           private location: Location,
      ) {
-          this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+          this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
      }
 
 
@@ -141,7 +141,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           ) {
                await this.calltonghop();
                this.nguoiNhap = this.userInfo?.username;
-               this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+               this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
                this.maDonViTao = this.userInfo?.dvql;
                this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
                     (data) => {

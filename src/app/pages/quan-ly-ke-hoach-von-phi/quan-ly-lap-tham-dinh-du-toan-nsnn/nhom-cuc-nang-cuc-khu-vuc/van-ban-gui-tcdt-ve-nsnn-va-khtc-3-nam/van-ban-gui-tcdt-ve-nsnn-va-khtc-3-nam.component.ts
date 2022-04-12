@@ -50,18 +50,12 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      soVban!: string;
      ngayDuyetVban!: string;
      baoCaos: any = LOAIBAOCAO;
+     donVis: any = [];
      cucKhuVucs: any = [];
      lstBcao: any = [];
-     trangThais: any = [
-          {
-               id: "1",
-               tenDm: "Đang soạn",
-          },
-          {
-               id: "2",
-               tenDm: "Gửi đơn vị cấp trên",
-          },
-     ];
+
+     capDvi!: string;
+     status: boolean = false;
 
      url: string;
 
@@ -74,7 +68,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      maBaoCao!: string;                          // ma bao cao
      namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
      trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
-     maLoaiBaoCao: string = "26";                // nam bao cao
+     //maLoaiBaoCao: string = "26";                // nam bao cao
      newDate = new Date();
      kt: boolean;                   //
 
@@ -137,12 +131,34 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.maBaoCao = '';
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
+
+          if (this.trangThaiBanGhi == '6') this.status = true;
+          //get danh muc nhom chi
+          await this.danhMucService.dMDonVi().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         this.donVis = data.data;
+                         this.donVis.forEach(item => {
+                              if (item.maDvi == this.maDonViTao) {
+                                   this.capDvi = item.capDvi;
+                              }
+                         })
+                         this.cucKhuVucs = this.donVis.filter(item => item.capDvi = '2');
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+               }
+          );
+
           this.getStatusButton();
+
           this.danhMucService.dMucBcaoDuyet().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.lstBcao = data.data;
-                         console.log(this.lstBcao);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -151,23 +167,6 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-
-          //get danh muc nhom chi
-          this.danhMucService.dMDonVi().toPromise().then(
-               (data) => {
-                    if (data.statusCode == 0) {
-                         this.cucKhuVucs = data.data;
-                    } else {
-                         this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-               },
-               (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-               }
-          );
-
-          this.noiTao = this.getUnitName();
-          this.trangThai = this.getStatusName();
 
           this.spinner.hide();
      }
@@ -176,11 +175,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           const utils = new Utils();
           this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
           this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+          if ((this.capDvi == '2') && (this.trangThaiBanGhi == '1')) {
+               this.statusBtnGuiDVCT = false;
+          } else {
+               this.statusBtnGuiDVCT = true;
+          }
      }
 
      //get user info
@@ -225,17 +224,18 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           if (this.id == null) {
 
                this.quanLyVonPhiService.themMoiVban(request).toPromise().then(
-                    data => {
-                         console.log(data);
+                    async data => {
                          if (data.statusCode == 0) {
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                              this.id = data.data.id;
+                              await this.getDetailReport();
+                              this.getStatusButton();
                          } else {
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     },
                     err => {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                         console.log(err);
                     },
                );
           } else {
@@ -290,10 +290,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           await this.quanLyVonPhiService.ctietVban(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
-                         console.log(data);
                          this.chiTietBcaos = data.data.lstCtiet;
-                         console.log(this.chiTietBcaos);
-
+                         this.lstCTietBCao = [];
                          this.chiTietBcaos.forEach(item => {
                               let mm: ItemData = {
                                    id: item.id,
@@ -315,7 +313,6 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                               }
                               this.lstCTietBCao.push(mm);
                          })
-                         console.log(this.lstCTietBCao);
                          this.updateEditCache();
 
                          // set thong tin chung bao cao
@@ -425,7 +422,8 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
 
      // lay ten trang thai
      getStatusName() {
-          return this.trangThais.find(item => item.id == this.trangThaiBanGhi)?.tenDm;
+          const utils = new Utils();
+          return utils.getStatusName(this.trangThaiBanGhi);
      }
 
      // lay ten don vi tao

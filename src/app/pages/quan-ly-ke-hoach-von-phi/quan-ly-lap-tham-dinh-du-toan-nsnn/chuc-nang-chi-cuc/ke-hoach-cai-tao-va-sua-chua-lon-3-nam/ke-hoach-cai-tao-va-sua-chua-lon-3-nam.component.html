@@ -318,7 +318,7 @@
                                              <ng-template #editTemplate>
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
-                                                       <input class="search__input" nz-input
+                                                       <input class="search__input" nz-input 
                                                             [(ngModel)]="editCache[data.id].data.tenCtrinh" />
                                                   </td>
                                                   <td>
@@ -476,7 +476,7 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected()">
+                         <button type="button" class="btn btn-main" (click)="deleteSelected()" >
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>

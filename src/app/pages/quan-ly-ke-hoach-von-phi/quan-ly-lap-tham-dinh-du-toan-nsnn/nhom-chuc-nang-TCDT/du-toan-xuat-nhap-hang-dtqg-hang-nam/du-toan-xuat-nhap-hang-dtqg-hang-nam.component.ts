@@ -313,7 +313,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeletes: this.listIdDelete,
-      listColDeleteVtus: this.listIdDeleteVtus,
+      listDeleteVtus: this.listIdDeleteVtus,
       lstCTietBCao: this.lstCTietBCao,
       lstTongVtu: this.lstVtu,
       maBcao: this.maBaoCao,
@@ -326,10 +326,13 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (data) => {
+      this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
+        async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -338,7 +341,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist(request).toPromise().then(
+      this.quanLyVonPhiService.updatelist1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -418,6 +421,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.lstCTietBCao= [];
+          this.lstVtu = [];
           this.chiTietBcaos = data.data.lstCTietBCao;
           this.chiTietBcaos.forEach(item => {
             var mm: ItemData = {
@@ -463,6 +468,10 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
             data.listCtiet.forEach( item => {
               item.vitri = this.lstVtu.find(e => e.maVtuTbi==item.maVtuTbi).id;
             })
+          })
+
+          this.lstCTietBCao.forEach(item => {
+            this.tongCong(1, item);
           })
 
           this.updateEditCache();
@@ -939,7 +948,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       var ind: number = item.listCtiet.findIndex(e => e.vitri == this.lstVtu[index].id);
       this.editCache[item.id].data.listCtiet.forEach(data => {
         if (data.vitri == this.lstVtu[index].id){
-          item.listCtiet[ind].maVtuTbi = data.maVtuTbi;
+          item.listCtiet[ind].maVtuTbi = this.lstVtu[index].maVtuTbi;
           item.listCtiet[ind].sl = data.sl;
         }
       })

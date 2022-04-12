@@ -287,7 +287,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeletes: this.listIdDelete,
-      listColDeleteVtus: this.listIdDeleteVtus,
+      listDeleteVtus: this.listIdDeleteVtus,
       lstCTietBCao: this.lstCTietBCao,
       lstTongVtu: this.lstVtu,
       maBcao: this.maBaoCao,
@@ -299,12 +299,17 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       namHienHanh: 2022,
     };
 
+    console.log(request);
+
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
-        (data) => {
+        async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -393,6 +398,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.lstCTietBCao = [];
+          this.lstVtu = [];
           this.chiTietBcaos = data.data.lstCTietBCao;
           this.chiTietBcaos.forEach(item => {
             var mm: ItemData = {
@@ -900,10 +907,12 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     const index = this.lstVtu.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     Object.assign(this.lstVtu[index], this.editCache1[id].data);
     this.editCache1[id].edit = false;  // CHUYEN VE DANG TEXT
+    //debugger
     this.lstCTietBCao.forEach(item => {
       var ind: number = item.listCtiet.findIndex(e => e.vitri == this.lstVtu[index].id);
       this.editCache[item.id].data.listCtiet.forEach(data => {
         if (data.vitri == this.lstVtu[index].id) {
+          item.listCtiet[ind].maVtuTbi = this.lstVtu[index].maVtuTbi;
           item.listCtiet[ind].sl = data.sl;
         }
       })
@@ -911,7 +920,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   tinhLaiTongSl() {
-    this.lstVtu.forEach(item => {
+    this.lstVtu.forEach(item => { 
       item.tong = 0;
       this.lstCTietBCao.forEach(data => {
         data.listCtiet.forEach(e => {

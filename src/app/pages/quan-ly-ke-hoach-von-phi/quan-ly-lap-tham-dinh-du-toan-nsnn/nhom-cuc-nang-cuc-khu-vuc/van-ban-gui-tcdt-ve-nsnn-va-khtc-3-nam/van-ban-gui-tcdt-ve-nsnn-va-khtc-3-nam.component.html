@@ -25,9 +25,9 @@
                          <span>Xóa</span>
                     </a>
 
-                      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="dong()">
-                           <span>Đóng</span>
-                      </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="dong()">
+                         <span>Đóng</span>
+                    </a>
                </div>
           </div>
      </div>
@@ -37,30 +37,31 @@
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
                     <div class="widget-body">
-                      <div>
-                        <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                          <nz-descriptions-item nzTitle="Ngày nhập">
-                            {{ngayNhap}}
-                          </nz-descriptions-item>
-                          <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
-                            {{nguoiNhap}}
-                          </nz-descriptions-item>
-                          <nz-descriptions-item nzTitle="Nơi tạo">
-                            {{getUnitName()}}
-                          </nz-descriptions-item>
-                          <nz-descriptions-item nzTitle="Trạng thái">
-                              {{getStatusName()}}
-                            </nz-descriptions-item>
-                          <nz-descriptions-item nzTitle="Số văn bản">
-                            {{soVban}}
-                          </nz-descriptions-item>
-                          <nz-descriptions-item nzTitle="Ngày duyệt văn bản">
-                              {{ngayDuyetVban}}
-                            </nz-descriptions-item>
-                        </nz-descriptions>
-                      </div>
+                         <div>
+                              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
+                                   [nzColon]="false">
+                                   <nz-descriptions-item nzTitle="Ngày nhập">
+                                        {{ngayNhap}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+                                        {{nguoiNhap}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Nơi tạo">
+                                        {{getUnitName()}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Trạng thái">
+                                        {{getStatusName()}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Số văn bản">
+                                        {{soVban}}
+                                   </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Ngày duyệt văn bản">
+                                        {{ngayDuyetVban}}
+                                   </nz-descriptions-item>
+                              </nz-descriptions>
+                         </div>
                     </div>
-                  </nz-card>
+               </nz-card>
 
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
@@ -71,8 +72,8 @@
                                              <th nzWidth="100px">STT</th>
                                              <th nzWidth="200px">Mã báo cáo</th>
                                              <th nzWidth="500px">Loại báo cáo</th>
-                                             <th></th>
-                                             <th></th>
+                                             <th [hidden]="status"></th>
+                                             <th [hidden]="status"></th>
                                              <th>
                                                   <label nz-checkbox [(ngModel)]="allChecked"
                                                        (ngModelChange)="updateAllChecked()"
@@ -96,10 +97,10 @@
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                                                   </td>
                                                   <td>
@@ -110,28 +111,31 @@
                                              </ng-container>
                                              <ng-template #editTemplate>
                                                   <td>{{ i + 1 }}</td>
-                                                  <td >
-                                                       <nz-select nzShowSearch nzAllowClear
-                                                            nzPlaceHolder="Chọn báo cáo"
-                                                            [(ngModel)]="editCache[data.id].data.objResp.maBcao" (ngModelChange)="changeModel(data.id)">
-                                                            <nz-option *ngFor="let item of lstBcao" [nzValue]="item.maBcao"
-                                                                 [nzLabel]="item.maBcao"></nz-option>
+                                                  <td>
+                                                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn báo cáo"
+                                                            [(ngModel)]="editCache[data.id].data.objResp.maBcao"
+                                                            (ngModelChange)="changeModel(data.id)">
+                                                            <nz-option *ngFor="let item of lstBcao"
+                                                                 [nzValue]="item.maBcao" [nzLabel]="item.maBcao">
+                                                            </nz-option>
                                                        </nz-select>
                                                   </td>
                                                   <td>
                                                        <div *ngFor="let item of baoCaos">
-                                                            <div *ngIf="item.id == editCache[data.id].data.objResp.maLoaiBcao">
+                                                            <div
+                                                                 *ngIf="item.id == editCache[data.id].data.objResp.maLoaiBcao">
                                                                  {{item.tenDm}}
                                                             </div>
                                                        </div>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
-                                                  <td>
-                                                       <a (click)="saveEdit(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Cancel</a>
+                                                  <td [hidden]="status">
+                                                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm
+                                                            nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td>
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
@@ -144,7 +148,7 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected()" >
+                         <button type="button" class="btn btn-main" (click)="deleteSelected()">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>
@@ -152,7 +156,7 @@
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
                          </button>
-                         <button type="button" class="btn btn-sub" >
+                         <button type="button" class="btn btn-sub">
                               <i class="icon htvbdh_tcdt_import"></i>
                               <span>Import</span>
                          </button>
