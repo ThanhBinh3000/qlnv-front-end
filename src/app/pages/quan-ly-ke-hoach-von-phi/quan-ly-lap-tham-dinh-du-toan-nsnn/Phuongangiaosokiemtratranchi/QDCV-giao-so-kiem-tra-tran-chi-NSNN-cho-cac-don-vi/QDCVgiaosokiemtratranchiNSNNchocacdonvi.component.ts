@@ -10,6 +10,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 @Component({
   selector: 'app-QDCVgiaosokiemtratranchiNSNNchocacdonvi',
@@ -31,6 +33,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
   currentYear: Date = new Date();
   listDvi:any[]=[];
   donviTaos:any []=[];
+  listDonViNhan:any []=[];
   lstFile: any[] = [];
   listFile: File[] = [];
   fileUrl: any;
@@ -39,6 +42,9 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
   listPhuongAn:any[];
   length:number =0;
   msg:string='';
+  validateForm!: FormGroup;   
+  message:any =MESSAGEVALIDATE;
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -47,32 +53,34 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
      private datepipe:DatePipe,
      private sanitizer: DomSanitizer,
      private notification: NzNotificationService,
-     private location: Location
+     private location: Location,
+     private fb: FormBuilder
      ) {
     this.namgiao = this.currentYear.getFullYear();
   }
 
   ngOnInit() {
+    this.validateForm = this.fb.group({
+      ngaynhap: [null,[Validators.required]],
+      donvitao:[null, [Validators.required]],
+      // donvinhan:[null, [Validators.required]],
+      soQd:[null, [Validators.required]],
+      ngayQd:[null, [Validators.required]],
+      soCv:[null, [Validators.required]],
+      ngayCv:[null, [Validators.required]],
+      mapa:[null, [Validators.required]],
+      namgiao:[null,[Validators.pattern('^[12][0-9]{3}$')]],
+      temp: [null],
+    });
     let username = this.userService.getUserName();
     this.getUserInfo(username);
     this.quankhoachvon.dMDonVi().subscribe(res => {
       this.donviTaos = res.data;
-      console.log(this.donviTaos);
     })
     this.danhmuc.dmDonViNhan().subscribe(res =>{
       this.listDvi= res.data.content;
-      console.log(res)
     })
-    this.quankhoachvon.danhsachphuonganduocduyet().subscribe(res => {
-      if(res.statusCode==0){
-        this.listPhuongAn = res.data;
-
-      }else{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
-    })
+    
   }
 
   //get infor user
@@ -92,28 +100,69 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
     );
   }
 
+  submitForm(){
+    if (this.validateForm.valid) {
+      return true;
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return false;
+    }
+  }
 
+//chọn đơn vị tạo => các đơn vị nhận
+chonDonviTao(maDonVi:any){
+  if(maDonVi!=undefined){
+    var donVi = this.donviTaos.find( item=> item.id==maDonVi)?.maDvi;
+    console.log(donVi);
+    let objectDonViThuocQuanLy={
+      capDvi: null,
+      kieuDvi: null,
+      loaiDvi: null,
+      maDvi: donVi,
+      maKbnn: null,
+      maNsnn: null,
+      maPhuong: null,
+      maQuan: null,
+      maTinh: null,
+      paggingReq: {
+        limit: 20,
+        page: 1
+      },
+      str: '',
+      tenDvi: '',
+      trangThai: '01'
+  }
+  this.danhmuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
+    if(res.statusCode==0){
+      console.log(res);
+      this.listDonViNhan = res.data;
+    }
+  })
+  }
+  this.quankhoachvon.danhsachphuonganduocduyet(donVi).subscribe(res => {
+    if(res.statusCode==0){
+      console.log(res);
+      this.listPhuongAn = res.data;
+    }else{
+      this.notification.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err => {
+    this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
+  })
+}
 
 //xoa
 xoaquyetdinh(){
-
-  let objectXoa={
-
-      fileDinhKems:[],
-      listIdFiles: null,
-      maDvi: null,
-      maDviNhan: null,
-      maPa: this.mapa,
-      namGiao: null,
-      ngayCv: null,
-      ngayQd: null,
-      nguoiTao: null,
-      soCv: null,
-      soQd: null,
-  }
-  console.log(objectXoa);
-  this.quankhoachvon.xoaquyetdinhcongvan(objectXoa).subscribe(res => {
+  var idPa = this.listPhuongAn.find( item => item.maPa == this.mapa)?.id;
+  
+  this.quankhoachvon.xoaquyetdinhcongvan(idPa).subscribe(res => {
     if(res.statusCode==0){
+      this.showcongvan(this.mapa)
       this.msg = 'Xóa thành công';
       this.notification.success('Xóa QĐ-CV',this.msg)
 
@@ -127,25 +176,22 @@ xoaquyetdinh(){
 }
 
 //view so quyet dinh va cv
-showcongvan(){
-  var id = this.mapa;
-  this.listPhuongAn.forEach(e => {
-    if(id ==e.maPa){
-      id=e.id
-    }
-  })
-  this.quankhoachvon.chitietPhuongAn(id).subscribe(res => {
+showcongvan(maPa:any){
+  
+  if(this.mapa!=undefined){
+    var idPa = this.listPhuongAn.find( item => item.maPa == maPa)?.id;
+  this.quankhoachvon.chitietPhuongAn(idPa).subscribe(res => {
     if(res.statusCode==0){
       var ob = res.data;
       this.soCv = ob.soCv;
       this.soQd = ob.soQd;
-      console.log(res);
     }else{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, res?.msg);
     }
   },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   })
+}
 }
 //luu
 async luu(){
@@ -162,21 +208,28 @@ async luu(){
       maDviNhan:this.donvinhan,
       maPa:this.mapa,
       namGiao:this.namgiao,
+      ngayCv:this.ngayCv,
+      ngayQd:this.ngayQd,
       soCv:this.soCv,
       soQd:this.soQd
     }
+    
     console.log(request);
-    this.quankhoachvon.nhapsoqdcv(request).subscribe(res => {
-      console.log(res);
-      if(res.statusCode==0){
-        this.notification.success('Lưu QĐ-CV','Lưu thành công');
-      }else{
-        this.notification.error('Lưu QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
-      }
-
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
-    })
+    if(this.validateForm.valid){
+      this.quankhoachvon.nhapsoqdcv(request).subscribe(res => {
+        if(res.statusCode==0){
+          this.notification.success('Lưu QĐ-CV','Lưu thành công');
+        }else{
+          this.notification.error('Lưu QĐ-CV','Có lỗi xảy ra vui lòng thử lại sau');
+        }
+  
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+      })
+    }else{
+      return;
+    }
+    
   }
 
 

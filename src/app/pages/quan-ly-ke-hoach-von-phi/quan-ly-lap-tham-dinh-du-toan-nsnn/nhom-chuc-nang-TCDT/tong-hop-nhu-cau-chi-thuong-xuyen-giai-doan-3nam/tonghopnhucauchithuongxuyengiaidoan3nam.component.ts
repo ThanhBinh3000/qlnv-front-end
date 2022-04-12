@@ -352,6 +352,13 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
     };
   }
 
+  //nut xoa bang
+  xoaBang(){
+    this.lstCTietBCao=[];
+    this.lstFile = [];
+    this.listFile = []
+  }
+
   //checkox trên tùng row
   updateSingleChecked(): void {
     if (this.lstCTietBCao.every((item) => !item.checked)) {
@@ -494,14 +501,20 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg)
         }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         async (data) => {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS)
-          this.id = data.data.id;
-          await this.getDetailReport();
-          this.getStatusButton();
+          if(data.statusCode==0){
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = data.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
+          }else{
+            this.notification.error(MESSAGE.ERROR, data?.msg)
+          }
         },
         (err) => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
@@ -563,7 +576,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
-
+            this.updateEditCache();
             this.namBcaohienhanh = this.namBcaohienhanh
         }else{
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
