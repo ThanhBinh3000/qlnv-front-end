@@ -127,7 +127,7 @@
                   <th rowspan="2">Nội dung</th>
                   <th rowspan="2">Nhóm</th>
                   <th rowspan="2">Tổng số</th>
-                  <th colspan="13">Chi tiết theo các đơn vị sử dụng</th>
+                  <th colspan="{{cols}}">Chi tiết theo các đơn vị sử dụng</th>
                   <th rowspan="2" colspan="3" [hidden]="status"></th>
                   <th rowspan="2" [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
@@ -136,21 +136,9 @@
                   </th>
                 </tr>
                 <tr>
-                  <th>Hà Nội</th>
-                  <th>Tây bắc</th>
-                  <th>Hoàng Liên Sơn</th>
-                  <th>Vĩnh Phúc</th>
-                  <th>Bắc Thái</th>
-                  <th>Hà Bắc</th>
-                  <th>Hải Hưng</th>
-                  <th>Đông Bắc</th>
-                  <th>Thái Bình</th>
-                  <th>Hà Nam Ninh</th>
-                  <th>Nghệ Tĩnh </th>
-                  <th>Bình Trị Thiên</th>
-                  <th>Đà Nẵng</th>
+                  <th *ngFor="let dv of listColNames">{{dv.tenDvi}}</th>
                 </tr>
-                <tr>
+                <!-- <tr>
                   <th></th>
                             <th>Tổng số</th>
                             <th></th>
@@ -172,7 +160,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                </tr>
+                </tr> -->
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
@@ -193,110 +181,113 @@
                       </div>
                     </td>
                     <td>{{data.tongSo}}</td>
-                    <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 342; then content"></div>
+                    <td *ngFor="let kv of data.listCtietDvi">
+                          {{kv.soTranChi}}
+                    </td>
+                    <!-- <td>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 342; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 343; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 343; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 344; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 344; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 345; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 345; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 346; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 346; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 347; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 347; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 348; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 348; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 349; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 349; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 350; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 350; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 351; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 351; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 354; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 354; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 352; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 352; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                          <div *ngIf="kv.khuvucId == 353; then content"></div>
+                      <div *ngFor="let kv of data.listCtietDvi;let i = index">
+                          <div *ngIf="kv.maKhuVuc == 353; then content"></div>
                           <ng-template #content>
-                            {{kv.soTranchi}}
+                            {{kv.soTranChi}}
                           </ng-template>
                       </div>
-                    </td>
+                    </td> -->
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -327,110 +318,113 @@
                     <td>
                       <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.tongSo" disabled/>
                     </td>
-                    <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 342; then content"></div>
+                    <td *ngFor="let kv of editCache[data.id].data.listCtietDvi">
+                        <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
+                    </td>
+                    <!-- <td>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 342; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 343; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 343; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input  type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input  type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 344; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 344; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 345; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 345; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 346; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 346; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 347; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 347; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 348; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 348; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 349; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 349; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 350; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 350; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 351; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 351; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 354; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 354; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 352; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 352; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
                     </td>
                     <td>
-                      <div *ngFor="let kv of editCache[data.id].data.lstPaGiaoSoKiemTraTcNsnnCtietDvi;let i = index">
-                        <div *ngIf="kv.khuvucId == 353; then content"></div>
+                      <div *ngFor="let kv of editCache[data.id].data.listCtietDvi;let i = index">
+                        <div *ngIf="kv.maKhuVuc == 353; then content"></div>
                         <ng-template #content>
-                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranchi" (change)="tinhtong(data.id)" />
+                          <input class="search__input" nz-input type="number" [(ngModel)]="kv.soTranChi" (change)="tinhtong(data.id)" />
                         </ng-template>
                       </div>
-                    </td>
+                    </td> -->
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
