@@ -1648,15 +1648,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
   }
-  changeDonVi(event) {
-    if (!event.target.value) {
-      this.isAddLuongThuc = false;
-    }
+  changeDonVi() {
+    this.isAddLuongThuc = false;
   }
-  changeDonViMuoi(event) {
-    if (!event.target.value) {
-      this.isAddMuoi = false;
-    }
+  changeDonViMuoi() {
+    this.isAddMuoi = false;
   }
   clearKHLT() {
     this.isAddLuongThuc = false;

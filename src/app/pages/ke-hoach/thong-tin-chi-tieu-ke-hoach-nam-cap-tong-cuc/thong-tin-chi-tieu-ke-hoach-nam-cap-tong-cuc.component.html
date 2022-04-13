@@ -211,7 +211,7 @@
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                       class="search__input autocomplete__input donvi__input">
                       <input placeholder="Đơn vị" nz-input (input)="onInput($event)" [nzAutocomplete]="auto"
-                        class="w-300" [(ngModel)]="keHoachLuongThucCreate.tenDonvi" (input)="changeDonVi($event)" />
+                        class="w-300" [(ngModel)]="keHoachLuongThucCreate.tenDonvi" (input)="changeDonVi()" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
@@ -574,7 +574,7 @@
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                       class="search__input autocomplete__input donvi__input w-300">
                       <input placeholder="Đơn vị" nz-input (input)="onInput($event)" [nzAutocomplete]="autoMuoi"
-                        class="" [(ngModel)]="keHoachMuoiCreate.tenDonVi" (input)="changeDonViMuoi($event)" />
+                        class="" [(ngModel)]="keHoachMuoiCreate.tenDonVi" (input)="changeDonViMuoi()" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
