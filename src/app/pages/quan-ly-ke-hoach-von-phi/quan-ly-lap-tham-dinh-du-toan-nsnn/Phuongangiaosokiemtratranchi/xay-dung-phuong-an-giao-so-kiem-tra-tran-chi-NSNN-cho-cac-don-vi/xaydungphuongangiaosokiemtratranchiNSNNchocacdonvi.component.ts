@@ -639,6 +639,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   lstQlnvKhvonphiDsachGiaoSo: any[] = [];
   //giao
   giao(madvinhan: any) {
+    this.lstQlnvKhvonphiDsachGiaoSo =[];
     this.quanLyVonPhiService.maGiao().subscribe((res) => {
       this.maGiao = res.data;
       this.lstCTietBCao.forEach((e) => {
@@ -682,6 +683,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //giao toan bo
   giaotoanbo() {
+    this.lstQlnvKhvonphiDsachGiaoSo =[];
     this.quanLyVonPhiService.maGiao().subscribe((res) => {
       this.maGiao = res.data;
       this.lstCTietBCao.forEach((e) => {
