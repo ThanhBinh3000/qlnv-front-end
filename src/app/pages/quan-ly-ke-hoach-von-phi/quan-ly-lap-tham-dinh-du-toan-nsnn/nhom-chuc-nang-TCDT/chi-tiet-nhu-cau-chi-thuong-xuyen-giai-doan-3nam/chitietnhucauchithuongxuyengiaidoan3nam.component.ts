@@ -150,7 +150,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       );
     }
     //get danh muc noi dung
-    this.danhMucService.dMVatTu().subscribe(
+    this.danhMucService.dMNoiDung().subscribe(
       (data) => {
         if (data.statusCode == 0) {
           this.listNoidung = data.data?.content;
@@ -162,6 +162,20 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       (err) => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
+    );
+
+    //get danh muc nhom chi
+    this.danhMucService.dMNhomChi().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.listNhomchi = data.data?.content;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     );
     
     //lay danh sach danh muc don vi
@@ -245,7 +259,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
-          this.namBcaohienhanh = data.data.namBcao;
+          this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban
           if (
@@ -486,8 +500,8 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBcaohienhanh.toString(),
-      namHienHanh: this.namBcaohienhanh.toString(),
+      namBcao: this.namBcaohienhanh+1,
+      namHienHanh: this.namBcaohienhanh,
     };
     this.spinner.show();
 

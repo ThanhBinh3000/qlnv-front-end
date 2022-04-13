@@ -242,7 +242,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
-          this.namBcaohienhanh = data.data.namBcao;
+          this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if(this.trangThaiBanGhi == '1' ||this.trangThaiBanGhi == '3' ||this.trangThaiBanGhi == '5' ||this.trangThaiBanGhi == '8' ){
             this.status = false;
@@ -478,8 +478,8 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBcaohienhanh.toString(),
-      namHienHanh: this.namBcaohienhanh.toString(),
+      namBcao: this.namBcaohienhanh+1,
+      namHienHanh: this.namBcaohienhanh,
     };
     this.spinner.show();
 

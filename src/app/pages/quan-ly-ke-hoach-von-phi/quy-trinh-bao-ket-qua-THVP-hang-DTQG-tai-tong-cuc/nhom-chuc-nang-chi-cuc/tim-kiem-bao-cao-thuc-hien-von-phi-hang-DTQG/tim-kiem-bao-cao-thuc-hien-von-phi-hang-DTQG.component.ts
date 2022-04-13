@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -10,6 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCKETQUATHUCHIENHANGDTQG, Utils} from 'src/app/Utility/utils';
 import { TRANGTHAI } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
   selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
   templateUrl: './tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.html',
@@ -21,8 +22,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   nzTreeComponent!: NzTreeComponent;
   detailDonVi: FormGroup;
   danhSachBaoCao: any = [];
-  totalElements = 0;
-  totalPages = 0;
   errorMessage = "";
   url: string ='';
   urlChiTiet:string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
@@ -38,7 +37,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   listKPB: any = [];
   noParent = true;
   searchValue = '';
-
+  messageValidate:any =MESSAGEVALIDATE;
   listTrangThai:any = TRANGTHAI;
   
   listBcaoKqua:any []=[];
@@ -63,13 +62,31 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     
   }
 
-
+  validateForm!: FormGroup;
+  totalElements = 0;
+  totalPages = 0;
   pages = {
     size: 10,
     page: 1,
   }
+
   donViTaos: any = [];
   baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
+
+
+  submitForm(): void {
+    if (this.validateForm.valid) {
+     
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
+  
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -77,14 +94,18 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     private datePipe: DatePipe,
     private notifi:NzNotificationService,
     private nguoiDungSerivce:UserService,
+    private fb:FormBuilder,
   ) {
   }
 
  async ngOnInit() {
 
+  this.validateForm = this.fb.group({
+    loaiBaocao: [null, [Validators.required]],
+  });
+
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
-    console.log(userInfor);
     const utils = new Utils();
     var role = utils.getRole(Number(userInfor.roles[0]?.code));
     if(role=='TRUONG_BO_PHAN'){
@@ -117,10 +138,11 @@ async getUserInfo(username: string) {
           this.userInfor = data?.data;
           return data?.data;
         } else {
+          this.notifi.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   return userInfo;
@@ -185,9 +207,8 @@ async getUserInfo(username: string) {
   }
 
   themMoi(){
-    console.log(this.url)
-    if(this.url==""){
-      this.notifi.warning(MESSAGE.ERROR, "Bạn chưa chọn loại báo cáo")
+   
+    if(!this.validateForm.valid){
       return;
     }
     else{

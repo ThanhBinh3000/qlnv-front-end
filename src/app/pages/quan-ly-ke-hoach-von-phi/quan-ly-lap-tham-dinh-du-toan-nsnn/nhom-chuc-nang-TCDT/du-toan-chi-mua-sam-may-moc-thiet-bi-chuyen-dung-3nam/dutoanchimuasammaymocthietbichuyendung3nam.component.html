@@ -96,7 +96,7 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="text" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -193,6 +193,11 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
+                      <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chỉ tiêu"
+                        [(ngModel)]="editCache[data.id].data.maVtuTbi">
+                        <nz-option *ngFor="let item of chiTieus" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
+                      </nz-select> -->
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chỉ tiêu"
                         [(ngModel)]="editCache[data.id].data.maVtuTbi">
                         <nz-option *ngFor="let item of chiTieus" [nzValue]="item.id" [nzLabel]="item.tenDm">

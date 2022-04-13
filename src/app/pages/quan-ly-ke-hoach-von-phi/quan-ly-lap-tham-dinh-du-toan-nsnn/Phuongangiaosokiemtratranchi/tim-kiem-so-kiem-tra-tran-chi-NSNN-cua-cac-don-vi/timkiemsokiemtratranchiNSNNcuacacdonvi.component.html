@@ -36,18 +36,19 @@
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị tạo">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao">
-                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.id" [nzLabel]="op.tenDvi"></nz-option>
+                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.maDvi" [nzLabel]="op.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangthai">
+                <input type="text" nz-input [value]="getStatusName(trangthai)" >
+                <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangthai">
                   <nz-option nzValue="1" nzLabel="Đã giao"></nz-option>
                   <nz-option nzValue="2" nzLabel="Giao lại"></nz-option>
-                </nz-select>
+                </nz-select> -->
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Đơn vị nhận">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan">
-                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.id" [nzLabel]="op.tenDvi"></nz-option>
+                  <nz-option *ngFor="let op of donviTaos" [nzValue]="op.maDvi" [nzLabel]="op.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Mã giao">
@@ -63,17 +64,9 @@
           </div>
         </div>
       </nz-card>
-      <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Danh sách giao số kiểm tra NSNN'">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="3">
-                <p>Tổng số bản ghi được tìm thấy: {{length}} </p>
-              </div>
-            </div>
-            <nz-table nzBordered class="table__body">
-              <thead>
-                <tr>
+      <nz-card nzTitle="Danh sách giao số kiểm tra NSNN" class="mt16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap">
+          <thead>
                   <th>STT</th>
                   <th>Mã phương án</th>
                   <th>Mã giao</th>
@@ -83,46 +76,43 @@
                   <th>Đơn vị tạo</th>
                   <th>Đơn vị nhận</th>
                   <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of listSogiaoTranChi; let i = index">
-                  <td>{{(i + 1) + (pages.page - 1)*pages.size}}</td>
-                  <td>{{item.maPa}}</td>
-                  <td>{{item.maGiao}}</td>
-                  <td>{{item.ngayTao}}</td>
-                  <td>{{item.namGiao}}</td>
-                  <td>{{item.tenTrangThai}}</td>
-                  <td>{{item.tenDviTao}}</td>
-                  <td>{{item.tenDviNhan}}</td>
-                  <td><a routerLink="../so-kiem-tra-tran-tri-nsnn/{{item.maDviNhan}}">xem</a> </td>
-                </tr>
-                <tr *ngIf="listSogiaoTranChi.length==0" style="text-align: center;">
-                    <td colspan="9"> Không có dữ liệu</td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <div class="tab-content tab-menu" id="myTabContent">
-              <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-    
-                </div>
-                <div class="canphai">
-                  <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                    nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
-                    (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
-                    <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
-                    </ng-template>
-                  </nz-pagination>
-                  <!-- end phân trang  -->
-                </div>
-              </div>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listSogiaoTranChi; let i = index">
+              <td>{{(i + 1) + (pages.page - 1)*pages.size}}</td>
+              <td>{{item.maPa}}</td>
+              <td>{{item.maGiao}}</td>
+              <td>{{item.ngayTao}}</td>
+              <td>{{item.namGiao}}</td>
+              <td>{{item.tenTrangThai}}</td>
+              <td>{{item.tenDviTao}}</td>
+              <td>{{item.tenDviNhan}}</td>
+              <td><a routerLink="../so-kiem-tra-tran-tri-nsnn/{{item.maDviNhan}}/{{item.maPa}}">xem</a> </td>
+            </tr>
+            <tr *ngIf="listSogiaoTranChi.length==0" style="text-align: center;">
+                <td colspan="9"> Không có dữ liệu</td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+
             </div>
-          </nz-tab>
-        </nz-tabset>
-      </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-card>
       <div class="ghi-chu">
         <nz-form-label nzRequired [nzNoColon]="true">
           Ghi chú

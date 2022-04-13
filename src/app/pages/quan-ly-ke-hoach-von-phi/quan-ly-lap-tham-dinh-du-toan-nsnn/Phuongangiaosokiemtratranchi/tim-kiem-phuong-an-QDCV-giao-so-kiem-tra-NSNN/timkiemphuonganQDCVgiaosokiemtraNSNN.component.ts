@@ -67,10 +67,9 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
       maPa:[null],
     });
     let username = this.userService.getUserName();
-    let userInfor: any = await this.getUserInfo(username); //get user info
+    await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
       this.donViTaos = res.data;
-      console.log(this.donViTaos);
       this.checkroleDvi = this.donViTaos.find(e => e.maDvi == this.donViTaoChiCuc).capDvi;
     
     })
@@ -137,11 +136,10 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
             page: 1
         }
     }
-    console.log(objsearch);
     this.quankhoachvon.timkiemphuongan(objsearch).subscribe(res => {
         if(res.statusCode==0){
-          console.log(res)
-            this.listVanban=res.data;
+          this.listVanban =[];
+            this.listVanban=res.data.content;
             this.listVanban.forEach( e => {
               e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy')
             })

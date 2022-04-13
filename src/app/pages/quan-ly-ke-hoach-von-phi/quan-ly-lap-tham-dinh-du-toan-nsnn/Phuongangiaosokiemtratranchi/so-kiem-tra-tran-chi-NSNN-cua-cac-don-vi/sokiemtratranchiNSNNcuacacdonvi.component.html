@@ -1,3 +1,19 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button nz-button type="button" class="search__button--clear" (click)="redirectkehoachvonphi()">
+          <i nz-icon nzType="close"></i>
+          <span>Đóng</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
 <!--body-->
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
@@ -79,10 +95,7 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-sub" (click)="redirectkehoachvonphi()">
-            <i class="icon htvbdh_tcdt_close"></i>
-            <span>Đóng</span>
-          </button>
+         
         </div>
       </div>
       <div class="ghi-chu">
