@@ -173,7 +173,7 @@
               </div>
             </nz-tab>
             <nz-tab [nzTitle]="'Danh sách chi tiết đơn vị thức hiện quyết định'" (nzClick)="tabSelected = tab.muoi">
-              <nz-table #basicTable class="nowrap mt-16">
+              <nz-table #basicTable class="nowrap mt-16" [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th class="text-center" width="60px">STT</th>

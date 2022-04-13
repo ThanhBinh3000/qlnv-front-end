@@ -2,23 +2,25 @@
   <input type="text" nz-input placeholder="Nhập số quyết định" [(ngModel)]="text" />
   <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
 </div>
-<nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
+<nz-card nzTitle="DANH SÁCH QĐ PHÊ DUYỆT KHLCNT" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
   <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
         <th [width]="35">STT</th>
         <th>Số quyết định</th>
-        <th>Ngày ký</th>
-        <th>Năm kế hoạch</th>
+        <th>Ngày QĐ</th>
+        <th>Về việc</th>
+        <th>Nguồn vốn</th>
         <th class="text-center">Chọn</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-        <td>{{ data.soQuyetDinh }}</td>
-        <td>{{ data.ngayKy }}</td>
-        <td>{{ data.namKeHoach }}</td>
+        <td>{{ data.soQd }}</td>
+        <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.veViec }}</td>
+        <td>{{ data.nguonVon }}</td>
         <td class="text-center">
           <a (click)="handleOk(data)">
             <i class="icon htvbdh_dau-cong"></i>

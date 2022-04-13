@@ -1,7 +1,4 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -12,6 +9,8 @@ import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from 'src/app/comp
 import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import dayjs from 'dayjs';
+import { DialogCanCuQDPheDuyetKHLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
 
 interface ItemData {
   id: string;
@@ -45,16 +44,25 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   listOfData: ItemData[] = [];
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
-
+  listNam: any[] = [];
+  yearNow: number = 0;
+  selectedCanCu: any = {};
   constructor(
     private modal: NzModalService,
     private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    this.yearNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: this.yearNow - i,
+        text: this.yearNow - i,
+      });
+    }
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
@@ -77,7 +85,7 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate([`/nhap/dau-thau/quyet-dinh-phe-duyet-ket-qua-lcnt`])
+    this.router.navigate([`/nhap/dau-thau/quyet-dinh-phe-duyet-ket-qua-lcnt`]);
   }
 
   openDialogThongTinPhuLucKLCNT() {
@@ -95,18 +103,15 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     });
   }
 
-  themMoi() {
-
-  }
+  themMoi() {}
 
   async changePageIndex(event) {
     this.spinner.show();
     try {
       this.page = event;
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -117,11 +122,27 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     try {
       this.pageSize = event;
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+  openDialogCanCuQDPheDuyetKHLCNT() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin căn cứ quyết định phê duyệt KHLCNT',
+      nzContent: DialogCanCuQDPheDuyetKHLCNTComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        console.log(data);
+        this.selectedCanCu = data;
+      }
+    });
   }
 }

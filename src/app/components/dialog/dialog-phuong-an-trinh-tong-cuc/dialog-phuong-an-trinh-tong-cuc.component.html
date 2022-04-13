@@ -3,7 +3,7 @@
   <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
 </div>
 <nz-card nzTitle="DANH SÁCH phương án trình tổng cục" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
-  <nz-table nzBordered #basicTable [nzData]="dataTable">
+  <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
         <th [width]="35">STT</th>

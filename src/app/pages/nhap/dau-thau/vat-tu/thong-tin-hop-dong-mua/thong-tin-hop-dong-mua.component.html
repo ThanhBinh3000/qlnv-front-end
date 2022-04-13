@@ -327,7 +327,8 @@
               </nz-tab>
               <nz-tab [nzTitle]="'Danh sách gói thầu'" class="ds-goi-thau__container">
                 <nz-card class="mt16 flex-card p-lr16">
-                  <nz-table #editRowTable nzBordered [nzData]="listOfData">
+                  <nz-table #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
+                    [nzShowPagination]="false">
                     <thead>
                       <tr>
                         <th [width]="35">STT</th>
@@ -366,7 +367,8 @@
               </nz-tab>
               <nz-tab [nzTitle]="'Phụ lục hợp đồng'" class="ds-goi-thau__container">
                 <nz-card class="mt16 flex-card p-lr16">
-                  <nz-table #editRowTable nzBordered [nzData]="listOfData">
+                  <nz-table #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
+                    [nzShowPagination]="false">
                     <thead>
                       <tr>
                         <th [width]="35">STT</th>

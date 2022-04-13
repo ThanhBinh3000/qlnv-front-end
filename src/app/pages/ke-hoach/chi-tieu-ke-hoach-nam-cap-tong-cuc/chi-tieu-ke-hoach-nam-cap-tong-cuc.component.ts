@@ -269,4 +269,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  onCurrentPageDataChange() {}
 }

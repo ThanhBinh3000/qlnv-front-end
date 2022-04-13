@@ -75,6 +75,7 @@ import { DialogThongTinPhuLucHopDongMuaComponent } from './dialog/dialog-thong-t
 import { DialogThemBienbanNghiemThuKeLotComponent } from './dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { DialogThongTinChiTietGoiThauComponent } from './dialog/dialog-thong-tin-chi-tiet-goi-thau-vat-tu/dialog-thong-tin-chi-tiet-goi-thau-vat-tu.component';
 import { DialogThongTinPhuLucHopDongMuaVatTuComponent } from './dialog/dialog-thong-tin-phu-luc-hop-dong-mua-vat-tu/dialog-thong-tin-phu-luc-hop-dong-mua-vat-tu.component';
+import { DialogCanCuQDPheDuyetKHLCNTComponent } from './dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { DialogThongTinPhuLucHopDongMuaVatTuComponent } from './dialog/dialog-th
     DialogThemBienbanNghiemThuKeLotComponent,
     DialogThongTinChiTietGoiThauComponent,
     DialogThongTinPhuLucHopDongMuaVatTuComponent,
+    DialogCanCuQDPheDuyetKHLCNTComponent,
     //pipes
     FilterPipe,
   ],
@@ -213,4 +215,4 @@ import { DialogThongTinPhuLucHopDongMuaVatTuComponent } from './dialog/dialog-th
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}
