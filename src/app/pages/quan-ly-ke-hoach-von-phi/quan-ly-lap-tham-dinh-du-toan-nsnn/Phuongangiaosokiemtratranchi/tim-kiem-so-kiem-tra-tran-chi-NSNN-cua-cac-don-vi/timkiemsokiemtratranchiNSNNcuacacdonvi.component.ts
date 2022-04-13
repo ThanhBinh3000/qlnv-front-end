@@ -30,6 +30,14 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   donviTaos:any []=[];
   listVanban:any []=[];
   length:number =0;
+  totalElements = 0;
+  totalPages = 0;
+
+  pages = {                           // page
+    size: 10,
+    page: 1,
+  }
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -71,7 +79,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     await this.userService.getUserInfo(username).subscribe(
       (data) => {
         if (data?.statusCode == 0) {
-          this.donvitao = data?.data.dvql;
+       // this.donvitao = data?.data.dvql;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -105,7 +113,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         ngayTaoDen:this.datepipe.transform(this.denngay,'dd/MM/yyyy'),
         ngayTaoTu:this.datepipe.transform(this.ngaygiao,'dd/MM/yyyy'),
         paggingReq: {
-            limit: 1000,
+            limit: 10,
             page: 1
         },
         str: "",
@@ -116,6 +124,8 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         console.log(res);
         if(res.statusCode==0){
           this.length = res.data.totalElements;
+          this.totalElements = this.length;
+          this.totalPages = res.data.totalPages;
           this.listSogiaoTranChi = res.data.content;
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -133,4 +143,15 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.location.back()
   }
 
+
+  
+  //doi so trang
+  onPageIndexChange(page) {
+    this.pages.page = page;
+  }
+
+  //doi so luong phan tu tren 1 trang
+  onPageSizeChange(size) {
+    this.pages.size = size;
+  }
 }
