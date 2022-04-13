@@ -30,6 +30,14 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   donviTaos:any []=[];
   listVanban:any []=[];
   length:number =0;
+  totalElements = 0;
+  totalPages = 0;
+
+  pages = {                           // page
+    size: 10,
+    page: 1,
+  }
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -50,20 +58,20 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         this.donviTaos = res.data;
         console.log(this.donviTaos)
       }else{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
-
-
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.danhmuc.dmDonViNhan().subscribe(res =>{
         if(res.statusCode==0){
           this.listDvnhan= res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-
-
-  })
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 
   //get infor user
@@ -71,14 +79,13 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     await this.userService.getUserInfo(username).subscribe(
       (data) => {
         if (data?.statusCode == 0) {
-          this.donvitao = data?.data.dvql;
-
-          console.log(data)
+       // this.donvitao = data?.data.dvql;
         } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -106,7 +113,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         ngayTaoDen:this.datepipe.transform(this.denngay,'dd/MM/yyyy'),
         ngayTaoTu:this.datepipe.transform(this.ngaygiao,'dd/MM/yyyy'),
         paggingReq: {
-            limit: 1000,
+            limit: 10,
             page: 1
         },
         str: "",
@@ -117,11 +124,15 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         console.log(res);
         if(res.statusCode==0){
           this.length = res.data.totalElements;
+          this.totalElements = this.length;
+          this.totalPages = res.data.totalPages;
           this.listSogiaoTranChi = res.data.content;
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
 
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
 
@@ -132,4 +143,15 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.location.back()
   }
 
+
+  
+  //doi so trang
+  onPageIndexChange(page) {
+    this.pages.page = page;
+  }
+
+  //doi so luong phan tu tren 1 trang
+  onPageSizeChange(size) {
+    this.pages.size = size;
+  }
 }

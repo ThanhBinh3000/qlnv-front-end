@@ -646,6 +646,13 @@ const routes: Routes = [
       ).then((m) => m.TimkiemsokiemtratranchiNSNNcuacacdonviModule),
   },
   {
+    path: 'so-kiem-tra-tran-tri-nsnn/:id',
+    loadChildren: () =>
+      import(
+        './Phuongangiaosokiemtratranchi/so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/sokiemtratranchiNSNNcuacacdonvi.module'
+      ).then((m) => m.SokiemtratranchiNSNNcuacacdonviModule),
+  },
+  {
     path: 'qd-cv-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi',
     loadChildren: () =>
       import(

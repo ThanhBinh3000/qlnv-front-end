@@ -19,13 +19,14 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   namPa!: string;
   ngaylap: string = null;
   denngay: string = null;
-  donvitao: number = null;
+  donViTao: number = null;
   donvinhan: string = null;
   trangthai: string = null;
   loaivanban: string = '';
   soQd: string = null;
   soCV: string = null;
   maPa: string = null;
+  donViTaoChiCuc:any;
   currentYear: Date = new Date();
   listVanban: any[] = [];
   donViTaos: any[] = [];
@@ -34,6 +35,13 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   listTrangThai: any=TRANGTHAI;
   validateForm!: FormGroup; 
   messageValidate:any = MESSAGEVALIDATE;
+  totalElements = 0;
+  totalPages = 0;
+  pages = {                           // page
+    size: 10,
+    page: 1,
+  }
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -49,24 +57,33 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   async ngOnInit() {
     this.validateForm = this.fb.group({
       loaivanban: [null, [Validators.required]],
-      temp: [null],
+      namPa:[null],
+      ngaylap:[null],
+      denngay:[null],
+      donViTao:[null],
+      trangthai:[null],
+      soQd:[null],
+      soCV:[null],
+      maPa:[null],
     });
     let username = this.userService.getUserName();
     let userInfor: any = await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
       this.donViTaos = res.data;
+      console.log(this.donViTaos);
+      this.checkroleDvi = this.donViTaos.find(e => e.maDvi == this.donViTaoChiCuc).capDvi;
+    
     })
   }
 
   //get infor user
   async getUserInfo(username: any) {
-    await this.userService.getUserInfo(username).subscribe(
+    await this.userService.getUserInfo(username).toPromise().then(
       (data) => {
         if (data?.statusCode == 0) {
-          console.log(data);
-          this.donvitao = data?.data.dvql;
+          // this.donViTao = data?.data.dvql;
+          this.donViTaoChiCuc = data?.data.dvql;
           this.nguoinhap = data?.data.username;
-          this.checkroleDvi = data?.data.roles[0].id;
         } else {
         }
       },
@@ -91,9 +108,12 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   }
   //lay ten don vi tạo
   getUnitName() {
-     return this.donViTaos.find(item => item.maDvi== this.donvitao)?.tenDvi;
+     return this.donViTaos.find(item => item.maDvi== this.donViTaoChiCuc)?.tenDvi;
   }
 
+  getTenKhuVuc(maKhuVuc:any){
+    return this.donViTaos.find(item => item.maDvi== maKhuVuc)?.tenDvi;
+  }
   //get trạng thai
   getStatusName(trangthai:any):string {
     const utils = new Utils();
@@ -103,7 +123,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   //tim kiếm
   timkiem(){
     let objsearch={
-        maDviTao:this.donvitao,
+        maDviTao:this.donViTao,
         maPa:this.maPa,
         namPa:this.namPa,
         ngayTaoDen:this.datePipe.transform(this.denngay,'dd/MM/yyyy'),
@@ -113,7 +133,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         str:null,
         trangThai:this.trangthai,
         paggingReq:{
-            limit: 20,
+            limit: 10,
             page: 1
         }
     }
@@ -121,11 +141,12 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     this.quankhoachvon.timkiemphuongan(objsearch).subscribe(res => {
         if(res.statusCode==0){
           console.log(res)
-            this.listVanban=res.data.content;
+            this.listVanban=res.data;
             this.listVanban.forEach( e => {
               e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy')
             })
-            this.totalitem = res.data.totalElements;
+            this.totalElements = res.data.totalElements;
+            this.totalPages = res.data.totalPages;
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -147,5 +168,15 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   dong(){
       // this.router.navigate(['/'])
       this.location.back()
+  }
+
+  //doi so trang
+  onPageIndexChange(page) {
+    this.pages.page = page;
+  }
+
+  //doi so luong phan tu tren 1 trang
+  onPageSizeChange(size) {
+    this.pages.size = size;
   }
 }
