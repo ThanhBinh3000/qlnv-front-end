@@ -91,7 +91,7 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -101,9 +101,9 @@
               </nz-descriptions-item>
             </nz-descriptions>
             <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
-              <div nz-col nzSpan="3" >
+              <div nz-col nzSpan="3">
                 <label class="search__label">Số VB gửi TC</label>
-                <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
+                <input class="search__input" nz-input [(ngModel)]="soVban" disabled />
               </div>
             </div>
           </div>
@@ -201,27 +201,30 @@
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản"
                         [(ngModel)]="editCache[data.id].data.maHthucVban">
-                        <nz-option *ngFor="let item of loaiVbans" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                        <nz-option *ngFor="let item of loaiVbans" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
                       </nz-select>
                     </td>
 
                     <td>
-                      <input class="search__input"  nz-input [(ngModel)]="editCache[data.id].data.tgianDkien" />
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDkien" />
                     </td>
 
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì"
                         [(ngModel)]="editCache[data.id].data.maDviChuTri">
-                        <nz-option *ngFor="let item of maDviChuTris" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                        <nz-option *ngFor="let item of maDviChuTris" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
                       </nz-select>
                     </td>
 
                     <td>
-                      <input class="search__input ant-input" nz-input  [(ngModel)]="editCache[data.id].data.dviPhop" />
+                      <input class="search__input ant-input" nz-input [(ngModel)]="editCache[data.id].data.dviPhop" />
                     </td>
 
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanKphi" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.dtoanKphi"></nz-input-number>
                     </td>
 
                     <td>
@@ -234,8 +237,8 @@
 
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Hủy</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
@@ -259,9 +262,9 @@
                     </td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
                   </tr>
                 </ng-container>
               </tbody>

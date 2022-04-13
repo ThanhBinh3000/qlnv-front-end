@@ -341,7 +341,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       maDviTien: this.maDviTien="01",
       maLoaiBcao: this.maLoaiBaoCao=QLNV_KHVONPHI_CHI_TX_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
       soVban:this.soVban,
     };
 

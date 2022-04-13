@@ -63,7 +63,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Số quyết định chỉ tiêu</label>
-            <input class="search__input" nz-input [(ngModel)]="soQdChiTieu"/>
+            <input class="search__input" nz-input [(ngModel)]="soQdChiTieu" />
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày</label>
@@ -71,7 +71,7 @@
           </div>
           <div nz-col nzSpan="11">
             <label class="search__label">Căn cứ số quyết định trúng thầu</label>
-            <input class="search__input" nz-input [(ngModel)]="canCuSoQdTrungThau"/>
+            <input class="search__input" nz-input [(ngModel)]="canCuSoQdTrungThau" />
           </div>
           <div nz-col nzSpan="1">
             <br />
@@ -89,7 +89,7 @@
           </div>
           <div nz-col nzSpan="24">
             <label class="search__label">Về việc</label>
-            <input class="search__input" nz-input [(ngModel)]="veViec" disabled />
+            <input class="search__input" nz-input [(ngModel)]="veViec" />
           </div>
         </div>
       </nz-card>
@@ -97,7 +97,7 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Danh mục hàng hóa đề xuất'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              
+
             </div>
             <nz-table nzBordered class="table__body">
               <thead>
@@ -124,46 +124,102 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>
-                    <div *ngFor="let item of vatTus">
-                      <div *ngIf="item.id == data.maVtu">
-                        {{item.tenDm}}
+                  <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <div *ngFor="let item of vatTus">
+                        <div *ngIf="item.id == data.maVtu">
+                          {{item.tenDm}}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div *ngFor="let item of dviTinhs">
-                      <div *ngIf="item.id == data.maDviTinh">
-                        {{item.tenDm}}
+                    </td>
+                    <td>
+                      <div *ngFor="let item of dviTinhs">
+                        <div *ngIf="item.id == data.maDviTinh">
+                          {{item.tenDm}}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    {{data.soLuong}}
-                  </td>
-                  <td>{{ data.donGia }}</td>
-                  <td>
-                    <div *ngFor="let item of dviTiens">
-                      <div *ngIf="item.id == data.maDviTien">
-                        {{item.tenDm}}
+                    </td>
+                    <td>
+                      {{data.soLuong}}
+                    </td>
+                    <td>{{ data.donGia }}</td>
+                    <td>
+                      <div *ngFor="let item of dviTiens">
+                        <div *ngIf="item.id == data.maDviTien">
+                          {{item.tenDm}}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>{{ data.thanhTien }}</td>
-                  <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
-                  </td>
-                  <td [hidden]="status">
-                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                  </td>
-                  <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                  </td>
-                  <td [hidden]="status">
-                    <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                      (ngModelChange)="updateSingleChecked()"></label>
-                  </td>
+                    </td>
+                    <td>{{ data.thanhTien }}</td>
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+                  </ng-container>
+                  <ng-template #editTemplate>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mặt hàng"
+                        [(ngModel)]="editCache[data.id].data.maVtu">
+                        <nz-option *ngFor="let item of vatTus" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
+                      </nz-select>
+                    </td>
+
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị hàng"
+                        [(ngModel)]="editCache[data.id].data.maDviTinh">
+                        <nz-option *ngFor="let item of dviTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
+                      </nz-select>
+                    </td>
+
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.soLuong"></nz-input-number>
+                    </td>
+
+                    <td>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.donGia"></nz-input-number>
+                    </td>
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tiền"
+                        [(ngModel)]="editCache[data.id].data.maDviTien">
+                        <nz-option *ngFor="let item of dviTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
+                      </nz-select>
+                    </td>
+
+                    <td>
+                      {{editCache[data.id].data.thanhTien}}
+                    </td>
+
+                    <td [hidden]="status">
+                      <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    </td>
+                    <td>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
+                    </td>
+                    <td [hidden]="status">
+                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    </td>
+                    <td [hidden]="status">
+                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                        (ngModelChange)="updateSingleChecked()"></label>
+                    </td>
+                  </ng-template>
                 </tr>
               </tbody>
             </nz-table>

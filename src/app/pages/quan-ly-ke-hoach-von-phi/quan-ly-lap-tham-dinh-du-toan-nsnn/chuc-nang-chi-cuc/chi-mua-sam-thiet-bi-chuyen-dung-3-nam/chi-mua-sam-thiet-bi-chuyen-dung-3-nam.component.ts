@@ -40,7 +40,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   chiTietBcaos: any;
   lstFile: any = [];
   status: boolean = false;
-  namBcao = new Date().getFullYear();
+  namBcao: number;
   userData!: any;
   role!: any;
   unit!: any;
@@ -286,7 +286,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh+1,
       namHienHanh: this.namBaoCaoHienHanh,
       soVban: this.soVban,
     };

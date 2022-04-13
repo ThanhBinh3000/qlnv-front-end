@@ -67,9 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
-                      <i class="icon htvbdh_dong"></i>
-                      <span>Đóng</span>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                         (click)="redirectChiTieuKeHoachNam()">
+                         <i class="icon htvbdh_dong"></i>
+                         <span>Đóng</span>
                     </a>
                </div>
           </div>
@@ -97,17 +98,19 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        {{namBaoCaoHienHanh}}
+                                        <input type="number" nz-input class="input__search" name="" id=""
+                                             [(ngModel)]="namBaoCaoHienHanh">
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Số VB gửi TC">
-                                        Dự toán chi mua sắm máy móc thiết bị chuyên dụng 3 năm
-                                   </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Loại báo cáo" *ngIf="!checkDv">
+                                   <nz-descriptions-item nzTitle="Số VB gửi TC" *ngIf="!checkDv">
                                         {{soVban}}
                                    </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Loại báo cáo">
+                                        Dự toán chi mua sắm máy móc thiết bị chuyên dụng 3 năm
+                                   </nz-descriptions-item>
+
                               </nz-descriptions>
                          </div>
                     </div>
@@ -118,7 +121,8 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         <!-- <div class="inner-box">Đơn vị: -->
-                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien">
+                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                                             [(ngModel)]="maDviTien">
                                              <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                                              <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                                              <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
@@ -132,7 +136,7 @@
                                         <tr>
                                              <th rowspan="2">STT</th>
                                              <th rowspan="2" nzWidth="25%">Chỉ tiêu</th>
-                                             <th colspan="3" >Tổng cộng</th>
+                                             <th colspan="3">Tổng cộng</th>
                                              <th colspan="3" rowspan="2" [hidden]="status"></th>
                                              <th rowspan="2" [hidden]="status">
                                                   <label nz-checkbox [(ngModel)]="allChecked"
@@ -191,26 +195,29 @@
                                                   <td>{{ i + 1 }}</td>
 
                                                   <td>
-                                                       <nz-select nzShowSearch nzAllowClear
+                                                       <nz-select nzShowSearch nzAllowClear class="my-ant"
                                                             nzPlaceHolder="Chọn nội dung"
                                                             [(ngModel)]="editCache[data.id].data.maTbi">
-                                                            <nz-option *ngFor="let item of listMachitieu" [nzValue]="item.id"
-                                                                 [nzLabel]="item.tenDm"></nz-option>
+                                                            <nz-option *ngFor="let item of listMachitieu"
+                                                                 [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                                                        </nz-select>
                                                   </td>
 
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.n1"></nz-input-number>
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            nzSize="small" [(ngModel)]="editCache[data.id].data.n1">
+                                                       </nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.n2"></nz-input-number>
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            nzSize="small" [(ngModel)]="editCache[data.id].data.n2">
+                                                       </nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.n3"></nz-input-number>
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            nzSize="small" [(ngModel)]="editCache[data.id].data.n3">
+                                                       </nz-input-number>
                                                   </td>
 
                                                   <td [hidden]="status">
@@ -218,7 +225,8 @@
                                                   </td>
                                                   <td>
                                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                       <a nz-popconfirm
+                                                            nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
