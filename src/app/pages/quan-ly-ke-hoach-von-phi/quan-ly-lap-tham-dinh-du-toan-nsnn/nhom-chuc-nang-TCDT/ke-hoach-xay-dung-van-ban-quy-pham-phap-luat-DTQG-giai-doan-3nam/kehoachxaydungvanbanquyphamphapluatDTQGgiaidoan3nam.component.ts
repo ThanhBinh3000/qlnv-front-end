@@ -176,8 +176,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    
-
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -195,7 +193,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.getStatusButton();
     this.spinner.hide();
     //check role cho các nut trinh duyet
-    
   }
 
   redirectkehoachvonphi() {
@@ -221,7 +218,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         },
       );
-  
   }
 
   getStatusButton(){
