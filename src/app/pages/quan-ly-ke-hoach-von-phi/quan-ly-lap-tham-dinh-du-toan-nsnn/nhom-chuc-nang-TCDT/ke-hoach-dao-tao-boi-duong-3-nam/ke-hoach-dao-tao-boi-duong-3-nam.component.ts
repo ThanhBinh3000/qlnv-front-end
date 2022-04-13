@@ -177,7 +177,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           if (res.statusCode == 0) {
             this.maBaoCao = res.data;
           } else {
-           this.notification.error(MESSAGE.ERROR, res?.msg);
+           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
         },
         (err) => {
@@ -249,7 +249,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       }
     },
     (err) => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   );
 
@@ -439,7 +439,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();

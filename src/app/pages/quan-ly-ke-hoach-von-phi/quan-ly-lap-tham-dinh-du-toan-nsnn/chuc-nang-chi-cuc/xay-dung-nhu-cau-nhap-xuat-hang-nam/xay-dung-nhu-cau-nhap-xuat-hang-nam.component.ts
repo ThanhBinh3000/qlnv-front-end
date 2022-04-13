@@ -178,7 +178,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
         },
         (err) => {
@@ -197,7 +197,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.tenTbis = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -218,7 +218,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
             this.checkDv = true;
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -331,7 +331,7 @@ getStatusButton(){
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -347,7 +347,7 @@ getStatusButton(){
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then( async res => {
         if (res.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           await this.getDetailReport();
             this.getStatusButton();
         } else {
@@ -631,7 +631,7 @@ getStatusButton(){
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
       },err =>{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
       this.updateEditCache()
       this.spinner.hide();
