@@ -67,9 +67,9 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" >
-                      <i class="icon htvbdh_dong"></i>
-                      <span>Đóng</span>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                         <i class="icon htvbdh_dong"></i>
+                         <span>Đóng</span>
                     </a>
                </div>
           </div>
@@ -97,10 +97,11 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        {{namBaoCaoHienHanh}}
+                                        <input type="number" nz-input class="input__search" name="" id=""
+                                             [(ngModel)]="namBaoCaoHienHanh">
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm BC">
-                                        {{namBcao}}
+                                        {{namBaoCaoHienHanh + 1}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
@@ -304,7 +305,8 @@
                                                   </td>
                                                   <td>
                                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                       <a nz-popconfirm
+                                                            nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
@@ -316,6 +318,51 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
+                                        <ng-container *ngIf="lstCTietBCao.length != 0">
+                                             <tr>
+                                                  <td></td>
+                                                  <td>Tổng</td>
+                                                  <td>
+                                                       {{tong.luongGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.cphiXuatCoDmucGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.cphiXuatChuaDmucGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienCoDmucGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienKhongDmucGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienCongGao}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.luongThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.cphiXuatCoDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.cphiXuatChuaDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienCoDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienKhongDmucThoc}}
+                                                  </td>
+                                                  <td>
+                                                       {{tong.thanhTienCongThoc}}
+                                                  </td>
+                                                  <td [hidden]="status"></td>
+                                                  <td [hidden]="status"></td>
+                                                  <td [hidden]="status"></td>
+                                             </tr>
+                                        </ng-container>
                                    </tbody>
                               </nz-table>
                          </nz-tab>
@@ -363,7 +410,7 @@
                                                        </th>
                                                   </ng-container>
                                              </ng-container>
-                                             
+
 
                                              <th rowspan="2" nzWidth="100px">
                                                   Tổng
@@ -489,10 +536,12 @@
                                                   <ng-container *ngFor="let item of lstCTietBCao">
                                                        <ng-container *ngIf="item.maCucDtnnKvuc">
                                                             <td>
-                                                                 <div *ngFor="let e of editCache[item.id].data.listCtiet">
+                                                                 <div
+                                                                      *ngFor="let e of editCache[item.id].data.listCtiet">
                                                                       <ng-container *ngIf="e.vitri == data.id">
-                                                                           <nz-input-number class="search__input" nzSize="small"
-                                                                                [(ngModel)]="e.sl" (change)="tongSl(data.id)">
+                                                                           <nz-input-number class="search__input"
+                                                                                nzSize="small" [(ngModel)]="e.sl"
+                                                                                (change)="tongSl(data.id)">
                                                                            </nz-input-number>
                                                                       </ng-container>
                                                                  </div>
@@ -534,7 +583,8 @@
 
                                                   <td>
                                                        <a (click)="saveEdit1(data.id)" class="save">Lưu</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                       <a nz-popconfirm
+                                                            nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                             (nzOnConfirm)="cancelEdit1(data.id)" class="save">Hủy</a>
                                                   </td>
 
@@ -548,6 +598,7 @@
                                                   </td>
                                              </ng-template>
                                         </tr>
+
                                    </tbody>
                               </nz-table>
                          </nz-tab>

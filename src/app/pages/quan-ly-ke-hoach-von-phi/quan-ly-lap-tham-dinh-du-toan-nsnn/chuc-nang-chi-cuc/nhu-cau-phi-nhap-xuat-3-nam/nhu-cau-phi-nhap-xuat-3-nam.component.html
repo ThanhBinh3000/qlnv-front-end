@@ -97,19 +97,21 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        {{namBaoCaoHienHanh}}
+                                        <input type="number" nz-input class="input__search" name="" id=""
+                                             [(ngModel)]="namBaoCaoHienHanh">
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Loại báo cáo">
-                                        Xây dựng Nhu cầu phí nhập xuất theo các năm của giai đoạn 03 năm
+                                   <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv">
+                                        {{soVban}}
                                    </nz-descriptions-item>
+                                   
                                    <nz-descriptions-item nzTitle="Năm BC">
                                         {{namBaoCaoHienHanh + 1}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv">
-                                        {{soVban}}
+                                   <nz-descriptions-item nzTitle="Loại báo cáo">
+                                        Xây dựng Nhu cầu phí nhập xuất theo các năm của giai đoạn 03 năm
                                    </nz-descriptions-item>
                               </nz-descriptions>
                          </div>
@@ -295,9 +297,9 @@
                                                        {{tong}}
                                                   </td>
                                                   <td></td>
-                                                  <td></td>
-                                                  <td></td>
-                                                  <td></td>
+                                                  <td [hidden]="status"></td>
+                                                  <td [hidden]="status"></td>
+                                                  <td [hidden]="status"></td>
                                              </tr>
                                         </ng-container>
                                    </tbody>

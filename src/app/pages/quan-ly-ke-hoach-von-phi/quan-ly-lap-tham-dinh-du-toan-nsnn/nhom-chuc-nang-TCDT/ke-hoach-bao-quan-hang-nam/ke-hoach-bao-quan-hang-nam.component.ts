@@ -114,7 +114,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusVP:boolean = true;                      // trang thai an hien cua van phong
+  statusVP: boolean = true;                      // trang thai an hien cua van phong
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -183,6 +183,20 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
       this.maDonViTao = this.userInfo?.dvql;
+      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.maBaoCao = data.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      );
+      this.maBaoCao = '';
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -202,6 +216,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = parseInt(this.namBaoCaoHienHanh, 10) + 1;
     }
     this.getStatusButton();
     //get danh muc noi dung
@@ -238,7 +253,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  getStatusButton(){
+  getStatusButton() {
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -248,7 +263,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
-  
+
   //get user info
   async getUserInfo(username: string) {
     await this.userService.getUserInfo(username).toPromise().then(
@@ -312,9 +327,9 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maLoaiBcao: this.maLoaiBaoCao,
-      namBcao: this.namBcao,
+      namBcao: this.namBaoCaoHienHanh + 1,
       maDviTien: this.maDviTien,
-      namHienHanh: 2022,
+      namHienHanh: this.namBaoCaoHienHanh,
     };
 
     this.spinner.show();
@@ -343,9 +358,9 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-      },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
 
     }
 
@@ -381,10 +396,10 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         await this.getDetailReport();
         this.getStatusButton();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -407,7 +422,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBaoCaoHienHanh;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.namBcao = data.data.namBcao
           this.trangThaiBanGhi = data.data.trangThai;
           if (
@@ -597,7 +612,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.listIdDelete += id + ",";
     }
 
-    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1) {
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -621,7 +636,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
 
-    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1) {
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -668,7 +683,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    if (!this.editCache[id].data.maCucDtnnKvuc){
+    if (!this.editCache[id].data.maCucDtnnKvuc) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
@@ -688,7 +703,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maCucDtnnKvuc){
+    if (!this.editCache[id].data.maCucDtnnKvuc) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
@@ -707,7 +722,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTietBCao[index].checked = false;
     this.editCache[id].edit = false;
 
-    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1){
+    if (this.lstCTietBCao.findIndex(e => e.maCucDtnnKvuc === this.vanPhongs[0].maDvi) != -1) {
       this.statusVP = false;
     } else {
       this.statusVP = true;
@@ -764,7 +779,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   // them dong moi
   addLine1(id: number): void {
     var ind: number = this.lstVtu.findIndex(e => e.loaiDmuc == 0);
-    
+
     let item: miniData = {
       maVtuTbi: "",
       stt: "",
@@ -795,7 +810,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       data.listCtiet.push(mm);
       this.editCache[data.id].data.listCtiet.push(mm1);
     })
-    this.lstVtu.splice(Math.min(id,Math.max(1,ind)), 0, item);
+    this.lstVtu.splice(Math.min(id, Math.max(1, ind)), 0, item);
     this.editCache1[item.id] = {
       edit: true,
       data: { ...item }
@@ -874,7 +889,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit1(id: string): void {
-    if (!this.editCache1[id].data.maVtuTbi){
+    if (!this.editCache1[id].data.maVtuTbi) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
@@ -897,7 +912,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // luu thay doi
   saveEdit1(id: string): void {
-    if (!this.editCache1[id].data.maVtuTbi){
+    if (!this.editCache1[id].data.maVtuTbi) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
@@ -1047,12 +1062,12 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   //kiem tra xem vat tu da duoc chon hay chua
-  checkVtu(id: any){
+  checkVtu(id: any) {
     var index: number = this.lstVtu.findIndex(e => e.id === id);
     var ma: any = this.editCache1[id].data;
     var kt: boolean = false;
     this.lstVtu.forEach(item => {
-      if ((id != item.id)&&(item.maVtuTbi == ma.maVtuTbi)&&(item.loaiDmuc == ma.loaiDmuc)) {
+      if ((id != item.id) && (item.maVtuTbi == ma.maVtuTbi) && (item.loaiDmuc == ma.loaiDmuc)) {
         kt = true;
       }
     })
@@ -1063,12 +1078,12 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     }
   }
   //kiem tra xe cuc DTNN KV duoc chon hay chua
-  checkCucKV(id: any){
+  checkCucKV(id: any) {
     var index: number = this.lstCTietBCao.findIndex(e => e.id === id);
     var ma: any = this.editCache[id].data.maCucDtnnKvuc;
     var kt: boolean = false;
     this.lstCTietBCao.forEach(item => {
-      if ((id != item.id)&&(item.maCucDtnnKvuc == ma)) {
+      if ((id != item.id) && (item.maCucDtnnKvuc == ma)) {
         kt = true;
       }
     })

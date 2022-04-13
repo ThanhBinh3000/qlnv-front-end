@@ -338,7 +338,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien='01',
       maLoaiBcao: QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();

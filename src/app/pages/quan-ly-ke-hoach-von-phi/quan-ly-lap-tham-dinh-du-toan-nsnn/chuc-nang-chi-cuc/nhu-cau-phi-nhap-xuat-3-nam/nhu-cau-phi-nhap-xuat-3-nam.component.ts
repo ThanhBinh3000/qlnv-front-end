@@ -15,10 +15,10 @@ import { MESSAGE } from '../../../../../constants/message';
 
 export class ItemData {
      stt!: number;
-     maVtu!: string;
-     maNhomChi!: string;
-     maLoaiChi!: string;
-     maDviTinh!: string;
+     maVtu!: String;
+     maNhomChi!: String;
+     maLoaiChi!: String;
+     maDviTinh!: String;
      dmucPhiTc!: number;
      sl!: number;
      thanhTien: number = this.sl * this.dmucPhiTc;
@@ -143,20 +143,6 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                this.nguoiNhap = this.userInfo?.username;
                this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
                this.maDonViTao = this.userInfo?.dvql;
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-                    (data) => {
-                         if (data.statusCode == 0) {
-                              this.maBaoCao = data.data;
-                         } else {
-                              this.notification.error(MESSAGE.ERROR, data?.msg);
-                         }
-                    },
-                    (err) => {
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    }
-               );
-               this.maBaoCao = '';
-               this.namBaoCaoHienHanh = new Date().getFullYear();
           } else {
                this.trangThaiBanGhi = "1";
                this.nguoiNhap = this.userInfo?.username;
@@ -179,7 +165,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           }
 
           this.getStatusButton();
-          this.danhMucService.dMVatTu().toPromise().then(
+          this.danhMucService.dMVatTu().subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.vatTus = data.data?.content;
@@ -191,7 +177,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          this.danhMucService.dMNhom().toPromise().then(
+          this.danhMucService.dMNhom().subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.nhomChis = data.data?.content;
@@ -203,7 +189,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          this.danhMucService.dMLoai().toPromise().then(
+          this.danhMucService.dMLoai().subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.loaiChis = data.data?.content;
@@ -215,7 +201,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          this.danhMucService.dMDviTinh().toPromise().then(
+          this.danhMucService.dMDviTinh().subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.dviTinhs = data.data?.content;
@@ -318,8 +304,8 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien ="01",
                maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N,
-               namBcao: this.namBaoCaoHienHanh,
-               namHienHanh: this.namBcao,
+               namBcao: this.namBaoCaoHienHanh + 1,
+               namHienHanh: this.namBaoCaoHienHanh,
                soVban: this.soVban,
           };
           this.spinner.show();
