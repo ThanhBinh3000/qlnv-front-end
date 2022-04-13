@@ -67,9 +67,10 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
-                      <i class="icon htvbdh_dong"></i>
-                      <span>Đóng</span>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                         (click)="redirectChiTieuKeHoachNam()">
+                         <i class="icon htvbdh_dong"></i>
+                         <span>Đóng</span>
                     </a>
                </div>
           </div>
@@ -97,10 +98,11 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        {{namBaoCaoHienHanh}}
+                                        <input type="number" nz-input class="input__search" name="" id=""
+                                             [(ngModel)]="namBaoCaoHienHanh">
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm BC">
-                                        {{namBcao}}
+                                        {{namBaoCaoHienHanh + 1}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
@@ -135,9 +137,9 @@
                                              <th rowspan="4" nzWidth="75px">Tổng cộng</th>
                                              <th colspan="13">Khoản 331</th>
                                              <th colspan="7">Khoản 341</th>
-                                             <th >Khoản<br />085</th>
-                                             <th >Khoản<br /> 102</th>
-                                             <th >Khoản<br /> 398</th>
+                                             <th>Khoản<br />085</th>
+                                             <th>Khoản<br /> 102</th>
+                                             <th>Khoản<br /> 398</th>
 
                                              <th colspan="3" rowspan="4" [hidden]="status"></th>
                                              <th rowspan="4" [hidden]="status">
@@ -181,7 +183,7 @@
                                              <th nzWidth="75px">Thuê<br />kho</th>
                                              <th nzWidth="75px">Mua sắm<br />tài sản</th>
                                              <th nzWidth="75px">Bảo hiểm<br />hàng hóa</th>
-                                             <th nzWidth="75px">Phòng <br />trống mối,<br /> KPLB</th>
+                                             <th nzWidth="75px">Phòng <br />chống mối,<br /> KPLB</th>
                                              <th nzWidth="75px">Vận<br /> chuyển<br /> bảo quản<br /> tài sản<br /> quý
                                                   hiếm</th>
                                              <th nzWidth="75px">Sửa<br /> chữa<br /> kho tàng</th>
@@ -209,12 +211,12 @@
                                              <td>16</td>
                                              <td>17</td>
                                              <td>18</td>
-                                             <td>16</td>
-                                             <td>17</td>
-                                             <td>18</td>
                                              <td>19</td>
                                              <td>20</td>
                                              <td>21</td>
+                                             <td>22</td>
+                                             <td>23</td>
+                                             <td>24</td>
                                              <td width="2.25%" [hidden]="status"></td>
                                              <td width="2.25%" [hidden]="status"></td>
                                              <td width="2.25%" [hidden]="status"></td>
@@ -238,15 +240,15 @@
                                              <td>{{tong.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem}}</td>
                                              <td>{{tong.k331KhongTchuChuaDmucSchuaKhoTang}}</td>
                                              <td>{{tong.k341Tcong}}</td>
-                                             <td>{{tong.k341Luong}}</td>
-                                             <td>{{tong.k341TxTheoDmuc}}</td>
-                                             <td>{{tong.k341ChiTxKhongDmuc}}</td>
-                                             <td>{{tong.k341Luong}}</td>
-                                             <td>{{tong.k341TxTheoDmuc}}</td>
-                                             <td>{{tong.k341ChiTxKhongDmuc}}</td>
-                                             <td>{{tong.k341ChiTxKhongDmuc}}</td>
-                                             <td>{{tong.k341ChiTxKhongDmuc}}</td>
-                                             <td>{{tong.k341ChiTxKhongDmuc}}</td>
+                                             <td>{{tong.k341LuongTuChu}}</td>
+                                             <td>{{tong.k341TxTheoDmucTuChu}}</td>
+                                             <td>{{tong.k341ChiTxKhongDmucTuChu}}</td>
+                                             <td>{{tong.k341LuongKhongTuChu}}</td>
+                                             <td>{{tong.k341TxTheoDmucKhongTuChu}}</td>
+                                             <td>{{tong.k341ChiTxKhongDmucKhongTuChu}}</td>
+                                             <td>{{tong.k085DaoTao}}</td>
+                                             <td>{{tong.k102NghienCuuKhoaHoc}}</td>
+                                             <td>{{tong.k398DamBaoXaHoi}}</td>
 
                                              <td width="2.25%" [hidden]="status"></td>
                                              <td width="2.25%" [hidden]="status"></td>
@@ -295,23 +297,23 @@
 
                                                   <td>{{ data.k341Tcong }}</td>
 
-                                                  <td>{{ data.k341Luong }}</td>
+                                                  <td>{{ data.k341LuongTuChu }}</td>
 
-                                                  <td>{{ data.k341TxTheoDmuc }}</td>
+                                                  <td>{{ data.k341TxTheoDmucTuChu }}</td>
 
-                                                  <td>{{ data.k341ChiTxKhongDmuc }}</td>
+                                                  <td>{{ data.k341ChiTxKhongDmucTuChu }}</td>
 
-                                                  <td>{{ data.k341Luong }}</td>
+                                                  <td>{{ data.k341LuongKhongTuChu }}</td>
 
-                                                  <td>{{ data.k341TxTheoDmuc }}</td>
+                                                  <td>{{ data.k341TxTheoDmucKhongTuChu }}</td>
 
-                                                  <td>{{ data.k341ChiTxKhongDmuc }}</td>
+                                                  <td>{{ data.k341ChiTxKhongDmucKhongTuChu }}</td>
 
-                                                  <td>{{ data.k341ChiTxKhongDmuc }}</td>
+                                                  <td>{{ data.k085DaoTao }}</td>
 
-                                                  <td>{{ data.k341ChiTxKhongDmuc }}</td>
+                                                  <td>{{ data.k102NghienCuuKhoaHoc }}</td>
 
-                                                  <td>{{ data.k341ChiTxKhongDmuc }}</td>
+                                                  <td>{{ data.k398DamBaoXaHoi }}</td>
 
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -332,11 +334,10 @@
                                                   <td>{{ i + 1 }}</td>
 
                                                   <td>
-                                                       <nz-select nzShowSearch nzAllowClear
-                                                            nzPlaceHolder="Chọn đơn vị"
+                                                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis"
-                                                                 [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
+                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.id"
+                                                                 [nzLabel]="item.tenDvi"></nz-option>
                                                        </nz-select>
                                                   </td>
 
@@ -382,7 +383,8 @@
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucThueKho" ></nz-input-number>
+                                                            [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucThueKho">
+                                                       </nz-input-number>
                                                   </td>
 
                                                   <td>
@@ -421,53 +423,66 @@
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.k341Luong"
+                                                            [(ngModel)]="editCache[data.id].data.k341LuongTuChu"
                                                             (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.k341TxTheoDmuc"
+                                                            [(ngModel)]="editCache[data.id].data.k341TxTheoDmucTuChu"
                                                             (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmuc"
+                                                            [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmucTuChu"
                                                             (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341Luong}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k341LuongKhongTuChu"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341TxTheoDmuc}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k341TxTheoDmucKhongTuChu"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmucKhongTuChu"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k085DaoTao"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k102NghienCuuKhoaHoc"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       {{editCache[data.id].data.k341ChiTxKhongDmuc}}
+                                                       <nz-input-number class="search__input" nzSize="small"
+                                                            [(ngModel)]="editCache[data.id].data.k398DamBaoXaHoi"
+                                                            (change)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td [hidden]="status">
                                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                                   </td>
                                                   <td>
-                                                       <a (click)="saveEdit(data.id)" class="save">Save</a>
-                                                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Cancel</a>
+                                                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                                       <a nz-popconfirm
+                                                            nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

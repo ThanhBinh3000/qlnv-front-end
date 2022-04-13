@@ -327,7 +327,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                maDviTien: this.maDviTien = "01",
                maLoaiBcao: QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N,
                namHienHanh: this.namBaoCaoHienHanh,
-               namBcao: this.namBcao,
+               namBcao: this.namBaoCaoHienHanh + 1,
                soVban: this.soVban,
           };
 

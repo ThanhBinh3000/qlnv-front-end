@@ -90,7 +90,7 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -332,7 +332,8 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.namHhanhN" ></nz-input-number>
+                      <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.namHhanhN">
+                      </nz-input-number>
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.tranChiDuocTbN1"
@@ -340,29 +341,29 @@
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.ncauChiCuaDviN1"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       {{editCache[data.id].data.clechTranChiVsNcauN1}}
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.tranChiDuocTbN2"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.ncauChiCuaDviN2"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       {{editCache[data.id].data.clechTranChiVsNcauN2}}
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.tranChiDuocTbN3"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.ncauChiCuaDviN3"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       {{editCache[data.id].data.clechTranChiVsNcauN3}}
@@ -372,8 +373,8 @@
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Hủy</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

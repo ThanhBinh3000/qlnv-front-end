@@ -338,8 +338,8 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien ="01",
                maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N,
-               namBcao: this.namBaoCaoHienHanh,
-               namHienHanh: this.namBcao,
+               namBcao: this.namBaoCaoHienHanh + 1,
+               namHienHanh: this.namBaoCaoHienHanh,
                soVban: this.soVban,
           };
           this.spinner.show();
