@@ -82,13 +82,17 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.stt}}
+                      {{data.tenDm}}
                     </td>
                     <div>
-                      {{data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </div>
                     <td>{{data.tong}}</td>
-                    <td>{{data.nguonNSNN}}</td>
+                    <td>{{data.nguonNsnn}}</td>
                     <td>{{data.nguonKhac}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -96,17 +100,21 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.stt}}
+                      {{editCache[data.id].data.tenDm}}
                     </td>
                     <td>
-                      {{editCache[data.id].data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == editCache[data.id].data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </td>
                     <td>
                            {{editCache[data.id].data.tong}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.nguonNSNN"
+                           [(ngModel)]="editCache[data.id].data.nguonNsnn"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>

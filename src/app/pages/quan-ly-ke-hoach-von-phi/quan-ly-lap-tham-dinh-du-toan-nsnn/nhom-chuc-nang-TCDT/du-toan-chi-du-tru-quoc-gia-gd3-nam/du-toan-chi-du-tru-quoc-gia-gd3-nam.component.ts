@@ -287,7 +287,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N,
-      namHienHanh: this.namBcaohienhanh,
+      namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
     };
 
@@ -375,7 +375,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBaoCaoHienHanh;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           // set list id file ban dau

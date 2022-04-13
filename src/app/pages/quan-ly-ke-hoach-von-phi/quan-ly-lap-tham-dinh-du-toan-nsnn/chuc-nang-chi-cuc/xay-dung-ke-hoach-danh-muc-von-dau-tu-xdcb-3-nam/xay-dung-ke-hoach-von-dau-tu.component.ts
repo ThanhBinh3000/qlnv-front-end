@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   tenDan!: string;
@@ -107,6 +109,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   capDv:any;
   checkDv:boolean;
   currentday: Date = new Date();
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -139,13 +143,17 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
               private userSerivce: UserService,
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
-              private location : Location
+              private location : Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -176,8 +184,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.errorMessage = err.error.message;
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -195,8 +203,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -277,6 +285,9 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
   getStatusButton(){
