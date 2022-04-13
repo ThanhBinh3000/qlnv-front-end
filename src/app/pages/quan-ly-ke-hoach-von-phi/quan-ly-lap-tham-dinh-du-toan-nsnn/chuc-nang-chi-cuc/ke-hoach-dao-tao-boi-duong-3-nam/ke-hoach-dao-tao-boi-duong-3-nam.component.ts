@@ -632,12 +632,12 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   tinhTong(heSo: number, item: ItemData){
-    this.tong.soLuotNguoiN1 += heSo * item.soLuotNguoiN1; 
-    this.tong.thanhTienN1 += heSo * item.thanhTienN1; 
-    this.tong.soLuotNguoiN2 += heSo * item.soLuotNguoiN2; 
-    this.tong.thanhTienN2 += heSo * item.thanhTienN2; 
-    this.tong.soLuotNguoiN3 += heSo * item.soLuotNguoiN3; 
-    this.tong.thanhTienN3 += heSo * item.thanhTienN3; 
+    this.tong.soLuotNguoiN1 += heSo * item.soLuotNguoiN1;
+    this.tong.thanhTienN1 += heSo * item.thanhTienN1;
+    this.tong.soLuotNguoiN2 += heSo * item.soLuotNguoiN2;
+    this.tong.thanhTienN2 += heSo * item.thanhTienN2;
+    this.tong.soLuotNguoiN3 += heSo * item.soLuotNguoiN3;
+    this.tong.thanhTienN3 += heSo * item.thanhTienN3;
   }
 
   //call tong hop

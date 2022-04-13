@@ -219,7 +219,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     );
 
-    
+
     this.spinner.hide();
   }
 
@@ -423,7 +423,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
             }
             this.lstCTietBCao.push(mm);
           })
-          
+
           this.lstFile = data.data.lstFile;
           var listVatTu: any = data.data.lstTongVtu;
           listVatTu.forEach(item => {
@@ -446,7 +446,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
               item.vitri = this.lstVtu.find(e => e.maVtuTbi==item.maVtuTbi).id;
             })
           })
-          
+
           this.updateEditCache();
 
 
@@ -920,7 +920,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   tinhLaiTongSl() {
-    this.lstVtu.forEach(item => { 
+    this.lstVtu.forEach(item => {
       item.tong = 0;
       this.lstCTietBCao.forEach(data => {
         data.listCtiet.forEach(e => {

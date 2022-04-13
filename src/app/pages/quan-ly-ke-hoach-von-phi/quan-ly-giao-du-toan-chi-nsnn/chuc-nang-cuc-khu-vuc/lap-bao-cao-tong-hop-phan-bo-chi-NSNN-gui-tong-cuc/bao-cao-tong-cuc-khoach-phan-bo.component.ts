@@ -168,7 +168,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                   }
                 },
                 (err) => {
-                  this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 }
               );
                this.maBaoCao = '';
@@ -195,7 +195,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                },
                (err) => {
                     console.log(err);
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           this.danhMucService.dMLoaiChi().toPromise().then(
@@ -209,7 +209,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                },
                (err) => {
                     console.log(err);
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           this.danhMucService.dMKhoanChi().toPromise().then(
@@ -223,7 +223,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                },
                (err) => {
                     console.log(err);
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           // this.danhMucService.dMMucChi().toPromise().then(
@@ -237,7 +237,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
           //      },
           //      (err) => {
           //           console.log(err);
-          //           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          //           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           //      }
           // );
 
@@ -251,7 +251,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                     }
                },
                (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           this.spinner.hide();
@@ -406,7 +406,7 @@ export class BaoCaoTongCucKhoachPhanBoComponent implements OnInit {
                },
                (err) => {
                     console.log(err);
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
           );
           this.spinner.show();
