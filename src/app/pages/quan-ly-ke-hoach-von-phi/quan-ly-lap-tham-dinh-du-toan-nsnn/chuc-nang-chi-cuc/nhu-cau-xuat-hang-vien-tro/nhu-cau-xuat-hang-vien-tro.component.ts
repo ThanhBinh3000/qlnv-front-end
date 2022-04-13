@@ -135,7 +135,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -167,6 +167,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
         }
       );
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -184,8 +185,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -252,6 +253,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       });
       return false;
     }
+  }
+
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
   getStatusButton(){
