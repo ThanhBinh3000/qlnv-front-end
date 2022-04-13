@@ -97,7 +97,8 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        {{namBaoCaoHienHanh}}
+                                        <input type="number" nz-input class="input__search" name="" id=""
+                                             [(ngModel)]="namBaoCaoHienHanh">
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}

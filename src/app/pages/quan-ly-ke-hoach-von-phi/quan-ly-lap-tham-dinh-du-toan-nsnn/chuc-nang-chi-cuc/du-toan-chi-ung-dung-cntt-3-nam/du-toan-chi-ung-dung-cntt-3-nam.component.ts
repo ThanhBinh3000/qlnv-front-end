@@ -350,7 +350,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien = "01",
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
