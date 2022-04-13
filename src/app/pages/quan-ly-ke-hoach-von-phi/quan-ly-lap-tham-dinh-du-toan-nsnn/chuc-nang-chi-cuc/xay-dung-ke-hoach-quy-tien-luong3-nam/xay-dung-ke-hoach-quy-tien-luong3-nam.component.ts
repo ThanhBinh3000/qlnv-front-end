@@ -12,6 +12,9 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+
 
 export class ItemData {
   maDvi!: String;
@@ -114,6 +117,9 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   capDv:any;
   checkDv:boolean;
   currentday: Date = new Date();
+  validateForm!: FormGroup;
+  messageValidate:any =MESSAGEVALIDATE;
+
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -147,13 +153,16 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
               private danhMucService: DanhMucHDVService,
               private notification: NzNotificationService,
               private location: Location,
-
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');

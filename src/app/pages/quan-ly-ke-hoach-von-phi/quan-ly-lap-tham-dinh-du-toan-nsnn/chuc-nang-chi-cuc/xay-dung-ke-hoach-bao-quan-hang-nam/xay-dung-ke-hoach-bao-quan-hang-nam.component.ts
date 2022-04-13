@@ -140,7 +140,9 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
 
   async ngOnInit() {
-    console.log(this.namBaoCaoHienHanh);
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -171,6 +173,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         }
       );
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh+1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -188,11 +191,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
-      this.namBcao = this.namBaoCaoHienHanh + 1
-      console.log(this.namBaoCaoHienHanh);
-
+      this.namBcao = this.namBaoCaoHienHanh+1
     }
 
     this.getStatusButton();
@@ -263,7 +263,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   tinhNam(){
-
     this.namBcao = this.namBaoCaoHienHanh+1;
   }
   getStatusButton(){
