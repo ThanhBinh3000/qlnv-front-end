@@ -47,7 +47,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
      private notification: NzNotificationService,
      private location: Location
      ) {
-    this.namgiao = this.currentYear.getFullYear();
+    
   }
 
   ngOnInit() {
@@ -56,7 +56,6 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.quankhoachvon.dMDonVi().subscribe(res => {
       if(res.statusCode==0){
         this.donviTaos = res.data;
-        console.log(this.donviTaos)
       }else{
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -72,6 +71,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.trangthai = '0';
   }
 
   //get infor user
@@ -123,7 +123,8 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.quankhoachvon.timkiemsokiemtratranchi(req).subscribe(res => {
         console.log(res);
         if(res.statusCode==0){
-          this.length = res.data.totalElements;
+          this.listSogiaoTranChi =[];
+          this.length = res.data.numberOfElements;
           this.totalElements = this.length;
           this.totalPages = res.data.totalPages;
           this.listSogiaoTranChi = res.data.content;

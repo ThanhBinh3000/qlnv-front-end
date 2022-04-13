@@ -229,7 +229,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
-          this.namBcaohienhanh = data.data.namBcao;
+          this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if(this.trangThaiBanGhi == '1' ||this.trangThaiBanGhi == '3' ||this.trangThaiBanGhi == '5' ||this.trangThaiBanGhi == '8' ){
             this.status = false;
@@ -240,6 +240,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';
           });
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -363,6 +364,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -466,8 +468,8 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBcaohienhanh.toString(),
-      namHienHanh: this.namBcaohienhanh.toString(),
+      namBcao: this.namBcaohienhanh+1,
+      namHienHanh: this.namBcaohienhanh,
     };
     this.spinner.show();
 
@@ -585,5 +587,51 @@ changeModel(id: string): void {
   this.editCache[id].data.chiMoi = Number(this.editCache[id].data.dtuPtrienChiMoi) + Number(this.editCache[id].data.chiTxChiMoi);
   this.editCache[id].data.dtuPtrien =Number(this.editCache[id].data.dtuPtrienChiCs) + Number(this.editCache[id].data.dtuPtrienChiMoi);
   this.editCache[id].data.chiTx = Number(this.editCache[id].data.chiTxChiCs) + Number(this.editCache[id].data.chiTxChiMoi);
+  }
+
+  //tinh hang tong cong
+  tong1:number =0;
+  tong2:number = 0;
+  tong3:number =0;
+  tong4:number =0;
+  tong5:number =0;
+  tong6:number =0;
+  tong7:number =0;
+  tong8:number =0;
+  tong9:number =0;
+  tong10:number =0;
+  tong11:number =0;
+  tong12:number =0;
+  tong13:number =0;
+  tinhTong(){
+  this.tong1 =0;
+  this.tong2= 0;
+  this.tong3=0;
+  this.tong4=0;
+  this.tong5=0;
+  this.tong6=0;
+  this.tong7=0;
+  this.tong8=0;
+  this.tong9=0;
+  this.tong10 =0;
+  this.tong11 =0;
+  this.tong12=0;
+  this.tong13 =0;
+  this.lstCTietBCao.forEach(e =>{
+
+    this.tong1 +=e.mtieuNvu;
+    this.tong2 +=e.csPhapLyThien;
+    this.tong3 +=e.hdongChuYeu;
+    this.tong4 +=e.nguonKphi;
+    this.tong5 +=e.tongSo;
+    this.tong6 +=e.chiCs;
+    this.tong7 +=e.chiMoi;
+    this.tong8 +=e.dtuPtrien;
+    this.tong9 +=e.dtuPtrienChiCs;
+    this.tong10 +=e.dtuPtrienChiMoi;
+    this.tong11 +=e.chiTx;
+    this.tong12 +=e.chiTxChiCs;
+    this.tong13 +=e.chiTxChiMoi;
+  })
   }
 }

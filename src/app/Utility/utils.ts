@@ -21,6 +21,7 @@ export class Utils {
     public static BCAO_03 = "03";
 
     // Trang thái báo cáo
+    public static TT_BC_0 = "0"; // Trạng thái của Phương án giao số trần chi (đã giao);
     public static TT_BC_1 = "1"; // Đang soạn,
     public static TT_BC_2 = "2"; // Trình duyệt,
     public static TT_BC_3 = "3"; // Trưởng BP từ chối,
@@ -186,6 +187,9 @@ export class Utils {
     public getStatusName(id: string) {
         let statusName;
         switch (id) {
+            case Utils.TT_BC_0:
+                statusName = "Đã giao";
+                break;
             case Utils.TT_BC_1:
                 statusName = "Đang soạn"
                 break;

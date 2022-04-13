@@ -42,14 +42,17 @@
             </div>
             <div nz-col nzSpan="6" >
               <label class="search__label">Đơn vị tạo</label>
-              <ng-container *ngIf="checkroleDvi==3;else template">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donViTao" formControlName="donViTao">
+                <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+              </nz-select>
+              <!-- <ng-container *ngIf="checkroleDvi==3;else template">
                 <input type="text" nz-input class="search__input" *ngIf="checkroleDvi==3;else template" value="{{getUnitName()}}" disabled>
             </ng-container>
                 <ng-template #template>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donViTao" formControlName="donViTao">
-                    <nz-option *ngFor="let item of donViTaos" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
+                    <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                   </nz-select>
-                </ng-template>
+                </ng-template> -->
             </div>
             
             <!-- <div nz-col nzSpan="6" *ngIf="checkroleDvi!=3">

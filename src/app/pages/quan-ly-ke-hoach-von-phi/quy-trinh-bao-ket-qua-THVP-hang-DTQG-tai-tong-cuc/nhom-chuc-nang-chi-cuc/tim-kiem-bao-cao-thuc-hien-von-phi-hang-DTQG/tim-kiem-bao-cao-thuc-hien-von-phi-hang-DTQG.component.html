@@ -48,19 +48,26 @@
               <nz-option *ngFor="let t of listTrangThai" [nzValue]="t.id" [nzLabel]="t.tenDm"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="13"></div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"  [(ngModel)]="searchFilter.maLoaiBcao" (ngModelChange)="setUrl($event)">
-              <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
-            </nz-select>
-          </div>
-
+          <div nz-col nzSpan="12"></div>
           <!-- <div nz-col nzSpan="6">
             <label class="search__label">Đợt báo cáo</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
           </div> -->
         </div>
+        <form nz-form  [formGroup]="validateForm" class="login-form" style="margin-bottom:12px">
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Loại báo cáo</label>
+              <nz-form-item>
+              <nz-form-control [nzErrorTip]="messageValidate.NOTBLANK">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao" [(ngModel)]="searchFilter.maLoaiBcao" (ngModelChange)="setUrl($event)">
+                <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
+              </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            </div>
+          </div>
+        </form>
       </nz-card>
       <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
@@ -135,7 +142,7 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Tổng hợp báo cáo từ chi cục trực thuộc</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()">
+        <button type="button" class="btn btn-main" (click)="themMoi();submitForm()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

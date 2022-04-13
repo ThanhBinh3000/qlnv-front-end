@@ -56,7 +56,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
      private location: Location,
      private fb: FormBuilder
      ) {
-    this.namgiao = this.currentYear.getFullYear();
+    // this.namgiao = this.currentYear.getFullYear();
   }
 
   ngOnInit() {

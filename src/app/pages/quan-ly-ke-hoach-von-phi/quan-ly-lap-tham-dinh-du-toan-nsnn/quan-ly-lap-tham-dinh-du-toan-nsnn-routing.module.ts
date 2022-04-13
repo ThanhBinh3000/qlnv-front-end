@@ -646,7 +646,7 @@ const routes: Routes = [
       ).then((m) => m.TimkiemsokiemtratranchiNSNNcuacacdonviModule),
   },
   {
-    path: 'so-kiem-tra-tran-tri-nsnn/:id',
+    path: 'so-kiem-tra-tran-tri-nsnn/:maDonViNhan/:maPa',
     loadChildren: () =>
       import(
         './Phuongangiaosokiemtratranchi/so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/sokiemtratranchiNSNNcuacacdonvi.module'

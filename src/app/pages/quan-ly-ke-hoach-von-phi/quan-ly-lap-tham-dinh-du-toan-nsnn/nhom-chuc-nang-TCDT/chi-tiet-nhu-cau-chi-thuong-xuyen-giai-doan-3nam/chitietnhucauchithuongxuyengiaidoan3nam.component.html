@@ -90,7 +90,7 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="text" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -99,12 +99,12 @@
                Chi tiết nhu cầu chi thường xuyên giai đoạn 3 năm
               </nz-descriptions-item>
             </nz-descriptions>
-            <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
+            <!-- <div class="search__body" nz-row [nzGutter]="[18, 12]" [hidden]="checkDv">
               <div nz-col nzSpan="3" >
                 <label class="search__label">Số VB gửi TC</label>
                 <input class="search__input" nz-input [(ngModel)]="soVban" disabled/>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </nz-card>
@@ -220,12 +220,12 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maNdung">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [(ngModel)]="editCache[data.id].data.maNdung">
                         <nz-option *ngFor="let item of listNoidung" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maNhomChi">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhóm chi" [(ngModel)]="editCache[data.id].data.maNhomChi">
                         <nz-option *ngFor="let item of listNhomchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

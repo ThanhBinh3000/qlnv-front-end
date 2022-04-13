@@ -90,7 +90,7 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="text" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -157,7 +157,6 @@
                 <tr>
                   <th>1</th>
                   <th>2</th>
-                  <th></th>
                   <th>3</th>
                   <th>4</th>
                   <th>5</th>
@@ -171,6 +170,7 @@
                   <th>13=14+15</th>
                   <th>14</th>
                   <th>15</th>
+                  <th>16</th>
                   <th [hidden]="status"></th>
                   <th [hidden]="status"></th>
                   <th [hidden]="status"></th>
@@ -226,12 +226,12 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maLvuc">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn lĩnh vực chi" [(ngModel)]="editCache[data.id].data.maLvuc">
                         <nz-option *ngFor="let item of listlinhvucchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="editCache[data.id].data.maMucChi">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại mục chi" [(ngModel)]="editCache[data.id].data.maMucChi">
                         <nz-option *ngFor="let item of listMucchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -269,7 +269,7 @@
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTx" disabled ></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTxChiCs" (change)="changeModel(data.id)"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTxChiCs" (change)="changeModel(data.id)" style="width:100px !important"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.chiTxChiMoi" (change)="changeModel(data.id)" ></nz-input-number>
@@ -290,6 +290,28 @@
                       (ngModelChange)="updateSingleChecked()"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Tổng cộng</td>
+                  <td></td>
+                  <td>{{tong1}}</td>
+                  <td>{{tong2}}</td>
+                  <td>{{tong3}}</td>
+                  <td>{{tong4}}</td>
+                  <td>{{tong5}}</td>
+                  <td>{{tong6}}</td>
+                  <td>{{tong7}}</td>
+                  <td>{{tong8}}</td>
+                  <td>{{tong9}}</td>
+                  <td>{{tong10}}</td>
+                  <td>{{tong11}}</td>
+                  <td>{{tong12}}</td>
+                  <td>{{tong13}}</td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
                 </tr>
               </tbody>
             </nz-table>

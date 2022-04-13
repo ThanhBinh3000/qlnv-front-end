@@ -290,7 +290,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.maphuongan = data.data.maPa;
           this.donvitao = data.data.maDvi;
           this.nguoinhap = data.data.nguoiTao;
-          this.ngaynhap = data.data.ngayTao;
+          this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           var soqd = data.data.soQd;
           var socv = data.data.soCv;
           if (

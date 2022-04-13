@@ -72,6 +72,10 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     trangThaiBanGhi:string ='1';
     donViTaos:any []=[];
     donvitao:any;
+
+    //bien url
+    maDonviNhan:any;
+    maPa:any;
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -89,8 +93,13 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
     //check param dieu huong router
-    this.id = this.router.snapshot.paramMap.get('id');
-    this.quanLyVonPhiService.getchitiettranchi(this.id).subscribe(
+    this.maDonviNhan = this.router.snapshot.paramMap.get('maDonViNhan');
+    this.maPa = this.router.snapshot.paramMap.get('maPa');
+    let objChiTietSoTranChi ={
+      maDviNhan:this.maDonviNhan,
+      maPa:this.maPa
+    }
+    this.quanLyVonPhiService.getchitiettranchi(objChiTietSoTranChi).subscribe(
       res => {
           if (res.statusCode == 0) {
               this.listchitiet = res.data.lstCTiet;
