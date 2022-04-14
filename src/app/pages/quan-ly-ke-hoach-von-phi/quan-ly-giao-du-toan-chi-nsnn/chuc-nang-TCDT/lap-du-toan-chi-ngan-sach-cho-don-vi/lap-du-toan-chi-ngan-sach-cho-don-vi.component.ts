@@ -14,6 +14,8 @@ import { Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   stt!: string;
@@ -100,16 +102,27 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     checked: true,
   };
   khoanMucs: any = [];
+  qDinhBTCs: any = [];
+  validateForm!: FormGroup;
+  messageValidate:any =MESSAGEVALIDATE;
+  ghiChu!: any
+  loaiQd!: any;
+  lyDoTuChoi!: any;
+  maQdCha!: any;
+  nam!: any;
+  noiQd!: any;
+  tenDvi!: any;
+  veViec!: any;
+  soQd!: any;
+  vanBan!: any;
+  nguoiKy!: any;
 
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-  soQd!: any;
-  vanBan!: any;
-  nguoiKy!: any;
-  lyDoTuChoi!: any;
+
 
   // upload file
   addFile() {
@@ -138,12 +151,16 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
               private userService: UserService,
               private notification: NzNotificationService,
               private modal: NzModalService,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
@@ -284,21 +301,27 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      // maDvi: this.maDonViTao,
+      loaiQd: this.loaiQd = "1",
+      lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      ngayQd: this.ngayQd,
-      noiQd: "12",
+      maDviTien: "01",
+      maNguoiKy: this.nguoiKy,
+      maQdCha: this.maQdCha,
+      nam: this.nam,
+      ngayQD: this.ngayQd,
+      noiDung: "1",
+      noiQd: this.noiQd,
       soQd: this.soQd,
-      trangThai: this.trangThaiBanGhi,
+      tenDvi: this.tenDvi,
+      trangThai: "1",
       vanBan: this.vanBan,
+      veViec: this.veViec,
+      ghiChu: this.ghiChu,
     };
-
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetGiaoService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -312,7 +335,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+      this.quanLyVonPhiService.updatelistGiaoDuToan(request).subscribe(res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         } else {
@@ -388,6 +411,43 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           } else {
             this.status = true;
           }
+          var idDanhMuc  = this.lstCTietBCao[0].maNdung;
+          let requestReport = {
+            id: idDanhMuc,
+          };
+
+          this.danhMucService.dMKhoanMuc().toPromise().then(
+            (data) => {
+              if (data.statusCode == 0) {
+                this.khoanMucs = data.data?.content;
+              } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+              }
+            },
+            (err) => {
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+          );
+
+          this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(res => {
+            if (data.statusCode == 0) {
+              console.log(res);
+              var tempArr = res.data;
+              tempArr.forEach(e =>{
+                this.khoanMucs.push(e);
+                e.lstQlnvDmKhoachVonPhi.forEach( el => {
+                this.khoanMucs.push(el);
+                })
+              })
+              this.khoanMucs.forEach(e => {
+                this.lstCTietBCao.push(e)
+              })
+            } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+
+           })
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
