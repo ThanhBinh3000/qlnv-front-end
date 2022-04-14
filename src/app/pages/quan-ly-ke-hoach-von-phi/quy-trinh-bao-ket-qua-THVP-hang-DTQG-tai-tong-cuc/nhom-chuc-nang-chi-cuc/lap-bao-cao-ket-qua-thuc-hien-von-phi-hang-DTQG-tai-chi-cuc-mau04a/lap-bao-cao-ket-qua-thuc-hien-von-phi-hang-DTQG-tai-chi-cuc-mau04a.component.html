@@ -40,7 +40,7 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-main" (click)="onSubmit('2')" [hidden]="statusBtnApprove">
+        <button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -57,7 +57,7 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP trả lại</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('4')" [hidden]="statusBtnTBP">
+        <a class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP phê duyệt</span>
         </a>
@@ -66,7 +66,7 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo trả lại</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('6')" [hidden]="statusBtnLD">
+        <a class="btn btn-main" (click)="onSubmit('6',null)" [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
@@ -79,7 +79,7 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Từ chối</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('9')"
+        <a class="btn btn-main" (click)="onSubmit('9',null)"
           [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Cục khu vực chấp thuận</span>
@@ -113,16 +113,16 @@
               <td>{{item.tieuDe}}</td>
               <td>{{getStatusNameBieuMau(item.trangThai)}}</td>
               <td>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="checkXem">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="status">
                   <span>Nhập dữ liệu</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="checkXem">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="!checkXem">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="statusBtnTBP">
                   <span>KIểm tra</span>
                 </button>
-                <button type="button" class="btn btn-main" [hidden]="checkXem">
+                <button type="button" class="btn btn-main" [hidden]="status">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
               </td>
@@ -1125,7 +1125,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04ax.length!=0" (click)="addLine(this.lstCTietBCao04ax.length,1)">
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04ax.length!=0 || status" (click)="addLine(this.lstCTietBCao04ax.length,1)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm dòng</span>
         </button>
@@ -1393,7 +1393,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04an.length!=0" (click)="addLine(this.lstCTietBCao04an.length,2)">
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04an.length!=0 || status" (click)="addLine(this.lstCTietBCao04an.length,2)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm dòng</span>
         </button>
@@ -1660,7 +1660,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04bx.length!=0" (click)="addLine(this.lstCTietBCao04bx.length,3)">
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao04bx.length!=0 || status" (click)="addLine(this.lstCTietBCao04bx.length,3)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm dòng</span>
         </button>
@@ -1925,7 +1925,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm cột</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao05.length!=0" (click)="addLine(this.lstCTietBCao05.length,4)">
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCao05.length!=0 || status" (click)="addLine(this.lstCTietBCao05.length,4)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm dòng</span>
         </button>
