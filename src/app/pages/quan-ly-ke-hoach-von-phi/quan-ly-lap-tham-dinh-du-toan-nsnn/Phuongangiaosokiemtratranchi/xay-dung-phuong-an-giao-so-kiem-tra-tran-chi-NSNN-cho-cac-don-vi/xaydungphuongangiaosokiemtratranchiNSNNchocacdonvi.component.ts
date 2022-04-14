@@ -53,7 +53,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   currentday: Date = new Date();
   //////
-  id: any;
+  maPa: any;
+  id:any;
   userInfor: any;
   status: boolean = false;
   ngaynhap: any;
@@ -112,9 +113,9 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     await this.getUserInfo(userName); //get user info
 
     //check param dieu huong router
-    this.id = this.router.snapshot.paramMap.get('id');
+    this.maPa = this.router.snapshot.paramMap.get('maPa');
 
-    if (this.id != null) {
+    if (this.maPa != null) {
       this.getDetailReport();
     } else {
       this.trangThaiBanGhi = '1';
@@ -276,10 +277,11 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.chitietPhuongAn(this.id).subscribe(
+    this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.chiTietBcaos = data.data;
+          // this.chiTietBcaos = data.data;
+          this.id = data.data.id;
           this.lstCTietBCao = data.data.listCtiet;
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
@@ -564,7 +566,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       trangThai: this.trangThaiBanGhi,
     };
     this.spinner.show();
-    if (this.id == null) {
+    if (this.maPa == null) {
       this.quanLyVonPhiService.themmoiPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {

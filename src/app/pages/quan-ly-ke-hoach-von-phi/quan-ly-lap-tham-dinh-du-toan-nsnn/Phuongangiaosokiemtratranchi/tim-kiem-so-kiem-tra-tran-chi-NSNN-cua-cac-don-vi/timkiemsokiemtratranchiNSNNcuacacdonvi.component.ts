@@ -113,8 +113,8 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         ngayTaoDen:this.datepipe.transform(this.denngay,'dd/MM/yyyy'),
         ngayTaoTu:this.datepipe.transform(this.ngaygiao,'dd/MM/yyyy'),
         paggingReq: {
-            limit: 10,
-            page: 1
+          limit: this.pages.size,
+          page: this.pages.page,
         },
         str: "",
         trangThai: this.trangthai,
@@ -123,11 +123,18 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.quankhoachvon.timkiemsokiemtratranchi(req).subscribe(res => {
         console.log(res);
         if(res.statusCode==0){
-          this.listSogiaoTranChi =[];
-          this.length = res.data.numberOfElements;
-          this.totalElements = this.length;
-          this.totalPages = res.data.totalPages;
+          // this.listSogiaoTranChi =[];
           this.listSogiaoTranChi = res.data.content;
+          if(this.listSogiaoTranChi.length==0){
+            this.listSogiaoTranChi =[];
+          }else{
+            this.listSogiaoTranChi.forEach( e=>{
+              e.ngayTao = this.datepipe.transform(e.ngayTao,'dd/MM/yyyy');
+            })
+          }
+          this.totalElements = res.data.totalElements;
+          this.totalPages = res.data.totalPages;
+          
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -149,10 +156,12 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;
+    this.getlistsogiaokiemtra();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+    this.getlistsogiaokiemtra();
   }
 }

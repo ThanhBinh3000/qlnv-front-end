@@ -44,7 +44,9 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   lenght:any=0;
   userInfor:any;
   btnPheDuyet:boolean = true;
-  
+  btnCanBo:boolean =true;
+  btnLanhDao:boolean =true;
+
   searchFilter = {
     maBcao: "",
     maDvi: "",
@@ -56,7 +58,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     ngayTaoTu: "",
     maPhanBcao:1,
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     }
     
@@ -107,9 +109,13 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
     const utils = new Utils();
-    var role = utils.getRole(Number(userInfor.roles[0]?.code));
+    var role = utils.getRole(Number(userInfor.roles[0]?.id));
     if(role=='TRUONG_BO_PHAN'){
       this.btnPheDuyet = false;
+    }else if(role =='LANH_DAO'){
+      this.btnLanhDao =false;
+    }else{
+      this.btnCanBo = false;
     }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -175,11 +181,21 @@ async getUserInfo(username: string) {
         console.log(res);
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
-        this.totalElements = res.data.totalElements;
-          this.totalPages = res.data.totalPages;
-        if(this.listBcaoKqua.length!=0){
+        if(this.listBcaoKqua.length==0){
+          this.listBcaoKqua =[];
+        }else{
           this.lenght = this.listBcaoKqua.length;
+          this.listBcaoKqua.forEach(e =>{
+            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          })
         }
+        this.totalElements = res.data.totalElements;
+        this.totalPages = res.data.totalPages;
+        
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
       }
@@ -219,11 +235,13 @@ async getUserInfo(username: string) {
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;
+    this.timkiem();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+    this.timkiem();
   }
 
 }

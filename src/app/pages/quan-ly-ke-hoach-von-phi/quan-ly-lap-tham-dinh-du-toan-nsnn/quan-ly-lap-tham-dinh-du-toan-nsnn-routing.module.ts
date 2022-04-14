@@ -409,7 +409,7 @@ const routes: Routes = [
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
   {
-    path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:id',
+    path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:maPa',
     loadChildren:() => import('./Phuongangiaosokiemtratranchi/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-NSNN-cho-cac-don-vi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
