@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -53,7 +53,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
-  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N;                // nam bao cao
   maDviTien: string = "";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -298,7 +298,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao = this.maDonViTao,
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N,
       namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
