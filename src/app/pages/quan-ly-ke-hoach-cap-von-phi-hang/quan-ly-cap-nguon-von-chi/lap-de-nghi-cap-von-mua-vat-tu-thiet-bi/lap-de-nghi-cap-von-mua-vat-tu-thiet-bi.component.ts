@@ -14,8 +14,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { stringify } from 'querystring';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogThemVtuTbiComponent } from 'src/app/components/dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-them-vtu-tbi/dialog-them-vtu-tbi.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogDanhSachMuaTbiVtuComponent } from 'src/app/components/dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
 
 export class ItemData {
   maVtu!: string;
@@ -36,7 +36,7 @@ export class HopDong {
   maHd!: string;
   tenHd!: string;
   maGoiThau!: string;
-  ngayHq!: string;
+  ngayHd!: string;
   gtriHd!: number;
 }
 
@@ -53,14 +53,13 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
   ngay!: string;
   canCuSoQdTrungThau!: string;
   ngayTrungThau!: string;
-  dtoanDaCap!: number;
+  dtoanDaCap: number = 0;
   veViec!: string;
   status: boolean = false;
 
   vatTus: any = [];
   dviTinhs: any = [];
   dviTiens: any = [];
-  hopDongs: any = [];
 
   lstCTietBCao: ItemData[] = [];
   lstHopDong: HopDong[] = [];
@@ -68,6 +67,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
+  tongGtriHd: number = 0;
 
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -237,7 +237,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -250,7 +250,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
     } else {
       this.quanLyVonPhiService.updatelist(request).subscribe(res => {
         if (res.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -276,7 +276,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           //this.getDetailReport();
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -485,6 +485,29 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 
   redirectChiTieuKeHoachNam() {
     this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+  }
+
+  getContract() {
+    const modalIn = this.modal.create({
+      nzTitle: 'Danh sách hợp đồng',
+      nzContent: DialogDanhSachMuaTbiVtuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1000px',
+      nzFooter: null,
+      nzComponentParams: {
+        maGoiThau: this.canCuSoQdTrungThau
+      },
+    });
+    modalIn.afterClose.subscribe((res) => {
+      if (res) {
+        this.lstHopDong = res.filter(e => e.checked === true);
+        this.tongGtriHd = 0;
+        this.lstHopDong.forEach(item => {
+          this.tongGtriHd += item.gtriHd;
+        })
+      }
+    });
   }
 
 }

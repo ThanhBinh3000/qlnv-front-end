@@ -337,7 +337,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -352,7 +352,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -395,7 +395,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -1096,39 +1096,41 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   //call tong hop
   calltonghop() {
-    this.spinner.hide();
+    this.spinner.show();
     let objtonghop = {
       maDvi: this.maDvi,
       maLoaiBcao: this.maLoaiBacao,
       namHienTai: this.nam,
     }
-    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
-      if (res.statusCode == 0) {
-        this.lstCTietBCao = res.data;
-        // this.namBaoCao = this.namBcao;
-        this.namBaoCaoHienHanh = new Date().getFullYear();
-        if (this.lstCTietBCao == null) {
-          this.lstCTietBCao = [];
-        }
-        console.log(this.lstCTietBCao)
-        //this.namBcaohienhanh = this.namBcaohienhanh
+    this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(data => {
+      if (data.statusCode == 0) {
+        this.chiTietBcaos = data.data;
+        this.lstCTietBCao = [];
+        this.lstVtu = [];
+        this.chiTietBcaos.forEach(item => {
+          var mm: ItemData = {
+            maCucDtnnKvuc: item.maCucDtnnKvuc,
+            kphiBquanCoDmucThocLd: item.kphiBquanCoDmucThocLd,
+            kphiBquanCoDmucThocTx: item.kphiBquanCoDmucThocTx,
+            kphiBquanCoDmucGaoLd: item.kphiBquanCoDmucGaoLd,
+            kphiBquanCoDmucGaoTx: item.kphiBquanCoDmucGaoTx,
+            listCtiet: [],
+            stt: "",
+            id: item.id,
+            checked: false,
+          }
+          this.lstCTietBCao.push(mm);
+          this.tongCong(1, mm);
+        })
+
+        this.updateEditCache();
+
       } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-      res => {
-        if (res.statusCode == 0) {
-          this.maBaoCao = res.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      });
-    this.spinner.show();
+    this.spinner.hide();
   }
 }

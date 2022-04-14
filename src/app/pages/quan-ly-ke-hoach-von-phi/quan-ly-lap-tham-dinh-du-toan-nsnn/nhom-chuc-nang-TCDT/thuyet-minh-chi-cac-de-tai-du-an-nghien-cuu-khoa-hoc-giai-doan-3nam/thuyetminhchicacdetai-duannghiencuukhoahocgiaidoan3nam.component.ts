@@ -126,7 +126,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.mabaocao = '';
@@ -568,13 +568,23 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.namBcaohienhanh = this.currentday.getFullYear();
+            this.namBcaohienhanh = this.currentday.getFullYear();
+            if(this.lstCTietBCao==null){
+                this.lstCTietBCao =[];
+            }else {
+              this.lstCTietBCao.forEach( e => {
+                e.id = uuid.v4();
+              })
+            }
+            this.updateEditCache()
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
-    this.updateEditCache()
+    
     this.spinner.hide();
 }
 }

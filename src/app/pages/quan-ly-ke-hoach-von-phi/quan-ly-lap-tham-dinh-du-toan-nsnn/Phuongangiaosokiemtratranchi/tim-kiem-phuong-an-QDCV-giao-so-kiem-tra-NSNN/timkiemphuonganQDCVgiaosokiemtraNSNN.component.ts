@@ -143,6 +143,9 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
             this.listVanban.forEach( e => {
               e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy')
             })
+            if(this.listVanban.length==0){
+              this.listVanban =[];
+            }
             this.totalElements = res.data.totalElements;
             this.totalPages = res.data.totalPages;
         }else{

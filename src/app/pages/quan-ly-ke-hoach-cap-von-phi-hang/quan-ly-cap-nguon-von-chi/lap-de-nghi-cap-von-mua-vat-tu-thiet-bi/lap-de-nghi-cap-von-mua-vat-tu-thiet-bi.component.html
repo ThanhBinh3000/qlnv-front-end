@@ -75,7 +75,7 @@
           </div>
           <div nz-col nzSpan="1">
             <br />
-            <button class="btn btn-main">
+            <button class="btn btn-main" (click)="getContract()">
               Chọn
             </button>
           </div>
@@ -93,6 +93,78 @@
           </div>
         </div>
       </nz-card>
+
+      <ng-container *ngIf="lstHopDong.length != 0">
+        <div class="tab__container">
+          <nz-tabset nzType="card" class="tab__container">
+            <nz-tab [nzTitle]="'Danh sách hợp đồng'">
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+
+              </div>
+              <nz-table nzBordered class="table__body">
+                <thead>
+                  <tr>
+                    <th nzWidth="75px">STT</th>
+                    <th nzWidth="200px">Mã hợp đồng</th>
+                    <th nzWidth="300px">Tên hợp đồng</th>
+                    <th nzWidth="200px">
+                      Thuộc gói thầu
+                    </th>
+                    <th nzWidth="200px">
+                      Ngày hợp đồng
+                    </th>
+                    <th nzWidth="200px">
+                      Giá trị hợp đồng
+                    </th>
+                    <th colspan="2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of lstHopDong; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{data.maHd}}
+                    </td>
+                    <td>
+                      {{data.tenHd}}
+                    </td>
+                    <td>
+                      {{data.maGoiThau}}
+                    </td>
+                    <td>
+                      {{data.ngayHd}}
+                    </td>
+                    <td>
+                      {{data.gtriHd}}
+                    </td>
+
+                    <td>
+                      <i class="fa fa-trash-o do"></i>
+                    </td>
+                    <td>
+                      <i class="fa fa-plus"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </nz-tab>
+          </nz-tabset>
+          <div class="widget-body">
+            <div>
+              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+                <nz-descriptions-item [nzSpan]="2"></nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Còn lại" [nzSpan]="1">
+                  {{tongGtriHd - dtoanDaCap}}
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Tổng" [nzSpan]="1">
+                  {{tongGtriHd}}
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Danh mục hàng hóa đề xuất'">
