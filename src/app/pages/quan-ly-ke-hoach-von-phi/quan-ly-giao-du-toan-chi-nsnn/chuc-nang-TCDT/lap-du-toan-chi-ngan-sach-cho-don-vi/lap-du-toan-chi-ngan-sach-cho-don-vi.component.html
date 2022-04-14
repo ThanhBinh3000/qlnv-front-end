@@ -3,12 +3,12 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()" >
           <i class="fa fa-arrow-circle-left"></i>
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="nhapQdTongCuc()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Nhập quyết định của tổng cục</span>
         </button>
@@ -76,36 +76,37 @@
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-        <form nz-form  [formGroup]="validateForm" class="login-form" >
+
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle="Quyết định BTC">
-                <!-- <input class="search__input" nz-input [(ngModel)]="qDinhBTC" /> -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" formControlName="temp">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" >
                   <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayNhap}}
+              <nz-descriptions-item nzTitle="Ngày quyết định" >
+                {{ngayNhap }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm" >
+                <form nz-form  [formGroup]="validateForm" class="login-form" >
                 <nz-form-item>
                   <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" formControlName="namBaoCaoHienHanh"/>
+                    <input type="number" nz-input   formControlName="nam" [(ngModel)]="nam"/>
                   </nz-form-control>
                 </nz-form-item>
+              </form>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Lần lập thứ">
                 {{lanLapThu}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ghi chú">
-                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input [(ngModel)]="ghiChu"></textarea>
+                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input   [(ngModel)]="ghiChu"></textarea>
               </nz-descriptions-item>
             </nz-descriptions>
-          </div>
         </div>
-      </form>
+      </div>
+
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
@@ -113,7 +114,7 @@
             <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
               <div nz-col nzSpan="6" >
                 <label class="search__label">Đ/v thực hiện:</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" formControlName="temp">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" >
                   <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                 </nz-select>
               </div>
@@ -141,12 +142,12 @@
                 <tr>
                   <th nzWidth="170px" rowspan="2" >Tên loại, khoản</th>
                   <th nzWidth="300px" rowspan="2">Nội dung</th>
-                  <th nzWidth="150px" rowspan="2">Ước thực hiện năm {{namBaoCaoHienHanh}}</th>
-                  <th nzWidth="150px" colspan="2">Năm {{namBaoCaoHienHanh}}</th>
+                  <th nzWidth="150px" rowspan="2">Ước thực hiện năm {{nam}}</th>
+                  <th nzWidth="150px" colspan="2">Năm {{nam}}</th>
                   <th></th>
                 </tr>
                 <tr>
-                  <th>Dự toán giao {{namBaoCaoHienHanh}}</th>
+                  <th>Dự toán giao {{nam}}</th>
                   <th>Dự toán đã phân bổ cho các đơn vị trực thuộc</th>
                   <th>Phân bổ cho các đơn vị trực thuộc</th>
                 </tr>
@@ -163,7 +164,7 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.maNdung}}
+                      {{data.tenDm}}
                     </td>
                     <div>
                       <div *ngFor="let item of khoanMucs">
@@ -182,7 +183,7 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.maNdung}}
+                      {{editCache[data.id].data.tenDm}}
                     </td>
                     <td>
                       <div *ngFor="let item of khoanMucs">

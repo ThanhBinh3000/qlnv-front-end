@@ -337,7 +337,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
                     async data => {
                       if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.id = data.data.id;
                         await this.getDetailReport();
                         this.getStatusButton();
@@ -353,7 +353,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                this.quanLyVonPhiService.updatelist(request).toPromise().then(
                     async data => {
                          if (data.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                               await this.getDetailReport();
                               this.getStatusButton();
                          } else {
@@ -385,7 +385,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                if (data.statusCode == 0) {
                     await this.getDetailReport();
                     this.getStatusButton();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                }
