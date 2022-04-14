@@ -73,8 +73,10 @@
          margin-left: 5px;
        }
      }
-     .ant-select:not(.ant-select-customize-input).ant-select-selector {
+     .error.ant-select:not(.ant-select-customize-input).ant-select-selector {
+      border: 1px solid red !important;
       border-color: red !important;
+      z-index: 1000;
     }
    }
    .save {
@@ -84,5 +86,9 @@
    .ant-input-number{
     width: 75px !important;
   }
-
+  ::ng-deep .error.ant-select:not(.ant-select-customize-input).ant-select-selector {
+    border: 1px solid red !important;
+    border-color: red !important;
+    z-index: 1000;
+  }
   

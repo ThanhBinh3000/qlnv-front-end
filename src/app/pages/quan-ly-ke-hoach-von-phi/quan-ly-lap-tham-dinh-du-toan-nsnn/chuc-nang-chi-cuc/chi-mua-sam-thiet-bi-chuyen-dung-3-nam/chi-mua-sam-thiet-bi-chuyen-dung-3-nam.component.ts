@@ -378,7 +378,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           this.ngayNhap = data.data.ngayTao;
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
-          console.log(this.maDonViTao);
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;

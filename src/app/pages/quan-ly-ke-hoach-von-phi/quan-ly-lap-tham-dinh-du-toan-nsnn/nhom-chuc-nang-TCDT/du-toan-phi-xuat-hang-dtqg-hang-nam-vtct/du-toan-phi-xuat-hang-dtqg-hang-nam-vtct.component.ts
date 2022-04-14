@@ -338,7 +338,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -353,7 +353,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       this.quanLyVonPhiService.updatelist1(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -391,7 +391,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -483,8 +483,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
             this.tinhTong(1, item);
           })
 
-          this.updateEditCache();        
-          
+          this.updateEditCache();
+
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -915,7 +915,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   // start edit
   startEdit1(id: string): void {
     console.log(this.editCache1[id].data);
-    
+
     this.editCache1[id].edit = true;
   }
 
@@ -998,56 +998,102 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     this.editCache1[id].data.thanhTienCong = this.editCache1[id].data.thanhTienCoDmuc + this.editCache1[id].data.thanhTienKhongDmuc;
   }
 
-  tinhTong(heSo: number, item: ItemData){
-    this.tong.luongGao += heSo * item.luongGao ;
-    this.tong.cphiXuatCoDmucGao += heSo * item.cphiXuatCoDmucGao ;
-    this.tong.cphiXuatChuaDmucGao += heSo * item.cphiXuatChuaDmucGao ;
-    this.tong.thanhTienCoDmucGao += heSo * item.thanhTienCoDmucGao ;
-    this.tong.thanhTienKhongDmucGao += heSo * item.thanhTienKhongDmucGao ;
-    this.tong.thanhTienCongGao += heSo * item.thanhTienCongGao ;
-    this.tong.luongThoc += heSo * item.luongThoc ;
-    this.tong.cphiXuatCoDmucThoc += heSo * item.cphiXuatCoDmucThoc ;
-    this.tong.cphiXuatChuaDmucThoc += heSo * item.cphiXuatChuaDmucThoc ;
-    this.tong.thanhTienCoDmucThoc += heSo * item.thanhTienCoDmucThoc ;
-    this.tong.thanhTienKhongDmucThoc += heSo * item.thanhTienKhongDmucThoc ;
-    this.tong.thanhTienCongThoc += heSo * item.thanhTienCongThoc ;
+  tinhTong(heSo: number, item: ItemData) {
+    this.tong.luongGao += heSo * item.luongGao;
+    this.tong.cphiXuatCoDmucGao += heSo * item.cphiXuatCoDmucGao;
+    this.tong.cphiXuatChuaDmucGao += heSo * item.cphiXuatChuaDmucGao;
+    this.tong.thanhTienCoDmucGao += heSo * item.thanhTienCoDmucGao;
+    this.tong.thanhTienKhongDmucGao += heSo * item.thanhTienKhongDmucGao;
+    this.tong.thanhTienCongGao += heSo * item.thanhTienCongGao;
+    this.tong.luongThoc += heSo * item.luongThoc;
+    this.tong.cphiXuatCoDmucThoc += heSo * item.cphiXuatCoDmucThoc;
+    this.tong.cphiXuatChuaDmucThoc += heSo * item.cphiXuatChuaDmucThoc;
+    this.tong.thanhTienCoDmucThoc += heSo * item.thanhTienCoDmucThoc;
+    this.tong.thanhTienKhongDmucThoc += heSo * item.thanhTienKhongDmucThoc;
+    this.tong.thanhTienCongThoc += heSo * item.thanhTienCongThoc;
   }
 
   //call tong hop
   calltonghop() {
-    this.spinner.hide();
+    this.spinner.show();
     let objtonghop = {
       maDvi: this.maDvi,
       maLoaiBcao: this.maLoaiBacao,
       namHienTai: this.nam,
     }
-    this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
-      if (res.statusCode == 0) {
-        this.lstCTietBCao = res.data;
-        // this.namBaoCao = this.namBcao;
-        this.namBaoCaoHienHanh = new Date().getFullYear();
-        if (this.lstCTietBCao == null) {
-          this.lstCTietBCao = [];
-        }
-        //this.namBcaohienhanh = this.namBcaohienhanh
+    this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(data => {
+      if (data.statusCode == 0) {
+        this.chiTietBcaos = data.data;
+        this.lstCTietBCao = [];
+        this.lstVtu = [];
+
+        this.chiTietBcaos.forEach(item => {
+          var mm: ItemData = {
+            maCucDtnnKvuc: item.maCucDtnnKvuc,
+            luongGao: item.luongGao,
+            cphiXuatCoDmucGao: 0,
+            cphiXuatChuaDmucGao: 0,
+            thanhTienCoDmucGao: 0,
+            thanhTienKhongDmucGao: 0,
+            thanhTienCongGao: 0,
+            luongThoc: item.luongThoc,
+            cphiXuatCoDmucThoc: 0,
+            cphiXuatChuaDmucThoc: 0,
+            thanhTienCoDmucThoc: 0,
+            thanhTienKhongDmucThoc: 0,
+            thanhTienCongThoc: 0,
+            listCtiet: [],
+            stt: "",
+            id: item.id,
+            checked: false,
+          }
+          item.listCtiet.forEach(e => {
+            let ss: superMiniData = {
+              vitri: e.id,
+              maVtuTbi: e.maVtuTbi,
+              sl: e.sl,
+            }
+            mm.listCtiet.push(ss);
+          })
+          this.lstCTietBCao.push(mm);
+        })
+
+        this.lstCTietBCao[0].listCtiet.forEach(item => {
+          var mm: miniData = {
+            maVtuTbi: item.maVtuTbi,
+            stt: 0,
+            id: item.vitri,
+            checked: false,
+            tong: 0,
+            cphiXuatCoDmuc: 0,
+            cphiXuatChuaDmuc: 0,
+            thanhTienCoDmuc: 0,
+            thanhTienKhongDmuc: 0,
+            thanhTienCong: 0,
+          }
+          this.lstVtu.push(mm);
+        })
+
+        this.lstCTietBCao.forEach(data => {
+          data.listCtiet.forEach(item => {
+            item.vitri = this.lstVtu.find(e => e.maVtuTbi == item.maVtuTbi).id;
+          })
+        })
+
+        this.lstCTietBCao.forEach(item => {
+          this.tinhTong(1, item);
+        })
+        this.tinhLaiTongSl();
+        console.log(this.lstCTietBCao);
+
+        this.updateEditCache();
       } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
-      res => {
-        if (res.statusCode == 0) {
-          this.maBaoCao = res.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-      }),
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    this.spinner.show();
+    this.spinner.hide();
   }
   //kiem tra xem vat tu da duoc chon hay chua
   checkVtu(id: any) {
