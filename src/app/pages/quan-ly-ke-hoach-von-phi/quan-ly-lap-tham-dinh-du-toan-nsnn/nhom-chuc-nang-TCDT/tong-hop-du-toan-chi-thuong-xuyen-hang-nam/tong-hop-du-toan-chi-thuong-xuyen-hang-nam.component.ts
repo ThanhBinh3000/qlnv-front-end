@@ -376,6 +376,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.spinner.hide();
   }
 
+  
   //thay doi trang thai
   changeStatus(status: boolean) {
     this.status = status;
