@@ -2,11 +2,15 @@
 <div class="modal__content">
 
   <div class="search__body" nz-row [nzGutter]="[18, 12]">
+    <div nz-col nzSpan="6">
+      <label class="search__label">Năm</label>
+      <input class="search__input" nz-input [(ngModel)]="searchFilter.nam" />
+    </div>
     <div nz-col nzSpan="12">
-      <label class="search__label">Khoản mục</label>
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khoản mục" [(ngModel)]="searchFilter.khoanMuc">
-        <nz-option *ngFor="let item of khoanMucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-      </nz-select>
+      <label class="search__label">Trạng thái</label>
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" formControlName="temp">
+          <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+        </nz-select>
     </div>
     <div class="phai canphai">
       <button nz-button class="search__button--search mt-4" (click)="timKiemKhoanMuc()">

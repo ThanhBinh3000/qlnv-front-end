@@ -164,7 +164,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
@@ -183,7 +182,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
