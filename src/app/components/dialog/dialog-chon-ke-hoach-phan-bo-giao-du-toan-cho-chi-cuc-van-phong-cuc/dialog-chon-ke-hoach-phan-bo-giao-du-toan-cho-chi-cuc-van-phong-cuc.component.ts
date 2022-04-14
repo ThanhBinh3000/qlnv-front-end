@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
+import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc',
@@ -14,9 +15,11 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
 
   @Input() danhSachKhoanMuc:any;
   khoanMucs: any = [];
+  trangThais: any = TRANGTHAITIMKIEM;
 
   searchFilter = {
-    khoanMuc: "",
+    trangThai: "",
+    nam: "",
   };
 
   constructor(
@@ -45,7 +48,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
 
   timKiemKhoanMuc(){
     let requestReport = {
-      id: this.searchFilter.khoanMuc,
+      id: this.searchFilter.trangThai,
     };
 
     this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
@@ -71,7 +74,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   handleOk() {
     let req ={
       danhSachKhoanMuc : this.danhSachKhoanMuc,
-      id: this.searchFilter.khoanMuc
+      id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);
   }

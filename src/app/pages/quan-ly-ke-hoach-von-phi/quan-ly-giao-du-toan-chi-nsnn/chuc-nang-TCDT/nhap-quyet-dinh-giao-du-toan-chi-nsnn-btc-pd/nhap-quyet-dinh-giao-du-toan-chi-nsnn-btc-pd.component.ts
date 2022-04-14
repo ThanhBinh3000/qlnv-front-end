@@ -636,7 +636,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     });
   }
 
-  danhmucTemp :any []=[];
   addKmuc() {
     // KHOANMUCLIST.forEach(item => item.status = false);
     // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
