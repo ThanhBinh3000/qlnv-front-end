@@ -336,7 +336,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien='01',
+      maDviTien: this.maDviTien = '01',
       maLoaiBcao: QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
@@ -429,7 +429,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
           if (
@@ -519,7 +519,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if (item.checked){
+      if (item.checked) {
         this.tinhTong(-1, item);
       }
       if (item.checked == true && typeof item.id == "number") {
@@ -631,7 +631,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     });
   }
 
-  tinhTong(heSo: number, item: ItemData){
+  tinhTong(heSo: number, item: ItemData) {
     this.tong.soLuotNguoiN1 += heSo * item.soLuotNguoiN1;
     this.tong.thanhTienN1 += heSo * item.thanhTienN1;
     this.tong.soLuotNguoiN2 += heSo * item.soLuotNguoiN2;
@@ -651,6 +651,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

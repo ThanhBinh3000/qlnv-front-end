@@ -336,7 +336,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien ="01",
+               maDviTien: this.maDviTien = "01",
                maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N,
                namBcao: this.namBaoCaoHienHanh + 1,
                namHienHanh: this.namBaoCaoHienHanh,
@@ -346,19 +346,19 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           if (this.id == null) {
                this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
                     async data => {
-                      if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                        this.id = data.data.id;
-                        await this.getDetailReport();
-                        this.getStatusButton();
-                      } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                      }
+                         if (data.statusCode == 0) {
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                              this.id = data.data.id;
+                              await this.getDetailReport();
+                              this.getStatusButton();
+                         } else {
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
                     },
                     err => {
-                      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     },
-                  );
+               );
           } else {
                this.quanLyVonPhiService.updatelist(request).toPromise().then(
                     async data => {
@@ -426,7 +426,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                          this.nguoiNhap = data.data.nguoiTao;
                          this.maDonViTao = data.data.maDvi;
                          this.maBaoCao = data.data.maBcao;
-                         this.namBaoCaoHienHanh = data.data.namBcao;
+                         this.namBaoCaoHienHanh = data.data.namHienHanh;
                          this.trangThaiBanGhi = data.data.trangThai;
                          this.soVban = data.data.soVban;
                          if (
@@ -647,6 +647,9 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
                if (res.statusCode == 0) {
                     this.lstCTietBCao = res.data;
+                    this.lstCTietBCao.forEach(e => {
+                         e.id = uuid.v4();
+                    })
                } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                }

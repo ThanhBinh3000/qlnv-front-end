@@ -30,7 +30,7 @@ export class ItemData {
   id!: any;
   maBcao!: String;
   stt!: String;
-  checked!:boolean;
+  checked!: boolean;
 }
 
 @Component({
@@ -43,10 +43,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
   noiDungs: any = [];                         // danh muc noi dung
-  nhomChis:any = [];                          // danh muc nhom chi
-  loaiChis:any = [];                          // danh muc loai chi
-  donVis:any = [];                            // danh muc don vi
-  donViTiens:any = [];                        // danh muc don vi tien
+  nhomChis: any = [];                          // danh muc nhom chi
+  loaiChis: any = [];                          // danh muc loai chi
+  donVis: any = [];                            // danh muc don vi
+  donViTiens: any = [];                        // danh muc don vi tien
 
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
@@ -86,9 +86,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
-  soVban:any;
-  capDv:any;
-  checkDv:boolean;
+  soVban: any;
+  capDv: any;
+  checkDv: boolean;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -113,18 +113,18 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
 
   constructor(private router: Router,
-              private routerActive: ActivatedRoute,
-              private spinner: NgxSpinnerService,
-              private quanLyVonPhiService: QuanLyVonPhiService,
-              private datePipe: DatePipe,
-              private sanitizer: DomSanitizer,
-              private danhMucService: DanhMucHDVService,
-              private userService: UserService,
-              private notification: NzNotificationService,
-              private location: Location,
-              ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
-              }
+    private routerActive: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
+    private datePipe: DatePipe,
+    private sanitizer: DomSanitizer,
+    private danhMucService: DanhMucHDVService,
+    private userService: UserService,
+    private notification: NzNotificationService,
+    private location: Location,
+  ) {
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
+  }
 
 
   async ngOnInit() {
@@ -246,9 +246,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.donVis = data.data;
           var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
-          if( this.capDv=='2'){
+          if (this.capDv == '2') {
             this.checkDv = false;
-          }else{
+          } else {
             this.checkDv = true;
           }
         } else {
@@ -276,7 +276,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  getStatusButton(){
+  getStatusButton() {
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -286,7 +286,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
-  
+
   //get user info
   async getUserInfo(username: string) {
     await this.userService.getUserInfo(username).toPromise().then(
@@ -338,11 +338,11 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien="01",
-      maLoaiBcao: this.maLoaiBaoCao=QLNV_KHVONPHI_CHI_TX_GD3N,
+      maDviTien: this.maDviTien = "01",
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_TX_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh + 1,
-      soVban:this.soVban,
+      soVban: this.soVban,
     };
 
     //call service them moi
@@ -373,9 +373,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-      },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
     }
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
@@ -399,10 +399,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         await this.getDetailReport();
         this.getStatusButton();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -428,7 +428,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
 
@@ -477,7 +477,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   // them dong moi
   addLine(id: number): void {
-    let item : ItemData = {
+    let item: ItemData = {
       namHhanhN!: 0,
       tranChiDuocTbN1!: 0,
       ncauChiCuaDviN1!: 0,
@@ -494,7 +494,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       maBcao: "",
       stt: "",
       id: uuid.v4(),
-      checked:false,
+      checked: false,
     }
 
     this.lstCTietBCao.splice(id, 0, item);
@@ -516,12 +516,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if(item.checked == true && typeof item.id == "number"){
+      if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
   }
 
@@ -581,14 +581,14 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   // lay ten trang thai
-  getStatusName(){
+  getStatusName() {
     const utils = new Utils();
     return utils.getStatusName(this.trangThaiBanGhi);
   }
 
   // lay ten don vi tao
-  getUnitName(){
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+  getUnitName() {
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   // start edit
@@ -640,6 +640,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

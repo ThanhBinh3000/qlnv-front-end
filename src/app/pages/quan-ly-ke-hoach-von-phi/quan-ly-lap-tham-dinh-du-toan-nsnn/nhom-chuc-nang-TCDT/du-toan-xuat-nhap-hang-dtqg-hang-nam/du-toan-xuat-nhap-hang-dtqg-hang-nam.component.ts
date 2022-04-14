@@ -341,7 +341,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -356,7 +356,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist1(request).toPromise().then(
+      this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
