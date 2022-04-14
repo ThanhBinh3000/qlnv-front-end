@@ -639,6 +639,9 @@ async calltonghop(){
           this.luongXuatGaoVtro = res.data.luongXuatGaoVtro;
           this.luongXuatThocVtro= res.data.luongXuatThocVtro;
           this.lstCTiet = res.data.lstCTiet;
+          this.lstCTiet.forEach(e => {
+            e.id = uuid.v4();
+          })
       }else{
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

@@ -657,6 +657,9 @@ async calltonghop(){
           this.lstCTiet.forEach(e => {
             this.tongSo += e.kphi;
           })
+          this.lstCTiet.forEach(e => {
+            e.id = uuid.v4();
+          })
       }else{
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

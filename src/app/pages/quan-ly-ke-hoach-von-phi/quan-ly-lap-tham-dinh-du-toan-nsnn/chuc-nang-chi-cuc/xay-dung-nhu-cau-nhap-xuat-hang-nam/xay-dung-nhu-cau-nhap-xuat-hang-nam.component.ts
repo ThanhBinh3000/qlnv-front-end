@@ -630,7 +630,9 @@ getStatusButton(){
               this.lstCTiet = res.data.lstCTiet;
               this.lstCTiet.forEach(e => {
                 this.tong += e.slNhap;
+                e.id = uuid.v4();
               })
+              this.namBcao= this.namBaoCaoHienHanh + 1
           }else{
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
