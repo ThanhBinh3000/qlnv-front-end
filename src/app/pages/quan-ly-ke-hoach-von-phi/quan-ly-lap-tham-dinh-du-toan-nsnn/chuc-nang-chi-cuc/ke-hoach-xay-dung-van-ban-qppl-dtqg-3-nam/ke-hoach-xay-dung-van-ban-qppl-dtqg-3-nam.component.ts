@@ -81,11 +81,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
-  capDvi:any;
-  checkKV:boolean;                            // check khu vuc
-  soVban:any;
-  capDv:any;
-  checkDv:boolean;
+  capDvi: any;
+  checkKV: boolean;                            // check khu vuc
+  soVban: any;
+  capDv: any;
+  checkDv: boolean;
   tong: number = 0;
 
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -212,15 +212,15 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.donVis.forEach(e => {
-            if(e.maDvi==this.maDonViTao){
+            if (e.maDvi == this.maDonViTao) {
               this.capDvi = e.capDvi;
             }
           })
           var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
-          if( this.capDv == '2'){
+          if (this.capDv == '2') {
             this.checkDv = false;
-          }else{
+          } else {
             this.checkDv = true;
           }
 
@@ -235,7 +235,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  getStatusButton(){
+  getStatusButton() {
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -330,9 +330,9 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-      },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
     }
 
     this.lstCTietBCao.filter(item => {
@@ -358,10 +358,10 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         await this.getDetailReport();
         this.getStatusButton();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -391,7 +391,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -463,7 +463,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.tong -= this.lstCTietBCao.find(e => e.id==id).dtoanKphi;
+    this.tong -= this.lstCTietBCao.find(e => e.id == id).dtoanKphi;
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -474,7 +474,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if (item.checked){
+      if (item.checked) {
         this.tong -= item.dtoanKphi;
       }
       if (item.checked == true && typeof item.id == "number") {
@@ -545,7 +545,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   }
 
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
@@ -589,6 +589,9 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

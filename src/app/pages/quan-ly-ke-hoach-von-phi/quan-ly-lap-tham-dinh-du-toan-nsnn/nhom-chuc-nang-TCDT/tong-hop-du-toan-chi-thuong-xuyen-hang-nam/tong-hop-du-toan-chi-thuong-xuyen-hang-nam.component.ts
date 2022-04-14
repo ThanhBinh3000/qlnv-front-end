@@ -398,7 +398,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -664,13 +664,15 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
         // this.namBaoCao = this.namBcao;
         this.updateEditCache();
         this.namBaoCaoHienHanh = new Date().getFullYear();
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
         }
-        console.log(this.lstCTietBCao)
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
