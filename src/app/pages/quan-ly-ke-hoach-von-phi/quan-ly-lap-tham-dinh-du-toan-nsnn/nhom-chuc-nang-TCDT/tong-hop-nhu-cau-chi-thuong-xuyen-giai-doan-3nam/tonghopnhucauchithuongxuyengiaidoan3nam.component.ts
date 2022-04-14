@@ -254,7 +254,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             this.listIdFiles += item.id + ',';
           });
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
@@ -575,21 +575,26 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
+            }else {
+              this.lstCTietBCao.forEach(e =>{
+                e.id = uuid.v4();
+              })
             }
             this.updateEditCache();
-            this.namBcaohienhanh = this.namBcaohienhanh
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+          this.notification.error(MESSAGE.ERROR, res?.msg)
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {
             this.mabaocao = res.data;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+          this.notification.error(MESSAGE.ERROR, res?.msg)
         }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.show();
 }
