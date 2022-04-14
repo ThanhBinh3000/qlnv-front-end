@@ -566,11 +566,13 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
-            // this.namBaoCao = this.namBcao;
             this.namBaoCaoHienHanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
+            this.lstCTietBCao.forEach(e => {
+              e.id= uuid.v4();
+            })
 
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);

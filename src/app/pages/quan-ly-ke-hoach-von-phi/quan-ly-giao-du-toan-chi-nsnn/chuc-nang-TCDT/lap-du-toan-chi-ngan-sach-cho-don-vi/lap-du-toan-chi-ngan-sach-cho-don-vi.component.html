@@ -76,27 +76,36 @@
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <form nz-form  [formGroup]="validateForm" class="login-form" >
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle="Quyết định BTC">
-                <input class="search__input" nz-input [(ngModel)]="qDinhBTC" />
+                <!-- <input class="search__input" nz-input [(ngModel)]="qDinhBTC" /> -->
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" formControlName="temp">
+                  <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
                 {{ngayNhap}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm">
-                {{namBaoCaoHienHanh}}
+              <nz-descriptions-item nzTitle="Năm" >
+                <nz-form-item>
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" formControlName="namBaoCaoHienHanh"/>
+                  </nz-form-control>
+                </nz-form-item>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Lần lập thứ">
                 {{lanLapThu}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ghi chú">
-                <input class="search__input" nz-input [(ngModel)]="qDinhBTC" />
+                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input [(ngModel)]="ghiChu"></textarea>
               </nz-descriptions-item>
             </nz-descriptions>
           </div>
         </div>
+      </form>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
@@ -132,13 +141,13 @@
                 <tr>
                   <th nzWidth="170px" rowspan="2" >Tên loại, khoản</th>
                   <th nzWidth="300px" rowspan="2">Nội dung</th>
-                  <th nzWidth="150px" rowspan="2">Ước thực hiện năm 2020</th>
-                  <th nzWidth="150px" colspan="2">Năm 2021</th>
+                  <th nzWidth="150px" rowspan="2">Ước thực hiện năm {{namBaoCaoHienHanh}}</th>
+                  <th nzWidth="150px" colspan="2">Năm {{namBaoCaoHienHanh}}</th>
                   <th></th>
                 </tr>
                 <tr>
-                  <th>Dự toán giao 2021</th>
-                  <th>Dự toán đã phân bổ cho</th>
+                  <th>Dự toán giao {{namBaoCaoHienHanh}}</th>
+                  <th>Dự toán đã phân bổ cho các đơn vị trực thuộc</th>
                   <th>Phân bổ cho các đơn vị trực thuộc</th>
                 </tr>
               </thead>
@@ -154,10 +163,14 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.stt}}
+                      {{data.maNdung}}
                     </td>
                     <div>
-                      {{data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </div>
                     <td>{{data.uocThucHienNam}}</td>
                     <td>{{data.duToanGiao2021}}</td>
@@ -169,10 +182,14 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.stt}}
+                      {{editCache[data.id].data.maNdung}}
                     </td>
                     <td>
-                      {{editCache[data.id].data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == editCache[data.id].data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </td>
                     <td>
                            {{editCache[data.id].data.tong}}

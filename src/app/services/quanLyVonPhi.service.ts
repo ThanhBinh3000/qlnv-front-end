@@ -127,8 +127,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan
   trinhDuyetGiaoService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
-      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/them-moi',
       request,
     );
   }

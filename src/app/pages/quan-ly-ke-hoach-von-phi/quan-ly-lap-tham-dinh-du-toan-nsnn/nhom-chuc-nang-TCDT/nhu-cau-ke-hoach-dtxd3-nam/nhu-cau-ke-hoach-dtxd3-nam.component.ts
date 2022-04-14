@@ -647,6 +647,9 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.lstCTietBCao.forEach(e => {
+              e.id = uuid.v4();
+            })
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }

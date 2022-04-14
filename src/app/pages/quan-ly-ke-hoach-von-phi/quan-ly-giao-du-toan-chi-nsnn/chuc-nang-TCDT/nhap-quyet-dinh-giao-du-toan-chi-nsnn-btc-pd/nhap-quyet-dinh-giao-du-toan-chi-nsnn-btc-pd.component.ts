@@ -15,6 +15,7 @@ import { MESSAGE } from '../../../../../constants/message';
 // import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   tenDm!: string;
@@ -88,19 +89,11 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   tongCong!: number;
   tongCongNguonNSNN!: number  ;
   tongCongNguonKhac!: number ;
-
   khoanMucs: any = [];
-
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
   fileList: NzUploadFile[] = [];
-
-  beforeUpload = (file: NzUploadFile): boolean => {
-    this.fileList = this.fileList.concat(file);
-    return false;
-  };
   maKhoanMucs: any = [];
   loaiQd!: any;
   lyDoTuChoi!: any;
@@ -109,7 +102,12 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   noiQd!: any;
   tenDvi!: any;
   veViec!: any;
+  validateForm!: FormGroup;
 
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
 
   // upload file
   // addFile() {
@@ -138,11 +136,15 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
               private userService: UserService,
               private notification: NzNotificationService,
               private modal: NzModalService,
+              private fb:FormBuilder,
               ) {
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
@@ -452,8 +454,9 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
                 this.khoanMucs.push(el);
                 })
               })
-              console.log(this.khoanMucs);
-
+              this.khoanMucs.forEach(e => {
+                this.lstCTietBCao.push(e)
+              })
             } else {
               this.notification.error(MESSAGE.ERROR, data?.msg);
             }
