@@ -215,7 +215,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -406,7 +406,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   //update khi sửa
   saveEdit(id: string): void {
     if (!this.editCache[id].data.maVtuTbi) {
-      this.notification.error(MESSAGE.ERROR, "MESSAGE.NULL_ERROR");
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find((item) => item.id === id).checked; // set checked editCache = checked lstCTietBCao
@@ -650,20 +650,26 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         this.namBaoCaoHienHanh = this.currentday.getFullYear();
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
+        }else{
+          this.lstCTietBCao.forEach(e => {
+            e.id = uuid.v4();
+          })
         }
         this.updateEditCache();
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
       if (res.statusCode == 0) {
         this.maBaoCao = res.data;
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
     })
     this.spinner.show();
   }
