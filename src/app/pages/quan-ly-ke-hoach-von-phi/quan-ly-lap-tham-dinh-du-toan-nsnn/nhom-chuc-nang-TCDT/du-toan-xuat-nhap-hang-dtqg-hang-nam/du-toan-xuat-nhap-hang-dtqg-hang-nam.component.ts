@@ -344,7 +344,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -359,7 +359,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -396,7 +396,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -1013,38 +1013,83 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   }
   //call tong hop
   calltonghop() {
-    this.spinner.hide();
+    this.spinner.show();
     let objtonghop = {
       maDvi: this.maDvi,
       maLoaiBcao: this.maLoaiBacao,
       namHienTai: this.nam,
     }
-    this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
-      if (res.statusCode == 0) {
-        this.lstCTietBCao = res.data;
-        // this.namBaoCao = this.namBcao;
-        this.namBaoCaoHienHanh = new Date().getFullYear();
-        if (this.lstCTietBCao == null) {
-          this.lstCTietBCao = [];
-        }
-        //this.namBcaohienhanh = this.namBcaohienhanh
+    this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(data => {
+      if (data.statusCode == 0) {
+        this.chiTietBcaos = data.data;
+        this.lstCTietBCao = [];
+        this.lstVtu = [];
+        this.chiTietBcaos.forEach(item => {
+          var mm: ItemData = {
+            maCucDtnnKvuc: item.maCucDtnnKvuc,
+            nxuatThocLuongXuat: item.nxuatThocLuongXuat,
+            nxuatThocLuongNhap: item.nxuatThocLuongNhap,
+            nxuatThocLuongDmucPhiXuat: 0,
+            nxuatThocLuongDmucPhiNhap: 0,
+            nxuatThocLuongTtien: 0,
+            nxuatGaoLuongXuat: item.nxuatGaoLuongXuat,
+            nxuatGaoLuongNhap: item.nxuatGaoLuongNhap,
+            nxuatGaoLuongDmucPhiNhap: 0,
+            nxuatGaoLuongDmucPhiXuat: 0,
+            nxuatGaoLuongTtien: 0,
+            listCtiet: [],
+            stt: item.stt,
+            id: item.id,
+            checked: false,
+          }
+          item.listCtiet.forEach(e => {
+            let ss: superMiniData = {
+              vitri: e.id,
+              maVtuTbi: e.maVtuTbi,
+              sl: e.sl,
+            }
+            mm.listCtiet.push(ss);
+          })
+          this.lstCTietBCao.push(mm);
+        })
+
+        this.lstCTietBCao[0].listCtiet.forEach(item => {
+          var mm: miniData = {
+            maVtuTbi: item.maVtuTbi,
+            stt: "",
+            id: item.vitri,
+            checked: false,
+            tongDvi: 0,
+            tongVphong: 0,
+            dmucNhapVttbDvi: 0,
+            dmucNhapVttbVphong: 0,
+            ttienNhapVttbDvi: 0,
+            ttienNhapVttbVphong: 0,
+          }
+          this.lstVtu.push(mm);
+        })
+
+        this.lstCTietBCao.forEach(data => {
+          data.listCtiet.forEach(item => {
+            item.vitri = this.lstVtu.find(e => e.maVtuTbi == item.maVtuTbi).id;
+          })
+        })
+
+        this.lstCTietBCao.forEach(item => {
+          this.tongCong(1, item);
+        })
+
+        this.tinhLaiTongSl();
+
+        this.updateEditCache();
       } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
-      if (res.statusCode == 0) {
-        this.maBaoCao = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
-      }
-    },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      })
-    this.spinner.show();
+
+    this.spinner.hide();
   }
 
   //kiem tra xem vat tu da duoc chon hay chua
