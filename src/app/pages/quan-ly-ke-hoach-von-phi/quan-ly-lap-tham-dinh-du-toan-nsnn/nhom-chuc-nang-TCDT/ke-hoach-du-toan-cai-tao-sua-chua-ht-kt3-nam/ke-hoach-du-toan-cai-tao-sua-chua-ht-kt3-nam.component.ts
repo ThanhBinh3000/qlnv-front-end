@@ -12,6 +12,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 export class ItemData {
   tenCtrinh!: string;
   nguonVon!: string;
@@ -101,7 +103,8 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
   namBcaohienhanh: any;
   mabaocao: any;
   currentday: Date = new Date();
-
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
   // upload file
   addFile() {
     const id = this.fileToUpload?.lastModified.toString();
@@ -128,13 +131,17 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
               private nguoiDungSerivce: UserService,
               private danhMucService: DanhMucHDVService,
               private notification:NzNotificationService,
-              private location: Location
+              private location: Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDvi = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -620,6 +627,13 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
     });
     this.updateEditCache()
     this.spinner.hide();
+}
+//gia tri cac o input thay doi thi tinh toan lai
+changeModel(id: string): void {
+  this.editCache[id].data.tongSoN1 = Number(this.editCache[id].data.ttoanNamTruocChuyenSangN1) + Number(this.editCache[id].data.psinhMoiN1);
+  this.editCache[id].data.tongSoN2 = Number(this.editCache[id].data.ttoanNamTruocChuyenSangN2) + Number(this.editCache[id].data.psinhMoiN2);
+  this.editCache[id].data.tongSoN3 = Number(this.editCache[id].data.ttoanNamTruocChuyenSangN3) + Number(this.editCache[id].data.psinhMoiN3);
+
 }
 
 }
