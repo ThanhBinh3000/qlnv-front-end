@@ -18,6 +18,8 @@ import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatL
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import * as dayjs from 'dayjs';
+import { ChiTietDuAn } from 'src/app/models/ChiTietDuAn';
 
 interface ItemData {
   id: string;
@@ -118,7 +120,24 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
 
   async loadChiTiet() {
     if (this.id > 0) {
+      let res = await this.phuongAnKeHoachLCNTService.loadChiTiet(this.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.chiTiet = res.data;
+        if (res.data.children1 && res.data.children1.length > 0) {
+          res.data.children1.forEach((item: any) => {
+            item.detail = item.children;
+          });
+        }
+        this.chiTiet.detail = res.data.children1;
 
+        this.startPH = dayjs(this.chiTiet.tgianMthau).toDate();
+        this.startDT = dayjs(this.chiTiet.tgianDthau).toDate();
+        this.startHS = dayjs(this.chiTiet.tgianTbao).toDate();
+        this.startHTN = dayjs(this.chiTiet.tgianNhang).toDate();
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
     else {
       this.chiTiet.idThHdr = this.idHdr;
@@ -127,8 +146,8 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   async loadChiTietTongHop() {
-    if (this.idHdr > 0) {
-      let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.idHdr);
+    if (this.chiTiet.idThHdr > 0) {
+      let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.chiTiet.idThHdr);
       if (res.msg == MESSAGE.SUCCESS) {
         this.chiTietTongHop = res.data;
         this.chiTiet.namKhoach = +this.chiTietTongHop.namKhoach;
@@ -158,6 +177,11 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
         this.errorGhiChu = true;
       }
       if (!this.errorGhiChu) {
+        if (this.chiTiet && this.chiTiet.detail && this.chiTiet.detail.length > 0) {
+          this.chiTiet.detail.forEach((item: ChiTietDuAn) => {
+            item.id = null;
+          });
+        }
         if (this.id > 0) {
           let res = await this.phuongAnKeHoachLCNTService.sua(this.chiTiet);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -272,7 +296,6 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     });
     modalPhuLuc.afterClose.subscribe((res) => {
       if (res) {
-        console.log(res);
         this.checkDataExistPhuLuc(res);
       }
     });

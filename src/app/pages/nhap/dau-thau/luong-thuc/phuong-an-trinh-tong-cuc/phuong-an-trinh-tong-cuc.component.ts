@@ -6,7 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
 
@@ -26,13 +26,13 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
   totalRecord: number = 0;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   listNam: any[] = [];
-  yearNow: number = 0;
-  namKeHoach: number = 0;
-  loaiVTHH: number = 0;
+  yearNow: number = null;
+  namKeHoach: number = null;
+  loaiVTHH: number = null;
 
-  thocIdDefault: number = 2;
-  gaoIdDefault: number = 6;
-  muoiIdDefault: number = 78;
+  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
+  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
   dataTable: any[] = [];
 
@@ -49,6 +49,7 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
     this.spinner.show();
     try {
       this.yearNow = dayjs().get('year');
+      this.namKeHoach = this.yearNow;
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: this.yearNow - i,
@@ -69,36 +70,39 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   clearFilter() {
-    this.namKeHoach = null;
+    this.namKeHoach = this.yearNow;
     this.loaiVTHH = null;
     this.startValue = null;
     this.endValue = null;
   }
 
   async search() {
-    this.dataTable = [];
     let param = {
       "denNgayTao": this.endValue
-        ? dayjs(this.endValue).format('DD/MM/YYYY')
+        ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": "00",
+      "loaiVthh": this.loaiVTHH ?? "00",
       "namKhoach": this.namKeHoach,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page
       },
-      "str": "",
-      "trangThai": "",
+      "str": null,
+      "trangThai": null,
       "tuNgayTao": this.startValue
-        ? dayjs(this.startValue).format('DD/MM/YYYY')
+        ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     }
-    this.totalRecord = 0;
     let res = await this.phuongAnKeHoachLCNTService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
+      if (data && data.content) {
         this.dataTable = data.content;
+        if (this.dataTable.length > 0) {
+          this.dataTable.forEach((item: any) => {
+            item.ngayTao = dayjs(item.ngayTao).format('DD/MM/YYYY')
+          });
+        }
       }
       this.totalRecord = data.totalElements;
     } else {

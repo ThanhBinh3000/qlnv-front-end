@@ -44,7 +44,7 @@
           <tbody>
             <tr>
               <td></td>
-              <td><input nz-input [(ngModel)]="itemRow.soGthau" /></td>
+              <td><input nz-input [(ngModel)]="itemRow.goiThau" /></td>
               <td><input nz-input [(ngModel)]="itemRow.diaDiemNhap" /></td>
               <td>
                 <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="itemRow.soLuong" [nzMin]="0">
@@ -56,7 +56,7 @@
               <td><input nz-input [ngModel]="(itemRow.soLuong ?? 0) * (itemRow.donGia ?? 0)" [readonly]="true" /></td>
               <td>
                 <a (click)="addRow()"
-                  [class.disabled]="!itemRow.soGthau || !itemRow.diaDiemNhap || itemRow.soGthau == '' || itemRow.diaDiemNhap == ''">
+                  [class.disabled]="!itemRow.goiThau || !itemRow.diaDiemNhap || itemRow.goiThau == '' || itemRow.diaDiemNhap == ''">
                   <i class="fa fa-plus"></i>
                 </a>
                 <a (click)="clearItemRow()">
@@ -67,7 +67,7 @@
             <tr *ngFor="let data of basicTable.data; let i = index">
               <ng-container *ngIf="!editCache[data.id]?.edit; else editTemplate">
                 <td class="text-center">{{i+1}}</td>
-                <td>{{ data.soGthau }}</td>
+                <td>{{ data.goiThau }}</td>
                 <td>{{ data.diaDiemNhap }}</td>
                 <td>{{ data.soLuong | number: '1.0-1' }}</td>
                 <td>{{ data.donGia | number: '1.0-1' }}</td>
@@ -83,7 +83,7 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td></td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.soGthau" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.goiThau" /></td>
                 <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.diaDiemNhap" /></td>
                 <td>
                   <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.id]?.data.soLuong"
@@ -102,7 +102,7 @@
                 </td>
                 <td>
                   <a (click)="saveEdit(data.id)" class="save"
-                    [class.disabled]="!editCache[data.id]?.data.soGthau || !editCache[data.id]?.data.diaDiemNhap || editCache[data.id]?.data.soGthau == '' || editCache[data.id]?.data.diaDiemNhap == ''">
+                    [class.disabled]="!editCache[data.id]?.data.goiThau || !editCache[data.id]?.data.diaDiemNhap || editCache[data.id]?.data.goiThau == '' || editCache[data.id]?.data.diaDiemNhap == ''">
                     <i class="fa fa-save"></i>
                   </a>
                   <a (click)="cancelEdit(data.id)">
@@ -111,13 +111,13 @@
                 </td>
               </ng-template>
             </tr>
-            <tr>
+            <tr *ngIf="dataTable.length > 0">
               <td colspan="3" class="background-last-row align-right">Tổng</td>
-              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 3, 2,
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 3, 2,
                 ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
-              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 4, 2,
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 4, 2,
                 ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
-              <td class="background-last-row">{{(tableExist && data.length > 0 ? reduceRowData(0, 5, 2,
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 5, 2,
                 ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
               <td class="background-last-row"></td>
             </tr>
