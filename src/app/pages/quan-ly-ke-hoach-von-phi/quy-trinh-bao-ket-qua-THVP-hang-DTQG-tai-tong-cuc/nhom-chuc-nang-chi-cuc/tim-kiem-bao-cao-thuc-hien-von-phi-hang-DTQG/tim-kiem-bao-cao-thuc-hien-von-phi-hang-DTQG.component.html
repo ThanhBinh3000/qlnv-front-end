@@ -96,7 +96,7 @@
               <td><a routerLink="../{{urlChiTiet}}/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
-              <td>{{item.ngayTao | date}}</td>
+              <td>{{item.ngayTao}}</td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
               <td>{{item.ngayPheDuyet}}</td>
@@ -106,13 +106,16 @@
                 <button type="button" class="btn btn-main" routerLink="../{{urlChiTiet}}/{{ item.id }}" [hidden]="btnPheDuyet">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main" [hidden]="!btnPheDuyet">
+                <button type="button" class="btn btn-main" routerLink="../{{urlChiTiet}}/{{ item.id }}" [hidden]="btnLanhDao">
+                  <span>Lãnh đạo phê duyệt</span>
+                </button>
+                <button type="button" class="btn btn-main" [hidden]="btnCanBo">
                   <span>Nhập/Sửa dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" [hidden]="!btnPheDuyet">
+                <button type="button" class="btn btn-main" [hidden]="btnCanBo">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main"[hidden]="!btnPheDuyet">
+                <button type="button" class="btn btn-main"[hidden]="btnCanBo">
                   <span>Xóa</span>
                 </button>
               </td>

@@ -132,8 +132,8 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
         str:null,
         trangThai:this.trangthai,
         paggingReq:{
-            limit: 10,
-            page: 1
+            limit: this.pages.size,
+            page: this.pages.page,
         }
     }
     this.quankhoachvon.timkiemphuongan(objsearch).subscribe(res => {
@@ -174,10 +174,12 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;
+    this.timkiem();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+    this.timkiem();
   }
 }

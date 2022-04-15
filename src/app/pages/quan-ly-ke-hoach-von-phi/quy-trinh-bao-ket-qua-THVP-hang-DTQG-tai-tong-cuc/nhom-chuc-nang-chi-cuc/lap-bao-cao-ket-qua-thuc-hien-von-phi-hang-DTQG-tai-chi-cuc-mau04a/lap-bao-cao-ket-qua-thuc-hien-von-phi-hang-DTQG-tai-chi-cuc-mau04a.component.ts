@@ -434,7 +434,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     );
     
     this.getStatusButton();
-    if(this.userInfor.roles[0]?.id==2){
+    if(this.userInfor.roles[0]?.id!=3){
       this.statusBtnDuyetBieuMau= false;
     }
     //lay danh sach cac đơn vị quản lý (hn, thái nguyên,...)
@@ -453,11 +453,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
 
   //chuc nang trinh duyet len các cap tren
-  onSubmit(mcn: String) {
+  onSubmit(mcn: String, LydoTuChoi:String) {
     const requestGroupButtons = {
       id: this.id,
       maChucNang: mcn,
-      lyDoTuChoi: '',
+      lyDoTuChoi: LydoTuChoi,
     };
     this.spinner.show();
     this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).subscribe(async (data) => {
@@ -641,7 +641,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        // this.onSubmit(mcn, text);
+        this.onSubmit(mcn, text);
       }
     });
   }
@@ -1293,10 +1293,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao.maBcao = data.data.maBcao;
           this.baoCao.namBcao = data.data.namBcao;
           this.baoCao.maDvi = data.data.maDvi;
-          this.baoCao.ngayDuyet = data.data.ngayDuyet;
-          this.baoCao.ngayPheDuyet = data.data.ngayPheDuyet;
-          this.baoCao.ngayCapTrenTraKq = data.data.ngayTraKq;
-          this.baoCao.ngayTrinhDuyet = data.data.ngayTrinh;
+          this.baoCao.ngayDuyet = this.datepipe.transform(data.data.ngayDuyet, 'dd/MM/yyyy');
+          this.baoCao.ngayPheDuyet = this.datepipe.transform(data.data.ngayPheDuyet,'dd/MM/yyyy');
+          this.baoCao.ngayCapTrenTraKq = this.datepipe.transform(data.data.ngayTraKq,'dd/MM/yyyy');
+          this.baoCao.ngayTrinhDuyet = this.datepipe.transform(data.data.ngayTrinh,'dd/MM/yyyy');
           this.baoCao.trangThai = data.data.trangThai;
           this.donvitien = data.data.maDviTien;
           this.maLoaiBaocao = data.data.maLoaiBcao;
@@ -1476,7 +1476,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           } else {
             this.status = true;
           }
-          this.checkXem= true;
+          
+          //check điều kiện nút xem
+          if((this.userInfor.roles[0].id!=3) && (this.status ==false)){
+            this.checkXem = true
+          }
+
+        
+          
           // set list id file ban dau
           this.lstFile.filter((item) => {
             this.listIdFiles += item.id + ',';

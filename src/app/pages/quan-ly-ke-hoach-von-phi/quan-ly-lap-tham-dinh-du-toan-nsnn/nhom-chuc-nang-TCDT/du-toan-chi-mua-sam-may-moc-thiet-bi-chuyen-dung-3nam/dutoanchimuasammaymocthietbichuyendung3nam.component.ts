@@ -297,7 +297,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
