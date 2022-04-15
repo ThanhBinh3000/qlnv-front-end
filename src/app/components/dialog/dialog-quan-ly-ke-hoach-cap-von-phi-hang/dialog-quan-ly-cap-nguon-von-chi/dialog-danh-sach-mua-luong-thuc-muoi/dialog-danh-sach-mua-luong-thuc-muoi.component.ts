@@ -19,11 +19,11 @@ export class HopDong {
 }
 
 @Component({
-      selector: 'dialog-danh-sach-mua-tbi-vtu',
-      templateUrl: './dialog-danh-sach-mua-tbi-vtu.component.html',
-      styleUrls: ['./dialog-danh-sach-mua-tbi-vtu.component.scss'],
+      selector: 'dialog-danh-sach-mua-luong-thuc-muoi',
+      templateUrl: './dialog-danh-sach-mua-luong-thuc-muoi.component.html',
+      styleUrls: ['./dialog-danh-sach-mua-luong-thuc-muoi.component.scss'],
 })
-export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
+export class DialogDanhSachMuaLuongThucMuoiComponent implements OnInit {
       @Input() maGoiThau: any;
 
       tuNgayQd!: string;
@@ -43,7 +43,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
                   id: 1,
                   checked: false,
                   maHd: "112/HD-MBG",
-                  tenHd: "Hợp đồng mua vật tư, thiết bị",
+                  tenHd: "Hợp đồng mua Gạo",
                   maGoiThau: "HST-120/BTC-HS",
                   ngayHd: "1/02/2021",
                   gtriHd: 5700000000,
@@ -52,7 +52,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
                   id: 2,
                   checked: false,
                   maHd: "117/HD-MBG",
-                  tenHd: "Hợp đồng mua vật tư, thiết bị",
+                  tenHd: "Hợp đồng mua Gạo",
                   maGoiThau: "HST-120/BTC-HS",
                   ngayHd: "7/02/2021",
                   gtriHd: 345888000,
@@ -61,7 +61,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
                   id: 3,
                   checked: false,
                   maHd: "102/HD-MBG",
-                  tenHd: "Hợp đồng mua vật tư, thiết bị",
+                  tenHd: "Hợp đồng mua Gạo",
                   maGoiThau: "HST-120/BTC-HS",
                   ngayHd: "2/02/2021",
                   gtriHd: 1200450000,
@@ -70,7 +70,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
                   id: 4,
                   checked: false,
                   maHd: "122/HD-MBG",
-                  tenHd: "Hợp đồng mua vật tư, thiết bị",
+                  tenHd: "Hợp đồng mua Gạo",
                   maGoiThau: "HST-120/BTC-HS",
                   ngayHd: "12/02/2021",
                   gtriHd: 201444000,

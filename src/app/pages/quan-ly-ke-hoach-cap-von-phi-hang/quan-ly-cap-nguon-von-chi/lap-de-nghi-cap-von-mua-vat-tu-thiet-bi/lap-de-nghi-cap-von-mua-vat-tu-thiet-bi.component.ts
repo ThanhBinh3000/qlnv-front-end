@@ -487,6 +487,10 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
     this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
   }
 
+  changeModel(id: any){
+    this.editCache[id].data.thanhTien = this.editCache[id].data.soLuong * this.editCache[id].data.donGia;
+  }
+
   getContract() {
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách hợp đồng',

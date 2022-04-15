@@ -16,14 +16,7 @@ import { MESSAGE } from '../../../../../constants/message';
 export class ObjResp {
      id: string;
      maBcao: string;
-     maDvi: number;
-     maDviTien: string;
      maLoaiBcao: string;
-     namBcao: number;
-     namHienHanh: number;
-     ngayTao: string;
-     nguoiTao: string;
-     trangThai: string;
 }
 
 export class ItemData {
@@ -159,6 +152,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.lstBcao = data.data;
+                         console.log(this.lstBcao);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -299,14 +293,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                                    objResp: {
                                         id: item.objResp.id,
                                         maBcao: item.objResp.maBcao,
-                                        maDvi: item.objResp.maDvi,
-                                        maDviTien: item.objResp.maDviTien,
                                         maLoaiBcao: item.objResp.maLoaiBcao,
-                                        namBcao: item.objResp.namBcao,
-                                        namHienHanh: item.objResp.namHienHanh,
-                                        ngayTao: item.objResp.ngayTao,
-                                        nguoiTao: item.objResp.nguoiTao,
-                                        trangThai: item.objResp.trangThai,
                                    },
                                    url: this.getUrl(item.objResp.maLoaiBcao) + '/' + item.objResp.id,
                                    checked: false,
@@ -344,14 +331,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                objResp: {
                     id: "",
                     maBcao: "",
-                    maDvi: 0,
-                    maDviTien: "",
                     maLoaiBcao: "",
-                    namBcao: 0,
-                    namHienHanh: 0,
-                    ngayTao: "",
-                    nguoiTao: "",
-                    trangThai: "",
                },
                url: "",
                checked: false,
@@ -468,14 +448,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           let mm = this.lstBcao.filter(item => item.maBcao == this.editCache[id].data.objResp.maBcao)
           console.log(mm);
           this.editCache[id].data.objResp.id = mm[0].id;
-          this.editCache[id].data.objResp.maDvi = mm[0].maDvi;
-          this.editCache[id].data.objResp.maDviTien = mm[0].maDviTien;
           this.editCache[id].data.objResp.maLoaiBcao = mm[0].maLoaiBcao;
-          this.editCache[id].data.objResp.namBcao = mm[0].namBcao;
-          this.editCache[id].data.objResp.namHienHanh = mm[0].namHienHanh;
-          this.editCache[id].data.objResp.ngayTao = mm[0].ngayTao;
-          this.editCache[id].data.objResp.nguoiTao = mm[0].nguoiTao;
-          this.editCache[id].data.objResp.trangThai = mm[0].trangThai;
           this.editCache[id].data.url = this.getUrl(mm[0].maLoaiBcao) + '/' + mm[0].id;
           console.log(this.editCache[id].data);
      }

@@ -1,166 +1,202 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-
-
+import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DomSanitizer } from '@angular/platform-browser';
+import * as fileSaver from 'file-saver';
+import { TRANGTHAITIMKIEM, Utils } from "../../../../Utility/utils";
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { min } from 'moment';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from '../../../../constants/message';
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
-  selector: 'app-danh-sach-de-nghi-cap-von',
-  templateUrl: './danh-sach-tong-hop-de-nghi-cap-von.component.html',
-  styleUrls: ['./danh-sach-tong-hop-de-nghi-cap-von.component.scss'],
+    selector: 'app-danh-sach-tong-hop-de-nghi-cap-von',
+    templateUrl: './danh-sach-tong-hop-de-nghi-cap-von.component.html',
+    styleUrls: ['./danh-sach-tong-hop-de-nghi-cap-von.component.scss'],
 })
+
 export class DanhSachTongHopDeNghiCapVonComponent implements OnInit {
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
-  totalElements = 0;
-  totalPages = 0;
-  errorMessage = "";
-  url!: string;
+    lstCTietBCao: any = [];                         // chi tiet nooi dung tim kiem
+    totalElements: number = 0;
+    totalPages: number = 0;
+    trangThais: any = TRANGTHAITIMKIEM;
+    userInfo!: any;
 
-  // phan cu cua teca
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  noParent = true;
-  searchValue = '';
+    searchFilter = {
+        tuNgay: "",
+        denNgay: "",
+        trangThai: "",
+    }
 
-  searchFilter = {
-    nam: "",
-    tuNgay: "",
-    denNgay: "",
-    maBaoCao: "",
-    donViTao: "",
-    loaiBaoCao: "",
-  };
-  pages = {
-    size: 10,
-    page: 1,
-  }
-  donViTaos: any = [];
-  baoCaos: any = [];
-  constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
-    private danhMuc: DanhMucHDVService,
-    private router: Router,
-    private datePipe: DatePipe,
-  ) {
-  }
-
-  ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCao().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        console.log(err);
-        this.errorMessage = "err.error.message";
-      }
-    );
-
-    //lay danh sach danh muc
-    this.danhMuc.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donViTaos = data.data;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      err => {
-        this.errorMessage = "err.error.message";
-      }
-    );
-  }
-
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-  //search list bao cao theo tieu chi
-  onSubmit() {
-    let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
-      maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
-      namBcao: this.searchFilter.nam,
-      ngayTaoDen: this.searchFilter.tuNgay,
-      ngayTaoTu: this.searchFilter.denNgay,
-      paggingReq: {
-        limit: this.pages.size,
-        page: this.pages.page,
-      },
-      str: "",
-      trangThai: "",
+    pages = {
+        size: 10,
+        page: 1,
     };
 
-    //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCao(requestReport).toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
-          this.totalElements = data.data.totalElements;
-          this.totalPages = data.data.totalPages;
-        } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
-        }
-      },
-      (err) => {
-        this.errorMessage = err.error.message;
-      }
-    );
-  }
-
-  //set url khi
-  setUrl(id) {
-    switch (id) {
-      case 26:
-        this.url = '/chi-thuong-xuyen-3-nam/'
-        break;
-      default:
-        this.url = null;
-        break;
+    constructor(private router: Router,
+        private routerActive: ActivatedRoute,
+        private spinner: NgxSpinnerService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
+        private datePipe: DatePipe,
+        private sanitizer: DomSanitizer,
+        private userService: UserService,
+        private notification: NzNotificationService,
+        private danhMucService: DanhMucHDVService,
+        private modal: NzModalService,
+    ) {
     }
-    console.log(id);
 
-  }
+    async ngOnInit() {
+        let userName = this.userService.getUserName();
+        await this.getUserInfo(userName);
+    }
 
-  //doi so trang
-  onPageIndexChange(page) {
-    this.pages.page = page;
-    this.onSubmit();
-  }
+    //get user info
+    async getUserInfo(username: string) {
+        await this.userService.getUserInfo(username).toPromise().then(
+            (data) => {
+                if (data?.statusCode == 0) {
+                    this.userInfo = data?.data
+                    return data?.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+    }
 
-  //doi so luong phan tu tren 1 trang
-  onPageSizeChange(size) {
-    this.pages.size = size;
-    this.onSubmit();
-  }
+    // // chuc nang check role
+    // onSubmit(mcn: String, lyDoTuChoi: string) {
+    //     this.lstCTietBCao.forEach(item => {
+    //         if (item.checked) {
+    //             const requestGroupButtons = {
+    //                 id: item.id,
+    //                 maChucNang: mcn,
+    //                 lyDotuChoi: lyDoTuChoi,
+    //             };
+    //             this.spinner.show();
+    //             this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
+    //                 (data) => {
+    //                     if (data.statusCode == 0) {
+    //                         //this.getDetailReport();
+    //                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+    //                     } else {
+    //                         this.notification.error(MESSAGE.ERROR, data?.msg);
+    //                     }
+    //                 },
+    //                 err => {
+    //                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //                 }
+    //             );
+    //             this.spinner.hide();
+    //         }
+    //     })
+    // }
+
+    // tuChoi(mcn: string) {
+    //     const modalTuChoi = this.modal.create({
+    //         nzTitle: 'Từ chối',
+    //         nzContent: DialogTuChoiComponent,
+    //         nzMaskClosable: false,
+    //         nzClosable: false,
+    //         nzWidth: '900px',
+    //         nzFooter: null,
+    //         nzComponentParams: {},
+    //     });
+    //     modalTuChoi.afterClose.subscribe(async (text) => {
+    //         if (text) {
+    //             this.onSubmit(mcn, text);
+    //         }
+    //     });
+    // }
+
+
+    // call chi tiet bao cao
+    getDetailReport() {
+        this.spinner.show();
+
+        let request = {
+            ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+            paggingReq: {
+                limit: this.pages.size,
+                page: this.pages.page,
+            },
+            trangThai: this.searchFilter.trangThai,
+        }
+
+        this.quanLyVonPhiService.timkiem325(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.lstCTietBCao = data.data.content;
+                    this.totalElements = data.data.totalElements;
+                    this.totalPages = data.data.totalPages;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        );
+        this.spinner.hide();
+    }
+
+
+
+    // xoa dong
+    deleteById(id: any): void {
+        this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+    }
+
+    // // lay ten don vi tao
+    // getUnitName() {
+    //     return this.donVis.find(item => item.maDvi == this.maDvi)?.tenDvi;
+    // }
+
+    // lay ten trang thai
+    getStatusName(trangThaiBanGhi: string) {
+        const utils = new Utils();
+        return utils.getStatusName(trangThaiBanGhi);
+    }
+
+    taoMoi(){
+        this.router.navigate([
+            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/tong-hop-de-nghi-cap-von',
+          ]);
+    }
+
+    redirectChiTieuKeHoachNam() {
+        this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    }
+
+    xoaDieuKien(){
+        this.searchFilter.tuNgay = null;
+        this.searchFilter.denNgay = null;
+        this.searchFilter.trangThai = null;
+    }
+
+    //doi so trang
+    onPageIndexChange(page) {
+        this.pages.page = page;
+        this.getDetailReport();
+    }
+
+    //doi so luong phan tu tren 1 trang
+    onPageSizeChange(size) {
+        this.pages.size = size;
+        this.getDetailReport();
+    }
+
 }
