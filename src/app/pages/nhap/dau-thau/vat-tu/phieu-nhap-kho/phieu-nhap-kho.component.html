@@ -2,37 +2,53 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Điều kiện tìm kiếm" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Số hồ sơ</label>
-              <input class="search__input" placeholder="Số hồ sơ" nz-input [(ngModel)]="soHoSo" />
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số phiếu</label>
+              <input class="search__input" placeholder="Số phiếu" nz-input [(ngModel)]="soPhieu" />
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Hợp đồng</label>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
-                <input nz-input [readonly]="true" [(ngModel)]="soHD" />
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đơn vị</label>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+                  [nzAutocomplete]="auto" />
               </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+                  (click)="selectDonVi(option)">
+                  {{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Hàng hóa</label>
-              <nz-select nzPlaceHolder="Hàng hóa" [(ngModel)]="loaiVTHH">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="loaiVTHH">
                 <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Từ ngày</label>
+            <div nz-col nzSpan="8" *ngIf="!isDuyet">
+              <label class="search__label">Điểm kho</label>
+              <nz-select nzPlaceHolder="Điểm kho" [(ngModel)]="diemKho">
+                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngày lập phiếu từ ngày</label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày">
+                [(ngModel)]="startValue" nzPlaceHolder="Ngày lập phiếu từ ngày">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="8">
               <label class="search__label">Đến ngày</label>
               <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                 [(ngModel)]="endValue" nzPlaceHolder="Đến ngày">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="12" *ngIf="isDuyet">
+            <div nz-col nzSpan="8" *ngIf="isDuyet">
               <label class="search__label">Trạng thái</label>
               <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiVTHH">
                 <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
@@ -53,7 +69,7 @@
             <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
-        <nz-card nzTitle="Danh sách hồ sơ kỹ thuật" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Danh sách Phiếu nhập kho hàng DTQG" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
@@ -62,13 +78,15 @@
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <th width="130px">Tên hồ sơ kỹ thuật</th>
-                <th width="175px">Ngày lập</th>
-                <th width="175px">Số hợp đồng mua bán</th>
-                <th width="">Hàng hóa</th>
-                <th width="175px">Ngày nhập</th>
-                <th width="175px">Số lượng nhập</th>
-                <th width="175px">Trạng thái</th>
+                <th width="130px">Số phiếu</th>
+                <th width="175px">Ngày lập phiếu</th>
+                <th width="175px">Điểm kho</th>
+                <th width="">Nhà kho</th>
+                <th width="175px">Ngăn kho</th>
+                <th width="175px">Hàng hóa</th>
+                <th width="175px">Số lượng</th>
+                <th width="175px">Đơn giá</th>
+                <th width="175px">Thành tiền</th>
                 <th width="130px"></th>
               </tr>
             </thead>
@@ -78,19 +96,21 @@
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <td>VP/HSKTKT/2022/04</td>
+                <td>ĐNB/CC.ĐNT/N/2022/16</td>
                 <td>15/03/2022</td>
-                <td>22/2022/HĐMB</td>
-                <td>Nhà bạt loại 16,5 m2</td>
-                <td>10/03/2022</td>
-                <td>350</td>
-                <td>Dự thảo</td>
+                <td>Tân An</td>
+                <td>Nhà kho H1</td>
+                <td>Lô số 2 Ngăn kho H1/1</td>
+                <td>Nhà bạt cứu sinh</td>
+                <td>3.000</td>
+                <td>500.000</td>
+                <td>1.500.000.000</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a>
-                    <i class="icon htvbdh_tcdt_print"></i>
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
                   <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>

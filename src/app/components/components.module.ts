@@ -78,6 +78,7 @@ import { DialogThongTinPhuLucHopDongMuaVatTuComponent } from './dialog/dialog-th
 import { DialogCanCuQDPheDuyetKHLCNTComponent } from './dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
 import { DialogThongTinDonViThucHienQuyetDinhComponent } from './dialog/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh.component';
 import { DialogCanCuHopDongComponent } from './dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { DialogChiTietHangHoaNhapKhoComponent } from './dialog/dialog-chi-tiet-hang-hoa-nhap-kho/dialog-chi-tiet-hang-hoa-nhap-kho.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { DialogCanCuHopDongComponent } from './dialog/dialog-can-cu-hop-dong/dia
     DialogCanCuQDPheDuyetKHLCNTComponent,
     DialogThongTinDonViThucHienQuyetDinhComponent,
     DialogCanCuHopDongComponent,
+    DialogChiTietHangHoaNhapKhoComponent,
     //pipes
     FilterPipe,
   ],

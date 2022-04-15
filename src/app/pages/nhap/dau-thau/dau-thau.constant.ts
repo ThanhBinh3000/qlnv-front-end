@@ -286,4 +286,10 @@ export const VAT_TU_LIST: DauThau[] = [
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Phiếu nhập kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/phieu-nhap-kho',
+  },
 ];
