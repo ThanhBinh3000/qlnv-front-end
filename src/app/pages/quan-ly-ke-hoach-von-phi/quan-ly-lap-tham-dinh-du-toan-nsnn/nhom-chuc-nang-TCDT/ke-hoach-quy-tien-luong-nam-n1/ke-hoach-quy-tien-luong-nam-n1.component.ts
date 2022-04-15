@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { Location } from '@angular/common'
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   maCucDtnnKvuc!:string;
@@ -109,6 +111,8 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
   // upload file
   addFile() {
     const id = this.fileToUpload?.lastModified.toString();
@@ -136,12 +140,17 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
               private location: Location,
+              private fb:FormBuilder,
+
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -174,6 +183,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -193,6 +203,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -223,6 +234,10 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
     getStatusButton(){
