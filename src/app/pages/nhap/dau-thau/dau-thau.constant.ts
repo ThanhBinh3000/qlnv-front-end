@@ -253,7 +253,7 @@ export const VAT_TU_LIST: DauThau[] = [
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hồ sơ kỹ thuật',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
-    url: '',
+    url: 'vat-tu/ho-so-ky-thuat',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -285,5 +285,11 @@ export const VAT_TU_LIST: DauThau[] = [
     title: 'Phiếu nhập điều chỉnh',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: '',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Phiếu nhập kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/phieu-nhap-kho',
   },
 ];

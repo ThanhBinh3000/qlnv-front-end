@@ -19,6 +19,11 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  chiTiet(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/chi-tiet/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   them(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
@@ -31,6 +36,11 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
 
   xoa(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/xoa`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/phe-duyet`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 }

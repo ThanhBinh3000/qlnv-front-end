@@ -4,6 +4,7 @@ import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
@@ -39,6 +40,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
   soQD: string = null;
   canCu: string = null;
   loaiQd: string = null;
+  soHd: string = null;
 
   selectedCanCu: any = null;
 
@@ -76,10 +78,10 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     }
   }
 
-  openDialogQuyetDinhGiaoChiTieu() {
+  openDialogHopDong() {
     const modalQD = this.modal.create({
-      nzTitle: 'Căn cứ trên hợp đồng',
-      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzTitle: 'Thông tin căn cứ trên hợp đồng',
+      nzContent: DialogCanCuHopDongComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -88,7 +90,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        this.selectedCanCu = data;
+        this.soHd = data.soHdong;
       }
     });
   }
@@ -134,7 +136,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     let body = {
       "loaiQd": this.loaiQd,
       "maDvi": maDonVi,
-      "maVthh": this.loaiVTHH ?? "MVT01",
+      "maVthh": this.loaiVTHH ?? "00",
       "ngayQd": this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
@@ -144,7 +146,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page
       },
-      "soHd": null,
+      "soHd": this.soHd,
       "soQd": this.soQD,
       "str": null,
       "trangThai": null
