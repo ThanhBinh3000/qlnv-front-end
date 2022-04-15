@@ -16,8 +16,8 @@
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Căn cứ trên hợp đồng</label>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
-                <input nz-input [readonly]="true" [(ngModel)]="canCu" />
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
+                <input nz-input [readonly]="true" [(ngModel)]="soHd" />
               </nz-input-group>
             </div>
             <div nz-col nzSpan="8">
@@ -90,13 +90,13 @@
                 <td>{{ data.soQd }}</td>
                 <td>{{ data.ngayKy }}</td>
                 <td>{{ data.veViec }}</td>
-                <td></td>
+                <td>{{ data.soHd }}</td>
                 <td>{{ data.tenDvi }}</td>
                 <td>{{ data.loaiQd }}</td>
                 <td></td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
-                  <a (click)="redirectToChiTiet(1)">
+                  <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a>

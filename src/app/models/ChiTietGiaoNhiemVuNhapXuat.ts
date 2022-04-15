@@ -8,12 +8,13 @@ export class ChiTietGiaoNhiemVuNhapXuat {
     ldoTuchoi: string;
     loaiQd: string;
     maDvi: string;
+    tenDvi: string;
     ngayHluc: string;
     ngayKy: string;
     soHd: string;
     soQd: string;
     veViec: string;
     fileDinhKems: ChiTietFile;
-    detail: ChiTietDonViQuyetDinh;
-    detail1: ChiTietThongTinHangDTQG;
+    detail: Array<ChiTietDonViQuyetDinh>;
+    detail1: Array<ChiTietThongTinHangDTQG>;
 }
