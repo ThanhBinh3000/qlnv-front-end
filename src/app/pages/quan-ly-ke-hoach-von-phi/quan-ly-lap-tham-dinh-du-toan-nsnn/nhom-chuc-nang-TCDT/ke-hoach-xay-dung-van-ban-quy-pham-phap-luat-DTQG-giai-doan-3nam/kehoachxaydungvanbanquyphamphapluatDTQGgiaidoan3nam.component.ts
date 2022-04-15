@@ -46,7 +46,8 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chi so kiem tra
+  statusBtnLDDC:boolean;                       // trang thai
+
   currentday: Date = new Date();
   //////
   id: any;
