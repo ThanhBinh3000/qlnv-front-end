@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   maDvi!: String;
@@ -92,6 +94,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -125,12 +129,16 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
     private location: Location,
+    private fb:FormBuilder,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
   }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
      //check param dieu huong router
      this.id = this.routerActive.snapshot.paramMap.get('id');
      this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -384,7 +392,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.getDetailReport();
           this.getStatusButton();
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -413,11 +421,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||

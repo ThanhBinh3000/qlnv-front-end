@@ -2,6 +2,7 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -45,7 +46,8 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
      private danhmuc :DanhMucHDVService,
      private datepipe:DatePipe,
      private notification: NzNotificationService,
-     private location: Location
+     private location: Location,
+     private spinner: NgxSpinnerService,
      ) {
     
   }
@@ -119,11 +121,9 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         str: "",
         trangThai: this.trangthai,
     }
-    console.log(req);
+    this.spinner.show();
     this.quankhoachvon.timkiemsokiemtratranchi(req).subscribe(res => {
-        console.log(res);
         if(res.statusCode==0){
-          // this.listSogiaoTranChi =[];
           this.listSogiaoTranChi = res.data.content;
           if(this.listSogiaoTranChi.length==0){
             this.listSogiaoTranChi =[];
@@ -142,6 +142,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
 
 

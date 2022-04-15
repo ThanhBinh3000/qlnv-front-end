@@ -13,6 +13,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 export class ItemData {
   maNdungChi: string;
   chiTiet: string;
@@ -88,6 +90,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   namBcaohienhanh: any;
   mabaocao: any;
   currentday: Date = new Date();
+  validateForm!: FormGroup;
+  messageValidate:any =MESSAGEVALIDATE;
 
   // upload file
   addFile() {
@@ -115,13 +119,17 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
               private nguoiDungSerivce: UserService,
               private danhMucService: DanhMucHDVService,
               private notification:NzNotificationService,
-              private location: Location
+              private location: Location,
+              private fb:FormBuilder,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDvi = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -153,12 +161,13 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
+      this.namBaoCaoHienHanh = new Date().getFullYear();
     }
     else {
       this.trangThaiBanGhi = '1';
       this.nguoiNhap = this.userInfo?.username;
       this.maDonViTao = this.userInfo?.dvql;
-      this.namBcaohienhanh = this.currentday.getFullYear();
+      this.namBaoCaoHienHanh = new Date().getFullYear();
       this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
       this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N;
       this.spinner.show();
@@ -371,7 +380,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
