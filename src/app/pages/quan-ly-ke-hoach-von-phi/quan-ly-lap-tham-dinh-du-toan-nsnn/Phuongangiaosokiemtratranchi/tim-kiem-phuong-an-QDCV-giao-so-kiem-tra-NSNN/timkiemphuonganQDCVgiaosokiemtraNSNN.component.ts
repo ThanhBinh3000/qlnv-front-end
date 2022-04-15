@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -50,6 +51,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
      private location: Location,
      private fb: FormBuilder,
      private datePipe : DatePipe,
+     private spinner: NgxSpinnerService,
      ) {
     // this.namPa = this.currentYear.getFullYear().toString();   
   }
@@ -136,6 +138,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
             page: this.pages.page,
         }
     }
+    this.spinner.show();
     this.quankhoachvon.timkiemphuongan(objsearch).subscribe(res => {
         if(res.statusCode==0){
           this.listVanban =[];
@@ -152,6 +155,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     })
+    this.spinner.hide();
   }
 
   //tao moi
