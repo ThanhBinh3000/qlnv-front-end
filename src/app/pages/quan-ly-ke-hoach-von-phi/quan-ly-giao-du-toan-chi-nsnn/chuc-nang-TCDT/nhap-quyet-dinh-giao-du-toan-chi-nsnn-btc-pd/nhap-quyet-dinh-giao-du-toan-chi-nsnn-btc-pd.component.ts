@@ -99,7 +99,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   lyDoTuChoi!: any;
   maQdCha!: any;
   nam!: any;
-  noiQd!: any;
+  noiQd: string = "Bộ Tài Chính";
   tenDvi!: any;
   veViec!: any;
   validateForm!: FormGroup;
