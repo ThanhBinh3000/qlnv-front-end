@@ -169,7 +169,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -188,7 +188,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -219,7 +219,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -392,7 +392,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       },
       (err) => {
         console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -582,6 +582,9 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.lstCTietBCao.forEach(e => {
+              e.id = uuid.v4();
+            })
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }

@@ -146,7 +146,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     private danhMucService: DanhMucHDVService,
     private location: Location,
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
   }
 
 
@@ -166,7 +166,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -350,7 +350,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien = "01",
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
@@ -358,7 +358,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -374,7 +374,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -406,7 +406,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -437,7 +437,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -654,6 +654,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

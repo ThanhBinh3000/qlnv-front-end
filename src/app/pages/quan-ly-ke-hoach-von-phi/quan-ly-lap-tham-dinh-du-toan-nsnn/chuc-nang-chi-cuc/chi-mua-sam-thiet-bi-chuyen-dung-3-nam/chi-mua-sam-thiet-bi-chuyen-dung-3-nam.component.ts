@@ -40,7 +40,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   chiTietBcaos: any;
   lstFile: any = [];
   status: boolean = false;
-  namBcao = new Date().getFullYear();
+  namBcao: number;
   userData!: any;
   role!: any;
   unit!: any;
@@ -125,7 +125,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     private danhMucService: DanhMucHDVService,
     private location: Location,
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
   }
 
 
@@ -145,7 +145,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -156,7 +156,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -175,7 +175,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -192,7 +192,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -213,7 +213,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -242,7 +242,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -286,7 +286,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
       soVban: this.soVban,
     };
@@ -378,9 +378,8 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
           this.ngayNhap = data.data.ngayTao;
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
-          console.log(this.maDonViTao);
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
           if (
@@ -409,7 +408,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -599,11 +598,14 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.updateEditCache()
     this.spinner.hide();

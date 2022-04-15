@@ -146,7 +146,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           if (res.statusCode == 0) {
             this.maBaoCao = res.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
@@ -167,7 +167,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           if (res.statusCode == 0) {
             this.maBaoCao = res.data;
           } else {
-           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+           this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
@@ -188,7 +188,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -202,7 +202,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -216,7 +216,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -287,7 +287,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N,
-      namHienHanh: this.namBcaohienhanh,
+      namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
     };
 
@@ -297,7 +297,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -313,7 +313,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -344,7 +344,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -375,7 +375,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBaoCaoHienHanh;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           // set list id file ban dau
@@ -388,7 +388,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -566,11 +566,13 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
-            // this.namBaoCao = this.namBcao;
             this.namBaoCaoHienHanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }
+            this.lstCTietBCao.forEach(e => {
+              e.id= uuid.v4();
+            })
 
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);

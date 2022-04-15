@@ -15,6 +15,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { parse } from 'querystring';
 
 
 export class ItemData {
@@ -59,13 +60,13 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  namBcao: any;         // nam bao cao
+  namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
+  namBcao!: any;         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
   maDonViTao!: any;                           // ma don vi tao
   maBaoCao!: string;                          // ma bao cao
-  namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG;                // nam bao cao
   maDviTien: string = "01";                   // ma don vi tien
@@ -140,7 +141,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -172,6 +173,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         }
       );
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh+1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -182,15 +184,15 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
         },
         (err) => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh+1
     }
 
     this.getStatusButton();
@@ -201,7 +203,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.nhoms = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -215,7 +217,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.matHangs = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -236,7 +238,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             this.checkDv = true;
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -260,6 +262,9 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     }
   }
 
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
+  }
   getStatusButton(){
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -283,7 +288,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -348,7 +353,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -364,7 +369,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -652,11 +657,14 @@ async calltonghop(){
           this.lstCTiet.forEach(e => {
             this.tongSo += e.kphi;
           })
+          this.lstCTiet.forEach(e => {
+            e.id = uuid.v4();
+          })
       }else{
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
   },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   });
   this.updateEditCache()
   this.spinner.hide();

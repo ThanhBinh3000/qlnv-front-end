@@ -217,7 +217,7 @@
                     <td>{{ data.tenDan }}</td>
                     <td>
                       <div *ngFor="let item of maLoaiKhoachs">
-                        <div *ngIf="item.id == data.maKhoach">
+                        <div *ngIf="item.id == data.maLoaiKhoach">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -231,7 +231,7 @@
                     </td>
                     <td>
                       <div *ngFor="let item of maDdiemXdungs">
-                        <div *ngIf="item.id == data.maDdiemXd">
+                        <div *ngIf="item.id == data.maDdiemXdung">
                           {{item.tenDm}}
                         </div>
                       </div>
@@ -291,7 +291,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
-                        [(ngModel)]="editCache[data.id].data.maKhoach">
+                        [(ngModel)]="editCache[data.id].data.maLoaiKhoach">
                         <nz-option *ngFor="let item of maLoaiKhoachs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -303,7 +303,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa điểm xây dựng"
-                        [(ngModel)]="editCache[data.id].data.maDdiemXd">
+                        [(ngModel)]="editCache[data.id].data.maDdiemXdung">
                         <nz-option *ngFor="let item of maDdiemXdungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -398,9 +398,9 @@
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Xóa</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

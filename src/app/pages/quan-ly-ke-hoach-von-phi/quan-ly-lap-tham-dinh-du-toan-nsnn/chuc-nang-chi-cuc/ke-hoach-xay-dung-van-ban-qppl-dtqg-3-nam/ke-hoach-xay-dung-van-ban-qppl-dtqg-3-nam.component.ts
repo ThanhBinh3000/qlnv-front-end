@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -53,7 +53,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   maBaoCao!: string;                          // ma bao cao
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
-  maLoaiBaoCao: string = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;                // nam bao cao
+  maLoaiBaoCao: string = QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N;                // nam bao cao
   maDviTien: string = "";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
@@ -81,11 +81,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
-  capDvi:any;
-  checkKV:boolean;                            // check khu vuc
-  soVban:any;
-  capDv:any;
-  checkDv:boolean;
+  capDvi: any;
+  checkKV: boolean;                            // check khu vuc
+  soVban: any;
+  capDv: any;
+  checkDv: boolean;
   tong: number = 0;
 
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -122,7 +122,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     private location: Location,
 
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
   }
 
 
@@ -142,7 +142,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -212,15 +212,15 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.donVis.forEach(e => {
-            if(e.maDvi==this.maDonViTao){
+            if (e.maDvi == this.maDonViTao) {
               this.capDvi = e.capDvi;
             }
           })
           var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
-          if( this.capDv == '2'){
+          if (this.capDv == '2') {
             this.checkDv = false;
-          }else{
+          } else {
             this.checkDv = true;
           }
 
@@ -235,7 +235,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  getStatusButton(){
+  getStatusButton() {
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -298,8 +298,8 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao = this.maDonViTao,
       maDviTien: this.maDviTien = "01",
-      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N,
-      namBcao: this.namBaoCaoHienHanh,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     //console.log(this.lstCTietBCao);
@@ -308,7 +308,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -324,15 +324,15 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
-      },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
     }
 
     this.lstCTietBCao.filter(item => {
@@ -357,11 +357,11 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -391,7 +391,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||
@@ -463,7 +463,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.tong -= this.lstCTietBCao.find(e => e.id==id).dtoanKphi;
+    this.tong -= this.lstCTietBCao.find(e => e.id == id).dtoanKphi;
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -474,7 +474,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if (item.checked){
+      if (item.checked) {
         this.tong -= item.dtoanKphi;
       }
       if (item.checked == true && typeof item.id == "number") {
@@ -545,7 +545,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   }
 
   getUnitName() {
- return this.donVis.find(item => item.maDvi== this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
   startEdit(id: string): void {
@@ -589,6 +589,9 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
+        this.lstCTietBCao.forEach(e => {
+          e.id = uuid.v4();
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }

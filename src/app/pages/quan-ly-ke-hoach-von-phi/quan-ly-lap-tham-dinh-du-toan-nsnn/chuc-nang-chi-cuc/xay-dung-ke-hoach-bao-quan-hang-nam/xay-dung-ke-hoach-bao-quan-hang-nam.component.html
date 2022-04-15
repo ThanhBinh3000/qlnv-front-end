@@ -88,8 +88,12 @@
               <nz-descriptions-item nzTitle="Mã báo cáo">
                 {{maBaoCao}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
+              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)" >
+                <nz-form-item>
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" (change)="tinhNam()" formControlName="namBaoCaoHienHanh"/>
+                  </nz-form-control>
+                </nz-form-item>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -101,16 +105,12 @@
                 {{soVban}}
               </nz-descriptions-item>
               <nz-descriptions-item ></nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC" >
-                <nz-form-item>
-                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input nz-input  [(ngModel)]="namBcao" formControlName="namBcao"/>
-                  </nz-form-control>
-                </nz-form-item>
+              <nz-descriptions-item nzTitle="Năm BC">
+                {{namBcao}}
               </nz-descriptions-item>
             </nz-descriptions>
         </div>
-        </form>
+      </form>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">

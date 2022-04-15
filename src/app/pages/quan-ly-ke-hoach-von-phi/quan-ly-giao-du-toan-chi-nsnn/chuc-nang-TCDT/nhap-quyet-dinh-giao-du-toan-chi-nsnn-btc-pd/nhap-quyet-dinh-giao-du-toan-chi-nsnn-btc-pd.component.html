@@ -33,8 +33,8 @@
                 <nz-descriptions-item nzTitle="Số quyết định">
                     <input class="search__input" nz-input [(ngModel)]="soQd" />
                 </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="ngày quyết định">
-                  <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
+                <nz-descriptions-item nzTitle="Ngày quyết định">
+                  <nz-date-picker class="search__input" [(ngModel)]="ngayQd" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </nz-descriptions-item>
                 <nz-descriptions-item ></nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Về việc" nzSpan="4" >
@@ -82,13 +82,17 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.stt}}
+                      {{data.tenDm}}
                     </td>
                     <div>
-                      {{data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </div>
                     <td>{{data.tong}}</td>
-                    <td>{{data.nguonNSNN}}</td>
+                    <td>{{data.nguonNsnn}}</td>
                     <td>{{data.nguonKhac}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -96,17 +100,21 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.stt}}
+                      {{editCache[data.id].data.tenDm}}
                     </td>
                     <td>
-                      {{editCache[data.id].data.maNdung}}
+                      <div *ngFor="let item of khoanMucs">
+                        <div *ngIf="item.id == editCache[data.id].data.maNdung">
+                          {{item.thongTin}}
+                        </div>
+                      </div>
                     </td>
                     <td>
                            {{editCache[data.id].data.tong}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.nguonNSNN"
+                           [(ngModel)]="editCache[data.id].data.nguonNsnn"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
@@ -115,26 +123,23 @@
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
-                    <!-- <td [hidden]="status">
-                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                    </td> -->
                   </ng-template>
                 </tr>
                 <tr>
                   <td></td>
                   <td>DỰ TOÁN CHI NGÂN SÁCH NHÀ NƯỚC</td>
                   <td>
-                       {{tongCong?.tong}}
+                       {{tongCong}}
                   </td>
                   <td>
-                       {{tongCong?.nguonNSNN}}
+                       {{tongCongNguonNSNN}}
                   </td>
                   <td>
-                       {{tongCong?.nguonKhac}}
+                       {{tongCongNguonKhac}}
                   </td>
                   <td></td>
                 </tr>

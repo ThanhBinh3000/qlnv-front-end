@@ -90,7 +90,7 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBcaohienhanh}}
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -191,7 +191,7 @@
                       <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDkien"/>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản" [(ngModel)]="editCache[data.id].data.maDviChuTri">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì" [(ngModel)]="editCache[data.id].data.maDviChuTri">
                         <nz-option *ngFor="let item of listDviChuTri" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

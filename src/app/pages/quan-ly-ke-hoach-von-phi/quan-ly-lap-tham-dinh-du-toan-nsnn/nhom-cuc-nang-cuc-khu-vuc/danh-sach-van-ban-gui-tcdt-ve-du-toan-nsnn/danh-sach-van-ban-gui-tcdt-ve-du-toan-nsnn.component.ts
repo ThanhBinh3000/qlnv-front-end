@@ -29,11 +29,13 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                tenDm: "Đang soạn",
           },
           {
-               id: "2",
+               id: "7",
                tenDm: "Đã gửi TCDT",
           },
      ];
-     cucKhuVucs: any = [];                          // danh muc nhom chi
+     cucKhuVucs: any = [];                          // danh muc cuc  khu vuc
+     donVis: any = [];
+     capDvi!: string;
 
      lstCTietBCao: any = [];              // list chi tiet bao cao
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -42,7 +44,8 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      denNgay: string;
      soVanBan: string;
      maDvi: string;
-     maTrangThai: number;
+     maTrangThai: string;
+     status: boolean = false;
 
      pages = {
           size: 10,
@@ -69,13 +72,22 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
 
      async ngOnInit() {
           let userName = this.userService.getUserName();
-          let userInfo: any = await this.getUserInfo(userName); //get user info
+          await this.getUserInfo(userName);
 
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.cucKhuVucs = data.data;
-                         this.cucKhuVucs = this.cucKhuVucs.filter(item => item.capDvi === "2");
+                         this.donVis = data.data;
+                         this.cucKhuVucs = this.donVis.filter(item => item.capDvi === "2");
+                         this.donVis.forEach(item => {
+                              if (item.maDvi == this.userInfo?.dvql){
+                                   this.capDvi = item.capDvi;
+                              }
+                         })
+                         if (this.capDvi == '1') {
+                              this.maTrangThai = '7';
+                              this.status = true;
+                         }
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -111,14 +123,14 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      async getDetailReport() {
           this.spinner.show();
           let request = {
-               maDonVi: null, //this.maDvi,
-               ngayTaoTu: null,// this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
-               ngayTaoDen: null, //this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
+               maDonVi: this.maDvi,
+               ngayTaoTu:  this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
+               ngayTaoDen: this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
                },
-               soVban: null,//this.soVanBan,
+               soVban: this.soVanBan,
                trangThai: this.maTrangThai,
           }
           await this.quanLyVonPhiService.timDsachVban(request).toPromise().then(

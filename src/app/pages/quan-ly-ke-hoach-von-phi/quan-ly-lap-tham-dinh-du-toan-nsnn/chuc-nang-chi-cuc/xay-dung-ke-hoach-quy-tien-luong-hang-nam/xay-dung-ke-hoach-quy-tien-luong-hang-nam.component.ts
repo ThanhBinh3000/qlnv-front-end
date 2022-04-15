@@ -136,7 +136,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
@@ -165,11 +165,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -184,11 +184,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
-      this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -217,7 +217,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -240,6 +240,9 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       });
       return false;
     }
+  }
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
   getStatusButton(){
@@ -318,7 +321,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -334,7 +337,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -407,7 +410,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
       );
       this.spinner.hide();
@@ -608,11 +611,14 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.lstCTietBCao.forEach(e => {
+              e.id = uuid.v4();
+            })
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.updateEditCache()
     this.spinner.hide();

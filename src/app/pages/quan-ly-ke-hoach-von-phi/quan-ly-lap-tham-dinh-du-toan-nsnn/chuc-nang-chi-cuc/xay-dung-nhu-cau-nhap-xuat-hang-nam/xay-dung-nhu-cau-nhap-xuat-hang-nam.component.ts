@@ -135,7 +135,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      namBcao: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
@@ -178,7 +178,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
         },
         (err) => {
@@ -187,6 +187,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -197,7 +198,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.tenTbis = data.data?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -218,7 +219,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
             this.checkDv = true;
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
       (err) => {
@@ -239,6 +240,9 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       });
       return false;
     }
+  }
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
 getStatusButton(){
@@ -331,7 +335,7 @@ getStatusButton(){
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -347,7 +351,7 @@ getStatusButton(){
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then( async res => {
         if (res.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           await this.getDetailReport();
             this.getStatusButton();
         } else {
@@ -626,12 +630,14 @@ getStatusButton(){
               this.lstCTiet = res.data.lstCTiet;
               this.lstCTiet.forEach(e => {
                 this.tong += e.slNhap;
+                e.id = uuid.v4();
               })
+              this.namBcao= this.namBaoCaoHienHanh + 1
           }else{
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
       },err =>{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
       this.updateEditCache()
       this.spinner.hide();

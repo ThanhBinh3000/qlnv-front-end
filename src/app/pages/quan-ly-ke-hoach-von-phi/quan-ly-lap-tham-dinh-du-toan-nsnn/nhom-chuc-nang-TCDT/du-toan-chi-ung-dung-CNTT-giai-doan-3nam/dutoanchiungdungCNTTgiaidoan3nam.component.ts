@@ -167,10 +167,9 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         },
       );
     }
-    this.danhMucService.dMKeHoachVon().subscribe(
+    this.danhMucService.dMLoaiKeHoach().subscribe(
       (res) => {
         if (res.statusCode == 0) {
-          console.log(res);
           this.listLoaikehoach = res.data?.content;
 
         } else {
@@ -226,7 +225,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.getStatusButton();
@@ -255,7 +254,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
     
@@ -287,7 +286,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
-          this.namBcaohienhanh = data.data.namBcao;
+          this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if(this.trangThaiBanGhi == '1' ||this.trangThaiBanGhi == '3' ||this.trangThaiBanGhi == '5' ||this.trangThaiBanGhi == '8' ){
             this.status = false;
@@ -299,7 +298,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             this.listIdFiles += item.id + ',';
           });
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
@@ -524,8 +523,8 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBcaohienhanh.toString(),
-      namHienHanh: this.namBcaohienhanh.toString(),
+      namBcao: this.namBcaohienhanh +1,
+      namHienHanh: this.namBcaohienhanh,
     };
     this.spinner.show();
     console.log(request);
@@ -552,7 +551,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR,data?.msg);
           }
         },
         (err) => {
@@ -614,22 +613,26 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
+            }else {
+              this.lstCTietBCao.forEach( e => {
+                e.id = uuid.v4();
+              })
             }
-
-            this.namBcaohienhanh = this.namBcaohienhanh;
             this.updateEditCache();
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {
             this.mabaocao = res.data;
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.show();
 }

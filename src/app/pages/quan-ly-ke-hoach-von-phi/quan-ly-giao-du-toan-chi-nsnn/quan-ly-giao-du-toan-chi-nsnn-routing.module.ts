@@ -67,14 +67,14 @@ const routes: Routes = [
     path: 'bao-cao-tong-cuc-khoach-phan-bo',
     loadChildren: () =>
       import(
-        './chuc-nang-cuc-khu-vuc/bao-cao-tong-cuc-khoach-phan-bo/bao-cao-tong-cuc-khoach-phan-bo.module'
+        './chuc-nang-cuc-khu-vuc/lap-bao-cao-tong-hop-phan-bo-chi-NSNN-gui-tong-cuc/bao-cao-tong-cuc-khoach-phan-bo.module'
       ).then((m) => m.BaoCaoTongCucKhoachPhanBoModule),
   },
   {
     path: 'bao-cao-tong-cuc-khoach-phan-bo/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-cuc-khu-vuc/bao-cao-tong-cuc-khoach-phan-bo/bao-cao-tong-cuc-khoach-phan-bo.module'
+        './chuc-nang-cuc-khu-vuc/lap-bao-cao-tong-hop-phan-bo-chi-NSNN-gui-tong-cuc/bao-cao-tong-cuc-khoach-phan-bo.module'
       ).then((m) => m.BaoCaoTongCucKhoachPhanBoModule),
   },
   {
@@ -193,14 +193,14 @@ const routes: Routes = [
     path: 'danh-sach-bao-cao',
     loadChildren: () =>
       import(
-        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-tong-hop-da-phan-bo/danh-sach-bao-cao.module'
+        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-phan-bo-giao-du-toan-gui-tong-cuc/danh-sach-bao-cao.module'
       ).then((m) => m.DanhSachBaoCaoModule),
   },
   {
     path: 'danh-sach-bao-cao/:id',
     loadChildren: () =>
       import(
-        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-tong-hop-da-phan-bo/danh-sach-bao-cao.module'
+        './chuc-nang-cuc-khu-vuc/danh-sach-bao-cao-phan-bo-giao-du-toan-gui-tong-cuc/danh-sach-bao-cao.module'
       ).then((m) => m.DanhSachBaoCaoModule),
   },
   {

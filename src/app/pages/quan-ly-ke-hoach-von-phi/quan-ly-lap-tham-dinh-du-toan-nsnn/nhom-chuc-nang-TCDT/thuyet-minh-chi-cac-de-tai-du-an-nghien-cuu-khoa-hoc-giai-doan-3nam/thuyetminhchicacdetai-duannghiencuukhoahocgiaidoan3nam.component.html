@@ -90,7 +90,7 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="text" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
+                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -123,7 +123,7 @@
                   <th rowspan="2">STT</th>
                   <th rowspan="2" nzWidth="170px">Tên đề tài, dự án nghiên cứu khoa học</th>
                   <th rowspan="2" nzWidth="150px">Đơn vị chủ trì thực hiện</th>
-                  <th  nzWidth="150px" colspan="2">Thời gian</th>
+                  <th nzWidth="150px" colspan="2">Thời gian</th>
                   <th colspan="6"> Kinh phí </th>
                   <th rowspan="2">Kinh phí thu hồi</th>
                   <th rowspan="2">Thời gian thu hồi</th>
@@ -138,11 +138,11 @@
                   <th>Bắt đầu</th>
                   <th>Kết thúc</th>
                   <th>Tổng phí được duyệt</th>
-                  <th>Kinh phí đã được bố trí đến năm N</th>
-                  <th>Kinh phí được thực hiện đến thời điểm báo cáo</th>
-                  <th>Dự kiến bố trí kinh phí năm N+1</th>
-                  <th>Dự kiến bố trí kinh phí năm N+2</th>
-                  <th>Dự kiến bố trí kinh phí năm N+3</th>
+                  <th>Kinh phí đã được <br> bố trí đến năm N</th>
+                  <th>Kinh phí được thực <br> hiện đến thời <br>điểm báo cáo</th>
+                  <th>Dự kiến bố trí <br>kinh phí năm N+1</th>
+                  <th>Dự kiến bố trí <br>kinh phí năm N+2</th>
+                  <th>Dự kiến bố trí <br>kinh phí năm N+3</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,7 +188,7 @@
                       <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenDtaiDanNckh" />
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản" [(ngModel)]="editCache[data.id].data.maDvi">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ thực hiện" [(ngModel)]="editCache[data.id].data.maDvi">
                         <nz-option *ngFor="let item of listDviChuTri" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

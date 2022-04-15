@@ -11,6 +11,7 @@ import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 export class chitietpagiao {
   id: any;
@@ -71,6 +72,10 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     trangThaiBanGhi:string ='1';
     donViTaos:any []=[];
     donvitao:any;
+
+    //bien url
+    maDonviNhan:any;
+    maPa:any;
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -80,15 +85,21 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private route: Router,
     private notification : NzNotificationService,
-    private location: Location
+    private location: Location,
+    private danhMucService : DanhMucHDVService,
   ) {}
 
   async ngOnInit() {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
     //check param dieu huong router
-    this.id = this.router.snapshot.paramMap.get('id');
-    this.quanLyVonPhiService.getchitiettranchi(this.id).subscribe(
+    this.maDonviNhan = this.router.snapshot.paramMap.get('maDonViNhan');
+    this.maPa = this.router.snapshot.paramMap.get('maPa');
+    let objChiTietSoTranChi ={
+      maDviNhan:this.maDonviNhan,
+      maPa:this.maPa
+    }
+    this.quanLyVonPhiService.getchitiettranchi(objChiTietSoTranChi).subscribe(
       res => {
           if (res.statusCode == 0) {
               this.listchitiet = res.data.lstCTiet;
@@ -103,7 +114,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
               }
 
           } else {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            this.notification.error(MESSAGE.ERROR, res?.msg);
               this.checkdata = false;
           }
       },
@@ -112,7 +123,11 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           this.checkdata = false;
       },
   );
-
+  this.quanLyVonPhiService.dMDonVi().toPromise().then(res =>{
+    if(res.statusCode==0){
+      this.donViTaos = res.data;
+    }
+  })
     this.spinner.hide();
     //check role cho các nut trinh duyet
     const utils = new Utils();
@@ -181,13 +196,13 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
 
 
   //lay ten don vi tạo
-  getUnitName() {
-    return this.donViTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
+  getUnitName(maDonVi:any) {
+    return this.donViTaos.find((item) => item.maDvi == maDonVi)?.tenDvi;
   }
 
-  getStatusName() {
+  getStatusName(maTrangThai:any) {
     const utils = new Utils();
-    return utils.getStatusName(this.trangThaiBanGhi);
+    return utils.getStatusName(maTrangThai);
   }
 
 

@@ -22,142 +22,154 @@
     </div>
   </div>
 </nz-affix>
-
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Danh sách phương án giao số kiểm tra NSNN" class="mt16 flex-card p-lr16" style="margin-bottom: 30px;">
+      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <form nz-form [formGroup]="validateForm">
-        <div class="widget-body">
-          <div>
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Năm phương án">
-                <input type="text" formControlName="temp" nz-input [(ngModel)]="namPa" >
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ngày lập" >
-                <nz-date-picker formControlName="temp" [(ngModel)]="ngaylap" class="search__input" ></nz-date-picker>
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đơn vị tạo">
-                <ng-container *ngIf="checkroleDvi==3;else template">
-                    {{getUnitName()}}
-                </ng-container>
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Năm phương án </label>
+                  <input nz-input  [(ngModel)]="namPa" formControlName="namPa"/>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày lập từ</label>
+              <nz-date-picker formControlName="ngaylap" class="search__input" [(ngModel)]="ngaylap" ></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đến ngày</label>
+              <nz-date-picker formControlName="denngay" class="search__input" [(ngModel)]="denngay" ></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6" >
+              <label class="search__label">Đơn vị tạo</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donViTao" formControlName="donViTao">
+                <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+              </nz-select>
+              <!-- <ng-container *ngIf="checkroleDvi==3;else template">
+                <input type="text" nz-input class="search__input" *ngIf="checkroleDvi==3;else template" value="{{getUnitName()}}" disabled>
+            </ng-container>
                 <ng-template #template>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" formControlName="temp" [(ngModel)]="donvitao" >
-                    <nz-option *ngFor="let dv of donViTaos" [nzValue]="dv.id" [nzLabel]="dv.tenDvi"></nz-option>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donViTao" formControlName="donViTao">
+                    <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                   </nz-select>
-                </ng-template>
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Loại văn bản">
+                </ng-template> -->
+            </div>
+            
+            <!-- <div nz-col nzSpan="6" *ngIf="checkroleDvi!=3">
+              <label class="search__label">Đơn vị tạo</label>
+              
+            </div> -->
+            <div nz-col nzSpan="6">
+              <label class="search__label">Loại báo cáo</label>
+              <nz-form-item>
                 <nz-form-control [nzErrorTip]="messageValidate.TYPE_OF_TEXT">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản"  formControlName="loaivanban"[(ngModel)]="loaivanban" >
-                  <nz-option nzValue="PA" nzLabel="PA"></nz-option>
-                  <nz-option nzValue="CV" nzLabel="CV"></nz-option>
-                </nz-select>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản"  formControlName="loaivanban" [(ngModel)]="loaivanban" >
+                <nz-option nzValue="PA" nzLabel="PA"></nz-option>
+                <nz-option nzValue="CV" nzLabel="CV"></nz-option>
+              </nz-select>
               </nz-form-control>
-               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đến ngày">
-                <nz-date-picker  formControlName="temp" [(ngModel)]="denngay"  ></nz-date-picker>
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" formControlName="temp" [(ngModel)]="trangthai" >
-                  <nz-option *ngFor="let tt of listTrangThai" [nzValue]="tt.id" [nzLabel]="tt.tenDm"></nz-option>
-                </nz-select>
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số QĐ">
-                <input type="text" nz-input formControlName="temp" [(ngModel)]="soQd" >
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số CV">
-                <input type="text" nz-input formControlName="temp" [(ngModel)]="soCV" >
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Mã PA">
-                <input type="text" nz-input formControlName="temp" [(ngModel)]="maPa" >
-              </nz-descriptions-item>
-              <nz-descriptions-item ></nz-descriptions-item>
-              <nz-descriptions-item ></nz-descriptions-item>
-              <nz-descriptions-item ></nz-descriptions-item>
-            </nz-descriptions>
+            </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Trạng thái</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" formControlName="trangthai" [(ngModel)]="trangthai" >
+                <nz-option *ngFor="let tt of listTrangThai" [nzValue]="tt.id" [nzLabel]="tt.tenDm"></nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số QĐ</label>
+              <input type="text" nz-input formControlName="soQd" [(ngModel)]="soQd" >
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số CV</label>
+              <input type="text" nz-input formControlName="soCV" [(ngModel)]="soCV" >
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Mã PA</label>
+              <input type="text" nz-input formControlName="maPa" [(ngModel)]="maPa" >
+            </div>
+          </div>
+        </form>
+      </nz-card>
+      <nz-card nzTitle="Danh sách phương án giao số kiểm tra NSNN" 
+        class="mt16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap">
+          <thead>
+            <tr>
+              <th width="60px">STT</th>
+              <th width="130px">Mã Phương án</th>
+              <th width="175px">Số QĐ</th>
+              <th width="175px">Số CV</th>
+              <th width="175px" >Ngày lập</th>
+              <th width="175px" >Năm phương án</th>
+              <th width="175px" >Trạng thái</th>
+              <th width="175px" class="text-center">Đơn vị lập</th>
+              <th width="175px">Đơn vị nhận</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vb of listVanban;let i = index">
+              <td>{{(i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td><a routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/{{vb.id}}">{{vb.maPa}}</a></td>
+              <td>{{vb.soQd}}</td>
+              <td>{{vb.soCv}}</td>
+              <td>{{vb.ngayTao}}</td>
+              <td>{{vb.namPa}}</td>
+              <td>{{getStatusName(vb.trangThai)}}</td>
+              <td>{{getTenKhuVuc(vb.maDvi)}}</td>
+              <td>{{getTenKhuVuc(vb.maKhuVuc)}}</td>
+          </tr>
+          <tr *ngIf="listVanban.length==0" style="text-align: center;">
+            <td colspan="9"> Không có dữ liệu</td>
+          </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
           </div>
         </div>
-      </form>
+        <div class="ghi-chu">
+          <nz-form-label nzRequired [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <ul>
+            <li class="ghi-chu__item">
+              Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
+              chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
+              Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
+              về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+              CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+              dựng CSDL về Tài chính
+            </li>
+            <li class="ghi-chu__item">
+              Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+              2022
+            </li>
+            <li class="ghi-chu__item">
+              Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
+              2022
+            </li>
+          </ul>
+        </div>
       </nz-card>
-      <div class="tab__container">
-
-        <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Danh sách phương án giao số kiểm tra NSNN'">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="3">
-                <!-- <div class="inner-box">Đơn vị: -->
-                <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" >
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select> -->
-                <!-- </div> -->
-              </div>
-            </div>
-
-            <nz-table nzBordered class="table__body">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã phương án</th>
-                  <th>Số QĐ</th>
-                  <th>Số CV</th>
-                  <th>Ngày lập</th>
-                  <th>Năm phương án</th>
-                  <th>Trạng thái</th>
-                  <th>Đơn vị lập</th>
-                  <th>Đơn vị nhận</th>
-                </tr>
-              </thead>
-              <tbody>
-                    <tr *ngFor="let vb of listVanban;let i = index">
-                      <td>{{i+1}}</td>
-                      <td><a routerLink="/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/{{vb.id}}">{{vb.maPa}}</a></td>
-                      <td>{{vb.soQd}}</td>
-                      <td>{{vb.soCv}}</td>
-                      <td>{{vb.ngayTao}}</td>
-                      <td>{{vb.namPa}}</td>
-                      <td>{{getStatusName(vb.trangThai)}}</td>
-                      <td>{{vb.maDvi}}</td>
-                      <td>4</td>
-                  </tr>
-                <tr *ngIf="listVanban.length==0" style="text-align: center;">
-                  <td colspan="9"> Không có dữ liệu</td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <nz-pagination [nzPageIndex]="1" [nzPageSize]="5" [nzTotal]="totalitem" ></nz-pagination>
-          </nz-tab>
-        </nz-tabset>
-      </div>
-      <div class="ghi-chu">
-        <nz-form-label nzRequired [nzNoColon]="true">
-          Ghi chú
-        </nz-form-label>
-        <ul>
-          <li class="ghi-chu__item">
-            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài
-            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về
-            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL
-            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
-            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
-            dựng CSDL về Tài chính
-          </li>
-          <li class="ghi-chu__item">
-            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
-            2022
-          </li>
-          <li class="ghi-chu__item">
-            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế hoạch năm
-            2022
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </div>
+
 
 
 

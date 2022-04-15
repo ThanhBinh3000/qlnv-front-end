@@ -5,7 +5,7 @@
     <div nz-col nzSpan="12">
       <label class="search__label">Khoản mục</label>
       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khoản mục" [(ngModel)]="searchFilter.khoanMuc">
-        <nz-option *ngFor="let item of khoanMucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+        <nz-option *ngFor="let item of khoanMucs" [nzValue]="item.id" [nzLabel]="item.thongTin"></nz-option>
       </nz-select>
     </div>
     <div class="phai canphai">
@@ -15,7 +15,7 @@
       </button>
     </div>
   </div>
-  <label *ngFor="let item of danhSachKhoanMuc" nz-checkbox [(ngModel)]="item.status" class="check-box">{{item.tenDm}}
+  <label *ngFor="let item of danhSachKhoanMuc" nz-checkbox [(ngModel)]="item.status" class="check-box">{{item.thongTin}}
     <!-- - {{item.thongTin}} -->
   </label>
 

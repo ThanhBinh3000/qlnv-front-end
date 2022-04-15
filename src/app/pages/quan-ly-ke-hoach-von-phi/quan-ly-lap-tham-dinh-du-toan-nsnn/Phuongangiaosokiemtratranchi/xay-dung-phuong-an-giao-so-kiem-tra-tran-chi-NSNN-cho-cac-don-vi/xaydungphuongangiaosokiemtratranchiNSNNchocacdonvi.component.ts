@@ -21,6 +21,7 @@ export class ItemData {
   tongSo: any;
   listCtietDvi: ItemDvi[] = [];
   checked!: boolean;
+  
 }
 
 export class ItemDvi {
@@ -28,6 +29,7 @@ export class ItemDvi {
   maKhuVuc!: any;
   soTranChi!: any;
   tongSo:any;
+ 
 }
 
 @Component({
@@ -51,7 +53,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   currentday: Date = new Date();
   //////
-  id: any;
+  maPa: any;
+  id:any;
   userInfor: any;
   status: boolean = false;
   ngaynhap: any;
@@ -90,19 +93,6 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   listColNames:any []=[];
   cols:any;
   //tinh tong
-  tongHaNoi: number = 0;
-  tongtaybac: number = 0;
-  tonghoangliension: number = 0;
-  tongvinhphuc: number = 0;
-  tongbacthai: number = 0;
-  tonghabac: number = 0;
-  tonghaihung: number = 0;
-  tongdongbac: number = 0;
-  tongthaibinh: number = 0;
-  tonghanamninh: number = 0;
-  tongnghetinh: number = 0;
-  tongbinhtrithien: number = 0;
-  tongdanang: number = 0;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -123,16 +113,16 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     await this.getUserInfo(userName); //get user info
 
     //check param dieu huong router
-    this.id = this.router.snapshot.paramMap.get('id');
+    this.maPa = this.router.snapshot.paramMap.get('maPa');
 
-    if (this.id != null) {
+    if (this.maPa != null) {
       this.getDetailReport();
     } else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = this.userInfor?.username;
       this.donvitao = this.userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
-      this.nampa = this.currentday.getFullYear();
+      this.nampa = this.namBcaohienhanh+1;
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.spinner.show();
       this.quanLyVonPhiService.maPhuongAn().subscribe(
@@ -201,18 +191,14 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     }
     this.danhmuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
       if(res.statusCode==0){
-        var tempArr = res.data;
-        this.listColNames = tempArr;
-        tempArr.forEach(e => {
-          let objDonVi = {
-            maKhuVuc: e.id,
-            soTranChi: 0,
-            tongSo:0,
-          }
-          this.listDviThuocQuanLy.push(objDonVi);
+        this.listColNames;
+        res?.data.forEach(item => {
+          item.tong = 0;
+          this.listColNames.push(item)
         })
-        this.cols = this.listDviThuocQuanLy.length;
-        console.log(res);
+        this.listColNames = res.data;
+        
+        this.cols = this.listColNames.length;
       }
     })
     this.getStatusButton();
@@ -284,13 +270,18 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.userInfor?.roles[0]?.id,
     );
   }
+
+  tinhNam(){
+    this.nampa = this.namBcaohienhanh+1;
+  }
   // call chi tiet bao cao
   getDetailReport() {
     this.spinner.hide();
-    this.quanLyVonPhiService.chitietPhuongAn(this.id).subscribe(
+    this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.chiTietBcaos = data.data;
+          // this.chiTietBcaos = data.data;
+          this.id = data.data.id;
           this.lstCTietBCao = data.data.listCtiet;
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
@@ -301,7 +292,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.maphuongan = data.data.maPa;
           this.donvitao = data.data.maDvi;
           this.nguoinhap = data.data.nguoiTao;
-          this.ngaynhap = data.data.ngayTao;
+          this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           var soqd = data.data.soQd;
           var socv = data.data.soCv;
           if (
@@ -318,9 +309,10 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (soqd != null && socv != null) {
             this.checknutgiao = false;
           }
-
+          this.changeInput();
+          this.getStatusButton();
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
@@ -344,14 +336,18 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     const requestGroupButtons = {
       id: this.id,
       maChucNang: mcn,
-      type: '',
+      lyDoTuChoi: '',
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe((data) => {
+    this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).subscribe((data) => {
       if (data.statusCode == 0) {
         this.getDetailReport();
-
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+      }else {
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
   }
@@ -388,6 +384,15 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   // them dong moi
   addLine(id: number): void {
+    this.listDviThuocQuanLy=[];
+    this.listColNames.forEach(e => {
+      let objDonVi = {
+        maKhuVuc: e.maDvi,
+        soTranChi: 0,
+        tongSo:0,
+      }
+      this.listDviThuocQuanLy.push(objDonVi);
+    })
     let item: ItemData = {
       id: uuid.v4(),
       stt: 0,
@@ -405,6 +410,22 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     };
   }
 
+
+  //sinh ma cot
+  //list vat tu la list cot da co trong danh sach
+  // sinhMa(): number{
+  //   var i: number = 1;
+  //   var kt: boolean = true;
+  //   while (kt){
+  //     var index1: number = this.lstCTietBCao.findIndex(item => item.col == i);
+  //     if (index1 > -1) {
+  //       i++;
+  //     } else {
+  //       kt = false;
+  //     }
+  //   }
+  //   return i;
+  // }
   //checkox trên tùng row
   updateSingleChecked(): void {
     if (this.lstCTietBCao.every((item) => !item.checked)) {
@@ -545,7 +566,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       trangThai: this.trangThaiBanGhi,
     };
     this.spinner.show();
-    if (this.id == null) {
+    if (this.maPa == null) {
       this.quanLyVonPhiService.themmoiPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {
@@ -620,10 +641,9 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   lstQlnvKhvonphiDsachGiaoSo: any[] = [];
   //giao
   giao(madvinhan: any) {
+    this.lstQlnvKhvonphiDsachGiaoSo =[];
     this.quanLyVonPhiService.maGiao().subscribe((res) => {
       this.maGiao = res.data;
-
-      console.log(this.maGiao);
       this.lstCTietBCao.forEach((e) => {
         var manoidung = e.maNoiDung;
         var manhom = e.maNhom;
@@ -655,7 +675,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_SUCCESS);
         }else{
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -665,6 +685,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   //giao toan bo
   giaotoanbo() {
+    this.lstQlnvKhvonphiDsachGiaoSo =[];
     this.quanLyVonPhiService.maGiao().subscribe((res) => {
       this.maGiao = res.data;
       this.lstCTietBCao.forEach((e) => {
@@ -707,78 +728,19 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     });
   }
 
+  listTongCol:any []=[];
   changeInput() {
-    this.tongHaNoi = 0;
-    this.tongtaybac = 0;
-    this.tonghoangliension = 0;
-    this.tongvinhphuc = 0;
-    this.tongbacthai = 0;
-    this.tonghabac = 0;
-    this.tonghaihung = 0;
-    this.tongdongbac = 0;
-    this.tongthaibinh = 0;
-    this.tonghanamninh = 0;
-    this.tongnghetinh = 0;
-    this.tongbinhtrithien = 0;
-    this.tongdanang = 0;
-
-    this.lstCTietBCao.filter((item) => {
-
-      item.listCtietDvi.filter((itemCtiet) => {
-        if (itemCtiet.maKhuVuc == 342) {
-          this.tongHaNoi +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 343) {
-          this.tongtaybac +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 344) {
-          this.tonghoangliension +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 345) {
-          this.tongvinhphuc +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 346) {
-          this.tongbacthai +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 347) {
-          this.tonghabac +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 348) {
-          this.tonghaihung +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 349) {
-          this.tongdongbac +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 350) {
-          this.tongthaibinh +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 351) {
-          this.tonghanamninh +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 354) {
-          this.tongnghetinh +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 352) {
-          this.tongbinhtrithien +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-        if (itemCtiet.maKhuVuc == 353) {
-          this.tongdanang +=
-            typeof itemCtiet.soTranChi == 'number' ? itemCtiet.soTranChi : 0;
-        }
-      });
-    });
+    this.listColNames.forEach(e =>{
+      e.tong = 0;
+      this.lstCTietBCao.forEach(item => {
+        item.listCtietDvi.forEach(el =>{
+         if(e.maDvi==el.maKhuVuc){
+           e.tong += el.soTranChi;
+         }
+        })
+      })
+    })
+    
   }
 
   tinhtong(id:any){

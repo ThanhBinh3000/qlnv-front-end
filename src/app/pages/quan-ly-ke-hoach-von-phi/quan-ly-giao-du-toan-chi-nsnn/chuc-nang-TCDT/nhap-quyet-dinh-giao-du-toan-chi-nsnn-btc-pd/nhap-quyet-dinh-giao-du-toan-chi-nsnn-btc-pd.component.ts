@@ -15,11 +15,12 @@ import { MESSAGE } from '../../../../../constants/message';
 // import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
-  stt!: string;
-  maNdung!: string;
-  nguonNSNN!: number;
+  tenDm!: string;
+  maNdung!: number;
+  nguonNsnn!: number;
   nguonKhac!: number;
   tong!: number;
   id!: any;
@@ -75,29 +76,38 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
   listIdFiles: string;                        // id file luc call chi tiet
-  tongCong: ItemData = {
-    id: "",
-    stt: "",
-    maNdung: "",
-    nguonNSNN: 0,
-    nguonKhac: 0,
-    tong: 0,
-    checked: true,
-  };
-    khoanMucs: any = [];
+  // tongCong: ItemData = {
+  //   id: "",
+  //   stt: "",
+  //   maNdung: "",
+  //   nguonNSNN: 0,
+  //   nguonKhac: 0,
+  //   tong: 0,
+  //   checked: true,
+  // };
 
+  tongCong!: number;
+  tongCongNguonNSNN!: number  ;
+  tongCongNguonKhac!: number ;
+  khoanMucs: any = [];
   allChecked = false;                         // check all checkbox
   indeterminate = true;                       // properties allCheckBox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
   fileList: NzUploadFile[] = [];
+  maKhoanMucs: any = [];
+  loaiQd!: any;
+  lyDoTuChoi!: any;
+  maQdCha!: any;
+  nam!: any;
+  noiQd!: any;
+  tenDvi!: any;
+  veViec!: any;
+  validateForm!: FormGroup;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-  maKhoanMucs: any = [];
-
 
   // upload file
   // addFile() {
@@ -107,7 +117,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // }
 
   handleUpload(): void {
-    debugger
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
       this.lstFile.push({ id: id, fileName: file?.name });
@@ -127,11 +136,15 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
               private userService: UserService,
               private notification: NzNotificationService,
               private modal: NzModalService,
+              private fb:FormBuilder,
               ) {
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
@@ -162,7 +175,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -176,7 +189,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -190,7 +203,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -204,7 +217,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -218,7 +231,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -232,7 +245,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -247,7 +260,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -265,7 +278,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     return userInfo;
@@ -285,7 +298,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 
   // luu
   async luu() {
-    debugger
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -304,15 +316,22 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      // maDvi: this.maDonViTao,
+      loaiQd: this.loaiQd = "1",
+      lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      ngayQd: this.ngayQd,
-      noiQd: "12",
+      maDviTien: "01",
+      maNguoiKy: this.nguoiKy,
+      maQdCha: this.maQdCha,
+      nam: this.nam,
+      ngayQD: this.ngayQd,
+      noiDung: "1",
+      noiQd: this.noiQd,
       soQd: this.soQd,
-      trangThai: this.trangThaiBanGhi,
+      tenDvi: this.tenDvi,
+      trangThai: "1",
       vanBan: this.vanBan,
+      veViec: this.veViec,
+      ghiChu: this.ghiChu,
     };
     //call service them moi
     this.spinner.show();
@@ -388,13 +407,14 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
-          this.nguoiNhap = data.data.nguoiTao;
+          this.ngayQd = data.data.ngayQD;
+          this.nguoiKy = data.data.maNguoiKy;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.vanBan = data.data.vanBan;
           this.soQd = data.data.soQd;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.ghiChu = data.data.ghiChu;
 
           // set list id file ban dau
           this.lstFile?.filter(item => {
@@ -406,16 +426,52 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
           } else {
             this.status = true;
           }
+          var idDanhMuc  = this.lstCTietBCao[0].maNdung;
+          let requestReport = {
+            id: idDanhMuc,
+          };
+
+          this.danhMucService.dMKhoanMuc().toPromise().then(
+            (data) => {
+              if (data.statusCode == 0) {
+                this.khoanMucs = data.data?.content;
+              } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+              }
+            },
+            (err) => {
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+          );
+
+          this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(res => {
+            if (data.statusCode == 0) {
+              console.log(res);
+              var tempArr = res.data;
+              tempArr.forEach(e =>{
+                this.khoanMucs.push(e);
+                e.lstQlnvDmKhoachVonPhi.forEach( el => {
+                this.khoanMucs.push(el);
+                })
+              })
+              this.khoanMucs.forEach(e => {
+                this.lstCTietBCao.push(e)
+              })
+            } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+
+           })
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
-    console.log(this.lstCTietBCao)
 
   }
 
@@ -444,9 +500,9 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item : ItemData = {
-      stt: "",
-      maNdung: "",
-      nguonNSNN: 0,
+      tenDm: "",
+      maNdung: 0,
+      nguonNsnn: 0,
       nguonKhac: 0,
       tong: 0,
       id: uuid.v4(),
@@ -583,9 +639,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   addKmuc() {
     // KHOANMUCLIST.forEach(item => item.status = false);
     // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
-
     var danhSach = this.khoanMucs
-
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
          nzContent: DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
@@ -598,19 +652,20 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
          },
     });
     modalIn.afterClose.subscribe((res) => {
+      console.log(res);
          if (res) {
            this.maKhoanMucs.forEach(e => {
              if(res.id == e.id){
-                 return res.id = e.tenDm
-             }
+                this.khoanMucs.push({id: e.id, thongTin: e.thongTin})
+                return res.id = e.id
+                }
            })
-
           this.lstCTietBCao.push({
             id: uuid.v4(),
-            stt: "I",
+            tenDm: "I",
             maNdung: res.id,
             nguonKhac: 0,
-            nguonNSNN: 0,
+            nguonNsnn: 0,
             tong: 0,
             checked: false,
        });
@@ -618,10 +673,10 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
                    if (item.status) {
                         this.lstCTietBCao.push({
                              id: uuid.v4(),
-                             stt: "",
-                             maNdung: item.tenDm,
+                             tenDm: item.tenDm,
+                             maNdung: item.id,
                              nguonKhac: 0,
-                             nguonNSNN: 0,
+                             nguonNsnn: 0,
                              tong: 0,
                              checked: false,
                         });
@@ -634,9 +689,9 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 
   changeTong(id: string): void {
     let index = this.lstCTietBCao.findIndex(item => item.id == id);
-    this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
-    // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
+    this.editCache[id].data.tong = this.editCache[id].data.nguonNsnn + this.editCache[id].data.nguonKhac;
+    // this.lstCTietBCao.forEach(e => {
+    //   this.editCache[id].data.tong = e[index].tong;
+    // })
   }
-
-
 }

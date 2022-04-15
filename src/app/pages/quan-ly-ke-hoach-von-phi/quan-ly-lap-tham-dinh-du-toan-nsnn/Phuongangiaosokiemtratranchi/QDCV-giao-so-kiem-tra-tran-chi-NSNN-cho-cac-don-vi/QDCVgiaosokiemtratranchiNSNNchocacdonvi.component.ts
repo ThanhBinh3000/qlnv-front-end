@@ -56,7 +56,7 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
      private location: Location,
      private fb: FormBuilder
      ) {
-    this.namgiao = this.currentYear.getFullYear();
+    // this.namgiao = this.currentYear.getFullYear();
   }
 
   ngOnInit() {
@@ -74,10 +74,10 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
     });
     let username = this.userService.getUserName();
     this.getUserInfo(username);
-    this.quankhoachvon.dMDonVi().subscribe(res => {
+    this.quankhoachvon.dMDonVi().toPromise().then(res => {
       this.donviTaos = res.data;
     })
-    this.danhmuc.dmDonViNhan().subscribe(res =>{
+    this.danhmuc.dmDonViNhan().toPromise().then(res =>{
       this.listDvi= res.data.content;
     })
     
@@ -88,14 +88,13 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
     await this.userService.getUserInfo(username).subscribe(
       (data) => {
         if (data?.statusCode == 0) {
-          this.donvitao = data?.data.dvql;
           this.nguoinhap = data?.data.username;
-          console.log(data)
         } else {
+          this.notification.error(MESSAGE.ERROR, data?.smg);
         }
       },
       (err) => {
-        console.log(err);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
   }
@@ -116,9 +115,8 @@ export class QDCVgiaosokiemtratranchiNSNNchocacdonviComponent implements OnInit 
 
 //chọn đơn vị tạo => các đơn vị nhận
 chonDonviTao(maDonVi:any){
-  if(maDonVi!=undefined){
+  if(maDonVi){
     var donVi = this.donviTaos.find( item=> item.id==maDonVi)?.maDvi;
-    console.log(donVi);
     let objectDonViThuocQuanLy={
       capDvi: null,
       kieuDvi: null,
@@ -137,23 +135,28 @@ chonDonviTao(maDonVi:any){
       tenDvi: '',
       trangThai: '01'
   }
-  this.danhmuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
-    if(res.statusCode==0){
-      console.log(res);
-      this.listDonViNhan = res.data;
+    this.danhmuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
+      if(res.statusCode==0){
+        console.log(res);
+        this.listDonViNhan = res.data;
+      }
+    })
+
+    let obdCallDanhSachDuocDuyet={
+      maDvi:donVi,
     }
-  })
+    this.quankhoachvon.danhsachphuonganduocduyet(obdCallDanhSachDuocDuyet).subscribe(res => {
+      if(res.statusCode==0){
+        console.log(res);
+        this.listPhuongAn = res.data;
+      }else{
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
+    })
   }
-  this.quankhoachvon.danhsachphuonganduocduyet(donVi).subscribe(res => {
-    if(res.statusCode==0){
-      console.log(res);
-      this.listPhuongAn = res.data;
-    }else{
-      this.notification.error(MESSAGE.ERROR, res?.msg);
-    }
-  },err => {
-    this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR)
-  })
+  
 }
 
 //xoa

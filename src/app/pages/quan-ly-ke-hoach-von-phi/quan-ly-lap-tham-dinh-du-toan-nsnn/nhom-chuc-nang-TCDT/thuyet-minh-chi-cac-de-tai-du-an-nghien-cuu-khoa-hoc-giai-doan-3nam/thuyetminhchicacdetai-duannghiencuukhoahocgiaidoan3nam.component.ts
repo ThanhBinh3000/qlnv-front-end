@@ -126,7 +126,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           }
         },
         (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.mabaocao = '';
@@ -234,12 +234,13 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngaynhap = data.data.ngayTao;
+          this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
-          this.namBcaohienhanh = data.data.namBcao;
+          this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.maLoaiBacao = data.data.maLoaiBcao;
           if (
             this.trangThaiBanGhi == '1' ||
             this.trangThaiBanGhi == '3' ||
@@ -259,8 +260,8 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
         }
       },
       (err) => {
-        console.log(err);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -450,7 +451,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBacao,
       namHienHanh: this.namBcaohienhanh,
-      namBcao: this.namBcaohienhanh,
+      namBcao: this.namBcaohienhanh+1,
     };
 
     //call service them moi
@@ -459,7 +460,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -475,7 +476,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -506,7 +507,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -567,13 +568,23 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.namBcaohienhanh = this.currentday.getFullYear();
+            this.namBcaohienhanh = this.currentday.getFullYear();
+            if(this.lstCTietBCao==null){
+                this.lstCTietBCao =[];
+            }else {
+              this.lstCTietBCao.forEach( e => {
+                e.id = uuid.v4();
+              })
+            }
+            this.updateEditCache()
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
-    this.updateEditCache()
+    
     this.spinner.hide();
 }
 }

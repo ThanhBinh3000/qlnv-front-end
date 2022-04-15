@@ -15,9 +15,9 @@ import { MESSAGE } from 'src/app/constants/message';
 
 export class ItemData {
   tenDan!:string;
-  maKhoach!:string;
+  maLoaiKhoach!:string;
   maKhoiDan!:string;
-  maDdiemXd!:string;
+  maDdiemXdung!:string;
   ddiemMoTk!:string;
   maSoDan!:string;
   maNganhKte!:string;
@@ -178,7 +178,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           }
         },
         (err) => {
-         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
@@ -201,14 +201,14 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           }
         },
         (err) => {
-         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    
+
     this.getStatusButton()
     //get danh muc noi dung
     this.danhMucService.dMLoaiKeHoach().subscribe(
@@ -220,7 +220,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -234,7 +234,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -248,7 +248,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -262,7 +262,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -276,7 +276,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -294,7 +294,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -344,7 +344,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao,
+      maLoaiBcao: QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh,
     };
@@ -446,7 +446,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.spinner.hide();
@@ -478,9 +478,9 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDan:"",
-      maKhoach:"",
+      maLoaiKhoach:"",
       maKhoiDan:"",
-      maDdiemXd:"",
+      maDdiemXdung:"",
       ddiemMoTk:"",
       maSoDan:"",
       maNganhKte:"",
@@ -647,6 +647,9 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
+            this.lstCTietBCao.forEach(e => {
+              e.id = uuid.v4();
+            })
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }

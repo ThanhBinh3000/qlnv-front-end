@@ -409,7 +409,7 @@ const routes: Routes = [
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
   {
-    path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:id',
+    path:'xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/:maPa',
     loadChildren:() => import('./Phuongangiaosokiemtratranchi/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-NSNN-cho-cac-don-vi/xaydungphuongangiaosokiemtratranchiNSNNchocacdonvi.module')
     .then(m => m.XaydungphuongangiaosokiemtratranchiNSNNchocacdonviModule),
   },
@@ -644,6 +644,13 @@ const routes: Routes = [
       import(
         './Phuongangiaosokiemtratranchi/tim-kiem-so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/timkiemsokiemtratranchiNSNNcuacacdonvi.module'
       ).then((m) => m.TimkiemsokiemtratranchiNSNNcuacacdonviModule),
+  },
+  {
+    path: 'so-kiem-tra-tran-tri-nsnn/:maDonViNhan/:maPa',
+    loadChildren: () =>
+      import(
+        './Phuongangiaosokiemtratranchi/so-kiem-tra-tran-chi-NSNN-cua-cac-don-vi/sokiemtratranchiNSNNcuacacdonvi.module'
+      ).then((m) => m.SokiemtratranchiNSNNcuacacdonviModule),
   },
   {
     path: 'qd-cv-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi',
