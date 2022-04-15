@@ -115,16 +115,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  trinhDuyetService1(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      //  'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/them-moi',
-      request,
-    );
-  }
-
-
   // trinh duyet giao du toan
   trinhDuyetGiaoService(request: any): Observable<any> {
     return this.httpClient.post(
