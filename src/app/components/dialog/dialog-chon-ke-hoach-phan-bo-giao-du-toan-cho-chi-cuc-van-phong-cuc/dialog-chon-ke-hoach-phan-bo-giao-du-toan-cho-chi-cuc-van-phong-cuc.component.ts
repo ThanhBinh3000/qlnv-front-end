@@ -74,7 +74,6 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
         page: this.pages.page
       },
     };
-     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
      this.QuanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -91,25 +90,6 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-
-    // this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
-    //   (data) => {
-    //     if (data.statusCode == 0) {
-    //       var tempArr = data.data;
-    //       tempArr.forEach(e =>{
-    //         this.danhSachKhoanMuc.push(e);
-    //         e.lstQlnvDmKhoachVonPhi.forEach( el => {
-    //         this.danhSachKhoanMuc.push(el);
-    //         })
-    //       })
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, data?.msg);
-    //     }
-    //   },
-    //   (err) => {
-    //     this.notification.error(MESSAGE.ERROR, err?.msg);
-    //   }
-    // );
   }
 
   handleOk() {

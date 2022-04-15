@@ -46,6 +46,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
+  statusBtnLDDC:boolean;                       // trang thai
 
   currentday: Date = new Date();
   //////
@@ -229,6 +230,8 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
+
   }
   // call chi tiet bao cao
   async getDetailReport() {
