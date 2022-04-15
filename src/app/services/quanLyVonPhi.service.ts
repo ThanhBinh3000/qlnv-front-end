@@ -146,8 +146,8 @@ export class QuanLyVonPhiService extends BaseService {
   // upload list
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
-      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
