@@ -47,7 +47,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chinh so kiem tra
   currentday: Date = new Date();
   //////
   id: any;
@@ -203,6 +203,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -242,10 +243,11 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           this.trangThaiBanGhi = data.data.trangThai;
           this.maLoaiBacao = data.data.maLoaiBcao;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+           
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -569,7 +571,6 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
             this.namBcaohienhanh = this.currentday.getFullYear();
-            this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
             }else {
@@ -586,5 +587,19 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     });
     
     this.spinner.hide();
+}
+
+xoaBaoCao(){
+  this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+    if(res.statusCode==0){
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+      this.getDetailReport();
+      this.getStatusButton();
+    }else {
+      this.notification.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  })
 }
 }

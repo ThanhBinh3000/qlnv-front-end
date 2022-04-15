@@ -73,7 +73,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-    this.trangthai = '0';
+    this.trangthai = '11';
   }
 
   //get infor user

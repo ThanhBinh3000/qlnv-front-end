@@ -21,7 +21,7 @@ export class Utils {
     public static BCAO_03 = "03";
 
     // Trang thái báo cáo
-    public static TT_BC_0 = "0"; // Trạng thái của Phương án giao số trần chi (đã giao);
+    public static TT_BC_0 = "0"; // Đã xóa 
     public static TT_BC_1 = "1"; // Đang soạn,
     public static TT_BC_2 = "2"; // Trình duyệt,
     public static TT_BC_3 = "3"; // Trưởng BP từ chối,
@@ -32,6 +32,7 @@ export class Utils {
     public static TT_BC_8 = "8"; // ĐV cấp trên từ chối,
     public static TT_BC_9 = "9"; // Đv cấp trên duyệt,
     public static TT_BC_10 = "10"; // Lãnh đạo điều chỉnh,
+    public static TT_BC_11 = "11"; //Trạng thái của Phương án giao số trần chi (đã giao);
     // Danh sach quyen
     public static LANH_DAO = 1;// "Lãnh Đạo";
     public static TRUONG_BO_PHAN = 2;// "Trưởng Bộ Phận";
@@ -93,7 +94,7 @@ export class Utils {
 
     //role lanh dao dieu chinh
     public static btnRoleLDDC = {
-        "status": ['5','6','7'],
+        "status": ['4'],
         "unit": [1, 2],
         "role": [1],
     }
@@ -188,7 +189,7 @@ export class Utils {
         let statusName;
         switch (id) {
             case Utils.TT_BC_0:
-                statusName = "Đã giao";
+                statusName = "Đã xóa";
                 break;
             case Utils.TT_BC_1:
                 statusName = "Đang soạn"
@@ -216,6 +217,12 @@ export class Utils {
                 break;
             case Utils.TT_BC_9:
                 statusName = "Đv cấp trên duyệt"
+                break;
+            case Utils.TT_BC_10:
+                statusName = "Điều chỉnh theo số kiểm tra"
+                break;
+            case Utils.TT_BC_11:
+                statusName = "Đã giao"
                 break;
             default:
                 statusName = id;
