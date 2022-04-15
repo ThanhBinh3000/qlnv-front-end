@@ -238,7 +238,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N;
           // set thong tin chung bao cao
-          this.ngaynhap = data.data.ngayTao;
+          this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;

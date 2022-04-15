@@ -280,9 +280,10 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          // this.chiTietBcaos = data.data;
+          this.chiTietBcaos = data.data;
           this.id = data.data.id;
-          this.lstCTietBCao = data.data.listCtiet;
+          this.lstCTietBCao = data.data.listCtiet
+          ;
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
           this.namBcaohienhanh = this.chiTietBcaos.namHienHanh;
@@ -572,6 +573,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = res.data.id;
+            this.maPa = res.data.maPa;
             this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -588,6 +590,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.id = res.data.id;
+            this.maPa = res.data.maPa;
             this.getDetailReport();
             this.getStatusButton();
           } else {

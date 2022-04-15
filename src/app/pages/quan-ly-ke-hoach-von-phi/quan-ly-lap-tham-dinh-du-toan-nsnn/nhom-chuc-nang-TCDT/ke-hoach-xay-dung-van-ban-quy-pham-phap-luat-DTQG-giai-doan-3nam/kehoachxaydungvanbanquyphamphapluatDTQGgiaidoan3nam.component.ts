@@ -242,7 +242,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
           // set thong tin chung bao cao
-          this.ngaynhap = data.data.ngayTao;
+          this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoinhap = data.data.nguoiTao;
           this.donvitao = data.data.maDvi;
           this.mabaocao = data.data.maBcao;
@@ -258,7 +258,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             this.listIdFiles += item.id + ',';
           });
         } else {
-          this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.ERROR,data?.msg);
         }
       },
       (err) => {

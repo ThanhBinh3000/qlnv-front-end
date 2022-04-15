@@ -301,7 +301,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -317,7 +317,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -348,7 +348,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -375,11 +375,11 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           // set list id file ban dau
