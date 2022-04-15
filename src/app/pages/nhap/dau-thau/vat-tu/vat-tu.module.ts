@@ -13,6 +13,8 @@ import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket
 import { ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent } from './thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 import { HopDongMuaComponent } from './hop-dong-mua/hop-dong-mua.component';
 import { ThongTinHopDongMuaComponent } from './thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
+import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thuat-vat-tu.component';
+import { ThongTinHoSoKyThuatComponent } from './thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { ThongTinHopDongMuaComponent } from './thong-tin-hop-dong-mua/thong-tin-
     ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
     HopDongMuaComponent,
     ThongTinHopDongMuaComponent,
+    HoSoKyThuatVatTuComponent,
+    ThongTinHoSoKyThuatComponent,
   ],
   imports: [
     CommonModule,
