@@ -181,7 +181,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
           this.donViTaos = data.data;
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
@@ -231,7 +230,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
     this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-
   }
   // call chi tiet bao cao
   async getDetailReport() {

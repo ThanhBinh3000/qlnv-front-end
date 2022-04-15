@@ -365,4 +365,9 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chuc-nang',
     request);
   }
+
+  //xóa báo cáo nút xóa Báo cáo
+  xoaBaoCao(id:any):Observable<any>{
+    return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/xoa/' +id);
+  }
 }
