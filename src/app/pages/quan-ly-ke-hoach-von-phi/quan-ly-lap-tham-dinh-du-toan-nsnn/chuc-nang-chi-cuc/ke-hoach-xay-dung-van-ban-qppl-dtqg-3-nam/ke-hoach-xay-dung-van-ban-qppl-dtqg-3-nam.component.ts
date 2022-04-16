@@ -380,6 +380,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
+          this.tong=0;
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.lstCTietBCao.forEach(e => {
