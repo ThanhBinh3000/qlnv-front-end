@@ -24,7 +24,7 @@
         </div>
         <div nz-col nzSpan="6">
             <br />
-            <button class="btn btn-main">
+            <button class="btn btn-main" (click)="getDetailReport()">
                 Tìm kiếm
             </button>
         </div>
@@ -53,7 +53,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of lstHopDong; let i = index">
+                        <tr *ngFor="let data of lstCTietBCao; let i = index">
                             <td>
                                 <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"></label>
                             </td>
@@ -75,6 +75,22 @@
                         </tr>
                     </tbody>
                 </nz-table>
+                <div class="tab-content tab-menu" id="myTabContent">
+                    <div class="tab-pane fade show active justify-content-between">
+                        <div class="canphai">
+                            <!-- begin phân trang  -->
+                            <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                                (nzPageIndexChange)="onPageIndexChange($event)"
+                                (nzPageSizeChange)="onPageSizeChange($event)">
+                                <ng-template #rangeTemplate let-range="range" let-total>
+                                    {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                                </ng-template>
+                            </nz-pagination>
+                            <!-- end phân trang  -->
+                        </div>
+                    </div>
+                </div>
             </nz-tab>
         </nz-tabset>
     </div>

@@ -40,19 +40,22 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      lstCTietBCao: any = [];              // list chi tiet bao cao
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
 
-     tuNgay: string;
-     denNgay: string;
-     soVanBan: string;
-     maDvi: string;
-     maTrangThai: string;
      status: boolean = false;
+
+     searchFilter = {
+          tuNgay: "",
+          denNgay: "",
+          soVanBan: "",
+          maDvi: "",
+          trangThai: "",
+     };
 
      pages = {
           size: 10,
           page: 1,
      };
-     totalPages!: number;
-     totalElements!: number;
+     totalPages: number = 0;
+     totalElements: number = 0;
 
      userName: any;                              // ten nguoi dang nhap
 
@@ -85,7 +88,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                               }
                          })
                          if (this.capDvi == '1') {
-                              this.maTrangThai = '7';
+                              this.searchFilter.trangThai = '7';
                               this.status = true;
                          }
                     } else {
@@ -123,15 +126,15 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
      async getDetailReport() {
           this.spinner.show();
           let request = {
-               maDonVi: this.maDvi,
-               ngayTaoTu:  this.datePipe.transform(this.tuNgay, Utils.FORMAT_DATE_STR),
-               ngayTaoDen: this.datePipe.transform(this.denNgay, Utils.FORMAT_DATE_STR),
+               maDonVi: this.searchFilter.maDvi,
+               ngayTaoTu:  this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+               ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
                },
-               soVban: this.soVanBan,
-               trangThai: this.maTrangThai,
+               soVban: this.searchFilter.soVanBan,
+               trangThai: this.searchFilter.trangThai,
           }
           await this.quanLyVonPhiService.timDsachVban(request).toPromise().then(
                (data) => {
@@ -149,6 +152,14 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                }
           );
           this.spinner.hide();
+     }
+
+     xoaDieuKien() {
+          this.searchFilter.tuNgay = null;
+          this.searchFilter.denNgay = null;
+          this.searchFilter.maDvi = null;
+          this.searchFilter.soVanBan = null;
+          this.searchFilter.trangThai = null;
      }
 
      redirectChiTieuKeHoachNam() {
