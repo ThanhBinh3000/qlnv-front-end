@@ -238,17 +238,8 @@ async luu(){
 
   //xem thong tin PA
   xemphuongan(){
-    var id = this.mapa;
-    if(id!=undefined){
-      this.listPhuongAn.forEach(e => {
-        if(id ==e.maPa){
-          id=e.id
-        }
-      })
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/'+id])
-    }
-
-  }
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/'+this.mapa])
+      }
   //lay ten don vi tạo
   getUnitName(mdv:any):string {
     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
