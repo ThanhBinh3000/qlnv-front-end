@@ -177,11 +177,6 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
         this.errorGhiChu = true;
       }
       if (!this.errorGhiChu) {
-        if (this.chiTiet && this.chiTiet.detail && this.chiTiet.detail.length > 0) {
-          this.chiTiet.detail.forEach((item: ChiTietDuAn) => {
-            item.id = null;
-          });
-        }
         if (this.id > 0) {
           let res = await this.phuongAnKeHoachLCNTService.sua(this.chiTiet);
           if (res.msg == MESSAGE.SUCCESS) {

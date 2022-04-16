@@ -42,12 +42,17 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
       if (this.data) {
         this.isEdit = true;
         this.dataTable = this.data.detail;
+        if (this.dataTable && this.dataTable.length > 0) {
+          for (let i = 0; i < this.dataTable.length; i++) {
+            this.dataTable[i].stt = i + 1;
+          }
+        }
         this.selectedDonVi.tenDvi = this.data.tenDvi;
         this.selectedDonVi.maDvi = this.data.maDvi;
         this.inputDonVi = this.data.tenDvi;
       }
       else {
-        this.data = { id: null };
+        this.data = { id: null, stt: 0 };
       }
       await Promise.all([
         this.loadDonVi(),
@@ -102,7 +107,7 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
   updateEditCache(): void {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach(item => {
-        this.editCache[item.id] = {
+        this.editCache[item.stt] = {
           edit: false,
           data: { ...item }
         };
@@ -110,19 +115,19 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
     }
   }
 
-  cancelEdit(id: number): void {
-    const index = this.dataTable.findIndex(item => item.id === id);
-    this.editCache[id] = {
+  cancelEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.editCache[stt] = {
       data: { ...this.dataTable[index] },
       edit: false
     };
   }
 
-  saveEdit(id: number): void {
-    const index = this.dataTable.findIndex(item => item.id === id);
-    this.editCache[id].data.thanhTien = (this.editCache[id].data.soLuong ?? 0) * (this.editCache[id].data.donGia ?? 0);
-    Object.assign(this.dataTable[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+  saveEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.editCache[stt].data.thanhTien = (this.editCache[stt].data.soLuong ?? 0) * (this.editCache[stt].data.donGia ?? 0);
+    Object.assign(this.dataTable[index], this.editCache[stt].data);
+    this.editCache[stt].edit = false;
   }
 
   addRow() {
@@ -131,7 +136,7 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
     }
     this.sortTableId();
     let item = cloneDeep(this.itemRow);
-    item.id = this.dataTable.length + 1;
+    item.stt = this.dataTable.length + 1;
     item.thanhTien = (item.soLuong ?? 0) * (item.donGia ?? 0);
     this.dataTable = [
       ...this.dataTable,
@@ -146,18 +151,18 @@ export class DialogThongTinPhuLucKHLCNTComponent implements OnInit {
   }
 
   deleteRow(data: any) {
-    this.dataTable = this.dataTable.filter(x => x.id != data.id);
+    this.dataTable = this.dataTable.filter(x => x.stt != data.stt);
     this.sortTableId();
     this.updateEditCache();
   }
 
-  editRow(id: number) {
-    this.editCache[id].edit = true;
+  editRow(stt: number) {
+    this.editCache[stt].edit = true;
   }
 
   sortTableId() {
     this.dataTable.forEach((lt, i) => {
-      lt.id = i + 1;
+      lt.stt = i + 1;
     });
   }
 
