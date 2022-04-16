@@ -17,6 +17,10 @@ import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thua
 import { ThongTinHoSoKyThuatComponent } from './thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
 import { ThongTinPhieuNhapKhoComponent } from './thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
+import { QuanLyBangCanKeHangComponent } from './quan-ly-bang-can-ke-hang/quan-ly-bang-can-ke-hang.component';
+import { ThongTinQuanLyBangCanKeHangComponent } from './thong-tin-quan-ly-bang-can-ke-hang/thong-tin-quan-ly-bang-can-ke-hang.component';
+import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
+import { ThongTinBienBanKetThucNhapKhoComponent } from './thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +38,10 @@ import { ThongTinPhieuNhapKhoComponent } from './thong-tin-phieu-nhap-kho/thong-
     ThongTinHoSoKyThuatComponent,
     PhieuNhapKhoComponent,
     ThongTinPhieuNhapKhoComponent,
+    QuanLyBangCanKeHangComponent,
+    ThongTinQuanLyBangCanKeHangComponent,
+    BienBanKetThucNhapKhoComponent,
+    ThongTinBienBanKetThucNhapKhoComponent,
   ],
   imports: [
     CommonModule,

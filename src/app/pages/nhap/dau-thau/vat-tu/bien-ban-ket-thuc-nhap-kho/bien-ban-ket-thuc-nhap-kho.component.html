@@ -2,37 +2,37 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Điều kiện tìm kiếm" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Số hồ sơ</label>
-              <input class="search__input" placeholder="Số hồ sơ" nz-input [(ngModel)]="soHoSo" />
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số phiếu</label>
+              <input class="search__input" placeholder="Số phiếu" nz-input [(ngModel)]="soPhieu" />
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Hợp đồng</label>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
-                <input nz-input [readonly]="true" [(ngModel)]="soHD" />
+            <div nz-col nzSpan="8">
+              <label class="search__label">Từ ngày lập</label>
+              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày lập">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Đến ngày lập</label>
+              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày lập">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngăn/ lô kho</label>
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input />
               </nz-input-group>
             </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Hàng hóa</label>
-              <nz-select nzPlaceHolder="Hàng hóa" [(ngModel)]="loaiVTHH">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Loại hàng hóa</label>
+              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="loaiVTHH">
                 <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Từ ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Từ ngày">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đến ngày</label>
-              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="12" *ngIf="isDuyet">
+            <div nz-col nzSpan="8" *ngIf="isDuyet">
               <label class="search__label">Trạng thái</label>
               <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiVTHH">
                 <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
@@ -53,7 +53,7 @@
             <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
-        <nz-card nzTitle="Danh sách hồ sơ kỹ thuật" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Danh sách biên bản kết thúc nhập kho" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
@@ -62,12 +62,13 @@
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <th width="130px">Tên hồ sơ kỹ thuật</th>
+                <th width="130px">Số phiếu</th>
                 <th width="175px">Ngày lập</th>
-                <th width="175px">Số hợp đồng mua bán</th>
-                <th width="">Hàng hóa</th>
-                <th width="175px">Ngày nhập</th>
-                <th width="175px">Số lượng nhập</th>
+                <th width="175px">Tên hàng hóa</th>
+                <th width="">Ngày bắt đầu nhập</th>
+                <th width="175px">Ngày kết thúc nhập</th>
+                <th width="175px">Tổng số</th>
+                <th width="175px">Ngăn/ lô kho</th>
                 <th width="175px">Trạng thái</th>
                 <th width="130px"></th>
               </tr>
@@ -78,13 +79,14 @@
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <td>VP/HSKTKT/2022/04</td>
+                <td>ĐNB/CC.ĐNT/N/2022/16</td>
                 <td>15/03/2022</td>
-                <td>22/2022/HĐMB</td>
-                <td>Nhà bạt loại 16,5 m2</td>
-                <td>10/03/2022</td>
-                <td>350</td>
-                <td>Dự thảo</td>
+                <td>Phao áo cứu sinh</td>
+                <td>13/03/2022</td>
+                <td>22/03/2022</td>
+                <td>10.000</td>
+                <td>Lô số 2 Ngăn kho H1/2</td>
+                <td>Chờ duyệt</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
@@ -127,10 +129,10 @@
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
           </button>
-          <button type="button" class="btn btn-sub">
-            <i class="icon htvbdh_tcdt_print"></i>
+          <!-- <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Kết xuất</span>
-          </button>
+          </button> -->
         </ng-template>
       </div>
     </div>
