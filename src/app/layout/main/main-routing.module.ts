@@ -39,6 +39,13 @@ const routes: Routes = [
             (m) => m.DanhMucModule,
           ),
       },
+      {
+        path: MAIN_ROUTES.quantrihethong,
+        loadChildren: () =>
+          import('../../pages/quantrihethong/quantrihethong.module').then(
+            (m) => m.QuanTriHeThongModule,
+          ),
+      },
     ],
   },
 ];

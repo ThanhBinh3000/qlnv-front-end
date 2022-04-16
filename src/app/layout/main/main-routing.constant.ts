@@ -14,7 +14,8 @@ export const MAIN_ROUTES = {
   quanLyChatLuong: 'quan-ly-chat-luong',
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
-  danhMuc: 'danh-muc'
+  danhMuc: 'danh-muc',
+  quantrihethong:'quan-tri-he-thong'
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -69,5 +70,9 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
+  },
+  {
+    title: 'Quản trị hệ thống',
+    route: MAIN_ROUTES.quantrihethong,
   },
 ];
