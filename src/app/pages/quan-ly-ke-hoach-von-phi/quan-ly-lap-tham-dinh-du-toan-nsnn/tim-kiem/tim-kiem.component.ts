@@ -133,6 +133,9 @@ export class TimKiemComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
+          this.danhSachBaoCao.forEach( e=>{
+            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+          })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
 
