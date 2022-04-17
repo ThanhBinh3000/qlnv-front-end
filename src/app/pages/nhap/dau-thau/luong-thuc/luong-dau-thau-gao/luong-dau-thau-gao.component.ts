@@ -73,7 +73,7 @@ export class LuongDauThauGaoComponent implements OnInit {
         "denNgayTao": this.endValue
           ? dayjs(this.endValue).format('DD/MM/YYYY')
           : null,
-        "loaiVthh": this.loaiVTHH ?? "00",
+        "loaiVthh": this.loaiVTHH,
         "namKhoach": this.namKeHoach,
         "paggingReq": {
           "limit": this.pageSize,
@@ -104,7 +104,7 @@ export class LuongDauThauGaoComponent implements OnInit {
 
       }
       let param = {
-        "loaiVthh": this.loaiVTHH ?? "00",
+        "loaiVthh": this.loaiVTHH,
         "namKhoach": this.namKeHoach,
         "trangThai": trangThai,
       }

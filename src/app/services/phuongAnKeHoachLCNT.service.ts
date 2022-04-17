@@ -19,6 +19,11 @@ export class PhuongAnKeHoachLCNTService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  loadChiTiet(id: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/chi-tiet/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
   danhSachChuaQuyetDinh(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/pan-lcnt-gao/tra-cuu/ds-chua-qd`
     return this.httpClient.post<any>(url, body).toPromise();

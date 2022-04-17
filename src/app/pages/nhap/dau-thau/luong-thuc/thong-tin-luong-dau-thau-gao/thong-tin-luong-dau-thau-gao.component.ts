@@ -194,6 +194,8 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
           this.chiTiet.namKhoach = +res.data.namKhoach;
         }
 
+        this.idPA = res.data.phuongAnId;
+
         this.startPH = dayjs(this.chiTiet.tuTgianMthau).toDate();
         this.endPH = dayjs(this.chiTiet.denTgianMthau).toDate();
 

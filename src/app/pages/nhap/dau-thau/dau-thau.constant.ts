@@ -294,6 +294,18 @@ export const VAT_TU_LIST: DauThau[] = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý bảng kê cân hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/quan-ly-bang-can-ke-hang',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý biên bản kết thúc nhập kho',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/bien-ban-ket-thuc-nhap-kho',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
     title: 'Quyết định giao nhiệm vụ nhập hàng',
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: 'vat-tu/quyet-dinh-giao-nhiem-vu-nhap-hang',
