@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { ThemBienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
 import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ChiTietThongTinGoiThauComponent } from './chi-tiet-thong-tin-goi-thau/chi-tiet-thong-tin-goi-thau.component';
 import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet-thong-tin-lcnt.component';
@@ -101,6 +103,14 @@ const routes: Routes = [
       {
         path: 'quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/:id',
         component: ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
+      },
+      {
+        path: 'bien-ban-chuan-bi-kho-truoc-khi-nhap-hang',
+        component: BienBanChuanBiKhoTruocKhiNhapHangComponent,
+      },
+      {
+        path: 'bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/:id',
+        component: ThemBienBanChuanBiKhoTruocKhiNhapHangComponent,
       },
     ],
   },

@@ -23,6 +23,8 @@ import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bie
 import { ThongTinBienBanKetThucNhapKhoComponent } from './thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { BienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { ThemBienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhi
     ThongTinBienBanKetThucNhapKhoComponent,
     QuyetDinhGiaoNhiemVuNhapHangComponent,
     ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
+    BienBanChuanBiKhoTruocKhiNhapHangComponent,
+    ThemBienBanChuanBiKhoTruocKhiNhapHangComponent,
   ],
   imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule],
 })
