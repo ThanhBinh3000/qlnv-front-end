@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ChiTietThongTinGoiThauComponent } from './chi-tiet-thong-tin-goi-thau/chi-tiet-thong-tin-goi-thau.component';
 import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet-thong-tin-lcnt.component';
@@ -9,6 +10,7 @@ import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component
 import { QuanLyBangCanKeHangComponent } from './quan-ly-bang-can-ke-hang/quan-ly-bang-can-ke-hang.component';
 import { QuyetDinhPheDuyetKeHoachLCNTComponent } from './quyet-dinh-phe-duyet-ke-hoach-lcnt/quyet-dinh-phe-duyet-ke-hoach-lcnt.component';
 import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
+import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { ThongTinHoSoKyThuatComponent } from './thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { ThongTinHopDongMuaComponent } from './thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
@@ -91,6 +93,14 @@ const routes: Routes = [
       {
         path: 'bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/:id',
         component: ThongTinBienBanKetThucNhapKhoComponent
+      },
+      {
+        path: 'bien-ban-giao-nhan',
+        component: BienBanGiaoNhanComponent
+      },
+      {
+        path: 'bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/:id',
+        component: ThongTinBienBanGiaoNhanComponent
       },
     ]
   }

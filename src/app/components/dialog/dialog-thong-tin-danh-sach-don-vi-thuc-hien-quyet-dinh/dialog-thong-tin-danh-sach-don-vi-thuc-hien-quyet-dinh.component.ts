@@ -7,6 +7,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 @Component({
   selector: 'dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh',
@@ -24,6 +25,8 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
   optionsDonViShow: any[] = [];
   selectedDonVi: any = {};
 
+  listNganLo: any[] = [];
+
   isEdit: boolean = false;
 
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -34,6 +37,7 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
     private donViService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
   ) { }
 
   async ngOnInit() {
@@ -51,6 +55,7 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
       }
       await Promise.all([
         this.loadDonVi(),
+        this.loadNganLo(),
       ]);
       this.updateEditCache();
       this.spinner.hide();
@@ -92,6 +97,27 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
   async selectDonVi(donVi) {
     this.inputDonVi = donVi.tenDvi;
     this.selectedDonVi = donVi;
+  }
+
+  async loadNganLo() {
+    let body = {
+      "maNganLo": "",
+      "nganKhoId": 0,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": "",
+      "tenNganLo": "",
+      "trangThai": ""
+    }
+    const res = await this.tinhTrangKhoHienThoiService.timKiemNganLo(body);
+    this.listNganLo = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNganLo = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   ngAfterViewChecked(): void {

@@ -16,16 +16,16 @@
           <span class="text"> {{route.title}} </span>
         </span>
         <ng-template #contentTemplate>
-          <div class="content-child-menu">
+          <div class="content-child-menu" nz-row [nzGutter]="24">
             <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let menu of route.children">
               <nz-card class="card-tree" [ngClass]="menu.url && routerUrl.indexOf(menu.url) != -1 ? 'active-tab' : ''">
                 <div class="content-item">
                   <span class="icon" [ngClass]="menu.icon"></span>
                   <div class="content-item-title">{{menu.title}}</div>
-                  <div class="item-url-menu">
-                    <a [href]="menu.urlTongCuc" class="pd-r-6">Tổng cục</a>
-                    <a [href]="menu.urlCuc" class="pd-r-6 pd-l-6 center-url-item">Cục</a>
-                    <a [href]="menu.urlChiCuc" class="pd-l-6">Chi cục</a>
+                  <div class="item-url-menu row">
+                    <a [href]="menu.urlTongCuc" class="col-md-4 text-center item-url-click-left">Tổng cục</a>
+                    <a [href]="menu.urlCuc" class="col-md-4 text-center item-url-click-center">Cục</a>
+                    <a [href]="menu.urlChiCuc" class="col-md-4 text-center item-url-click-right">Chi cục</a>
                   </div>
                 </div>
               </nz-card>

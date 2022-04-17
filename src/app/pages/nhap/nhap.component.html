@@ -18,6 +18,9 @@
           <div *ngIf="route.dropdown == 'dau-thau'">
             <dau-thau-tab></dau-thau-tab>
           </div>
+          <div *ngIf="route.dropdown == 'khac'">
+            <nhap-khac-tab [children]="route.children"></nhap-khac-tab>
+          </div>
         </ng-template>
       </li>
       <li nz-submenu class="nav-item prev" (click)="endSlide()">

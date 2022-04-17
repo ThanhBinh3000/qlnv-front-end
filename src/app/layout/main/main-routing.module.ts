@@ -26,6 +26,16 @@ const routes: Routes = [
           import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
       },
       {
+        path: MAIN_ROUTES.muaHang,
+        loadChildren: () =>
+          import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),
+      },
+      {
+        path: MAIN_ROUTES.luuKho,
+        loadChildren: () =>
+          import('../../pages/luu-kho/luu-kho.module').then((m) => m.LuuKhoModule),
+      },
+      {
         path: MAIN_ROUTES.kehoach,
         loadChildren: () =>
           import('../../pages/ke-hoach/ke-hoach.module').then(

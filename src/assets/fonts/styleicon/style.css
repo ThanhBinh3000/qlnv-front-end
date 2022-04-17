@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?3xyrfz');
-  src:  url('fonts/htvbdh.eot?3xyrfz#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?3xyrfz') format('truetype'),
-    url('fonts/htvbdh.woff?3xyrfz') format('woff'),
-    url('fonts/htvbdh.svg?3xyrfz#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?f0qaho');
+  src:  url('fonts/htvbdh.eot?f0qaho#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?f0qaho') format('truetype'),
+    url('fonts/htvbdh.woff?f0qaho') format('woff'),
+    url('fonts/htvbdh.svg?f0qaho#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,60 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_muoi:before {
+  content: "\eb07";
+}
+.htvbdh_tcdt_honghoccanbaohanh:before {
+  content: "\eafe";
+}
+.htvbdh_tcdt_honghocgiamchatluong:before {
+  content: "\eb01";
+}
+.htvbdh_tcdt_saphethan:before {
+  content: "\eb02";
+}
+.htvbdh_tcdt_hethanbaohanh:before {
+  content: "\eb03";
+}
+.htvbdh_tcdt_tieuhuy:before {
+  content: "\eb04";
+}
+.htvbdh_tcdt_Thanhly:before {
+  content: "\eb05";
+}
+.htvbdh_tcdt_theodoibaoquan:before {
+  content: "\eb06";
+}
+.htvbdh_tcdt_ngan-kho:before {
+  content: "\eafd";
+}
+.htvbdh_tcdt_baogao:before {
+  content: "\eaff";
+}
+.htvbdh_tcdt_baothoc:before {
+  content: "\eb00";
+}
+.htvbdh_tcdt_nhapkhac2:before {
+  content: "\eafb";
+}
+.htvbdh_tcdt_nhaptheokehoach:before {
+  content: "\eafc";
+}
+.htvbdh_tcdt_nhomquyen2:before {
+  content: "\eaf9";
+}
+.htvbdh_tcdt_nhomquyen:before {
+  content: "\eafa";
+}
+.htvbdh_tcdt_kynhay:before {
+  content: "\eaf6";
+}
+.htvbdh_tcdt_muatructiep:before {
+  content: "\eaf7";
+}
+.htvbdh_tcdt_dauthau:before {
+  content: "\eaf8";
+}
 .htvbdh_tcdt_baocao2:before {
   content: "\eaf3";
 }

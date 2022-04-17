@@ -1,4 +1,5 @@
 @import "../../../../assets/scss/default.scss";
+@import "../../../../assets/scss/common/tab.scss";
 ::ng-deep {
   .main-content-dau-thau {
     padding: unset !important;
@@ -61,5 +62,23 @@
   }
   .ant-popover-inner-content {
     padding: 0;
+  }
+  .main-content-dau-thau .ant-card .ant-card-body {
+    padding: 0 !important;
+  }
+  .card-tree .icon {
+    font-size: 42px;
+    color: #19797b;
+  }
+  .main-content-dau-thau {
+    .ant-tabs-tab.ng-star-inserted {
+      height: 100% !important;
+      width: 300px !important;
+    }
+    .ant-tabs-tab-btn {
+      white-space: normal !important;
+      font-size: 14px !important;
+      text-align: center;
+    }
   }
 }
