@@ -5,6 +5,8 @@ import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet
 import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thuat-vat-tu.component';
 import { HopDongMuaComponent } from './hop-dong-mua/hop-dong-mua.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { QuyetDinhPheDuyetKeHoachLCNTComponent } from './quyet-dinh-phe-duyet-ke-hoach-lcnt/quyet-dinh-phe-duyet-ke-hoach-lcnt.component';
 import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 import { ThongTinHoSoKyThuatComponent } from './thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
@@ -22,62 +24,70 @@ const routes: Routes = [
     children: [
       {
         path: 'quyet-dinh-phe-duyet-ke-hoach-lcnt',
-        component: QuyetDinhPheDuyetKeHoachLCNTComponent
+        component: QuyetDinhPheDuyetKeHoachLCNTComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ke-hoach-lcnt/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lcnt/:id',
-        component: ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent
+        component: ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt',
-        component: ThongTinLCNTComponent
+        component: ThongTinLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt/chi-tiet-thong-tin-lcnt/:id',
-        component: ChiTietThongTinLCNTComponent
+        component: ChiTietThongTinLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt/chi-tiet-thong-tin-goi-thau/:id',
-        component: ChiTietThongTinGoiThauComponent
+        component: ChiTietThongTinGoiThauComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
-        component: QuyetDinhPheDuyetKetQuaLCNTComponent
+        component: QuyetDinhPheDuyetKetQuaLCNTComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/:id',
-        component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent
+        component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
       },
       {
         path: 'hop-dong-mua',
-        component: HopDongMuaComponent
+        component: HopDongMuaComponent,
       },
       {
         path: 'hop-dong-mua/thong-tin-hop-dong-mua/:id',
-        component: ThongTinHopDongMuaComponent
+        component: ThongTinHopDongMuaComponent,
       },
       {
         path: 'ho-so-ky-thuat',
-        component: HoSoKyThuatVatTuComponent
+        component: HoSoKyThuatVatTuComponent,
       },
       {
         path: 'ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/:id',
-        component: ThongTinHoSoKyThuatComponent
+        component: ThongTinHoSoKyThuatComponent,
       },
       {
         path: 'phieu-nhap-kho',
-        component: PhieuNhapKhoComponent
+        component: PhieuNhapKhoComponent,
       },
       {
         path: 'phieu-nhap-kho/thong-tin-phieu-nhap-kho/:id',
-        component: ThongTinPhieuNhapKhoComponent
+        component: ThongTinPhieuNhapKhoComponent,
       },
-    ]
-  }
-]
+      {
+        path: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
+        component: QuyetDinhGiaoNhiemVuNhapHangComponent,
+      },
+      {
+        path: 'quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/:id',
+        component: ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class VatTuRoutingModule { }
+export class VatTuRoutingModule {}

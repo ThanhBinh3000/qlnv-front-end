@@ -17,6 +17,8 @@ import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thua
 import { ThongTinHoSoKyThuatComponent } from './thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
 import { ThongTinPhieuNhapKhoComponent } from './thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 
 @NgModule({
   declarations: [
@@ -34,12 +36,9 @@ import { ThongTinPhieuNhapKhoComponent } from './thong-tin-phieu-nhap-kho/thong-
     ThongTinHoSoKyThuatComponent,
     PhieuNhapKhoComponent,
     ThongTinPhieuNhapKhoComponent,
+    QuyetDinhGiaoNhiemVuNhapHangComponent,
+    ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
   ],
-  imports: [
-    CommonModule,
-    VatTuRoutingModule,
-    ComponentsModule,
-    MainModule,
-  ]
+  imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule],
 })
-export class VatTuModule { }
+export class VatTuModule {}
