@@ -8,6 +8,8 @@ import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thua
 import { HopDongMuaComponent } from './hop-dong-mua/hop-dong-mua.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
 import { QuanLyBangCanKeHangComponent } from './quan-ly-bang-can-ke-hang/quan-ly-bang-can-ke-hang.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { QuyetDinhPheDuyetKeHoachLCNTComponent } from './quyet-dinh-phe-duyet-ke-hoach-lcnt/quyet-dinh-phe-duyet-ke-hoach-lcnt.component';
 import { QuyetDinhPheDuyetKetQuaLCNTComponent } from './quyet-dinh-phe-duyet-ket-qua-lcnt/quyet-dinh-phe-duyet-ket-qua-lcnt.component';
 import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
@@ -28,71 +30,79 @@ const routes: Routes = [
     children: [
       {
         path: 'quyet-dinh-phe-duyet-ke-hoach-lcnt',
-        component: QuyetDinhPheDuyetKeHoachLCNTComponent
+        component: QuyetDinhPheDuyetKeHoachLCNTComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ke-hoach-lcnt/thong-tin-quyet-dinh-phe-duyet-ke-hoach-lcnt/:id',
-        component: ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent
+        component: ThongTinQuyetDinhPheDuyetKeHoachLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt',
-        component: ThongTinLCNTComponent
+        component: ThongTinLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt/chi-tiet-thong-tin-lcnt/:id',
-        component: ChiTietThongTinLCNTComponent
+        component: ChiTietThongTinLCNTComponent,
       },
       {
         path: 'thong-tin-lcnt/chi-tiet-thong-tin-goi-thau/:id',
-        component: ChiTietThongTinGoiThauComponent
+        component: ChiTietThongTinGoiThauComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
-        component: QuyetDinhPheDuyetKetQuaLCNTComponent
+        component: QuyetDinhPheDuyetKetQuaLCNTComponent,
       },
       {
         path: 'quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt/:id',
-        component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent
+        component: ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent,
       },
       {
         path: 'hop-dong-mua',
-        component: HopDongMuaComponent
+        component: HopDongMuaComponent,
       },
       {
         path: 'hop-dong-mua/thong-tin-hop-dong-mua/:id',
-        component: ThongTinHopDongMuaComponent
+        component: ThongTinHopDongMuaComponent,
       },
       {
         path: 'ho-so-ky-thuat',
-        component: HoSoKyThuatVatTuComponent
+        component: HoSoKyThuatVatTuComponent,
       },
       {
         path: 'ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/:id',
-        component: ThongTinHoSoKyThuatComponent
+        component: ThongTinHoSoKyThuatComponent,
       },
       {
         path: 'phieu-nhap-kho',
-        component: PhieuNhapKhoComponent
+        component: PhieuNhapKhoComponent,
       },
       {
         path: 'phieu-nhap-kho/thong-tin-phieu-nhap-kho/:id',
-        component: ThongTinPhieuNhapKhoComponent
+        component: ThongTinPhieuNhapKhoComponent,
       },
       {
         path: 'quan-ly-bang-can-ke-hang',
-        component: QuanLyBangCanKeHangComponent
+        component: QuanLyBangCanKeHangComponent,
       },
       {
         path: 'quan-ly-bang-can-ke-hang/thong-tin-quan-ly-bang-can-ke-hang/:id',
-        component: ThongTinQuanLyBangCanKeHangComponent
+        component: ThongTinQuanLyBangCanKeHangComponent,
       },
       {
         path: 'bien-ban-ket-thuc-nhap-kho',
-        component: BienBanKetThucNhapKhoComponent
+        component: BienBanKetThucNhapKhoComponent,
       },
       {
         path: 'bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/:id',
-        component: ThongTinBienBanKetThucNhapKhoComponent
+        component: ThongTinBienBanKetThucNhapKhoComponent,
+      },
+      {
+        path: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
+        component: QuyetDinhGiaoNhiemVuNhapHangComponent,
+      },
+      {
+        path: 'quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/:id',
+        component: ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
       },
       {
         path: 'bien-ban-giao-nhan',
@@ -105,9 +115,8 @@ const routes: Routes = [
     ]
   }
 ]
-
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class VatTuRoutingModule { }

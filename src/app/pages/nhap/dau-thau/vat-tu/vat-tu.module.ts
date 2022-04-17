@@ -21,6 +21,8 @@ import { QuanLyBangCanKeHangComponent } from './quan-ly-bang-can-ke-hang/quan-ly
 import { ThongTinQuanLyBangCanKeHangComponent } from './thong-tin-quan-ly-bang-can-ke-hang/thong-tin-quan-ly-bang-can-ke-hang.component';
 import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ThongTinBienBanKetThucNhapKhoComponent } from './thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
+import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
+import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 
@@ -44,14 +46,11 @@ import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan
     ThongTinQuanLyBangCanKeHangComponent,
     BienBanKetThucNhapKhoComponent,
     ThongTinBienBanKetThucNhapKhoComponent,
+    QuyetDinhGiaoNhiemVuNhapHangComponent,
+    ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
     BienBanGiaoNhanComponent,
     ThongTinBienBanGiaoNhanComponent,
   ],
-  imports: [
-    CommonModule,
-    VatTuRoutingModule,
-    ComponentsModule,
-    MainModule,
-  ]
+  imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule],
 })
-export class VatTuModule { }
+export class VatTuModule {}

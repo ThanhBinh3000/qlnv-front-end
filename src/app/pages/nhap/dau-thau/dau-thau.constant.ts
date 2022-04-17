@@ -651,6 +651,12 @@ export const VAT_TU_LIST = [
     urlCuc: '',
     urlChiCuc: '',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quyết định giao nhiệm vụ nhập hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/quyet-dinh-giao-nhiem-vu-nhap-hang',
+  },
 ];
 
 export const DAU_THAU_LIST = [
