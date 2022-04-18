@@ -2082,8 +2082,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       this.updateSTT(this.chiTietBcao5);
       this.updateLstCTietBCao(maLoai);
     }
-  
-    console.log(this.lstIdDeleteMau04bx);
 
   }
 

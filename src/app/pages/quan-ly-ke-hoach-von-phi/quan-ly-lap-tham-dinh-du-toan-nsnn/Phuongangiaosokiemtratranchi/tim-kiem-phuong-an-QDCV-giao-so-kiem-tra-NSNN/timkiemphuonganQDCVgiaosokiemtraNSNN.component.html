@@ -29,8 +29,12 @@
         <form nz-form [formGroup]="validateForm">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
               <label class="search__label">Năm phương án </label>
                   <input nz-input  [(ngModel)]="namPa" formControlName="namPa"/>
+                </nz-form-control>
+                </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Ngày lập từ</label>

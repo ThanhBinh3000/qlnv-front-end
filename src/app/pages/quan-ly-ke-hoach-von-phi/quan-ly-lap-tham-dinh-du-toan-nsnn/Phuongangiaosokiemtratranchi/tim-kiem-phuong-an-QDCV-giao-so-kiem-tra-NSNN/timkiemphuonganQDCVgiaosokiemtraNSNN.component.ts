@@ -59,7 +59,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   async ngOnInit() {
     this.validateForm = this.fb.group({
       loaivanban: [null, [Validators.required]],
-      namPa:[null],
+      namPa:[null,[Validators.pattern('^[12][0-9]{3}$')]],
       ngaylap:[null],
       denngay:[null],
       donViTao:[null],

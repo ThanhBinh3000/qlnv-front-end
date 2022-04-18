@@ -690,4 +690,18 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   dong(){
     this.location.back();
   }
+
+  xoaBaoCao(){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.getDetailReport();
+        this.getStatusButton();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    }
 }

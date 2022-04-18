@@ -360,6 +360,14 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maLvuc){
+      this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(this.editCache[id].data.maMucChi){
+      this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -465,6 +473,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       id: this.id,
       fileDinhKems: this.listFileUploaded,
       listIdFiles: idFileDinhKems,
+      listIdDeletes: this.listIdDelete,  
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
