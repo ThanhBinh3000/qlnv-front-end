@@ -58,11 +58,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" >
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Diều chỉnh theo số kiểm tra</span>
+          <span>Điều chỉnh theo số kiểm tra</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnDel" (click)="xoaBaoCao()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -148,13 +148,13 @@
                 <tr>
                   <th nzWidth="100px">SL</th>
                   <th>Giá trị</th>
-                  <th>C8 đầu tư</th>
+                  <th>CB đầu tư</th>
                   <th>TH đầu tư</th>
-                  <th>C8 đầu tư</th>
+                  <th>CB đầu tư</th>
                   <th>TH đầu tư</th>
-                  <th>C8 đầu tư</th>
+                  <th>CB đầu tư</th>
                   <th>TH đầu tư</th>
-                  <th>C8 đầu tư</th>
+                  <th>CB đầu tư</th>
                   <th>TH đầu tư</th>
 
                 </tr>

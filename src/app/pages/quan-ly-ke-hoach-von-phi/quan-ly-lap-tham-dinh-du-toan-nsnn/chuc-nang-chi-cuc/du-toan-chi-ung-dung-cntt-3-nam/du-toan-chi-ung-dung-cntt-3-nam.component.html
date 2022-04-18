@@ -62,7 +62,12 @@
                               <i class="icon htvbdh_tcdt_tuchoi"></i>
                               <span>ĐV cấp trên duyệt</span>
                         </a>
-                        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
+                        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')"
+                              [hidden]="statusBtnLDDC">
+                              <i class="icon htvbdh_tcdt_tuchoi"></i>
+                              <span>Điều chỉnh theo số kiểm tra</span>
+                        </a>
+                        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()"
                               [hidden]="statusBtnDel">
                               <i class="icon htvbdh_tcdt_delete"></i>
                               <span>Xóa</span>
@@ -210,17 +215,39 @@
                                                       <td></td>
                                                       <td></td>
                                                       <td [hidden]="statusDvi"></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
-                                                      <td></td>
+                                                      <td>
+                                                            {{tong.tongDtoanSl}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.tongDtoanGtri}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.thienNamTruoc}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.cbDtuN}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.thDtuN}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.cbDtuN1}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.thDtuN1}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.cbDtuN2}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.thDtuN2}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.cbDtuN3}}
+                                                      </td>
+                                                      <td>
+                                                            {{tong.thDtuN3}}
+                                                      </td>
                                                       <td></td>
                                                       <td width="2.25%" [hidden]="status"></td>
                                                       <td width="2.25%" [hidden]="status"></td>

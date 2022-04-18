@@ -182,8 +182,8 @@ xoaquyetdinh(){
 showcongvan(maPa:any){
   
   if(this.mapa!=undefined){
-    var idPa = this.listPhuongAn.find( item => item.maPa == maPa)?.id;
-  this.quankhoachvon.chitietPhuongAn(idPa).subscribe(res => {
+    // var idPa = this.listPhuongAn.find( item => item.maPa == maPa)?.id;
+  this.quankhoachvon.chitietPhuongAn(maPa).subscribe(res => {
     if(res.statusCode==0){
       var ob = res.data;
       this.soCv = ob.soCv;
@@ -217,7 +217,6 @@ async luu(){
       soQd:this.soQd
     }
     
-    console.log(request);
     if(this.validateForm.valid){
       this.quankhoachvon.nhapsoqdcv(request).subscribe(res => {
         if(res.statusCode==0){
@@ -239,17 +238,8 @@ async luu(){
 
   //xem thong tin PA
   xemphuongan(){
-    var id = this.mapa;
-    if(id!=undefined){
-      this.listPhuongAn.forEach(e => {
-        if(id ==e.maPa){
-          id=e.id
-        }
-      })
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/'+id])
-    }
-
-  }
+      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/'+this.mapa])
+      }
   //lay ten don vi tạo
   getUnitName(mdv:any):string {
     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;

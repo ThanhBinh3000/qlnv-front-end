@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ComponentsModule } from 'src/app/components/components.module';
 import { TongHopDeNghiCapVonRoutingModule } from './tong-hop-de-nghi-cap-von-routing.module';
 
+import { ComponentsModule } from 'src/app/components/components.module';
+import { TongHopDeNghiCapVonComponent } from './tong-hop-de-nghi-cap-von.component';
+
 @NgModule({
-    declarations: [],
+    declarations: [TongHopDeNghiCapVonComponent],
     imports: [CommonModule, TongHopDeNghiCapVonRoutingModule, ComponentsModule],
 })
 
-export class TongHopDeNghiCapVonModule {}
+export class  TongHopDeNghiCapVonModule {}

@@ -52,11 +52,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" >
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điểu chỉnh theo số kiểm tra</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel" (click)="xoaBaoCao()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -220,7 +220,7 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [(ngModel)]="editCache[data.id].data.maNdung">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chỉ tiêu" [(ngModel)]="editCache[data.id].data.maNdung">
                         <nz-option *ngFor="let item of listNoidung" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

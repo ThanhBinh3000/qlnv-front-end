@@ -73,6 +73,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnLDDC:boolean;                       // trang thai
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -231,6 +232,8 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+
   }
 
   //get user info
@@ -346,7 +349,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -377,7 +380,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
             this.trangThaiBanGhi == '1' ||

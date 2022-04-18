@@ -126,6 +126,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnLDDC: boolean;
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -170,7 +171,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     private location: Location
 
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
   }
 
 
@@ -257,6 +258,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -376,7 +378,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  
+
   //thay doi trang thai
   changeStatus(status: boolean) {
     this.status = status;
@@ -395,17 +397,17 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -676,7 +678,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
         }
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);;
@@ -690,5 +692,22 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     })
 
     this.spinner.show();
+  }
+
+  xoaBaoCao() {
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 }

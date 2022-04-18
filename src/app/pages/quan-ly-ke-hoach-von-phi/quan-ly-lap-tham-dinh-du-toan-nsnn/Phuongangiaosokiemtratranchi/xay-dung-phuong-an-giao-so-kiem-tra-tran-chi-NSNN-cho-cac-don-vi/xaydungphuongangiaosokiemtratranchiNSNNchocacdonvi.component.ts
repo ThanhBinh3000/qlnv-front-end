@@ -278,11 +278,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   getDetailReport() {
     this.spinner.hide();
     this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
-      (data) => {
+      async (data) => {
         if (data.statusCode == 0) {
-          // this.chiTietBcaos = data.data;
+          this.chiTietBcaos = data.data;
           this.id = data.data.id;
-          this.lstCTietBCao = data.data.listCtiet;
+          this.lstCTietBCao = data.data.listCtiet
+          ;
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
           this.namBcaohienhanh = this.chiTietBcaos.namHienHanh;
@@ -296,20 +297,52 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           var soqd = data.data.soQd;
           var socv = data.data.soCv;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
             this.status = true;
           }
+          let objectDonViThuocQuanLy={
+            capDvi: null,
+            kieuDvi: null,
+            loaiDvi: null,
+            maDvi: this.donvitao,
+            maKbnn: null,
+            maNsnn: null,
+            maPhuong: null,
+            maQuan: null,
+            maTinh: null,
+            paggingReq: {
+              limit: 20,
+              page: 1
+            },
+            str: '',
+            tenDvi: '',
+            trangThai: '01'
+          
+        }
+        await this.danhmuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
+          if(res.statusCode==0){
+            this.listColNames;
+            res?.data.forEach(item => {
+              item.tong = 0;
+              this.listColNames.push(item)
+            })
+            this.listColNames = res.data;
+            
+            this.cols = this.listColNames.length;
+          }
+        })
+          this.changeInput();
           this.updateEditCache();
           if (soqd != null && socv != null) {
             this.checknutgiao = false;
           }
-          this.changeInput();
+          
           this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -572,6 +605,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = res.data.id;
+            this.maPa = res.data.maPa;
             this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -588,6 +622,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.id = res.data.id;
+            this.maPa = res.data.maPa;
             this.getDetailReport();
             this.getStatusButton();
           } else {

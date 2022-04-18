@@ -62,7 +62,12 @@
                          <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>ĐV cấp trên duyệt</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')"
+                         [hidden]="statusBtnLDDC">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
+                         <span>Điều chỉnh theo số kiểm tra</span>
+                    </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()"
                          [hidden]="statusBtnDel">
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
@@ -133,7 +138,7 @@
                                    <thead>
                                         <tr>
                                              <th rowspan="4">STT</th>
-                                             <th rowspan="4" nzWidth="100px">Đơn vị</th>
+                                             <th rowspan="4" nzWidth="200px">Đơn vị</th>
                                              <th rowspan="4" nzWidth="75px">Tổng cộng</th>
                                              <th colspan="13">Khoản 331</th>
                                              <th colspan="7">Khoản 341</th>
@@ -261,7 +266,7 @@
 
                                                   <td>
                                                        <div *ngFor="let item of donVis">
-                                                            <div *ngIf="item.id == data.maDvi">
+                                                            <div *ngIf="item.maDvi == data.maDvi">
                                                                  {{item.tenDvi}}
                                                             </div>
                                                        </div>
@@ -336,7 +341,7 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.id"
+                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
                                                                  [nzLabel]="item.tenDvi"></nz-option>
                                                        </nz-select>
                                                   </td>
@@ -356,19 +361,19 @@
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucNx"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucVtct"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuCoDmucBquan"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
@@ -378,7 +383,7 @@
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucCntt"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
@@ -390,31 +395,31 @@
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucMsamTsan"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucBhiemHhoa"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucPhongChongMoiKplb"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k331KhongTchuChuaDmucSchuaKhoTang"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
@@ -424,55 +429,55 @@
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341LuongTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341TxTheoDmucTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmucTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341LuongKhongTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341TxTheoDmucKhongTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k341ChiTxKhongDmucKhongTuChu"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k085DaoTao"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k102NghienCuuKhoaHoc"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.k398DamBaoXaHoi"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
 
                                                   <td [hidden]="status">

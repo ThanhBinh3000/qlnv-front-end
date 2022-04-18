@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { Location } from '@angular/common'
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   maCucDtnnKvuc!:string;
@@ -86,7 +88,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean;                       // trang thai
   listIdFiles: string;                        // id file luc call chi tiet
 
 
@@ -109,6 +111,8 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   soVban:any;
   capDv:any;
   checkDv:boolean;
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
   // upload file
   addFile() {
     const id = this.fileToUpload?.lastModified.toString();
@@ -136,12 +140,17 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
               private danhMucService: DanhMucHDVService,
               private notification : NzNotificationService,
               private location: Location,
+              private fb:FormBuilder,
+
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     //check param dieu huong router
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -174,6 +183,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -193,6 +203,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       );
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
     this.getStatusButton();
@@ -225,6 +236,10 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     this.spinner.hide();
   }
 
+  tinhNam(){
+    this.namBcao = this.namBaoCaoHienHanh+1;
+  }
+
     getStatusButton(){
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
@@ -234,6 +249,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     }
 
   //get user info
@@ -301,7 +317,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
             await this.getDetailReport();
             this.getStatusButton();
@@ -317,7 +333,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
             this.getStatusButton();
           } else {
@@ -348,7 +364,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -375,11 +391,11 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           // set list id file ban dau

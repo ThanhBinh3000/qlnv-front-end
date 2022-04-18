@@ -52,11 +52,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" >
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điểu chỉnh theo số kiểm tra</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel" (click)="xoaBaoCao()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -161,14 +161,14 @@
                   <th>4</th>
                   <th>5</th>
                   <th>6</th>
-                  <th>7=8+9</th>
-                  <th>8=11+14</th>
+                  <th>7</th>
+                  <th>8=9+10</th>
                   <th>9=12+15</th>
-                  <th>10=11+12</th>
-                  <th>11</th>
+                  <th>10=13+16</th>
+                  <th>11=12+13</th>
                   <th>12</th>
-                  <th>13=14+15</th>
-                  <th>14</th>
+                  <th>13</th>
+                  <th>14=15+16</th>
                   <th>15</th>
                   <th>16</th>
                   <th [hidden]="status"></th>

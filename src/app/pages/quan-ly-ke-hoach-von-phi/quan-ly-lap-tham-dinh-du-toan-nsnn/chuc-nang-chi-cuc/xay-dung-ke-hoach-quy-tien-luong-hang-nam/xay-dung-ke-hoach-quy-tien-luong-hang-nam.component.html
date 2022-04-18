@@ -52,9 +52,9 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden] = "statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Điều chỉnh theo số kiểm tra</span>
+          <span>Điều chỉnh theo số kiểm tra </span>
         </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
@@ -104,7 +104,7 @@
               <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
                 {{soVban}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="năm BC">
+              <nz-descriptions-item nzTitle="Năm BC">
                 {{namBcao}}
               </nz-descriptions-item>
             </nz-descriptions>

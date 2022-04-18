@@ -96,7 +96,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean;                       // trang thai
   listIdFiles: string;                        // id file luc call chi tiet
 
 
@@ -177,11 +177,11 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.namBaoCaoHienHanh = new Date().getFullYear();
@@ -286,9 +286,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     );
     this.spinner.hide();
   }
-  tinhNam(){
-    this.namBcao = this.namBaoCaoHienHanh+1;
-  }
+
 
   getStatusButton(){
     const utils = new Utils();
@@ -299,6 +297,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+
   }
 
   //get user info
@@ -412,7 +412,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
       }else{
         this.notification.error(MESSAGE.ERROR,data?.msg);
       }
@@ -442,7 +442,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namBcao;
+          this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
           // set list id file ban dau

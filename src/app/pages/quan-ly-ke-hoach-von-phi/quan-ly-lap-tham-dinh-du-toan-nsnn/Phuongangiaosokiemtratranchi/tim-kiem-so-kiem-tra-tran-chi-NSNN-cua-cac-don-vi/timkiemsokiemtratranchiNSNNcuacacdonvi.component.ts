@@ -1,8 +1,11 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -37,7 +40,9 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     size: 10,
     page: 1,
   }
-
+  validateForm!: FormGroup; 
+  messageValidate:any = MESSAGEVALIDATE;
+  
   constructor(
     private userService: UserService,
      private router: Router,
@@ -45,12 +50,18 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
      private danhmuc :DanhMucHDVService,
      private datepipe:DatePipe,
      private notification: NzNotificationService,
-     private location: Location
+     private location: Location,
+     private spinner: NgxSpinnerService,
+     private fb: FormBuilder,
      ) {
     
   }
 
   ngOnInit() {
+    this.validateForm = this.fb.group({
+      namgiao:[null,[Validators.pattern('^[12][0-9]{3}$')]],
+      temp:[null],
+    });
     let username = this.userService.getUserName();
     this.getUserInfo(username);
     this.quankhoachvon.dMDonVi().subscribe(res => {
@@ -71,7 +82,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-    this.trangthai = '0';
+    this.trangthai = '11';
   }
 
   //get infor user
@@ -119,11 +130,9 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
         str: "",
         trangThai: this.trangthai,
     }
-    console.log(req);
+    this.spinner.show();
     this.quankhoachvon.timkiemsokiemtratranchi(req).subscribe(res => {
-        console.log(res);
         if(res.statusCode==0){
-          // this.listSogiaoTranChi =[];
           this.listSogiaoTranChi = res.data.content;
           if(this.listSogiaoTranChi.length==0){
             this.listSogiaoTranChi =[];
@@ -142,6 +151,7 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     },err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
 
 

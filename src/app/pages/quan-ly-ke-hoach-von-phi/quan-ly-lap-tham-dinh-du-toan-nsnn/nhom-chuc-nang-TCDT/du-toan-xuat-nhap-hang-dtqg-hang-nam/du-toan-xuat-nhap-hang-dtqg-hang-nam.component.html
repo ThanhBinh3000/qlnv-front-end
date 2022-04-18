@@ -58,7 +58,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden]="statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Điều chỉnh theo số kiểm tra</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -466,7 +470,7 @@
                           <div *ngFor="let e of editCache[item.id].data.listCtiet">
                             <ng-container *ngIf="e.vitri == data.id">
                               <nz-input-number class="search__input" nzSize="small" [(ngModel)]="e.sl"
-                                (change)="tongSl(data.id)"></nz-input-number>
+                                (ngModelChange)="tongSl(data.id)"></nz-input-number>
                             </ng-container>
                           </div>
                         </td>
@@ -485,13 +489,13 @@
 
                     <td>
                       <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache1[data.id].data.dmucNhapVttbDvi" (change)="thanhTien(data.id)">
+                        [(ngModel)]="editCache1[data.id].data.dmucNhapVttbDvi" (ngModelChange)="thanhTien(data.id)">
                       </nz-input-number>
                     </td>
 
                     <td [hidden]="statusVP">
                       <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache1[data.id].data.dmucNhapVttbVphong" (change)="thanhTien(data.id)">
+                        [(ngModel)]="editCache1[data.id].data.dmucNhapVttbVphong" (ngModelChange)="thanhTien(data.id)">
                       </nz-input-number>
                     </td>
 

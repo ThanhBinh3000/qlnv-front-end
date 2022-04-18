@@ -78,10 +78,9 @@ import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-
 import { DialogChonThemKhoanMucComponent } from './dialog/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
 import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component'
-import { DialogMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-luong-thuc-muoi/dialog-mua-luong-thuc-muoi.component';
-import { DialogMuaHangDtqgComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-mua-hang-dtqg/dialog-mua-hang-dtqg.component';
 import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from './dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
 import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
+import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 @NgModule({
   declarations: [
     // components
@@ -113,9 +112,8 @@ import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoa
     DialogChonThemBieuMauBaoCaoComponent,
     DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
     //
-    DialogMuaLuongThucMuoiComponent,
-    DialogMuaHangDtqgComponent,
     DialogDanhSachMuaTbiVtuComponent,
+    DialogDanhSachMuaLuongThucMuoiComponent,
   ],
   imports: [
     CommonModule,

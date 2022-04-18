@@ -52,6 +52,10 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden] = "statusBtnLDDC">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Điều chỉnh theo số kiểm tra </span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden] = "statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
@@ -84,12 +88,15 @@
               <nz-descriptions-item nzTitle="Mã báo cáo">
                 {{maBaoCao}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                {{namBaoCaoHienHanh}}
+              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)" >
+              <form nz-form  [formGroup]="validateForm" class="login-form" >
+                <nz-form-item>
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" formControlName="namBaoCaoHienHanh"/>
+                  </nz-form-control>
+                </nz-form-item>
+              </form>
               </nz-descriptions-item>
-              <!-- <nz-descriptions-item nzTitle="Năm BC">
-                {{namBcao}}
-              </nz-descriptions-item> -->
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
               </nz-descriptions-item>
@@ -201,7 +208,7 @@
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Xóa</a>
+                        class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

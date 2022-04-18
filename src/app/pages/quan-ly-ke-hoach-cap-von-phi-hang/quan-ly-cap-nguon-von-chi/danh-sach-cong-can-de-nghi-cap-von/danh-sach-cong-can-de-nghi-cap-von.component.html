@@ -28,47 +28,43 @@
         <div class="main-content">
 
             <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-                <form nz-form>
-                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Ngày lập từ</label>
-                            <nz-date-picker formControlName="temp" class="search__input"
-                                [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Đến ngày</label>
-                            <nz-date-picker formControlName="temp" class="search__input"
-                                [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <label class="search__label">Trạng thái</label>
-                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-                                [(ngModel)]="searchFilter.trangThai" formControlName="temp">
-                                <nz-option *ngFor="let item of trangThais" [nzValue]="item.id"
-                                    [nzLabel]="item.tenDm"></nz-option>
-                            </nz-select>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <label class="search__label">Đơn vị tạo</label>
-                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                                [(ngModel)]="searchFilter.maDviTao" formControlName="temp">
-                                <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
-                                    [nzLabel]="item.tenDvi"></nz-option>
-                            </nz-select>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Phân loại</label>
-                            <nz-select nzShowSearch nzAllowClear
-                                [(ngModel)]="searchFilter.phanLoai" nzDisabled>
-                                <nz-option  [nzValue]="1"
-                                    nzLabel="Đề nghị cấp vốn mua vật tư"></nz-option>
-                            </nz-select>
-                        </div>
+                <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                    <div nz-col nzSpan="6">
+                        <label class="search__label">Ngày lập từ</label>
+                        <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay"
+                            nzFormat="dd/MM/yyyy"></nz-date-picker>
                     </div>
-                </form>
+                    <div nz-col nzSpan="6">
+                        <label class="search__label">Đến ngày</label>
+                        <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay"
+                            nzFormat="dd/MM/yyyy"></nz-date-picker>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <label class="search__label">Trạng thái</label>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+                            [(ngModel)]="searchFilter.trangThai" formControlName="temp">
+                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <label class="search__label">Đơn vị tạo</label>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                            [(ngModel)]="searchFilter.maDviTao">
+                            <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <label class="search__label">Phân loại</label>
+                        <nz-select nzShowSearch nzAllowClear [(ngModel)]="searchFilter.phanLoai" nzDisabled>
+                            <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
             </nz-card>
-            <nz-card nzTitle="DANH SÁCH CÔNG VĂN ĐỀ NGHỊ CẤP VỐN" [nzExtra]="tableCard1"
-                class="mt16 flex-card p-lr16">
+            <nz-card nzTitle="DANH SÁCH CÔNG VĂN ĐỀ NGHỊ CẤP VỐN" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
                 <nz-table #basicTable class="nowrap">
                     <thead>
                         <tr>

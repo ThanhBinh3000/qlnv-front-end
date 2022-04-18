@@ -80,7 +80,8 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chi so kiem tra
+  
   listIdFiles: string;                        // id file luc call chi tiet
 
 
@@ -229,6 +230,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   // call chi tiet bao cao
@@ -249,13 +251,16 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
-          if (this.trangThaiBanGhi == '1' || this.trangThaiBanGhi == '3' || this.trangThaiBanGhi == '5' || this.trangThaiBanGhi == '8') {
+          if (this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8) {
             this.status = false;
           } else {
             this.status = true;
@@ -538,7 +543,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     console.log(request);
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -549,7 +554,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.quanLyVonPhiService.updatelist1(request).toPromise().then(
+      this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -688,4 +693,21 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   dong(){
     this.location.back();
   }
+
+  xoaBaoCao(){
+    if(this.id){
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        }else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+      }else {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+      }
+    }
 }

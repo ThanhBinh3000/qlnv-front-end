@@ -114,6 +114,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnLDDC: boolean;
   statusVP: boolean = true;                      // trang thai an hien cua van phong
 
   listIdFiles: string;                        // id file luc call chi tiet
@@ -262,6 +263,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -334,7 +336,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService1(request).toPromise().then(
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -349,7 +351,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     } else {
-      this.quanLyVonPhiService.updatelist1(request).toPromise().then(
+      this.quanLyVonPhiService.updatelist(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -418,7 +420,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           console.log(data.data);
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -426,10 +428,10 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
           this.namBcao = data.data.namBcao
           this.trangThaiBanGhi = data.data.trangThai;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -1132,5 +1134,21 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     });
     this.spinner.hide();
+  }
+  xoaBaoCao() {
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 }

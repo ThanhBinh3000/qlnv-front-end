@@ -52,11 +52,11 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" >
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Diều chỉnh theo số kiểm tra</span>
+          <span>Điều chỉnh theo số kiểm tra</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel" (click)="xoaBaoCao()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -151,16 +151,16 @@
                     <td> {{i + 1}}</td>
                     <td>{{data.tenDtaiDanNckh}}</td>
                     <td>
-                      <div *ngFor="let item of listDviChuTri;">
-                        <div *ngIf="item.id ==data.maDvi">
-                            {{item.tenDm}}
+                      <div *ngFor="let item of donViTaos;">
+                        <div *ngIf="item.maDvi ==data.maDvi">
+                            {{item.tenDvi}}
                         </div>
                       </div>
                     </td>
                     <td>{{data.tgianBdau}}</td>
                     <td>{{data.tgianKthuc}}</td>
                     <td>{{data.kphiTongPhiDuocDuyet}}</td>
-                    <td>{{data.kphiDaDuocBoTriDenTdiemN}}</td>
+                    <td>{{data.kphiDaDuocBoTriDenNamN}}</td>
                     <td>{{data.kphiDaDuocThienDenTdiemBcao}}</td>
                     <td>{{data.kphiDkienBtriN1}}</td>
                     <td>{{data.kphiDkienBtriN2}}</td>
@@ -189,7 +189,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ thực hiện" [(ngModel)]="editCache[data.id].data.maDvi">
-                        <nz-option *ngFor="let item of listDviChuTri" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                        <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                       </nz-select>
                     </td>
                     <td>
@@ -202,7 +202,7 @@
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphiTongPhiDuocDuyet"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphiDaDuocBoTriDenTdiemN"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphiDaDuocBoTriDenNamN"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphiDaDuocThienDenTdiemBcao"></nz-input-number>
@@ -282,15 +282,15 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+          <button type="button" class="btn btn-main"  (click)="deleteSelected()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>

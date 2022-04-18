@@ -206,7 +206,9 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
     }
 
     taoMoi(){
-        
+        this.router.navigate([
+            '/qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/lap-de-nghi-cap-von-mua-vat-tu-thiet-bi',
+          ]);
     }
 
     redirectChiTieuKeHoachNam() {

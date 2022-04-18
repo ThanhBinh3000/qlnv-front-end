@@ -62,7 +62,11 @@
                          <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>ĐV cấp trên duyệt</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden]="statusBtnLDDC">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
+                         <span>Điều chỉnh theo số kiểm tra</span>
+                       </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()"
                          [hidden]="statusBtnDel">
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>

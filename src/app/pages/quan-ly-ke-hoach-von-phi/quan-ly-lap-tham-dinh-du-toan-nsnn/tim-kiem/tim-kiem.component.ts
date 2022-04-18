@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -66,7 +67,8 @@ export class TimKiemComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -125,12 +127,15 @@ export class TimKiemComponent implements OnInit {
       str: "",
       trangThai: this.searchFilter.trangThai,
     };
-
+    this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
     this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
+          this.danhSachBaoCao.forEach( e=>{
+            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+          })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
 
@@ -142,6 +147,7 @@ export class TimKiemComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.spinner.hide();
   }
 
   //set url khi

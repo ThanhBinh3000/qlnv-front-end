@@ -87,6 +87,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnLDDC: boolean;
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -166,11 +167,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg)
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
       this.maBaoCao = '';
@@ -283,6 +284,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -425,7 +427,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -433,10 +435,10 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -600,6 +602,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   // start edit
   startEdit(id: string): void {
     this.editCache[id].edit = true;
+
   }
 
   // huy thay doi
@@ -654,6 +657,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         this.lstCTietBCao.forEach(e => {
           e.id = uuid.v4();
         })
+        this.lstCTietBCao.forEach(item => {
+          this.tinhTong(1, item);
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -662,5 +668,22 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
     });
     this.updateEditCache()
     this.spinner.hide();
+  }
+
+  xoaBaoCao() {
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 }

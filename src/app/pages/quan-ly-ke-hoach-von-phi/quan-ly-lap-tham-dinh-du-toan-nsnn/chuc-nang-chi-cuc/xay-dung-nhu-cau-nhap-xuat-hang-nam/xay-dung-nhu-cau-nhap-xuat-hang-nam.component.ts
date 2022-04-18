@@ -79,7 +79,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean;                       // trang thai
   listIdFiles: string;                        // id file luc call chi tiet
 
 
@@ -160,14 +160,15 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.errorMessage = "Có lỗi trong quá trình sinh mã báo cáo vấn tin!";
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.errorMessage = err.error.message;
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       );
       this.namBaoCaoHienHanh = new Date().getFullYear();
+      this.namBcao = this.namBaoCaoHienHanh + 1
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = this.userInfo?.username;
@@ -254,6 +255,7 @@ getStatusButton(){
     this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -378,11 +380,16 @@ getStatusButton(){
       type: "",
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then( async (data) => {
+    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
       if (data.statusCode == 0) {
         await this.getDetailReport();
         this.getStatusButton();
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+      }else{
+        this.notification.error(MESSAGE.ERROR, data?.msg);
       }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
     this.updateEditCache();
