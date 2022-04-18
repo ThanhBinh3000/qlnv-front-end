@@ -2,7 +2,7 @@ import { RouteInfo } from './main-routing.type';
 
 export const MAIN_ROUTES = {
   kehoach: 'kehoach',
-  mua: 'mua',
+  muaHang: 'mua-hang',
   nhap: 'nhap',
   luuKho: 'luu-kho',
   ban: 'ban',
@@ -15,7 +15,7 @@ export const MAIN_ROUTES = {
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
-  quantrihethong:'quan-tri-he-thong'
+  quantrihethong: 'quan-tri-he-thong'
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -25,7 +25,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Mua',
-    route: MAIN_ROUTES.mua,
+    route: MAIN_ROUTES.muaHang,
   },
   {
     title: 'Nhập',

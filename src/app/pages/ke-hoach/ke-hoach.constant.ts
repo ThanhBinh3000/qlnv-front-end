@@ -1,11 +1,14 @@
+import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+
 export const MAIN_ROUTE_KE_HOACH = 'kehoach';
-export const ROUTE_LIST_KE_HOACH = [
+export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Giao chỉ tiêu kế hoạch đầu năm',
     url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-`,
-    hasChild: true,
     dropdown: 'giao-chi-tieu',
+    idHover: 'giao-chi-tieu',
+    hasTab: false,
     children: [
       {
         icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -23,6 +26,8 @@ export const ROUTE_LIST_KE_HOACH = [
     title: 'Điều chỉnh kế hoạch năm',
     url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-`,
     dropdown: 'dieu-chinh-chi-tieu',
+    idHover: 'giao-chi-tieu',
+    hasTab: false,
     children: [
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
@@ -40,5 +45,8 @@ export const ROUTE_LIST_KE_HOACH = [
     title: 'Báo cáo',
     url: `/${MAIN_ROUTE_KE_HOACH}/bao-cao`,
     dropdown: 'bao-cao',
+    idHover: 'giao-chi-tieu',
+    hasTab: false,
+    children: []
   },
 ];

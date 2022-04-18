@@ -1,3 +1,5 @@
+import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
+import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VatTuRoutingModule } from './vat-tu-routing.module';
@@ -54,6 +56,8 @@ import { BienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/bien-ban-ban
     ThongTinBienBanKetThucNhapKhoComponent,
     QuyetDinhGiaoNhiemVuNhapHangComponent,
     ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
+    BienBanGiaoNhanComponent,
+    ThongTinBienBanGiaoNhanComponent,
     BienBanChuanBiKhoTruocKhiNhapHangComponent,
     ThemBienBanChuanBiKhoTruocKhiNhapHangComponent,
     ThemPhieuNhapKhoTamGuiComponent,

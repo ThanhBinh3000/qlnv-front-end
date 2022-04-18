@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MUOI_LIST, VAT_TU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-thau/dau-thau.constant';
+import { DAU_THAU_LIST, MUA_TRUC_TIEP_LIST } from '../dau-thau/dau-thau.constant';
+// import { MUOI_LIST, VAT_TU_LIST, THOC_LIST, GAO_LIST } from 'src/app/pages/nhap/dau-thau/dau-thau.constant';
 
 @Component({
   selector: 'dau-thau-tab',
@@ -9,9 +10,12 @@ import { MUOI_LIST, VAT_TU_LIST, LUONG_THUC_LIST } from 'src/app/pages/nhap/dau-
   styleUrls: ['./dau-thau-tab.component.scss'],
 })
 export class DauThauTabComponent implements OnInit {
-  muoiList = MUOI_LIST;
-  vatTuList = VAT_TU_LIST;
-  luongThucList = LUONG_THUC_LIST;
+  // muoiList = MUOI_LIST;
+  // vatTuList = VAT_TU_LIST;
+  // gaoList = GAO_LIST;
+  // thocList = THOC_LIST;
+  dauThauList = DAU_THAU_LIST;
+  muaTrucTiepList = MUA_TRUC_TIEP_LIST;
   tabSelected: string = "luong-thuc";
   @Input() selectedIndex: number = 0;
   routerUrl: string = "";
