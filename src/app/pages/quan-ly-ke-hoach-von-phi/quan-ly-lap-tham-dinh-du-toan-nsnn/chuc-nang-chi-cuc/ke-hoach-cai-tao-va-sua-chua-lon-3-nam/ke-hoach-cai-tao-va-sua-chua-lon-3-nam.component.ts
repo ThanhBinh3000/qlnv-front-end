@@ -94,7 +94,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
      statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
      statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-     statusBtnLDDC:boolean;
+     statusBtnLDDC: boolean;
 
      listIdFiles: string;                        // id file luc call chi tiet
 
@@ -321,7 +321,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           let request = {
                id: this.id,
                fileDinhKems: listFile,
-               listIdFiles: this.listIdFiles,  
+               listIdFiles: this.listIdFiles,
                listIdDeletes: this.listIdDelete,                    // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
@@ -338,19 +338,19 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           if (this.id == null) {
                this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
                     async data => {
-                      if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        this.id = data.data.id;
-                        await this.getDetailReport();
-                        this.getStatusButton();
-                      } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                      }
+                         if (data.statusCode == 0) {
+                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                              this.id = data.data.id;
+                              await this.getDetailReport();
+                              this.getStatusButton();
+                         } else {
+                              this.notification.error(MESSAGE.ERROR, data?.msg);
+                         }
                     },
                     err => {
-                      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     },
-                  );
+               );
           } else {
                this.quanLyVonPhiService.updatelist(request).toPromise().then(
                     async data => {
@@ -422,10 +422,10 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                          this.trangThaiBanGhi = data.data.trangThai;
                          this.soVban = data.data.soVban;
                          if (
-                              this.trangThaiBanGhi == '1' ||
-                              this.trangThaiBanGhi == '3' ||
-                              this.trangThaiBanGhi == '5' ||
-                              this.trangThaiBanGhi == '8'
+                              this.trangThaiBanGhi == Utils.TT_BC_1 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_3 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_5 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_8
                          ) {
                               this.status = false;
                          } else {
@@ -637,7 +637,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                if (res.statusCode == 0) {
                     this.lstCTietBCao = res.data;
                     this.lstCTietBCao.forEach(e => {
-                         e.id=uuid.v4();
+                         e.id = uuid.v4();
                     })
                } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -647,5 +647,22 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           });
           this.updateEditCache()
           this.spinner.hide();
+     }
+
+     xoaBaoCao() {
+          if (this.id) {
+               this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+                    if (res.statusCode == 0) {
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                         this.location.back();
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, res?.msg);
+                    }
+               }, err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+               })
+          } else {
+               this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+          }
      }
 }

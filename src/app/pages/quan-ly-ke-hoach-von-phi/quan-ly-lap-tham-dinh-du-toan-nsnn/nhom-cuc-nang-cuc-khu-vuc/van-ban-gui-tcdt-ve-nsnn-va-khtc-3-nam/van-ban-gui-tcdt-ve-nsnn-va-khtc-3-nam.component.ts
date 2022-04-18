@@ -39,7 +39,6 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      ngayNhap!: string;                             // ngay nhap
      nguoiNhap!: string;                         // nguoi nhap
      noiTao!: string;
-     trangThai: string = '6';
      soVban!: string;
      ngayDuyetVban!: string;
      baoCaos: any = LOAIBAOCAO;
@@ -125,14 +124,14 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                this.namBaoCaoHienHanh = new Date().getFullYear();
           }
 
-          if (this.trangThaiBanGhi == '6') this.status = true;
+          if (this.trangThaiBanGhi == '7') this.status = true;
           //get danh muc nhom chi
           await this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
                          this.donVis.forEach(item => {
-                              if (item.maDvi == this.maDonViTao) {
+                              if (item.maDvi == this.userInfo?.dvql) {
                                    this.capDvi = item.capDvi;
                               }
                          })
@@ -145,6 +144,9 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
+
+          console.log(this.capDvi);
+          
 
           this.getStatusButton();
 
@@ -211,7 +213,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                ngayDuyetVban: this.ngayDuyetVban,
                soVban: this.soVban,
                stt: "",
-               trangThai: this.trangThai,
+               trangThai: this.trangThaiBanGhi,
           };
           //call service them moi
           this.spinner.show();
@@ -234,7 +236,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                );
           } else {
 
-               this.quanLyVonPhiService.updatelist(request).toPromise().then(
+               this.quanLyVonPhiService.capNhatVban(request).toPromise().then(
                     async data => {
                          if (data.statusCode == 0) {
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -264,7 +266,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                type: "",
           };
           this.spinner.show();
-          this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+          this.quanLyVonPhiService.approveVB(requestGroupButtons).toPromise().then(async (data) => {
                if (data.statusCode == 0) {
                     await this.getDetailReport();
                     this.getStatusButton();

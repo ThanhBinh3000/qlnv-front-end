@@ -1,33 +1,24 @@
+
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
      <div class="tab-content tab-menu" id="myTabContent">
           <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
                aria-labelledby="banhanh-tab">
                <div class="trai">
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                         (click)="redirectChiTieuKeHoachNam()">
-                         <i class="fa fa-arrow-circle-left"></i>
-                    </a>
                </div>
-               <div class="canphai phai">
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4','')"
-                         [hidden]="statusBtnTBP">
-                         <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Duyệt</span>
+               <div class="canphai phai action-top">
+
+                    <button nz-button class="search__button--search" routerLink="../">
+                         <i nz-icon nzType="stop"></i>
+                         Đóng
                     </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnTBP"
-                         (click)="tuChoi('3')">
-                         <i class="icon htvbdh_tcdt_tuchoi"></i>
-                         <span>Từ chối</span>
+                    <button nz-button type="submit" class="search__button--search"
+                         (click)="pages.page = 1; pages.size = 10 ;getDetailReport()">
+                         <i nz-icon nzType="search"></i>
+                         Tìm kiếm
                     </button>
-                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnLD"
-                         (click)="onSubmit('6','')">
-                         <i class="icon htvbdh_tcdt_pheduyet"></i>
-                         <span>Phê duyệt</span>
-                    </button>
-                    <button class="btn btn-main btn-sm waves-effect waves-light" [hidden]="statusBtnLD"
-                         (click)="tuChoi('5')">
-                         <i class="icon htvbdh_tcdt_tuchoi"></i>
-                         <span>Từ chối</span>
+                    <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+                         <i nz-icon nzType="close"></i>
+                         Xóa điều kiện
                     </button>
                </div>
           </div>
@@ -36,162 +27,128 @@
 <div class="contentBor chi-tieu__body">
      <div class="contentDetail">
           <div class="main-content">
-               <nz-card nzTitle="Thông tin tìm kiếm" class="mt16 flex-card p-lr16">
-                    <div class="search__body" nz-row [nzGutter]="[16, 12]">
-                         <div nz-col nzSpan="4">
-                              <label class="search__label">Ngày lập từ</label>
-                              <nz-date-picker class="search__input" [(ngModel)]="tuNgay"></nz-date-picker>
+
+               <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+                    <form nz-form [formGroup]="validateForm">
+                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                              <div nz-col nzSpan="12">
+                                   <label class="search__label">Năm hiện tại (N)</label>
+                                   <nz-form-item>
+                                        <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                                             <input nz-input [(ngModel)]="searchFilter.nam"
+                                                  formControlName="namhientai" />
+                                        </nz-form-control>
+                                   </nz-form-item>
+                              </div>
+                              <div nz-col nzSpan="6">
+                                   <label class="search__label">Ngày lập từ</label>
+                                   <nz-date-picker formControlName="temp" class="search__input"
+                                        [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                              </div>
+                              <div nz-col nzSpan="6">
+                                   <label class="search__label">Đến ngày</label>
+                                   <nz-date-picker formControlName="temp" class="search__input"
+                                        [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                              </div>
+                              <div nz-col nzSpan="12">
+                                   <label class="search__label">Đơn vị tạo</label>
+                                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
+                                        [(ngModel)]="searchFilter.maDvi" formControlName="dviTemp" nzDisabled>
+                                        <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
+                                             [nzLabel]="item.tenDvi"></nz-option>
+                                   </nz-select>
+                              </div>
                          </div>
-                         <div nz-col nzSpan="4">
-                              <label class="search__label">Đến ngày</label>
-                              <nz-date-picker class="search__input" [(ngModel)]="denNgay"></nz-date-picker>
-                         </div>
-                         <div nz-col nzSpan="4">
-                              <label class="search__label">Năm</label>
-                              <input class="search__input" nz-input [(ngModel)]="nam" />
-                         </div>
-                         <div nz-col nzSpan="12">
-                              <label class="search__label">Đơn vị</label>
-                              <input class="search__input" nz-input [(ngModel)]="tenDvi" disabled />
-                         </div>
-                         <div nz-col nzSpan="4">
-                              <button type="button" class="btn btn-main"
-                                   (click)="pages.page = 1; pages.size = 10 ;getDetailReport()">
-                                   <span>Tìm kiếm</span>
-                              </button>
+                    </form>
+               </nz-card>
+               <nz-card nzTitle="DANH SÁCH ĐỀ XUẤT ĐIỀU CHỈNH DỰ TOÁN CHI NGÂN SÁCH" [nzExtra]="tableCard1"
+                    class="mt16 flex-card p-lr16">
+                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                         Tổng số bản ghi được tìm thấy: {{totalElements}}
+                    </div>
+                    <nz-table #basicTable class="nowrap">
+                         <thead>
+                              <tr>
+                                   <th nzWidth="50px">STT</th>
+                                   <th nzWidth="200px">Ngày lập</th>
+                                   <th nzWidth="300px">Đơn vị lập</th>
+                                   <th nzWidth="100px">Năm</th>
+                                   <th nzWidth="300px" [hidden]="status">Nội dung</th>
+                                   <th nzWidth="200px">Trạng thái</th>
+                                   <th nzWidth="100px" [hidden]="!statusBtnSave"></th>
+                                   <th nzWidth="100px" [hidden]="statusBtnSave"></th>
+                                   <th nzWidth="100px" [hidden]="statusBtnDel"></th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <tr *ngFor="let data of lstCTietBCao; let i = index">
+                                   <td>
+                                        <label nz-checkbox [nzValue]="data.id"
+                                             [(ngModel)]="data.checked"></label>
+                                   </td>
+                                   <td>
+                                        {{data.ngayTao}}
+                                   </td>
+                                   <td>
+                                        <div *ngFor="let item of donVis">
+                                             <div *ngIf="item.maDvi == data.maDvi">
+                                                  {{item.tenDvi}}
+                                             </div>
+                                        </div>
+                                   </td>
+                                   <td>
+                                        {{data.namPb}}
+                                   </td>
+                                   <td [hidden]="status">
+                                        {{data.noiDung}}
+                                   </td>
+                                   <td>
+                                        {{getStatusName(data.trangThai)}}
+                                   </td>
+                                   <td [hidden]="!statusBtnSave">
+                                        <a
+                                             routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Xem</a>
+                                   </td>
+                                   <td [hidden]="statusBtnSave">
+                                        <a
+                                             routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
+                                   </td>
+                                   <td [hidden]="statusBtnDel">
+                                        <a routerLink="#">Xóa</a>
+                                   </td>
+                              </tr>
+                         </tbody>
+                    </nz-table>
+                    <div class="tab-content tab-menu" id="myTabContent">
+                         <div class="tab-pane fade show active justify-content-between">
+                              <div class="trai">
+
+                              </div>
+                              <div class="canphai">
+                                   <!-- begin phân trang  -->
+                                   <nz-pagination class="pagination-card" [nzPageIndex]="pages.page"
+                                        [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
+                                        [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
+                                        (nzPageSizeChange)="onPageSizeChange($event)">
+                                        <ng-template #rangeTemplate let-range="range" let-total>
+                                             {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+                                        </ng-template>
+                                   </nz-pagination>
+                                   <!-- end phân trang  -->
+                              </div>
                          </div>
                     </div>
                </nz-card>
-               <div class="tab__container">
-                    <nz-tabset nzType="card" class="tab__container">
-                         <nz-tab [nzTitle]="'Chi tiết'">
-                              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-
-                              </div>
-                              <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                                   Tổng số bản ghi được tìm thấy: {{totalElements}}
-                              </div>
-                              <nz-table nzBordered class="table__body">
-                                   <thead>
-                                        <tr>
-                                             <th nzWidth="50px">STT</th>
-                                             <th nzWidth="200px">Ngày lập</th>
-                                             <th nzWidth="300px">Đơn vị lập</th>
-                                             <th nzWidth="100px">Năm</th>
-                                             <th nzWidth="300px" [hidden]="status">Nội dung</th>
-                                             <th nzWidth="200px">Trạng thái</th>
-                                             <th nzWidth="100px" [hidden]="!statusBtnSave"></th>
-                                             <th nzWidth="100px" [hidden]="statusBtnSave"></th>
-                                             <th nzWidth="100px" [hidden]="statusBtnDel"></th>
-                                        </tr>
-                                   </thead>
-                                   <tbody>
-                                        <tr *ngFor="let data of lstCTietBCao; let i = index">
-                                             <td>
-                                                  <label nz-checkbox [nzValue]="data.id"
-                                                       [(ngModel)]="data.checked"></label>
-                                             </td>
-                                             <td>
-                                                  {{data.ngayTao}}
-                                             </td>
-                                             <td>
-                                                  <div *ngFor="let item of donVis">
-                                                       <div *ngIf="item.maDvi == data.maDvi">
-                                                            {{item.tenDvi}}
-                                                       </div>
-                                                  </div>
-                                             </td>
-                                             <td>
-                                                  {{data.namPb}}
-                                             </td>
-                                             <td [hidden]="status">
-                                                  {{data.noiDung}}
-                                             </td>
-                                             <td>
-                                                  {{getStatusName(data.trangThai)}}
-                                             </td>
-                                             <td [hidden]="!statusBtnSave">
-                                                  <a
-                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Xem</a>
-                                             </td>
-                                             <td [hidden]="statusBtnSave">
-                                                  <a
-                                                       routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
-                                             </td>
-                                             <td [hidden]="statusBtnDel">
-                                                  <a routerLink="#">Xóa</a>
-                                             </td>
-                                        </tr>
-                                   </tbody>
-                              </nz-table>
-                              <div class="tab-content tab-menu" id="myTabContent">
-                                   <div class="tab-pane fade show active justify-content-between">
-                                        <div class="trai">
-                                        </div>
-                                        <div class="canphai">
-                                             <!-- begin phân trang  -->
-                                             <nz-pagination class="pagination-card" [nzPageIndex]="pages.page"
-                                                  [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
-                                                  [nzShowTotal]="rangeTemplate"
-                                                  (nzPageIndexChange)="onPageIndexChange($event)"
-                                                  (nzPageSizeChange)="onPageSizeChange($event)">
-                                                  <ng-template #rangeTemplate let-range="range" let-total>
-                                                       {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
-                                                  </ng-template>
-                                             </nz-pagination>
-                                             <!-- end phân trang  -->
-                                        </div>
-                                   </div>
-                              </div>
-
-                         </nz-tab>
-                    </nz-tabset>
-                    <div class="action">
-                         <button type="button" class="btn btn-main" routerLink="#">
-                              <span>Xuất</span>
-                         </button>
-                         <button type="button" class="btn btn-main"
-                              routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn" [hidden]="statusBtnSave">
-                              <span>Tạo mới</span>
-                         </button>
-                    </div>
-               </div>
-               <div class="ghi-chu">
-                    <nz-form-label nzRequired [nzNoColon]="true">
-                         Ghi chú
-                    </nz-form-label>
-                    <ul>
-                         <li class="ghi-chu__item">
-                              Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
-                              dựng CSDL về Tài
-                              chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát
-                              xây dựng CSDL về
-                              Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo
-                              sát xây dựng CSDL
-                              về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến
-                              khảo sát xây dựng
-                              CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý
-                              kiến khảo sát xây
-                              dựng CSDL về Tài chính
-                         </li>
-                         <li class="ghi-chu__item">
-                              Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc
-                              gia kế hoạch năm
-                              2022
-                         </li>
-                         <li class="ghi-chu__item">
-                              Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc
-                              gia kế hoạch năm
-                              2022
-                         </li>
-                    </ul>
-               </div>
+               <ng-template #tableCard1>
+                    <button type="button" class="btn btn-main" (click)="taoMoi()">
+                         <i class="icon htvbdh_dau-cong"></i>
+                         <span>Tạo mới</span>
+                    </button>
+                    <button type="button" class="btn btn-sub">
+                         <i class="icon htvbdh_chuyen-xu-ly"></i>
+                         <span>Export</span>
+                    </button>
+               </ng-template>
           </div>
      </div>
 </div>
-<!-- modal -->
-<!-- <app-lua-chon-in [(isVisible)]="modals.luaChonIn"></app-lua-chon-in>
-     
-     <app-thong-tin-luong-thuc [(isVisible)]="modals.thongTinLuongThuc"></app-thong-tin-luong-thuc>
-     
-     <app-thong-tin-vat-tu-trong-nam [(isVisible)]="modals.thongTinVatTuTrongNam"></app-thong-tin-vat-tu-trong-nam> -->

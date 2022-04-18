@@ -71,7 +71,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean;
+  statusBtnLDDC: boolean;
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -179,6 +179,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
+    
 
     this.getStatusButton();
 
@@ -380,7 +381,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.tong=0;
+          this.tong = 0;
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.lstCTietBCao.forEach(e => {
@@ -397,10 +398,10 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -595,6 +596,9 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
         this.lstCTietBCao.forEach(e => {
           e.id = uuid.v4();
         })
+        this.lstCTietBCao.forEach(e => {
+          this.tong += e.dtoanKphi;
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -603,6 +607,23 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
     });
     this.updateEditCache()
     this.spinner.hide();
+  }
+
+  xoaBaoCao() {
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
 }
