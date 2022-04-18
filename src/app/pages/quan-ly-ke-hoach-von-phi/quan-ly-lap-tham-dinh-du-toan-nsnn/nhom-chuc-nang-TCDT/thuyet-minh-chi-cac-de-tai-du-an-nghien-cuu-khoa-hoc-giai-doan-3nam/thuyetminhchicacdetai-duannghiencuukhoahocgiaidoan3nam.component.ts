@@ -577,16 +577,19 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
 }
 
 xoaBaoCao(){
-  this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
-    if(res.statusCode==0){
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-      this.getDetailReport();
-      this.getStatusButton();
+  if(this.id){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.location.back();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
     }else {
-      this.notification.error(MESSAGE.ERROR, res?.msg);
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
     }
-  },err => {
-    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  })
   }
 }
