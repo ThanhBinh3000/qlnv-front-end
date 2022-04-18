@@ -4107,3 +4107,13 @@ td nz-upload .upload-content .card-content {
     padding: 5px 15px;
   }
 }
+
+.input-error-validate:not(.ant-select-disabled) .ant-select-selector 
+{
+  border-color: #ff4d4f $i; 
+}
+
+.input-error-validate
+{
+  border-color: #ff4d4f $i; 
+}

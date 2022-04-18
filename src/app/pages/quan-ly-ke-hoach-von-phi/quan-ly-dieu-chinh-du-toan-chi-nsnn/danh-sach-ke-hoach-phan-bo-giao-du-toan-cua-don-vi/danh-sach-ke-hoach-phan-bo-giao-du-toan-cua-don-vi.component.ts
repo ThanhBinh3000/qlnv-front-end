@@ -14,11 +14,10 @@ import { min } from 'moment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
-export class danhMuc {
-     id: number;
-     tenDm: string;
-}
+
 @Component({
      selector: 'app-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
      templateUrl: './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component.html',
@@ -28,35 +27,54 @@ export class danhMuc {
 
 
 export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit {
-     donVis: danhMuc[] = [];                            //don vi se hien thi
-     chiCucs: any = [];                           //danh muc don vi cap chi cuc
-     cucKhuVucs: any = [];                        //danh muc don vi cap cuc khu vuc
-     tongCucs: any = [];                           //danh muc don vi cap tong cuc
-
-     tuNgayQd: string;                              //tim kiem tu ngay
-     denNgayQd: string;                             //tim kiem den ngay
-     tuNgayGn: string;
-     denNgayGn: string;
-     soQd: string;
-     nam: number;                                 //nam tim kiem
-     idDvi: number;                               //id don vi tim kiem
+     totalPages!: number;
+     totalElements!: number;
      lstCTietBCao: any = [];                      // list chi tiet bao cao
      userInfo: any;
+
+     donVis: any = [];                            //don vi se hien thi
+     messageValidate: any = MESSAGEVALIDATE;
+
+     searchFilter = {
+          nam: null,
+          tuNgayQd: null,
+          denNgayQd: null,
+          tuNgayGn: null,
+          denNgayGn: null,
+          soQd: null,
+          maDvi: null,
+     }
+
      status: boolean = false;                     // trang thai an/ hien cua cot noi dung
      userName: any;                              // ten nguoi dang nhap
-     
+
      //dung de phan trang
      pages = {
           size: 10,
           page: 1,
      };
-     totalPages!: number;
-     totalElements!: number;
+
 
      statusBtnDuyet: boolean;
      statusBtnPheDuyet: boolean;
      statusBtnTuChoi: boolean;
      statusBtnTaoMoi: boolean;
+
+     validateForm!: FormGroup;           // form
+
+     submitForm() {
+          if (this.validateForm.valid) {
+               return true;
+          } else {
+               Object.values(this.validateForm.controls).forEach(control => {
+                    if (control.invalid) {
+                         control.markAsDirty();
+                         control.updateValueAndValidity({ onlySelf: true });
+                    }
+               });
+               return false;
+          }
+     }
 
 
      constructor(private router: Router,
@@ -65,28 +83,31 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
           private quanLyVonPhiService: QuanLyVonPhiService,
           private datePipe: DatePipe,
           private sanitizer: DomSanitizer,
-          private userSerivce: UserService,
+          private userService: UserService,
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
+          private fb: FormBuilder,
      ) {
      }
 
 
      async ngOnInit() {
-          let userName = this.userSerivce.getUserName();
-          let userInfo: any = await this.getUserInfo(userName); //get user info
+          this.validateForm = this.fb.group({
+               namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
+               temp: null,
+               soQdTemp: [null],
+          });
 
+          let userName = this.userService.getUserName();
+          await this.getUserInfo(userName); //get user info
+          this.searchFilter.maDvi = this.userInfo?.dvql;
           const utils = new Utils();
-          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
-          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
-          this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
-          this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
 
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.chiCucs = data.data;
+                         this.donVis = data.data;
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -95,45 +116,13 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          
-          let idDviQl = userInfo?.dvql;
-          if (this.chiCucs.findIndex(item => item.id == idDviQl)) {
-               this.chiCucs.forEach(item => {
-                    let mm: danhMuc = {
-                         id: item.id,
-                         tenDm: item.tenDvi,
-                    }
-                    this.donVis.push(mm);
-               })
-               this.status = false;
-          } else {
-               this.status = true;
-               if (this.cucKhuVucs.findIndex(item => item.id == idDviQl)) {
-                    this.cucKhuVucs.forEach(item => {
-                         let mm: danhMuc = {
-                              id: item.id,
-                              tenDm: item.tenDvi,
-                         }
-                         this.donVis.push(mm);
-                    })
-               } else {
-                    this.tongCucs.forEach(item => {
-                         let mm: danhMuc = {
-                              id: item.id,
-                              tenDm: item.tenDvi,
-                         }
-                         this.donVis.push(mm);
-                    })
-               }
-          }
-
 
           this.spinner.hide();
      }
 
      //get user info
      async getUserInfo(username: string) {
-          let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
+          await this.userService.getUserInfo(username).toPromise().then(
                (data) => {
                     if (data?.statusCode == 0) {
                          this.userInfo = data?.data
@@ -146,7 +135,6 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          return userInfo;
      }
 
      // chuc nang check role
@@ -179,12 +167,12 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
           this.spinner.show();
 
           let request = {
-               maDvi: this.idDvi,
-               tuNgayQd: this.datePipe.transform(this.tuNgayQd, Utils.FORMAT_DATE_STR,),
-               denNgayQd: this.datePipe.transform(this.denNgayQd, Utils.FORMAT_DATE_STR,),
-               tuNgayGn: this.datePipe.transform(this.tuNgayGn, Utils.FORMAT_DATE_STR,),
-               denNgayGn: this.datePipe.transform(this.denNgayGn, Utils.FORMAT_DATE_STR,),
-               soQd: this.soQd,
+               maDvi: this.searchFilter.maDvi,
+               tuNgayQd: this.datePipe.transform(this.searchFilter.tuNgayQd, Utils.FORMAT_DATE_STR,),
+               denNgayQd: this.datePipe.transform(this.searchFilter.denNgayQd, Utils.FORMAT_DATE_STR,),
+               tuNgayGn: this.datePipe.transform(this.searchFilter.tuNgayGn, Utils.FORMAT_DATE_STR,),
+               denNgayGn: this.datePipe.transform(this.searchFilter.denNgayGn, Utils.FORMAT_DATE_STR,),
+               soQd: this.searchFilter.soQd,
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
@@ -219,21 +207,31 @@ export class DanhSachKeHoachPhanBoGiaoDuToanCuaDonViComponent implements OnInit 
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
      }
 
+     xoaDieuKien() {
+          this.searchFilter.nam = null
+          this.searchFilter.tuNgayQd = null
+          this.searchFilter.denNgayQd = null
+          this.searchFilter.tuNgayGn = null
+          this.searchFilter.denNgayGn = null
+          this.searchFilter.soQd = null
+     }
+
+
 
      redirectChiTieuKeHoachNam() {
           this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
      }
 
      //doi so trang
-  onPageIndexChange(page) {
-     this.pages.page = page;
-     this.getDetailReport();
-   }
- 
-   //doi so luong phan tu tren 1 trang
-   onPageSizeChange(size) {
-     this.pages.size = size;
-     this.getDetailReport();
-   }
+     onPageIndexChange(page) {
+          this.pages.page = page;
+          this.getDetailReport();
+     }
+
+     //doi so luong phan tu tren 1 trang
+     onPageSizeChange(size) {
+          this.pages.size = size;
+          this.getDetailReport();
+     }
 
 }

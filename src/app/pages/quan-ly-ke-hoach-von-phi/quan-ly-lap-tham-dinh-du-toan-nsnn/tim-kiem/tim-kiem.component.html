@@ -47,7 +47,7 @@
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Đơn vị tạo</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.donViTao" formControlName="temp">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="searchFilter.donViTao" formControlName="temp">
                 <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
               </nz-select>
             </div>

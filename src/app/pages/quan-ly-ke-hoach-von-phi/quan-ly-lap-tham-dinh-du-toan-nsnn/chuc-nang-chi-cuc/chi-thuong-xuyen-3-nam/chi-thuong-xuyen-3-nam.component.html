@@ -17,14 +17,6 @@
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
-        <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê duyệt</span>
-        </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a> -->
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')"
           [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -62,7 +54,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điều chỉnh theo số kiểm tra</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()" [hidden]="statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -94,7 +86,12 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
+                <ng-container *ngIf="status;else nbc">
+                  {{namBaoCaoHienHanh}}
+                </ng-container>
+                <ng-template #nbc>
+                  <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -113,13 +110,22 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Xây dựng Chi thường xuyên giai đoạn 03 năm'">
             <ng-container *ngIf="status;else templateName">
-
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                <div nz-col class="gutter-row" [nzSpan]="3">
+                  Đơn vị: 
+                  <div *ngFor="let item of donViTiens">
+                    <div *ngIf="item.id == maDviTien">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </ng-container>
             <ng-template #templateName>
               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                 <div nz-col class="gutter-row" [nzSpan]="3">
                   <!-- <div class="inner-box">Đơn vị: -->
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
                     <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                   <!-- </div> -->
@@ -318,19 +324,19 @@
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[data.id].data.maNoiDung ?'' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.maNoiDung">
                         <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhóm chi"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhóm chi" [class]="editCache[data.id].data.maNhomChi ?'' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.maNhomChi">
                         <nz-option *ngFor="let item of nhomChis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chi"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chi" [class]="editCache[data.id].data.maLoaiChi ?'' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.maLoaiChi">
                         <nz-option *ngFor="let item of loaiChis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>

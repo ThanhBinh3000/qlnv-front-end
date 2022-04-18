@@ -67,7 +67,7 @@
                          <i class="icon htvbdh_tcdt_tuchoi"></i>
                          <span>Điều chỉnh theo số kiểm tra</span>
                     </a>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()"
                          [hidden]="statusBtnDel">
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
@@ -138,7 +138,7 @@
                                    <thead>
                                         <tr>
                                              <th rowspan="4">STT</th>
-                                             <th rowspan="4" nzWidth="100px">Đơn vị</th>
+                                             <th rowspan="4" nzWidth="200px">Đơn vị</th>
                                              <th rowspan="4" nzWidth="75px">Tổng cộng</th>
                                              <th colspan="13">Khoản 331</th>
                                              <th colspan="7">Khoản 341</th>
@@ -266,7 +266,7 @@
 
                                                   <td>
                                                        <div *ngFor="let item of donVis">
-                                                            <div *ngIf="item.id == data.maDvi">
+                                                            <div *ngIf="item.maDvi == data.maDvi">
                                                                  {{item.tenDvi}}
                                                             </div>
                                                        </div>
@@ -341,7 +341,7 @@
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.id"
+                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
                                                                  [nzLabel]="item.tenDvi"></nz-option>
                                                        </nz-select>
                                                   </td>

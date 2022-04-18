@@ -220,7 +220,7 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [(ngModel)]="editCache[data.id].data.maNdung">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chỉ tiêu" [(ngModel)]="editCache[data.id].data.maNdung">
                         <nz-option *ngFor="let item of listNoidung" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
