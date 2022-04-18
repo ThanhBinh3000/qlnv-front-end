@@ -21,7 +21,7 @@ export class ItemData {
   tgBdau!: number;
   tgKthuc!: number;
   kphiTongPhiDuocDuyet!: number;
-  kphiDaDuocBtri!: number;
+  kphiDaDuocBoTriDenNamN!: number;
   kphiDuocThienDenThoiDiemBcao!: number;
   kphiDuKienBtriN1!: number;
   kphiDuKienBtriN2!: number;
@@ -438,7 +438,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       tgBdau: 0,
       tgKthuc: 0,
       kphiTongPhiDuocDuyet: 0,
-      kphiDaDuocBtri: 0,
+      kphiDaDuocBoTriDenNamN: 0,
       kphiDuocThienDenThoiDiemBcao: 0,
       kphiDuKienBtriN1: 0,
       kphiDuKienBtriN2: 0,
