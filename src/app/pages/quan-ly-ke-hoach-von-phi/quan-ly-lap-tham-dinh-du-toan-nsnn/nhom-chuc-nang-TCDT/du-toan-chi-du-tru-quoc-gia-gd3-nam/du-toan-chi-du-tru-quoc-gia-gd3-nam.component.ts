@@ -123,7 +123,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
               private location: Location,
               private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
 
 
@@ -148,7 +148,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     ) {
       this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (res) => {
@@ -193,6 +193,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.maNdungChis = data.data?.content;
+          console.log(this.maNdungChis);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -207,6 +209,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.chiTiets = data.data?.content;
+          console.log(this.chiTiets);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -382,13 +386,25 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
+
+          if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
+
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -584,6 +600,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             this.lstCTietBCao.forEach(e => {
               e.id= uuid.v4();
             })
+            this.updateEditCache()
+            console.log(this.lstCTietBCao);
 
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -599,6 +617,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
     })
+
     this.spinner.show();
 }
 

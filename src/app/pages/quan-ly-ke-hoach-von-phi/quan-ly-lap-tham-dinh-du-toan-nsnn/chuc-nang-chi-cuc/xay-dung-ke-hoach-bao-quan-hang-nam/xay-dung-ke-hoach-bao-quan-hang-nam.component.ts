@@ -135,7 +135,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
               private location: Location,
               private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd/MM/yyyy',)
               }
 
 
@@ -448,10 +448,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           console.log(this.lstCTiet);
 
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {

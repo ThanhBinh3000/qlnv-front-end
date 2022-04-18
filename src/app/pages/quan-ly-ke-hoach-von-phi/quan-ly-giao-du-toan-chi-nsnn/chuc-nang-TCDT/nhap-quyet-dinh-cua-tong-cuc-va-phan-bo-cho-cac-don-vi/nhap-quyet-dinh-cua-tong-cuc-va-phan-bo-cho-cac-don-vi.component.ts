@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
@@ -8,6 +9,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from 'src/app/components/dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
@@ -114,6 +116,9 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
   noiNhan!:any; // noi nhan
   nguoiKyTCs: any = [];
 
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
+
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -147,12 +152,16 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
               private userService: UserService,
               private notification: NzNotificationService,
               private modal: NzModalService,
+              private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
               }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      nam: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let userName = this.userService.getUserName();
     let userInfo: any = await this.getUserInfo(userName); //get user info
@@ -236,7 +245,6 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   );
-
 
     this.spinner.hide();
   }

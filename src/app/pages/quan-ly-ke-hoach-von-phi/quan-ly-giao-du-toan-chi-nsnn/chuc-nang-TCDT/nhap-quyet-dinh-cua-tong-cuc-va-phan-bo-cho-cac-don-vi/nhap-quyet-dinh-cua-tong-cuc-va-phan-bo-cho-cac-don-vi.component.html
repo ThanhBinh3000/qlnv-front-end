@@ -89,7 +89,11 @@
                 {{ngayQdBTC}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
-                {{nam}}
+                <form nz-form  [formGroup]="validateForm" class="login-form" >
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input type="number" nz-input  [(ngModel)]="nam"  formControlName="nam"/>
+                  </nz-form-control>
+                </form>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
                 {{nguoiKyBTC}}

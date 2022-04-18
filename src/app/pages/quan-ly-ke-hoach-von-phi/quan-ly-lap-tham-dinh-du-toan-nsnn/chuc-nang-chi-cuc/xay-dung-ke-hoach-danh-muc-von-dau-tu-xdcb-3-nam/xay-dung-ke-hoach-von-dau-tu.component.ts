@@ -146,7 +146,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
               private location : Location,
               private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
 
 
@@ -170,7 +170,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -438,7 +438,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -449,6 +449,17 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
           })
+
+          if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

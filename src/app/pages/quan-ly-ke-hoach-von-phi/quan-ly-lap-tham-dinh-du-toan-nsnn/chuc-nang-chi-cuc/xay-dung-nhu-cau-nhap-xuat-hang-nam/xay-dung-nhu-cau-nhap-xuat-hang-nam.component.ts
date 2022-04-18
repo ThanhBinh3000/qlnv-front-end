@@ -129,7 +129,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
               private location : Location,
               private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
 
 
@@ -153,7 +153,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -411,16 +411,16 @@ getStatusButton(){
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
+          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.tong = 0;
           this.lstCTiet.forEach(e => {
             this.tong += e.slNhap;
           })
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -429,10 +429,10 @@ getStatusButton(){
           this.namBcao = data.data.namBcao;
           this.soVban = data.data.soVban;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
