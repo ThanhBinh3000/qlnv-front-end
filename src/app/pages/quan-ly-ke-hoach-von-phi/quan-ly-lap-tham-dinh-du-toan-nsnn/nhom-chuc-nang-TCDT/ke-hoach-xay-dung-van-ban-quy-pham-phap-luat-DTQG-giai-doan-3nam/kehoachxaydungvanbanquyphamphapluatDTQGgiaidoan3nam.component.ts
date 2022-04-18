@@ -164,19 +164,19 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    // this.danhMucService.mDMaDviChuTri().subscribe(
-    //   (res) => {
-    //     if (res.statusCode == 0) {
-    //       this.listDviChuTri = res.data?.content;
+    this.danhMucService.dMDonviChuTri().subscribe(
+      (res) => {
+        if (res.statusCode == 0) {
+          this.listDviChuTri = res.data?.content;
 
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR,res?.msg);
-    //     }
-    //   },
-    //   (err) => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   },
-    // );
+        } else {
+          this.notification.error(MESSAGE.ERROR,res?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
       (data) => {

@@ -153,9 +153,9 @@
                       {{data.tgianDkien}}
                     </td>
                     <td>
-                      <div *ngFor="let item of donViTaos;">
+                      <div *ngFor="let item of listDviChuTri;">
                         <div *ngIf="item.id ==data.maDviChuTri">
-                            {{item.tenDvi}}
+                            {{item.tenDm}}
                         </div>
                       </div>
                     </td>
@@ -192,7 +192,7 @@
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì" [(ngModel)]="editCache[data.id].data.maDviChuTri">
-                        <nz-option *ngFor="let item of donViTaos" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
+                        <nz-option *ngFor="let item of listDviChuTri" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
