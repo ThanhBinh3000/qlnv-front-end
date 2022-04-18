@@ -21,7 +21,7 @@ export class ItemData {
   tgianBdau!: number;
   tgianKthuc!: number;
   kphiTongPhiDuocDuyet!: number;
-  kphiDaDuocBoTriDenTdiemN!: number;
+  kphiDaDuocBoTriDenNamN!: number;
   kphiDaDuocThienDenTdiemBcao!: number;
   kphiDkienBtriN1!: number;
   kphiDkienBtriN2!: number;
@@ -155,33 +155,19 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     }
 
     this.getStatusButton();
+    // this.danhMuc.mDMaDviChuTri().subscribe(
+    //   (res) => {
+    //     if (res.statusCode == 0) {
+    //       this.listDviChuTri = res.data?.content;
 
-    this.danhMuc.dMMaHthucVban().subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.listHinhThucVanBan = res.data?.content;
-
-        } else {
-          this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-    this.danhMuc.mDMaDviChuTri().subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.listDviChuTri = res.data?.content;
-
-        } else {
-          this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   },
+    // );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
 
       this.donViTaos = res.data;
@@ -324,7 +310,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       kphiDkienBtriN3!: 0,
       kphiThuHoi!: 0,
       tgianThuHoi!: 0,
-      kphiDaDuocBoTriDenTdiemN!: 0,
+      kphiDaDuocBoTriDenNamN!: 0,
       checked:false,
     };
 
@@ -446,7 +432,8 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdFiles: this.listIdFiles, 
+      listIdDeletes: this.listIdDelete,                     // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
@@ -601,5 +588,5 @@ xoaBaoCao(){
   },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   })
-}
+  }
 }

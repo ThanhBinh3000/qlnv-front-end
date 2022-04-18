@@ -416,6 +416,18 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maLoaiKhoach){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maLoaiDan){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maDvi){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -520,6 +532,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       id: this.id,
       fileDinhKems: this.listFileUploaded,
       listIdFiles: idFileDinhKems,
+      listIdDeletes: this.listIdDelete, 
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
@@ -638,4 +651,18 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     })
     this.spinner.show();
 }
+
+xoaBaoCao(){
+  this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+    if(res.statusCode==0){
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+      this.getDetailReport();
+      this.getStatusButton();
+    }else {
+      this.notification.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  })
+  }
 }
