@@ -376,6 +376,14 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maNdung){
+      this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maNhomChi){
+      this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -480,6 +488,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       id: this.id,
       fileDinhKems: this.listFileUploaded,
       listIdFiles: idFileDinhKems,
+      listIdDeletes: this.listIdDelete,  
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
@@ -607,4 +616,18 @@ changeModel(id: string): void {
   this.editCache[id].data.clechTranChiVsNcauChiN2 =  this.editCache[id].data.ncauChiN2 - this.editCache[id].data.tranChiN2;
   this.editCache[id].data.clechTranChiVsNcauChiN3 =  this.editCache[id].data.ncauChiN3 - this.editCache[id].data.tranChiN3;
 }
+
+xoaBaoCao(){
+  this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+    if(res.statusCode==0){
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+      this.getDetailReport();
+      this.getStatusButton();
+    }else {
+      this.notification.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  })
+  }
 }

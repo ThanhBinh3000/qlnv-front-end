@@ -164,19 +164,19 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.danhMucService.mDMaDviChuTri().subscribe(
-      (res) => {
-        if (res.statusCode == 0) {
-          this.listDviChuTri = res.data?.content;
+    // this.danhMucService.mDMaDviChuTri().subscribe(
+    //   (res) => {
+    //     if (res.statusCode == 0) {
+    //       this.listDviChuTri = res.data?.content;
 
-        } else {
-          this.notification.error(MESSAGE.ERROR,res?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR,res?.msg);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   },
+    // );
     //lay danh sach danh muc don vi
     this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -366,6 +366,14 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maHthucVban){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maDviChuTri){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -470,6 +478,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       id: this.id,
       fileDinhKems: this.listFileUploaded,
       listIdFiles: idFileDinhKems,
+      listIdDeletes: this.listIdDelete,  
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
@@ -583,4 +592,18 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     })
     this.spinner.show();
 }
+
+xoaBaoCao(){
+  this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+    if(res.statusCode==0){
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+      this.getDetailReport();
+      this.getStatusButton();
+    }else {
+      this.notification.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err => {
+    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  })
+  }
 }

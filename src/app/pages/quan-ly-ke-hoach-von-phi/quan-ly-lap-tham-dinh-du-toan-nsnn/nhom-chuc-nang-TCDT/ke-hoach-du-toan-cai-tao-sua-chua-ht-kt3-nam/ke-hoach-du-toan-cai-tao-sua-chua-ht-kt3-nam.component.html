@@ -255,7 +255,7 @@
                       <nz-input-number class="search__input" [nzMin]="0" nzSize="small" [(ngModel)]="editCache[data.id].data.tgianHt" ></nz-input-number>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại công trình"
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cơ quan"
                         [(ngModel)]="editCache[data.id].data.dtoanDuocDuyetCquanQd">
                         <nz-option *ngFor="let item of dtoanDuocDuyetCquanQds" [nzValue]="item.id"
                           [nzLabel]="item.tenDm"></nz-option>

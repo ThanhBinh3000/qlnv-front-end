@@ -231,7 +231,7 @@ export class QuanLyVonPhiService extends BaseService {
 
   //list danh sach phuong an da duoc duyet
   danhsachphuonganduocduyet(maDvi:any): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach-phuong-an/'+maDvi);
+    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach-phuong-an/',maDvi);
     // return this.httpClient.post('http://192.168.1.103:8094/pa-giao-so-kt/danh-sach-phuong-an',maDvi);
   }
 
