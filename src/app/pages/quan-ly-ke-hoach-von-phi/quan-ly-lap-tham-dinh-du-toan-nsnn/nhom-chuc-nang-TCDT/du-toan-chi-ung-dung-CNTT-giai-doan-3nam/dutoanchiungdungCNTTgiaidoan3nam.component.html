@@ -219,7 +219,7 @@
                     <td>{{data.dtoanThienN2Th}}</td>
                     <td>{{data.dtoanThienN3Cb}}</td>
                     <td>{{data.dtoanThienN3Th}}</td>
-                    <td>{{data.ghichu}}</td>
+                    <td>{{data.ghiChu}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
@@ -295,7 +295,7 @@
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanThienN3Th" ></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghichu" />
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

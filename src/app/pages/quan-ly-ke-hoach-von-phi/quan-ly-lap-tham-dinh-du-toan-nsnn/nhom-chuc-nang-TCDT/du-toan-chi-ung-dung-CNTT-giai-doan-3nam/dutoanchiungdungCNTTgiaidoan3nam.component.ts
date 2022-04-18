@@ -32,7 +32,7 @@ export class ItemData {
   dtoanThienN2Th!: number;
   dtoanThienN3Cb!: number;
   dtoanThienN3Th!: number;
-  ghichu!:string;
+  ghiChu!:string;
   checked!:boolean;
 }
 
@@ -393,7 +393,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       dtoanThienN2Th!: 0,
       dtoanThienN3Cb!: 0,
       dtoanThienN3Th!: 0,
-      ghichu:'',
+      ghiChu:'',
       checked: false,
     };
 
