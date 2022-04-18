@@ -316,4 +316,22 @@ export const VAT_TU_LIST: DauThau[] = [
     description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
     url: 'vat-tu/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý phiếu nhập kho tạm gửi',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/phieu-nhap-kho-tam-gui',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý biên bản gửi hàng',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/bien-ban-gui-hang',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản lý biên bản bàn giao mẫu',
+    description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+    url: 'vat-tu/bien-ban-ban-giao-mau',
+  },
 ];
