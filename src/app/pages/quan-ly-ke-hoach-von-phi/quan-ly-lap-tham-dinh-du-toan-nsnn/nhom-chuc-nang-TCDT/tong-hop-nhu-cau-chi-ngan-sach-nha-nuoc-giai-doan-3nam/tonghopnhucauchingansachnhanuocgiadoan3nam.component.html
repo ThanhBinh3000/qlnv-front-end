@@ -239,12 +239,12 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [(ngModel)]="editCache[data.id].data.maNdung">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [(ngModel)]="editCache[data.id].data.maNdung">
                         <nz-option *ngFor="let item of listNoidung" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại dự án" [(ngModel)]="editCache[data.id].data.maNhomChiNsnn">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhóm chi" [(ngModel)]="editCache[data.id].data.maNhomChiNsnn">
                         <nz-option *ngFor="let item of listNhomchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
