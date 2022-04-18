@@ -1,11 +1,156 @@
+import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+
 export const MUA_HANG_MAIN_ROUTE = 'nhap';
-export const MUA_HANG_ROUTE_LIST = [
+export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dauthau',
         title: 'Theo phương thức đấu thầu',
         url: `/${MUA_HANG_MAIN_ROUTE}/dau-thau`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: true,
+        children: [
+            {
+                title: 'Thóc',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Gạo',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Muối',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Vật tư',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+        ]
     },
     {
         icon: 'htvbdh_tcdt_muatructiep',
@@ -13,6 +158,149 @@ export const MUA_HANG_ROUTE_LIST = [
         url: `/${MUA_HANG_MAIN_ROUTE}/mua-truc-tiep`,
         dropdown: 'mua-truc-tiep',
         idHover: 'muatructiep',
+        hasTab: true,
+        children: [
+            {
+                title: 'Thóc',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Gạo',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Muối',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+            {
+                title: 'Vật tư',
+                icon: '',
+                hasChild: true,
+                url: '',
+                urlTongCuc: '',
+                urlCuc: '',
+                urlChiCuc: '',
+                children: [
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen2',
+                        title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
+                        url: '',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                ]
+            },
+        ]
     },
     {
         icon: 'htvbdh_tcdt_kynhay',
@@ -20,7 +308,7 @@ export const MUA_HANG_ROUTE_LIST = [
         url: `/${MUA_HANG_MAIN_ROUTE}/hop-dong`,
         dropdown: 'hop-dong',
         idHover: 'hop-dong',
-        hasChild: true,
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_kynhay',
@@ -48,5 +336,7 @@ export const MUA_HANG_ROUTE_LIST = [
         url: `/${MUA_HANG_MAIN_ROUTE}/bao-cao`,
         dropdown: 'bao-cao',
         idHover: 'bao-cao',
+        hasTab: false,
+        children: []
     },
 ];

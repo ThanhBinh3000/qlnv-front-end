@@ -21,6 +21,7 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
   routerUrl: string = "";
+  defaultUrl: string = '/ke-hoach/'
 
   constructor(
     private userService: UserService,
@@ -78,12 +79,16 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateCssOverlay(dropdown: string) {
+  updateCssOverlay() {
     setTimeout(() => {
-      let child = document.getElementsByClassName(dropdown + '-tab');
+      let child = document.getElementsByClassName('dau-thau-tab');
       if (child && child.length > 0) {
         child[0].parentElement.classList.add('left-0');
       }
     }, 200);
+  }
+
+  redirect(url: string) {
+    this.router.navigate([this.defaultUrl + url]);
   }
 }
