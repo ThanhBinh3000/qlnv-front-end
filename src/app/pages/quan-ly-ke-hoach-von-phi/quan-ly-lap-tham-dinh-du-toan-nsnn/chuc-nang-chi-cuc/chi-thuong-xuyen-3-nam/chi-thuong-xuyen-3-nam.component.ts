@@ -10,8 +10,9 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { QLNV_KHVONPHI_CHI_TX_GD3N, Utils } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_CHI_TX_GD3N, Utils, divMoney, mulMoney, DONVITIEN } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
 
 export class ItemData {
   namHhanhN!: number;
@@ -46,7 +47,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   nhomChis: any = [];                          // danh muc nhom chi
   loaiChis: any = [];                          // danh muc loai chi
   donVis: any = [];                            // danh muc don vi
-  donViTiens: any = [];                        // danh muc don vi tien
+  donViTiens: any = DONVITIEN;                        // danh muc don vi tien
 
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
@@ -61,7 +62,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_CHI_TX_GD3N;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: any;                             // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -260,19 +261,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       }
     );
 
-    //lay danh sach danh muc don vi tien
-    this.danhMucService.dMDonViTien().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donViTiens = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
     this.spinner.hide();
   }
 
@@ -318,6 +306,29 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   // luu
   async luu() {
+    let checkSaveEdit;
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.filter(element => {
+      element.tranChiDuocTbN1 = mulMoney(element.tranChiDuocTbN1, this.maDviTien);
+      element.ncauChiCuaDviN1 = mulMoney(element.ncauChiCuaDviN1, this.maDviTien);
+      element.clechTranChiVsNcauN1 = mulMoney(element.clechTranChiVsNcauN1, this.maDviTien);
+      element.tranChiDuocTbN2 = mulMoney(element.tranChiDuocTbN2, this.maDviTien);
+      element.ncauChiCuaDviN2 = mulMoney(element.ncauChiCuaDviN2, this.maDviTien);
+      element.clechTranChiVsNcauN2 = mulMoney(element.clechTranChiVsNcauN2, this.maDviTien);
+      element.tranChiDuocTbN3 = mulMoney(element.tranChiDuocTbN3, this.maDviTien);
+      element.ncauChiCuaDviN3 = mulMoney(element.ncauChiCuaDviN3, this.maDviTien);
+      element.clechTranChiVsNcauN3 = mulMoney(element.clechTranChiVsNcauN3, this.maDviTien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK);
+      return;
+    }
+
+    //upload file
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -333,12 +344,13 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
+      listIdDeletes: this.listIdDelete,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien = "01",
+      maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_TX_GD3N,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBaoCaoHienHanh + 1,
@@ -420,6 +432,18 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(item => {
+            item.tranChiDuocTbN1 = divMoney(item.tranChiDuocTbN1, this.maDviTien);
+            item.ncauChiCuaDviN1 = divMoney(item.ncauChiCuaDviN1, this.maDviTien);
+            item.clechTranChiVsNcauN1 = divMoney(item.clechTranChiVsNcauN1, this.maDviTien);
+            item.tranChiDuocTbN2 = divMoney(item.tranChiDuocTbN2, this.maDviTien);
+            item.ncauChiCuaDviN2 = divMoney(item.ncauChiCuaDviN2, this.maDviTien);
+            item.clechTranChiVsNcauN2 = divMoney(item.clechTranChiVsNcauN2, this.maDviTien);
+            item.tranChiDuocTbN3 = divMoney(item.tranChiDuocTbN3, this.maDviTien);
+            item.ncauChiCuaDviN3 = divMoney(item.ncauChiCuaDviN3, this.maDviTien);
+            item.clechTranChiVsNcauN3 = divMoney(item.clechTranChiVsNcauN3, this.maDviTien);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -431,7 +455,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
-
+          
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -607,10 +631,14 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    if (!this.editCache[id].data.maNoiDung || !this.editCache[id].data.maNhomChi || !this.editCache[id].data.maLoaiChi) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    } else {
+      this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+      const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+      Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    }
   }
 
   // gan editCache.data == lstCTietBCao
@@ -632,6 +660,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   async calltonghop() {
     this.spinner.show();
+    this.maDviTien = 1;
     let objtonghop = {
       maDvi: this.maDonViTao,
       maLoaiBcao: this.maLoaiBaoCao,
