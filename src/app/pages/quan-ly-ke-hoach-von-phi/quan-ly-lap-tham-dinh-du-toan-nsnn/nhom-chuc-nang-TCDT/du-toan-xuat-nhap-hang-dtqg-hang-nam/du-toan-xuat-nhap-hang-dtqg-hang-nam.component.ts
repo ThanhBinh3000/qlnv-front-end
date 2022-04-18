@@ -123,7 +123,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean;
+  statusBtnLDDC: boolean;
 
   statusVP: boolean = true;                      // trang thai an hien cua van phong
 
@@ -1131,5 +1131,19 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     if (this.editCache[id].data.maCucDtnnKvuc) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
     }
+  }
+
+  xoaBaoCao() {
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.getDetailReport();
+        this.getStatusButton();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 }

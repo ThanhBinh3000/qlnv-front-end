@@ -59,13 +59,11 @@
                                    <nz-descriptions-item nzTitle="Năm:" [nzSpan]="4">
                                         {{namBcao}}
                                    </nz-descriptions-item>
+                                   <nz-descriptions-item nzTitle="Nội dung">
+                                        <input type="text" nz-input class="input__search" name="" id=""
+                                              [(ngModel)]="noiDung">
+                                  </nz-descriptions-item>
                               </nz-descriptions>
-                         </div>
-                    </div>
-                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                         <div nz-col nzSpan="24" style="left: 1em; right: 1,em;">
-                              <label class="search__label">Nội dung:</label>
-                              <input nz-input class="search__input" [(ngModel)]="noiDung" />
                          </div>
                     </div>
                </nz-card>

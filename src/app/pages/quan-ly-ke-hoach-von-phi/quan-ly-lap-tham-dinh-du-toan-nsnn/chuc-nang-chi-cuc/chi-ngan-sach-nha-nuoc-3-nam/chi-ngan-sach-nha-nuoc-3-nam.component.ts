@@ -81,7 +81,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
      statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
      statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-     statusBtnLDDC:boolean;
+     statusBtnLDDC: boolean;
 
      listIdFiles: string;                        // id file luc call chi tiet
 
@@ -660,5 +660,19 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           });
           this.updateEditCache()
           this.spinner.hide();
+     }
+
+     xoaBaoCao() {
+          this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(res => {
+               if (res.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                    this.getDetailReport();
+                    this.getStatusButton();
+               } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+               }
+          }, err => {
+               this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          })
      }
 }

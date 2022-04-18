@@ -126,7 +126,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean;
+  statusBtnLDDC: boolean;
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -171,7 +171,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     private location: Location
 
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
   }
 
 
@@ -378,7 +378,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     this.spinner.hide();
   }
 
-  
+
   //thay doi trang thai
   changeStatus(status: boolean) {
     this.status = status;
@@ -692,5 +692,19 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     })
 
     this.spinner.show();
+  }
+
+  xoaBaoCao() {
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.getDetailReport();
+        this.getStatusButton();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 }

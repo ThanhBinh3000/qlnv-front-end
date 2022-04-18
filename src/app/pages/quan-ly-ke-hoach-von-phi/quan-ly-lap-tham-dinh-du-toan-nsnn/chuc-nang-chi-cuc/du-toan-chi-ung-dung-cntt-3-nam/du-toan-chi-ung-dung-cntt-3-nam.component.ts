@@ -20,17 +20,17 @@ export class ItemData {
   stt!: string;
   loaiKhoach!: string;
   loaiDan!: string;
-  tongDtoanSl!: Number;
-  tongDtoanGtri!: Number;
-  thienNamTruoc!: Number;
-  cbDtuN!: Number;
-  thDtuN!: Number;
-  cbDtuN1!: Number;
-  thDtuN1!: Number;
-  cbDtuN2!: Number;
-  thDtuN2!: Number;
-  cbDtuN3!: Number;
-  thDtuN3!: Number;
+  tongDtoanSl!: number;
+  tongDtoanGtri!: number;
+  thienNamTruoc!: number;
+  cbDtuN!: number;
+  thDtuN!: number;
+  cbDtuN1!: number;
+  thDtuN1!: number;
+  cbDtuN2!: number;
+  thDtuN2!: number;
+  cbDtuN3!: number;
+  thDtuN3!: number;
   ghiChu!: string;
   ndung!: string;
   checked!: boolean;
@@ -53,6 +53,28 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   cucKhuVucs: any = [];
   listBaoCao: ItemData[] = [];
   lstCTietBCao: ItemData[] = [];
+  tong: ItemData = {
+    id: null,
+    maBcao: null,
+    maDvi: null,
+    stt: null,
+    loaiKhoach: null,
+    loaiDan: null,
+    tongDtoanSl: 0,
+    tongDtoanGtri: 0,
+    thienNamTruoc: 0,
+    cbDtuN: 0,
+    thDtuN: 0,
+    cbDtuN1: 0,
+    thDtuN1: 0,
+    cbDtuN2: 0,
+    thDtuN2: 0,
+    cbDtuN3: 0,
+    thDtuN3: 0,
+    ghiChu: null,
+    ndung: null,
+    checked: false,
+  }
   id!: any;
   chiTietBcaos: any;
   lstFile: any = [];
@@ -101,7 +123,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean;
+  statusBtnLDDC: boolean;
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -429,8 +451,12 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
+          this.tinhTong(-1, this.tong);
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao.forEach(item => {
+            this.tinhTong(1, item);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -523,6 +549,8 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    var index: number = this.lstCTietBCao.findIndex(e => e.id === id);
+    this.tinhTong(-1, this.lstCTietBCao[index]);
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
@@ -533,6 +561,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if (item.checked) {
+        this.tinhTong(-1, item);
+      }
       if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
@@ -626,8 +657,10 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   saveEdit(id: string): void {
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    this.tinhTong(-1, this.lstCTietBCao[index]);
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.tinhTong(1, this.lstCTietBCao[index]);
   }
 
   // gan editCache.data == lstCTietBCao
@@ -638,6 +671,20 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
         data: { ...item }
       };
     });
+  }
+
+  tinhTong(heSo: number, item: ItemData){
+    this.tong.tongDtoanSl += heSo * item.tongDtoanSl ;
+    this.tong.tongDtoanGtri += heSo * item.tongDtoanGtri ;
+    this.tong.thienNamTruoc += heSo * item.thienNamTruoc ;
+    this.tong.cbDtuN += heSo * item.cbDtuN ;
+    this.tong.thDtuN += heSo * item.thDtuN ;
+    this.tong.cbDtuN1 += heSo * item.cbDtuN1 ;
+    this.tong.thDtuN1 += heSo * item.thDtuN1 ;
+    this.tong.cbDtuN2 += heSo * item.cbDtuN2 ;
+    this.tong.thDtuN2 += heSo * item.thDtuN2 ;
+    this.tong.cbDtuN3 += heSo * item.cbDtuN3 ;
+    this.tong.thDtuN3 += heSo * item.thDtuN3 ;
   }
 
   callListMaDonVi() {
@@ -659,6 +706,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
         this.lstCTietBCao.forEach(e => {
           e.id = uuid.v4();
         })
+        this.lstCTietBCao.forEach(item => {
+          this.tinhTong(1, item);
+        })
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -668,5 +718,19 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     this.updateEditCache()
     this.spinner.hide();
   }
-  
+
+  xoaBaoCao(){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.getDetailReport();
+        this.getStatusButton();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
+
 }
