@@ -155,19 +155,19 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     }
 
     this.getStatusButton();
-    // this.danhMuc.mDMaDviChuTri().subscribe(
-    //   (res) => {
-    //     if (res.statusCode == 0) {
-    //       this.listDviChuTri = res.data?.content;
+    this.danhMuc.dMDonviChuTri().subscribe(
+      (res) => {
+        if (res.statusCode == 0) {
+          this.listDviChuTri = res.data?.content;
 
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
-    //     }
-    //   },
-    //   (err) => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   },
-    // );
+        } else {
+          this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
     this.quanLyVonPhiService.dMDonVi().subscribe(res => {
 
       this.donViTaos = res.data;
