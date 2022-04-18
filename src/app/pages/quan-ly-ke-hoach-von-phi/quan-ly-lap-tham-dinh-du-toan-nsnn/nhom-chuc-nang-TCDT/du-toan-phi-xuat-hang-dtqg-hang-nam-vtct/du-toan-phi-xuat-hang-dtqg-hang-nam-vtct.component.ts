@@ -423,10 +423,10 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
           this.namBcao = data.data.namBcao
           this.trangThaiBanGhi = data.data.trangThai;
           if (
-            this.trangThaiBanGhi == '1' ||
-            this.trangThaiBanGhi == '3' ||
-            this.trangThaiBanGhi == '5' ||
-            this.trangThaiBanGhi == '8'
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
@@ -1141,16 +1141,19 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   xoaBaoCao() {
-    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(res => {
-      if (res.statusCode == 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        this.getDetailReport();
-        this.getStatusButton();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    })
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 }

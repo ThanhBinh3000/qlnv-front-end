@@ -236,7 +236,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                );
           } else {
 
-               this.quanLyVonPhiService.updatelist(request).toPromise().then(
+               this.quanLyVonPhiService.capNhatVban(request).toPromise().then(
                     async data => {
                          if (data.statusCode == 0) {
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
