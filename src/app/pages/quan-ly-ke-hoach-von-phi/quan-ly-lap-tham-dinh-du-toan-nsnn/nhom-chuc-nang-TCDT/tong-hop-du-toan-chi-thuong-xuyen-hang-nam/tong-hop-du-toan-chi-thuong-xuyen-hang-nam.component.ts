@@ -678,7 +678,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
         }
         //this.namBcaohienhanh = this.namBcaohienhanh
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);;
