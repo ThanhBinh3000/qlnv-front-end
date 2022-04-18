@@ -371,11 +371,11 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(this.editCache[id].data.maNdung){
+    if(!this.editCache[id].data.maNdung){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }
-    if(this.editCache[id].data.maNhomChiNsnn){
+    if(!this.editCache[id].data.maNhomChiNsnn){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }

@@ -364,7 +364,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
       return;
     }
-    if(this.editCache[id].data.maMucChi){
+    if(!this.editCache[id].data.maMucChi){
       this.notification.error(MESSAGE.ERROR,MESSAGE.NULL_ERROR);
       return;
     }
