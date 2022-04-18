@@ -649,3 +649,53 @@ export const LOAIBAOCAO =[
             tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
         },
     ]
+
+    // loai bao cao quy trinh thuc hien du toan chi
+    export const DONVITIEN =[
+        {
+            id:1,
+            tenDm:'Đồng',
+            giaTri:1
+        },
+        {
+            id:2,
+            tenDm:'Nghìn đồng',
+            giaTri:1000
+        },
+        {
+            id:3,
+            tenDm:'Triệu đồng',
+            giaTri:1000000
+        },
+        {
+            id:4,
+            tenDm:'Tỷ đồng',
+            giaTri:1000000000
+        },
+    ]
+
+    export function divMoney(value,maDonViTien){
+        let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+        if(!value){
+            return null;
+        }
+        
+        if(donVi){
+            return value/donVi.giaTri;
+        }else{
+            return null;
+        }
+    }
+
+    export function mulMoney(value,maDonViTien){
+        let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+        if(!value){
+            return null;
+        }
+        
+        if(donVi){
+            return value*donVi.giaTri;
+        }else{
+            return null;
+        }
+    }
