@@ -308,6 +308,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   // luu
   async luu() {
     let checkSaveEdit;
+    if(!this.maDviTien){
+      checkSaveEdit = false
+    }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
@@ -325,7 +328,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       }
     });
     if (checkSaveEdit == false) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK);
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
 

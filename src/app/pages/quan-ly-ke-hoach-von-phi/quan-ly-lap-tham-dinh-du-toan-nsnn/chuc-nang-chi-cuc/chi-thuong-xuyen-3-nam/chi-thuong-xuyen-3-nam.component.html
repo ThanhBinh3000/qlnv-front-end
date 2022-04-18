@@ -125,7 +125,7 @@
               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                 <div nz-col class="gutter-row" [nzSpan]="3">
                   <!-- <div class="inner-box">Đơn vị: -->
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
                     <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                   <!-- </div> -->
