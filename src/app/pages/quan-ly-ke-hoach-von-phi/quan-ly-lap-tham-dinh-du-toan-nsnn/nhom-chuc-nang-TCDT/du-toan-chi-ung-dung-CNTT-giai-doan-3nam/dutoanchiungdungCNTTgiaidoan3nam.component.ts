@@ -290,7 +290,10 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           this.mabaocao = data.data.maBcao;
           this.namBcaohienhanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
-          if(this.trangThaiBanGhi == '1' ||this.trangThaiBanGhi == '3' ||this.trangThaiBanGhi == '5' ||this.trangThaiBanGhi == '8' ){
+          if(this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8 ){
             this.status = false;
           }else{
             this.status = true;
@@ -416,6 +419,14 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
+    if(!this.editCache[id].data.maLoaiKhoach){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
+    if(!this.editCache[id].data.maLoaiDan){
+      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -520,6 +531,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       id: this.id,
       fileDinhKems: this.listFileUploaded,
       listIdFiles: idFileDinhKems,
+      listIdDeletes: this.listIdDelete, 
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
@@ -638,4 +650,21 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     })
     this.spinner.show();
 }
+
+xoaBaoCao(){
+  if(this.id){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.location.back();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    }else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+  }
 }

@@ -178,8 +178,6 @@ async getUserInfo(username: string) {
     this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu,'dd/MM/yyyy');
     this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-        console.log(res);
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length==0){
           this.listBcaoKqua =[];
