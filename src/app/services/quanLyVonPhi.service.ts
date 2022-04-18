@@ -62,6 +62,16 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  // call api nút chức năng cho văn bản
+  approveVB(request: any): Observable<any> {
+    return this.httpClient.put(
+      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/chuc-nang-van-ban',
+      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang-van-ban',
+      request,
+    );
+  }
+
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
@@ -162,6 +172,7 @@ export class QuanLyVonPhiService extends BaseService {
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
   }
@@ -287,7 +298,9 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
   timDsachVban(request: any): Observable<any> {
-    return this.httpClient.post( this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
+    return this.httpClient.post( 
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
+      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
       request,
     );
   }
