@@ -179,6 +179,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
       this.maBaoCao = '';
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
+    
 
     this.getStatusButton();
 
