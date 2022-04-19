@@ -309,7 +309,8 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   async luu() {
     let checkSaveEdit;
     if(!this.maDviTien){
-      checkSaveEdit = false
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
     }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
