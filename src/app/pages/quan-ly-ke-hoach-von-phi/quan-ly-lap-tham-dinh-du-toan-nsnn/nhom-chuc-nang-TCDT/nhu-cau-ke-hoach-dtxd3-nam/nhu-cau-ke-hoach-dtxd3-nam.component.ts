@@ -153,7 +153,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
               private fb:FormBuilder,
 
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
 
 
@@ -178,7 +178,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao =this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -200,7 +200,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.nguoiNhap = this.userInfo?.username;
       this.maDonViTao = this.userInfo?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maLoaiBacao = QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
@@ -353,6 +353,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -442,13 +443,22 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,'dd/MM/yyyy');
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao,Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
-
+          if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -673,4 +683,21 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.updateEditCache()
     this.spinner.hide();
   }
+
+  xoaBaoCao(){
+    if(this.id){
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        }else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+      }else {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+      }
+    }
 }

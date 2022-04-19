@@ -131,7 +131,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
               private location: Location,
               private fb:FormBuilder,
               ) {
-                this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+                this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
 
 
@@ -155,7 +155,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     ) {
       await this.calltonghop();
       this.nguoiNhap = this.userInfo?.username;
-      this.ngayNhap = this.datePipe.transform(this.currentday, 'dd/MM/yyyy');
+      this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.maDonViTao = this.userInfo?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
@@ -308,6 +308,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
+      listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -408,6 +409,17 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
           })
+
+          if (
+            this.trangThaiBanGhi == Utils.TT_BC_1 ||
+            this.trangThaiBanGhi == Utils.TT_BC_3 ||
+            this.trangThaiBanGhi == Utils.TT_BC_5 ||
+            this.trangThaiBanGhi == Utils.TT_BC_8
+          ) {
+            this.status = false;
+          } else {
+            this.status = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -625,5 +637,19 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     });
     this.updateEditCache()
     this.spinner.hide();
+  }
+
+  xoaBaoCao(){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        await this.getDetailReport();
+        this.getStatusButton();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
   }
 }

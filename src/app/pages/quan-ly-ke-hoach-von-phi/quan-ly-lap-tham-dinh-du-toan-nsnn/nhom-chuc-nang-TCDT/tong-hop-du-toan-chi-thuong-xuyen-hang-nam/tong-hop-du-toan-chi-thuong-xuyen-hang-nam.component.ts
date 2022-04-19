@@ -306,6 +306,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     let request = {
       id: this.id,
       idFileDinhKem: listFile,
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,

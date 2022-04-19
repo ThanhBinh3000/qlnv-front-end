@@ -48,7 +48,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
-  nam = new Date().getFullYear();         // nam bao cao
+  nam !: any;         // nam bao cao
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
@@ -144,9 +144,10 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
               private notification: NzNotificationService,
               private modal: NzModalService,
               private location: Location,
-
+              private datePipe: DatePipe,
               private fb:FormBuilder,
               ) {
+                // this.ngayNhap =  this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
               }
 
 
@@ -166,7 +167,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       this.maDonViTao = userInfo?.dvql;
       this.spinner.show();
       this.maBaoCao = '';
-      this.nam = new Date().getFullYear();
+      // this.nam = new Date().getFullYear();
       this.lanLapThu = 1
     }
     const utils = new Utils();
@@ -189,7 +190,8 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           this.capDv = Dvi.capDvi;
 
           this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2');
-          console.log(this.maCucDtnnKvucs);
+
+
 
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -212,11 +214,43 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   );
-
+  this.danhMucService.dmQuyetDinhBTC().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          let qDinhCuaBtc = data.data
+          // this.qDinhBTCs = data;
+          qDinhCuaBtc.forEach(e => {
+            this.qDinhBTCs.push(e)
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+  )
 
     this.spinner.hide();
   }
 
+  changeQdinhBTC(id: any){
+    this.qDinhBTCs.forEach(e => {
+      if(id == e.id){
+        this.ngayNhap =  this.datePipe.transform(e.ngayQd, Utils.FORMAT_DATE_STR)
+        this.nam = e.nam
+      }
+    })
+  }
+
+  changeMaCucKhuVuc(maDvi: any){
+    this.maCucDtnnKvucs.forEach(e => {
+      if(maDvi == e.maDvi){
+        this.maNganSach = e.maNsnn;
+        this.maSoKBNN = e.maKbnn;
+      }
+    });
+  }
 
 
   //get user info
@@ -269,7 +303,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: this.lstCTietBCao,
-      loaiQd: this.loaiQd = "1",
+      loaiQd: this.loaiQd = "2",
       lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
       maDviTien: "01",
@@ -299,7 +333,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
         },
         err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          console.log(err);
         },
       );
     } else {
@@ -399,7 +432,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
 
           this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(res => {
             if (data.statusCode == 0) {
-              console.log(res);
               var tempArr = res.data;
               tempArr.forEach(e =>{
                 this.khoanMucs.push(e);
@@ -413,10 +445,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
             } else {
               this.notification.error(MESSAGE.ERROR, data?.msg);
             }
-
            })
-           console.log("lstCTietBCao: ", this.lstCTietBCao);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -449,27 +478,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     );
     return temp;
   }
-
-  // // them dong moi
-  // addLine(id: number): void {
-  //   let item : ItemData = {
-  //     : "",
-  //     maNdung: 0,
-  //     uocThucHienNam: 0,
-  //     duToanGiao2021: 0,
-  //     duToanDapBo: 0,
-  //     pBoChoDviTT: 0,
-  //     tong: 0,
-  //     id: uuid.v4(),
-  //     checked:false,
-  //   }
-
-  //   this.lstCTietBCao.splice(id, 0, item);
-  //   this.editCache[item.id] = {
-  //     edit: true,
-  //     data: { ...item }
-  //   };
-  // }
 
   // xoa dong
   deleteById(id: any): void {
@@ -618,7 +626,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
          },
     });
     modalIn.afterClose.subscribe((res) => {
-      console.log(res);
          if (res) {
            this.maKhoanMucs.forEach(e => {
              if(res.id == e.id){
