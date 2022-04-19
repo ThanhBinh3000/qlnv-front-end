@@ -656,7 +656,25 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
         }else{
+          this.cucKhuVucs.forEach( e =>{
+
+          })
           this.lstCTietBCao.forEach(e => {
+            
+              this.cucKhuVucs.forEach(item => {
+                var idx = e.listCtiet.findIndex( (i) => i.maDvi ==item.maDvi);
+                if(idx==-1){
+                    var obJect = {
+                      id!: uuid.v4(),
+                      maDvi: '',
+                      n1: 0,
+                      n2: 0,
+                      n3: 0,
+                    }
+                  e.listCtiet.push(obJect);
+                }
+              })
+          
             e.id = uuid.v4();
           })
         }

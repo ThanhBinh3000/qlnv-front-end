@@ -108,11 +108,8 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate'">
+                  <nz-option *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
                 </nz-select>
                 <!-- </div> -->
               </div>
@@ -183,7 +180,7 @@
                       <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenVban" />
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản" [(ngModel)]="editCache[data.id].data.maHthucVban">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản" [(ngModel)]="editCache[data.id].data.maHthucVban" [class]="editCache[data.id].data.maHthucVban ?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of listHinhThucVanBan" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
@@ -191,7 +188,7 @@
                       <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDkien"/>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì" [(ngModel)]="editCache[data.id].data.maDviChuTri">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì" [(ngModel)]="editCache[data.id].data.maDviChuTri" [class]="editCache[data.id].data.maDviChuTri ?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of listDviChuTri" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

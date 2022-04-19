@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { SYSTYPE_CONFIRM } from 'src/app/constants/config';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 export class ItemData{
@@ -64,6 +65,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
+  listDonViTien:any []= DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -239,6 +241,10 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.donvitien = data.data.maDviTien;
+          this.lstCTietBCao.filter(item =>{
+            item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
@@ -454,16 +460,29 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   // luu
   async luu() {
+    let checkSaveEdit;
+    if(!this.donvitien){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
 
+    //tinh đon vi tien
+    this.lstCTietBCao.filter(item => {
+      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
+      if (this.editCache[item.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
       }
     })
-    // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+    
     // gui du lieu trinh duyet len server
 
     // lay id file dinh kem
