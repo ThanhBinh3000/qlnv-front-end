@@ -653,22 +653,22 @@ export const LOAIBAOCAO =[
     // loai bao cao quy trinh thuc hien du toan chi
     export const DONVITIEN =[
         {
-            id:1,
+            id:'1',
             tenDm:'Đồng',
             giaTri:1
         },
         {
-            id:2,
+            id:'2',
             tenDm:'Nghìn đồng',
             giaTri:1000
         },
         {
-            id:3,
+            id:'3',
             tenDm:'Triệu đồng',
             giaTri:1000000
         },
         {
-            id:4,
+            id:'4',
             tenDm:'Tỷ đồng',
             giaTri:1000000000
         },
@@ -676,7 +676,7 @@ export const LOAIBAOCAO =[
 
     export function divMoney(value,maDonViTien){
         let donVi = DONVITIEN.find(item => item.id == maDonViTien);
-        if(!value){
+        if(!value && value!=0){
             return null;
         }
         
@@ -688,8 +688,9 @@ export const LOAIBAOCAO =[
     }
 
     export function mulMoney(value,maDonViTien){
+        
         let donVi = DONVITIEN.find(item => item.id == maDonViTien);
-        if(!value){
+        if(!value && value!=0){
             return null;
         }
         
