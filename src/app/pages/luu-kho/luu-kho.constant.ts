@@ -1,11 +1,14 @@
+import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+
 export const LUU_KHO_MAIN_ROUTE = 'nhap';
-export const LUU_KHO_ROUTE_LIST = [
+export const LUU_KHO_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_theodoibaoquan',
         title: 'Theo dõi bảo quản',
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_theodoibaoquan',
@@ -24,6 +27,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_Thanhly',
@@ -42,6 +46,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_tieuhuy',
@@ -60,6 +65,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_hethanbaohanh',
@@ -78,6 +84,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_saphethan',
@@ -96,6 +103,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_honghocgiamchatluong',
@@ -114,6 +122,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_honghoccanbaohanh',
@@ -132,6 +141,7 @@ export const LUU_KHO_ROUTE_LIST = [
         url: '',
         dropdown: 'dau-thau',
         idHover: 'dauthau',
+        hasTab: false,
         children: [
             {
                 icon: 'htvbdh_tcdt_saphethan',

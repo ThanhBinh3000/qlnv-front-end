@@ -1,25 +1,27 @@
+import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+
 export const NHAP_MAIN_ROUTE = 'nhap';
-export const NHAP_ROUTE_LIST = [
+export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Nhập theo kế hoạch',
     url: `/${NHAP_MAIN_ROUTE}/dau-thau`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
-  },
-  {
-    icon: 'htvbdh_tcdt_nhapkhac2',
-    title: 'Nhập khác',
-    url: `/${NHAP_MAIN_ROUTE}/khac`,
-    dropdown: 'khac',
-    idHover: 'khac',
+    hasTab: true,
     children: [
       {
-        data: [
+        icon: 'htvbdh_tcdt_baothoc',
+        title: 'Nhập theo phương thức đấu thầu',
+        hasChild: true,
+        url: '',
+        urlTongCuc: '',
+        urlCuc: '',
+        urlChiCuc: '',
+        children: [
           {
             icon: 'htvbdh_tcdt_baothoc',
             title: 'Thóc',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -28,7 +30,6 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_baogao',
             title: 'Gạo',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -37,7 +38,6 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_muoi',
             title: 'Muối',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -46,7 +46,78 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_ngan-kho',
             title: 'Vật tư',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+            url: '',
+            urlTongCuc: '',
+            urlCuc: '',
+            urlChiCuc: '',
+          },
+        ],
+      },
+      {
+        icon: 'htvbdh_tcdt_baogao',
+        title: 'Nhập theo phương thức mua trực tiếp',
+        hasChild: true,
+        url: '',
+        urlTongCuc: '',
+        urlCuc: '',
+        urlChiCuc: '',
+        children: [
+          {
+            icon: 'htvbdh_tcdt_baothoc',
+            title: 'Thóc',
+            url: '',
+            urlTongCuc: '',
+            urlCuc: '',
+            urlChiCuc: '',
+          },
+        ],
+      },
+    ]
+  },
+  {
+    icon: 'htvbdh_tcdt_nhapkhac2',
+    title: 'Nhập khác',
+    url: `/${NHAP_MAIN_ROUTE}/khac`,
+    dropdown: 'khac',
+    idHover: 'khac',
+    hasTab: true,
+    children: [
+      {
+        icon: 'htvbdh_tcdt_baothoc',
+        title: 'Kế hoạch',
+        hasChild: true,
+        url: '',
+        urlTongCuc: '',
+        urlCuc: '',
+        urlChiCuc: '',
+        children: [
+          {
+            icon: 'htvbdh_tcdt_baothoc',
+            title: 'Thóc',
+            url: '',
+            urlTongCuc: '',
+            urlCuc: '',
+            urlChiCuc: '',
+          },
+          {
+            icon: 'htvbdh_tcdt_baogao',
+            title: 'Gạo',
+            url: '',
+            urlTongCuc: '',
+            urlCuc: '',
+            urlChiCuc: '',
+          },
+          {
+            icon: 'htvbdh_tcdt_muoi',
+            title: 'Muối',
+            url: '',
+            urlTongCuc: '',
+            urlCuc: '',
+            urlChiCuc: '',
+          },
+          {
+            icon: 'htvbdh_tcdt_ngan-kho',
+            title: 'Vật tư',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -55,11 +126,17 @@ export const NHAP_ROUTE_LIST = [
         ]
       },
       {
-        data: [
+        icon: 'htvbdh_tcdt_baothoc',
+        title: 'Tổ chức thực hiện',
+        hasChild: true,
+        url: '',
+        urlTongCuc: '',
+        urlCuc: '',
+        urlChiCuc: '',
+        children: [
           {
             icon: 'htvbdh_tcdt_baothoc',
             title: 'Thóc',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -68,7 +145,6 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_baogao',
             title: 'Gạo',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -77,7 +153,6 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_muoi',
             title: 'Muối',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -86,7 +161,6 @@ export const NHAP_ROUTE_LIST = [
           {
             icon: 'htvbdh_tcdt_ngan-kho',
             title: 'Vật tư',
-            description: 'Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
             url: '',
             urlTongCuc: '',
             urlCuc: '',
@@ -102,5 +176,6 @@ export const NHAP_ROUTE_LIST = [
     url: `/${NHAP_MAIN_ROUTE}/bao-cao`,
     dropdown: 'bao-cao',
     idHover: 'bao-cao',
+    hasTab: false,
   },
 ];

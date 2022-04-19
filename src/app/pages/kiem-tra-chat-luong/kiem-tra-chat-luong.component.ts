@@ -6,15 +6,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NHAP_ROUTE_LIST } from './xuat.constant';
+import { KIEM_TRA_CHAT_LUONG_ROUTE_LIST } from './kiem-tra-chat-luong.constant';
 @Component({
-  selector: 'app-xuat',
-  templateUrl: './xuat.component.html',
-  styleUrls: ['./xuat.component.scss'],
+  selector: 'app-kiem-tra-chat-luong',
+  templateUrl: './kiem-tra-chat-luong.component.html',
+  styleUrls: ['./kiem-tra-chat-luong.component.scss'],
 })
-export class XuatComponent implements OnInit, AfterViewInit {
+export class KiemTraChatLuongComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  routes = NHAP_ROUTE_LIST;
+  routes = KIEM_TRA_CHAT_LUONG_ROUTE_LIST;
   routerUrl: string = "";
 
   constructor(

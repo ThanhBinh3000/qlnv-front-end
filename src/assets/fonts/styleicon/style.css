@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?f0qaho');
-  src:  url('fonts/htvbdh.eot?f0qaho#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?f0qaho') format('truetype'),
-    url('fonts/htvbdh.woff?f0qaho') format('woff'),
-    url('fonts/htvbdh.svg?f0qaho#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?ax96x9');
+  src:  url('fonts/htvbdh.eot?ax96x9#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?ax96x9') format('truetype'),
+    url('fonts/htvbdh.woff?ax96x9') format('woff'),
+    url('fonts/htvbdh.svg?ax96x9#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_ngan-kho-2:before {
+  content: "\eb0f";
+}
+.htvbdh_tcdt_quytrinhkythuat:before {
+  content: "\eb10";
+}
+.htvbdh_tcdt_congtrinhnghiencuu:before {
+  content: "\eb11";
+}
+.htvbdh_tcdt_kiemtrachatluong:before {
+  content: "\eb12";
+}
+.htvbdh_tcdt_dungcuchuyendung:before {
+  content: "\eb13";
+}
+.htvbdh_tcdt_congcudungcu:before {
+  content: "\eb14";
+}
+.htvbdh_tcdt_dinhmucdungcu:before {
+  content: "\eb15";
+}
+.htvbdh_tcdt_dinhmuc2:before {
+  content: "\eb16";
+}
+.htvbdh_tcdt_saphethanluukho:before {
+  content: "\eb0d";
+}
+.htvbdh_tcdt_bienbannghiemthukelot2:before {
+  content: "\eb0e";
+}
+.htvbdh_tcdt_cucdutru3:before {
+  content: "\eb0b";
+}
+.htvbdh_tcdt_cucdutru2:before {
+  content: "\eb0c";
+}
+.htvbdh_tcdt_xuatkhac:before {
+  content: "\eb09";
+}
+.htvbdh_tcdt_xuatkhoban:before {
+  content: "\eb0a";
+}
+.htvbdh_tcdt_tochucthuchien:before {
+  content: "\eb08";
+}
 .htvbdh_tcdt_muoi:before {
   content: "\eb07";
 }

@@ -5,7 +5,7 @@ export const MAIN_ROUTES = {
   muaHang: 'mua-hang',
   nhap: 'nhap',
   luuKho: 'luu-kho',
-  ban: 'ban',
+  banHang: 'ban-hang',
   xuat: 'xuat',
   dieuChuyenNoiBo: 'dieu-chuyen-noi-bo',
   kiemTraChatLuong: 'kiem-tra-chat-luong',
@@ -37,7 +37,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Bán',
-    route: MAIN_ROUTES.ban,
+    route: MAIN_ROUTES.banHang,
   },
   {
     title: 'Xuất',
