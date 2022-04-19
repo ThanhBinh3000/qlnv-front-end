@@ -398,19 +398,23 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
   }
 
   //thay doi trang thai
@@ -438,7 +442,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayNhap = data.data.ngayTao;
+          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR,)
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -674,16 +678,19 @@ async calltonghop(){
   }
 
   xoaBaoCao(){
-    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
-      if(res.statusCode==0){
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        await this.getDetailReport();
-        this.getStatusButton();
+    if(this.id){
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        }else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
       }else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    })
-  }
+    }
 }

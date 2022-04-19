@@ -408,18 +408,22 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR,data?.msg);
-      }
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR,data?.msg);
+        }
 
-    });
-    this.spinner.hide();
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
   //thay doi trang thai
@@ -690,16 +694,19 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   xoaBaoCao(){
-    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
-      if(res.statusCode==0){
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        await this.getDetailReport();
-        this.getStatusButton();
+    if(this.id){
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        }else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
       }else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    })
-  }
+    }
 }
