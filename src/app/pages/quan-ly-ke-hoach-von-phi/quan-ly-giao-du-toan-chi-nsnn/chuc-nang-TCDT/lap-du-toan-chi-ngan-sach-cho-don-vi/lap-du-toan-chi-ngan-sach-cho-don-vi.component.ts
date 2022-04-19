@@ -238,7 +238,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     this.qDinhBTCs.forEach(e => {
       if(id == e.id){
         this.ngayNhap =  this.datePipe.transform(e.ngayQd, Utils.FORMAT_DATE_STR)
-        this.nam = e.nam
       }
     })
   }
