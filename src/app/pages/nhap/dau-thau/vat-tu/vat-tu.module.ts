@@ -1,3 +1,5 @@
+import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
+import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VatTuRoutingModule } from './vat-tu-routing.module';
@@ -23,8 +25,14 @@ import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bie
 import { ThongTinBienBanKetThucNhapKhoComponent } from './thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { ThemQuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang/them-quyet-dinh-giao-nhiem-vu-nhap-hang.component';
-import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
-import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
+import { BienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { ThemBienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { ThemPhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/them-phieu-nhap-kho-tam-gui/them-phieu-nhap-kho-tam-gui.component';
+import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
+import { ThemBienBanGuiHangComponent } from './bien-ban-gui-hang/them-bien-ban-gui-hang/them-bien-ban-gui-hang.component';
+import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
+import { ThemBienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau.component';
+import { BienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/bien-ban-ban-giao-mau.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +58,14 @@ import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan
     ThemQuyetDinhGiaoNhiemVuNhapHangComponent,
     BienBanGiaoNhanComponent,
     ThongTinBienBanGiaoNhanComponent,
+    BienBanChuanBiKhoTruocKhiNhapHangComponent,
+    ThemBienBanChuanBiKhoTruocKhiNhapHangComponent,
+    ThemPhieuNhapKhoTamGuiComponent,
+    PhieuNhapKhoTamGuiComponent,
+    ThemBienBanGuiHangComponent,
+    BienBanGuiHangComponent,
+    ThemBienBanBanGiaoMauComponent,
+    BienBanBanGiaoMauComponent,
   ],
   imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule],
 })

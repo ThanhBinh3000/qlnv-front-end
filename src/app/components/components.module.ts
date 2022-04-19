@@ -80,6 +80,8 @@ import { DialogThongTinDonViThucHienQuyetDinhComponent } from './dialog/dialog-t
 import { DialogCanCuHopDongComponent } from './dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
 import { DialogChiTietHangHoaNhapKhoComponent } from './dialog/dialog-chi-tiet-hang-hoa-nhap-kho/dialog-chi-tiet-hang-hoa-nhap-kho.component';
 import { DialogDanhSachChiTietNganKhoComponent } from './dialog/dialog-danh-sach-chi-tiet-ngan-kho/dialog-danh-sach-chi-tiet-ngan-kho.component';
+import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +111,8 @@ import { DialogDanhSachChiTietNganKhoComponent } from './dialog/dialog-danh-sach
     DialogCanCuHopDongComponent,
     DialogChiTietHangHoaNhapKhoComponent,
     DialogDanhSachChiTietNganKhoComponent,
+    DialogDanhSachHangHoaComponent,
+    DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
     //pipes
     FilterPipe,
   ],

@@ -1,11 +1,19 @@
+import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
+import { BienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/bien-ban-ban-giao-mau.component';
+import { ThemBienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau.component';
+import { BienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { ThemBienBanChuanBiKhoTruocKhiNhapHangComponent } from './bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang.component';
+import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
+import { ThemBienBanGuiHangComponent } from './bien-ban-gui-hang/them-bien-ban-gui-hang/them-bien-ban-gui-hang.component';
 import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
 import { ChiTietThongTinGoiThauComponent } from './chi-tiet-thong-tin-goi-thau/chi-tiet-thong-tin-goi-thau.component';
 import { ChiTietThongTinLCNTComponent } from './chi-tiet-thong-tin-lcnt/chi-tiet-thong-tin-lcnt.component';
 import { HoSoKyThuatVatTuComponent } from './ho-so-ky-thuat-vat-tu/ho-so-ky-thuat-vat-tu.component';
 import { HopDongMuaComponent } from './hop-dong-mua/hop-dong-mua.component';
+import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
+import { ThemPhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/them-phieu-nhap-kho-tam-gui/them-phieu-nhap-kho-tam-gui.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
 import { QuanLyBangCanKeHangComponent } from './quan-ly-bang-can-ke-hang/quan-ly-bang-can-ke-hang.component';
 import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
@@ -106,17 +114,49 @@ const routes: Routes = [
       },
       {
         path: 'bien-ban-giao-nhan',
-        component: BienBanGiaoNhanComponent
+        component: BienBanGiaoNhanComponent,
       },
       {
         path: 'bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/:id',
-        component: ThongTinBienBanGiaoNhanComponent
+        component: ThongTinBienBanGiaoNhanComponent,
       },
-    ]
-  }
-]
+      {
+        path: 'bien-ban-chuan-bi-kho-truoc-khi-nhap-hang',
+        component: BienBanChuanBiKhoTruocKhiNhapHangComponent,
+      },
+      {
+        path: 'bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/them-bien-ban-chuan-bi-kho-truoc-khi-nhap-hang/:id',
+        component: ThemBienBanChuanBiKhoTruocKhiNhapHangComponent,
+      },
+      {
+        path: 'phieu-nhap-kho-tam-gui',
+        component: PhieuNhapKhoTamGuiComponent,
+      },
+      {
+        path: 'phieu-nhap-kho-tam-gui/them-phieu-nhap-kho-tam-gui/:id',
+        component: ThemPhieuNhapKhoTamGuiComponent,
+      },
+      {
+        path: 'bien-ban-gui-hang',
+        component: BienBanGuiHangComponent,
+      },
+      {
+        path: 'bien-ban-gui-hang/them-bien-ban-gui-hang/:id',
+        component: ThemBienBanGuiHangComponent,
+      },
+      {
+        path: 'bien-ban-ban-giao-mau',
+        component: BienBanBanGiaoMauComponent,
+      },
+      {
+        path: 'bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau/:id',
+        component: ThemBienBanBanGiaoMauComponent,
+      },
+    ],
+  },
+];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class VatTuRoutingModule { }
+export class VatTuRoutingModule {}
