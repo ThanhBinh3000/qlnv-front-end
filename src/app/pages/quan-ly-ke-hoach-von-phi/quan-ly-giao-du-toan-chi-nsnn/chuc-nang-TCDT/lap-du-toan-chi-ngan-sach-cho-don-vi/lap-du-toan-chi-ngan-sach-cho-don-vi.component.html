@@ -81,27 +81,21 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle="Quyết định BTC">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" >
-                  <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" (ngModelChange)="changeQdinhBTC($event)" >
+                  <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.soQd" ></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định" >
                 {{ngayNhap }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm" >
-                <form nz-form  [formGroup]="validateForm" class="login-form" >
-                <nz-form-item>
-                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input type="number" nz-input   formControlName="nam" [(ngModel)]="nam"/>
-                  </nz-form-control>
-                </nz-form-item>
-              </form>
+                <input class="search__input" nz-input [(ngModel)]="nam" disabled/>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Lần lập thứ">
                 {{lanLapThu}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ghi chú">
-                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input   [(ngModel)]="ghiChu"></textarea>
+                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input spellcheck="false" [(ngModel)]="ghiChu"></textarea>
               </nz-descriptions-item>
             </nz-descriptions>
         </div>
@@ -114,17 +108,17 @@
             <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
               <div nz-col nzSpan="6" >
                 <label class="search__label">Đ/v thực hiện:</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" >
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" (ngModelChange)="changeMaCucKhuVuc($event)">
                   <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                 </nz-select>
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label" >Mã ngân sách:</label>
-                <input class="search__input" nz-input [(ngModel)]="maNganSach" />
+                <input class="search__input" nz-input [(ngModel)]="maNganSach" disabled/>
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Mã số KBNN</label>
-                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" disabled/>
               </div>
               <div nz-col nzSpan="6">
                 <div class="search__label">Đơn vị Tiền:
@@ -191,9 +185,6 @@
                           {{item.thongTin}}
                         </div>
                       </div>
-                    </td>
-                    <td>
-                           {{editCache[data.id].data.tong}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"

@@ -712,6 +712,12 @@ dMucBcaoDuyet(): Observable<any> {
         "trangThai": "",
       })
   }
+  //lay danh sach quyet dinh BTC 3.2.6
+  dmQuyetDinhBTC(): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach',)
+  }
 
   //lấy danh sach các đơn vị thuộc quyền quản lý bởi tổng cục hoặc khu vực ( Tổng cục lấy các khu vực do tổng cục đó quản lý)
   dmDonViThuocQuanLy(request:any):Observable<any>{
