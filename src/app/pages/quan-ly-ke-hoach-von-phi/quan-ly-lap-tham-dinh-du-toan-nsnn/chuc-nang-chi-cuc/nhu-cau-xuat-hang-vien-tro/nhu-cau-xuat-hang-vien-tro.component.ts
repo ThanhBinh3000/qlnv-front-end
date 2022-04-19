@@ -337,6 +337,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
+      listIdDeletes: this.listIdDelete,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao:ob,

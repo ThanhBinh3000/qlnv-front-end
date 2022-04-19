@@ -321,6 +321,7 @@ getStatusButton(){
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao:ob,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -648,5 +649,19 @@ getStatusButton(){
       });
       this.updateEditCache()
       this.spinner.hide();
+      }
+
+      xoaBaoCao(){
+        this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+          if(res.statusCode==0){
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            await this.getDetailReport();
+            this.getStatusButton();
+          }else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        },err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
       }
 }
