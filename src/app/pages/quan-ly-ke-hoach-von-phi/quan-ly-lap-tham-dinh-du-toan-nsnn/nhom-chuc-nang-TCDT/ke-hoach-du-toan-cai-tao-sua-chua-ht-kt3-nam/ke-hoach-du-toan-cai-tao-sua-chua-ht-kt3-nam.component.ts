@@ -316,6 +316,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -638,4 +639,20 @@ changeModel(id: string): void {
 
 }
 
+xoaBaoCao(){
+  if(this.id){
+    this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+      if(res.statusCode==0){
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        this.location.back();
+      }else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    },err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    }else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+  }
 }
