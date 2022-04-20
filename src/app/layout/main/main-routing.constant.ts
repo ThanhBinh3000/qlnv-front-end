@@ -20,7 +20,7 @@ export const MAIN_ROUTES = {
 
 export const LIST_PAGES: RouteInfo[] = [
   {
-    title: 'Kế hoạch DTNN',
+    title: 'Kế hoạch',
     route: `${MAIN_ROUTES.kehoach}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
   },
   {
