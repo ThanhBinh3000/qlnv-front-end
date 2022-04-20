@@ -66,7 +66,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
-  messageValidate:any = MESSAGEVALIDATE;
+  
   listDonViTien:any []=DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
@@ -86,7 +86,6 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
-  validateForm!: FormGroup;
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -98,15 +97,11 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     private route:Router,
     private notification : NzNotificationService,
     private location: Location,
-    private fb: FormBuilder,
   ) {}
 
   async ngOnInit() {
     
-    this.validateForm = this.fb.group({
-      namBcaohienhanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-      temp: [null],
-    });
+    
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -405,18 +400,25 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -445,10 +447,11 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   // luu
   async luu() {
     let checkSaveEdit;
-    if(!this.donvitien){
+    if(!this.donvitien || !this.namBcaohienhanh){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
+    
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {

@@ -90,7 +90,12 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
+                <ng-container *ngIf="status;else nbc">
+                  {{namBcaohienhanh}}
+                </ng-container>
+                <ng-template #nbc>
+                    <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh" [class]="namBcaohienhanh >= 1000 &&  namBcaohienhanh <= 2999 ?'' : 'input-error-validate'">
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -177,7 +182,7 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenVban" />
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenVban" [class]="editCache[data.id].data.tenVban ?'' : 'input-error-validate'"/>
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản" [(ngModel)]="editCache[data.id].data.maHthucVban" [class]="editCache[data.id].data.maHthucVban ?'' : 'input-error-validate'">
@@ -185,7 +190,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDkien"/>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDkien" [class]="editCache[data.id].data.tgianDkien ?'' : 'input-error-validate'"/>
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì" [(ngModel)]="editCache[data.id].data.maDviChuTri" [class]="editCache[data.id].data.maDviChuTri ?'' : 'input-error-validate'">
@@ -193,13 +198,13 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.dviPhop"/>
+                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.dviPhop" [class]="editCache[data.id].data.dviPhop ?'' : 'input-error-validate'"/>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanKphi"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanKphi" [class]="editCache[data.id].data.dtoanKphi || editCache[data.id].data.dtoanKphi ===0 ?'' : 'input-error-validate'"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan"/>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan" [class]="editCache[data.id].data.dviPhop ?'' : 'input-error-validate'"/>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>

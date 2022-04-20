@@ -80,6 +80,7 @@
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+        <form nz-form  [formGroup]="validateForm" class="login-form" >
         <div class="widget-body">
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
@@ -96,7 +97,14 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
+                <ng-container *ngIf="status;else nbc">
+                  {{namBaoCaoHienHanh}}
+                </ng-container>
+                <ng-template #nbc>
+                  <nz-form-control [nzErrorTip]="messageValidate.INVALIDFORMAT">
+                    <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh" formControlName="namBcaohienhanh">
+                    </nz-form-control>
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -107,6 +115,7 @@
             </nz-descriptions>
           </div>
         </div>
+      </form>
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
@@ -203,13 +212,13 @@
                     </td>
                     <ng-container *ngFor="let item of editCache[data.id].data.listCtiet">
                       <td>
-                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n1"></nz-input-number>
+                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n1" [class]="item.n1 || item.n1 === 0 ?'' : 'input-error-validate'"></nz-input-number>
                       </td>
                       <td>
-                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n2"></nz-input-number>
+                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n2" [class]="item.n2 || item.n2 === 0?'' : 'input-error-validate'"></nz-input-number>
                       </td>
                       <td>
-                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n3"></nz-input-number>
+                        <nz-input-number class="search__input" nzSize="small" [(ngModel)]="item.n3" [class]="item.n3 || item.n3 === 0?'' : 'input-error-validate'"></nz-input-number>
                       </td>
                     </ng-container>
                     <td>

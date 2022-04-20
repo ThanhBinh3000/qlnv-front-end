@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
 
@@ -71,7 +72,8 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-
+  messageValidate:any = MESSAGEVALIDATE;
+  validateForm: FormGroup;
   listDonViTien:any [] = DONVITIEN;
   cucKhuVucs: any = [];
 
@@ -114,9 +116,16 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     private route:Router,
     private notification : NzNotificationService,
     private location: Location,
+    private fb:FormBuilder,
   ) {}
 
   async ngOnInit() {
+    
+    this.validateForm = this.fb.group({
+      namBcaohienhanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      temp: [null],
+    });
+    
     let userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
 
@@ -344,19 +353,24 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       maChucNang: mcn,
       type: '',
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
+    
   }
 
   //check all input
@@ -434,14 +448,12 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(!this.editCache[id].data.maLoaiKhoach){
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
+    if(!this.editCache[id].data.ndung || !this.editCache[id].data.maLoaiKhoach || !this.editCache[id].data.maLoaiDan
+      || (!this.editCache[id].data.tongDtoanGtri  && this.editCache[id].data.tongDtoanGtri !==0)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if(!this.editCache[id].data.maLoaiDan){
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
-      return;
-    }
+    
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -479,18 +491,25 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -520,7 +539,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   async luu() {
 
     let checkSaveEdit;
-    if(!this.donvitien){
+    if(!this.donvitien || this.namBcaohienhanh){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -549,10 +568,6 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         e.id = null;
       }
     })
-    // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
     // gui du lieu trinh duyet len server
 
     // lay id file dinh kem
@@ -581,8 +596,6 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       namHienHanh: this.namBcaohienhanh,
     };
     this.spinner.show();
-    console.log(request);
-
     if (this.id != null) {
       this.quanLyVonPhiService.updatelist(request).subscribe(async (res) => {
         if (res.statusCode == 0) {
@@ -655,6 +668,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   //call tong hop
   calltonghop(){
     this.spinner.hide();
+    this.donvitien = '1';
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
@@ -663,7 +677,6 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
-            // this.namBaoCao = this.namBcao;
             this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];
