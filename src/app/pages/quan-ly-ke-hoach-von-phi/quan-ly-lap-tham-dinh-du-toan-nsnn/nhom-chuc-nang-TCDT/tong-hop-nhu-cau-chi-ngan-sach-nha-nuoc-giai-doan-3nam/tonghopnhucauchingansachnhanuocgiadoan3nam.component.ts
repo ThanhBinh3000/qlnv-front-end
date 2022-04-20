@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, mulMoney, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -67,7 +67,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-
+  listDonViTien:any = DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -302,19 +302,24 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       maChucNang: mcn,
       type: '',
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
+    
   }
 
   //check all input
@@ -390,14 +395,15 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(!this.editCache[id].data.maNdung){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if(!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChiNsnn 
+      || (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !==0) 
+      || (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !==0)
+      || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !==0)
+      || (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !==0)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if(!this.editCache[id].data.maNhomChiNsnn){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -435,18 +441,25 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -480,7 +493,10 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
     this.lstCTietBCao.filter( item => {
       item.dtoanN = mulMoney(item.dtoanN, this.donvitien);
       item.uocThienN = mulMoney(item.uocThienN, this.donvitien);
@@ -610,7 +626,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
 
   //call tong hop
   calltonghop(){
-   
+   this.donvitien = '1';
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
@@ -619,9 +635,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
     this.spinner.show();
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
-          console.log(res);
             this.lstCTietBCao = res.data;
-            // this.namBaoCao = this.namBcao;
             this.namBcaohienhanh = this.currentday.getFullYear();
             if(this.lstCTietBCao==null){
                 this.lstCTietBCao =[];

@@ -90,7 +90,12 @@
                 {{mabaocao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh">
+                <ng-container *ngIf="status;else nbc">
+                  {{namBcaohienhanh}}
+                </ng-container>
+                <ng-template #nbc>                  
+                    <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBcaohienhanh"  [class]="namBcaohienhanh >= 1000 &&  namBcaohienhanh <= 2999 ?'' : 'input-error-validate'">
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
                 {{getStatusName()}}
@@ -108,11 +113,8 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien?'' : 'input-error-validate'">
+                  <nz-option *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
                 </nz-select>
                 <!-- </div> -->
               </div>
@@ -226,12 +228,12 @@
                   <ng-template #editTemplate>
                     <td>{{i + 1}}</td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn lĩnh vực chi" [(ngModel)]="editCache[data.id].data.maLvuc">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn lĩnh vực chi" [(ngModel)]="editCache[data.id].data.maLvuc" [class]="editCache[data.id].data.maLvuc?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of listlinhvucchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại mục chi" [(ngModel)]="editCache[data.id].data.maMucChi">
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại mục chi" [(ngModel)]="editCache[data.id].data.maMucChi" [class]="editCache[data.id].data.maMucChi?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of listMucchi" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

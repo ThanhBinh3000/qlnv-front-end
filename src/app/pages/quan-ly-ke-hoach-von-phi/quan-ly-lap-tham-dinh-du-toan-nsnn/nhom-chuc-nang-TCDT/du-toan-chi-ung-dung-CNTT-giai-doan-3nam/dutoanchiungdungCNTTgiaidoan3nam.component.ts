@@ -72,8 +72,6 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-  messageValidate:any = MESSAGEVALIDATE;
-  validateForm: FormGroup;
   listDonViTien:any [] = DONVITIEN;
   cucKhuVucs: any = [];
 
@@ -116,15 +114,10 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     private route:Router,
     private notification : NzNotificationService,
     private location: Location,
-    private fb:FormBuilder,
   ) {}
 
   async ngOnInit() {
-    
-    this.validateForm = this.fb.group({
-      namBcaohienhanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-      temp: [null],
-    });
+   
     
     let userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
@@ -539,8 +532,12 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   async luu() {
 
     let checkSaveEdit;
-    if(!this.donvitien || this.namBcaohienhanh){
+    if(!this.donvitien || !this.namBcaohienhanh){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     this.lstCTietBCao.filter(element => {

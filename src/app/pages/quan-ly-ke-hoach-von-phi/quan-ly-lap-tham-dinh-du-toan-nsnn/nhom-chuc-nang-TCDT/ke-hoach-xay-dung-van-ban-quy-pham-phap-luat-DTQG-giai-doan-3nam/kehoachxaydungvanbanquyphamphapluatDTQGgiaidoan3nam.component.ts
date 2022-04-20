@@ -479,7 +479,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       return;
     }
     if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
-      this.notification.warning(MESSAGE.WARNING, 'HEHE');
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     //tinh đon vi tien

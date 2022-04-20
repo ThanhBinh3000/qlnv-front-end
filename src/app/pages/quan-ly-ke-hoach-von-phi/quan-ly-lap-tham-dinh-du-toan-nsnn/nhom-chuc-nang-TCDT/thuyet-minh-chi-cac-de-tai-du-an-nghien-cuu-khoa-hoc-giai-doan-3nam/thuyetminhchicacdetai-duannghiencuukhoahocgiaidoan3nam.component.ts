@@ -451,7 +451,10 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {

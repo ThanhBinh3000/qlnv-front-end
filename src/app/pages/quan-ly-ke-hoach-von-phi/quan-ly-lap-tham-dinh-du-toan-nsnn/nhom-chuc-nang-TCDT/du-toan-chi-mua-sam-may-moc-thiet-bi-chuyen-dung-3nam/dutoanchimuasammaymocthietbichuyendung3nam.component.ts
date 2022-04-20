@@ -74,9 +74,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
   listIdDeleteVtus: string = "";
-  messageValidate:any = MESSAGEVALIDATE;
   listDonViTien:any []= DONVITIEN;
-  validateForm:FormGroup;
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -107,15 +105,9 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     private route: Router,
     private notification: NzNotificationService,
     private location: Location,
-    private fb:FormBuilder,
   ) { }
 
   async ngOnInit() {
-    
-    this.validateForm = this.fb.group({
-      namBcaohienhanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-      temp: [null],
-    });
     await this.danhMucService.dMDonVi().toPromise().then(data => {
       if (data.statusCode == 0) {
         this.donVis = data.data;
@@ -534,11 +526,14 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   async luu() {
     
     let checkSaveEdit;
-    if(!this.maDviTien || this.namBaoCaoHienHanh){
+    if(!this.maDviTien || !this.namBaoCaoHienHanh){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
     this.lstCTietBCao.forEach(e => {
       if (this.editCache[e.id].edit === true) {
         checkSaveEdit = false
