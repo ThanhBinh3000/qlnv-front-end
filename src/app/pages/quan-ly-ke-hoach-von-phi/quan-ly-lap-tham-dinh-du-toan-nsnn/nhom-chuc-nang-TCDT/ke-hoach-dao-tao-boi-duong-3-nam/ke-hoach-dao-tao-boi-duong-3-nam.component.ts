@@ -391,22 +391,24 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(
-      (data) => {
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
-          this.getDetailReport();
+          await this.getDetailReport();
           this.getStatusButton();
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        } else {
+        }else{
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
-      },
-      err => {
+      },err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-    this.spinner.hide();
+      });
+      this.spinner.hide();
+      this.updateEditCache();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
   //thay doi trang thai
@@ -538,18 +540,25 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // click o checkbox all
@@ -632,6 +641,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   //call tong hop
   async calltonghop(){
     this.spinner.show();
+    this.maDviTien = "1"
     let objtonghop={
         maDvi: this.maDonViTao,
         maLoaiBcao: this.maLoaiBaoCao,

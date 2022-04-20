@@ -82,7 +82,7 @@
                 <a routerLink="../{{url}}/{{ item.id }}">
                   xem
                 </a>
-              </td >
+              </td>
               <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
                 sửa
               </td>
@@ -99,8 +99,9 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
-                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>

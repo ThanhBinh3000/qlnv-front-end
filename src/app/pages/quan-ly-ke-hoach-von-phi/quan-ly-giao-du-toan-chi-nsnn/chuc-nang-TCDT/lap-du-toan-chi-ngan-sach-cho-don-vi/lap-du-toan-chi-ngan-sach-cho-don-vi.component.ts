@@ -25,7 +25,7 @@ export class ItemData {
   dtoanDaPbo!: number;
   pboChoCacDvi!: number;
   ghiChu!: string;
-  checked!:boolean;
+  checked!: boolean;
   id!: any;
 }
 
@@ -40,9 +40,9 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   userInfo: any;
   errorMessage!: String;                      //
   ngayQd!: any;
-  maKhoanMucs:any = [];                          // danh muc nhom chi
+  maKhoanMucs: any = [];                          // danh muc nhom chi
 
-  donVis:any = [];                            // danh muc don vi
+  donVis: any = [];                            // danh muc don vi
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -80,22 +80,11 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
   maCucDtnnKvucs: any = [];
-  capDv:any;
+  capDv: any;
 
   maNganSach!: any;
-  maSoKBNN!:any;
+  maSoKBNN!: any;
   lanLapThu!: number;
-  tongCong: ItemData = {
-    id: "",
-    tenLoaiKhoan: "",
-    maNdung: 0,
-    uocThien: 0,
-    dtoanGiao: 0,
-    dtoanDaPbo: 0,
-    pboChoCacDvi: 0,
-    ghiChu: "",
-    checked: true,
-  };
   khoanMucs: any = [];
   qDinhBTCs: any = [];
   ghiChu!: any
@@ -109,8 +98,14 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   vanBan!: any;
   nguoiKy!: any;
   validateForm!: FormGroup;
-  messageValidate:any =MESSAGEVALIDATE;
+  messageValidate: any = MESSAGEVALIDATE;
   noiDung: any;
+
+  tongUocThien: any;
+  tongDtoanGiao: any;
+  tongDtoanDaPbo: any;
+  tongPboChoCacDvi: any;
+
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -136,25 +131,25 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
 
 
   constructor(private router: Router,
-              private routerActive: ActivatedRoute,
-              private spinner: NgxSpinnerService,
-              private quanLyVonPhiService: QuanLyVonPhiService,
-              private sanitizer: DomSanitizer,
-              private danhMucService: DanhMucHDVService,
-              private userService: UserService,
-              private notification: NzNotificationService,
-              private modal: NzModalService,
-              private location: Location,
-              private datePipe: DatePipe,
-              private fb:FormBuilder,
-              ) {
-                // this.ngayNhap =  this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
-              }
+    private routerActive: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
+    private sanitizer: DomSanitizer,
+    private danhMucService: DanhMucHDVService,
+    private userService: UserService,
+    private notification: NzNotificationService,
+    private modal: NzModalService,
+    private location: Location,
+    private datePipe: DatePipe,
+    private fb: FormBuilder,
+  ) {
+    // this.ngayNhap =  this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR)
+  }
 
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
-      nam: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      nam: [null, [Validators.required, Validators.pattern('^[12][0-9]{3}$')]],
       temp: [null],
     });
     this.id = this.routerActive.snapshot.paramMap.get('id');
@@ -187,13 +182,10 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          var Dvi = this.donVis.find(e =>  e.maDvi == this.maDonViTao);
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
 
           this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2');
-
-
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -203,19 +195,19 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       }
     );
 
-  this.danhMucService.dMKhoanMuc().toPromise().then(
-    (data) => {
-      if (data.statusCode == 0) {
-        this.maKhoanMucs = data.data?.content;
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
+    this.danhMucService.dMKhoanMuc().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.maKhoanMucs = data.data?.content;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    },
-    (err) => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  );
-  this.danhMucService.dmQuyetDinhBTC().toPromise().then(
+    );
+    this.danhMucService.dmQuyetDinhBTC().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           let qDinhCuaBtc = data.data
@@ -230,22 +222,22 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       (err) => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-  )
+    )
 
     this.spinner.hide();
   }
 
-  changeQdinhBTC(id: any){
+  changeQdinhBTC(id: any) {
     this.qDinhBTCs.forEach(e => {
-      if(id == e.id){
-        this.ngayNhap =  this.datePipe.transform(e.ngayQd, Utils.FORMAT_DATE_STR)
+      if (id == e.id) {
+        this.ngayNhap = this.datePipe.transform(e.ngayQd, Utils.FORMAT_DATE_STR)
       }
     })
   }
 
-  changeMaCucKhuVuc(maDvi: any){
+  changeMaCucKhuVuc(maDvi: any) {
     this.maCucDtnnKvucs.forEach(e => {
-      if(maDvi == e.maDvi){
+      if (maDvi == e.maDvi) {
         this.maNganSach = e.maNsnn;
         this.maSoKBNN = e.maKbnn;
       }
@@ -342,7 +334,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-      },err =>{
+      }, err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -368,10 +360,10 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       if (data.statusCode == 0) {
         this.getDetailReport();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
-    },err => {
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.spinner.hide();
@@ -412,7 +404,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           } else {
             this.status = true;
           }
-          var idDanhMuc  = this.lstCTietBCao[0].maNdung;
+          var idDanhMuc = this.lstCTietBCao[0].maNdung;
           let requestReport = {
             id: idDanhMuc,
           };
@@ -433,10 +425,10 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(res => {
             if (data.statusCode == 0) {
               var tempArr = res.data;
-              tempArr.forEach(e =>{
+              tempArr.forEach(e => {
                 this.khoanMucs.push(e);
-                e.lstQlnvDmKhoachVonPhi.forEach( el => {
-                this.khoanMucs.push(el);
+                e.lstQlnvDmKhoachVonPhi.forEach(el => {
+                  this.khoanMucs.push(el);
                 })
               })
               this.khoanMucs.forEach(e => {
@@ -445,7 +437,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
             } else {
               this.notification.error(MESSAGE.ERROR, data?.msg);
             }
-           })
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -491,12 +483,12 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if(item.checked == true && typeof item.id == "number"){
+      if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
+    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
     this.allChecked = false;
   }
 
@@ -555,13 +547,13 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   }
 
   // lay ten trang thai
-  getStatusName(){
+  getStatusName() {
     const utils = new Utils();
     return utils.getStatusName(this.trangThaiBanGhi);
   }
 
   // lay ten don vi tao
-  getUnitName(){
+  getUnitName() {
     return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
   }
 
@@ -585,6 +577,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.tinhTong1();
   }
 
   // gan editCache.data == lstCTietBCao
@@ -615,64 +608,72 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
     var danhSach = this.khoanMucs
     const modalIn = this.modal.create({
-         nzTitle: 'Danh sách khoản mục',
-         nzContent: DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
-         nzMaskClosable: false,
-         nzClosable: false,
-         nzWidth: '600px',
-         nzFooter: null,
-         nzComponentParams: {
-              danhSachKhoanMuc: danhSach
-         },
+      nzTitle: 'Danh sách khoản mục',
+      nzContent: DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '600px',
+      nzFooter: null,
+      nzComponentParams: {
+        danhSachKhoanMuc: danhSach
+      },
     });
     modalIn.afterClose.subscribe((res) => {
-         if (res) {
-           this.maKhoanMucs.forEach(e => {
-             if(res.id == e.id){
-                this.khoanMucs.push({id: e.id, thongTin: e.thongTin})
-                return res.id = e.id
-                }
-           })
-          this.lstCTietBCao.push({
-            id: uuid.v4(),
-            tenLoaiKhoan: "I",
-            maNdung: res.id,
-            uocThien: 0,
-            dtoanGiao: 0,
-            dtoanDaPbo: 0,
-            pboChoCacDvi: 0,
-            ghiChu: "",
-            checked: false,
-       });
-              res.danhSachKhoanMuc.forEach(item => {
-                   if (item.status) {
-                        this.lstCTietBCao.push({
-                             id: uuid.v4(),
-                             tenLoaiKhoan: item.tenDm,
-                             maNdung: item.id,
-                             uocThien: 0,
-                             dtoanGiao: 0,
-                             dtoanDaPbo: 0,
-                             pboChoCacDvi: 0,
-                             ghiChu: "",
-                             checked: false,
-                        });
-                   }
-              })
-              this.updateEditCache();
-         }
+      if (res) {
+        this.maKhoanMucs.forEach(e => {
+          if (res.id == e.id) {
+            this.khoanMucs.push({ id: e.id, thongTin: e.thongTin })
+            return res.id = e.id
+          }
+        })
+        this.lstCTietBCao.push({
+          id: uuid.v4(),
+          tenLoaiKhoan: "I",
+          maNdung: res.id,
+          uocThien: 0,
+          dtoanGiao: 0,
+          dtoanDaPbo: 0,
+          pboChoCacDvi: 0,
+          ghiChu: "",
+          checked: false,
+        });
+        res.danhSachKhoanMuc.forEach(item => {
+          if (item.status) {
+            this.lstCTietBCao.push({
+              id: uuid.v4(),
+              tenLoaiKhoan: item.tenDm,
+              maNdung: item.id,
+              uocThien: 0,
+              dtoanGiao: 0,
+              dtoanDaPbo: 0,
+              pboChoCacDvi: 0,
+              ghiChu: "",
+              checked: false,
+            });
+          }
+        })
+        this.updateEditCache();
+      }
     });
-}
-
-  changeTong(id: string): void {
-    let index = this.lstCTietBCao.findIndex(item => item.id == id);
-    // this.editCache[id].data.tong = this.editCache[id].data.nguonNsnn + this.editCache[id].data.nguonKhac;
-    // this.lstCTietBCao.forEach(e => {
-    //   this.editCache[id].data.tong = e[index].tong;
-    // })
   }
 
-  nhapQdTongCuc(){
+  changeTong(id: string): void {
+    this.editCache[id].data.dtoanGiao = this.editCache[id].data.dtoanDaPbo + this.editCache[id].data.pboChoCacDvi;
+  }
+  tinhTong1(){
+    this.tongUocThien = 0
+    this.tongDtoanGiao = 0
+    this.tongPboChoCacDvi = 0
+    this.tongDtoanDaPbo = 0
+    this.lstCTietBCao.forEach(e => {
+      this.tongUocThien += e.uocThien;
+      this.tongDtoanDaPbo += e.dtoanDaPbo;
+      this.tongPboChoCacDvi += e.pboChoCacDvi
+      this.tongDtoanGiao = this.tongDtoanDaPbo + this.tongPboChoCacDvi;
+    })
+  }
+
+  nhapQdTongCuc() {
     this.router.navigate(['/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi']);
   }
 }

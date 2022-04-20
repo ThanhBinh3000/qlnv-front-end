@@ -297,7 +297,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,   // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      listIdDeletes: this.listIdDelete,                   
+      listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -355,19 +355,24 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       maChucNang: mcn,
       type: "",
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+      this.updateEditCache();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
   //thay doi trang thai
@@ -493,18 +498,25 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // click o checkbox all
@@ -586,6 +598,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   //call tong hop
   calltonghop(){
     this.spinner.hide();
+    this.maDviTien = "1"
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
