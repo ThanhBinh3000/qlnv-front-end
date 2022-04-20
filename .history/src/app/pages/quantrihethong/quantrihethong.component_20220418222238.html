@@ -8,7 +8,7 @@
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
       <li class="nav-item" data-toggle="collapse" data-target="#collapsnav" *ngFor="let route of routes, let i = index">
-        <span (click)="routerNavigate(route.url)" class="nav-link" [ngClass]="route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''" nz-popover
+        <span class="nav-link" [ngClass]="route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''" nz-popover
           title nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
           (mouseenter)="updateCssOverlay()">
           <i class="icon" [ngClass]="route.icon"></i>
