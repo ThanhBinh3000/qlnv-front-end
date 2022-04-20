@@ -100,7 +100,9 @@
                   {{namBaoCaoHienHanh}}
                 </ng-container>
                 <ng-template #nbc>
-                  <input type="number" nz-input class="input__search" name="" id="" [(ngModel)]="namBaoCaoHienHanh">
+                  <input type="number" nz-input class="input__search" name="" id=""
+                    [class]="namBaoCaoHienHanh && namBaoCaoHienHanh < 3000 && namBaoCaoHienHanh > 999 ?'' : 'input-error-validate' "
+                    [(ngModel)]="namBaoCaoHienHanh">
                 </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Trạng thái">
