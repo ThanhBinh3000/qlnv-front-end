@@ -6,4 +6,5 @@ export const MESSAGEVALIDATE = {
 
     NOTEMPTYS:'Vui lòng nhập giá trị cho các trường bôi đỏ!',
     NOTSAVE:'Vui lòng lưu các trường dữ liệu trong bảng!',
+    WRONG_FORMAT: 'Vui lòng nhập đúng định dạng',
   };

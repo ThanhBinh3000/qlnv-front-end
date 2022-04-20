@@ -86,6 +86,7 @@
      <div class="contentDetail">
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
+                    <form nz-form  [formGroup]="validateForm" class="login-form" >
                     <div class="widget-body">
                          <div>
                               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
@@ -103,17 +104,24 @@
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                                        <input type="number" nz-input class="input__search" name="" id=""
-                                             [(ngModel)]="namBaoCaoHienHanh">
+                                        <ng-container *ngIf="status;else nbc">
+                                             {{namBaoCaoHienHanh}}
+                                        </ng-container>
+                                        <ng-template #nbc>
+                                             <nz-form-control [nzErrorTip]="messageValidate.INVALIDFORMAT">
+                                                  <input type="number" nz-input class="input__search" [(ngModel)]="namBaoCaoHienHanh"
+                                                       formControlName="namBaoCaoHienHanh" />
+                                             </nz-form-control>
+                                        </ng-template>
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
                                    </nz-descriptions-item>
                                    <ng-container *ngIf="!checkDv">
-                                        <nz-descriptions-item nzTitle="Số VB gửi TC" >
+                                        <nz-descriptions-item nzTitle="Số VB gửi TC">
                                              {{soVban}}
                                         </nz-descriptions-item>
-                                   </ng-container>                                   
+                                   </ng-container>
                                    <nz-descriptions-item nzTitle="Loại báo cáo">
                                         Dự toán chi mua sắm máy móc thiết bị chuyên dụng 3 năm
                                    </nz-descriptions-item>
@@ -121,6 +129,7 @@
                               </nz-descriptions>
                          </div>
                     </div>
+               </form>
                </nz-card>
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
@@ -200,7 +209,8 @@
                                                   <td>{{ i + 1 }}</td>
 
                                                   <td>
-                                                       <nz-select nzShowSearch nzAllowClear class="my-ant" [class]="editCache[data.id].data.maTbi?'' : 'input-error-validate' "
+                                                       <nz-select nzShowSearch nzAllowClear class="my-ant"
+                                                            [class]="editCache[data.id].data.maTbi?'' : 'input-error-validate' "
                                                             nzPlaceHolder="Chọn nội dung"
                                                             [(ngModel)]="editCache[data.id].data.maTbi">
                                                             <nz-option *ngFor="let item of listMachitieu"
@@ -209,18 +219,21 @@
                                                   </td>
 
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" [class]="editCache[data.id].data.n1 || editCache[data.id].data.n1 === 0 ?'' : 'input-error-validate' "
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            [class]="editCache[data.id].data.n1 || editCache[data.id].data.n1 === 0 ?'' : 'input-error-validate' "
                                                             nzSize="small" [(ngModel)]="editCache[data.id].data.n1">
                                                        </nz-input-number>
                                                   </td>
 
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" [class]="editCache[data.id].data.n2 || editCache[data.id].data.n2 === 0?'' : 'input-error-validate' "
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            [class]="editCache[data.id].data.n2 || editCache[data.id].data.n2 === 0?'' : 'input-error-validate' "
                                                             nzSize="small" [(ngModel)]="editCache[data.id].data.n2">
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
-                                                       <nz-input-number class="search__input" [nzStep]="1" [class]="editCache[data.id].data.n3 || editCache[data.id].data.n3 === 0 ?'' : 'input-error-validate' "
+                                                       <nz-input-number class="search__input" [nzStep]="1"
+                                                            [class]="editCache[data.id].data.n3 || editCache[data.id].data.n3 === 0 ?'' : 'input-error-validate' "
                                                             nzSize="small" [(ngModel)]="editCache[data.id].data.n3">
                                                        </nz-input-number>
                                                   </td>

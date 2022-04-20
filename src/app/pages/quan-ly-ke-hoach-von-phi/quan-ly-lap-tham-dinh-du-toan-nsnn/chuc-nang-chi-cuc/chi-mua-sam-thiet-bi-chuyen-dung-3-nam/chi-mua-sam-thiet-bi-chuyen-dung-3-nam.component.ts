@@ -13,6 +13,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   id: any;
@@ -94,6 +95,9 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   checkDv: boolean;
   currentday: Date = new Date();
 
+  messageValidate:any =MESSAGEVALIDATE;
+  validateForm!: FormGroup;
+
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -126,12 +130,17 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
     private location: Location,
+    private fb:FormBuilder,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
   }
 
 
   async ngOnInit() {
+    this.validateForm = this.fb.group({
+      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    });
+
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
     this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -265,8 +274,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   // luu
   async luu() {
     let checkSaveEdit;
-    if (!this.maDviTien) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (!this.validateForm.valid){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     //check xem tat ca cac dong du lieu da luu chua?
@@ -517,18 +530,25 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // click o checkbox all

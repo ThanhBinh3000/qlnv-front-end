@@ -13,6 +13,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { C, L } from '@angular/cdk/keycodes';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 export class superMiniData {
@@ -536,20 +537,26 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
-
   // lay ten trang thai
   getStatusName() {
     const utils = new Utils();
@@ -731,7 +738,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (!this.editCache[id].data.maCucDtnnKvuc) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
@@ -950,8 +957,10 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
   // luu thay doi
   saveEdit1(id: string): void {
-    if (!this.editCache1[id].data.maVtuTbi) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if (!this.editCache1[id].data.maVtuTbi ||
+        (!this.editCache1[id].data.cphiXuatCoDmuc && this.editCache1[id].data.cphiXuatCoDmuc !== 0) ||
+        (!this.editCache1[id].data.cphiXuatChuaDmuc && this.editCache1[id].data.cphiXuatChuaDmuc !== 0)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this.editCache1[id].data.checked = this.lstVtu.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
@@ -1113,7 +1122,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     })
     if (kt) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
       this.deleteById1(id);
       this.addLine1(index + 1);
     }
@@ -1129,7 +1138,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
       }
     })
     if (kt) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_UNIT);
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.ERROR_ADD_UNIT);
       this.deleteById(id);
       this.addLine(index + 1);
     }
