@@ -100,14 +100,15 @@
                                    <nz-descriptions-item nzTitle="Mã báo cáo">
                                         {{maBaoCao}}
                                    </nz-descriptions-item>
-                                   <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)" >
-                                    <form nz-form  [formGroup]="validateForm" class="login-form" >
-
-                                      <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                                        <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" formControlName="namBaoCaoHienHanh"/>
-                                      </nz-form-control>
-
-                                    </form>
+                                   <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
+                                    <ng-container *ngIf="status;else nbc">
+                                      {{namBaoCaoHienHanh}}
+                                    </ng-container>
+                                    <ng-template #nbc>
+                                      <input type="number" nz-input class="input__search"
+                                        [class]="namBaoCaoHienHanh >= 1000 &&  namBaoCaoHienHanh <= 2999 ?'' : 'input-error-validate'"
+                                        name="" id="" [(ngModel)]="namBaoCaoHienHanh" />
+                                    </ng-template>
                                   </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
                                         {{getStatusName()}}
@@ -122,18 +123,30 @@
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
                          <nz-tab [nzTitle]="'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'">
-                              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                   <div nz-col class="gutter-row" [nzSpan]="3">
-                                        <!-- <div class="inner-box">Đơn vị: -->
-                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                                             <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                                             <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                                             <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                                             <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                                        </nz-select>
-                                        <!-- </div> -->
-                                   </div>
+                          <ng-container *ngIf="status;else templateName">
+                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                              <div nz-col class="gutter-row" [nzSpan]="3">
+                                Đơn vị:
+                                <div *ngFor="let item of donViTiens">
+                                  <div *ngIf="item.id == maDviTien">
+                                    {{item.tenDm}}
+                                  </div>
+                                </div>
                               </div>
+                            </div>
+                          </ng-container>
+                          <ng-template #templateName>
+                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                              <div nz-col class="gutter-row" [nzSpan]="3">
+                                <!-- <div class="inner-box">Đơn vị: -->
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                  [class]="maDviTien ?'' : 'input-error-validate' ">
+                                  <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                                </nz-select>
+                                <!-- </div> -->
+                              </div>
+                            </div>
+                          </ng-template>
                               <nz-table nzBordered class="table__body">
                                    <thead>
                                         <tr>
@@ -255,6 +268,7 @@
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại"
+                                                       [class]="editCache[data.id].data.maLoai ?'' : 'input-error-validate' "
                                                             [(ngModel)]="editCache[data.id].data.maLoai">
                                                             <nz-option *ngFor="let item of maLoais" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
@@ -262,6 +276,7 @@
                                                   </td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khoản"
+                                                       [class]="editCache[data.id].data.maKhoan ?'' : 'input-error-validate' "
                                                             [(ngModel)]="editCache[data.id].data.maKhoan">
                                                             <nz-option *ngFor="let item of maKhoans" [nzValue]="item.id"
                                                                  [nzLabel]="item.tenDm"></nz-option>
@@ -269,6 +284,7 @@
                                                   </td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chỉ mục"
+                                                       [class]="editCache[data.id].data.maChiMuc ?'' : 'input-error-validate' "
                                                             [(ngModel)]="editCache[data.id].data.maChiMuc">
                                                             <nz-option *ngFor="let item of maChiMucs"
                                                                  [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
@@ -276,6 +292,7 @@
                                                   </td>
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                                                       [class]="editCache[data.id].data.maDvi ?'' : 'input-error-validate' "
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
                                                             <nz-option *ngFor="let item of maCucDtnnKvucs"
                                                                  [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -284,32 +301,32 @@
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN1">
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN1" [class]="editCache[data.id].data.soLuotNguoiN1 ?'' : 'input-error-validate' " >
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN1">
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN1" [class]="editCache[data.id].data.thanhTienN1 || editCache[data.id].data.thanhTienN1 ===0 ?'' : 'input-error-validate' ">
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN2">
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN2" [class]="editCache[data.id].data.soLuotNguoiN2 ?'' : 'input-error-validate' " >
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN2">
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN2" [class]="editCache[data.id].data.thanhTienN2 || editCache[data.id].data.thanhTienN2 ===0 ?'' : 'input-error-validate' ">
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN3">
+                                                            [(ngModel)]="editCache[data.id].data.soLuotNguoiN3" [class]="editCache[data.id].data.soLuotNguoiN3 ?'' : 'input-error-validate' " >
                                                        </nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
-                                                            [(ngModel)]="editCache[data.id].data.thanhTienN3">
+                                                            [(ngModel)]="editCache[data.id].data.thanhTienN3" [class]="editCache[data.id].data.thanhTienN3 || editCache[data.id].data.thanhTienN3 ===0 ?'' : 'input-error-validate' ">
                                                        </nz-input-number>
                                                   </td>
 

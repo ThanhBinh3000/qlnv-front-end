@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -55,7 +55,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: any;                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -93,6 +93,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   currentday: Date = new Date();
   validateForm!: FormGroup;
   messageValidate:any =MESSAGEVALIDATE;
+  donViTiens: any = DONVITIEN;
 
   // upload file
   addFile() {
@@ -280,6 +281,31 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // luu
   async luu() {
+
+    let checkSaveEdit;
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.filter(element => {
+      element.khoachChiNsnnN1 = mulMoney(element.khoachChiNsnnN1, this.maDviTien);
+      element.khoachChiNsnnN2 = mulMoney(element.khoachChiNsnnN2, this.maDviTien);
+      element.khoachChiNsnnN3 = mulMoney(element.khoachChiNsnnN3, this.maDviTien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -579,11 +605,14 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-    this.tinhtong();
+    if (!this.editCache[id].data.maNdungChi || !this.editCache[id].data.chiTiet) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    } else {
+      this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+      const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+      Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    }
   }
 
   // gan editCache.data == lstCTietBCao
