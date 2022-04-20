@@ -18,13 +18,13 @@ import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
 
 export class ItemData {
-  tenDm!: string;
+  tenLoaiKhoan!: string;
   maNdung!: number;
-  uocThucHienNam!: number;
-  duToanGiao2021!: number;
-  duToanDapBo!: number;
-  pBoChoDviTT!: number;
-  tong!: number;
+  uocThien!: number;
+  dtoanGiao!: number;
+  dtoanDaPbo!: number;
+  pboChoCacDvi!: number;
+  ghiChu!: string;
   checked!:boolean;
   id!: any;
 }
@@ -87,13 +87,13 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   lanLapThu!: number;
   tongCong: ItemData = {
     id: "",
-    tenDm: "",
+    tenLoaiKhoan: "",
     maNdung: 0,
-    uocThucHienNam: 0,
-    duToanDapBo: 0,
-    duToanGiao2021: 0,
-    pBoChoDviTT: 0,
-    tong: 0,
+    uocThien: 0,
+    dtoanGiao: 0,
+    dtoanDaPbo: 0,
+    pboChoCacDvi: 0,
+    ghiChu: "",
     checked: true,
   };
   khoanMucs: any = [];
@@ -110,6 +110,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   nguoiKy!: any;
   validateForm!: FormGroup;
   messageValidate:any =MESSAGEVALIDATE;
+  noiDung: any;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -310,14 +311,14 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       maQdCha: this.maQdCha,
       nam: this.nam,
       ngayQD: this.ngayQd,
-      noiDung: "1",
+      // noiDung: "1",
       noiQd: this.noiQd,
       soQd: this.soQd,
       tenDvi: this.tenDvi,
       trangThai: "1",
       vanBan: this.vanBan,
       veViec: this.veViec,
-      ghiChu: this.ghiChu,
+      noiDung: this.noiDung,
     };
     //call service them moi
     this.spinner.show();
@@ -634,26 +635,26 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
            })
           this.lstCTietBCao.push({
             id: uuid.v4(),
-            tenDm: "I",
+            tenLoaiKhoan: "I",
             maNdung: res.id,
-            uocThucHienNam: 0,
-            duToanDapBo: 0,
-            duToanGiao2021: 0,
-            pBoChoDviTT: 0,
-            tong: 0,
+            uocThien: 0,
+            dtoanGiao: 0,
+            dtoanDaPbo: 0,
+            pboChoCacDvi: 0,
+            ghiChu: "",
             checked: false,
        });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({
                              id: uuid.v4(),
-                             tenDm: item.tenDm,
+                             tenLoaiKhoan: item.tenDm,
                              maNdung: item.id,
-                             uocThucHienNam: 0,
-                             duToanDapBo: 0,
-                             duToanGiao2021: 0,
-                             pBoChoDviTT: 0,
-                             tong: 0,
+                             uocThien: 0,
+                             dtoanGiao: 0,
+                             dtoanDaPbo: 0,
+                             pboChoCacDvi: 0,
+                             ghiChu: "",
                              checked: false,
                         });
                    }

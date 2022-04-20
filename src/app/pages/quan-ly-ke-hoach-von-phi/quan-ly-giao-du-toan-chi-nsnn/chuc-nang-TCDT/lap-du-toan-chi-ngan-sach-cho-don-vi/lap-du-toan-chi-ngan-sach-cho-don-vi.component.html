@@ -89,13 +89,17 @@
                 {{ngayNhap }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm" >
-                <input class="search__input" nz-input [(ngModel)]="nam"/>
+                <form nz-form  [formGroup]="validateForm" class="login-form" >
+                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                    <input type="number" nz-input  [(ngModel)]="nam"  formControlName="nam"/>
+                  </nz-form-control>
+                </form>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Lần lập thứ">
                 {{lanLapThu}}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Ghi chú">
-                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input spellcheck="false" [(ngModel)]="ghiChu"></textarea>
+              <nz-descriptions-item nzTitle="Nội dung">
+                <textarea [nzAutosize]="{ minRows: 3, maxRows: 5 }" class="search__input" nz-input spellcheck="false" [(ngModel)]="noiDung"></textarea>
               </nz-descriptions-item>
             </nz-descriptions>
         </div>
@@ -158,7 +162,7 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.tenDm}}
+                      {{data.tenLoaiKhoan}}
                     </td>
                     <div>
                       <div *ngFor="let item of khoanMucs">
@@ -167,17 +171,17 @@
                         </div>
                       </div>
                     </div>
-                    <td>{{data.uocThucHienNam}}</td>
-                    <td>{{data.duToanGiao2021}}</td>
-                    <td>{{data.duToanDapBo}}</td>
-                    <td>{{data.pBoChoDviTT}}</td>
+                    <td>{{data.uocThien}}</td>
+                    <td>{{data.dtoanGiao}}</td>
+                    <td>{{data.dtoanDaPbo}}</td>
+                    <td>{{data.pboChoCacDvi}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                     </td>
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.tenDm}}
+                      {{editCache[data.id].data.tenLoaiKhoan}}
                     </td>
                     <td>
                       <div *ngFor="let item of khoanMucs">
@@ -188,28 +192,28 @@
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.uocThucHienNam"
+                           [(ngModel)]="editCache[data.id].data.uocThien"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.duToanGiao2021"
+                           [(ngModel)]="editCache[data.id].data.dtoanGiao"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.duToanDapBo"
+                           [(ngModel)]="editCache[data.id].data.dtoanDaPbo"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.pBoChoDviTT"
+                           [(ngModel)]="editCache[data.id].data.pboChoCacDvi"
                            (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
-                      <a (click)="saveEdit(data.id)" class="save">Save</a>
+                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Cancel</a>
+                        class="save">Hủy</a>
                     </td>
                     <!-- <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
@@ -220,16 +224,16 @@
                   <td></td>
                   <td>Tổng cộng</td>
                   <td>
-                       {{tongCong?.uocThucHienNam}}
+                       {{tongCong?.uocThien}}
                   </td>
                   <td>
-                       {{tongCong?.duToanGiao2021}}
+                       {{tongCong?.dtoanGiao}}
                   </td>
                   <td>
-                       {{tongCong?.duToanDapBo}}
+                       {{tongCong?.dtoanDaPbo}}
                   </td>
                   <td>
-                       {{tongCong?.pBoChoDviTT}}
+                       {{tongCong?.pboChoCacDvi}}
                   </td>
                 </tr>
               </tbody>
