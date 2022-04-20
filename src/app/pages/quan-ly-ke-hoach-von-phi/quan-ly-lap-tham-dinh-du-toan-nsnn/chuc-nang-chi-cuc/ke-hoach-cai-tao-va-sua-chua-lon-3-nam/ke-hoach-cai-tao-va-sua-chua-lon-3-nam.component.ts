@@ -308,8 +308,12 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      // luu
      async luu() {
           let checkSaveEdit;
-          if (!this.maDviTien) {
+          if (!this.maDviTien || !this.namBaoCaoHienHanh) {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
                return;
           }
           //check xem tat ca cac dong du lieu da luu chua?
