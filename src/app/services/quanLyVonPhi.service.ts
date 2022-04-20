@@ -385,4 +385,9 @@ export class QuanLyVonPhiService extends BaseService {
   xoaBaoCao(id:any):Observable<any>{
     return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/xoa/' +id);
   }
+
+  //download file tu he thong chung
+  downloadFile(fileUrl:any):Observable<any>{
+    return this.httpClient.get(this.urlDefault + '/qlnv-core/file/' +fileUrl,{responseType: 'blob'});
+  }
 }
