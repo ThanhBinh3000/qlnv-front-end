@@ -81,7 +81,7 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle="Quyết định BTC">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="qDinhBTC" (ngModelChange)="changeQdinhBTC($event)" >
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định Bộ Tài Chính" [(ngModel)]="maQdCha" (ngModelChange)="changeQdinhBTC($event)" >
                   <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.soQd" ></nz-option>
                 </nz-select>
               </nz-descriptions-item>
@@ -89,7 +89,7 @@
                 {{ngayNhap }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm" >
-                <input class="search__input" nz-input [(ngModel)]="nam" disabled/>
+                <input class="search__input" nz-input [(ngModel)]="nam"/>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Lần lập thứ">
                 {{lanLapThu}}
