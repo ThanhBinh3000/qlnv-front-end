@@ -297,6 +297,27 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   async luu() {
+    let checkSaveEdit;
+    if (!this.namBaoCaoHienHanh) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.forEach(element => {
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));

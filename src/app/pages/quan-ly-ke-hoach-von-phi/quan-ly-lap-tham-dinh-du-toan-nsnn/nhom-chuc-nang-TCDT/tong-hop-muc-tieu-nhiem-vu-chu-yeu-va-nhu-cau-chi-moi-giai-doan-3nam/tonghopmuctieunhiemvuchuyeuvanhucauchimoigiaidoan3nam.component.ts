@@ -6,12 +6,13 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData{
   id:any;
@@ -66,6 +67,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
+  listDonViTien:any [] = DONVITIEN;
 
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
@@ -223,6 +225,19 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.donvitien = data.data.maDviTien;
+          this.lstCTietBCao.filter(item =>{
+            item.nguonKphi = divMoney(item.nguonKphi, this.donvitien);
+            item.tongSo = divMoney(item.tongSo, this.donvitien);
+            item.chiCs = divMoney(item.chiCs, this.donvitien);
+            item.chiMoi = divMoney(item.chiMoi, this.donvitien);
+            item.dtuPtrien = divMoney(item.dtuPtrien, this.donvitien);
+            item.dtuPtrienChiCs = divMoney(item.dtuPtrienChiCs, this.donvitien);
+            item.dtuPtrienChiMoi = divMoney(item.dtuPtrienChiMoi, this.donvitien);
+            item.chiTx = divMoney(item.chiTx, this.donvitien);
+            item.chiTxChiCs = divMoney(item.chiTxChiCs, this.donvitien);
+            item.chiTxChiMoi = divMoney(item.chiTxChiMoi, this.donvitien);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N;
@@ -274,19 +289,24 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       maChucNang: mcn,
       type: '',
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE. MESSAGE_DELETE_WARNING);
+    }
+    
   }
 
   //check all input
@@ -409,18 +429,25 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -449,15 +476,41 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
   // luu
   async luu() {
 
+    let checkSaveEdit;
+    if(!this.donvitien || !this.namBcaohienhanh){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+    this.lstCTietBCao.filter(item =>{
+      item.nguonKphi = mulMoney(item.nguonKphi, this.donvitien);
+      item.tongSo = mulMoney(item.tongSo, this.donvitien);
+      item.chiCs = mulMoney(item.chiCs, this.donvitien);
+      item.chiMoi = mulMoney(item.chiMoi, this.donvitien);
+      item.dtuPtrien = mulMoney(item.dtuPtrien, this.donvitien);
+      item.dtuPtrienChiCs = mulMoney(item.dtuPtrienChiCs, this.donvitien);
+      item.dtuPtrienChiMoi = mulMoney(item.dtuPtrienChiMoi, this.donvitien);
+      item.chiTx = mulMoney(item.chiTx, this.donvitien);
+      item.chiTxChiCs = mulMoney(item.chiTxChiCs, this.donvitien);
+      item.chiTxChiMoi = mulMoney(item.chiTxChiMoi, this.donvitien);
+      if(this.editCache[item.id].edit ===true){
+        checkSaveEdit = false;
+      }
+    })
+
+    if(checkSaveEdit===false){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
       }
     })
-    // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+   
     // gui du lieu trinh duyet len server
 
     // lay id file dinh kem
@@ -561,12 +614,13 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
 
   //call tong hop
   calltonghop(){
-    this.spinner.hide();
+    this.donvitien = '1';
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
         namHienTai: this.nam,
     }
+    this.spinner.show();
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
         if(res.statusCode==0){
             this.lstCTietBCao = res.data;
@@ -596,7 +650,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
     },err => {
       this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
     })
-    this.spinner.show();
+    this.spinner.hide();
 }
 
 //gia tri cac o input thay doi thi tinh toan lai
