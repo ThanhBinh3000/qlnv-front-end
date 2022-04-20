@@ -6,13 +6,14 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
+import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { miniData } from '../du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct.component';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class MiniData {
   id!: any;
@@ -64,7 +65,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   namBaoCaoHienHanh: any = new Date().getFullYear();                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: string;                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -72,6 +73,8 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
   listIdDeleteVtus: string = "";
+
+  listDonViTien:any []= DONVITIEN;
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -171,7 +174,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       );
     }
     //get danh muc chi tiêu
-    await this.danhMucService.dMChiTieu().toPromise().then(
+    await this.danhMucService.dMVatTu().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTieus = data.data?.content;
@@ -240,6 +243,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       (data) => {
         if (data.statusCode == 0) {
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.maDviTien = data.data.maDviTien;
           this.lstCTietBCao.forEach(data => {
             var mm: MiniData[] = [];
             this.cucKhuVucs.forEach(item => {
@@ -499,6 +503,21 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   // luu
   async luu() {
     
+    let checkSaveEdit;
+    if(!this.maDviTien){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    
+    this.lstCTietBCao.forEach(e => {
+      if (this.editCache[e.id].edit === true) {
+        checkSaveEdit = false
+      }
+    })
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     this.lstCTietBCao.forEach(e => {
       if (typeof e.id != "number") {
         e.id = null;
@@ -544,9 +563,12 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        (res) => {
+        async (res) => {
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = res.data.id;
+            await this.getDetailReport();
+            this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -651,34 +673,37 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
       if (res.statusCode == 0) {
         this.lstCTietBCao = res.data;
-        // this.namBaoCao = this.namBcao;
         this.namBaoCaoHienHanh = this.currentday.getFullYear();
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
         }else{
-          this.cucKhuVucs.forEach( e =>{
-
-          })
+         
           this.lstCTietBCao.forEach(e => {
-            
               this.cucKhuVucs.forEach(item => {
                 var idx = e.listCtiet.findIndex( (i) => i.maDvi ==item.maDvi);
                 if(idx==-1){
                     var obJect = {
                       id!: uuid.v4(),
-                      maDvi: '',
+                      maDvi: item.maDvi,
                       n1: 0,
                       n2: 0,
                       n3: 0,
                     }
                   e.listCtiet.push(obJect);
+                }else{
+                  e.listCtiet[idx].id = uuid.v4();
                 }
               })
-          
+            
+            const index = this.lstCTietBCao.findIndex((item) => item.id === e.id);
+            this.tinhTong(index); 
             e.id = uuid.v4();
           })
+          
+          this.updateEditCache();
+          console.log(this.lstCTietBCao);
         }
-        this.updateEditCache();
+        
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -708,6 +733,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     })
   }
 
+ 
   dong(){
     this.location.back();
   }

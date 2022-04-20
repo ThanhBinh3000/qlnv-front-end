@@ -114,11 +114,8 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate'">
+                  <nz-option *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
                 </nz-select>
                 <!-- </div> -->
               </div>
@@ -199,7 +196,7 @@
                         </nz-option>
                       </nz-select> -->
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại chỉ tiêu"
-                        [(ngModel)]="editCache[data.id].data.maVtuTbi">
+                        [(ngModel)]="editCache[data.id].data.maVtuTbi" [class]="editCache[data.id].data.maVtuTbi ?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of chiTieus" [nzValue]="item.id" [nzLabel]="item.tenDm">
                         </nz-option>
                       </nz-select>

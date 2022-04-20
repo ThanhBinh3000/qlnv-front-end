@@ -6,12 +6,13 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
 
@@ -71,6 +72,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
+  listDonViTien:any [] = DONVITIEN;
   cucKhuVucs: any = [];
 
   capDvi:any;
@@ -280,6 +282,19 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.donvitien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.thienNamTruoc = divMoney(element.thienNamTruoc, this.donvitien);
+            element.tongDtoanGtri = divMoney(element.tongDtoanGtri, this.donvitien);
+            element.dtoanThienNCb = divMoney(element.dtoanThienNCb, this.donvitien);
+            element.dtoanThienNTh = divMoney(element.dtoanThienNTh, this.donvitien);
+            element.dtoanThienN1Cb = divMoney(element.dtoanThienN1Cb, this.donvitien);
+            element.dtoanThienN1Th = divMoney(element.dtoanThienN1Th, this.donvitien);
+            element.dtoanThienN2Cb = divMoney(element.dtoanThienN2Cb, this.donvitien);
+            element.dtoanThienN2Th = divMoney(element.dtoanThienN2Th, this.donvitien);
+            element.dtoanThienN3Cb = divMoney(element.dtoanThienN3Cb, this.donvitien);
+            element.dtoanThienN3Th = divMoney(element.dtoanThienN3Th, this.donvitien);
+          });
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
@@ -420,11 +435,11 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   //update khi sửa
   saveEdit(id: string): void {
     if(!this.editCache[id].data.maLoaiKhoach){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
       return;
     }
     if(!this.editCache[id].data.maLoaiDan){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
@@ -503,6 +518,31 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
 
   // luu
   async luu() {
+
+    let checkSaveEdit;
+    if(!this.donvitien){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    this.lstCTietBCao.filter(element => {
+      element.thienNamTruoc = mulMoney(element.thienNamTruoc, this.donvitien);
+      element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.donvitien);
+      element.dtoanThienNCb = mulMoney(element.dtoanThienNCb, this.donvitien);
+      element.dtoanThienNTh = mulMoney(element.dtoanThienNTh, this.donvitien);
+      element.dtoanThienN1Cb = mulMoney(element.dtoanThienN1Cb, this.donvitien);
+      element.dtoanThienN1Th = mulMoney(element.dtoanThienN1Th, this.donvitien);
+      element.dtoanThienN2Cb = mulMoney(element.dtoanThienN2Cb, this.donvitien);
+      element.dtoanThienN2Th = mulMoney(element.dtoanThienN2Th, this.donvitien);
+      element.dtoanThienN3Cb = mulMoney(element.dtoanThienN3Cb, this.donvitien);
+      element.dtoanThienN3Th = mulMoney(element.dtoanThienN3Th, this.donvitien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
 
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){

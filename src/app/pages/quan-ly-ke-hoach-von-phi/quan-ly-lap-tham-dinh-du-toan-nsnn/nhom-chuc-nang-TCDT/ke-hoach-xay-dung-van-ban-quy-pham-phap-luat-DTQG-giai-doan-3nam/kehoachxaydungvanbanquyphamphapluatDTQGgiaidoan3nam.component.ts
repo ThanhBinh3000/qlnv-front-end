@@ -377,11 +377,11 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   //update khi sửa
   saveEdit(id: string): void {
     if(!this.editCache[id].data.maHthucVban){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
       return;
     }
     if(!this.editCache[id].data.maDviChuTri){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.NULL_ERROR);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(

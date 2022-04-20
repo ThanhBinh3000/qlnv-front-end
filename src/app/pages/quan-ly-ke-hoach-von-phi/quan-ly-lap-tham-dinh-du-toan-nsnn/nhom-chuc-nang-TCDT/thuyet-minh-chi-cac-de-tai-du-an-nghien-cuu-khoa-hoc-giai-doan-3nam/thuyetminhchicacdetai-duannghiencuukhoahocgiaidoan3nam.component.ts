@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   id!: any;
@@ -65,7 +66,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
-
+  messageValidate:any = MESSAGEVALIDATE;
   listDonViTien:any []=DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
@@ -85,7 +86,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
-
+  validateForm!: FormGroup;
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -97,9 +98,15 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     private route:Router,
     private notification : NzNotificationService,
     private location: Location,
+    private fb: FormBuilder,
   ) {}
 
   async ngOnInit() {
+    
+    this.validateForm = this.fb.group({
+      namBcaohienhanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+      temp: [null],
+    });
     //check param dieu huong router
     this.id = this.router.snapshot.paramMap.get('id');
     this.maDvi = this.router.snapshot.paramMap.get('maDvi');
@@ -349,8 +356,16 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(!this.editCache[id].data.maDvi){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if( !this.editCache[id].data.tenDtaiDanNckh || !this.editCache[id].data.maDvi 
+      || (!this.editCache[id].data.tgianBdau && this.editCache[id].data.tgianBdau !== 0)
+      || (!this.editCache[id].data.tgianKthuc && this.editCache[id].data.tgianKthuc !==0) 
+      || (!this.editCache[id].data.kphiTongPhiDuocDuyet && this.editCache[id].data.kphiTongPhiDuocDuyet !==0)
+      || (!this.editCache[id].data.kphiDaDuocBoTriDenNamN && this.editCache[id].data.kphiDaDuocBoTriDenNamN !==0)
+      || (!this.editCache[id].data.kphiDaDuocThienDenTdiemBcao && this.editCache[id].data.kphiDaDuocThienDenTdiemBcao !==0)
+      || (!this.editCache[id].data.kphiDkienBtriN1 && this.editCache[id].data.kphiDkienBtriN1 !==0)
+      || (!this.editCache[id].data.kphiDkienBtriN2 && this.editCache[id].data.kphiDkienBtriN2 !==0)
+      || (!this.editCache[id].data.kphiDkienBtriN3 && this.editCache[id].data.kphiDkienBtriN3 !==0)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
@@ -362,7 +377,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
-  cancelEdit(id: string): void {
+  cancelEdit(id: string): void {    
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
@@ -590,6 +605,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   //call tong hop
   async calltonghop(){
     this.spinner.show();
+    this.donvitien = '1'
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
