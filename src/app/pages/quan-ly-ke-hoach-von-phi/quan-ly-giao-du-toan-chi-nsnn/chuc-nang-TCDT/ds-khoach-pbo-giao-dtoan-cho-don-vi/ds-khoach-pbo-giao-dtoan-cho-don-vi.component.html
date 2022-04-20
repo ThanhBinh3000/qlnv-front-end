@@ -58,11 +58,11 @@
           <thead>
             <tr>
               <th width="60px" class="text-center">STT</th>
-              <th width="130px" class="text-center">Số quyết định</th>
+              <th width="130px" class="text-center">Quyết định BTC</th>
               <th width="175px" class="text-center">Ngày quyết định</th>
               <th width="175px" class="text-center">Năm</th>
               <th width="175px" class="text-center">Ngày lập</th>
-              <th width="175px" class="text-center">Đơn vị lập</th>
+              <th width="175px" class="text-center">Lần lập thứ</th>
               <th width="175px" class="text-center">Trạng thái</th>
               <th></th>
               <th></th>
@@ -71,7 +71,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of danhSachBaoCao; let i = index">
-              <td style="display: none">{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td class="text-center">{{ item.soQd }}</td>
               <td class="text-center">{{item.ngayQd}}</td>
               <td class="text-center">{{item.nam}}</td>
@@ -82,7 +82,7 @@
                 <a routerLink="../{{url}}/{{ item.id }}">
                   xem
                 </a>
-              </td >
+              </td>
               <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
                 sửa
               </td>
@@ -99,8 +99,9 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
-                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>

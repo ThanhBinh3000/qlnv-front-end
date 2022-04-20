@@ -7,7 +7,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
+import { DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -64,7 +64,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: any;                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -96,6 +96,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   fileList: NzUploadFile[] = [];
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
+  donViTiens: any = DONVITIEN;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -290,6 +291,38 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
 
   // luu
   async luu() {
+    let checkSaveEdit;
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.filter(element => {
+      element.bcheGiaoN1 = mulMoney(element.bcheGiaoN1, this.maDviTien);
+      element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+      element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      element.ccvcDuKienCoMatN1LuongTheoBac = mulMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
+      element.ccvcDuKienCoMatN1Pcap = mulMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
+      element.ccvcDuKienCoMatN1Ckdg = mulMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
+      element.quyLuongTangNangBacLuongN1 = mulMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+      element.bcheChuaSdungLuong = mulMoney(element.bcheChuaSdungLuong, this.maDviTien);
+      element.bcheChuaSdungCkdg = mulMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+      element.quyLuongPcapTheoHdld = mulMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -523,18 +556,25 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   updateAllChecked(): void {
@@ -622,6 +662,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   //call tong hop
   async calltonghop(){
     this.spinner.show();
+    this.maDviTien="1"
     let objtonghop={
         maDvi: this.maDonViTao,
         maLoaiBcao: this.maLoaiBaoCao,
