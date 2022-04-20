@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { SYSTYPE_CONFIRM } from 'src/app/constants/config';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 export class ItemData{
@@ -64,6 +66,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
+  listDonViTien:any []= DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -83,7 +86,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   fileUrl: any;
   fileToUpload!: File;
   listFileUploaded: any = [];
-
   constructor(
     private nguoiDungSerivce: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -98,6 +100,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   ) {}
 
   async ngOnInit() {
+    
     let userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
 
@@ -239,6 +242,10 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.donvitien = data.data.maDviTien;
+          this.lstCTietBCao.filter(item =>{
+            item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
+          })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
@@ -289,19 +296,24 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       maChucNang: mcn,
       type: '',
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else{
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).subscribe(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }else{
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
+    
   }
 
   //check all input
@@ -370,14 +382,14 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(!this.editCache[id].data.maHthucVban){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if(!this.editCache[id].data.tenVban || !this.editCache[id].data.maHthucVban 
+      ||  !this.editCache[id].data.tgianDkien || !this.editCache[id].data.maDviChuTri
+      || !this.editCache[id].data.dviPhop || (!this.editCache[id].data.dtoanKphi && this.editCache[id].data.dtoanKphi !==0) 
+      || !this.editCache[id].data.ccuLapDtoan){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if(!this.editCache[id].data.maDviChuTri){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -415,18 +427,25 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -454,16 +473,32 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
   // luu
   async luu() {
-
+    let checkSaveEdit;
+    if(!this.donvitien || !this.namBcaohienhanh){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+    //tinh đon vi tien
+    this.lstCTietBCao.filter(item => {
+      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
+      if (this.editCache[item.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
       }
     })
-    // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+    
     // gui du lieu trinh duyet len server
 
     // lay id file dinh kem
@@ -565,6 +600,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   //call tong hop
   calltonghop(){
     this.spinner.hide();
+    this.donvitien ='1';
     let objtonghop={
         maDvi: this.maDvi,
         maLoaiBcao: this.maLoaiBacao,
@@ -585,7 +621,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
     },err =>{
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
     this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
         if (res.statusCode == 0) {
