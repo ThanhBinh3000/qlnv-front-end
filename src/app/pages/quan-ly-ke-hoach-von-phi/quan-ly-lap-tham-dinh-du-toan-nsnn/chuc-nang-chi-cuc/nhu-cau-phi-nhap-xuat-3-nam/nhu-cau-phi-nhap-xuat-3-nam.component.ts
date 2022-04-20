@@ -6,12 +6,13 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
      stt!: number;
@@ -39,6 +40,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      nhomChis: any = [];
      loaiChis: any = [];
      dviTinhs: any = [];
+     donViTiens: any = DONVITIEN;                        // danh muc don vi tien
      listBaoCao: ItemData[] = [];
      lstCTietBCao: ItemData[] = [];
      id!: any;
@@ -58,7 +60,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      namBaoCaoHienHanh!: any;
      trangThaiBanGhi: string = "1";
      maLoaiBaoCao: string = QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N;
-     maDviTien: string = "01";
+     maDviTien: string;
      newDate = new Date();
      fileToUpload!: File;
      listFile: File[] = [];
@@ -295,6 +297,24 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      // luu
      async luu() {
+          let checkSaveEdit;
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          //check xem tat ca cac dong du lieu da luu chua?
+          //chua luu thi bao loi, luu roi thi cho di
+          this.lstCTietBCao.filter(element => {
+               element.dmucPhiTc = mulMoney(element.dmucPhiTc, this.maDviTien);
+               element.thanhTien = mulMoney(element.thanhTien, this.maDviTien);
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
           let listFile: any = [];
           for (const iterator of this.listFile) {
                listFile.push(await this.uploadFile(iterator));
@@ -306,10 +326,6 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     item.id = null;
                }
           })
-
-          if (this.maDviTien != "") {
-               this.maDviTien = '01';
-          }
 
           // gui du lieu trinh duyet len server
           let request = {
@@ -370,24 +386,29 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      // chuc nang check role
      async onSubmit(mcn: String) {
-          const requestGroupButtons = {
-               id: this.id,
-               maChucNang: mcn,
-               type: "",
-          };
-          this.spinner.show();
-          this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-               if (data.statusCode == 0) {
-                    await this.getDetailReport();
-                    this.getStatusButton();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-               } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-               }
-          }, err => {
-               this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          });
-          this.spinner.hide();
+          if (this.id) {
+               const requestGroupButtons = {
+                    id: this.id,
+                    maChucNang: mcn,
+                    type: "",
+               };
+               this.spinner.show();
+               this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+                    if (data.statusCode == 0) {
+                         await this.getDetailReport();
+                         this.getStatusButton();
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               }, err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+               });
+               this.spinner.hide();
+          } else {
+               this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+          }
+
      }
 
      //thay doi trang thai
@@ -403,6 +424,11 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.maDviTien = data.data.maDviTien;
+                         this.lstCTietBCao.filter(element => {
+                              element.dmucPhiTc = divMoney(element.dmucPhiTc, this.maDviTien);
+                              element.thanhTien = divMoney(element.thanhTien, this.maDviTien);
+                         });
                          this.lstCTietBCao.forEach(e => {
                               this.tong += e.thanhTien;
                          })
@@ -518,18 +544,25 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
      }
 
      //download file về máy tính
-     downloadFile(id: string) {
+     async downloadFile(id: string) {
           let file!: File;
-          this.listFile.forEach(element => {
-               if (element?.lastModified.toString() == id) {
-                    file = element;
+          file = this.listFile.find(element => element?.lastModified.toString() == id);
+          if (!file) {
+               let fileAttach = this.lstFile.find(element => element?.id == id);
+               if (fileAttach) {
+                    await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                         (data) => {
+                              fileSaver.saveAs(data, fileAttach.fileName);
+                         },
+                         err => {
+                              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                         },
+                    );
                }
-          });
-          const blob = new Blob([file], { type: "application/octet-stream" });
-          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-               window.URL.createObjectURL(blob)
-          );
-          fileSaver.saveAs(blob, file.name);
+          } else {
+               const blob = new Blob([file], { type: "application/octet-stream" });
+               fileSaver.saveAs(blob, file.name);
+          }
      }
 
      // click o checkbox all
@@ -593,6 +626,13 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      // luu thay doi
      saveEdit(id: string): void {
+          if (!this.editCache[id].data.maVtu ||
+               !this.editCache[id].data.maNhomChi ||
+               !this.editCache[id].data.maLoaiChi ||
+               !this.editCache[id].data.maDviTinh) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+               return;
+          }
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           this.tong += this.editCache[id].data.thanhTien - this.lstCTietBCao[index].thanhTien;
@@ -617,6 +657,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      async calltonghop() {
           this.spinner.show();
+          this.maDviTien = "1";
           let objtonghop = {
                maDvi: this.maDonViTao,
                maLoaiBcao: this.maLoaiBaoCao,

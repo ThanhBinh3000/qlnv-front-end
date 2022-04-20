@@ -6,12 +6,13 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   id: any;
@@ -41,6 +42,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   maKhoans: any = [];
   maChiMucs: any = [];
   cucKhuVucs: any = [];
+  donViTiens: any = DONVITIEN;                        // danh muc don vi tien
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   tong: ItemData = {
     id: uuid.v4(),
@@ -72,7 +74,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: string;                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -318,6 +320,26 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // luu
   async luu() {
+
+    let checkSaveEdit;
+    if(!this.maDviTien){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.forEach(element => {
+      element.thanhTienN1 = mulMoney(element.thanhTienN1, this.maDviTien);
+      element.thanhTienN2 = mulMoney(element.thanhTienN2, this.maDviTien);
+      element.thanhTienN3 = mulMoney(element.thanhTienN3, this.maDviTien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -338,7 +360,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien = '01',
+      maDviTien: this.maDviTien,
       maLoaiBcao: QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N,
       namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
@@ -387,24 +409,28 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: String) {
-    const requestGroupButtons = {
-      id: this.id,
-      maChucNang: mcn,
-      type: "",
-    };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if (this.id) {
+      const requestGroupButtons = {
+        id: this.id,
+        maChucNang: mcn,
+        type: "",
+      };
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
   //thay doi trang thai
@@ -420,6 +446,12 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.forEach(element => {
+            element.thanhTienN1 = divMoney(element.thanhTienN1, this.maDviTien);
+            element.thanhTienN2 = divMoney(element.thanhTienN2, this.maDviTien);
+            element.thanhTienN3 = divMoney(element.thanhTienN3, this.maDviTien);
+          });
           this.lstCTietBCao.forEach(item => {
             this.tinhTong(1, item);
           })
@@ -540,18 +572,25 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // click o checkbox all
@@ -616,6 +655,19 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maLoai ||
+      !this.editCache[id].data.maKhoan ||
+      !this.editCache[id].data.maChiMuc ||
+      (!this.editCache[id].data.soLuotNguoiN1 && this.editCache[id].data.soLuotNguoiN1 !== 0) ||
+      (!this.editCache[id].data.thanhTienN1 && this.editCache[id].data.thanhTienN1 !== 0) ||
+      (!this.editCache[id].data.soLuotNguoiN2 && this.editCache[id].data.soLuotNguoiN2 !== 0) ||
+      (!this.editCache[id].data.thanhTienN2 && this.editCache[id].data.thanhTienN2 !== 0) ||
+      (!this.editCache[id].data.soLuotNguoiN3 && this.editCache[id].data.soLuotNguoiN3 !== 0) ||
+      (!this.editCache[id].data.thanhTienN3 && this.editCache[id].data.thanhTienN3 !== 0)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     this.tinhTong(-1, this.lstCTietBCao[index]);
@@ -646,6 +698,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   //call tong hop
   async calltonghop() {
     this.spinner.show();
+    this.maDviTien = "1";
     let objtonghop = {
       maDvi: this.maDonViTao,
       maLoaiBcao: this.maLoaiBaoCao,
