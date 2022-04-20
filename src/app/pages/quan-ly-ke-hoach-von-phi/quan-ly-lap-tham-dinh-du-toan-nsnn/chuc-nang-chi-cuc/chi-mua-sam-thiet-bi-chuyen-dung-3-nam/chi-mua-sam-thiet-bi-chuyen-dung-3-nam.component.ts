@@ -95,9 +95,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
   checkDv: boolean;
   currentday: Date = new Date();
 
-  messageValidate:any =MESSAGEVALIDATE;
-  validateForm!: FormGroup;
-
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -130,16 +127,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucHDVService,
     private location: Location,
-    private fb:FormBuilder,
   ) {
     this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
   }
 
 
   async ngOnInit() {
-    this.validateForm = this.fb.group({
-      namBaoCaoHienHanh: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-    });
 
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
@@ -278,7 +271,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (!this.validateForm.valid){
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }

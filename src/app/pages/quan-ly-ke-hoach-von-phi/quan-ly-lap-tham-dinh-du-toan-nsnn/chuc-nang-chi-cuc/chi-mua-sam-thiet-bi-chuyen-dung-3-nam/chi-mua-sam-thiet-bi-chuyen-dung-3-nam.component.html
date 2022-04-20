@@ -86,7 +86,6 @@
      <div class="contentDetail">
           <div class="main-content">
                <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
-                    <form nz-form  [formGroup]="validateForm" class="login-form" >
                     <div class="widget-body">
                          <div>
                               <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }"
@@ -108,10 +107,9 @@
                                              {{namBaoCaoHienHanh}}
                                         </ng-container>
                                         <ng-template #nbc>
-                                             <nz-form-control [nzErrorTip]="messageValidate.INVALIDFORMAT">
-                                                  <input type="number" nz-input class="input__search" [(ngModel)]="namBaoCaoHienHanh"
-                                                       formControlName="namBaoCaoHienHanh" />
-                                             </nz-form-control>
+                                             <input type="number" nz-input class="input__search" name="" id=""
+                                             [class]="namBaoCaoHienHanh && namBaoCaoHienHanh < 3000 && namBaoCaoHienHanh > 999 ?'' : 'input-error-validate' "
+                                                  [(ngModel)]="namBaoCaoHienHanh">
                                         </ng-template>
                                    </nz-descriptions-item>
                                    <nz-descriptions-item nzTitle="Trạng thái">
@@ -129,7 +127,6 @@
                               </nz-descriptions>
                          </div>
                     </div>
-               </form>
                </nz-card>
                <div class="tab__container">
                     <nz-tabset nzType="card" class="tab__container">
