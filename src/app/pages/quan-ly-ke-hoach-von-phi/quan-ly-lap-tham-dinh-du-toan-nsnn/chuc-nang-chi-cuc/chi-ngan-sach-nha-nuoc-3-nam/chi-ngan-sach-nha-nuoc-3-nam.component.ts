@@ -6,12 +6,13 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
      id: any;
@@ -50,6 +51,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      mucChis: any = [];
      donVis: any = [];
      maLoaiChiTxs: any = [];
+     donViTiens: any = DONVITIEN;                        // danh muc don vi tien
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
@@ -66,7 +68,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
      trangThaiBanGhi: string = "1";                   // trang thai cua ban ghi
      maLoaiBaoCao: string = QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N;                // nam bao cao
-     maDviTien: string = "";                   // ma don vi tien
+     maDviTien: string;                   // ma don vi tien
      newDate = new Date();                       //
      fileToUpload!: File;                        // file tai o input
      listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -315,6 +317,34 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // luu
      async luu() {
+          let checkSaveEdit;
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          //check xem tat ca cac dong du lieu da luu chua?
+          //chua luu thi bao loi, luu roi thi cho di
+          this.lstCTietBCao.forEach(element => {
+               element.dtoanN = mulMoney(element.dtoanN, this.maDviTien);
+               element.uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               element.tranChiN1 = mulMoney(element.tranChiN1, this.maDviTien);
+               element.ncauChiN1 = mulMoney(element.ncauChiN1, this.maDviTien);
+               element.clechTranChiVsNcauChiN1 = mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+               element.tranChiN2 = mulMoney(element.tranChiN2, this.maDviTien);
+               element.ncauChiN2 = mulMoney(element.ncauChiN2, this.maDviTien);
+               element.clechTranChiVsNcauChiN2 = mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+               element.tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
+               element.ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
+               element.clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+
           let listFile: any = [];
           for (const iterator of this.listFile) {
                listFile.push(await this.uploadFile(iterator));
@@ -327,9 +357,6 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                }
           })
 
-          if (this.maDviTien != "") {
-               this.maDviTien = '01';
-          }
           // gui du lieu trinh duyet len server
           let request = {
                id: this.id,
@@ -338,7 +365,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien = "01",
+               maDviTien: this.maDviTien,
                maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N,
                namBcao: this.namBaoCaoHienHanh + 1,
                namHienHanh: this.namBaoCaoHienHanh,
@@ -387,24 +414,28 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // chuc nang check role
      async onSubmit(mcn: String) {
-          const requestGroupButtons = {
-               id: this.id,
-               maChucNang: mcn,
-               type: "",
-          };
-          this.spinner.show();
-          this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-               if (data.statusCode == 0) {
-                    await this.getDetailReport();
-                    this.getStatusButton();
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-               } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-               }
-          }, err => {
-               this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          });
-          this.spinner.hide();
+          if (this.id) {
+               const requestGroupButtons = {
+                    id: this.id,
+                    maChucNang: mcn,
+                    type: "",
+               };
+               this.spinner.show();
+               this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+                    if (data.statusCode == 0) {
+                         await this.getDetailReport();
+                         this.getStatusButton();
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               }, err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+               });
+               this.spinner.hide();
+          } else {
+               this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+          }
      }
 
      //thay doi trang thai
@@ -420,6 +451,20 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.maDviTien = data.data.maDviTien;
+                         this.lstCTietBCao.forEach(element => {
+                              element.dtoanN = divMoney(element.dtoanN, this.maDviTien);
+                              element.uocThienN = divMoney(element.uocThienN, this.maDviTien);
+                              element.tranChiN1 = divMoney(element.tranChiN1, this.maDviTien);
+                              element.ncauChiN1 = divMoney(element.ncauChiN1, this.maDviTien);
+                              element.clechTranChiVsNcauChiN1 = divMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+                              element.tranChiN2 = divMoney(element.tranChiN2, this.maDviTien);
+                              element.ncauChiN2 = divMoney(element.ncauChiN2, this.maDviTien);
+                              element.clechTranChiVsNcauChiN2 = divMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+                              element.tranChiN3 = divMoney(element.tranChiN3, this.maDviTien);
+                              element.ncauChiN3 = divMoney(element.ncauChiN3, this.maDviTien);
+                              element.clechTranChiVsNcauChiN3 = divMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+                         });
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
 
@@ -455,7 +500,10 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           );
           this.spinner.hide();
      }
+     changeInput(a){
+console.log(a);
 
+     }
      //upload file
      async uploadFile(file: File) {
           // day file len server
@@ -614,6 +662,18 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
 
      // luu thay doi
      saveEdit(id: string): void {
+          if (!this.editCache[id].data.maNdung ||
+               !this.editCache[id].data.maLoaiChi ||
+               !this.editCache[id].data.maKhoanChi ||
+               !this.editCache[id].data.maMucChi ||
+               !this.editCache[id].data.maLoaiChiTx ||
+               (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !== 0) ||
+               (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !== 0) ||
+               (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0) ||
+               (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !== 0)) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+               return;
+          }
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
@@ -641,6 +701,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      //call tong hop
      async calltonghop() {
           this.spinner.show();
+          this.maDviTien = "1";
           let objtonghop = {
                maDvi: this.maDonViTao,
                maLoaiBcao: this.maLoaiBaoCao,

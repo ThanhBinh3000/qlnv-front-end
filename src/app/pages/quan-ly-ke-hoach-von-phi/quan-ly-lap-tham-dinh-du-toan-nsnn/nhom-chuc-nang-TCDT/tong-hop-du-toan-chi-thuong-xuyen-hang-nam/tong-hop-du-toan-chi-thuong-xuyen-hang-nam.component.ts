@@ -6,12 +6,13 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   id: any;
@@ -55,6 +56,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   maLoaiBacao: string = '25';
   nam: any;
   donVis: any = [];
+  donViTiens: any = DONVITIEN;                        // danh muc don vi tien
   tong: ItemData = {
     id: "",
     stt: 0,
@@ -105,7 +107,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
   namBaoCaoHienHanh!: any;
   trangThaiBanGhi: string = "1";
   maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM;
-  maDviTien: string = "01";
+  maDviTien: string;
   newDate = new Date();
   fileToUpload!: File;
   listFile: File[] = [];
@@ -292,6 +294,42 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   // luu
   async luu() {
+    let checkSaveEdit;
+    if (!this.maDviTien) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.forEach(element => {
+      element.k331KhongTchuCoDmucNx = mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
+      element.k331KhongTchuCoDmucVtct = mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
+      element.k331KhongTchuCoDmucBquan = mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
+      element.k331KhongTchuChuaDmucCntt = mulMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
+      element.k331KhongTchuChuaDmucThueKho = mulMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
+      element.k331KhongTchuChuaDmucMsamTsan = mulMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
+      element.k331KhongTchuChuaDmucBhiemHhoa = mulMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
+      element.k331KhongTchuChuaDmucPhongChongMoiKplb = mulMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
+      element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = mulMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
+      element.k331KhongTchuChuaDmucSchuaKhoTang = mulMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
+      element.k341LuongTuChu = mulMoney(element.k341LuongTuChu, this.maDviTien);
+      element.k341ChiTxKhongDmucTuChu = mulMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
+      element.k341TxTheoDmucTuChu = mulMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
+      element.k341LuongKhongTuChu = mulMoney(element.k341LuongKhongTuChu, this.maDviTien);
+      element.k341ChiTxKhongDmucKhongTuChu = mulMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
+      element.k341TxTheoDmucKhongTuChu = mulMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
+      element.k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
+      element.k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
+      element.k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -310,7 +348,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien = "01",
+      maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM,
       namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
@@ -359,24 +397,29 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: String) {
-    const requestGroupButtons = {
-      id: this.id,
-      maChucNang: mcn,
-      type: "",
-    };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if (this.id) {
+      const requestGroupButtons = {
+        id: this.id,
+        maChucNang: mcn,
+        type: "",
+      };
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+
   }
 
 
@@ -394,6 +437,28 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.forEach(element => {
+            element.k331KhongTchuCoDmucNx = divMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
+            element.k331KhongTchuCoDmucVtct = divMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
+            element.k331KhongTchuCoDmucBquan = divMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
+            element.k331KhongTchuChuaDmucCntt = divMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
+            element.k331KhongTchuChuaDmucThueKho = divMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
+            element.k331KhongTchuChuaDmucMsamTsan = divMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
+            element.k331KhongTchuChuaDmucBhiemHhoa = divMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
+            element.k331KhongTchuChuaDmucPhongChongMoiKplb = divMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
+            element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = divMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
+            element.k331KhongTchuChuaDmucSchuaKhoTang = divMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
+            element.k341LuongTuChu = divMoney(element.k341LuongTuChu, this.maDviTien);
+            element.k341ChiTxKhongDmucTuChu = divMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
+            element.k341TxTheoDmucTuChu = divMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
+            element.k341LuongKhongTuChu = divMoney(element.k341LuongKhongTuChu, this.maDviTien);
+            element.k341ChiTxKhongDmucKhongTuChu = divMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
+            element.k341TxTheoDmucKhongTuChu = divMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
+            element.k085DaoTao = divMoney(element.k085DaoTao, this.maDviTien);
+            element.k102NghienCuuKhoaHoc = divMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
+            element.k398DamBaoXaHoi = divMoney(element.k398DamBaoXaHoi, this.maDviTien);
+          });
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -603,6 +668,10 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
+    if (!this.editCache[id].data.maDvi) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     this.tinhTong(-1, this.lstCTietBCao[index]);

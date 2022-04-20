@@ -118,12 +118,9 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                  </nz-select>
                 <!-- </div> -->
               </div>
             </div>
@@ -198,11 +195,12 @@
                     <td>{{ i + 1 }}</td>
 
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tenVban" />
+                      <input class="search__input" [class]="editCache[data.id].data.tenVban ?'' : 'input-error-validate' " nz-input [(ngModel)]="editCache[data.id].data.tenVban" />
                     </td>
 
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn hình thức văn bản"
+                      <nz-select nzShowSearch nzAllowClear [class]="editCache[data.id].data.loaiVban ?'' : 'input-error-validate' "
+                      nzPlaceHolder="Chọn hình thức văn bản"
                         [(ngModel)]="editCache[data.id].data.loaiVban">
                         <nz-option *ngFor="let item of loaiVbans" [nzValue]="item.id" [nzLabel]="item.tenDm">
                         </nz-option>
@@ -210,11 +208,13 @@
                     </td>
 
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tgianDuKien" />
+                      <input class="search__input" nz-input [class]="editCache[data.id].data.tgianDuKien ?'' : 'input-error-validate' "
+                      [(ngModel)]="editCache[data.id].data.tgianDuKien" />
                     </td>
 
                     <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị chủ trì"
+                      <nz-select nzShowSearch nzAllowClear [class]="editCache[data.id].data.maDviChuTri ?'' : 'input-error-validate' "
+                      nzPlaceHolder="Chọn đơn vị chủ trì"
                         [(ngModel)]="editCache[data.id].data.maDviChuTri">
                         <nz-option *ngFor="let item of maDviChuTris" [nzValue]="item.id" [nzLabel]="item.tenDm">
                         </nz-option>
@@ -222,16 +222,18 @@
                     </td>
 
                     <td>
-                      <input class="search__input ant-input" nz-input [(ngModel)]="editCache[data.id].data.dviPhoiHop" />
+                      <input class="search__input ant-input" [class]="editCache[data.id].data.dviPhoiHop ?'' : 'input-error-validate' "
+                      nz-input [(ngModel)]="editCache[data.id].data.dviPhoiHop" />
                     </td>
 
                     <td>
-                      <nz-input-number class="search__input" nzSize="small"
+                      <nz-input-number class="search__input" nzSize="small" [class]="editCache[data.id].data.dtoanKphi || editCache[data.id].data.dtoanKphi === 0 ?'' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.dtoanKphi"></nz-input-number>
                     </td>
 
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan" />
+                      <input class="search__input" [class]="editCache[data.id].data.ccuLapDtoan ?'' : 'input-error-validate' "
+                      nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan" />
                     </td>
 
                     <td [hidden]="status">

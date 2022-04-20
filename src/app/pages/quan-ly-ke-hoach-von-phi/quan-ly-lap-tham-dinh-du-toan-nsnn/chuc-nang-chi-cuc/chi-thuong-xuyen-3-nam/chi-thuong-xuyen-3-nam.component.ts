@@ -668,7 +668,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   async calltonghop() {
     this.spinner.show();
-    this.maDviTien = 1;
+    this.maDviTien = "1";
     let objtonghop = {
       maDvi: this.maDonViTao,
       maLoaiBcao: this.maLoaiBaoCao,

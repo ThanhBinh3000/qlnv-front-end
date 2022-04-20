@@ -125,11 +125,10 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         <!-- <div class="inner-box">Đơn vị: -->
-                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                                             <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                                             <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                                             <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                                             <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
+                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                                             [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+                                             <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                                                  [nzLabel]="item.tenDm"></nz-option>
                                         </nz-select>
                                         <!-- </div> -->
                                    </div>
@@ -340,9 +339,11 @@
 
                                                   <td>
                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                                                            [class]="editCache[data.id].data.maDvi ?'' : 'input-error-validate' "
                                                             [(ngModel)]="editCache[data.id].data.maDvi">
-                                                            <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
-                                                                 [nzLabel]="item.tenDvi"></nz-option>
+                                                            <nz-option *ngFor="let item of donVis"
+                                                                 [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                                                            </nz-option>
                                                        </nz-select>
                                                   </td>
 
