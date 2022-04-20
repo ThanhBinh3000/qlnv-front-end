@@ -100,7 +100,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   currentday: Date = new Date();
   kphi!: number;
   messageValidate:any =MESSAGEVALIDATE;
-  validateForm!: FormGroup;
+  validateForm: FormGroup;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;

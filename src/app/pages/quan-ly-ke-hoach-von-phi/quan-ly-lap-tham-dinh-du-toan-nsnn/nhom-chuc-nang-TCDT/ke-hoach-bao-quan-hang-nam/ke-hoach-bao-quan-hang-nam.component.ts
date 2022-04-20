@@ -14,6 +14,7 @@ import { C } from '@angular/cdk/keycodes';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { getStyleAsText } from 'ng-zorro-antd/core/util';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 export class ItemData {
@@ -387,24 +388,29 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: String) {
-    const requestGroupButtons = {
-      id: this.id,
-      maChucNang: mcn,
-      type: "",
-    };
-    this.spinner.show();
-    this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.getStatusButton();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if (this.id) {
+      const requestGroupButtons = {
+        id: this.id,
+        maChucNang: mcn,
+        type: "",
+      };
+      this.spinner.show();
+      this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+
   }
 
   //thay doi trang thai
@@ -519,20 +525,26 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    if (!file) {
+      let fileAttach = this.lstFile.find(element => element?.id == id);
+      if (fileAttach) {
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    } else {
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
-
   // lay ten trang thai
   getStatusName() {
     const utils = new Utils();
@@ -706,7 +718,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (!this.editCache[id].data.maCucDtnnKvuc) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;  // set checked editCache = checked lstCTietBCao
@@ -914,8 +926,10 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
   // luu thay doi
   saveEdit1(id: string): void {
-    if (!this.editCache1[id].data.maVtuTbi) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if (!this.editCache1[id].data.maVtuTbi ||
+      (!this.editCache1[id].data.dmucNhapVttbDvi && this.editCache1[id].data.dmucNhapVttbDvi !== 0) ||
+      (!this.editCache1[id].data.dmucNhapVttbVphong && this.editCache1[id].data.dmucNhapVttbVphong !== 0)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this.editCache1[id].data.checked = this.lstVtu.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
@@ -1074,7 +1088,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       }
     })
     if (kt) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.ERROR_ADD_VTU);
       this.deleteById1(id);
       this.addLine1(index);
     }
@@ -1090,7 +1104,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
       }
     })
     if (kt) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_ADD_UNIT);
+      this.notification.warning(MESSAGE.ERROR, MESSAGE.ERROR_ADD_UNIT);
       this.deleteById(id);
       this.addLine(index + 1);
     }
