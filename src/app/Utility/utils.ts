@@ -99,6 +99,19 @@ export class Utils {
         "role": [1],
     }
 
+    //role copy
+    public static btnRoleCOPY = {
+        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
+        "unit": [1, 2],
+        "role": [3],
+    }
+
+    //role in
+    public static btnRolePRINT = {
+        "status": ['4'],
+        "unit": [1, 2],
+        "role": [1,2,3],
+    }
 
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
@@ -138,6 +151,16 @@ export class Utils {
     //role lanh dao dieu chinh
     public getRoleLDDC(status: any, unit: any, role: any) {
         return !(Utils.btnRoleLDDC.status.includes(status) && Utils.btnRoleLDDC.unit.includes(unit) && Utils.btnRoleLDDC.role.includes(role));
+    }
+
+    //role copy
+    public getRoleCopy(status: any, unit: any, role: any) {
+        return !(Utils.btnRoleCOPY.status.includes(status) && Utils.btnRoleCOPY.unit.includes(unit) && Utils.btnRoleCOPY.role.includes(role));
+    }
+
+    //role in
+    public getRolePrint(status: any, unit: any, role: any) {
+        return !(Utils.btnRolePRINT.status.includes(status) && Utils.btnRolePRINT.unit.includes(unit) && Utils.btnRolePRINT.role.includes(role));
     }
 
     // lay quyen
