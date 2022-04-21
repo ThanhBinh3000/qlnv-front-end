@@ -108,59 +108,59 @@ export class Utils {
 
     //role in
     public static btnRolePRINT = {
-        "status": ['4'],
+        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
         "unit": [1, 2],
         "role": [1,2,3],
     }
 
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleDel.status.includes(status) && Utils.btnRoleDel.unit.includes(unit) && Utils.btnRoleDel.role.includes(role));
+        return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
     }
 
     //get role luu
     public getRoleSave(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleSave.status.includes(status) && Utils.btnRoleSave.unit.includes(unit) && Utils.btnRoleSave.role.includes(role));
+        return !(Utils.btnRoleSave.status.includes(status) && unit == true && Utils.btnRoleSave.role.includes(role));
     }
 
     //get role trinh duyet
     public getRoleApprove(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleApprove.status.includes(status) && Utils.btnRoleApprove.unit.includes(unit) && Utils.btnRoleApprove.role.includes(role));
+        return !(Utils.btnRoleApprove.status.includes(status) && unit == true && Utils.btnRoleApprove.role.includes(role));
     }
 
     //get role truong bo phan
     public getRoleTBP(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleTBP.status.includes(status) && Utils.btnRoleTBP.unit.includes(unit) && Utils.btnRoleTBP.role.includes(role));
+        return !(Utils.btnRoleTBP.status.includes(status) && unit == true && Utils.btnRoleTBP.role.includes(role));
     }
 
     //get role button lanh dao
     public getRoleLD(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleLD.status.includes(status) && Utils.btnRoleLD.unit.includes(unit) && Utils.btnRoleLD.role.includes(role));
+        return !(Utils.btnRoleLD.status.includes(status) && unit == true && Utils.btnRoleLD.role.includes(role));
     }
 
     //get role button gui don vi cap tren
     public getRoleGuiDVCT(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleGuiDVCT.status.includes(status) && Utils.btnRoleGuiDVCT.unit.includes(unit) && Utils.btnRoleGuiDVCT.role.includes(role));
+        return !(Utils.btnRoleGuiDVCT.status.includes(status) && unit == true && Utils.btnRoleGuiDVCT.role.includes(role));
     }
 
     //get role button don vi cap tren
     public getRoleDVCT(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleDVCT.status.includes(status) && Utils.btnRoleDVCT.unit.includes(unit) && Utils.btnRoleDVCT.role.includes(role));
+        return !(Utils.btnRoleDVCT.status.includes(status) && unit == true && Utils.btnRoleDVCT.role.includes(role));
     }
 
     //role lanh dao dieu chinh
     public getRoleLDDC(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleLDDC.status.includes(status) && Utils.btnRoleLDDC.unit.includes(unit) && Utils.btnRoleLDDC.role.includes(role));
+        return !(Utils.btnRoleLDDC.status.includes(status) && unit == true && Utils.btnRoleLDDC.role.includes(role));
     }
 
     //role copy
     public getRoleCopy(status: any, unit: any, role: any) {
-        return !(Utils.btnRoleCOPY.status.includes(status) && Utils.btnRoleCOPY.unit.includes(unit) && Utils.btnRoleCOPY.role.includes(role));
+        return !(Utils.btnRoleCOPY.status.includes(status) && unit == true && Utils.btnRoleCOPY.role.includes(role));
     }
 
     //role in
     public getRolePrint(status: any, unit: any, role: any) {
-        return !(Utils.btnRolePRINT.status.includes(status) && Utils.btnRolePRINT.unit.includes(unit) && Utils.btnRolePRINT.role.includes(role));
+        return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
     }
 
     // lay quyen
@@ -386,7 +386,7 @@ export const LOAIBAOCAO =[
         tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
     },
     ]
-// Loai bao cao
+    // Loai bao cao
 	// 3.2.4.3.1
     export	const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N:string = "01";
 
@@ -583,6 +583,7 @@ export const LOAIBAOCAO =[
             ten:'Chưa đánh giá (để trống)'
         },
     ]
+
     export const TRANGTHAIPHULUC =[
         {
             id:0,

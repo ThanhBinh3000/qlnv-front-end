@@ -1,3 +1,4 @@
+import { ChiTieuKeHoachNamCapTongCucService } from './../../../services/chiTieuKeHoachNamCapTongCuc.service';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { DonviService } from 'src/app/services/donvi.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -26,16 +27,16 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private donViService: DonviService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
   ) {}
   async ngOnInit() {
-    this.yearNow = dayjs().get('year');
     this.initForm();
-    this.loadTonKhoDauNam();
-    this.loadTonKhoCuoiNam();
+
     this.spinner.show();
     try {
       await this.loadDonVi();
       await this.loadDonViTinh();
+
       this.spinner.hide();
     } catch (err) {
       this.spinner.hide();
@@ -133,7 +134,56 @@ export class DialogThongTinLuongThucComponent implements OnInit {
     this.formData.patchValue({
       maDonVi: donVi.maDvi,
       tenDonvi: donVi.tenDvi,
+      donViId: donVi.id,
     });
+    this.chiTieuKeHoachNamService
+      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['010103', '010101'] })
+      .then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          res.data.forEach((tonKho) => {
+            if (tonKho.maVthh == '010101') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong1: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong2: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 3).toString():
+                  this.formData.patchValue({
+                    tkdnThocSoLuong3: tonKho.slHienThoi,
+                  });
+                  break;
+                default:
+                  break;
+              }
+            } else if (tonKho.maVthh == '010103') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.formData.patchValue({
+                    tkdnGaoSoLuong1: tonKho.slHienThoi,
+                  });
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.formData.patchValue({
+                    tkdnGaoSoLuong2: tonKho.slHienThoi,
+                  });
+                  break;
+                default:
+                  break;
+              }
+            }
+            this.calculatorTkdnTongQuyThoc();
+            this.loadTonKhoCuoiNam();
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      });
   }
 
   onInputDonViTinh(e: Event): void {
@@ -230,12 +280,12 @@ export class DialogThongTinLuongThucComponent implements OnInit {
   }
   loadTonKhoDauNam() {
     this.formData.patchValue({
-      tkdnTongSoQuyThoc: 35,
-      tkdnThocSoLuong1: 5,
-      tkdnThocSoLuong2: 5,
-      tkdnThocSoLuong3: 5,
-      tkdnGaoSoLuong1: 5,
-      tkdnGaoSoLuong2: 5,
+      tkdnTongSoQuyThoc: 0,
+      tkdnThocSoLuong1: 0,
+      tkdnThocSoLuong2: 0,
+      tkdnThocSoLuong3: 0,
+      tkdnGaoSoLuong1: 0,
+      tkdnGaoSoLuong2: 0,
       tkcnTongSoQuyThoc:
         +this.formData.get('tkdnTongSoQuyThoc').value +
         +this.formData.get('ntnTongSoQuyThoc').value -

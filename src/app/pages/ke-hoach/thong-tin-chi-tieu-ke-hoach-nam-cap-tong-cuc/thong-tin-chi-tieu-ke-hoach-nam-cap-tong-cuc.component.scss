@@ -65,10 +65,9 @@
     cursor: pointer;
     position: absolute;
     top: 4px;
-    height: 15px;
+    height: 20px;
     left: 695px;
     color: #2196f3;
-    width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -105,5 +104,25 @@
   }
   .hide-row {
     display: none;
+  }
+  .disable {
+    cursor: not-allowed;
+    background: #f5f5f5;
+  }
+  .form-item-ghi-chu {
+    display: block;
+  }
+  .w-300 {
+    width: 300px;
+  }
+  .w-120 {
+    width: 120px !important;
+  }
+  .isDisabled {
+    opacity: 0.5;
+  }
+  .row-disabled {
+    pointer-events: none;
+    opacity: 0.5;
   }
 }

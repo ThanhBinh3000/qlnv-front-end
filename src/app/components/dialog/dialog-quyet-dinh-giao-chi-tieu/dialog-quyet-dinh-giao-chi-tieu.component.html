@@ -1,9 +1,9 @@
 <div class="input-group-search">
-  <input type="text" nz-input placeholder="Nhập số hoặc tên quyết định" />
-  <i nz-icon nzType="search" class="icon-search"></i>
+  <input type="text" nz-input placeholder="Nhập số quyết định" [(ngModel)]="text" />
+  <i nz-icon nzType="search" class="icon-search" (click)="search()"></i>
 </div>
 <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM" class="mt16 flex-card p-lr16 mb16 dialog-qd-giao-chi-tieu">
-  <nz-table nzBordered #basicTable [nzData]="dataTable">
+  <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
         <th [width]="35">STT</th>

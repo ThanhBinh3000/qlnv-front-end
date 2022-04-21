@@ -4,8 +4,9 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { ROUTE_LIST_KE_HOACH } from './ke-hoach.constant';
@@ -19,11 +20,21 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
-  constructor(private userService: UserService) {}
+  routerUrl: string = "";
+  defaultUrl: string = '/ke-hoach/'
+
+  constructor(
+    private userService: UserService,
+    private router: Router,
+  ) {
+  }
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
     this.isSuperAdmin = this.userLogin.userName == 'adminteca';
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
   }
 
   ngAfterViewInit() {
@@ -66,5 +77,18 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
       this.myTab.nativeElement.className =
         'nav nav-tabs expand-sidebar next-an';
     }
+  }
+
+  updateCssOverlay() {
+    setTimeout(() => {
+      let child = document.getElementsByClassName('dau-thau-tab');
+      if (child && child.length > 0) {
+        child[0].parentElement.classList.add('left-0');
+      }
+    }, 200);
+  }
+
+  redirect(url: string) {
+    this.router.navigate([this.defaultUrl + url]);
   }
 }

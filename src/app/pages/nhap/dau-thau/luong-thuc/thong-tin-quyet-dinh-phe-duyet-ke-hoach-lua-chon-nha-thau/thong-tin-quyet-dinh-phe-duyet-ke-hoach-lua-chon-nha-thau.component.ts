@@ -101,6 +101,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
     modalQD.afterClose.subscribe((data) => {
       if (data) {
         this.selectedCanCu = data;
+        this.chiTiet.qdCanCu = this.selectedCanCu.soQuyetDinh;
       }
     });
   }
@@ -111,7 +112,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
       nzContent: DialogPhuongAnTrinhTongCucComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1100px',
       nzFooter: null,
       nzComponentParams: {
       },
@@ -351,6 +352,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
           this.selectedPhuongAn.tgianTbao = this.chiTiet.tgianTbao;
           this.selectedPhuongAn.veViec = this.chiTiet.veViec;
           this.selectedPhuongAn.tenLoaiVthh = this.selectHang.ten;
+          this.selectedCanCu.soQuyetDinh = this.chiTiet.qdCanCu;
           this.getListFile(this.chiTiet.children);
         }
       }
@@ -407,6 +409,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
           "tgianNhang": this.chiTiet.tgianNhang ? dayjs(this.chiTiet.tgianNhang).format("YYYY-MM-DD") : null,
           "tgianTbao": this.chiTiet.tgianTbao ? dayjs(this.chiTiet.tgianTbao).format("YYYY-MM-DD") : null,
           "veViec": this.chiTiet.veViec,
+          "qdCanCu": this.chiTiet.qdCanCu,
         }
         if (this.id == 0) {
           let res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
