@@ -40,9 +40,10 @@ export class QuanTriHeThongComponent implements OnInit, AfterViewInit {
   }
 
   routerNavigate(url) {
-    this.routerUrl = url;
-
     this.router.navigateByUrl(url);
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
   }
   updateCssOverlay() {
     setTimeout(() => {
