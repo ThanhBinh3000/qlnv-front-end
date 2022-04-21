@@ -19,14 +19,6 @@
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
                          <span>Trình duyệt</span>
                     </button>
-                    <!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_pheduyet"></i>
-             <span>Phê duyệt</span>
-           </button>
-           <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-             <i class="icon htvbdh_tcdt_tuchoi"></i>
-             <span>Từ chối</span>
-           </a> -->
                     <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')"
                          [hidden]="statusBtnTBP">
                          <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -71,6 +63,16 @@
                          [hidden]="statusBtnDel">
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
+                    </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()"
+                         [hidden]="statusBtnCopy">
+                         <i nz-icon nzType="copy" nzTheme="outline"></i>
+                         <span>Copy</span>
+                    </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()"
+                         [hidden]="statusBtnPrint">
+                         <i nz-icon nzType="printer" nzTheme="outline"></i>
+                         <span>In</span>
                     </a>
                     <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
                          (click)="redirectChiTieuKeHoachNam()">
@@ -324,14 +326,16 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         Danh sách văn bản đính kèm
-                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                             [hidden]="status">
                                              <button nz-button>
                                                   <i nz-icon nzType="upload"></i>
                                                   Select File
                                              </button>
                                         </nz-upload>
-                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="status"
-                                             [disabled]="fileList.length === 0" style="margin-top: 16px">
+                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                             [hidden]="status" [disabled]="fileList.length === 0"
+                                             style="margin-top: 16px">
                                              Thêm vào danh sách
                                         </button>
                                    </div>

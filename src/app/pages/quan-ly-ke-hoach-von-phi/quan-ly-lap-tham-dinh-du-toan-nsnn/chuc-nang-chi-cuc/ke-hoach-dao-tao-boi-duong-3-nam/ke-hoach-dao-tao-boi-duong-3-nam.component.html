@@ -72,6 +72,16 @@
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
                     </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()"
+                         [hidden]="statusBtnCopy">
+                         <i nz-icon nzType="copy" nzTheme="outline"></i>
+                         <span>Copy</span>
+                    </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()"
+                         [hidden]="statusBtnPrint">
+                         <i nz-icon nzType="printer" nzTheme="outline"></i>
+                         <span>In</span>
+                    </a>
                     <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
                          (click)="redirectChiTieuKeHoachNam()">
                          <i class="icon htvbdh_dong"></i>
@@ -384,14 +394,16 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         Danh sách văn bản đính kèm
-                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                             [hidden]="status">
                                              <button nz-button>
                                                   <i nz-icon nzType="upload"></i>
                                                   Select File
                                              </button>
                                         </nz-upload>
-                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="status"
-                                             [disabled]="fileList.length === 0" style="margin-top: 16px">
+                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                             [hidden]="status" [disabled]="fileList.length === 0"
+                                             style="margin-top: 16px">
                                              Thêm vào danh sách
                                         </button>
                                    </div>
@@ -424,11 +436,12 @@
                          </nz-tab>
                     </nz-tabset>
                     <div class="action">
-                         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status"> 
+                         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>
                          </button>
-                         <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
+                         <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)"
+                              [hidden]="status">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
                          </button>
