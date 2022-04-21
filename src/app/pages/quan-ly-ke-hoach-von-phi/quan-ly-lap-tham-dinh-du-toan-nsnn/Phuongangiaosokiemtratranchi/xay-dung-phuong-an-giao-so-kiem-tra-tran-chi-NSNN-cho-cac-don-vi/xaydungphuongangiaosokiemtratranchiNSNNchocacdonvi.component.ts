@@ -5,13 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { O } from '@angular/cdk/keycodes';
 
 export class ItemData {
   id!: any;
@@ -66,6 +68,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
+  listDonViTien:any []=DONVITIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -282,8 +285,13 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.id = data.data.id;
-          this.lstCTietBCao = data.data.listCtiet
-          ;
+          this.lstCTietBCao = data.data.listCtiet;
+          this.donvitien = data.data.maDviTien;
+          this.lstCTietBCao.filter(item => {
+            item.listCtietDvi.forEach( e=>{
+              e.soTranChi = divMoney(e.soTranChi, this.donvitien);
+            })
+          })
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
           this.namBcaohienhanh = this.chiTietBcaos.namHienHanh;
@@ -475,14 +483,15 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   //update khi sửa
   saveEdit(id: string): void {
 
-    if (!this.editCache[id].data.maNoiDung){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    if (!this.editCache[id].data.maNoiDung || !this.editCache[id].data.maNhom){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (!this.editCache[id].data.maNhom){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    var arr = this.editCache[id].data.listCtietDvi;
+    let checkValidSoTranChi;
+    arr.forEach( e => {
+      e.soTranChi
+    })
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
@@ -521,18 +530,25 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach((element) => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: 'application/octet-stream' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob),
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -560,15 +576,34 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
   // luu
   async luu() {
+
+    let checkSaveEdit;
+    if(!this.donvitien || !this.namBcaohienhanh){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBcaohienhanh >= 3000 || this.namBcaohienhanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+
+    this.lstCTietBCao.filter(item => {
+      item.listCtietDvi.forEach( e=>{
+        e.soTranChi = mulMoney(e.soTranChi, this.donvitien);
+      })
+      if(this.editCache[item.id].edit==true){
+        checkSaveEdit = false;
+      }
+    })
+    if(checkSaveEdit==false){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+    }
     this.lstCTietBCao.forEach((e) => {
       if (typeof e.id != 'number') {
         e.id = null;
       }
     });
-    // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+    
     // gui du lieu trinh duyet len server
 
     // lay id file dinh kem
@@ -588,7 +623,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      listIdDeletes: this.listId,
+      listIdDeletes: this.listIdDelete,
       fileDinhKems: this.listFileUploaded,
       listCtiet: this.lstCTietBCao,
       maDvi: this.donvitao,
