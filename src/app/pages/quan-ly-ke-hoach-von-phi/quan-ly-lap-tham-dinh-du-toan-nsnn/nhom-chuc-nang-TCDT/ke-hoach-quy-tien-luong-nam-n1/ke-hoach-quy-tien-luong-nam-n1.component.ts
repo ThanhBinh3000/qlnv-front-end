@@ -89,7 +89,10 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
   statusBtnLDDC:boolean;                       // trang thai
-  listIdFiles: string;                        // id file luc call chi tiet
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
+
+  listIdDeleteFiles: string;                        // id file luc call chi tiet
 
 
   allChecked = false;                         // check all checkbox
@@ -211,11 +214,11 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
 
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          var Dvi = this.donVis.find(e =>  e.maDvi == this.maDonViTao);
+          let Dvi = this.donVis.find(e =>  e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
 
           this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2');
@@ -234,6 +237,8 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.getStatusButton();
+
     this.spinner.hide();
   }
 
@@ -241,17 +246,29 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
-    getStatusButton(){
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  getStatusButton() {
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if(dVi && dVi.maDvi == this.userInfo.dvql){
+      checkChirld = true;
     }
+    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+      checkParent = true;
+    }
+
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+  }
 
   //get user info
   async getUserInfo(username: string) {
@@ -333,7 +350,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
@@ -461,10 +478,8 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
             element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
             element.quyLuongPcapCkdgTheoLuongHdld = divMoney(element.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien);
           });
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
+          this.listFile=[]
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -552,10 +567,12 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     this.allChecked = false;
   }
 
-  // xoa file trong bang file
-  deleteFile(id: string): void {
+   // xoa file trong bang file
+   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    // set list for delete
+    this.listIdDeleteFiles += id + ",";
   }
 
   //download file về máy tính
@@ -716,5 +733,14 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
     }
+     // action copy
+  doCopy(){
+
+  }
+
+  // action print
+  doPrint(){
+
+  }
 }
 
