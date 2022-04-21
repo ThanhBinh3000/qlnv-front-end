@@ -56,6 +56,14 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điều chỉnh theo số kiểm tra</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()" [hidden]="statusBtnCopy">
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span>Copy</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()" [hidden]="statusBtnPrint">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel" (click)="xoaBaoCao()">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>

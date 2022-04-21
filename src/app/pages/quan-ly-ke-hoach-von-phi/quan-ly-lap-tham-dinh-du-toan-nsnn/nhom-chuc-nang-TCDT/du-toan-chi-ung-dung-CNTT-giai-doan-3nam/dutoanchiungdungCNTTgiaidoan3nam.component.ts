@@ -56,7 +56,8 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
   statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chi so kiem tra
-
+  statusBtnCopy:boolean; // trang thai nut copy
+  statusBtnPrint:boolean; // trang thai nut in
   currentday: Date = new Date();
   //////
   id: any;
@@ -139,7 +140,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       this.nguoinhap = this.userInfor?.username;
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.donvitao = this.userInfor?.dvql;
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+      this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
@@ -159,7 +160,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
       this.spinner.show();
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+      this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.mabaocao = res.data;
@@ -172,7 +173,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
         },
       );
     }
-    this.danhMucService.dMLoaiKeHoach().subscribe(
+    this.danhMucService.dMLoaiKeHoach().toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.listLoaikehoach = res.data?.content;
@@ -186,7 +187,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       },
     );
     //get danh muc dự án
-    this.danhMucService.dMKhoiDuAn().subscribe(
+    this.danhMucService.dMKhoiDuAn().toPromise().then(
       (data) => {
           if (data.statusCode == 0) {
               this.listLoaiduan = data.data?.content;
@@ -200,7 +201,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       }
     );
     //lay danh sach danh muc don vi
-    this.quanLyVonPhiService.dMDonVi().toPromise().then(
+   await this.quanLyVonPhiService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
@@ -266,15 +267,27 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   }
 
   getStatusButton(){
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donViTaos.find(e => e.maDvi == this.donvitao);
+    if(dVi && dVi.maDvi == this.userInfor.dvql){ 
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent.maDvi == this.userInfor.dvql){
+      checkParent = true;
+    }
+    
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfor?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfor?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
   }
   // call chi tiet bao cao
   async getDetailReport() {
@@ -748,5 +761,15 @@ xoaBaoCao(){
     }else {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
     }
+  }
+
+   // action copy
+   doCopy(){
+    
+  }
+
+  // action print
+  doPrint(){
+    
   }
 }
