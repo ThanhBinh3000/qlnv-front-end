@@ -1,3 +1,4 @@
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,6 +10,7 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'danh-sach-dau-thau',
@@ -33,25 +35,21 @@ export class DanhSachDauThauComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
     private router: Router,
-  ) { }
+    private modal: NzModalService,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.isVisibleChangeTab$.subscribe((value: boolean) => {
-        this.visibleTab = value;
-      });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
+      if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -64,9 +62,8 @@ export class DanhSachDauThauComponent implements OnInit {
       }
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -122,11 +119,11 @@ export class DanhSachDauThauComponent implements OnInit {
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
+    this.search();
   }
 
   async search() {
     let maDonVi = null;
-    this.dataTable = [];
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(
         (x) => x.labelDonVi == this.inputDonVi,
@@ -137,10 +134,10 @@ export class DanhSachDauThauComponent implements OnInit {
     }
     let body = {
       denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('DD/MM/YYYY')
+        ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
       id: 0,
-      loaiVthh: '00',
+      // loaiVthh: '00',
       maDvi: maDonVi,
       paggingReq: {
         limit: this.pageSize,
@@ -148,19 +145,15 @@ export class DanhSachDauThauComponent implements OnInit {
       },
       soDxuat: this.searchFilter.soDxuat,
       str: null,
-      trangThai: '00',
       trichYeu: this.searchFilter.trichYeu,
       tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('DD/MM/YYYY')
+        ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    this.totalRecord = 10;
     let res = await this.danhSachDauThauService.timKiem(body);
-    if (res.msg == 'Thành công') {
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -173,9 +166,8 @@ export class DanhSachDauThauComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -187,23 +179,49 @@ export class DanhSachDauThauComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
-      return "Đã duyệt";
-    }
-    else {
-      return "Chưa duyệt";
-    }
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.danhSachDauThauService
+            .deleteKeHoachLCNT({ id: item.id })
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }

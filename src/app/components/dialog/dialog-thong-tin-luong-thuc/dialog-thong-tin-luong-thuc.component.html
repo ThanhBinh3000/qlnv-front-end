@@ -61,7 +61,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter="{{yearNow-3}}">
-            <nz-input-number formControlName="tkdnThocSoLuong1" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkdnThocSoLuong3" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -72,7 +72,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow-2}} ">
-            <nz-input-number formControlName="tkdnThocSoLuong2" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkdnThocSoLuong2" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -83,7 +83,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow-1}} ">
-            <nz-input-number formControlName="tkdnThocSoLuong3" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkdnThocSoLuong1" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -94,7 +94,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow-2}} ">
-            <nz-input-number formControlName="tkdnGaoSoLuong1" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkdnGaoSoLuong2" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -105,7 +105,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow-1}} ">
-            <nz-input-number formControlName="tkdnGaoSoLuong2" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkdnGaoSoLuong1" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkdnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -138,7 +138,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number formControlName="ntnThoc" [nzMin]="1" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
+            <nz-input-number formControlName="ntnThoc" [nzMin]="0" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -149,7 +149,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number formControlName="ntnGao" [nzMin]="1" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
+            <nz-input-number formControlName="ntnGao" [nzMin]="0" [nzStep]="0.1" (input)="calculatorNtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -172,8 +172,8 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
-            <nz-input-number formControlName="xtnThocSoLuong1" [nzMin]="1"
-              [nzMax]="+this.formData.get('tkdnThocSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+            <nz-input-number formControlName="xtnThocSoLuong3" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnThocSoLuong3').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -184,7 +184,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
-            <nz-input-number formControlName="xtnThocSoLuong2" [nzMin]="1"
+            <nz-input-number formControlName="xtnThocSoLuong2" [nzMin]="0"
               [nzMax]="+this.formData.get('tkdnThocSoLuong2').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
@@ -196,8 +196,8 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
-            <nz-input-number formControlName="xtnThocSoLuong3" [nzMin]="1"
-              [nzMax]="+this.formData.get('tkdnThocSoLuong3').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+            <nz-input-number formControlName="xtnThocSoLuong1" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnThocSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -208,8 +208,8 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
-            <nz-input-number formControlName="xtnGaoSoLuong1" [nzMin]="1"
-              [nzMax]="+this.formData.get('tkdnGaoSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+            <nz-input-number formControlName="xtnGaoSoLuong2" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnGaoSoLuong2').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -220,8 +220,8 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
-            <nz-input-number formControlName="xtnGaoSoLuong2" [nzMin]="1"
-              [nzMax]="+this.formData.get('tkdnGaoSoLuong2').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
+            <nz-input-number formControlName="xtnGaoSoLuong1" [nzMin]="0"
+              [nzMax]="+this.formData.get('tkdnGaoSoLuong1').value" [nzStep]="0.1" (input)="calculatorXtnTongQuyThoc()"
               [nzSize]="'small'"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -254,7 +254,7 @@
         <nz-form-label [nzNoColon]="true"> SL Thóc </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number formControlName="tkcnTongThoc" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkcnTongThoc" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkcnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -265,7 +265,7 @@
         <nz-form-label [nzNoColon]="true"> SL Gạo </nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number formControlName="tkcnTongGao" [nzMin]="1" [nzStep]="0.1"
+            <nz-input-number formControlName="tkcnTongGao" [nzMin]="0" [nzStep]="0.1"
               (input)="calculatorTkcnTongQuyThoc()" [nzSize]="'small'" [nzDisabled]="true"></nz-input-number>
           </nz-input-group>
         </nz-form-control>

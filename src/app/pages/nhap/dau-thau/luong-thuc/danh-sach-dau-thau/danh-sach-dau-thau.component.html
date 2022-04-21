@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+<div class="luong-thuc__danh-sach">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -56,8 +54,9 @@
           </div>
         </nz-card>
         <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
-          class="mt16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap" [nzData]="dataTable">
+          class="mt-16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
             <thead>
               <tr>
                 <th class="text-center" width="60px">STT</th>
@@ -80,14 +79,14 @@
                 </th>
                 <td>{{ data.soDxuat }}</td>
                 <td>{{ data.ngayKy }}</td>
-                <td>{{ data.ngayKy }}</td>
+                <td>{{ data.tenDvi }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                  <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

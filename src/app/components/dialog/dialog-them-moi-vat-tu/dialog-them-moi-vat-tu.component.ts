@@ -1,8 +1,9 @@
 import { DanhSachGoiThau } from './../../../models/DeXuatKeHoachuaChonNhaThau';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import VNnum2words from 'vn-num2words';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -13,7 +14,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   formData: FormGroup;
   thongtinDauThau: DanhSachGoiThau;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-  constructor(private _modalRef: NzModalRef, private fb: FormBuilder) {}
+  constructor(
+    private _modalRef: NzModalRef,
+    private fb: FormBuilder,
+    public globals: Globals,
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -32,9 +37,15 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.thongtinDauThau ? this.thongtinDauThau.diaDiemNhap : null,
       ],
       donGia: [this.thongtinDauThau ? this.thongtinDauThau.donGia : null],
-      goiThau: [this.thongtinDauThau ? this.thongtinDauThau.goiThau : null],
+      goiThau: [
+        this.thongtinDauThau ? this.thongtinDauThau.goiThau : null,
+        [Validators.required],
+      ],
       id: [this.thongtinDauThau ? this.thongtinDauThau.id : null],
-      soLuong: [this.thongtinDauThau ? this.thongtinDauThau.soLuong : null],
+      soLuong: [
+        this.thongtinDauThau ? this.thongtinDauThau.soLuong : null,
+        [Validators.required],
+      ],
       thanhTien: [this.thongtinDauThau ? this.thongtinDauThau.thanhTien : null],
       bangChu: [this.thongtinDauThau ? this.thongtinDauThau.bangChu : null],
     });

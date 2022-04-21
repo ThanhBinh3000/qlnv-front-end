@@ -5,7 +5,7 @@
         <nz-form-label nzRequired [nzNoColon]="true">
           Đơn vị
         </nz-form-label>
-        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị" class="mb-3">
           <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input donvi__input">
             <input placeholder="Đơn vị" nz-input formControlName="tenDonVi" (input)="onInput($event)"
               [nzAutocomplete]="auto" />
@@ -40,10 +40,12 @@
         </nz-autocomplete>
       </nz-form-item> -->
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-        <nz-select formControlName="namKeHoach">
-          <nz-option *ngFor="let p of listDonViTinh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-        </nz-select>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+          <nz-select formControlName="donViTinh" (ngModelChange)="selectDonViTinh($event)">
+            <nz-option *ngFor="let donVi of listDonViTinh" [nzValue]="donVi.value" [nzLabel]="donVi.text"></nz-option>
+          </nz-select>
+        </nz-form-control>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
@@ -154,7 +156,7 @@
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 3}} ">
             <nz-input-number formControlName="soLuongTheoNam1" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -168,7 +170,7 @@
         <nz-form-control>
           <nz-input-group nzAddOnAfter=" {{yearNow - 2}} ">
             <nz-input-number formControlName="soLuongTheoNam2" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -182,7 +184,7 @@
         <nz-form-control class="mb-16">
           <nz-input-group nzAddOnAfter=" {{yearNow - 1}} ">
             <nz-input-number formControlName="soLuongTheoNam3" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
-              (input)="calculatorTongVatTu()">
+              [nzDisabled]="true" (input)="calculatorTongVatTu()">
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -195,12 +197,13 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <button nz-button (click)="save()" class="modal__button--save">
-        <i nz-icon nzType="save"></i>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>
-      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-        <i nz-icon nzType="close"></i>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
         Hủy
       </button>
     </div>
