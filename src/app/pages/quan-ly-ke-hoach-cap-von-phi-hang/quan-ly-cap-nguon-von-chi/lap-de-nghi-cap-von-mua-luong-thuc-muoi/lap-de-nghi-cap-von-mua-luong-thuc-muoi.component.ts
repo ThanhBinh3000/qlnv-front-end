@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { Utils } from "../../../../Utility/utils";
+import { DONVITIEN, Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { stringify } from 'querystring';
@@ -59,7 +59,8 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
 
   vatTus: any = [];
   dviTinhs: any = [];
-  dviTiens: any = [];
+  dviTiens: any = DONVITIEN;
+	donVis: any[] = [];
 
   lstCTietBCao: ItemData[] = [];
   lstHopDong: HopDong[] = [];
@@ -159,10 +160,10 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
     );
 
     //get don vi tinh
-    this.danhMucService.dMDonViTien().toPromise().then(
+    this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.dviTiens = data.data?.content;
+          this.donVis = data.data;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -520,5 +521,9 @@ export class LapDeNghiCapVonMuaLuongThucMuoiComponent implements OnInit {
       }
     });
   }
+
+  getUnitName(){
+		return this.donVis.find(e => e.maDvi === this.maDviTao)?.tenDvi;
+	}
 
 }

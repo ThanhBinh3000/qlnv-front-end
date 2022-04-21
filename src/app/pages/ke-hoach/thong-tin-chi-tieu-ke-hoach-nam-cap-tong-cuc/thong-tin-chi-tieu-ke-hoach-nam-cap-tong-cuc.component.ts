@@ -28,7 +28,7 @@ import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNa
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import { cloneDeep } from 'lodash';
 import * as dayjs from 'dayjs';
-import { ItemDetail } from 'src/app/models/ItemDetail';
+import { ItemDetail } from 'src/app/models/itemDetail';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
