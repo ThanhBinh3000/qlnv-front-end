@@ -632,7 +632,7 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                               </div>
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                                   <div nz-col class="gutter-row" [nzSpan]="3">
+                                   <div nz-col class="gutter-row" [nzSpan]="3" [hidden]="status">
                                         <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
                                              <button nz-button>
                                                   <i nz-icon nzType="upload"></i>

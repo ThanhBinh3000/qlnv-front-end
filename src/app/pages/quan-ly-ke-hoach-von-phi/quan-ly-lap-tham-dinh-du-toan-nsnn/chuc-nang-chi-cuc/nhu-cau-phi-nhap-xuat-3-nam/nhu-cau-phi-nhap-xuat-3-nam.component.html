@@ -271,12 +271,12 @@
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.sl"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
                                                   <td>
                                                        <nz-input-number class="search__input" nzSize="small"
                                                             [(ngModel)]="editCache[data.id].data.dmucPhiTc"
-                                                            (change)="changeModel(data.id)"></nz-input-number>
+                                                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
                                                   </td>
                                                   <td>
                                                        {{editCache[data.id].data.thanhTien}}
@@ -324,13 +324,13 @@
                               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                                    <div nz-col class="gutter-row" [nzSpan]="3">
                                         Danh sách văn bản đính kèm
-                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
                                              <button nz-button>
                                                   <i nz-icon nzType="upload"></i>
                                                   Select File
                                              </button>
                                         </nz-upload>
-                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="status"
                                              [disabled]="fileList.length === 0" style="margin-top: 16px">
                                              Thêm vào danh sách
                                         </button>
@@ -363,7 +363,7 @@
                               </nz-table>
                          </nz-tab>
                     </nz-tabset>
-                    <div class="action">
+                    <div class="action" [hidden]="status">
                          <button type="button" class="btn btn-main" (click)="deleteSelected()">
                               <i class="fa fa-trash-o"></i>
                               <span>Xóa</span>

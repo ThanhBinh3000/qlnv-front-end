@@ -339,7 +339,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                lstCTietBCao: this.lstCTietBCao,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
-               maDviTien: this.maDviTien = "01",
+               maDviTien: this.maDviTien,
                maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N,
                namBcao: this.namBaoCaoHienHanh + 1,
                namHienHanh: this.namBaoCaoHienHanh,
@@ -428,8 +428,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
+                         console.log(this.lstCTietBCao);
                          this.maDviTien = data.data.maDviTien;
-                         this.lstCTietBCao.filter(element => {
+                         this.lstCTietBCao.forEach(element => {
                               element.dmucPhiTc = divMoney(element.dmucPhiTc, this.maDviTien);
                               element.thanhTien = divMoney(element.thanhTien, this.maDviTien);
                          });
@@ -477,7 +478,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           // day file len server
           const upfile: FormData = new FormData();
           upfile.append('file', file);
-          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
           let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
                (data) => {
                     let objfile = {
@@ -656,7 +657,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      //gia tri cac o input thay doi thi tinh toan lai
      changeModel(id: string): void {
-          this.editCache[id].data.thanhTien = this.editCache[id].data.sl * this.editCache[id].data.dmucPhiTc;
+          this.editCache[id].data.thanhTien = Number((this.editCache[id].data.sl * this.editCache[id].data.dmucPhiTc).toFixed(3));
      }
 
      async calltonghop() {

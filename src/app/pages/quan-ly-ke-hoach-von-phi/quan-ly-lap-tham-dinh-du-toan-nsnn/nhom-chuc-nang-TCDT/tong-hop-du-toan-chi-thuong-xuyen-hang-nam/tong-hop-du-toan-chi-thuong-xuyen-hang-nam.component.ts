@@ -507,7 +507,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {

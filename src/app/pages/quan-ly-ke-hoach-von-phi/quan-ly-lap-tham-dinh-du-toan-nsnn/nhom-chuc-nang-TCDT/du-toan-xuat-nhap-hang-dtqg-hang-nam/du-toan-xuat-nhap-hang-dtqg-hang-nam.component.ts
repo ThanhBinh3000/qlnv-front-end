@@ -538,7 +538,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -1050,8 +1050,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
   }
 
   thanhTien(id: any) {
-    this.editCache1[id].data.ttienNhapVttbDvi = this.editCache1[id].data.tongDvi * this.editCache1[id].data.dmucNhapVttbDvi;
-    this.editCache1[id].data.ttienNhapVttbVphong = this.editCache1[id].data.tongVphong * this.editCache1[id].data.dmucNhapVttbVphong;
+    this.editCache1[id].data.ttienNhapVttbDvi = Number((this.editCache1[id].data.tongDvi * this.editCache1[id].data.dmucNhapVttbDvi).toFixed(3));
+    this.editCache1[id].data.ttienNhapVttbVphong = Number((this.editCache1[id].data.tongVphong * this.editCache1[id].data.dmucNhapVttbVphong).toFixed(3));
   }
   //call tong hop
   calltonghop() {

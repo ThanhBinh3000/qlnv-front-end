@@ -52,7 +52,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   loaiDans: any = [];
   donVis: any = [];
   cucKhuVucs: any = [];
-  donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+  donViTiens: any = DONVITIEN; // danh muc don vi tien
   listBaoCao: ItemData[] = [];
   lstCTietBCao: ItemData[] = [];
   tong: ItemData = {
@@ -93,7 +93,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;
   trangThaiBanGhi: string = "1";
   maLoaiBaoCao: string = QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N;
-  maDviTien: string ;
+  maDviTien: string;
   newDate = new Date();
   fileToUpload!: File;
   listFile: File[] = [];
@@ -101,10 +101,10 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   fileUrl: any;
   namBaoCao!: any;
   listId: string = "";
-  listIdDelete: string = "";                  // list id delete
+  listIdDelete: string = ""; // list id delete
 
   capDvi: any;
-  checkKV: boolean;                            // check khu vuc
+  checkKV: boolean; // check khu vuc
   soVban: any;
   capDv: any;
   checkDv: boolean;
@@ -112,27 +112,28 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   currentday: Date = new Date();
 
 
-  currentFile?: File;
+  currentFile ? : File;
   progress = 0;
   message = '';
   fileName = 'Select File';
 
 
-  statusBtnDel: boolean;                       // trang thai an/hien nut xoa
-  statusBtnSave: boolean;                      // trang thai an/hien nut luu
-  statusBtnApprove: boolean;                   // trang thai an/hien nut trinh duyet
-  statusBtnTBP: boolean;                       // trang thai an/hien nut truong bo phan
-  statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
-  statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
-  statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnDel: boolean; // trang thai an/hien nut xoa
+  statusBtnSave: boolean; // trang thai an/hien nut luu
+  statusBtnApprove: boolean; // trang thai an/hien nut trinh duyet
+  statusBtnTBP: boolean; // trang thai an/hien nut truong bo phan
+  statusBtnLD: boolean; // trang thai an/hien nut lanh dao
+  statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
+  statusBtnDVCT: boolean; // trang thai nut don vi cap tren
   statusBtnLDDC: boolean;
 
-  listIdFiles: string;                        // id file luc call chi tiet
+  listIdFiles: string; // id file luc call chi tiet
 
 
-  allChecked = false;                         // check all checkbox
-  indeterminate = true;                       // properties allCheckBox
-  editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
+  allChecked = false; // check all checkbox
+  indeterminate = true; // properties allCheckBox
+  editCache: {
+    [key: string]: { edit: boolean;data: ItemData } } = {}; // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
 
@@ -145,15 +146,15 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // upload file
   addFile() {
-    const id = this.fileToUpload?.lastModified.toString();
-    this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
+    const id = this.fileToUpload ?.lastModified.toString();
+    this.lstFile.push({ id: id, fileName: this.fileToUpload ?.name });
     this.listFile.push(this.fileToUpload);
   }
 
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
-      const id = file?.lastModified.toString();
-      this.lstFile.push({ id: id, fileName: file?.name });
+      const id = file ?.lastModified.toString();
+      this.lstFile.push({ id: id, fileName: file ?.name });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -171,7 +172,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     private danhMucService: DanhMucHDVService,
     private location: Location,
   ) {
-    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
+    this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR, )
   }
 
 
@@ -190,15 +191,15 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       this.namBaoCaoHienHanh != null
     ) {
       await this.calltonghop();
-      this.nguoiNhap = this.userInfo?.username;
+      this.nguoiNhap = this.userInfo ?.username;
       this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
-      this.maDonViTao = this.userInfo?.dvql;
+      this.maDonViTao = this.userInfo ?.dvql;
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, data ?.msg);
           }
         },
         (err) => {
@@ -209,15 +210,15 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     } else {
       this.trangThaiBanGhi = "1";
-      this.nguoiNhap = this.userInfo?.username;
-      this.maDonViTao = this.userInfo?.dvql;
+      this.nguoiNhap = this.userInfo ?.username;
+      this.maDonViTao = this.userInfo ?.dvql;
       this.spinner.show();
       this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
           } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, data ?.msg);
           }
         },
         (err) => {
@@ -234,9 +235,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.noiDungs = data.data?.content;
+          this.noiDungs = data.data ?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       },
       (err) => {
@@ -248,9 +249,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     this.danhMucService.dMLoaiKeHoach().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.loaiKhoachs = data.data?.content;
+          this.loaiKhoachs = data.data ?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       },
       (err) => {
@@ -262,9 +263,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     this.danhMucService.dMLoaiDan().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.loaiDans = data.data?.content;
+          this.loaiDans = data.data ?.content;
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       },
       (err) => {
@@ -313,25 +314,25 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   getStatusButton() {
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo ?.roles[0] ?.id);
   }
 
   //get user info
   async getUserInfo(username: string) {
     await this.userService.getUserInfo(username).toPromise().then(
       (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
+        if (data ?.statusCode == 0) {
+          this.userInfo = data ?.data
+          return data ?.data;
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       },
       (err) => {
@@ -355,11 +356,11 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   // luu
   async luu() {
     let checkSaveEdit;
-    if(!this.maDviTien || !this.namBaoCaoHienHanh){
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
@@ -413,18 +414,18 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
         async data => {
-          if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.id = data.data.id;
-            await this.getDetailReport();
-            this.getStatusButton();
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        err => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.id = data.data.id;
+              await this.getDetailReport();
+              this.getStatusButton();
+            } else {
+              this.notification.error(MESSAGE.ERROR, data ?.msg);
+            }
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
       );
     } else {
       this.quanLyVonPhiService.updatelist(request).toPromise().then(
@@ -434,7 +435,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, data ?.msg);
           }
         }, err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -465,7 +466,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
           this.getStatusButton();
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       }, err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -532,7 +533,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
             this.listIdFiles += item.id + ",";
           })
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data ?.msg);
         }
       },
       (err) => {
@@ -547,7 +548,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -625,16 +626,16 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
   // xoa file trong bang file
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
-    this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    this.listFile = this.listFile.filter((a: any) => a ?.lastModified.toString() !== id);
   }
 
   //download file về máy tính
   async downloadFile(id: string) {
     let file!: File;
-    file = this.listFile.find(element => element?.lastModified.toString() == id );
-    if(!file){
-      let fileAttach = this.lstFile.find(element => element?.id == id );
-      if(fileAttach){
+    file = this.listFile.find(element => element ?.lastModified.toString() == id);
+    if (!file) {
+      let fileAttach = this.lstFile.find(element => element ?.id == id);
+      if (fileAttach) {
         await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
             fileSaver.saveAs(data, fileAttach.fileName);
@@ -644,7 +645,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
           },
         );
       }
-    }else{
+    } else {
       const blob = new Blob([file], { type: "application/octet-stream" });
       fileSaver.saveAs(blob, file.name);
     }
@@ -652,14 +653,14 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // click o checkbox all
   updateAllChecked(): void {
-    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+    this.indeterminate = false; // thuoc tinh su kien o checkbox all
+    if (this.allChecked) { // checkboxall == true thi set lai lstCTietBCao.checked = true
       this.lstCTietBCao = this.lstCTietBCao.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+      this.lstCTietBCao = this.lstCTietBCao.map(item => ({ // checkboxall == false thi set lai lstCTietBCao.checked = false
         ...item,
         checked: false
       }));
@@ -668,13 +669,13 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // click o checkbox single
   updateSingleChecked(): void {
-    if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+    if (this.lstCTietBCao.every(item => !item.checked)) { // tat ca o checkbox deu = false thi set o checkbox all = false
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+    } else if (this.lstCTietBCao.every(item => item.checked)) { // tat ca o checkbox deu = true thi set o checkbox all = true
       this.allChecked = true;
       this.indeterminate = false;
-    } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
+    } else { // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
       this.indeterminate = true;
     }
   }
@@ -692,7 +693,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDonViTao) ?.tenDvi;
   }
 
   // start edit
@@ -702,7 +703,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    const index = this.lstCTietBCao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -714,15 +715,15 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
     if (!this.editCache[id].data.ndung ||
       !this.editCache[id].data.loaiKhoach ||
       !this.editCache[id].data.loaiDan ||
-      (!this.editCache[id].data.tongDtoanGtri && this.editCache[id].data.tongDtoanGtri !== 0) ){
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-        return;
+      (!this.editCache[id].data.tongDtoanGtri && this.editCache[id].data.tongDtoanGtri !== 0)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    const index = this.lstCTietBCao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     this.tinhTong(-1, this.lstCTietBCao[index]);
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.tinhTong(1, this.lstCTietBCao[index]);
   }
 
@@ -774,7 +775,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
           this.tinhTong(1, item);
         })
       } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, res ?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -790,7 +791,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.location.back();
         } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
+          this.notification.error(MESSAGE.ERROR, res ?.msg);
         }
       }, err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

@@ -511,7 +511,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           // day file len server
           const upfile: FormData = new FormData();
           upfile.append('file', file);
-          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+          upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
           let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
                (data) => {
                     let objfile = {
@@ -534,8 +534,8 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                tenCtrinh: "",
                maNguonVon: "",
                maLoaiCt: "",
-               tgianKc: 0,
-               tgianHt: 0,
+               tgianKc: this.namBaoCaoHienHanh,
+               tgianHt: this.namBaoCaoHienHanh,
                maCquanQd: 0,
                tongGtri: 0,
                dtoanKphi3006n: 0,
@@ -678,11 +678,16 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           if (!this.editCache[id].data.tenCtrinh ||
                !this.editCache[id].data.maNguonVon ||
                !this.editCache[id].data.maLoaiCt ||
-               (!this.editCache[id].data.tgianKc && this.editCache[id].data.tgianKc !== 0) ||
-               (!this.editCache[id].data.tgianHt && this.editCache[id].data.tgianHt !== 0) ||
+               !this.editCache[id].data.tgianKc  ||
+               !this.editCache[id].data.tgianHt ||
                !this.editCache[id].data.maCquanQd ||
                (!this.editCache[id].data.tongGtri && this.editCache[id].data.tongGtri !== 0)) {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+               return;
+          }
+          if ((this.editCache[id].data.tgianKc >= 3000 || this.editCache[id].data.tgianKc < 1000) ||
+               (this.editCache[id].data.tgianHt >= 3000 || this.editCache[id].data.tgianHt < 1000)) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
                return;
           }
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao

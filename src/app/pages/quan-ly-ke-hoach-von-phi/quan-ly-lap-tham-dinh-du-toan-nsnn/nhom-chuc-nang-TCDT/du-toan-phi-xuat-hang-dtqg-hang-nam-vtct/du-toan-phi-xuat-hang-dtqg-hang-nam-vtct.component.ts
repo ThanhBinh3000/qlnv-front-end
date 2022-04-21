@@ -534,7 +534,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -831,11 +831,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    this.editCache[id].data.thanhTienCoDmucGao = this.editCache[id].data.luongGao * this.editCache[id].data.cphiXuatCoDmucGao;
-    this.editCache[id].data.thanhTienKhongDmucGao = this.editCache[id].data.luongGao * this.editCache[id].data.cphiXuatChuaDmucGao;
+    this.editCache[id].data.thanhTienCoDmucGao =  Number((this.editCache[id].data.luongGao * this.editCache[id].data.cphiXuatCoDmucGao).toFixed(3));
+    this.editCache[id].data.thanhTienKhongDmucGao = Number((this.editCache[id].data.luongGao * this.editCache[id].data.cphiXuatChuaDmucGao).toFixed(3));
     this.editCache[id].data.thanhTienCongGao = this.editCache[id].data.thanhTienCoDmucGao + this.editCache[id].data.thanhTienKhongDmucGao;
-    this.editCache[id].data.thanhTienCoDmucThoc = this.editCache[id].data.luongThoc * this.editCache[id].data.cphiXuatCoDmucThoc;
-    this.editCache[id].data.thanhTienKhongDmucThoc = this.editCache[id].data.luongThoc * this.editCache[id].data.cphiXuatChuaDmucThoc;
+    this.editCache[id].data.thanhTienCoDmucThoc = Number((this.editCache[id].data.luongThoc * this.editCache[id].data.cphiXuatCoDmucThoc).toFixed(3));
+    this.editCache[id].data.thanhTienKhongDmucThoc = Number((this.editCache[id].data.luongThoc * this.editCache[id].data.cphiXuatChuaDmucThoc).toFixed(3));
     this.editCache[id].data.thanhTienCongThoc = this.editCache[id].data.thanhTienCoDmucThoc + this.editCache[id].data.thanhTienKhongDmucThoc;
   }
 
@@ -1030,8 +1030,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
   }
 
   thanhTien(id: any) {
-    this.editCache1[id].data.thanhTienCoDmuc = this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatCoDmuc;
-    this.editCache1[id].data.thanhTienKhongDmuc = this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatChuaDmuc;
+    this.editCache1[id].data.thanhTienCoDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatCoDmuc).toFixed(3));
+    this.editCache1[id].data.thanhTienKhongDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatChuaDmuc).toFixed(3));
     this.editCache1[id].data.thanhTienCong = this.editCache1[id].data.thanhTienCoDmuc + this.editCache1[id].data.thanhTienKhongDmuc;
   }
 
