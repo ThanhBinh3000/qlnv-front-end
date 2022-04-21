@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -99,8 +99,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
   statusBtnLDDC:boolean;                       // trang thai
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
 
-  listIdFiles: string;                        // id file luc call chi tiet
+  listIdDeleteFiles: string;                        // id file luc call chi tiet
 
 
   allChecked = false;                         // check all checkbox
@@ -123,6 +125,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
   donViTiens: any = DONVITIEN;
+  capDv: any;
 
   // upload file
   addFile() {
@@ -279,18 +282,26 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     );
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          let Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          this.capDv = Dvi?.capDvi;
+          if (this.capDv == '2') {
+            this.checkDv = false;
+          } else {
+            this.checkDv = true;
+          }
         } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       },
       (err) => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.getStatusButton()
     this.spinner.hide();
   }
 
@@ -311,17 +322,28 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     );
   }
 
-  getStatusButton(){
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+  getStatusButton() {
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if(dVi && dVi.maDvi == this.userInfo.dvql){
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+      checkParent = true;
+    }
 
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
   }
   //
   selectFile(files: FileList): void {
@@ -388,7 +410,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
@@ -500,10 +522,21 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
+
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.qdDuyetDanDtuTongVon= divMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
+            element.qdDchinhDanDtuTongVon= divMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+            element.qdDuyetTkDtoanXl= divMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
+            element.qdDuyetTkDtoanTb= divMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
+            element.qdDuyetTkDtoanCx= divMoney(element.qdDuyetTkDtoanCx, this.maDviTien);
+            element.klthCapDen3006Nstt= divMoney(element.klthCapDen3006Nstt, this.maDviTien);
+            element.klthCapDen3006DtoanChiTx= divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
+            element.klthCapDen3112Nstt= divMoney(element.klthCapDen3112Nstt, this.maDviTien);
+            element.klthCapDen3112DtoanChiTx= divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+          });
+          this.listFile=[]
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -605,11 +638,12 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
     this.allChecked = false;
   }
-
   // xoa file trong bang file
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    // set list for delete
+    this.listIdDeleteFiles += id + ",";
   }
 
   //download file về máy tính
@@ -689,7 +723,35 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maLoaiKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXdung || !this.editCache[id].data.maDdiemXdung) {
+    if (
+      !this.editCache[id].data.maLoaiKhoach ||
+      !this.editCache[id].data.maKhoiDan ||
+      !this.editCache[id].data.maDdiemXdung ||
+      !this.editCache[id].data.maDdiemXdung ||
+      !this.editCache[id].data.tenDan||
+      !this.editCache[id].data.maSoDan||
+      !this.editCache[id].data.ddiemMoTk||
+      !this.editCache[id].data.klthCapDen3006Songaythang ||
+      !this.editCache[id].data.qdDuyetTkDtoanSongaythang||
+      !this.editCache[id].data.qdDuyetDanDtuSongaythang||
+      !this.editCache[id].data.nlucTke||
+      !this.editCache[id].data.ghiChu||
+      !this.editCache[id].data.klthCapDen3112Songaythang ||
+      (!this.editCache[id].data.qdDuyetDanDtuTongVon && this.editCache[id].data.qdDuyetDanDtuTongVon !==0)||
+      (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanXl && this.editCache[id].data.qdDuyetTkDtoanXl !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanTb && this.editCache[id].data.qdDuyetTkDtoanTb !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanCx && this.editCache[id].data.qdDuyetTkDtoanCx !==0)||
+      (!this.editCache[id].data.klthCapDen3006Nstt && this.editCache[id].data.klthCapDen3006Nstt !==0)||
+      (!this.editCache[id].data.klthCapDen3006DtoanChiTx && this.editCache[id].data.klthCapDen3006DtoanChiTx !==0)||
+      (!this.editCache[id].data.klthCapDen3006Quykhac && this.editCache[id].data.klthCapDen3006Quykhac !==0)||
+      (!this.editCache[id].data.klthCapDen3112Nstt && this.editCache[id].data.klthCapDen3112Nstt !==0)||
+      (!this.editCache[id].data.klthCapDen3112DtoanChiTx && this.editCache[id].data.klthCapDen3112DtoanChiTx !==0)||
+      (!this.editCache[id].data.klthCapDen3112Quykhac && this.editCache[id].data.klthCapDen3112Quykhac !==0)||
+      (!this.editCache[id].data.ncauVonN1 && this.editCache[id].data.ncauVonN1 !==0)||
+      (!this.editCache[id].data.ncauVonN2 && this.editCache[id].data.ncauVonN2 !==0)||
+      (!this.editCache[id].data.ncauVonN3 && this.editCache[id].data.ncauVonN3 !==0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
@@ -753,4 +815,13 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
     }
+    // action copy
+  doCopy(){
+
+  }
+
+  // action print
+  doPrint(){
+
+  }
 }

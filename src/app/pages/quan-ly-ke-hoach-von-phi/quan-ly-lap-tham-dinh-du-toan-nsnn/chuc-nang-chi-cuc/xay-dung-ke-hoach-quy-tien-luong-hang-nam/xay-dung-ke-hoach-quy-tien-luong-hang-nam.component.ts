@@ -7,7 +7,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -80,8 +80,10 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
   statusBtnLDDC:boolean;                       // trang thai
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
 
-  listIdFiles: string;                        // id file luc call chi tiet
+  listIdDeleteFiles: string;                        // id file luc call chi tiet
   capDvi:any;
   checkKV:boolean;                            // check khu vuc
   soVban:any;
@@ -206,7 +208,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
               this.capDvi = e.capDvi;
             }
           })
-          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          let Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
           if( this.capDv == '2'){
             this.checkDv = false;
@@ -228,6 +230,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     }else{
       this.checkKV = false;
     }
+    this.getStatusButton();
     this.spinner.hide();
   }
   submitForm(){
@@ -247,18 +250,29 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
-  getStatusButton(){
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-  }
+  getStatusButton() {
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if(dVi && dVi.maDvi == this.userInfo.dvql){
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+      checkParent = true;
+    }
 
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+  }
   //get user info
   async getUserInfo(username: string) {
     let userInfo = await this.userSerivce.getUserInfo(username).toPromise().then(
@@ -339,7 +353,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
       listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       maBcao: this.maBaoCao,
@@ -442,10 +456,22 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
+            element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+            element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+            element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
+            element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
+            element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
+            element.quyLuongTangNangBacLuongN1 = divMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+            element.bcheChuaSdungLuong = divMoney(element.bcheChuaSdungLuong, this.maDviTien);
+            element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+            element.quyLuongPcapTheoHdld = divMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
+
+          });
+          this.listFile=[]
+
 
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
@@ -553,6 +579,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    // set list for delete
+    this.listIdDeleteFiles += id + ",";
   }
 
   //download file về máy tính
@@ -632,10 +660,25 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    if(
+      (!this.editCache[id].data.bcheGiaoN1 && this.editCache[id].data.bcheGiaoN1 !==0) ||
+      (!this.editCache[id].data.duKienSoCcvcCoMatN1 && this.editCache[id].data.duKienSoCcvcCoMatN1 !==0) ||
+      (!this.editCache[id].data.duKienSoHdongCoMatN1 && this.editCache[id].data.duKienSoHdongCoMatN1 !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac && this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1Pcap && this.editCache[id].data.ccvcDuKienCoMatN1Pcap !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1Ckdg && this.editCache[id].data.ccvcDuKienCoMatN1Ckdg !==0) ||
+      (!this.editCache[id].data.quyLuongTangNangBacLuongN1 && this.editCache[id].data.quyLuongTangNangBacLuongN1 !==0) ||
+      (!this.editCache[id].data.bcheChuaSdungLuong && this.editCache[id].data.bcheChuaSdungLuong !==0) ||
+      (!this.editCache[id].data.bcheChuaSdungCkdg && this.editCache[id].data.bcheChuaSdungCkdg !==0) ||
+      (!this.editCache[id].data.quyLuongPcapTheoHdld && this.editCache[id].data.quyLuongPcapTheoHdld !==0)
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    }else{
+      const index = this.lstCTietBCao.findIndex(item => item.id === id);
+      this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
+      Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
+      this.editCache[id].edit = false;
+    }
   }
 
   updateEditCache(): void {
@@ -700,4 +743,13 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
     }
+     // action copy
+  doCopy(){
+
+  }
+
+  // action print
+  doPrint(){
+
+  }
 }

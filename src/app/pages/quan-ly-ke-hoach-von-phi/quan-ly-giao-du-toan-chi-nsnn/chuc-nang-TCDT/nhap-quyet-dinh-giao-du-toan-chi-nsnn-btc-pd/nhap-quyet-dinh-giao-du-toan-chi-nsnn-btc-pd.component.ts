@@ -108,6 +108,9 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  tongNguonNsnn: number;
+  tongNguonKhac: number;
+  tongDtoanChiNSNN: number;
 
   // upload file
   // addFile() {
@@ -624,6 +627,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    this.tinhTong1()
   }
 
   // gan editCache.data == lstCTietBCao
@@ -688,10 +692,15 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 }
 
   changeTong(id: string): void {
-    let index = this.lstCTietBCao.findIndex(item => item.id == id);
     this.editCache[id].data.tong = this.editCache[id].data.nguonNsnn + this.editCache[id].data.nguonKhac;
-    // this.lstCTietBCao.forEach(e => {
-    //   this.editCache[id].data.tong = e[index].tong;
-    // })
+  }
+  tinhTong1(){
+    this.tongNguonNsnn = 0
+    this.tongNguonKhac = 0
+    this.lstCTietBCao.forEach(e => {
+      this.tongNguonNsnn += e.nguonNsnn;
+      this.tongNguonKhac += e.nguonKhac;
+      this.tongDtoanChiNSNN= this.tongNguonNsnn + this.tongNguonKhac;
+    })
   }
 }

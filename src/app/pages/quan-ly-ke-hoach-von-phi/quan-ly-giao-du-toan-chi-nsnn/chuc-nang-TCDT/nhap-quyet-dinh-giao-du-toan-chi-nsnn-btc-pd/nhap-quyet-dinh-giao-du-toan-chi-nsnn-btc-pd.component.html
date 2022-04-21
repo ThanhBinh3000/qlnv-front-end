@@ -114,13 +114,11 @@
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.nguonNsnn"
-                           (change)="changeTong(data.id)" ></nz-input-number>
+                           [(ngModel)]="editCache[data.id].data.nguonNsnn" (change)="changeTong(data.id)" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.nguonKhac"
-                           (change)="changeTong(data.id)" ></nz-input-number>
+                           [(ngModel)]="editCache[data.id].data.nguonKhac" (change)="changeTong(data.id)"></nz-input-number>
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
@@ -133,13 +131,13 @@
                   <td></td>
                   <td>DỰ TOÁN CHI NGÂN SÁCH NHÀ NƯỚC</td>
                   <td>
-                       {{tongCong}}
+                       {{tongDtoanChiNSNN}}
                   </td>
                   <td>
-                       {{tongCongNguonNSNN}}
+                       {{tongNguonNsnn}}
                   </td>
                   <td>
-                       {{tongCongNguonKhac}}
+                       {{tongNguonKhac}}
                   </td>
                   <td></td>
                 </tr>

@@ -12,7 +12,8 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden]="statusBtnApprove">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
+          [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -57,7 +58,8 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden] = "statusBtnLDDC">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')"
+          [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điều chỉnh theo số kiểm tra </span>
         </a>
@@ -65,8 +67,15 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
-        (click)="redirectChiTieuKeHoachNam()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()" [hidden]="statusBtnCopy">
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span>Copy</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()" [hidden]="statusBtnPrint">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="icon htvbdh_dong"></i>
           <span>Đóng</span>
         </a>
@@ -81,89 +90,69 @@
       <nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
 
         <div class="widget-body">
-            <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-              <nz-descriptions-item nzTitle="Ngày nhập">
-                {{ngayNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
-                {{nguoiNhap}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Đơn vị tạo">
-                {{getUnitName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Mã báo cáo">
-                {{maBaoCao}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <ng-container *ngIf="status;else nbc">
-                  {{namBaoCaoHienHanh}}
-                </ng-container>
-                <ng-template #nbc>
-                  <input type="number" nz-input class="input__search"
-                    [class]="namBaoCaoHienHanh >= 1000 &&  namBaoCaoHienHanh <= 2999 ?'' : 'input-error-validate'"
-                    name="" id="" [(ngModel)]="namBaoCaoHienHanh" (change)="tinhNam()"/>
-                </ng-template>
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Trạng thái">
-                {{getStatusName()}}
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Loại báo cáo">
-                Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv" >
-                {{soVban}}
-             </nz-descriptions-item>
-              <nz-descriptions-item></nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Năm BC">
-                {{namBcao}}
-              </nz-descriptions-item>
-            </nz-descriptions>
+          <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
+            <nz-descriptions-item nzTitle="Ngày nhập">
+              {{ngayNhap}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Người nhập" [nzSpan]="4">
+              {{nguoiNhap}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Đơn vị tạo">
+              {{getUnitName()}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Mã báo cáo">
+              {{maBaoCao}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
+              <ng-container *ngIf="status;else nbc">
+                {{namBaoCaoHienHanh}}
+              </ng-container>
+              <ng-template #nbc>
+                <input type="number" nz-input class="input__search"
+                  [class]="namBaoCaoHienHanh >= 1000 &&  namBaoCaoHienHanh <= 2999 ?'' : 'input-error-validate'" name=""
+                  id="" [(ngModel)]="namBaoCaoHienHanh" (change)="tinhNam()" />
+              </ng-template>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Trạng thái">
+              {{getStatusName()}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Loại báo cáo">
+              Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Số VB gửi TC " *ngIf="!checkDv">
+              {{soVban}}
+            </nz-descriptions-item>
+            <nz-descriptions-item></nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Năm BC">
+              {{namBcao}}
+            </nz-descriptions-item>
+          </nz-descriptions>
         </div>
 
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm'">
-            <ng-container *ngIf="status;else templateName">
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  Đơn vị:
-                  <div *ngFor="let item of donViTiens">
-                    <div *ngIf="item.id == maDviTien">
-                      {{item.tenDm}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <ng-template #templateName>
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  <!-- <div class="inner-box">Đơn vị: -->
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                    [class]="maDviTien ?'' : 'input-error-validate' ">
-                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
-                  <!-- </div> -->
-                </div>
-              </div>
-            </ng-template>
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất Thóc (tấn)</label>
-                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongThocXuat" [class]="luongThocXuat || luongThocXuat===0? '' : 'input-error-validate'"></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongThocXuat"
+                  [class]="luongThocXuat || luongThocXuat ===0? '' : 'input-error-validate'"></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng nhập Thóc (tấn)</label>
-                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongThocNhap" [class]="luongThocNhap || luongThocNhap===0? '' : 'input-error-validate'" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongThocNhap"
+                  [class]="luongThocNhap || luongThocNhap ===0? '' : 'input-error-validate'"></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất Gạo(tấn)</label>
-                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoXuat" [class]="luongGaoXuat || luongGaoXuat===0? '' : 'input-error-validate'" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoXuat"
+                  [class]="luongGaoXuat || luongGaoXuat ===0? '' : 'input-error-validate'"></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng nhập Gạo (tấn)</label>
-                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoNhap" [class]="luongGaoNhap || luongGaoNhap===0? '' : 'input-error-validate'" ></nz-input-number>
+                <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="luongGaoNhap"
+                  [class]="luongGaoNhap || luongGaoNhap ===0? '' : 'input-error-validate'"></nz-input-number>
               </div>
             </div>
             <div class="row">
@@ -215,21 +204,24 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn Thiết bị"
-                      [class]="editCache[data.id].data.maTbi ? '' : 'input-error-validate'"
+                        [class]="editCache[data.id].data.maTbi ? '' : 'input-error-validate'"
                         [(ngModel)]="editCache[data.id].data.maTbi">
                         <nz-option *ngFor="let item of tenTbis" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [nzMin]="0" [(ngModel)]="editCache[data.id].data.slNhap" [class]="editCache[data.id].data.slNhap || editCache[data.id].data.slNhap ===0 ? '' : 'input-error-validate' "></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [nzMin]="0"
+                        [(ngModel)]="editCache[data.id].data.slNhap"
+                        [class]="editCache[data.id].data.slNhap || editCache[data.id].data.slNhap ===0 ? '' : 'input-error-validate' ">
+                      </nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Hủy</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
@@ -254,14 +246,14 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-                  <button nz-button>
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <button nz-button >
                     <i nz-icon nzType="upload"></i>
                     Select File
                   </button>
-                </nz-upload>
+                </nz-upload >
                 <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
-                  style="margin-top: 16px">
+                  style="margin-top: 16px" [hidden]="status">
                   Thêm vào danh sách
                 </button>
               </div>
@@ -292,15 +284,15 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>

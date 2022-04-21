@@ -47,10 +47,10 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   donVis: any = [];             // danh muc don vi
   lstCTietBCao: AllItemData = new AllItemData;
   lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
-  luongThocXuat!: number;
-  luongThocNhap!: number;
-  luongGaoXuat!: number;
-  luongGaoNhap!: number;
+  luongThocXuat: number = 0;
+  luongThocNhap: number = 0;
+  luongGaoXuat: number = 0;
+  luongGaoNhap: number = 0;
   tong: number = 0;
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
@@ -80,7 +80,10 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
   statusBtnLDDC:boolean;                       // trang thai
-  listIdFiles: string;                        // id file luc call chi tiet
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
+
+  listIdDeleteFiles: string;                        // id file luc call chi tiet
 
 
   allChecked = false;                         // check all checkbox
@@ -209,11 +212,11 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     );
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          let Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi?.capDvi;
           if( this.capDv=='2'){
             this.checkDv = false;
@@ -228,6 +231,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    this.getStatusButton()
     this.spinner.hide();
   }
   submitForm(){
@@ -247,16 +251,28 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     this.namBcao = this.namBaoCaoHienHanh+1;
   }
 
-getStatusButton(){
+  getStatusButton() {
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if(dVi && dVi.maDvi == this.userInfo.dvql){
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+      checkParent = true;
+    }
+
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -296,7 +312,7 @@ getStatusButton(){
   // trinh duyet
   async luu() {
     let checkSaveEdit;
-    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+    if (!this.namBaoCaoHienHanh) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -304,19 +320,24 @@ getStatusButton(){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
-
-    if ((!this.luongThocXuat && this.luongThocXuat !== 0) || (!this.luongThocNhap && this.luongThocNhap !== 0) || (!this.luongGaoXuat && this.luongGaoXuat !== 0) || (!this.luongGaoNhap && this.luongGaoNhap !== 0)) {
-      checkSaveEdit = false
+    if (
+      (!this.luongThocXuat && this.luongThocXuat !== 0) ||
+      (!this.luongThocNhap && this.luongThocNhap !== 0) ||
+      (!this.luongGaoXuat && this.luongGaoXuat !== 0) ||
+      (!this.luongGaoNhap && this.luongGaoNhap !== 0)
+      ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
     }
 
-    //check xem tat ca cac dong du lieu da luu chua?
-    //chua luu thi bao loi, luu roi thi cho di
+    // check xem tat ca cac dong du lieu da luu chua?
+    // chua luu thi bao loi, luu roi thi cho di
     this.lstCTiet.filter(element => {
-      element.slNhap = mulMoney(element.slNhap, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
     });
+
     if (checkSaveEdit == false) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
@@ -348,12 +369,12 @@ getStatusButton(){
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao:ob,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
+      maDviTien: "01",
       maLoaiBcao: QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
@@ -472,10 +493,7 @@ getStatusButton(){
             this.status = true;
           }
 
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
+          this.listFile=[]
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
         }
@@ -557,6 +575,8 @@ getStatusButton(){
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    // set list for delete
+    this.listIdDeleteFiles += id + ",";
   }
 
   //download file về máy tính
@@ -641,8 +661,12 @@ getStatusButton(){
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maTbi) {
+    if (
+      !this.editCache[id].data.maTbi ||
+      (!this.editCache[id].data.slNhap && this.editCache[id].data.slNhap !== 0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return
     } else {
       this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
@@ -706,5 +730,14 @@ getStatusButton(){
           }else {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
           }
+        }
+          // action copy
+        doCopy(){
+
+        }
+
+        // action print
+        doPrint(){
+
         }
 }

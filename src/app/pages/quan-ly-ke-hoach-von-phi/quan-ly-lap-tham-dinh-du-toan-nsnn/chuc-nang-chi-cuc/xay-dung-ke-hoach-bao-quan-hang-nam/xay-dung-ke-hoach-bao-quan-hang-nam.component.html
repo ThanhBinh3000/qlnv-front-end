@@ -67,6 +67,14 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()" [hidden]="statusBtnCopy">
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span>Copy</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()" [hidden]="statusBtnPrint">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="icon htvbdh_dong"></i>
           <span>Đóng</span>
@@ -250,7 +258,8 @@
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphi"
-                        [class]="editCache[data.id].data.kphi || editCache[data.id].data.kphi ===0 ? '' : 'input-error-validate' ">
+                      [class]="editCache[data.id].data.kphi || editCache[data.id].data.kphi ===0 ? '' : 'input-error-validate' "
+                      >
                       </nz-input-number>
                     </td>
                     <td [hidden]="status">
@@ -275,14 +284,14 @@
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-                  <button nz-button>
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <button nz-button >
                     <i nz-icon nzType="upload"></i>
                     Select File
                   </button>
                 </nz-upload>
                 <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
-                  style="margin-top: 16px">
+                  style="margin-top: 16px" [hidden]="status">
                   Thêm vào danh sách
                 </button>
               </div>
@@ -313,15 +322,15 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
