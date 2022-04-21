@@ -1,20 +1,35 @@
-<form nz-form>
-  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNN KV </nz-form-label>
-        <input nz-input formControlName="slThoc1" />
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="24">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Tên dự án </nz-form-label>
-        <input nz-input formControlName="slThoc1" />
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="24" class="mt-16">
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+  <div nz-col [nzSpan]="8">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNN KV </nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+          <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+            [nzAutocomplete]="auto" [readonly]="isEdit" />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+            (click)="selectDonVi(option)">
+            {{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="24">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true"> Tên dự án </nz-form-label>
+      <input nz-input [(ngModel)]="data.tenDuAn" [readonly]="isEdit" />
+    </nz-form-item>
+  </div>
+  <div nz-col [nzSpan]="24" class="mt-16">
+    <div id="table-goi-thau">
       <nz-card nzTitle="Danh sách gói thầu" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
-        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
           <thead>
             <tr>
               <th width="60px">STT</th>
@@ -28,67 +43,112 @@
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td>Số 1</td>
-              <td>Việt trì, Phú thọ</td>
-              <td>1.330</td>
-              <td>13.020</td>
-              <td>17.316.600.000</td>
+              <td></td>
+              <td><input nz-input [(ngModel)]="itemRow.goiThau" /></td>
+              <td><input nz-input [(ngModel)]="itemRow.diaDiemNhap" /></td>
               <td>
-                <a>
-                  <i class="fa fa-pencil"></i>
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="itemRow.soLuong" [nzMin]="0">
+                </nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="itemRow.donGia" [nzMin]="0"></nz-input-number>
+              </td>
+              <td><input nz-input [ngModel]="(itemRow.soLuong ?? 0) * (itemRow.donGia ?? 0)" [readonly]="true" /></td>
+              <td>
+                <a (click)="addRow()"
+                  [class.disabled]="!itemRow.goiThau || !itemRow.diaDiemNhap || itemRow.goiThau == '' || itemRow.diaDiemNhap == ''">
+                  <i class="fa fa-plus"></i>
                 </a>
-                <a>
+                <a (click)="clearItemRow()">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
             </tr>
-            <tr>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <ng-container *ngIf="!editCache[data.stt]?.edit; else editTemplate">
+                <td class="text-center">{{i+1}}</td>
+                <td>{{ data.goiThau }}</td>
+                <td>{{ data.diaDiemNhap }}</td>
+                <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                <td>{{ data.donGia | number: '1.0-1' }}</td>
+                <td>{{ data.thanhTien | number: '1.0-1' }}</td>
+                <td>
+                  <a (click)="editRow(data.stt)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="deleteRow(data)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.stt]?.data.goiThau" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.stt]?.data.diaDiemNhap" /></td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.stt]?.data.soLuong"
+                    [nzMin]="0">
+                  </nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.stt]?.data.donGia"
+                    [nzMin]="0">
+                  </nz-input-number>
+                </td>
+                <td>
+                  <input type="text" nz-input
+                    [ngModel]="(editCache[data.stt]?.data.soLuong ?? 0) * (editCache[data.stt]?.data.donGia ?? 0)"
+                    [readonly]="true" />
+                </td>
+                <td>
+                  <a (click)="saveEdit(data.stt)" class="save"
+                    [class.disabled]="!editCache[data.stt]?.data.goiThau || !editCache[data.stt]?.data.diaDiemNhap || editCache[data.stt]?.data.goiThau == '' || editCache[data.stt]?.data.diaDiemNhap == ''">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEdit(data.stt)">
+                    <i class="fa fa-times do"></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
+            <tr *ngIf="dataTable.length > 0">
               <td colspan="3" class="background-last-row align-right">Tổng</td>
-              <td class="background-last-row">3.390</td>
-              <td class="background-last-row">39.060</td>
-              <td class="background-last-row">51.949.800.000</td>
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 3, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 4, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
+              <td class="background-last-row">{{(tableExist ? reduceRowData(0, 5, 2,
+                ',','table-goi-thau') : 0) | number: '1.0-1'}}</td>
               <td class="background-last-row"></td>
             </tr>
           </tbody>
         </nz-table>
-        <div class="tab-content tab-menu" id="myTabContent">
-          <div class="tab-pane fade show active justify-content-between">
-            <div class="trai">
-            </div>
-            <div class="canphai">
-              <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger [nzPageSize]="5"
-                [nzShowTotal]="rangeTemplate">
-                <ng-template #rangeTemplate let-range="range" let-total>
-                  3-3 of 4 items
-                </ng-template>
-              </nz-pagination>
-              <!-- end phân trang  -->
-            </div>
-          </div>
-        </div>
       </nz-card>
     </div>
-    <div nz-col [nzSpan]="24" class="mt-16">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true">
-          Ghi chú
-        </nz-form-label>
-        <textarea nz-input [rows]="3"></textarea>
-      </nz-form-item>
-    </div>
   </div>
-</form>
+  <div nz-col [nzSpan]="24" class="mt-16">
+    <nz-form-item>
+      <nz-form-label nzRequired [nzNoColon]="true">
+        Ghi chú
+      </nz-form-label>
+      <textarea nz-input [rows]="3" [(ngModel)]="data.ghiChu"></textarea>
+    </nz-form-item>
+  </div>
+</div>
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
-        <i aria-hidden="true" class="fa fa-sign-out"></i>
-        Đóng
-      </a>
+      <button nz-button (click)="handleOk()" class="modal__button--save"
+        [disabled]="!selectedDonVi.maDvi || selectedDonVi.maDvi == '' || !data.tenDuAn || data.tenDuAn == '' || !data.ghiChu || data.ghiChu == ''">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
     </div>
   </div>
 </div>

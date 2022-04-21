@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?cqcegt');
-  src:  url('fonts/htvbdh.eot?cqcegt#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?cqcegt') format('truetype'),
-    url('fonts/htvbdh.woff?cqcegt') format('woff'),
-    url('fonts/htvbdh.svg?cqcegt#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?ax96x9');
+  src:  url('fonts/htvbdh.eot?ax96x9#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?ax96x9') format('truetype'),
+    url('fonts/htvbdh.woff?ax96x9') format('woff'),
+    url('fonts/htvbdh.svg?ax96x9#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,114 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_ngan-kho-2:before {
+  content: "\eb0f";
+}
+.htvbdh_tcdt_quytrinhkythuat:before {
+  content: "\eb10";
+}
+.htvbdh_tcdt_congtrinhnghiencuu:before {
+  content: "\eb11";
+}
+.htvbdh_tcdt_kiemtrachatluong:before {
+  content: "\eb12";
+}
+.htvbdh_tcdt_dungcuchuyendung:before {
+  content: "\eb13";
+}
+.htvbdh_tcdt_congcudungcu:before {
+  content: "\eb14";
+}
+.htvbdh_tcdt_dinhmucdungcu:before {
+  content: "\eb15";
+}
+.htvbdh_tcdt_dinhmuc2:before {
+  content: "\eb16";
+}
+.htvbdh_tcdt_saphethanluukho:before {
+  content: "\eb0d";
+}
+.htvbdh_tcdt_bienbannghiemthukelot2:before {
+  content: "\eb0e";
+}
+.htvbdh_tcdt_cucdutru3:before {
+  content: "\eb0b";
+}
+.htvbdh_tcdt_cucdutru2:before {
+  content: "\eb0c";
+}
+.htvbdh_tcdt_xuatkhac:before {
+  content: "\eb09";
+}
+.htvbdh_tcdt_xuatkhoban:before {
+  content: "\eb0a";
+}
+.htvbdh_tcdt_tochucthuchien:before {
+  content: "\eb08";
+}
+.htvbdh_tcdt_muoi:before {
+  content: "\eb07";
+}
+.htvbdh_tcdt_honghoccanbaohanh:before {
+  content: "\eafe";
+}
+.htvbdh_tcdt_honghocgiamchatluong:before {
+  content: "\eb01";
+}
+.htvbdh_tcdt_saphethan:before {
+  content: "\eb02";
+}
+.htvbdh_tcdt_hethanbaohanh:before {
+  content: "\eb03";
+}
+.htvbdh_tcdt_tieuhuy:before {
+  content: "\eb04";
+}
+.htvbdh_tcdt_Thanhly:before {
+  content: "\eb05";
+}
+.htvbdh_tcdt_theodoibaoquan:before {
+  content: "\eb06";
+}
+.htvbdh_tcdt_ngan-kho:before {
+  content: "\eafd";
+}
+.htvbdh_tcdt_baogao:before {
+  content: "\eaff";
+}
+.htvbdh_tcdt_baothoc:before {
+  content: "\eb00";
+}
+.htvbdh_tcdt_nhapkhac2:before {
+  content: "\eafb";
+}
+.htvbdh_tcdt_nhaptheokehoach:before {
+  content: "\eafc";
+}
+.htvbdh_tcdt_nhomquyen2:before {
+  content: "\eaf9";
+}
+.htvbdh_tcdt_nhomquyen:before {
+  content: "\eafa";
+}
+.htvbdh_tcdt_kynhay:before {
+  content: "\eaf6";
+}
+.htvbdh_tcdt_muatructiep:before {
+  content: "\eaf7";
+}
+.htvbdh_tcdt_dauthau:before {
+  content: "\eaf8";
+}
+.htvbdh_tcdt_baocao2:before {
+  content: "\eaf3";
+}
+.htvbdh_tcdt_chitieukehoachnam:before {
+  content: "\eaf4";
+}
+.htvbdh_tcdt_dieuchinhkehoachnam:before {
+  content: "\eaf5";
+}
 .htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet:before {
   content: "\eaf1";
 }

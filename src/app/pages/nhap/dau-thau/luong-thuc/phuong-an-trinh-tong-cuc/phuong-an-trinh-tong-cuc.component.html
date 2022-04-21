@@ -1,14 +1,15 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+<div class="luong-thuc__danh-sach">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
         <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
-              <label class="search__label">Loại hàng DTQD</label>
-              <input class="search__input" nz-input />
+              <label class="search__label">Loại hàng DTQG</label>
+              <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="loaiVTHH">
+                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
+                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Từ ngày tạo phương án</label>
@@ -18,13 +19,13 @@
             <div nz-col nzSpan="6">
               <label class="search__label">Đến ngày tạo phương án</label>
               <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
-                nzFormat="yyyy-MM-dd" nzPlaceHolder="Đến ngày"></nz-date-picker>
+                nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <nz-select formControlName="namKeHoach">
+                  <nz-select [(ngModel)]="namKeHoach">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -32,11 +33,11 @@
             </div>
           </div>
           <div class="cangiua group-button-search">
-            <button nz-button class="search__button--search">
+            <button nz-button class="search__button--search" (click)="search()">
               <i nz-icon nzType="search"></i>
               Tìm kiếm
             </button>
-            <button nz-button class="search__button--clear">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
               <i nz-icon nzType="close"></i>
               Xóa điều kiện
             </button>
@@ -44,7 +45,8 @@
         </nz-card>
         <nz-card nzTitle="THÔNG TIN PHƯƠNG ÁN TỔNG HỢP KHLCNT TRÌNH TỔNG CỤC" [nzExtra]="tableCard1"
           class="mt16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
             <thead>
               <tr>
                 <th width="60px">STT</th>
@@ -64,50 +66,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>0</td>
-                <td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <th width="45px">
                   <label nz-checkbox></label>
-                </td>
-                <td>10/03/2022</td>
-                <td>2022</td>
-                <td>QDPD CTKH_01</td>
-                <td class="text-center">Đấu thầu qua mạng</td>
-                <td class="text-center">Một giai đoạn</td>
-                <td class="text-center">Hợp đồng trọn gói</td>
-                <td class="text-center">NSNN</td>
-                <td class="text-center">Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
-                  tại nam bộ</td>
-                <td class="text-center">Tổng cục chưa duyệt</td>
+                </th>
+                <td>{{ data.ngayTao }}</td>
+                <td>{{ data.namKhoach }}</td>
+                <td></td>
+                <td>{{ data.tenHthucLcnt }}</td>
+                <td>{{ data.tenPthucLcnt }}</td>
+                <td>{{ data.tenLoaiHdong }}</td>
+                <td>{{ data.tenNguonVon }}</td>
+                <td></td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
-                  <a>
+                  <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a>
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>0</td>
-                <td>
-                  <label nz-checkbox></label>
-                </td>
-                <td>10/03/2022</td>
-                <td>2022</td>
-                <td>QDPD CTKH_01</td>
-                <td class="text-center">Đấu thầu qua mạng</td>
-                <td class="text-center">Một giai đoạn</td>
-                <td class="text-center">Hợp đồng trọn gói</td>
-                <td class="text-center">NSNN</td>
-                <td class="text-center">Gạo 15% tấm, loại hạt dài, được say sát từ thóc thu hoạch vụ đông xuân năm 2022
-                  tại nam bộ</td>
-                <td class="text-center">Tổng cục chưa duyệt</td>
-                <td class="text-center">
-                  <a>
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <a>
+                  <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -134,10 +111,6 @@
           </div>
         </nz-card>
         <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToThongTinChungPhuongAnTrinhTongCuc()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
           <button type="button" class="btn btn-sub">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>

@@ -19,6 +19,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  text: string = "";
 
   constructor(
     private _modalRef: NzModalRef,
@@ -64,9 +65,10 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       tenDvi: null,
       pageNumber: this.page,
       pageSize: this.pageSize,
-      soQD: null,
+      soQD: this.text,
       trichYeu: null,
       ngayKyTuNgay: null,
+      trangThai: '02'
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

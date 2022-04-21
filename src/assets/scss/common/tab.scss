@@ -22,15 +22,17 @@
   }
   .ant-tabs-tab-btn {
     color: lighten($color: #444444, $amount: 50);
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
+    white-space: pre-wrap;
+    text-align: center;
   }
   .ant-tabs-tab.ng-star-inserted {
-    width: 208px;
+    max-width: 300px;
     justify-content: center;
     padding: 15px !important;
-    height: 52px !important;
+    height: auto !important;
     margin-right: 12px !important;
   }
   .ant-tabs-tab.ant-tabs-tab-active.ng-star-inserted {
@@ -59,8 +61,40 @@
   .content-item {
     .icon,
     .content-item-title,
-    .content-item-description {
+    .content-item-description,
+    a {
       color: #fff !important;
+    }
+  }
+}
+.card-tree {
+  padding: 0 !important;
+  padding-top: 24px !important;
+
+  .item-url-menu {
+    width: 100%;
+    padding-top: 24px;
+
+    .item-url-click-left {
+      border-top: 1px solid #b8f0f1;
+      background: #edffff;
+      color: #0064b1 !important;
+      border-bottom-left-radius: 6px;
+    }
+
+    .item-url-click-center {
+      border-top: 1px solid #b8f0f1;
+      border-right: 1px solid #b8f0f1;
+      border-left: 1px solid #b8f0f1;
+      background: #edffff;
+      color: #0064b1 !important;
+    }
+
+    .item-url-click-right {
+      border-top: 1px solid #b8f0f1;
+      background: #edffff;
+      color: #0064b1 !important;
+      border-bottom-right-radius: 6px;
     }
   }
 }
