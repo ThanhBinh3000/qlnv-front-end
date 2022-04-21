@@ -27,6 +27,10 @@ export const MESSAGE = {
   TRINH_DUYET_SUCCESS: 'Trình duyệt thành công',
   QD_TCDT: '/QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
+  TU_CHOI_SUCCESS: 'Từ chối thành công.',
+  DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
+  DON_VI_TINH_LUONG_THUC: 'Tấn',
+
   ERROR_CALL_SERVICE: 'Có lỗi trong quá trình vấn tin',
   SEARCH_VALIDATE: 'Bạn chưa chọn loại báo cáo',
   ERROR_ADD_VTU: 'Không được chọn trùng loại vật tư',

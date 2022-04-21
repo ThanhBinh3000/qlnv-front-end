@@ -1,5 +1,3 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
 <div>
   <nz-affix class="menu-lv3" [nzOffsetTop]="43">
     <div class="contentBor chi-tieu__body">
@@ -34,34 +32,7 @@
       <div class="main-content">
         <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
           <div class="widget-body">
-            <div *ngIf="id == 0">
-              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Số quyết định">
-                  100/QĐ-TCDT
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Ngày quyết định">
-                  17/02/2022
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Loại hàng DTQG">
-                  17/02/2022
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Năm kế hoạch">
-                  2022
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Về việc" [nzSpan]="4">
-                  Chỉ tiêu kế hoạch năm
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Tài liệu đính kèm" [nzSpan]="4">
-                  <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-                      <i class="icon htvbdh_tcdt_tep"></i>
-                    </a>
-                  </nz-upload>
-                  Chỉ tiêu kế hoạch năm.docx
-                </nz-descriptions-item>
-              </nz-descriptions>
-            </div>
-            <div class="search__body" nz-row [nzGutter]="[18, 12]" *ngIf="id > 0">
+            <div class="search__body" nz-row [nzGutter]="[18, 12]">
               <div nz-col nzSpan="6">
                 <label class="search__label">Số quyết định</label>
                 <input class="search__input" nz-input />
@@ -76,16 +47,18 @@
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Năm kế hoạch</label>
-                <input class="search__input" nz-input />
+                <nz-select>
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
               </div>
               <div nz-col nzSpan="24">
                 <label class="search__label">Về việc</label>
                 <textarea rows="3" nz-input class="search__input"></textarea>
               </div>
               <div nz-col nzSpan="12">
-                <label class="search__label">Căn cứ</label>
-                <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input nz-input formControlName="maDv" />
+                <label class="search__label">Căn cứ QĐ phê duyệt KHLCNT</label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogCanCuQDPheDuyetKHLCNT()">
+                  <input nz-input [readonly]="true" [(ngModel)]="chiTietThongTinQDPheDuyetKQLCNT.soQd" />
                 </nz-input-group>
               </div>
               <div nz-col nzSpan="12">
@@ -101,8 +74,10 @@
             </div>
           </div>
         </nz-card>
-        <nz-card nzTitle="Danh sách kết quả LCNT của các gói thầu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
-          <nz-table #editRowTable [nzData]="listOfData" nzBordered class="table__body">
+        <nz-card nzTitle="Danh sách kết quả LCNT của các gói thầu" class="mt-16 flex-card p-lr16"
+          [nzExtra]="tableCard1">
+          <nz-table #editRowTable [nzData]="chiTietThongTinQDPheDuyetKQLCNT.children1" nzBordered class="table__body"
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th [width]="35">STT</th>
@@ -118,20 +93,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of editRowTable.data" class="editable-row">
-                <td>{{ data.stt }}</td>
-                <td>{{ data.tenGoiThau }}</td>
-                <td>{{ data.soHieuGoiThau }}</td>
-                <td>{{ data.diaDiemNhapKho }}</td>
-                <td>{{ data.soLuong }}</td>
-                <td>{{ data.trungHuy }}</td>
-                <td>{{ data.donViTrungThau }}</td>
-                <td>{{ data.giaTrungThau }}</td>
+              <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row"
+                (click)="openDialogThongTinPhuLucKLCNT(data)">
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.children[0].goiThau }}</td>
+                <td>{{ data.soGthau }}</td>
+                <td>{{ data.children[0].diaDiemNhap }}</td>
+                <td>{{ data.children[0].soLuong }}</td>
+                <td>{{ data.trungThau }}</td>
+                <td>{{ data.tenDvi }}</td>
+                <td>{{ data.donGia * data.soLuong }}</td>
                 <td>{{ data.lyDoHuyThau }}</td>
-                <td>
-                  <a (click)="openDialogThongTinPhuLucKLCNT()">
+                <td class="text-center">
+                  <!-- <a (click)="openDialogThongTinPhuLucKLCNT()">
                     <i class="fa fa-pencil"></i>
-                  </a>
+                  </a> -->
                   <a>
                     <i class="fa fa-trash-o do"></i>
                   </a>
@@ -158,10 +134,10 @@
           </div>
         </nz-card>
         <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="themMoi()">
+          <!-- <button type="button" class="btn btn-main" (click)="themMoi()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
-          </button>
+          </button> -->
         </ng-template>
         <div class="ghi-chu">
           <nz-form-label nzRequired [nzNoColon]="true">

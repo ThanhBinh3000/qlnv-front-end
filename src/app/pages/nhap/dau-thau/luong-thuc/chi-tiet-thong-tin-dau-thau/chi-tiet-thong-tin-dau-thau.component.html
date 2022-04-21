@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+<div class="luong-thuc__danh-sach">
   <nz-affix class="menu-lv3" [nzOffsetTop]="43">
     <div class="contentBor chi-tieu__body">
       <div class="contentDetail">
@@ -161,7 +159,7 @@
           <nz-tabset nzType="card" class="tab__container">
             <nz-tab [nzTitle]="'Danh sách nhà thầu nộp hồ sơ dự thầu'" class="tt-chung__container">
               <nz-card class="mt16 flex-card p-lr16">
-                <nz-table #basicTable class="nowrap">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th width="60px">STT</th>
@@ -213,7 +211,7 @@
               <nz-tabset nzType="card" class="tab__container">
                 <nz-tab [nzTitle]="'Nhà thầu đáp ứng YCKT'" class="tt-chung__container">
                   <nz-card class="mt16 flex-card p-lr16">
-                    <nz-table #basicTable class="nowrap">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                       <thead>
                         <tr>
                           <th width="60px">STT</th>
@@ -257,7 +255,7 @@
                 </nz-tab>
                 <nz-tab [nzTitle]="'Nhà thầu không đáp ứng YCKT'" class="tt-chung__container">
                   <nz-card class="mt16 flex-card p-lr16">
-                    <nz-table #basicTable class="nowrap">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                       <thead>
                         <tr>
                           <th width="60px">STT</th>
@@ -303,7 +301,7 @@
                 </nz-tab>
                 <nz-tab [nzTitle]="'Tài liệu đề xuất kỹ thuật'" class="tt-chung__container">
                   <nz-card class="mt16 flex-card p-lr16">
-                    <nz-table #basicTable class="nowrap">
+                    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                       <thead>
                         <tr>
                           <th width="60px">STT</th>
@@ -370,7 +368,7 @@
                 </div>
               </div>
               <nz-card class="mt16 flex-card p-lr16">
-                <nz-table #basicTable class="nowrap">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th width="60px">STT</th>

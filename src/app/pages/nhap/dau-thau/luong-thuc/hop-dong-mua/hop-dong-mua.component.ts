@@ -39,7 +39,7 @@ export class HopDongMuaComponent implements OnInit {
       });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
+      if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],

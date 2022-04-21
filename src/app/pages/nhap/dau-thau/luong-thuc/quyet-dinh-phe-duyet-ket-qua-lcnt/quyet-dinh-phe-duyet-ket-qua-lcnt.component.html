@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="luong-thuc__danh-sach" *ngIf="!visibleTab">
+<div class="luong-thuc__danh-sach">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -8,8 +6,7 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
               <label class="search__label">Số QĐ phê duyệt KQ LCNT</label>
-              <input class="search__input" placeholder="Số QĐ phê duyệt KQ LCNT" nz-input
-                [(ngModel)]="searchFilter.soDxuat" />
+              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Từ ngày QĐ</label>
@@ -27,14 +24,15 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Loại hàng DTQG</label>
-              <nz-select>
-                <nz-option nzValue="Gạo/Thóc" nzLabel="Gạo/Thóc"></nz-option>
+              <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiHang">
+                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
+                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label"> Năm kế hoạch</label>
-              <nz-select>
-                <nz-option nzValue="2021" nzLabel="2021"></nz-option>
+              <nz-select [(ngModel)]="searchFilter.namKeHoach">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
             <div nz-col nzSpan="12">
@@ -67,8 +65,9 @@
           </div>
         </nz-card>
         <nz-card nzTitle="Danh sách quyết định phê duyệt kết quả LCNT" [nzExtra]="tableCard1"
-          class="mt16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap">
+          class="mt-16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
             <thead>
               <tr>
                 <th width="60px">STT</th>
@@ -85,8 +84,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td>{{(page-1)*pageSize+i+1}}</td>
                 <td>
                   <label nz-checkbox></label>
                 </td>
