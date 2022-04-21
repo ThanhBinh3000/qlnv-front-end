@@ -478,10 +478,6 @@ export const LOAIBAOCAO =[
     // trang thai ban ghi
     export const TRANGTHAI =[
         {
-            id:0,
-            tenDm:'Đã xóa'
-        },
-        {
             id:1,
             tenDm:'Đang soạn'
         },
