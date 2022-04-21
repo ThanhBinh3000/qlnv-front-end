@@ -82,6 +82,8 @@ import { DialogChiTietHangHoaNhapKhoComponent } from './dialog/dialog-chi-tiet-h
 import { DialogDanhSachChiTietNganKhoComponent } from './dialog/dialog-danh-sach-chi-tiet-ngan-kho/dialog-danh-sach-chi-tiet-ngan-kho.component';
 import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
+import { DialogChiTietQuyetDinhKhMuaTrucTiepComponent } from './dialog/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep.component';
+import { DialogChiTietQuyetDinhGiaNhapComponent } from './dialog/dialog-chi-tiet-quyet-dinh-gia-nhap/dialog-chi-tiet-quyet-dinh-gia-nhap.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,8 @@ import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialo
     DialogDanhSachChiTietNganKhoComponent,
     DialogDanhSachHangHoaComponent,
     DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
+    DialogChiTietQuyetDinhKhMuaTrucTiepComponent,
+    DialogChiTietQuyetDinhGiaNhapComponent,
     //pipes
     FilterPipe,
   ],
