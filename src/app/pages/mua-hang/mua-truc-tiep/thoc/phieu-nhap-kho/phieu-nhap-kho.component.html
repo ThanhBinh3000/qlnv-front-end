@@ -49,6 +49,36 @@
                 <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
               </nz-select>
             </div>
+            <div nz-col nzSpan="24" class="search-advanced">
+              <nz-collapse>
+                <nz-collapse-panel nzHeader="Tìm kiếm nâng cao">
+                  <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                    <div nz-col nzSpan="6">
+                      <label class="search__label">Mã vạch</label>
+                      <input class="search__input" nz-input />
+                    </div>
+                    <div nz-col nzSpan="18">
+                    </div>
+                    <div nz-col nzSpan="18">
+                      <label class="search__label">Hàng hóa</label>
+                      <nz-select nzPlaceHolder="Hàng hóa" [(ngModel)]="loaiVTHH">
+                        <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+                      </nz-select>
+                    </div>
+                    <div nz-col nzSpan="6">
+                    </div>
+                    <div nz-col nzSpan="6">
+                      <label class="search__label">Số lượng</label>
+                      <input class="search__input" nz-input />
+                    </div>
+                    <div nz-col nzSpan="6">
+                      <label class="search__label">Đơn giá</label>
+                      <input class="search__input" nz-input />
+                    </div>
+                  </div>
+                </nz-collapse-panel>
+              </nz-collapse>
+            </div>
           </div>
           <div class="cangiua group-button-search">
             <button nz-button class="search__button--search" (click)="search()">

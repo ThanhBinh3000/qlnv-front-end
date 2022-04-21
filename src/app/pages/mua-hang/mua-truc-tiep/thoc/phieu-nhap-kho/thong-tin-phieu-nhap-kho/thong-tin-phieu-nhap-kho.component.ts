@@ -15,6 +15,7 @@ import { Menu } from 'src/app/models/ChiTietMenu';
 })
 export class ThongTinPhieuNhapKhoComponent implements OnInit {
   code: string = '/QĐ-TCDT';
+  radioValue: string = "hopDong";
 
   constructor(
     private router: Router,

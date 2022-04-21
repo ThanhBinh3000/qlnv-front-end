@@ -30,8 +30,21 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="Thông tin phiếu kiểm tra chất lượng hàng DTQG nhập kho" class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Thông tin biên bản nghiệm thu kê lót bảo quản ban đầu nhập lương thực"
+          class="mt16 flex-card p-lr16">
           <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="24" *ngIf="radioValue == 'uyQuyen'">
+              <label nz-checkbox>Mua lẻ</label>
+            </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true" nz-col [nzSpan]="24"> Căn cứ </nz-form-label>
+                <nz-radio-group [(ngModel)]="radioValue">
+                  <label nz-radio nzValue="hopDong">Hợp đồng</label>
+                  <label nz-radio nzValue="uyQuyen">Ủy quyền chi cục</label>
+                </nz-radio-group>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số phiếu </nz-form-label>
@@ -42,32 +55,18 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập </nz-form-label>
                 <nz-date-picker class="search__input"></nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Lệnh nhập </nz-form-label>
-                <input nz-input />
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Hợp đồng số </nz-form-label>
-                <input nz-input />
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Biên bản nghiệm thu kê lót </nz-form-label>
-                <nz-input-group nzAddOnAfterIcon="folder-open">
-                  <input nz-input />
-                </nz-input-group>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="12">
 
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Theo lệnh nhập </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="18">
               <nz-form-item>
@@ -75,51 +74,99 @@
                 <input nz-input />
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="18">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho </nz-form-label>
-                <input nz-input />
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-            </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Người bán hàng </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số lượng yêu cầu </nz-form-label>
                 <input nz-input />
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Khối lượng </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số lượng đã nhập </nz-form-label>
                 <input nz-input />
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Địa chỉ </nz-form-label>
-                <textarea nz-input [rows]="3"></textarea>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Biển số PTVT </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Nước sản xuất/Xuất xứ </nz-form-label>
                 <input nz-input />
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="18">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Cảm quan </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Thông tin người giao </nz-form-label>
                 <input nz-input />
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kết luận </nz-form-label>
-                <textarea nz-input [rows]="3"></textarea>
+                <nz-form-label [nzNoColon]="true"> Nợ </nz-form-label>
+                <input nz-input />
               </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Có </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Số phiếu KTCL </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chứng từ kế toán </nz-form-label>
+                <input nz-input />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24" *ngIf="radioValue == 'uyQuyen'">
+              <button class="btn btn-tep btn-sm waves-effect waves-light">
+                <i class="icon htvbdh_tcdt_tep"></i>
+                <span>File đính kèm</span>
+              </button>
             </div>
           </div>
+        </nz-card>
+        <nz-card nzTitle="Chi tiết phiếu nhập kho" class="mt16 flex-card p-lr16">
+          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" class="mt-16">
+            <thead>
+              <tr>
+                <th width="60px">STT</th>
+                <th>Tên hàng hóa</th>
+                <th>Tên ngăn kho</th>
+                <th>Số lượng theo chứng từ</th>
+                <th>Số lượng thực nhập</th>
+                <th>Đơn giá(VNĐ)</th>
+                <th>Thành tiền (VNĐ)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Thóc đồng xuân</td>
+                <td>Lô số 1 Ngăn kho A2/1</td>
+                <td>100</td>
+                <td>13.020</td>
+                <td>13.020</td>
+                <td>13.020</td>
+                <td class="text-center">
+                  <a>
+                    <i class="icon htvbdh_tcdt_print"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
         </nz-card>
         <div nz-row [nzGutter]="[16, 12]">
           <div nz-col [nzSpan]="24">
