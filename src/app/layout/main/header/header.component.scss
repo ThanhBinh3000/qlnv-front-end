@@ -1,4 +1,4 @@
-@import '../../../../assets/scss/default.scss';
+@import "../../../../assets/scss/default.scss";
 
 @mixin background($imgpath, $position: 0 0, $repeat: no-repeat) {
   background: {
@@ -16,7 +16,7 @@
   width: 46px;
 }
 .logo {
-  @include background('#{$img-path}logo-tcdt.svg');
+  @include background("#{$img-path}logo-tcdt.svg");
   width: 40px;
   padding: 0;
   margin: 0px 0px 0px 10px;
@@ -28,7 +28,7 @@
 }
 @media (max-width: 767px) {
   .logo {
-    @include background('#{$img-path}logo-tcdt.svg');
+    @include background("#{$img-path}logo-tcdt.svg");
     // background-size: auto 38px !important;
     background-position: 0px 4px;
     background-repeat: no-repeat;

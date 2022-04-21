@@ -33,7 +33,7 @@
               <label class="search__label">Năm hiện tại (N)</label>
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                  <input nz-input  [(ngModel)]="searchFilter.nam" formControlName="namhientai"/>
+                  <nz-input-number [nzSize]="'small'"  [(ngModel)]="searchFilter.nam" formControlName="namhientai"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>

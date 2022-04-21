@@ -6,4 +6,5 @@ export class ChiTietFile {
     fileType: string;
     fileUrl: string;
     id: number;
+    dataId: number;
 }

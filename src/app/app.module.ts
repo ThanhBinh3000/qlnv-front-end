@@ -15,6 +15,7 @@ import { registerLocaleData } from '@angular/common';
 import vi from '@angular/common/locales/vi';
 import { ObservableService } from './services/observable.service';
 import { DirectivesModule } from './directives/directives.module';
+import { Globals } from './shared/globals';
 import { DatePipe } from '@angular/common';
 
 registerLocaleData(vi);
@@ -44,7 +45,8 @@ const ngZorroConfig: NzConfig = {
     { provide: NZ_I18N, useValue: vi_VN },
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
     ObservableService,
-    DatePipe,
+    Globals,
+	DatePipe,
   ],
   bootstrap: [AppComponent],
 })

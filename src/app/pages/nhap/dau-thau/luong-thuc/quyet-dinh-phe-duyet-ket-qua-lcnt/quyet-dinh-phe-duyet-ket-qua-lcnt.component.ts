@@ -1,3 +1,4 @@
+import { QuyetDinhPheDuyetKetQuaLCNTService } from './../../../../../services/quyetDinhPheDuyetKetQuaLCNT.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -19,7 +20,11 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
-    soDxuat: '',
+    soQd: '',
+    loaiHang: '',
+    namKeHoach: '',
+    donViId: '',
+    tenDonVi: '',
     trichYeu: '',
   };
   inputDonVi: string = '';
@@ -31,52 +36,63 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  isVisibleChangeTab$ = new Subject();
+  dataTable: any[] = [];
   visibleTab: boolean = false;
+  thocIdDefault: string = '01';
+  gaoIdDefault: string = '00';
+  listNam: any[] = [];
+  yearNow: number = 0;
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
     private notification: NzNotificationService,
-    private router: Router
+    private router: Router,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
-    try {
-      this.isVisibleChangeTab$.subscribe((value: boolean) => {
-        this.visibleTab = value;
+    this.yearNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: this.yearNow - i,
+        text: this.yearNow - i,
       });
-      let res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
-        for (let i = 0; i < res.data.length; i++) {
-          var item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + " - " + res.data[i].tenDvi
-          }
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      await this.search();
-      this.spinner.hide();
     }
-    catch (e) {
-      console.log('error: ', e)
+    try {
+      this.loadTatCaDonVi();
+      this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  async loadTatCaDonVi() {
+    let res = await this.donViService.layTatCaDonVi();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        var item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.options = [];
     } else {
-      this.options = this.optionsDonVi.filter(x => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1);
+      this.options = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
     }
   }
 
@@ -113,43 +129,60 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soDxuat: '',
+      soQd: '',
+      loaiHang: '',
+      namKeHoach: '',
+      donViId: '',
+      tenDonVi: '',
       trichYeu: '',
     };
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
+    this.search();
   }
 
   async search() {
     let maDonVi = null;
+    let tenDvi = null;
+    let donviId = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(x => x.labelDonVi == this.inputDonVi);
+      let getDonVi = this.optionsDonVi.filter(
+        (x) => x.labelDonVi == this.inputDonVi,
+      );
       if (getDonVi && getDonVi.length > 0) {
         maDonVi = getDonVi[0].maDvi;
+        tenDvi = getDonVi[0].tenDvi;
+        donviId = getDonVi[0].id;
       }
     }
     let body = {
-      "denNgayKy": this.endValue ? dayjs(this.endValue).format("DD/MM/YYYY") : null,
-      "id": 0,
-      "loaiVthh": "00",
-      "maDvi": maDonVi,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page
+      denNgayQd: this.endValue
+        ? dayjs(this.endValue).format('YYYY-MM-DD')
+        : null,
+      id: 0,
+      maDvi: maDonVi,
+      loaiVthh: this.searchFilter.loaiHang,
+      namKhoach: this.searchFilter.namKeHoach,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page,
       },
-      "soDxuat": this.searchFilter.soDxuat,
-      "str": null,
-      "trangThai": "00",
-      "trichYeu": this.searchFilter.trichYeu,
-      "tuNgayKy": this.startValue ? dayjs(this.startValue).format("DD/MM/YYYY") : null
-    }
-    this.totalRecord = 10;
-    let res = await this.danhSachDauThauService.timKiem(body);
-    if (res.msg == 'Thành công') {
+      soQd: this.searchFilter.soQd,
+      str: null,
+      tuNgayQd: this.startValue
+        ? dayjs(this.startValue).format('YYYY-MM-DD')
+        : null,
+    };
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      console.log('dataTable: ', this.dataTable);
 
+      this.totalRecord = data.totalElements;
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -159,9 +192,8 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -173,11 +205,11 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  selectNam() { }
 }

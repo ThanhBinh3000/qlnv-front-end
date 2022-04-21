@@ -78,8 +78,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC: boolean;
-  listIdFiles: string;                        // id file luc call chi tiet
+  statusBtnLDDC: boolean;                      // trang thai lanh dao dieu chinh
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
+  listIdDeleteFiles: string ="";                        // id file luc call chi tiet
 
 
   allChecked = false;                         // check all checkbox
@@ -183,7 +185,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    this.getStatusButton();
+    // this.getStatusButton();
     //get danh muc noi dung
     this.danhMucService.dMNoiDung().toPromise().then(
       (data) => {
@@ -226,26 +228,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       }
     );
 
-    //get danh muc loai chi
-    this.danhMucService.dMLoaiChi().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.loaiChis = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
-
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          let Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           this.capDv = Dvi.capDvi;
           if (this.capDv == '2') {
             this.checkDv = false;
@@ -260,20 +248,33 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
+    this.getStatusButton();
 
     this.spinner.hide();
   }
 
   getStatusButton() {
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if(dVi && dVi.maDvi == this.userInfo.dvql){ 
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+      checkParent = true;
+    }
+    
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
   }
 
   //get user info
@@ -355,7 +356,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       id: this.id,
       listIdDeletes: this.listIdDelete,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -403,6 +404,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         item.id = uuid.v4();
       }
     });
+    
     this.updateEditCache();
     this.spinner.hide();
   }
@@ -455,7 +457,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-
+          this.listFile = [];
           // set thong tin chung bao cao
           this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
@@ -464,11 +466,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
-
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
 
           if (this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -565,6 +562,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   deleteFile(id: string): void {
     this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+    
+    // set list for delete
+    this.listIdDeleteFiles += id + ",";
   }
 
   //download file về máy tính
@@ -716,5 +716,15 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     } else {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
     }
+  }
+
+  // action copy
+  doCopy(){
+    
+  }
+
+  // action print
+  doPrint(){
+    
   }
 }

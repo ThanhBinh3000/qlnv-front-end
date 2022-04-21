@@ -11,11 +11,25 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'nguoi-dung',
-        pathMatch: 'full',
+        redirectTo: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        pathMatch: 'full'
       },
       {
         path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
+          ).then((m) => m.ChiTieuKeHoachNamModule),
+      },
+      {
+        path: 'chi-tieu-ke-hoach-nam-cap-cuc',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
+          ).then((m) => m.ChiTieuKeHoachNamModule),
+      },
+      {
+        path: 'chi-tieu-ke-hoach-nam-cap-chi-cuc',
         loadChildren: () =>
           import(
             '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
@@ -30,6 +44,14 @@ const routes: Routes = [
       },
       {
         path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        component: DieuChinhChiTieuKeHoachNamComponent
+      },
+      {
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
+        component: DieuChinhChiTieuKeHoachNamComponent
+      },
+      {
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc',
         component: DieuChinhChiTieuKeHoachNamComponent
       },
       {

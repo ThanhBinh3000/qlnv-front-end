@@ -73,6 +73,17 @@ import { DialogTuChoiComponent } from './dialog/dialog-tu-choi/dialog-tu-choi.co
 import { DialogPhuongAnTrinhTongCucComponent } from './dialog/dialog-phuong-an-trinh-tong-cuc/dialog-phuong-an-trinh-tong-cuc.component';
 import { DialogThongTinPhuLucHopDongMuaComponent } from './dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
 import { DialogThemBienbanNghiemThuKeLotComponent } from './dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
+import { DialogThongTinChiTietGoiThauComponent } from './dialog/dialog-thong-tin-chi-tiet-goi-thau-vat-tu/dialog-thong-tin-chi-tiet-goi-thau-vat-tu.component';
+import { DialogThongTinPhuLucHopDongMuaVatTuComponent } from './dialog/dialog-thong-tin-phu-luc-hop-dong-mua-vat-tu/dialog-thong-tin-phu-luc-hop-dong-mua-vat-tu.component';
+import { DialogCanCuQDPheDuyetKHLCNTComponent } from './dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
+import { DialogThongTinDonViThucHienQuyetDinhComponent } from './dialog/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh.component';
+import { DialogCanCuHopDongComponent } from './dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { DialogChiTietHangHoaNhapKhoComponent } from './dialog/dialog-chi-tiet-hang-hoa-nhap-kho/dialog-chi-tiet-hang-hoa-nhap-kho.component';
+import { DialogDanhSachChiTietNganKhoComponent } from './dialog/dialog-danh-sach-chi-tiet-ngan-kho/dialog-danh-sach-chi-tiet-ngan-kho.component';
+import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
+
+
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import { DialogChonThemKhoanMucComponent } from './dialog/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
@@ -83,7 +94,7 @@ import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoa
 import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 @NgModule({
   declarations: [
-    // components
+    //components
     UploadComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
@@ -102,9 +113,20 @@ import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly
     DialogPhuongAnTrinhTongCucComponent,
     DialogThongTinPhuLucHopDongMuaComponent,
     DialogThemBienbanNghiemThuKeLotComponent,
-    DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
+    DialogThongTinChiTietGoiThauComponent,
+    DialogThongTinPhuLucHopDongMuaVatTuComponent,
+    DialogCanCuQDPheDuyetKHLCNTComponent,
+    DialogThongTinDonViThucHienQuyetDinhComponent,
+    DialogCanCuHopDongComponent,
+    DialogChiTietHangHoaNhapKhoComponent,
+    DialogDanhSachChiTietNganKhoComponent,
+    DialogDanhSachHangHoaComponent,
+    DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
     //pipes
     FilterPipe,
+    
+    DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
+    
 
     //
     DialogLuaChonThemPhuLucComponent,
@@ -228,4 +250,4 @@ import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}
