@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -452,6 +452,10 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.dtoanDuocDuyetTongGtri = divMoney(element.dtoanDuocDuyetTongGtri, this.maDviTien);
+          });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -496,8 +500,8 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       tenCtrinh: '',
       nguonVon: '',
       loaiCt: '',
-      tgianKc: 0,
-      tgianHt: 0,
+      tgianKc: this.namBaoCaoHienHanh,
+      tgianHt: this.namBaoCaoHienHanh,
       dtoanDuocDuyetCquanQd: '',
       dtoanDuocDuyetTongGtri: 0,
       thienKluongNDtoanKphiDen3006n: 0,
@@ -631,14 +635,27 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.nguonVon || !this.editCache[id].data.loaiCt || !this.editCache[id].data.dtoanDuocDuyetCquanQd) {
+    if (
+      !this.editCache[id].data.nguonVon ||
+      !this.editCache[id].data.loaiCt ||
+      !this.editCache[id].data.dtoanDuocDuyetCquanQd||
+      !this.editCache[id].data.tenCtrinh||
+      !this.editCache[id].data.tgianKc||
+      !this.editCache[id].data.tgianHt||
+      (!this.editCache[id].data.dtoanDuocDuyetTongGtri && this.editCache[id].data.dtoanDuocDuyetTongGtri !==0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    } else {
+      return
+    }
+    if((this.editCache[id].data.tgianKc >= 1000 || this.editCache[id].data.tgianKc <= 2999) || (this.editCache[id].data.tgianHt >= 1000 &&  this.editCache[id].data.tgianHt <= 2999)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return
+    }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-    }
+
   }
 
   updateEditCache(): void {

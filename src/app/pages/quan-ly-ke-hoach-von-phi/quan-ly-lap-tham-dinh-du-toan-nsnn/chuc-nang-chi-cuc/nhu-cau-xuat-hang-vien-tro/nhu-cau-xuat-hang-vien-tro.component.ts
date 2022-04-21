@@ -312,20 +312,21 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
-    this.lstCTiet.filter(element => {
-      if (this.editCache[element.id].edit === true) {
-        checkSaveEdit = false
-      }
-    });
+    // this.lstCTiet.filter(element => {
+    //   if (this.editCache[element.id].edit === true) {
+    //     checkSaveEdit = false
+    //   }
+    // });
 
-    if ((!this.lstCTietBCao.luongXuatGaoVtro && this.lstCTietBCao.luongXuatGaoVtro != 0) || (!this.lstCTietBCao.luongXuatThocVtro && this.lstCTietBCao.luongXuatThocVtro != 0)) {
-      checkSaveEdit = false
+    if ((!this.luongXuatGaoVtro  && this.luongXuatGaoVtro !==0 ) || (!this.luongXuatThocVtro && this.luongXuatThocVtro !==0 )) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
     }
 
     if (checkSaveEdit == false) {
@@ -640,14 +641,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maVtuTbi || !this.editCache[id].data.maDviVtuTbi) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    } else {
       this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTiet[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-    }
   }
 
   updateEditCache(): void {

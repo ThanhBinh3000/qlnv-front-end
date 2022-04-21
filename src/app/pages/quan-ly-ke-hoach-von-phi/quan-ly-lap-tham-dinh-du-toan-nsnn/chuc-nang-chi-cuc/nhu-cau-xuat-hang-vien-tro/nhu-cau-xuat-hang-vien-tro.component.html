@@ -138,12 +138,12 @@
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất gạo viện trợ (tấn)</label>
                 <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongXuatGaoVtro"
-                  [class]="luongXuatGaoVtro || luongXuatGaoVtro===0? '' : 'input-error-validate'"></nz-input-number>
+                  [class]="luongXuatGaoVtro || luongXuatGaoVtro === 0? '' : 'input-error-validate'"></nz-input-number>
               </div>
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất thóc viện trợ (tấn)</label>
                 <nz-input-number class="search__input" nzSize="small" [(ngModel)]="luongXuatThocVtro"
-                  [class]="luongXuatGaoVtro ||luongXuatGaoVtro ===0 ? '' : 'input-error-validate'"></nz-input-number>
+                  [class]="luongXuatThocVtro || luongXuatThocVtro === 0 ? '' : 'input-error-validate'"></nz-input-number>
               </div>
             </div>
             <div class="row">
@@ -204,19 +204,16 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn chỉ tiêu "
-                        [class]="editCache[data.id].data.maVtuTbi ? '' : 'input-error-validate'"
                         [(ngModel)]="editCache[data.id].data.maVtuTbi">
                         <nz-option *ngFor="let item of chiTieus" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.sl"
-                        [class]="editCache[data.id].data.sl ? '' : 'input-error-validate'">
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.sl">
                       </nz-input-number>
                     </td>
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị "
-                        [class]="editCache[data.id].data.maDviVtuTbi ? '' : 'input-error-validate'"
                         [(ngModel)]="editCache[data.id].data.maDviVtuTbi">
                         <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
                         </nz-option>
@@ -241,17 +238,17 @@
                 </tr>
               </tbody>
             </nz-table>
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px" >
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
-                  <button nz-button>
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <button nz-button >
                     <i nz-icon nzType="upload"></i>
                     Select File
                   </button>
                 </nz-upload>
                 <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
-                  style="margin-top: 16px">
+                  style="margin-top: 16px" [hidden]="status">
                   Thêm vào danh sách
                 </button>
               </div>
@@ -282,15 +279,15 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()">
+          <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)">
+          <button type="button" class="btn btn-main" (click)="addLine(lstCTiet.length)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
-          <button type="button" class="btn btn-sub">
+          <button type="button" class="btn btn-sub" [hidden]="status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>

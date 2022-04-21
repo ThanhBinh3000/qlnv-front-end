@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -408,6 +408,18 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.kphiDaDuocBoTriDenNamN = divMoney(element.kphiDaDuocBoTriDenNamN, this.maDviTien);
+            element.kphiDuKienBtriN1 = divMoney(element.kphiDuKienBtriN1, this.maDviTien);
+            element.kphiDuKienBtriN2 = divMoney(element.kphiDuKienBtriN2, this.maDviTien);
+            element.kphiDuKienBtriN3 = divMoney(element.kphiDuKienBtriN3, this.maDviTien);
+            element.kphiDuocThienDenThoiDiemBcao = divMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
+            element.kphiTgianThuhoi = divMoney(element.kphiTgianThuhoi, this.maDviTien);
+            element.kphiTongPhiDuocDuyet = divMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
+            element.kphiThuhoi = divMoney(element.kphiThuhoi, this.maDviTien);
+
+          });
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -471,8 +483,8 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     let item : ItemData = {
       tenDtaiDan: "",
       maDvi: "",
-      tgBdau: 0,
-      tgKthuc: 0,
+      tgBdau: this.namBaoCaoHienHanh,
+      tgKthuc: this.namBaoCaoHienHanh,
       kphiTongPhiDuocDuyet: 0,
       kphiDaDuocBoTriDenNamN: 0,
       kphiDuocThienDenThoiDiemBcao: 0,
@@ -603,14 +615,28 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maDvi) {
+    if (
+      !this.editCache[id].data.maDvi ||
+      !this.editCache[id].data.tgBdau ||
+      !this.editCache[id].data.tgKthuc ||
+      (!this.editCache[id].data.kphiTongPhiDuocDuyet && this.editCache[id].data.kphiTongPhiDuocDuyet  !==0) ||
+      (!this.editCache[id].data.kphiDaDuocBoTriDenNamN && this.editCache[id].data.kphiDaDuocBoTriDenNamN !==0) ||
+      (!this.editCache[id].data.kphiDuocThienDenThoiDiemBcao && this.editCache[id].data.kphiDuocThienDenThoiDiemBcao  !==0) ||
+      (!this.editCache[id].data.kphiDuKienBtriN1 && this.editCache[id].data.kphiDuKienBtriN1 !==0) ||
+      (!this.editCache[id].data.kphiDuKienBtriN2 && this.editCache[id].data.kphiDuKienBtriN2 !==0) ||
+      (!this.editCache[id].data.kphiDuKienBtriN3 && this.editCache[id].data.kphiDuKienBtriN3 !==0)
+    ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    } else {
+      return
+    }
+    if((this.editCache[id].data.tgBdau >= 1000 &&  this.editCache[id].data.tgBdau <= 2999) || (this.editCache[id].data.tgKthuc >= 1000 &&  this.editCache[id].data.tgKthuc <= 2999)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+    }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-    }
+
   }
 
   updateEditCache(): void {

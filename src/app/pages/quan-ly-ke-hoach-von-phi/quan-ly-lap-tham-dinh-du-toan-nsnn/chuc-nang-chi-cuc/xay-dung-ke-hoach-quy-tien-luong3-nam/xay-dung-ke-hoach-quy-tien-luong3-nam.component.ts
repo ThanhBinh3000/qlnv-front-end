@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -340,8 +340,6 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       element.luongCbanN3 = mulMoney(element.luongCbanN3, this.maDviTien);
       element.phuCapN3 = mulMoney(element.phuCapN3, this.maDviTien);
       element.cacKhoanDgopN3 = mulMoney(element.cacKhoanDgopN3, this.maDviTien);
-
-
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -478,6 +476,40 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.tongCboN = divMoney(element.tongCboN, this.maDviTien);
+            element.tongBcheDuocPdN = divMoney(element.tongBcheDuocPdN, this.maDviTien);
+            element.tongQuyLuongCoTchatLuongN = divMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+            element.tuongCbanN = divMoney(element.tuongCbanN, this.maDviTien);
+            element.phuCapN = divMoney(element.phuCapN, this.maDviTien);
+            element.cacKhoanDgopN = divMoney(element.cacKhoanDgopN, this.maDviTien);
+            element.tongCboThienN = divMoney(element.tongCboThienN, this.maDviTien);
+            element.tongBcheDuocPdThienN = divMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+            element.tongQuyLuongCoTchatLuongThienN = divMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+            element.luongCbanThienN = divMoney(element.luongCbanThienN, this.maDviTien);
+            element.phuCapThienN = divMoney(element.phuCapThienN, this.maDviTien);
+            element.cacKhoanDgopThienN = divMoney(element.cacKhoanDgopThienN, this.maDviTien);
+            element.tongCboN1 = divMoney(element.tongCboN1, this.maDviTien);
+            element.tongBcheDuocPdN1 = divMoney(element.tongBcheDuocPdN1, this.maDviTien);
+            element.tongQuyLuongCoTchatLuongN1 = divMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
+            element.luongCbanN1 = divMoney(element.luongCbanN1, this.maDviTien);
+            element.phuCapN1 = divMoney(element.phuCapN1, this.maDviTien);
+            element.cacKhoanDgopN1 = divMoney(element.cacKhoanDgopN1, this.maDviTien);
+            element.tongCboN2 = divMoney(element.tongCboN2, this.maDviTien);
+            element.tongBcheDuocPdN2 = divMoney(element.tongBcheDuocPdN2, this.maDviTien);
+            element.tongQuyLuongCoTchatLuongN2 = divMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+            element.luongCbanN2 = divMoney(element.luongCbanN2, this.maDviTien);
+            element.phuCapN2 = divMoney(element.phuCapN2, this.maDviTien);
+            element.cacKhoanDgopN2 = divMoney(element.cacKhoanDgopN2, this.maDviTien);
+            element.tongCboN3 = divMoney(element.tongCboN3, this.maDviTien);
+            element.tongBcheDuocPdN3 = divMoney(element.tongBcheDuocPdN3, this.maDviTien);
+            element.tongQuyLuongCoTchatLuongN3 = divMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+            element.luongCbanN3 = divMoney(element.luongCbanN3, this.maDviTien);
+            element.phuCapN3 = divMoney(element.phuCapN3, this.maDviTien);
+            element.cacKhoanDgopN3 = divMoney(element.cacKhoanDgopN3, this.maDviTien);
+          });
+
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -684,7 +716,39 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maDvi){
+    if (
+      !this.editCache[id].data.maDvi ||
+      (!this.editCache[id].data.tongCboN && this.editCache[id].data.tongCboN ===0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN && this.editCache[id].data.tongBcheDuocPdN ===0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN && this.editCache[id].data.tongQuyLuongCoTchatLuongN ===0) ||
+      (!this.editCache[id].data.tuongCbanN && this.editCache[id].data.tuongCbanN ===0) ||
+      (!this.editCache[id].data.phuCapN && this.editCache[id].data.phuCapN ===0) ||
+      (!this.editCache[id].data.cacKhoanDgopN && this.editCache[id].data.cacKhoanDgopN ===0) ||
+      (!this.editCache[id].data.tongCboThienN && this.editCache[id].data.tongCboThienN ===0) ||
+      (!this.editCache[id].data.tongBcheDuocPdThienN && this.editCache[id].data.tongBcheDuocPdThienN ===0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongThienN && this.editCache[id].data.tongQuyLuongCoTchatLuongThienN ===0) ||
+      (!this.editCache[id].data.luongCbanThienN && this.editCache[id].data.luongCbanThienN ===0) ||
+      (!this.editCache[id].data.phuCapThienN && this.editCache[id].data.phuCapThienN ===0) ||
+      (!this.editCache[id].data.cacKhoanDgopThienN && this.editCache[id].data.cacKhoanDgopThienN ===0) ||
+      (!this.editCache[id].data.tongCboN1 && this.editCache[id].data.tongCboN1 ===0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN1 && this.editCache[id].data.tongBcheDuocPdN1 ===0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN1 && this.editCache[id].data.tongQuyLuongCoTchatLuongN1 ===0) ||
+      (!this.editCache[id].data.luongCbanN1 && this.editCache[id].data.luongCbanN1 ===0) ||
+      (!this.editCache[id].data.phuCapN1 && this.editCache[id].data.phuCapN1 ===0) ||
+      (!this.editCache[id].data.cacKhoanDgopN1 && this.editCache[id].data.cacKhoanDgopN1 ===0) ||
+      (!this.editCache[id].data.tongCboN2 && this.editCache[id].data.tongCboN2 ===0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN2 && this.editCache[id].data.tongBcheDuocPdN2 ===0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN2 && this.editCache[id].data.tongQuyLuongCoTchatLuongN2 ===0) ||
+      (!this.editCache[id].data.luongCbanN2 && this.editCache[id].data.luongCbanN2 ===0) ||
+      (!this.editCache[id].data.phuCapN2 && this.editCache[id].data.phuCapN2 ===0) ||
+      (!this.editCache[id].data.cacKhoanDgopN2 && this.editCache[id].data.cacKhoanDgopN2 ===0) ||
+      (!this.editCache[id].data.tongCboN3 && this.editCache[id].data.tongCboN3 ===0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN3 && this.editCache[id].data.tongBcheDuocPdN3 ===0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN3 && this.editCache[id].data.tongQuyLuongCoTchatLuongN3 ===0) ||
+      (!this.editCache[id].data.luongCbanN3 && this.editCache[id].data.luongCbanN3 ===0) ||
+      (!this.editCache[id].data.phuCapN3 && this.editCache[id].data.phuCapN3 ===0) ||
+      (!this.editCache[id].data.cacKhoanDgopN3 && this.editCache[id].data.cacKhoanDgopN3 ===0)
+    ){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
     }

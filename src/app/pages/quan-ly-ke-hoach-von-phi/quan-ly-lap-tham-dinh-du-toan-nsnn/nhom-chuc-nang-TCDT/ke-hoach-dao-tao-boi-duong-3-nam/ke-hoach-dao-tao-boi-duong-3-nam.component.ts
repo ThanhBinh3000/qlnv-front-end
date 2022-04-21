@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -472,6 +472,13 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
             this.status = true;
           }
 
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.thanhTienN1 = divMoney(element.thanhTienN1, this.maDviTien);
+            element.thanhTienN2 = divMoney(element.thanhTienN2, this.maDviTien);
+            element.thanhTienN3 = divMoney(element.thanhTienN3, this.maDviTien);
+          });
+
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -649,7 +656,18 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maChiMuc || !this.editCache[id].data.maDvi || !this.editCache[id].data.maLoai || !this.editCache[id].data.maKhoan) {
+    if (
+      !this.editCache[id].data.maChiMuc ||
+      !this.editCache[id].data.maDvi ||
+      !this.editCache[id].data.maLoai ||
+      !this.editCache[id].data.maKhoan ||
+      !this.editCache[id].data.soLuotNguoiN1||
+      !this.editCache[id].data.soLuotNguoiN2||
+      !this.editCache[id].data.soLuotNguoiN3||
+      (!this.editCache[id].data.thanhTienN1 && this.editCache[id].data.thanhTienN1 !==0)||
+      (!this.editCache[id].data.thanhTienN2 && this.editCache[id].data.thanhTienN2 !==0)||
+      (!this.editCache[id].data.thanhTienN3 && this.editCache[id].data.thanhTienN3 !==0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao

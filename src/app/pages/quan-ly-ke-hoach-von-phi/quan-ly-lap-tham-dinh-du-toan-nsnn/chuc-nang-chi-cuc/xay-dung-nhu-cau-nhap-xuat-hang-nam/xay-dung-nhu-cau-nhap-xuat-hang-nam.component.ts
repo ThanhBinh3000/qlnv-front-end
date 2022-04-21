@@ -47,10 +47,10 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   donVis: any = [];             // danh muc don vi
   lstCTietBCao: AllItemData = new AllItemData;
   lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
-  luongThocXuat!: number;
-  luongThocNhap!: number;
-  luongGaoXuat!: number;
-  luongGaoNhap!: number;
+  luongThocXuat: number = 0;
+  luongThocNhap: number = 0;
+  luongGaoXuat: number = 0;
+  luongGaoNhap: number = 0;
   tong: number = 0;
   id!: any;                                   // id truyen tu router
   lstFile: any = [];                          // list File de day vao api
@@ -296,7 +296,7 @@ getStatusButton(){
   // trinh duyet
   async luu() {
     let checkSaveEdit;
-    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+    if (!this.namBaoCaoHienHanh) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -304,19 +304,24 @@ getStatusButton(){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
-
-    if ((!this.luongThocXuat && this.luongThocXuat !== 0) || (!this.luongThocNhap && this.luongThocNhap !== 0) || (!this.luongGaoXuat && this.luongGaoXuat !== 0) || (!this.luongGaoNhap && this.luongGaoNhap !== 0)) {
-      checkSaveEdit = false
+    if (
+      (!this.luongThocXuat && this.luongThocXuat !== 0) ||
+      (!this.luongThocNhap && this.luongThocNhap !== 0) ||
+      (!this.luongGaoXuat && this.luongGaoXuat !== 0) ||
+      (!this.luongGaoNhap && this.luongGaoNhap !== 0)
+      ) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
     }
 
-    //check xem tat ca cac dong du lieu da luu chua?
-    //chua luu thi bao loi, luu roi thi cho di
+    // check xem tat ca cac dong du lieu da luu chua?
+    // chua luu thi bao loi, luu roi thi cho di
     this.lstCTiet.filter(element => {
-      element.slNhap = mulMoney(element.slNhap, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
     });
+
     if (checkSaveEdit == false) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
@@ -353,7 +358,7 @@ getStatusButton(){
       lstCTietBCao:ob,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
+      maDviTien: "01",
       maLoaiBcao: QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
@@ -641,8 +646,12 @@ getStatusButton(){
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maTbi) {
+    if (
+      !this.editCache[id].data.maTbi ||
+      (!this.editCache[id].data.slNhap && this.editCache[id].data.slNhap !== 0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return
     } else {
       this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua

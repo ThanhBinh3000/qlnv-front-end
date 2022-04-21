@@ -7,7 +7,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -442,6 +442,20 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
+            element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+            element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+            element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
+            element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
+            element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
+            element.quyLuongTangNangBacLuongN1 = divMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+            element.bcheChuaSdungLuong = divMoney(element.bcheChuaSdungLuong, this.maDviTien);
+            element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+            element.quyLuongPcapTheoHdld = divMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
+
+          });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -632,10 +646,25 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    if(
+      (!this.editCache[id].data.bcheGiaoN1 && this.editCache[id].data.bcheGiaoN1 !==0) ||
+      (!this.editCache[id].data.duKienSoCcvcCoMatN1 && this.editCache[id].data.duKienSoCcvcCoMatN1 !==0) ||
+      (!this.editCache[id].data.duKienSoHdongCoMatN1 && this.editCache[id].data.duKienSoHdongCoMatN1 !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac && this.editCache[id].data.ccvcDuKienCoMatN1LuongTheoBac !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1Pcap && this.editCache[id].data.ccvcDuKienCoMatN1Pcap !==0) ||
+      (!this.editCache[id].data.ccvcDuKienCoMatN1Ckdg && this.editCache[id].data.ccvcDuKienCoMatN1Ckdg !==0) ||
+      (!this.editCache[id].data.quyLuongTangNangBacLuongN1 && this.editCache[id].data.quyLuongTangNangBacLuongN1 !==0) ||
+      (!this.editCache[id].data.bcheChuaSdungLuong && this.editCache[id].data.bcheChuaSdungLuong !==0) ||
+      (!this.editCache[id].data.bcheChuaSdungCkdg && this.editCache[id].data.bcheChuaSdungCkdg !==0) ||
+      (!this.editCache[id].data.quyLuongPcapTheoHdld && this.editCache[id].data.quyLuongPcapTheoHdld !==0)
+    ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    }else{
+      const index = this.lstCTietBCao.findIndex(item => item.id === id);
+      this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
+      Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
+      this.editCache[id].edit = false;
+    }
   }
 
   updateEditCache(): void {

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -437,6 +437,12 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             this.status = true;
           }
 
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.khoachChiNsnnN1 = divMoney(element.khoachChiNsnnN1, this.maDviTien);
+            element.khoachChiNsnnN2 = divMoney(element.khoachChiNsnnN2, this.maDviTien);
+            element.khoachChiNsnnN3 = divMoney(element.khoachChiNsnnN3, this.maDviTien);
+          });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -605,7 +611,13 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maNdungChi || !this.editCache[id].data.chiTiet) {
+    if (
+      !this.editCache[id].data.maNdungChi ||
+      !this.editCache[id].data.chiTiet||
+      (!this.editCache[id].data.khoachChiNsnnN1 && this.editCache[id].data.khoachChiNsnnN1 ===0)||
+      (!this.editCache[id].data.khoachChiNsnnN2 && this.editCache[id].data.khoachChiNsnnN2 ===0)||
+      (!this.editCache[id].data.khoachChiNsnnN3 && this.editCache[id].data.khoachChiNsnnN3 ===0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao

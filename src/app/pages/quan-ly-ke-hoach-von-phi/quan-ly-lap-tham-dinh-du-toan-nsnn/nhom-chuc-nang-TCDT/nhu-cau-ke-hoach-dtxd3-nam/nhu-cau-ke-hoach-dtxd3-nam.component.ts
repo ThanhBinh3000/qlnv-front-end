@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -500,6 +500,19 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           } else {
             this.status = true;
           }
+
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.qdDuyetDanDtuTongVon= divMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
+            element.qdDchinhDanDtuTongVon= divMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+            element.qdDuyetTkDtoanXl= divMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
+            element.qdDuyetTkDtoanTb= divMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
+            element.qdDuyetTkDtoanCx= divMoney(element.qdDuyetTkDtoanCx, this.maDviTien);
+            element.klthCapDen3006Nstt= divMoney(element.klthCapDen3006Nstt, this.maDviTien);
+            element.klthCapDen3006DtoanChiTx= divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
+            element.klthCapDen3112Nstt= divMoney(element.klthCapDen3112Nstt, this.maDviTien);
+            element.klthCapDen3112DtoanChiTx= divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+          });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -689,7 +702,35 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maLoaiKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXdung || !this.editCache[id].data.maDdiemXdung) {
+    if (
+      !this.editCache[id].data.maLoaiKhoach ||
+      !this.editCache[id].data.maKhoiDan ||
+      !this.editCache[id].data.maDdiemXdung ||
+      !this.editCache[id].data.maDdiemXdung ||
+      !this.editCache[id].data.tenDan||
+      !this.editCache[id].data.maSoDan||
+      !this.editCache[id].data.ddiemMoTk||
+      !this.editCache[id].data.klthCapDen3006Songaythang ||
+      !this.editCache[id].data.qdDuyetTkDtoanSongaythang||
+      !this.editCache[id].data.qdDuyetDanDtuSongaythang||
+      !this.editCache[id].data.nlucTke||
+      !this.editCache[id].data.ghiChu||
+      !this.editCache[id].data.klthCapDen3112Songaythang ||
+      (!this.editCache[id].data.qdDuyetDanDtuTongVon && this.editCache[id].data.qdDuyetDanDtuTongVon !==0)||
+      (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanXl && this.editCache[id].data.qdDuyetTkDtoanXl !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanTb && this.editCache[id].data.qdDuyetTkDtoanTb !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanCx && this.editCache[id].data.qdDuyetTkDtoanCx !==0)||
+      (!this.editCache[id].data.klthCapDen3006Nstt && this.editCache[id].data.klthCapDen3006Nstt !==0)||
+      (!this.editCache[id].data.klthCapDen3006DtoanChiTx && this.editCache[id].data.klthCapDen3006DtoanChiTx !==0)||
+      (!this.editCache[id].data.klthCapDen3006Quykhac && this.editCache[id].data.klthCapDen3006Quykhac !==0)||
+      (!this.editCache[id].data.klthCapDen3112Nstt && this.editCache[id].data.klthCapDen3112Nstt !==0)||
+      (!this.editCache[id].data.klthCapDen3112DtoanChiTx && this.editCache[id].data.klthCapDen3112DtoanChiTx !==0)||
+      (!this.editCache[id].data.klthCapDen3112Quykhac && this.editCache[id].data.klthCapDen3112Quykhac !==0)||
+      (!this.editCache[id].data.ncauVonN1 && this.editCache[id].data.ncauVonN1 !==0)||
+      (!this.editCache[id].data.ncauVonN2 && this.editCache[id].data.ncauVonN2 !==0)||
+      (!this.editCache[id].data.ncauVonN3 && this.editCache[id].data.ncauVonN3 !==0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao

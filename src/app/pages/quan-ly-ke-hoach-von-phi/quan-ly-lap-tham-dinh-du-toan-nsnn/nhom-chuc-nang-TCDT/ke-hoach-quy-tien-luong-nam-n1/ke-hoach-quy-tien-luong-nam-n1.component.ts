@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -447,6 +447,20 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           } else {
             this.status = true;
           }
+
+          this.maDviTien = data.data.maDviTien;
+          this.lstCTietBCao.filter(element => {
+            element.bcheGia0N1 = divMoney(element.bcheGia0N1, this.maDviTien);
+            element.dkienCcvcCoMat0101n1 = divMoney(element.dkienCcvcCoMat0101n1, this.maDviTien);
+            element.dkienHdongCoMat0101n1 = divMoney(element.dkienHdongCoMat0101n1, this.maDviTien);
+            element.ccvc0101n1Luong = divMoney(element.ccvc0101n1Luong, this.maDviTien);
+            element.ccvc0101n1Pcap = divMoney(element.ccvc0101n1Pcap, this.maDviTien);
+            element.ccvc0101n1Ckdg = divMoney(element.ccvc0101n1Ckdg, this.maDviTien);
+            element.quyLuongTangThemDoNangBacLuongCcvc0101n1 = divMoney(element.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien);
+            element.bcheChuaSdungLuongHeSo234 = divMoney(element.bcheChuaSdungLuongHeSo234, this.maDviTien);
+            element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+            element.quyLuongPcapCkdgTheoLuongHdld = divMoney(element.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien);
+          });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -622,7 +636,19 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
 
    // luu thay doi
    saveEdit(id: string): void {
-    if (!this.editCache[id].data.maCucDtnnKvuc) {
+    if (
+      !this.editCache[id].data.maCucDtnnKvuc ||
+      (!this.editCache[id].data.bcheGia0N1 && this.editCache[id].data.bcheGia0N1 !==0)||
+      (!this.editCache[id].data.dkienCcvcCoMat0101n1 && this.editCache[id].data.dkienCcvcCoMat0101n1 !==0)||
+      (!this.editCache[id].data.dkienHdongCoMat0101n1 && this.editCache[id].data.dkienHdongCoMat0101n1 !==0)||
+      (!this.editCache[id].data.ccvc0101n1Luong && this.editCache[id].data.ccvc0101n1Luong !==0)||
+      (!this.editCache[id].data.ccvc0101n1Pcap && this.editCache[id].data.ccvc0101n1Pcap !==0)||
+      (!this.editCache[id].data.ccvc0101n1Ckdg && this.editCache[id].data.ccvc0101n1Ckdg !==0)||
+      (!this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1 && this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1 !==0)||
+      (!this.editCache[id].data.bcheChuaSdungLuongHeSo234 && this.editCache[id].data.bcheChuaSdungLuongHeSo234 !==0)||
+      (!this.editCache[id].data.bcheChuaSdungCkdg && this.editCache[id].data.bcheChuaSdungCkdg !==0)||
+      (!this.editCache[id].data.quyLuongPcapCkdgTheoLuongHdld && this.editCache[id].data.quyLuongPcapCkdgTheoLuongHdld !==0)
+      ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
