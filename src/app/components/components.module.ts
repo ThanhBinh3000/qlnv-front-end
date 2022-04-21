@@ -82,6 +82,7 @@ import { DialogChiTietHangHoaNhapKhoComponent } from './dialog/dialog-chi-tiet-h
 import { DialogDanhSachChiTietNganKhoComponent } from './dialog/dialog-danh-sach-chi-tiet-ngan-kho/dialog-danh-sach-chi-tiet-ngan-kho.component';
 import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
+import { DialogPhieuKiemTraChatLuongComponent } from './dialog/dialog-phieu-kiem-tra-chat-luong/dialog-phieu-kiem-tra-chat-luong.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialo
     DialogDanhSachChiTietNganKhoComponent,
     DialogDanhSachHangHoaComponent,
     DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
+    DialogPhieuKiemTraChatLuongComponent,
     //pipes
     FilterPipe,
   ],
@@ -227,4 +229,4 @@ import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialo
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

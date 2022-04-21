@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -71,7 +72,7 @@ export class LuongDauThauGaoComponent implements OnInit {
     if (this.tabSelected == 'phuong-an-tong-hop') {
       let param = {
         "denNgayTao": this.endValue
-          ? dayjs(this.endValue).format('DD/MM/YYYY')
+          ? dayjs(this.endValue).format('YYYY-MM-DD')
           : null,
         "loaiVthh": this.loaiVTHH,
         "namKhoach": this.namKeHoach,
@@ -82,7 +83,7 @@ export class LuongDauThauGaoComponent implements OnInit {
         "str": "",
         "trangThai": "",
         "tuNgayTao": this.startValue
-          ? dayjs(this.startValue).format('DD/MM/YYYY')
+          ? dayjs(this.startValue).format('YYYY-MM-DD')
           : null,
       }
       let res = await this.tongHopDeXuatKHLCNTService.timKiem(param);
@@ -225,5 +226,38 @@ export class LuongDauThauGaoComponent implements OnInit {
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);
+  }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "denNgayTao": this.endValue
+            ? dayjs(this.endValue).format('YYYY-MM-DD')
+            : null,
+          "loaiVthh": this.loaiVTHH,
+          "namKhoach": this.namKeHoach,
+          "paggingReq": null,
+          "str": "",
+          "trangThai": "",
+          "tuNgayTao": this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+        };
+        this.tongHopDeXuatKHLCNTService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }

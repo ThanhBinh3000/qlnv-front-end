@@ -1,3 +1,11 @@
+export class Menu {
+    icon: string;
+    title: string;
+    url: string;
+    hasChild: boolean;
+    children?: Array<ChiTietMenu>;
+}
+
 export class ChiTietMenu {
     icon: string;
     title: string;
