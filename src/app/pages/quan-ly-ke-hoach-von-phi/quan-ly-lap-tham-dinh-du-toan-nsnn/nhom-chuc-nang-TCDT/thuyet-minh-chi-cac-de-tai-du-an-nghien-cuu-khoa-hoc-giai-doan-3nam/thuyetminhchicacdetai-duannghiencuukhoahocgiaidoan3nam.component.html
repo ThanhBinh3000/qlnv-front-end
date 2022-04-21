@@ -195,10 +195,10 @@
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tgianBdau" [class]="editCache[data.id].data.tgianBdau || editCache[data.id].data.tgianBdau === 0 ?'' : 'input-error-validate'"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.tgianBdau" [class]="editCache[data.id].data.tgianBdau && editCache[data.id].data.tgianBdau >= 1000 && editCache[data.id].data.tgianBdau <= 2999 ?'' : 'input-error-validate'"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tgianKthuc" [class]="editCache[data.id].data.tgianKthuc || editCache[data.id].data.tgianKthuc === 0 ?'' : 'input-error-validate'"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tgianKthuc" [class]="editCache[data.id].data.tgianKthuc && editCache[data.id].data.tgianKthuc >= 1000 && editCache[data.id].data.tgianKthuc <= 2999 ?'' : 'input-error-validate'"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.kphiTongPhiDuocDuyet" [class]="editCache[data.id].data.kphiTongPhiDuocDuyet || editCache[data.id].data.kphiTongPhiDuocDuyet === 0 ?'' : 'input-error-validate'"></nz-input-number>
@@ -243,16 +243,16 @@
                 </tr>
               </tbody>
             </nz-table>
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="3">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px" >
+              <div nz-col class="gutter-row" [nzSpan]="3" >
                 Danh sách văn bản đính kèm
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
                   <button nz-button>
                     <i nz-icon nzType="upload"></i>
                     Select File
                   </button>
                 </nz-upload>
-                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="status" [disabled]="fileList.length === 0"
                   style="margin-top: 16px">
                   Thêm vào danh sách
                 </button>
@@ -265,7 +265,7 @@
                   <th nzWidth="50">STT</th>
                   <th nzWidth="170px">Tên file</th>
                   <th nzWidth="150px"></th>
-                  <th nzWidth="150px"></th>
+                  <th nzWidth="150px" [hidden]="status"></th>
                 </tr>
               </thead>
               <tbody>

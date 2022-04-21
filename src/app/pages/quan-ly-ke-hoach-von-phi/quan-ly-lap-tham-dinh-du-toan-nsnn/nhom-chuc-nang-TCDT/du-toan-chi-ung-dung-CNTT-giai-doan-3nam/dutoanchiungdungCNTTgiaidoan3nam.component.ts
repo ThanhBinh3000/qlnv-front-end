@@ -86,7 +86,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
-  listIdFiles: string;
+  listIdDeleteFiles: string ='';
   errorMessage: any;
   donViTaos: any[] = [];
   donvitien: string;
@@ -315,10 +315,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           }else{
             this.status = true;
           }
-          // set list id file ban dau
-          this.lstFile.filter((item) => {
-            this.listIdFiles += item.id + ',';
-          });
+          this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -453,6 +450,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -511,6 +509,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     this.listFile = this.listFile.filter(
       (a: any) => a?.lastModified.toString() !== id,
     );
+    this.listIdDeleteFiles +=id+',';
   }
 
   // xóa với checkbox
@@ -567,22 +566,16 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     })
     // gui du lieu trinh duyet len server
 
-    // lay id file dinh kem
-    let idFileDinhKems = '';
-    for (let i = 0; i < this.lstFile.length; i++) {
-      idFileDinhKems += this.lstFile[i].id + ',';
-    }
-
     // lay id file dinh kem (gửi file theo danh sách )
-    let listFileUploaded: any = [];
+    let listFile: any = [];
     for (const iterator of this.listFile) {
-      listFileUploaded.push(await this.uploadFile(iterator));
+      listFile.push(await this.uploadFile(iterator));
     }
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      fileDinhKems: this.listFileUploaded,
-      listIdFiles: idFileDinhKems,
+      fileDinhKems: listFile,
+      listIdDeleteFiles: this.listIdDeleteFiles,
       listIdDeletes: this.listIdDelete, 
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
@@ -641,7 +634,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.mabaocao + '/' + this.donvitao + '/');
+    upfile.append('folder', this.mabaocao + '/' + this.donvitao);
     let temp = await this.quanLyVonPhiService
       .uploadFile(upfile)
       .toPromise()
@@ -699,6 +692,45 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.show();
+}
+
+tong1:number;
+tong2:number;
+tong3:number;
+tong4:number;
+tong5:number;
+tong6:number;
+tong7:number;
+tong8:number;
+tong9:number;
+tong10:number;
+tong11:number;
+tinhTong(){
+  this.tong1 = 0;
+  this.tong2 = 0;
+  this.tong3 = 0;
+  this.tong4 = 0;
+  this.tong5 = 0;
+  this.tong6 = 0;
+  this.tong7 = 0;
+  this.tong8 = 0;
+  this.tong9 = 0;
+  this.tong10 = 0;
+  this.tong11 =0;
+
+  this.lstCTietBCao.forEach(e =>{
+    this.tong1 +=e.tongDtoanSl;
+    this.tong2 +=e.tongDtoanGtri;
+    this.tong3 +=e.thienNamTruoc;
+    this.tong4 +=e.dtoanThienNCb;
+    this.tong5 +=e.dtoanThienNTh;
+    this.tong6 +=e.dtoanThienN1Cb;
+    this.tong7 +=e.dtoanThienN1Th;
+    this.tong8 +=e.dtoanThienN2Cb;
+    this.tong9 +=e.dtoanThienN2Th;
+    this.tong10 +=e.dtoanThienN3Cb;
+    this.tong11 +=e.dtoanThienN3Th;
+  })
 }
 
 xoaBaoCao(){

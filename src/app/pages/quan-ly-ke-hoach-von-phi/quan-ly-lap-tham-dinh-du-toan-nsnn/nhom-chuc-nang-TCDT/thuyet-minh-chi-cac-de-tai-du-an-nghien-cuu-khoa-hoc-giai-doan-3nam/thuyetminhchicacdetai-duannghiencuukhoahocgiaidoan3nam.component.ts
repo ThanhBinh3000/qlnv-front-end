@@ -71,7 +71,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
-  listIdFiles: string;
+  listIdDeleteFiles: string ='';
   errorMessage: any;
   donViTaos: any[] = [];
   donvitien: any;                   // ma don vi tien
@@ -234,7 +234,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           })
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
-          
+          this.listFile = [];
           // set thong tin chung bao cao
           this.ngaynhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
           this.nguoinhap = data.data.nguoiTao;
@@ -254,10 +254,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
           } else {
             this.status = true;
           }
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -316,8 +313,8 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       stt!: '',
       tenDtaiDanNckh!: '',
       maDvi!: '',
-      tgianBdau!: 0,
-      tgianKthuc!: 0,
+      tgianBdau!: this.namBcaohienhanh,
+      tgianKthuc!: this.namBcaohienhanh,
       kphiTongPhiDuocDuyet!: 0,
       kphiDaDuocThienDenTdiemBcao!: 0,
       kphiDkienBtriN1!: 0,
@@ -352,8 +349,8 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   //update khi sửa
   saveEdit(id: string): void {
     if( !this.editCache[id].data.tenDtaiDanNckh || !this.editCache[id].data.maDvi 
-      || (!this.editCache[id].data.tgianBdau && this.editCache[id].data.tgianBdau !== 0)
-      || (!this.editCache[id].data.tgianKthuc && this.editCache[id].data.tgianKthuc !==0) 
+      || (!this.editCache[id].data.tgianBdau )
+      || (!this.editCache[id].data.tgianKthuc) 
       || (!this.editCache[id].data.kphiTongPhiDuocDuyet && this.editCache[id].data.kphiTongPhiDuocDuyet !==0)
       || (!this.editCache[id].data.kphiDaDuocBoTriDenNamN && this.editCache[id].data.kphiDaDuocBoTriDenNamN !==0)
       || (!this.editCache[id].data.kphiDaDuocThienDenTdiemBcao && this.editCache[id].data.kphiDaDuocThienDenTdiemBcao !==0)
@@ -361,6 +358,11 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       || (!this.editCache[id].data.kphiDkienBtriN2 && this.editCache[id].data.kphiDkienBtriN2 !==0)
       || (!this.editCache[id].data.kphiDkienBtriN3 && this.editCache[id].data.kphiDkienBtriN3 !==0)){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if((this.editCache[id].data.tgianBdau >=3000 || this.editCache[id].data.tgianBdau < 1000) || 
+    (this.editCache[id].data.tgianKthuc >=3000 || this.editCache[id].data.tgianKthuc < 1000) ){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
@@ -427,6 +429,9 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     this.listFile = this.listFile.filter(
       (a: any) => a?.lastModified.toString() !== id,
     );
+    
+    this.listIdDeleteFiles +=id + ",";
+  
   }
 
   // xóa với checkbox
@@ -489,7 +494,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     let request = {
       id: this.id,
       fileDinhKems: listFile,
-      listIdFiles: this.listIdFiles, 
+      listIdDeleteFiles: this.listIdDeleteFiles, 
       listIdDeletes: this.listIdDelete,                     // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
@@ -587,7 +592,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.mabaocao + '/' + this.donvitao + '/');
+    upfile.append('folder', this.mabaocao + '/' + this.donvitao);
     let temp = await this.quanLyVonPhiService
       .uploadFile(upfile)
       .toPromise()

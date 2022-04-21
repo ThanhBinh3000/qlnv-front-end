@@ -70,7 +70,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
-  listIdFiles: string;
+  listIdDeleteFiles: string ='';
   errorMessage: any;
   donViTaos: any[] = [];
   donvitien: string;
@@ -265,10 +265,8 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           }else{
             this.status = true;
           }
-          // set list id file ban dau
-          this.lstFile.filter((item) => {
-            this.listIdFiles += item.id + ',';
-          });
+          this.listFile =[];
+          
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -454,6 +452,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     this.listFile = this.listFile.filter(
       (a: any) => a?.lastModified.toString() !== id,
     );
+    this.listIdDeleteFiles += id +',';
   }
 
   // xóa với checkbox
@@ -500,23 +499,16 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     })
     
     // gui du lieu trinh duyet len server
-
-    // lay id file dinh kem
-    let idFileDinhKems = '';
-    for (let i = 0; i < this.lstFile.length; i++) {
-      idFileDinhKems += this.lstFile[i].id + ',';
-    }
-
     // lay id file dinh kem (gửi file theo danh sách )
-    let listFileUploaded: any = [];
+    let listFile: any = [];
     for (const iterator of this.listFile) {
-      listFileUploaded.push(await this.uploadFile(iterator));
+      listFile.push(await this.uploadFile(iterator));
     }
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      fileDinhKems: this.listFileUploaded,
-      listIdFiles: idFileDinhKems,
+      fileDinhKems: listFile,
+      listIdDeleteFiles: this.listIdDeleteFiles,
       listIdDeletes: this.listIdDelete,  
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.mabaocao,
@@ -576,7 +568,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.mabaocao + '/' + this.donvitao + '/');
+    upfile.append('folder', this.mabaocao + '/' + this.donvitao);
     let temp = await this.quanLyVonPhiService
       .uploadFile(upfile)
       .toPromise()

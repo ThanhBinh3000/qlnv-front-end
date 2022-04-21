@@ -85,7 +85,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
   statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chi so kiem tra
   
-  listIdFiles: string;                        // id file luc call chi tiet
+  listIdDeleteFiles: string = '';                        // id file luc call chi tiet
 
 
   allChecked = false;                         // check all checkbox
@@ -268,10 +268,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           } else {
             this.status = true;
           }
-          // set list id file ban dau
-          this.lstFile.filter((item) => {
-            this.listIdFiles += item.id + ',';
-          });
+          this.listFile =[];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -505,6 +502,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.listFile = this.listFile.filter(
       (a: any) => a?.lastModified.toString() !== id,
     );
+    this.listIdDeleteFiles +=id+',';
   }
 
   // xóa với checkbox
@@ -555,23 +553,16 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     })
     
     // gui du lieu trinh duyet len server
-
-    // lay id file dinh kem
-    let idFileDinhKems = '';
-    for (let i = 0; i < this.lstFile.length; i++) {
-      idFileDinhKems += this.lstFile[i].id + ',';
-    }
-
-    // lay id file dinh kem (gửi file theo danh sách )
-    let listFileUploaded: any = [];
+   
+    let listFile: any = [];
     for (const iterator of this.listFile) {
-      listFileUploaded.push(await this.uploadFile(iterator));
+      listFile.push(await this.uploadFile(iterator));
     }
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
-      fileDinhKems: listFileUploaded,
-      listIdFiles: idFileDinhKems,
+      fileDinhKems: listFile,
+      listIdDeleteFiles: this.listIdDeleteFiles, // lay id file dinh kem (gửi file theo danh sách )
       listIdDeletes: this.listIdDelete, 
       lstCTietBCao: this.lstCTietBCao,
       maBcao: this.maBaoCao,
@@ -581,7 +572,6 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       namBcao: this.namBaoCaoHienHanh+1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
-    console.log(request);
     this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
@@ -663,7 +653,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao + '/');
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService
       .uploadFile(upfile)
       .toPromise()
