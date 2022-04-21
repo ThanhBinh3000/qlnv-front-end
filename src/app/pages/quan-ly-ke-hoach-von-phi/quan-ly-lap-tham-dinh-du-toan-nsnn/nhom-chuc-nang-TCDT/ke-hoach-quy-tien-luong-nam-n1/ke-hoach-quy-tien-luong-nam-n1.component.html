@@ -12,7 +12,8 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden]="statusBtnApprove">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
+          [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -24,39 +25,45 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a> -->
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')" [hidden] = "statusBtnTBP">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')"
+          [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Trưởng BP trả lại</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')" [hidden] = "statusBtnTBP">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')" [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Trưởng BP phê duyệt</span>
         </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')" [hidden] = "statusBtnLD">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')"
+          [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo trả lại</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')" [hidden] = "statusBtnLD">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')" [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')" [hidden] = "statusBtnGuiDVCT">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')"
+          [hidden]="statusBtnGuiDVCT">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('8')" [hidden] = "statusBtnDVCT">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('8')"
+          [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>ĐV cấp trên trả lại</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')" [hidden] = "statusBtnDVCT">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')"
+          [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>ĐV cấp trên duyệt</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')" [hidden] = "statusBtnLDDC">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')"
+          [hidden]="statusBtnLDDC">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Điều chỉnh theo số kiểm tra </span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()" [hidden] = "statusBtnDel">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
@@ -89,13 +96,14 @@
                 {{maBaoCao}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm báo cáo hiện hành (N)">
-                <form nz-form  [formGroup]="validateForm" class="login-form" >
-
-                    <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                      <input type="number" nz-input  [(ngModel)]="namBaoCaoHienHanh" formControlName="namBaoCaoHienHanh" (change)="tinhNam()"/>
-                    </nz-form-control>
-
-                  </form>
+                <ng-container *ngIf="status;else nbc">
+                  {{namBaoCaoHienHanh}}
+                </ng-container>
+                <ng-template #nbc>
+                  <input type="number" nz-input class="input__search"
+                    [class]="namBaoCaoHienHanh >= 1000 &&  namBaoCaoHienHanh <= 2999 ?'' : 'input-error-validate'"
+                    name="" id="" [(ngModel)]="namBaoCaoHienHanh" />
+                </ng-template>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm BC">
                 {{namBcao}}
@@ -113,18 +121,30 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Kế hoạch quỹ tiền lương năm N+1'">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col class="gutter-row" [nzSpan]="3">
-                <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
-                  <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
-                  <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select>
-                <!-- </div> -->
+            <ng-container *ngIf="status;else templateName">
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                <div nz-col class="gutter-row" [nzSpan]="3">
+                  Đơn vị:
+                  <div *ngFor="let item of donViTiens">
+                    <div *ngIf="item.id == maDviTien">
+                      {{item.tenDm}}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            </ng-container>
+            <ng-template #templateName>
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                <div nz-col class="gutter-row" [nzSpan]="3">
+                  <!-- <div class="inner-box">Đơn vị: -->
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                    [class]="maDviTien ?'' : 'input-error-validate' ">
+                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                  </nz-select>
+                  <!-- </div> -->
+                </div>
+              </div>
+            </ng-template>
             <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body">
               <thead>
                 <tr>
@@ -148,13 +168,14 @@
                   <th rowspan="3">Tổng số</th>
                   <th colspan="8">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của CCVC</th>
                   <th rowspan="3">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của HĐLĐ</th>
-              </tr>
-              <tr>
+                </tr>
+                <tr>
                   <th colspan="4">Đối với số CCVC dự kiến có mặt tại 01/01/N+1</th>
-                  <th rowspan="2">Quỹ tiền lương tăng thêm do nâng bậc lương, nâng phụ cấp của cố CCVC có mặt tại 01/01/N+1</th>
+                  <th rowspan="2">Quỹ tiền lương tăng thêm do nâng bậc lương, nâng phụ cấp của cố CCVC có mặt tại
+                    01/01/N+1</th>
                   <th colspan="3"> Đối với số biên chế chưa sử dụng</th>
-              </tr>
-              <tr>
+                </tr>
+                <tr>
                   <th>Cộng</th>
                   <th>Lương theo ngạch bậc</th>
                   <th>Phụ cấp theo lương</th>
@@ -162,8 +183,8 @@
                   <th>Cộng</th>
                   <th>Lương theo hệ số 2,3,4</th>
                   <th>Các khoản đóng góp theo lương</th>
-              </tr>
-              <tr>
+                </tr>
+                <tr>
                   <th>1</th>
                   <th>2</th>
                   <th>3</th>
@@ -185,7 +206,7 @@
                   <th [hidden]="status"></th>
                   <th [hidden]="status"></th>
                   <th [hidden]="status"></th>
-              </tr>
+                </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
@@ -193,9 +214,9 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <div *ngFor="let item of maCucDtnnKvucs">
-                           <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
-                                {{item.tenDvi}}
-                           </div>
+                        <div *ngIf="item.maDvi == data.maCucDtnnKvuc">
+                          {{item.tenDvi}}
+                        </div>
                       </div>
                     </td>
                     <td>{{ data.bcheGia0N1 }}</td>
@@ -203,10 +224,10 @@
                     <td>{{ data.dkienHdongCoMat0101n1 }}</td>
                     <td>{{ data.bcheChuaSdung }}</td>
                     <td>{{ data.tongQuyLuongPcapCkdgTheoLuongCcvcHdld }}</td>
+
                     <td>{{ data.tongSo }}</td>
                     <td>{{ data.ccvc0101n1Cong }}</td>
                     <td>{{ data.ccvc0101n1Luong }}</td>
-
                     <td>{{ data.ccvc0101n1Pcap }}</td>
                     <td>{{ data.ccvc0101n1Ckdg }}</td>
                     <td>{{ data.quyLuongTangThemDoNangBacLuongCcvc0101n1 }}</td>
@@ -232,30 +253,31 @@
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>{{ i + 1 }}</td>
-                    <!-- <td>
-                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                    <td>
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                        [class]="editCache[data.id].data.maCucDtnnKvuc ?'' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
-                        <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                      </nz-select>
-                    </td> -->
-                    <td >
-                      <nz-select nzShowSearch nzAllowClear
-                           nzPlaceHolder="Chọn đơn vị"
-                           [(ngModel)]="editCache[data.id].data.maCucDtnnKvuc">
-                           <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi"
-                                [nzLabel]="item.tenDvi"></nz-option>
+                        <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                        </nz-option>
                       </nz-select>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.bcheGia0N1"
-                      (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.bcheGia0N1"
+                        [class]="editCache[data.id].data.bcheGia0N1 || editCache[data.id].data.bcheGia0N1 ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dkienCcvcCoMat0101n1"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.dkienCcvcCoMat0101n1"
+                        [class]="editCache[data.id].data.dkienCcvcCoMat0101n1 || editCache[data.id].data.dkienCcvcCoMat0101n1 ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dkienHdongCoMat0101n1"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.dkienHdongCoMat0101n1"
+                        [class]="editCache[data.id].data.dkienHdongCoMat0101n1 || editCache[data.id].data.dkienHdongCoMat0101n1 ===0 ?'' : 'input-error-validate' ">
+                      </nz-input-number>
                     </td>
                     <td>
                       {{editCache[data.id].data.bcheChuaSdung}}
@@ -270,42 +292,57 @@
                       {{editCache[data.id].data.ccvc0101n1Cong}}
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ccvc0101n1Luong"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ccvc0101n1Luong"
+                        [class]="editCache[data.id].data.ccvc0101n1Luong || editCache[data.id].data.ccvc0101n1Luong ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ccvc0101n1Pcap"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ccvc0101n1Pcap"
+                        [class]="editCache[data.id].data.ccvc0101n1Pcap || editCache[data.id].data.ccvc0101n1Pcap ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ccvc0101n1Ckdg"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ccvc0101n1Ckdg"
+                        [class]="editCache[data.id].data.ccvc0101n1Ckdg || editCache[data.id].data.ccvc0101n1Ckdg ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1"
+                        [class]="editCache[data.id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1 || editCache[data.id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1 ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
                       {{editCache[data.id].data.bcheChuaSdungCong}}
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.bcheChuaSdungLuongHeSo234"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.bcheChuaSdungLuongHeSo234"
+                        [class]="editCache[data.id].data.bcheChuaSdungLuongHeSo234 || editCache[data.id].data.bcheChuaSdungLuongHeSo234 ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.bcheChuaSdungCkdg"
-                        (change)="changeModel(data.id)" ></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.bcheChuaSdungCkdg"
+                        [class]="editCache[data.id].data.bcheChuaSdungCkdg || editCache[data.id].data.bcheChuaSdungCkdg ===0 ?'' : 'input-error-validate' "
+                        (change)="changeModel(data.id)"></nz-input-number>
                     </td>
                     <td>
-                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.quyLuongPcapCkdgTheoLuongHdld"></nz-input-number>
+                      <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.quyLuongPcapCkdgTheoLuongHdld"
+                        [class]="editCache[data.id].data.quyLuongPcapCkdgTheoLuongHdld || editCache[data.id].data.quyLuongPcapCkdgTheoLuongHdld ===0 ?'' : 'input-error-validate' ">
+                      </nz-input-number>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                        class="save">Hủy</a>
+                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-plus" (click)="addLine(i + 1)"></i>

@@ -309,8 +309,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   // luu
   async luu() {
     let checkSaveEdit;
-    if(!this.maDviTien){
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    if(!this.maDviTien || !this.namBaoCaoHienHanh){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     //check xem tat ca cac dong du lieu da luu chua?
@@ -487,7 +491,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao );
+    upfile.append('folder', this.maBaoCao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -675,7 +679,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
   async calltonghop() {
     this.spinner.show();
-    this.maDviTien = 1;
+    this.maDviTien = "1";
     let objtonghop = {
       maDvi: this.maDonViTao,
       maLoaiBcao: this.maLoaiBaoCao,

@@ -37,7 +37,7 @@ export class ItemData {
 
 export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      donVis: any = [];                            //don vi se hien thi
-     
+
      dviTiens: any = [];
      dviTien: any;
 
@@ -144,9 +144,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           console.log(userInfo);
           if (this.id) {
                await this.getDetailReport();
-               if ((this.trangThaiBanGhi == '2')||(this.trangThaiBanGhi == '4') || (this.trangThaiBanGhi == '6')){
+               if ((this.trangThaiBanGhi == '2') || (this.trangThaiBanGhi == '4') || (this.trangThaiBanGhi == '6')) {
                     this.statusEdit = false;
-               } else {this.statusEdit = true;}
+               } else { this.statusEdit = true; }
           } else {
                this.maDonViTao = userInfo?.dvql;
                this.trangThaiBanGhi = '1';
@@ -172,9 +172,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                          console.log(this.donVis);
                          this.donVis.forEach(e => {
                               if (e.maDvi == this.maDvi) {
-                                this.capDvi = e.capDvi;
+                                   this.capDvi = e.capDvi;
                               }
-                            })
+                         })
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -196,7 +196,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                }
           );
 
-          if (this.capDvi == '3'){
+          if (this.capDvi == '3') {
                this.status = false;
           } else {
                this.status = true;
@@ -444,18 +444,25 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      }
 
      //download file về máy tính
-     downloadFile(id: string) {
+     async downloadFile(id: string) {
           let file!: File;
-          this.listFile.forEach(element => {
-               if (element?.lastModified.toString() == id) {
-                    file = element;
+          file = this.listFile.find(element => element?.lastModified.toString() == id);
+          if (!file) {
+               let fileAttach = this.lstFile.find(element => element?.id == id);
+               if (fileAttach) {
+                    await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                         (data) => {
+                              fileSaver.saveAs(data, fileAttach.fileName);
+                         },
+                         err => {
+                              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                         },
+                    );
                }
-          });
-          const blob = new Blob([file], { type: "application/octet-stream" });
-          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-               window.URL.createObjectURL(blob)
-          );
-          fileSaver.saveAs(blob, file.name);
+          } else {
+               const blob = new Blob([file], { type: "application/octet-stream" });
+               fileSaver.saveAs(blob, file.name);
+          }
      }
 
 
@@ -512,7 +519,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      }
 
      changeModel(id: string) {
-          if (this.editCache[id].data.uocThien < this.editCache[id].data.dtoanGiao){
+          if (this.editCache[id].data.uocThien < this.editCache[id].data.dtoanGiao) {
                this.editCache[id].data.dcTang = this.editCache[id].data.dtoanGiao - this.editCache[id].data.uocThien;
                this.editCache[id].data.dcGiam = 0;
           } else {
@@ -522,10 +529,10 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
 
      }
 
-     tinhTong(heSo: number, item: ItemData){
-          this.tongCong.uocThien += heSo*item.uocThien;
-          this.tongCong.dtoanGiao += heSo*item.dtoanGiao;
-          this.tongCong.dcTang += heSo*item.dcTang;
-          this.tongCong.dcGiam += heSo*item.dcGiam;
+     tinhTong(heSo: number, item: ItemData) {
+          this.tongCong.uocThien += heSo * item.uocThien;
+          this.tongCong.dtoanGiao += heSo * item.dtoanGiao;
+          this.tongCong.dcTang += heSo * item.dcTang;
+          this.tongCong.dcGiam += heSo * item.dcGiam;
      }
 }

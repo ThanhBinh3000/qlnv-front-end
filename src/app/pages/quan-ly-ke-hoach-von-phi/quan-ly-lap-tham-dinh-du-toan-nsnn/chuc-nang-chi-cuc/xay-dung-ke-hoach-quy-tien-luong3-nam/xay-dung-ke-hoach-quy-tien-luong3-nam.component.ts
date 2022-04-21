@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -87,7 +87,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N;                // nam bao cao
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: any;                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -119,7 +119,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   currentday: Date = new Date();
   validateForm!: FormGroup;
   messageValidate:any =MESSAGEVALIDATE;
-
+  donViTiens: any = DONVITIEN;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -296,6 +296,60 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
 
   // luu
   async luu() {
+
+    let checkSaveEdit;
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
+
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBCao.filter(element => {
+      element.tongCboN = mulMoney(element.tongCboN, this.maDviTien);
+      element.tongBcheDuocPdN = mulMoney(element.tongBcheDuocPdN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN = mulMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+      element.tuongCbanN = mulMoney(element.tuongCbanN, this.maDviTien);
+      element.phuCapN = mulMoney(element.phuCapN, this.maDviTien);
+      element.cacKhoanDgopN = mulMoney(element.cacKhoanDgopN, this.maDviTien);
+      element.tongCboThienN = mulMoney(element.tongCboThienN, this.maDviTien);
+      element.tongBcheDuocPdThienN = mulMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongThienN = mulMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+      element.luongCbanThienN = mulMoney(element.luongCbanThienN, this.maDviTien);
+      element.phuCapThienN = mulMoney(element.phuCapThienN, this.maDviTien);
+      element.cacKhoanDgopThienN = mulMoney(element.cacKhoanDgopThienN, this.maDviTien);
+      element.tongCboN1 = mulMoney(element.tongCboN1, this.maDviTien);
+      element.tongBcheDuocPdN1 = mulMoney(element.tongBcheDuocPdN1, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN1 = mulMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
+      element.luongCbanN1 = mulMoney(element.luongCbanN1, this.maDviTien);
+      element.phuCapN1 = mulMoney(element.phuCapN1, this.maDviTien);
+      element.cacKhoanDgopN1 = mulMoney(element.cacKhoanDgopN1, this.maDviTien);
+      element.tongCboN2 = mulMoney(element.tongCboN2, this.maDviTien);
+      element.tongBcheDuocPdN2 = mulMoney(element.tongBcheDuocPdN2, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN2 = mulMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+      element.luongCbanN2 = mulMoney(element.luongCbanN2, this.maDviTien);
+      element.phuCapN2 = mulMoney(element.phuCapN2, this.maDviTien);
+      element.cacKhoanDgopN2 = mulMoney(element.cacKhoanDgopN2, this.maDviTien);
+      element.tongCboN3 = mulMoney(element.tongCboN3, this.maDviTien);
+      element.tongBcheDuocPdN3 = mulMoney(element.tongBcheDuocPdN3, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN3 = mulMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+      element.luongCbanN3 = mulMoney(element.luongCbanN3, this.maDviTien);
+      element.phuCapN3 = mulMoney(element.phuCapN3, this.maDviTien);
+      element.cacKhoanDgopN3 = mulMoney(element.cacKhoanDgopN3, this.maDviTien);
+
+
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -550,18 +604,25 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id );
+    if(!file){
+      let fileAttach = this.lstFile.find(element => element?.id == id );
+      if(fileAttach){
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    }else{
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   updateAllChecked(): void {
@@ -653,6 +714,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   //call tong hop
   async calltonghop(){
     this.spinner.show();
+    this.maDviTien="1"
     let objtonghop={
         maDvi: this.maDonViTao,
         maLoaiBcao: this.maLoaiBaoCao,
