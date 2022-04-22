@@ -101,14 +101,14 @@ export class Utils {
 
     //role copy
     public static btnRoleCOPY = {
-        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
+        "status": ['2','3','4','5','6','7','8','9','10','11'],
         "unit": [1, 2],
         "role": [3],
     }
 
     //role in
     public static btnRolePRINT = {
-        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
+        "status": ['2','3','4','5','6','7','8','9','10','11'],
         "unit": [1, 2],
         "role": [1,2,3],
     }
