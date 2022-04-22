@@ -226,7 +226,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
     if(dVi && dVi.maDvi == this.userInfor.dvql){ 
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfor.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfor.dvql){
       checkParent = true;
     }
     
@@ -414,7 +414,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    
+    this.changeModel(id);
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
