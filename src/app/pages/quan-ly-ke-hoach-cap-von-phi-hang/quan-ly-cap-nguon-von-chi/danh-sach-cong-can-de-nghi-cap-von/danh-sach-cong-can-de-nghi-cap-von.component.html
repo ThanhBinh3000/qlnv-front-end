@@ -58,7 +58,7 @@
                     <div nz-col nzSpan="12">
                         <label class="search__label">Phân loại</label>
                         <nz-select nzShowSearch nzAllowClear [(ngModel)]="searchFilter.phanLoai" nzDisabled>
-                            <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            <nz-option *ngFor="let item of phanLoais" [nzValue]="item.id" [nzLabel]="item.tenDm">
                             </nz-option>
                         </nz-select>
                     </div>
