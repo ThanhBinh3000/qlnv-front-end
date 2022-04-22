@@ -373,7 +373,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 		// gui du lieu trinh duyet len server
 		let request = {
 			id: this.id,
-			idFileDinhKem: listFile,
+			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDelete,
 			listIdDeleteFiles: this.listIdDeleteFiles,
 			lstCTietBCao: this.lstCTietBCao,
