@@ -52,7 +52,9 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
-
+  statusBtnLDDC:boolean; // trang thai nut lanh dao dieu chinh so kiem tra
+  statusBtnCopy:boolean; // trang thai nut copy
+  statusBtnPrint:boolean; // trang thai nut in
   currentday: Date = new Date();
   //////
   maPa: any;
@@ -128,7 +130,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.nampa = this.namBcaohienhanh+1;
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAn().subscribe(
+      this.quanLyVonPhiService.maPhuongAn().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maphuongan = res.data;
@@ -141,7 +143,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         },
       );
     }
-    this.danhmuc.dMNoiDung().subscribe(
+    this.danhmuc.dMNoiDung().toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.listNoidung = res.data?.content;
@@ -154,7 +156,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       },
     );
     //get danh muc dự án
-    this.danhmuc.dMNhomChi().subscribe(
+    this.danhmuc.dMNhomChi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.listNhomchi = data.data?.content;
@@ -166,9 +168,8 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.quanLyVonPhiService.dMDonVi().subscribe(res => {
+   await this.quanLyVonPhiService.dMDonVi().toPromise().then(res => {
       if(res.statusCode==0){
-
         this.donViTaos = res.data;
       }
     })
@@ -237,41 +238,27 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
 //check role cho các nut trinh duyet
   getStatusButton(){
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donViTaos.find(e => e.maDvi == this.donvitao);
+    if(dVi && dVi.maDvi == this.userInfor.dvql){ 
+      checkChirld = true;
+    }
+    if(dVi && dVi.parent?.maDvi == this.userInfor.dvql){
+      checkParent = true;
+    }
+    
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnSave = utils.getRoleSave(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnApprove = utils.getRoleApprove(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnTBP = utils.getRoleTBP(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnLD = utils.getRoleLD(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(
-      this.trangThaiBanGhi,
-      2,
-      this.userInfor?.roles[0]?.id,
-    );
-    this.statusBtnDVCT = utils.getRoleDVCT(
-      this.trangThaiBanGhi,      2,
-      this.userInfor?.roles[0]?.id,
-    );
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfor?.roles[0]?.id);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
   }
 
   tinhNam(){
@@ -379,18 +366,28 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       maChucNang: mcn,
       lyDoTuChoi: '',
     };
-    this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).subscribe((data) => {
-      if (data.statusCode == 0) {
-        this.getDetailReport();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-      }else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if(this.id){
+      this.spinner.show();
+      this.quanLyVonPhiService.trinhDuyetPhuongAn(requestGroupButtons).subscribe(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          if(mcn == Utils.TT_BC_3 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3){
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+          }else{
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+          }
+          this.getStatusButton();
+        }else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
+    
   }
 
   //check all input
@@ -597,6 +594,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     })
     if(checkSaveEdit==false){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
     }
     this.lstCTietBCao.forEach((e) => {
       if (typeof e.id != 'number') {
@@ -606,25 +604,17 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     
     // gui du lieu trinh duyet len server
 
-    // lay id file dinh kem
-    // let idFileDinhKems = '';
-    // if(this.lstFile.length!=0){
-    //   for (let i = 0; i < this.lstFile.length; i++) {
-    //     idFileDinhKems += this.lstFile[i].id + ',';
-    //   }
-    // }
 
     // lay id file dinh kem (gửi file theo danh sách )
-    let listFileUploaded: any = [];
+    let listFile: any = [];
     for (const iterator of this.listFile) {
-      listFileUploaded.push(await this.uploadFile(iterator));
+      listFile.push(await this.uploadFile(iterator));
     }
-    // gui du lieu trinh duyet len server
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       listIdDeletes: this.listIdDelete,
-      fileDinhKems: this.listFileUploaded,
+      fileDinhKems: listFile,
       listCtiet: this.lstCTietBCao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
@@ -836,7 +826,36 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
 
       })
   }
+
+
+  xoaBaoCao(){
+    if(this.id){
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
+        if(res.statusCode==0){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.location.back();
+        }else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+      }else {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+      }
+    }
+
   dong(){
     this.location.back()
+  }
+
+  // action copy
+  doCopy(){
+    
+  }
+
+  // action print
+  doPrint(){
+    
   }
 }

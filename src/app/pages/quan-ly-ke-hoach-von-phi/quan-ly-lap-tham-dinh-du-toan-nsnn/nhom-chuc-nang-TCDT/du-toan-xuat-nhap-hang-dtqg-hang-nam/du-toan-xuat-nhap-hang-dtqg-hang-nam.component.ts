@@ -175,7 +175,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 		private danhMucService: DanhMucHDVService,
 		private location: Location
 	) {
-		this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
+		this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
 	}
 
 
@@ -277,7 +277,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 		if (dVi && dVi.maDvi == this.userInfo.dvql) {
 			checkChirld = true;
 		}
-		if (dVi && dVi.parent.maDvi == this.userInfo.dvql) {
+		if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
 			checkParent = true;
 		}
 
@@ -784,6 +784,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 		if (!this.editCache[id].data.maCucDtnnKvuc ||
 			(!this.editCache[id].data.nxuatGaoLuongDmucPhiNhap && this.editCache[id].data.nxuatGaoLuongDmucPhiNhap !== 0) ||
 			(!this.editCache[id].data.nxuatGaoLuongDmucPhiXuat && this.editCache[id].data.nxuatGaoLuongDmucPhiXuat !== 0) ||
+			(!this.editCache[id].data.nxuatThocLuongTtien && this.editCache[id].data.nxuatThocLuongTtien !== 0) ||
+			(!this.editCache[id].data.nxuatGaoLuongTtien && this.editCache[id].data.nxuatGaoLuongTtien !== 0) ||
 			(!this.editCache[id].data.nxuatThocLuongDmucPhiNhap && this.editCache[id].data.nxuatThocLuongDmucPhiNhap !== 0) ||
 			(!this.editCache[id].data.nxuatThocLuongDmucPhiXuat && this.editCache[id].data.nxuatThocLuongDmucPhiXuat !== 0)) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);

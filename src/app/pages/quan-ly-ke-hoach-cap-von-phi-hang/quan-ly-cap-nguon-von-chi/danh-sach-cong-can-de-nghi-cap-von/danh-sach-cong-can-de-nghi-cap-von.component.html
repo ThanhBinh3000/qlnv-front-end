@@ -31,18 +31,18 @@
                 <div class="search__body" nz-row [nzGutter]="[18, 12]">
                     <div nz-col nzSpan="6">
                         <label class="search__label">Ngày lập từ</label>
-                        <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay"
+                        <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"
                             nzFormat="dd/MM/yyyy"></nz-date-picker>
                     </div>
                     <div nz-col nzSpan="6">
                         <label class="search__label">Đến ngày</label>
-                        <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay"
+                        <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"
                             nzFormat="dd/MM/yyyy"></nz-date-picker>
                     </div>
                     <div nz-col nzSpan="12">
                         <label class="search__label">Trạng thái</label>
                         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-                            [(ngModel)]="searchFilter.trangThai" formControlName="temp">
+                            [(ngModel)]="searchFilter.trangThai" >
                             <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
                             </nz-option>
                         </nz-select>

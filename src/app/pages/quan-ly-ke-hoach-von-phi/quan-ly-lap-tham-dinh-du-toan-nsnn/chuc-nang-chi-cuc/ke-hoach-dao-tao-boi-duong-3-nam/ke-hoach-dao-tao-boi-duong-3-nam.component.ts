@@ -286,7 +286,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 		if (dVi && dVi.maDvi == this.userInfo.dvql) {
 			checkChirld = true;
 		}
-		if (dVi && dVi.parent.maDvi == this.userInfo.dvql) {
+		if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
 			checkParent = true;
 		}
 
@@ -463,6 +463,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
+					this.tinhTong(-1, this.tong);
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;

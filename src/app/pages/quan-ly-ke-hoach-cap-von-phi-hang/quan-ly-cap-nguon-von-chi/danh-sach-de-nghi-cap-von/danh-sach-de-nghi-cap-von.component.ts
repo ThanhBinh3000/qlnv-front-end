@@ -219,6 +219,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         this.searchFilter.tuNgay = null;
         this.searchFilter.denNgay = null;
         this.searchFilter.trangThai = null;
+        this.searchFilter.maDviTao = null;
     }
 
     //doi so trang

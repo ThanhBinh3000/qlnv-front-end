@@ -18,7 +18,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { DialogDanhSachMuaTbiVtuComponent } from 'src/app/components/dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
 
 export class ItemData {
-	maVtu!: string;
+	maVattuLuongThuc!: string;
 	maDviTinh!: string;
 	soLuong!: number;
 	donGia!: number;
@@ -49,11 +49,12 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 
 	userInfo!: any;
 	maDviTao!: string;
-	soQdChiTieu!: string;
-	ngay!: string;
-	canCuSoQdTrungThau!: string;
-	ngayTrungThau!: string;
+	soQd!: string;
+	ngayQd!: string;
+	soCanCuQd!: string;
+	ngayCanCuQd!: string;
 	dtoanDaCap: number = 0;
+	maHdong: string = "";
 	veViec!: string;
 	status: boolean = false;
 
@@ -76,7 +77,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 	fileUrl: any;                               // url
 	listIdDelete: string = "";                  // list id delete
 
-	listIdFiles: string;                        // id file luc call chi tiet
+	listIdDeletes: string;                        // id file luc call chi tiet
 
 	allChecked = false;                         // check all checkbox
 	indeterminate = true;                       // properties allCheckBox
@@ -222,20 +223,24 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 		let request = {
 			id: this.id,
 			fileDinhKems: listFile,
-			listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			listIdDeletes: this.listIdDeletes,              
 			lstCTietBCao: this.lstCTietBCao,
-			// maBcao: this.maBaoCao,
-			// maDvi: this.maDonViTao,
-			// maDviTien: this.maDviTien,
-			// maLoaiBcao: this.maLoaiBaoCao,
-			// namHienHanh: this.namBaoCaoHienHanh,
-			// namBcao: this.namBaoCaoHienHanh,
+			maDvi: this.maDviTao,
+			soQd: this.soQd,
+			ngayQd: this.datePipe.transform(this.ngayQd, Utils.FORMAT_DATE_STR),
+			soCanCuQd: this.soCanCuQd,
+			ngayCanCuQd: this.datePipe.transform(this.ngayCanCuQd, Utils.FORMAT_DATE_STR),
+			dtoanDaCap: this.dtoanDaCap,
+			maHdong: this.maHdong,
+			maGoiThau: this.soCanCuQd,
+			vanBan: this.veViec,
+			loaiCapVon: "1",
 		};
 
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
-			this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+			this.quanLyVonPhiService.themDeNghiCapVon(request).subscribe(
 				data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -316,16 +321,16 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 					this.lstFile = data.data.lstFile;
 
 					// set thong tin chung bao cao
-					this.soQdChiTieu = data.data.soQdChiTieu;
-					this.canCuSoQdTrungThau = data.data.canCuSoQdTrungThau;
+					this.soQd = data.data.soQd;
+					this.soCanCuQd = data.data.soCanCuQd;
 					this.maDviTao = data.data.maDvi;
-					this.ngay = data.data.ngay;
-					this.ngayTrungThau = data.data.ngayTrungThau;
+					this.ngayQd = data.data.ngayQd;
+					this.ngayCanCuQd = data.data.ngayCanCuQd;
 					this.dtoanDaCap = data.data.dtoanDaCap;
 
 					// set list id file ban dau
 					this.lstFile.filter(item => {
-						this.listIdFiles += item.id + ",";
+						this.listIdDeletes += item.id + ",";
 					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -344,7 +349,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 		// day file len server
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
-		upfile.append('folder', this.maDviTao + '/' + this.soQdChiTieu + '/');
+		upfile.append('folder', this.maDviTao + '/' + this.soQd + '/');
 		let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
 			(data) => {
 				let objfile = {
@@ -364,7 +369,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 	// them dong moi
 	addLine(id: number): void {
 		var item: ItemData = {
-			maVtu: "",
+			maVattuLuongThuc: "",
 			maDviTinh: "",
 			soLuong: 0,
 			donGia: 0,
@@ -508,7 +513,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 			nzWidth: '1000px',
 			nzFooter: null,
 			nzComponentParams: {
-				maGoiThau: this.canCuSoQdTrungThau
+				maGoiThau: this.soCanCuQd
 			},
 		});
 		modalIn.afterClose.subscribe((res) => {
