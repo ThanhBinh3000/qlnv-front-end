@@ -254,13 +254,14 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   getStatusButton() {
+    
     let checkParent = false;
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
     if(dVi && dVi.maDvi == this.userInfo.dvql){ 
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
       checkParent = true;
     }
     
@@ -310,7 +311,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   async luu() {
     let checkSaveEdit;
     if(!this.maDviTien || !this.namBaoCaoHienHanh){
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
@@ -719,8 +720,51 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   }
 
   // action copy
-  doCopy(){
-    
+  async doCopy(){
+    //upload file
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
+
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
+    let request = {
+      id: null,
+      listIdDeletes: this.listIdDelete,
+      fileDinhKems: listFile,
+      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: this.maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_TX_GD3N,
+      namHienHanh: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
+      soVban: this.soVban,
+    };
+
+    //call service them moi
+    this.spinner.show();
+    if (this.id == null) {
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+        async data => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.id = data.data.id;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    }
   }
 
   // action print
