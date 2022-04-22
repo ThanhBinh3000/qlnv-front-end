@@ -211,7 +211,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
-    this.getStatusButton();
+
     //get danh muc noi dung
     this.danhMucService.dMLoaiKeHoach().subscribe(
       (data) => {
@@ -297,10 +297,12 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     let checkParent = false;
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    console.log(dVi);
+
     if(dVi && dVi.maDvi == this.userInfo.dvql){
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
       checkParent = true;
     }
 
@@ -724,7 +726,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       !this.editCache[id].data.tenDan ||
       !this.editCache[id].data.ddiemMoTaikhoan ||
       !this.editCache[id].data.qdDuyetDanDtuSongaythang ||
-      !this.editCache[id].data.qdDchinhDanDtuSongaythang ||
+      // !this.editCache[id].data.qdDchinhDanDtuSongaythang ||
+      !this.editCache[id].data.qdDuyetTkDtoanSongaythang ||
       !this.editCache[id].data.klthCapDen3006Songaythang ||
       !this.editCache[id].data.klthCapDen3112Songaythang ||
       !this.editCache[id].data.masoDan ||
@@ -732,7 +735,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       !this.editCache[id].data.namHtTte ||
       !this.editCache[id].data.ghiChu ||
       (!this.editCache[id].data.qdDuyetDanDtuTongVon && this.editCache[id].data.qdDuyetDanDtuTongVon!==0)||
-      (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
+      // (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanXl && this.editCache[id].data.qdDuyetTkDtoanXl !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanTb && this.editCache[id].data.qdDuyetTkDtoanTb !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanCk && this.editCache[id].data.qdDuyetTkDtoanCk !==0)||

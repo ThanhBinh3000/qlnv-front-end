@@ -49,8 +49,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   lstCTietBCao: AllItemData = new AllItemData;
   lstCTiet: ItemData[] = [];                  // list chi tiet bao cao
   tongSo: number = 0;                            // tong kinh phi
-  luongXuatGaoVtro!: number;
-  luongXuatThocVtro!: number;
+  luongXuatGaoVtro: number = 0 ;
+  luongXuatThocVtro: number = 0;
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -270,7 +270,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     if(dVi && dVi.maDvi == this.userInfo.dvql){
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
       checkParent = true;
     }
 
@@ -652,14 +652,23 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       edit: false
     };
   }
-
-  // luu thay doi
-  saveEdit(id: string): void {
-      this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-      Object.assign(this.lstCTiet[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-      this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+// luu thay doi
+saveEdit(id: string): void {
+  if (
+    !this.editCache[id].data.maVtuTbi ||
+    !this.editCache[id].data.maDviVtuTbi ||
+    (!this.editCache[id].data.sl && this.editCache[id].data.sl !==0)
+  ) {
+    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    return
   }
+
+    this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTiet
+    const index = this.lstCTiet.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    Object.assign(this.lstCTiet[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+
+}
 
   updateEditCache(): void {
     this.lstCTiet.forEach(item => {

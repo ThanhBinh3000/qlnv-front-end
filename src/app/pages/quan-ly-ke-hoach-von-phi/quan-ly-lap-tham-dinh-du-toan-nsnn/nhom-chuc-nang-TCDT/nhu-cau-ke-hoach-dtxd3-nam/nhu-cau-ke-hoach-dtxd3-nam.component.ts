@@ -329,7 +329,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     if(dVi && dVi.maDvi == this.userInfo.dvql){
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
       checkParent = true;
     }
 
@@ -737,8 +737,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       !this.editCache[id].data.nlucTke||
       !this.editCache[id].data.ghiChu||
       !this.editCache[id].data.klthCapDen3112Songaythang ||
+      !this.editCache[id].data.namKcTte||
+      !this.editCache[id].data.namHtTte||
       (!this.editCache[id].data.qdDuyetDanDtuTongVon && this.editCache[id].data.qdDuyetDanDtuTongVon !==0)||
-      (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
+      // (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanXl && this.editCache[id].data.qdDuyetTkDtoanXl !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanTb && this.editCache[id].data.qdDuyetTkDtoanTb !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanCx && this.editCache[id].data.qdDuyetTkDtoanCx !==0)||
@@ -753,12 +755,18 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       (!this.editCache[id].data.ncauVonN3 && this.editCache[id].data.ncauVonN3 !==0)
       ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    } else {
+      return
+    }
+    if((this.editCache[id].data.namKcTte <= 1000 ||  this.editCache[id].data.namKcTte >= 2999) || (this.editCache[id].data.namHtTte <= 1000 ||  this.editCache[id].data.namHtTte >= 2999))
+    {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return
+    }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-    }
+
   }
 
   updateEditCache(): void {
