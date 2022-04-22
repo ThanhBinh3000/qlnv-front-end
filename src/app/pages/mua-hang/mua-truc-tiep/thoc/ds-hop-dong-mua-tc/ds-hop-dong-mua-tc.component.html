@@ -7,33 +7,32 @@
             <label class="search__label">Số HĐ</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày</label>
-            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
-              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
-          </div>
-          <div nz-col nzSpan="6"></div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Mã đơn vị</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
-          </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Tên đơn vị</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
-          </div>
-          <div nz-col nzSpan="6"></div>
+          <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Vật tư hàng hóa</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="18">
             <label class="search__label">Tên vật tư hàng hóa</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Mã đơn vị</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="18">
+            <label class="search__label">Tên đơn vị</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày ký từ ngày</label>
+            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
+              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
+              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue"></nz-date-picker>
           </div>
         </div>
         <div class="cangiua group-button-search">
@@ -57,9 +56,8 @@
                   <th width="130px">Số hợp đồng</th>
                   <th width="175px">Tên hàng hóa</th>
                   <th width="175px">Ngày ký</th>
-                  <th width="" class="text-center">Số QĐPDKH mua trực tiếp</th>
-                  <th width="" class="text-center">Số QĐ phê duyệt kết quả mua trực tiếp</th>
-                  <th width="" class="text-center">Đơn vị ký hợp đồng</th>
+                  <th width="" class="text-center">Số QĐ phê duyệt kết quả đấu thầu</th>
+                  <th width="" class="text-center">Nhà thầu trúng thầu</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,13 +66,13 @@
                   <td>Số 2</td>
                   <td>Nhà bạt</td>
                   <td>17/02/2022</td>
-                  <td class="text-center">123</td>
+                  <td class="text-center">13.020</td>
                   <td class="text-center">Cục DTNNKV Tây Nam Bộ</td>
                 </tr>
               </tbody>
             </nz-table>
           </nz-tab>
-          <nz-tab [nzTitle]="'Danh sách hợp đồng của cục DTNNKV'">
+          <nz-tab [nzTitle]="'Danh sách hợp đồng của Cục DTNNKV'">
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
               <thead>
@@ -110,8 +108,7 @@
                   <th width="175px">Tên hàng hóa</th>
                   <th width="175px">Ngày ký</th>
                   <th width="" class="text-center">Số QĐPDKH mua trực tiếp</th>
-                  <th width="" class="text-center">Số QĐ phê duyệt kết quả mua trực tiếp</th>
-                  <th width="" class="text-center">Đơn vị ký hợp đồng</th>
+                  <th width="" class="text-center">Số lệnh nhập</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,7 +118,7 @@
                   <td>Nhà bạt</td>
                   <td>17/02/2022</td>
                   <td class="text-center">123</td>
-                  <td class="text-center">Cục DTNNKV Tây Nam Bộ</td>
+                  <td class="text-center">444</td>
                 </tr>
               </tbody>
             </nz-table>

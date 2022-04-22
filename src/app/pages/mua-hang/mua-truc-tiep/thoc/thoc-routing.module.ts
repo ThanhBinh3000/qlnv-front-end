@@ -70,6 +70,27 @@ const routes: Routes = [
             '../thoc/thong-tin-phu-luc-hop-dong-tc/thong-tin-phu-luc-hop-dong-tc.module'
           ).then((m) => m.ThongTinPhuLucHopDongTCModule),
       },
+      {
+        path: 'ds-lenh-nhap-tc',
+        loadChildren: () =>
+          import('../thoc/ds-lenh-nhap-tc/ds-lenh-nhap-tc.module').then(
+            (m) => m.DsLenhNhapTCModule,
+          ),
+      },
+      {
+        path: 'ds-bien-ban-nghiem-thu-ke-lot-tc',
+        loadChildren: () =>
+          import(
+            '../thoc/ds-bien-ban-nghiem-thu-ke-lot-tc/ds-bien-ban-nghiem-thu-ke-lot-tc.module'
+          ).then((m) => m.DsBienBanNghiemThuKeLotTCModule),
+      },
+      {
+        path: 'ds-bien-ban-nghiem-thu-ke-lot-tc/thong-tin-bien-ban-nghiem-thu-ke-lot-tc/:id',
+        loadChildren: () =>
+          import(
+            '../thoc/thong-tin-bien-ban-nghiem-thu-ke-lot-tc/thong-tin-bien-ban-nghiem-thu-ke-lot-tc.module'
+          ).then((m) => m.ThongTinBienBanNghiemThuKeLotTCModule),
+      },
     ],
   },
 ];

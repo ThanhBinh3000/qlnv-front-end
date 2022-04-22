@@ -84,6 +84,12 @@ import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-h
 import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
 import { DialogChiTietQuyetDinhKhMuaTrucTiepComponent } from './dialog/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep.component';
 import { DialogChiTietQuyetDinhGiaNhapComponent } from './dialog/dialog-chi-tiet-quyet-dinh-gia-nhap/dialog-chi-tiet-quyet-dinh-gia-nhap.component';
+import { DialogThongTinVatTuHangHoaComponent } from './dialog/dialog-thong-tin-vat-tu-hang-hoa/dialog-thong-tin-vat-tu-hang-hoa.component';
+import { DialogDanhSachChiCucComponent } from './dialog/dialog-danh-sach-chi-cuc/dialog-danh-sach-chi-cuc.component';
+import { DialogCanhBaoComponent } from './dialog/dialog-canh-bao/dialog-canh-bao.component';
+import { DialogThongTinLenhNhapKhoComponent } from './dialog/dialog-thong-tin-lenh-nhap-kho/dialog-thong-tin-lenh-nhap-kho.component';
+import { DialogThongTinKeLotBaoQuanBanDauComponent } from './dialog/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau.component';
+import { DialogBaoCaoBienBanNghiemThuKeLotComponent } from './dialog/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +123,12 @@ import { DialogChiTietQuyetDinhGiaNhapComponent } from './dialog/dialog-chi-tiet
     DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
     DialogChiTietQuyetDinhKhMuaTrucTiepComponent,
     DialogChiTietQuyetDinhGiaNhapComponent,
+    DialogThongTinVatTuHangHoaComponent,
+    DialogDanhSachChiCucComponent,
+    DialogCanhBaoComponent,
+    DialogThongTinLenhNhapKhoComponent,
+    DialogThongTinKeLotBaoQuanBanDauComponent,
+    DialogBaoCaoBienBanNghiemThuKeLotComponent,
     //pipes
     FilterPipe,
   ],

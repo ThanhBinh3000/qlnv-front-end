@@ -1,12 +1,10 @@
-import { DialogChiTietQuyetDinhKhMuaTrucTiepComponent } from '../../../../../components/dialog/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Router } from '@angular/router';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { DialogCanhBaoComponent } from './../dialog-canh-bao/dialog-canh-bao.component';
+import { DanhSachGoiThau } from '../../../models/DeXuatKeHoachuaChonNhaThau';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import VNnum2words from 'vn-num2words';
 import { Globals } from 'src/app/shared/globals';
-import { DialogChiTietQuyetDinhGiaNhapComponent } from 'src/app/components/dialog/dialog-chi-tiet-quyet-dinh-gia-nhap/dialog-chi-tiet-quyet-dinh-gia-nhap.component';
-import { DialogThongTinVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-thong-tin-vat-tu-hang-hoa/dialog-thong-tin-vat-tu-hang-hoa.component';
-import { DialogDanhSachChiCucComponent } from 'src/app/components/dialog/dialog-danh-sach-chi-cuc/dialog-danh-sach-chi-cuc.component';
-
 export interface TreeNodeInterface {
   key: string;
   name: string;
@@ -18,12 +16,31 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 @Component({
-  selector: 'thong-tin-hop-dong-mua-tc',
-  templateUrl: './thong-tin-hop-dong-mua-tc.component.html',
-  styleUrls: ['./thong-tin-hop-dong-mua-tc.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'dialog-danh-sach-chi-cuc',
+  templateUrl: './dialog-danh-sach-chi-cuc.component.html',
+  styleUrls: ['./dialog-danh-sach-chi-cuc.component.scss'],
 })
-export class ThongTinHopDongMuaTCComponent implements OnInit {
+export class DialogDanhSachChiCucComponent implements OnInit {
+  constructor(
+    private _modalRef: NzModalRef,
+    private fb: FormBuilder,
+    public globals: Globals,
+    private modal: NzModalService,
+  ) {}
+
+  ngOnInit(): void {
+    this.listOfMapData.forEach((item) => {
+      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    });
+  }
+
+  save() {
+    this._modalRef.close();
+  }
+
+  huy() {
+    this._modalRef.destroy();
+  }
   listOfMapData: TreeNodeInterface[] = [
     {
       key: `1`,
@@ -69,18 +86,7 @@ export class ThongTinHopDongMuaTCComponent implements OnInit {
     },
   ];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
-  tabSelected: string = 'thong-tin-chung';
-  constructor(
-    public globals: Globals,
-    private router: Router,
-    private modal: NzModalService,
-  ) {}
 
-  ngOnInit(): void {
-    this.listOfMapData.forEach((item) => {
-      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    });
-  }
   collapse(
     array: TreeNodeInterface[],
     data: TreeNodeInterface,
@@ -133,42 +139,16 @@ export class ThongTinHopDongMuaTCComponent implements OnInit {
       array.push(node);
     }
   }
-  back() {
-    this.router.navigate([
-      '/mua-hang/mua-truc-tiep/thoc/quyet-dinh-gia-nhap-tc',
-    ]);
-  }
-  huyBo() {}
-  themMoi() {
-    if (this.tabSelected === 'ds-vat-tu-hang-hoa') {
-      const modalLuongThuc = this.modal.create({
-        nzTitle: 'Thông tin vật tư hàng hóa',
-        nzContent: DialogThongTinVatTuHangHoaComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {},
-      });
-      modalLuongThuc.afterClose.subscribe((res) => {});
-    } else if (this.tabSelected === 'ds-phu-luc-hop-dong') {
-      this.router.navigate([
-        '/mua-hang/mua-truc-tiep/thoc/ds-hop-dong-mua-tc/thong-tin-hop-dong-mua-tc',
-        0,
-        'thong-tin-phu-luc-hop-dong-tc',
-        0,
-      ]);
-    } else if (this.tabSelected === 'ds-chi-cuc-thuc-hien-hop-dong') {
-      const modalLuongThuc = this.modal.create({
-        nzTitle: 'Danh sách chi cục',
-        nzContent: DialogDanhSachChiCucComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {},
-      });
-      modalLuongThuc.afterClose.subscribe((res) => {});
-    }
+  capNhat() {
+    const modalLuongThuc = this.modal.create({
+      nzTitle: '',
+      nzContent: DialogCanhBaoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '400px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalLuongThuc.afterClose.subscribe((luongThuc) => {});
   }
 }
