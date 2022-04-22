@@ -52,4 +52,9 @@ export class TongHopDeXuatKHLCNTService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/xoa`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/ket-xuat`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
 }

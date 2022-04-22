@@ -84,6 +84,7 @@ import { DialogDanhSachHangHoaComponent } from './dialog/dialog-danh-sach-hang-h
 import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap/dialog-them-moi-ctbb-chuan-bi-kho-truoc-khi-nhap.component';
 import { DialogChiTietQuyetDinhKhMuaTrucTiepComponent } from './dialog/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep/dialog-chi-tiet-quyet-dinh-ke-hoach-mua-truc-tiep.component';
 import { DialogChiTietQuyetDinhGiaNhapComponent } from './dialog/dialog-chi-tiet-quyet-dinh-gia-nhap/dialog-chi-tiet-quyet-dinh-gia-nhap.component';
+import { DialogPhieuKiemTraChatLuongComponent } from './dialog/dialog-phieu-kiem-tra-chat-luong/dialog-phieu-kiem-tra-chat-luong.component';
 import { DialogThongTinVatTuHangHoaComponent } from './dialog/dialog-thong-tin-vat-tu-hang-hoa/dialog-thong-tin-vat-tu-hang-hoa.component';
 import { DialogDanhSachChiCucComponent } from './dialog/dialog-danh-sach-chi-cuc/dialog-danh-sach-chi-cuc.component';
 import { DialogCanhBaoComponent } from './dialog/dialog-canh-bao/dialog-canh-bao.component';
@@ -123,6 +124,7 @@ import { DialogBaoCaoBienBanNghiemThuKeLotComponent } from './dialog/dialog-bao-
     DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
     DialogChiTietQuyetDinhKhMuaTrucTiepComponent,
     DialogChiTietQuyetDinhGiaNhapComponent,
+    DialogPhieuKiemTraChatLuongComponent,
     DialogThongTinVatTuHangHoaComponent,
     DialogDanhSachChiCucComponent,
     DialogCanhBaoComponent,
@@ -243,4 +245,4 @@ import { DialogBaoCaoBienBanNghiemThuKeLotComponent } from './dialog/dialog-bao-
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
