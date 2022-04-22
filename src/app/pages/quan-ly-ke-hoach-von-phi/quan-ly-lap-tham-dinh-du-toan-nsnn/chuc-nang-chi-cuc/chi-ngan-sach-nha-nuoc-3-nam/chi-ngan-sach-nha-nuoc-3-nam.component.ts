@@ -284,7 +284,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           if (dVi && dVi.maDvi == this.userInfo.dvql) {
                checkChirld = true;
           }
-          if (dVi && dVi.parent.maDvi == this.userInfo.dvql) {
+          if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
                checkParent = true;
           }
 
@@ -702,6 +702,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
                return;
           }
+          this.editCache[id].data.ssanhNcauNVoiN1 = this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN;
           this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
           const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
           Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
@@ -721,7 +722,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      //gia tri cac o input thay doi thi tinh toan lai
      changeModel(id: string): void {
           this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-          this.editCache[id].data.ssanhNcauNVoiN1 = this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN;
+          
           this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
           this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
      }

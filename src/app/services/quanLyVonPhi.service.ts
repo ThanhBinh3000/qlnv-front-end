@@ -390,4 +390,13 @@ export class QuanLyVonPhiService extends BaseService {
   downloadFile(fileUrl:any):Observable<any>{
     return this.httpClient.get(this.urlDefault + '/qlnv-core/file/' +fileUrl,{responseType: 'blob'});
   }
+
+  // trinh duyet
+  themDeNghiCapVon(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      'http://192.168.1.111:8094/cap-nguon-von-chi/dncv',
+      request,
+    );
+  }
 }

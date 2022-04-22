@@ -272,6 +272,7 @@
 
 										<td>
 											<nz-input-number class="search__input" nzSize="small"
+											[class]="editCache[data.id].data.nxuatThocLuongTtien || editCache[data.id].data.nxuatThocLuongTtien === 0  ?'' : 'input-error-validate' "
 												[(ngModel)]="editCache[data.id].data.nxuatThocLuongTtien">
 											</nz-input-number>
 										</td>
@@ -302,6 +303,7 @@
 
 										<td>
 											<nz-input-number class="search__input" nzSize="small"
+											[class]="editCache[data.id].data.nxuatGaoLuongTtien || editCache[data.id].data.nxuatGaoLuongTtien === 0  ?'' : 'input-error-validate' "
 												[(ngModel)]="editCache[data.id].data.nxuatGaoLuongTtien">
 											</nz-input-number>
 										</td>
