@@ -246,7 +246,7 @@
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
                         [class]="editCache[data.id].data.maDvi ? '' : 'input-error-validate'"
                         [(ngModel)]="editCache[data.id].data.maDvi">
-                        <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
+                        <nz-option *ngFor="let item of donViChuTris" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>
                     <td>
