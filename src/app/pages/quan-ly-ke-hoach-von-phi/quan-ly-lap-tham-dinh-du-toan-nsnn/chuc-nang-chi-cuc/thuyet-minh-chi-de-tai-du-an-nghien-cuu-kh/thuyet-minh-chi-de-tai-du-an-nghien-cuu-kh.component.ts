@@ -17,7 +17,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   tenDtaiDan!: String;
-  maDvi!: String;
+  maDvi!: number;
   tgBdau!: number;
   tgKthuc!: number;
   kphiTongPhiDuocDuyet!: number;
@@ -99,6 +99,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  donViChuTris: any [] = [];
 
   // upload file
   addFile() {
@@ -188,16 +189,13 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       this.namBaoCaoHienHanh = new Date().getFullYear();
     }
 
-    this.getStatusButton();
-
-
      //lay danh sach danh muc don vi
      await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
           this.donVis.forEach(e => {
-            if(e.maDvi==this.maDonViTao){
+            if(e.maDvi == this.maDonViTao){
               this.capDvi = e.capDvi;
             }
           })
@@ -208,6 +206,21 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           }else{
             this.checkDv = true;
           }
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+     //lay danh sach danh muc don vi
+     await this.danhMucService.dMDonviChuTri().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donViChuTris = data.data.content;
+          console.log(this.donViChuTris);
 
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -233,7 +246,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     if(dVi && dVi.maDvi == this.userInfo.dvql){
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfo.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
       checkParent = true;
     }
 
@@ -493,7 +506,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDtaiDan: "",
-      maDvi: "",
+      maDvi: 0,
       tgBdau: this.namBaoCaoHienHanh,
       tgKthuc: this.namBaoCaoHienHanh,
       kphiTongPhiDuocDuyet: 0,
@@ -642,7 +655,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return
     }
-    if((this.editCache[id].data.tgBdau >= 1000 &&  this.editCache[id].data.tgBdau <= 2999) || (this.editCache[id].data.tgKthuc >= 1000 &&  this.editCache[id].data.tgKthuc <= 2999)){
+    if((this.editCache[id].data.tgBdau <= 1000 ||  this.editCache[id].data.tgBdau >= 2999) || (this.editCache[id].data.tgKthuc <= 1000 &&  this.editCache[id].data.tgKthuc >= 2999)){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
     }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao

@@ -475,17 +475,17 @@
                     </td>
                     <td>
                       <input class="search__input" style="width: 100px;" nz-input
-                        [class]="editCache[data.id].data.qdDchinhDanDtuSongaythang ? '' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuSongaythang" />
                     </td>
                     <td>
                       <nz-input-number class="search__input" style="width: 100px;" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.qdDchinhDanDtuTongVon"
-                        [class]="editCache[data.id].data.qdDchinhDanDtuTongVon || editCache[data.id].data.qdDchinhDanDtuTongVon ===0 ? '' : 'input-error-validate' ">
+                      >
                       </nz-input-number>
                     </td>
                     <td>
                       <input class="search__input" style="width: 100px;" nz-input
+                      [class]="editCache[data.id].data.qdDuyetTkDtoanSongaythang ? '' : 'input-error-validate' "
                         [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanSongaythang" />
                     </td>
                     <td>
