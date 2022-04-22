@@ -273,7 +273,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     if(dVi && dVi.maDvi == this.userInfor.dvql){ 
       checkChirld = true;
     }
-    if(dVi && dVi.parent.maDvi == this.userInfor.dvql){
+    if(dVi && dVi.parent?.maDvi == this.userInfor.dvql){
       checkParent = true;
     }
     
