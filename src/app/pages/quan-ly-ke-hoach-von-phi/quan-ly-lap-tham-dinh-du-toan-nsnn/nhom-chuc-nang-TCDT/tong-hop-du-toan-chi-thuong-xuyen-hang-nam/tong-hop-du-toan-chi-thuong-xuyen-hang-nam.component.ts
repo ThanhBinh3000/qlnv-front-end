@@ -360,7 +360,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		// gui du lieu trinh duyet len server
 		let request = {
 			id: this.id,
-			idFileDinhKem: listFile,
+			fileDinhKems: listFile,
 			listIdDeleteFiles: this.listIdDeleteFiles,
 			listIdDeletes: this.listIdDelete,
 			lstCTietBCao: this.lstCTietBCao,
