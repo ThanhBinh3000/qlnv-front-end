@@ -6,11 +6,11 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="taomoi();submitForm();">
+        <button nz-button class="search__button--search" (click)="taomoi();">
           <i nz-icon nzType="plus"></i>
           Tạo mới
         </button>
-        <button nz-button class="search__button--search" (click)="timkiem()">
+        <button nz-button class="search__button--search" (click)="timkiem();">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -30,7 +30,7 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="messageValidate.YEAR">
+                <nz-form-control nzErrorTip="">
               <label class="search__label">Năm phương án </label>
                   <input nz-input  [(ngModel)]="namPa" formControlName="namPa"/>
                 </nz-form-control>
@@ -66,7 +66,7 @@
             <div nz-col nzSpan="6">
               <label class="search__label">Loại báo cáo</label>
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="messageValidate.TYPE_OF_TEXT">
+                <nz-form-control nzErrorTip="">
               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại văn bản"  formControlName="loaivanban" [(ngModel)]="loaivanban" >
                 <nz-option nzValue="PA" nzLabel="PA"></nz-option>
                 <nz-option nzValue="CV" nzLabel="CV"></nz-option>

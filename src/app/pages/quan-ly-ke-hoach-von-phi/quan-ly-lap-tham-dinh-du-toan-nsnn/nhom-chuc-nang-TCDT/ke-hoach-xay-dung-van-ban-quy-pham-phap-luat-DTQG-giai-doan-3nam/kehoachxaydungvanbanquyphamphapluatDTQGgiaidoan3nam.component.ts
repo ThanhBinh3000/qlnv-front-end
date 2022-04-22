@@ -256,9 +256,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(item =>{
-            item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
-          })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
@@ -279,7 +277,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             this.status = true;
           }
           this.listFile =[];
-          
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -407,6 +405,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -496,7 +495,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     }
     //tinh đon vi tien
     this.lstCTietBCao.filter(item => {
-      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
       if (this.editCache[item.id].edit === true) {
         checkSaveEdit = false
       }
@@ -505,6 +503,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
@@ -541,9 +540,11 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
         } else {
+          this.divMoneyTotal();
          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err => {
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -555,10 +556,12 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -622,6 +625,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
             this.namBcaohienhanh = this.namBcaohienhanh;
             this.updateEditCache();
+            this.tinhTong();
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -655,6 +659,14 @@ xoaBaoCao(){
     }
   }
 
+
+  tinhTong():number{
+    let tongDtoanKphi =0;
+    this.lstCTietBCao.forEach(e =>{
+      tongDtoanKphi += e.dtoanKphi;
+    })
+    return tongDtoanKphi;
+  }
    // action copy
    doCopy(){
     
@@ -663,5 +675,18 @@ xoaBaoCao(){
   // action print
   doPrint(){
     
+  }
+
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter( item =>{
+      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
+    })
+  }
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
+    })
   }
 }

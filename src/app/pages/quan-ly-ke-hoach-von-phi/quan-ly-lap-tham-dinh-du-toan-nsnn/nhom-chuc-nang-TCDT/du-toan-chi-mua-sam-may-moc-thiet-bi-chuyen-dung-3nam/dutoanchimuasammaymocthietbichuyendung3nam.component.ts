@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -264,6 +264,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             })
             data.listCtiet = mm;
           })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
@@ -555,6 +556,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if (typeof e.id != "number") {
         e.id = null;
@@ -596,9 +598,11 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         }, err => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
@@ -610,10 +614,12 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -791,5 +797,31 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   // action print
   doPrint(){
     
+  }
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.listCtiet.forEach( e =>{
+        e.n1 = mulMoney(e.n1, this.maDviTien);
+        e.n2 = mulMoney(e.n2, this.maDviTien);
+        e.n3 = mulMoney(e.n3, this.maDviTien);
+      })
+      item.tcongN1 = mulMoney(item.tcongN1, this.maDviTien);
+      item.tcongN2 = mulMoney(item.tcongN2, this.maDviTien);
+      item.tcongN3 = mulMoney(item.tcongN3, this.maDviTien);
+    })
+  }
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter( item =>{
+      item.listCtiet.forEach( e =>{
+        e.n1 =divMoney(e.n1, this.maDviTien);
+        e.n2 = divMoney(e.n2, this.maDviTien);
+        e.n3 = divMoney(e.n3, this.maDviTien);
+      })
+      item.tcongN1 = divMoney(item.tcongN1, this.maDviTien);
+      item.tcongN2 = divMoney(item.tcongN2, this.maDviTien);
+      item.tcongN3 = divMoney(item.tcongN3, this.maDviTien);
+    })
   }
 }

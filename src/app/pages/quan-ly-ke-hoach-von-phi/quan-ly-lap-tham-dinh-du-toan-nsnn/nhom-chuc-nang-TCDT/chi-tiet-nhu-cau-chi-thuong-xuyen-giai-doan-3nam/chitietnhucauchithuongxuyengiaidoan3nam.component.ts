@@ -17,9 +17,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 export class ItemData {
   id: any;
   stt: number;
-  maNdung: string;
-  maNhomChi: string;
-  thienNamHhanhN: string;
+  maNdung: number;
+  maNhomChi: number;
+  thienNamHhanhN: number;
   ncauDtoanN1: number;
   ncauDtoanN2: number;
   ncauDtoanN3: number;
@@ -269,11 +269,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter( item =>{
-            item.ncauDtoanN1 = divMoney(item.ncauDtoanN1, this.donvitien);
-            item.ncauDtoanN2 = divMoney(item.ncauDtoanN2, this.donvitien);
-            item.ncauDtoanN3 = divMoney(item.ncauDtoanN3, this.donvitien);
-          })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
@@ -378,9 +374,9 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
     let item: ItemData = {
       id: uuid.v4(),
       stt: 0,
-      maNdung: '',
-      maNhomChi: '',
-      thienNamHhanhN: '',
+      maNdung: 0,
+      maNhomChi: 0,
+      thienNamHhanhN:0,
       ncauDtoanN1: 0,
       ncauDtoanN2: 0,
       ncauDtoanN3: 0,
@@ -409,8 +405,9 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
   //update khi sửa
   saveEdit(id: string): void {
-    if(!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChi ||
-      (!this.editCache[id].data.ncauDtoanN1 && this.editCache[id].data.ncauDtoanN1!==0)
+    if(!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChi 
+      || (!this.editCache[id].data.thienNamHhanhN && this.editCache[id].data.thienNamHhanhN!==0) 
+      || (!this.editCache[id].data.ncauDtoanN1 && this.editCache[id].data.ncauDtoanN1!==0)
       || (!this.editCache[id].data.ncauDtoanN2 && this.editCache[id].data.ncauDtoanN2!==0)
       || (!this.editCache[id].data.ncauDtoanN3 && this.editCache[id].data.ncauDtoanN3!==0)){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -512,9 +509,6 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
     }
 
     this.lstCTietBCao.filter( item =>{
-      item.ncauDtoanN1 = mulMoney(item.ncauDtoanN1, this.donvitien);
-      item.ncauDtoanN2 = mulMoney(item.ncauDtoanN2, this.donvitien);
-      item.ncauDtoanN3 = mulMoney(item.ncauDtoanN3, this.donvitien);
       if (this.editCache[item.id].edit === true) {
         checkSaveEdit = false
       }
@@ -523,6 +517,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach((e) => {
       if (typeof e.id != 'number') {
         e.id = null;
@@ -560,9 +555,11 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           await this.getDetailReport();
           this.getStatusButton();
         } else {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err =>{
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -574,10 +571,12 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -687,5 +686,21 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   // action print
   doPrint(){
     
+  }
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(item => {
+      item.ncauDtoanN1 = mulMoney(item.ncauDtoanN1, this.donvitien);
+      item.ncauDtoanN2 = mulMoney(item.ncauDtoanN2, this.donvitien);
+      item.ncauDtoanN3 = mulMoney(item.ncauDtoanN3, this.donvitien);
+    })
+  }
+  
+  divMoneyTotal(){
+    this.lstCTietBCao.filter( item =>{
+      item.ncauDtoanN1 = divMoney(item.ncauDtoanN1, this.donvitien);
+      item.ncauDtoanN2 = divMoney(item.ncauDtoanN2, this.donvitien);
+      item.ncauDtoanN3 = divMoney(item.ncauDtoanN3, this.donvitien);
+    })
   }
 }

@@ -298,18 +298,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.thienNamTruoc = divMoney(element.thienNamTruoc, this.donvitien);
-            element.tongDtoanGtri = divMoney(element.tongDtoanGtri, this.donvitien);
-            element.dtoanThienNCb = divMoney(element.dtoanThienNCb, this.donvitien);
-            element.dtoanThienNTh = divMoney(element.dtoanThienNTh, this.donvitien);
-            element.dtoanThienN1Cb = divMoney(element.dtoanThienN1Cb, this.donvitien);
-            element.dtoanThienN1Th = divMoney(element.dtoanThienN1Th, this.donvitien);
-            element.dtoanThienN2Cb = divMoney(element.dtoanThienN2Cb, this.donvitien);
-            element.dtoanThienN2Th = divMoney(element.dtoanThienN2Th, this.donvitien);
-            element.dtoanThienN3Cb = divMoney(element.dtoanThienN3Cb, this.donvitien);
-            element.dtoanThienN3Th = divMoney(element.dtoanThienN3Th, this.donvitien);
-          });
+         this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N;
@@ -553,16 +542,6 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       return;
     }
     this.lstCTietBCao.filter(element => {
-      element.thienNamTruoc = mulMoney(element.thienNamTruoc, this.donvitien);
-      element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.donvitien);
-      element.dtoanThienNCb = mulMoney(element.dtoanThienNCb, this.donvitien);
-      element.dtoanThienNTh = mulMoney(element.dtoanThienNTh, this.donvitien);
-      element.dtoanThienN1Cb = mulMoney(element.dtoanThienN1Cb, this.donvitien);
-      element.dtoanThienN1Th = mulMoney(element.dtoanThienN1Th, this.donvitien);
-      element.dtoanThienN2Cb = mulMoney(element.dtoanThienN2Cb, this.donvitien);
-      element.dtoanThienN2Th = mulMoney(element.dtoanThienN2Th, this.donvitien);
-      element.dtoanThienN3Cb = mulMoney(element.dtoanThienN3Cb, this.donvitien);
-      element.dtoanThienN3Th = mulMoney(element.dtoanThienN3Th, this.donvitien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -571,7 +550,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
@@ -607,9 +586,11 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
         } else {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR,res?.msg);
         }
       },err=> {
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -621,10 +602,12 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR,data?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -771,5 +754,35 @@ xoaBaoCao(){
   // action print
   doPrint(){
     
+  }
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.donvitien);
+      element.thienNamTruoc = mulMoney(element.thienNamTruoc, this.donvitien);
+      element.dtoanThienNCb = mulMoney(element.dtoanThienNCb, this.donvitien);
+      element.dtoanThienNTh = mulMoney(element.dtoanThienNTh, this.donvitien);
+      element.dtoanThienN1Cb = mulMoney(element.dtoanThienN1Cb, this.donvitien);
+      element.dtoanThienN1Th = mulMoney(element.dtoanThienN1Th, this.donvitien);
+      element.dtoanThienN2Cb = mulMoney(element.dtoanThienN2Cb, this.donvitien);
+      element.dtoanThienN2Th = mulMoney(element.dtoanThienN2Th, this.donvitien);
+      element.dtoanThienN3Cb = mulMoney(element.dtoanThienN3Cb, this.donvitien);
+      element.dtoanThienN3Th = mulMoney(element.dtoanThienN3Th, this.donvitien);
+    })
+  }
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.tongDtoanGtri = divMoney(element.tongDtoanGtri, this.donvitien);
+      element.thienNamTruoc = divMoney(element.thienNamTruoc, this.donvitien);
+      element.dtoanThienNCb = divMoney(element.dtoanThienNCb, this.donvitien);
+      element.dtoanThienNTh = divMoney(element.dtoanThienNTh, this.donvitien);
+      element.dtoanThienN1Cb = divMoney(element.dtoanThienN1Cb, this.donvitien);
+      element.dtoanThienN1Th = divMoney(element.dtoanThienN1Th, this.donvitien);
+      element.dtoanThienN2Cb = divMoney(element.dtoanThienN2Cb, this.donvitien);
+      element.dtoanThienN2Th = divMoney(element.dtoanThienN2Th, this.donvitien);
+      element.dtoanThienN3Cb = divMoney(element.dtoanThienN3Cb, this.donvitien);
+      element.dtoanThienN3Th = divMoney(element.dtoanThienN3Th, this.donvitien);
+    });
   }
 }

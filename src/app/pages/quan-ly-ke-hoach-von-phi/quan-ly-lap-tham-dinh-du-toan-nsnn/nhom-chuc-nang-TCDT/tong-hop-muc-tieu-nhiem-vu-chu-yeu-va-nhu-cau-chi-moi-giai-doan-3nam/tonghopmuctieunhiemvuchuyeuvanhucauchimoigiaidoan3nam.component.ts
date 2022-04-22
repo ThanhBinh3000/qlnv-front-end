@@ -239,18 +239,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(item =>{
-            item.nguonKphi = divMoney(item.nguonKphi, this.donvitien);
-            item.tongSo = divMoney(item.tongSo, this.donvitien);
-            item.chiCs = divMoney(item.chiCs, this.donvitien);
-            item.chiMoi = divMoney(item.chiMoi, this.donvitien);
-            item.dtuPtrien = divMoney(item.dtuPtrien, this.donvitien);
-            item.dtuPtrienChiCs = divMoney(item.dtuPtrienChiCs, this.donvitien);
-            item.dtuPtrienChiMoi = divMoney(item.dtuPtrienChiMoi, this.donvitien);
-            item.chiTx = divMoney(item.chiTx, this.donvitien);
-            item.chiTxChiCs = divMoney(item.chiTxChiCs, this.donvitien);
-            item.chiTxChiMoi = divMoney(item.chiTxChiMoi, this.donvitien);
-          })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N;
@@ -496,17 +485,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
-    this.lstCTietBCao.filter(item =>{
-      item.nguonKphi = mulMoney(item.nguonKphi, this.donvitien);
-      item.tongSo = mulMoney(item.tongSo, this.donvitien);
-      item.chiCs = mulMoney(item.chiCs, this.donvitien);
-      item.chiMoi = mulMoney(item.chiMoi, this.donvitien);
-      item.dtuPtrien = mulMoney(item.dtuPtrien, this.donvitien);
-      item.dtuPtrienChiCs = mulMoney(item.dtuPtrienChiCs, this.donvitien);
-      item.dtuPtrienChiMoi = mulMoney(item.dtuPtrienChiMoi, this.donvitien);
-      item.chiTx = mulMoney(item.chiTx, this.donvitien);
-      item.chiTxChiCs = mulMoney(item.chiTxChiCs, this.donvitien);
-      item.chiTxChiMoi = mulMoney(item.chiTxChiMoi, this.donvitien);
+    this.lstCTietBCao.filter(item =>{      
       if(this.editCache[item.id].edit ===true){
         checkSaveEdit = false;
       }
@@ -516,6 +495,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
@@ -556,9 +536,11 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
             await this.getDetailReport();
             this.getStatusButton();
         } else {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       }, err => {
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -570,10 +552,12 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
             await this.getDetailReport();
             this.getStatusButton();
            } else {
+            this.divMoneyTotal();
              this.notification.error(MESSAGE.ERROR, data?.msg);
            }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -740,5 +724,37 @@ changeModel(id: string): void {
   // action print
   doPrint(){
     
+  }
+
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.nguonKphi = mulMoney(item.nguonKphi, this.donvitien);
+      item.tongSo = mulMoney(item.tongSo, this.donvitien);
+      item.chiCs = mulMoney(item.chiCs, this.donvitien);
+      item.chiMoi = mulMoney(item.chiMoi, this.donvitien);
+      item.dtuPtrien = mulMoney(item.dtuPtrien, this.donvitien);
+      item.dtuPtrienChiCs = mulMoney(item.dtuPtrienChiCs, this.donvitien);
+      item.dtuPtrienChiMoi = mulMoney(item.dtuPtrienChiMoi, this.donvitien);
+      item.chiTx = mulMoney(item.chiTx, this.donvitien);
+      item.chiTxChiCs = mulMoney(item.chiTxChiCs, this.donvitien);
+      item.chiTxChiMoi = mulMoney(item.chiTxChiMoi, this.donvitien);
+    })
+  }
+  
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.nguonKphi = divMoney(item.nguonKphi, this.donvitien);
+      item.tongSo = divMoney(item.tongSo, this.donvitien);
+      item.chiCs = divMoney(item.chiCs, this.donvitien);
+      item.chiMoi = divMoney(item.chiMoi, this.donvitien);
+      item.dtuPtrien = divMoney(item.dtuPtrien, this.donvitien);
+      item.dtuPtrienChiCs = divMoney(item.dtuPtrienChiCs, this.donvitien);
+      item.dtuPtrienChiMoi = divMoney(item.dtuPtrienChiMoi, this.donvitien);
+      item.chiTx = divMoney(item.chiTx, this.donvitien);
+      item.chiTxChiCs = divMoney(item.chiTxChiCs, this.donvitien);
+      item.chiTxChiMoi = divMoney(item.chiTxChiMoi, this.donvitien);
+    })
   }
 }

@@ -274,11 +274,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.id = data.data.id;
           this.lstCTietBCao = data.data.listCtiet;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(item => {
-            item.listCtietDvi.forEach( e=>{
-              e.soTranChi = divMoney(e.soTranChi, this.donvitien);
-            })
-          })
+          this.divMoneyTotal();
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
           this.namBcaohienhanh = this.chiTietBcaos.namHienHanh;
@@ -585,9 +581,6 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     }
 
     this.lstCTietBCao.filter(item => {
-      item.listCtietDvi.forEach( e=>{
-        e.soTranChi = mulMoney(e.soTranChi, this.donvitien);
-      })
       if(this.editCache[item.id].edit==true){
         checkSaveEdit = false;
       }
@@ -596,6 +589,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach((e) => {
       if (typeof e.id != 'number') {
         e.id = null;
@@ -634,10 +628,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
             this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -651,10 +647,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
             this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -857,5 +855,23 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   // action print
   doPrint(){
     
+  }
+
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.listCtietDvi.forEach( e=>{
+        e.soTranChi = mulMoney(e.soTranChi, this.donvitien);
+      })
+    })
+  }
+  
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(item => {
+      item.listCtietDvi.forEach( e=>{
+        e.soTranChi = divMoney(e.soTranChi, this.donvitien);
+      })
+    })
   }
 }

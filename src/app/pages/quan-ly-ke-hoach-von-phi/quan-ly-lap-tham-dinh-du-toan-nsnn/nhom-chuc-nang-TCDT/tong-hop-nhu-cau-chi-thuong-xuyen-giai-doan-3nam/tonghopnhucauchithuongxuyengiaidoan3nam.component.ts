@@ -253,17 +253,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(item =>{
-            item.tranChiN1 = divMoney(item.tranChiN1, this.donvitien);
-            item.ncauChiN1 = divMoney(item.ncauChiN1, this.donvitien);
-            item.clechTranChiVsNcauChiN1 = divMoney(item.clechTranChiVsNcauChiN1, this.donvitien);
-            item.tranChiN2 = divMoney(item.tranChiN2, this.donvitien);
-            item.ncauChiN2 = divMoney(item.ncauChiN2, this.donvitien);
-            item.clechTranChiVsNcauChiN2 = divMoney(item.clechTranChiVsNcauChiN2, this.donvitien);
-            item.tranChiN3 = divMoney(item.tranChiN3, this.donvitien);
-            item.ncauChiN3 = divMoney(item.ncauChiN3, this.donvitien);
-            item.clechTranChiVsNcauChiN3 = divMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
-          })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N;
@@ -509,15 +499,6 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       return;
     }
     this.lstCTietBCao.filter(item =>{
-      item.tranChiN1 = mulMoney(item.tranChiN1, this.donvitien);
-      item.ncauChiN1 = mulMoney(item.ncauChiN1, this.donvitien);
-      item.clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.donvitien);
-      item.tranChiN2 = mulMoney(item.tranChiN2, this.donvitien);
-      item.ncauChiN2 = mulMoney(item.ncauChiN2, this.donvitien);
-      item.clechTranChiVsNcauChiN2 = mulMoney(item.clechTranChiVsNcauChiN2, this.donvitien);
-      item.tranChiN3 = mulMoney(item.tranChiN3, this.donvitien);
-      item.ncauChiN3 = mulMoney(item.ncauChiN3, this.donvitien);
-      item.clechTranChiVsNcauChiN3 = mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
       if(this.editCache[item.id].edit === true){
         checkSaveEdit = false;
       }
@@ -526,7 +507,7 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
@@ -565,9 +546,11 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
           await this.getDetailReport();
           this.getStatusButton();
         } else {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, res?.msg)
         }
       },err => {
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -579,10 +562,12 @@ export class Tonghopnhucauchithuongxuyengiaidoan3namComponent implements OnInit 
             await this.getDetailReport();
             this.getStatusButton();
           }else{
+            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg)
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
         },
       );
@@ -698,5 +683,33 @@ xoaBaoCao(){
   // action print
   doPrint(){
     
+  }
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.tranChiN1 = mulMoney(item.tranChiN1, this.donvitien);
+      item.ncauChiN1 = mulMoney(item.ncauChiN1, this.donvitien);
+      item.clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.donvitien);
+      item.tranChiN2 = mulMoney(item.tranChiN2, this.donvitien);
+      item.ncauChiN2 = mulMoney(item.ncauChiN2, this.donvitien);
+      item.clechTranChiVsNcauChiN2 = mulMoney(item.clechTranChiVsNcauChiN2, this.donvitien);
+      item.tranChiN3 = mulMoney(item.tranChiN3, this.donvitien);
+      item.ncauChiN3 = mulMoney(item.ncauChiN3, this.donvitien);
+      item.clechTranChiVsNcauChiN3 = mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
+    })
+  }
+  
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.tranChiN1 = divMoney(item.tranChiN1, this.donvitien);
+      item.ncauChiN1 = divMoney(item.ncauChiN1, this.donvitien);
+      item.clechTranChiVsNcauChiN1 = divMoney(item.clechTranChiVsNcauChiN1, this.donvitien);
+      item.tranChiN2 = divMoney(item.tranChiN2, this.donvitien);
+      item.ncauChiN2 = divMoney(item.ncauChiN2, this.donvitien);
+      item.clechTranChiVsNcauChiN2 = divMoney(item.clechTranChiVsNcauChiN2, this.donvitien);
+      item.tranChiN3 = divMoney(item.tranChiN3, this.donvitien);
+      item.ncauChiN3 = divMoney(item.ncauChiN3, this.donvitien);
+      item.clechTranChiVsNcauChiN3 = divMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
+    })
   }
 }

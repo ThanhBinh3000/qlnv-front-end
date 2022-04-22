@@ -21,51 +21,50 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Danh sách giao số kiểm tra NSNN" class="mt16 flex-card p-lr16" style="margin-bottom: 30px;">
+      <nz-card nzTitle="Danh sách giao số kiểm tra NSNN" class="mt16 flex-card p-lr16">
         <form nz-form [formGroup]="validateForm">
-          <div class="widget-body">
-            <div>
-              <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
-                <nz-descriptions-item nzTitle="Năm giao">
-                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input type="text" nz-input [(ngModel)]="namgiao" formControlName="namgiao">
-                  </nz-form-control>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Ngày giao từ">
-                  <nz-date-picker [(ngModel)]="ngaygiao" formControlName="temp" type="date"></nz-date-picker>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Đến ngày">
-                  <nz-date-picker [(ngModel)]="denngay" formControlName="temp" type="date"></nz-date-picker>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Đơn vị tạo">
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao"
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-control nzErrorTip="">
+              <label class="search__label">Năm giao </label>
+                  <input nz-input  [(ngModel)]="namgiao" formControlName="namgiao"/>
+                </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày giao từ</label>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="ngaygiao" ></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đến ngày</label>
+              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="denngay" ></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="6" >
+              <label class="search__label">Đơn vị tạo</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="donvitao"
                     formControlName="temp">
                     <nz-option *ngFor="let op of donviTaos" [nzValue]="op.maDvi" [nzLabel]="op.tenDvi"></nz-option>
                   </nz-select>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Trạng thái">
-                  <input type="text" nz-input [value]="getStatusName(trangthai)">
-                  <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangthai">
-                  <nz-option nzValue="1" nzLabel="Đã giao"></nz-option>
-                  <nz-option nzValue="2" nzLabel="Giao lại"></nz-option>
-                </nz-select> -->
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Đơn vị nhận">
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan"
-                    formControlName="temp">
-                    <nz-option *ngFor="let op of donviTaos" [nzValue]="op.maDvi" [nzLabel]="op.tenDvi"></nz-option>
-                  </nz-select>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Mã giao">
-                  <input type="text" nz-input [(ngModel)]="magiao" formControlName="temp">
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Mã PA">
-                  <input type="text" nz-input [(ngModel)]="mapa" formControlName="temp">
-                </nz-descriptions-item>
-                <nz-descriptions-item></nz-descriptions-item>
-                <nz-descriptions-item></nz-descriptions-item>
-                <nz-descriptions-item></nz-descriptions-item>
-              </nz-descriptions>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Trạng thái</label>
+              <input type="text" nz-input [value]="getStatusName(trangthai)">
+            </div>
+            <div nz-col nzSpan="6" >
+              <label class="search__label">Đơn vị nhận</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" [(ngModel)]="donvinhan"
+              formControlName="temp">
+              <nz-option *ngFor="let op of donviTaos" [nzValue]="op.maDvi" [nzLabel]="op.tenDvi"></nz-option>
+            </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Mã giao</label>
+              <input type="text" nz-input [(ngModel)]="magiao" formControlName="temp">
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Mã PA</label>
+              <input type="text" nz-input [(ngModel)]="mapa" formControlName="temp">
             </div>
           </div>
         </form>
