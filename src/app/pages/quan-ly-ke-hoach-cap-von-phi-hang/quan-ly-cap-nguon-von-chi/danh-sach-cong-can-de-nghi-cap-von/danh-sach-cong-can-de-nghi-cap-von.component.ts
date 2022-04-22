@@ -216,9 +216,10 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
     }
 
     xoaDieuKien(){
-        this.searchFilter.tuNgay = null;
-        this.searchFilter.denNgay = null;
-        this.searchFilter.trangThai = null;
+        this.searchFilter.tuNgay = null
+        this.searchFilter.denNgay = null
+        this.searchFilter.trangThai = null
+        this.searchFilter.maDviTao = null
     }
 
     //doi so trang

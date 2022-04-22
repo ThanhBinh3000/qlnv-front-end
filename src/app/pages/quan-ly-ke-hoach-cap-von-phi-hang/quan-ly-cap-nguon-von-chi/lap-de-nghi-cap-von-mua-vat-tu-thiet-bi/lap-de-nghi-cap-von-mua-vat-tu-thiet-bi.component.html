@@ -64,27 +64,27 @@
 							</nz-descriptions-item>
 							<nz-descriptions-item nzTitle="Số quyết định chỉ tiêu">
 								<ng-container *ngIf="status; else nbc1">
-									{{soQdChiTieu}}
+									{{soQd}}
 								</ng-container>
 								<ng-template #nbc1>
-									<input class="search__input" nz-input [(ngModel)]="soQdChiTieu" />
+									<input class="search__input" nz-input [(ngModel)]="soQd" />
 								</ng-template>
 							</nz-descriptions-item>
 							<nz-descriptions-item nzTitle="Ngày">
 								<ng-container *ngIf="status; else nbc2">
-									{{ngay}}
+									{{ngayQd}}
 								</ng-container>
 								<ng-template #nbc2>
-									<nz-date-picker class="search__input" [(ngModel)]="ngay" nzFormat="dd/MM/yyyy">
+									<nz-date-picker class="search__input" [(ngModel)]="ngayQd" nzFormat="dd/MM/yyyy">
 									</nz-date-picker>
 								</ng-template>
 							</nz-descriptions-item>
 							<nz-descriptions-item nzTitle="Căn cứ số q/d trúng thầu" [nzSpan]="2">
 								<ng-container *ngIf="status; else nbc3">
-									{{canCuSoQdTrungThau}}
+									{{soCanCuQd}}
 								</ng-container>
 								<ng-template #nbc3>
-									<input class="search__input" nz-input [(ngModel)]="canCuSoQdTrungThau" />
+									<input class="search__input" nz-input [(ngModel)]="soCanCuQd" />
 									<button type="button" class="btn btn-main" (click)="getContract()">
 										<i nz-icon nzType="search"></i>
 									</button>
@@ -92,10 +92,10 @@
 							</nz-descriptions-item>
 							<nz-descriptions-item nzTitle="Ngày">
 								<ng-container *ngIf="status;else nbc">
-									{{ngayTrungThau}}
+									{{ngayCanCuQd}}
 								</ng-container>
 								<ng-template #nbc>
-									<nz-date-picker class="search__input" [(ngModel)]="ngayTrungThau"
+									<nz-date-picker class="search__input" [(ngModel)]="ngayCanCuQd"
 										nzFormat="dd/MM/yyyy"></nz-date-picker>
 								</ng-template>
 							</nz-descriptions-item>
@@ -221,7 +221,7 @@
 									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 										<td>
 											<div *ngFor="let item of vatTus">
-												<div *ngIf="item.id == data.maVtu">
+												<div *ngIf="item.id == data.maVattuLuongThuc">
 													{{item.tenDm}}
 												</div>
 											</div>
@@ -262,7 +262,7 @@
 									<ng-template #editTemplate>
 										<td>
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mặt hàng"
-												[(ngModel)]="editCache[data.id].data.maVtu">
+												[(ngModel)]="editCache[data.id].data.maVattuLuongThuc">
 												<nz-option *ngFor="let item of vatTus" [nzValue]="item.id"
 													[nzLabel]="item.tenDm">
 												</nz-option>
