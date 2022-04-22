@@ -14,7 +14,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { KHOANMUCLIST } from './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant'
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogChonThemKhoanMucComponent } from 'src/app/components/dialog/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
+import { DialogChonThemKhoanMucComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 export class ItemData {

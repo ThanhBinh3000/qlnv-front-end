@@ -129,7 +129,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	statusBtnCopy: boolean;                      // trang thai copy
 	statusBtnPrint: boolean;                     // trang thai print
 
-	listIdDeleteFiles: string= ""; // id file luc call chi tiet
+	listIdDeleteFiles: string = ""; // id file luc call chi tiet
 
 
 	allChecked = false; // check all checkbox
@@ -197,7 +197,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -216,7 +216,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
 			this.spinner.show();
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -383,15 +383,6 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		//check xem tat ca cac dong du lieu da luu chua?
 		//chua luu thi bao loi, luu roi thi cho di
 		this.lstCTietBCao.filter(element => {
-			element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.maDviTien);
-			element.cbDtuN = mulMoney(element.cbDtuN, this.maDviTien);
-			element.thDtuN = mulMoney(element.thDtuN, this.maDviTien);
-			element.cbDtuN1 = mulMoney(element.cbDtuN1, this.maDviTien);
-			element.thDtuN1 = mulMoney(element.thDtuN1, this.maDviTien);
-			element.cbDtuN2 = mulMoney(element.cbDtuN2, this.maDviTien);
-			element.thDtuN2 = mulMoney(element.thDtuN2, this.maDviTien);
-			element.cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
-			element.thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
 			if (this.editCache[element.id].edit === true) {
 				checkSaveEdit = false
 			}
@@ -400,6 +391,8 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
+
+		this.mullMoneyTotal();
 
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
@@ -437,10 +430,12 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -452,9 +447,11 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
@@ -510,17 +507,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
-					this.lstCTietBCao.filter(element => {
-						element.tongDtoanGtri = divMoney(element.tongDtoanGtri, this.maDviTien);
-						element.cbDtuN = divMoney(element.cbDtuN, this.maDviTien);
-						element.thDtuN = divMoney(element.thDtuN, this.maDviTien);
-						element.cbDtuN1 = divMoney(element.cbDtuN1, this.maDviTien);
-						element.thDtuN1 = divMoney(element.thDtuN1, this.maDviTien);
-						element.cbDtuN2 = divMoney(element.cbDtuN2, this.maDviTien);
-						element.thDtuN2 = divMoney(element.thDtuN2, this.maDviTien);
-						element.cbDtuN3 = divMoney(element.cbDtuN3, this.maDviTien);
-						element.thDtuN3 = divMoney(element.thDtuN3, this.maDviTien);
-					});
+					this.divMoneyTotal();
 					this.lstCTietBCao.forEach(item => {
 						this.tinhTong(1, item);
 					})
@@ -720,6 +707,10 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	// huy thay doi
 	cancelEdit(id: string): void {
 		const index = this.lstCTietBCao.findIndex(item => item.id === id); // lay vi tri hang minh sua
+		if (!this.lstCTietBCao[index].ndung) {
+			this.deleteById(id);
+			return;
+		}
 		this.editCache[id] = {
 			data: { ...this.lstCTietBCao[index] },
 			edit: false
@@ -768,7 +759,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	}
 
 	callListMaDonVi() {
-		this.danhMucService.dMDonVi().subscribe(res => {
+		this.danhMucService.dMDonVi().toPromise().then(res => {
 			this.listMaDonvi = res.data;
 		});
 	}
@@ -815,6 +806,34 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
+	}
+
+	divMoneyTotal() {
+		this.lstCTietBCao.filter(element => {
+			element.tongDtoanGtri = divMoney(element.tongDtoanGtri, this.maDviTien);
+			element.cbDtuN = divMoney(element.cbDtuN, this.maDviTien);
+			element.thDtuN = divMoney(element.thDtuN, this.maDviTien);
+			element.cbDtuN1 = divMoney(element.cbDtuN1, this.maDviTien);
+			element.thDtuN1 = divMoney(element.thDtuN1, this.maDviTien);
+			element.cbDtuN2 = divMoney(element.cbDtuN2, this.maDviTien);
+			element.thDtuN2 = divMoney(element.thDtuN2, this.maDviTien);
+			element.cbDtuN3 = divMoney(element.cbDtuN3, this.maDviTien);
+			element.thDtuN3 = divMoney(element.thDtuN3, this.maDviTien);
+		});
+	}
+
+	mullMoneyTotal() {
+		this.lstCTietBCao.filter(element => {
+			element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.maDviTien);
+			element.cbDtuN = mulMoney(element.cbDtuN, this.maDviTien);
+			element.thDtuN = mulMoney(element.thDtuN, this.maDviTien);
+			element.cbDtuN1 = mulMoney(element.cbDtuN1, this.maDviTien);
+			element.thDtuN1 = mulMoney(element.thDtuN1, this.maDviTien);
+			element.cbDtuN2 = mulMoney(element.cbDtuN2, this.maDviTien);
+			element.thDtuN2 = mulMoney(element.thDtuN2, this.maDviTien);
+			element.cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
+			element.thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
+		});
 	}
 
 	// action copy

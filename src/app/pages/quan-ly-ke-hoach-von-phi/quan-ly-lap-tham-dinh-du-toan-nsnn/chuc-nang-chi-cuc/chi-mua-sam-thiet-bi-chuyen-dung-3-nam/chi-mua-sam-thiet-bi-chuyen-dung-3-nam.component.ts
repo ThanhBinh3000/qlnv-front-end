@@ -153,7 +153,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -172,7 +172,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
 			this.spinner.show();
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -189,7 +189,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		}
 
 		//get danh muc noi dung
-		this.danhMucService.dMVatTu().toPromise().then(
+		this.danhMucService.dMThietBi().toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.listMachitieu = data.data?.content;
@@ -294,9 +294,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		//check xem tat ca cac dong du lieu da luu chua?
 		//chua luu thi bao loi, luu roi thi cho di
 		this.lstCTietBCao.filter(element => {
-			element.n1 = mulMoney(element.n1, this.maDviTien);
-			element.n2 = mulMoney(element.n2, this.maDviTien);
-			element.n3 = mulMoney(element.n3, this.maDviTien);
 			if (this.editCache[element.id].edit === true) {
 				checkSaveEdit = false
 			}
@@ -305,6 +302,8 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
+		this.mullMoneyTotal();
+
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -341,10 +340,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -356,9 +357,11 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 
@@ -415,11 +418,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
-					this.lstCTietBCao.filter(element => {
-						element.n1 = divMoney(element.n1, this.maDviTien);
-						element.n2 = divMoney(element.n2, this.maDviTien);
-						element.n3 = divMoney(element.n3, this.maDviTien);
-					});
+					this.divMoneyTotal();
 					if (this.lstCTietBCao.length != null) {
 						this.updateEditCache();
 					}
@@ -614,7 +613,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
 	// huy thay doi
 	cancelEdit(id: string): void {
-		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		const index = this.lstCTietBCao.findIndex(item => item.id === id);
+		if (!this.lstCTietBCao[index].maTbi){
+			this.deleteById(id);
+			return;
+		}
+		  // lay vi tri hang minh sua
 		this.editCache[id] = {
 			data: { ...this.lstCTietBCao[index] },
 			edit: false
@@ -699,6 +703,22 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
+	}
+
+	divMoneyTotal(){
+		this.lstCTietBCao.forEach(element => {
+			element.n1 = divMoney(element.n1, this.maDviTien);
+			element.n2 = divMoney(element.n2, this.maDviTien);
+			element.n3 = divMoney(element.n3, this.maDviTien);
+		});
+	}
+
+	mullMoneyTotal(){
+		this.lstCTietBCao.forEach(element => {
+			element.n1 = mulMoney(element.n1, this.maDviTien);
+			element.n2 = mulMoney(element.n2, this.maDviTien);
+			element.n3 = mulMoney(element.n3, this.maDviTien);
+		});
 	}
 
 	// action copy

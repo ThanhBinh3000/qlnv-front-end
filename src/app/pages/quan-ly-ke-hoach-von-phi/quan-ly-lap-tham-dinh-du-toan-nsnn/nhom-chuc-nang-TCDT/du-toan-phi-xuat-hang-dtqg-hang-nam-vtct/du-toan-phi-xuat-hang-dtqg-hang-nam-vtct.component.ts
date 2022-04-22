@@ -191,7 +191,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 			await this.calltonghop();
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -210,7 +210,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
 			this.spinner.show();
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -331,6 +331,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 				checkSaveEdit = false
 			}
 		});
+		this.lstVtu.forEach(item => {
+			if (this.editCache1[item.id].edit === true) {
+				checkSaveEdit = false;
+			}
+		})
 		if (checkSaveEdit == false) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
@@ -743,12 +748,11 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 
 	// huy thay doi
 	cancelEdit(id: string): void {
-		if (!this.editCache[id].data.maCucDtnnKvuc) {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		if (!this.lstCTietBCao[index].maCucDtnnKvuc){
+			this.deleteById(id);
 			return;
 		}
-
-		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
 		var item: ItemData = this.lstCTietBCao[index];
 		this.editCache[id].data.maCucDtnnKvuc = item.maCucDtnnKvuc;
 		this.editCache[id].data.luongGao = item.luongGao;

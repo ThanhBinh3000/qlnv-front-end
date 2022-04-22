@@ -198,7 +198,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			await this.calltonghop();
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -319,25 +319,6 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		//check xem tat ca cac dong du lieu da luu chua?
 		//chua luu thi bao loi, luu roi thi cho di
 		this.lstCTietBCao.forEach(element => {
-			element.k331KhongTchuCoDmucNx = mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
-			element.k331KhongTchuCoDmucVtct = mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
-			element.k331KhongTchuCoDmucBquan = mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
-			element.k331KhongTchuChuaDmucCntt = mulMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
-			element.k331KhongTchuChuaDmucThueKho = mulMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
-			element.k331KhongTchuChuaDmucMsamTsan = mulMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
-			element.k331KhongTchuChuaDmucBhiemHhoa = mulMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
-			element.k331KhongTchuChuaDmucPhongChongMoiKplb = mulMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
-			element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = mulMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
-			element.k331KhongTchuChuaDmucSchuaKhoTang = mulMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
-			element.k341LuongTuChu = mulMoney(element.k341LuongTuChu, this.maDviTien);
-			element.k341ChiTxKhongDmucTuChu = mulMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
-			element.k341TxTheoDmucTuChu = mulMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
-			element.k341LuongKhongTuChu = mulMoney(element.k341LuongKhongTuChu, this.maDviTien);
-			element.k341ChiTxKhongDmucKhongTuChu = mulMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
-			element.k341TxTheoDmucKhongTuChu = mulMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
-			element.k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
-			element.k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
-			element.k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
 			if (this.editCache[element.id].edit === true) {
 				checkSaveEdit = false
 			}
@@ -346,6 +327,8 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
+
+		this.mulMoneyTotal();
 
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
@@ -381,10 +364,12 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				(err) => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		} else {
@@ -395,9 +380,11 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
@@ -456,27 +443,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
-					this.lstCTietBCao.forEach(element => {
-						element.k331KhongTchuCoDmucNx = divMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
-						element.k331KhongTchuCoDmucVtct = divMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
-						element.k331KhongTchuCoDmucBquan = divMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
-						element.k331KhongTchuChuaDmucCntt = divMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
-						element.k331KhongTchuChuaDmucThueKho = divMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
-						element.k331KhongTchuChuaDmucMsamTsan = divMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
-						element.k331KhongTchuChuaDmucBhiemHhoa = divMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
-						element.k331KhongTchuChuaDmucPhongChongMoiKplb = divMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
-						element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = divMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
-						element.k331KhongTchuChuaDmucSchuaKhoTang = divMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
-						element.k341LuongTuChu = divMoney(element.k341LuongTuChu, this.maDviTien);
-						element.k341ChiTxKhongDmucTuChu = divMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
-						element.k341TxTheoDmucTuChu = divMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
-						element.k341LuongKhongTuChu = divMoney(element.k341LuongKhongTuChu, this.maDviTien);
-						element.k341ChiTxKhongDmucKhongTuChu = divMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
-						element.k341TxTheoDmucKhongTuChu = divMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
-						element.k085DaoTao = divMoney(element.k085DaoTao, this.maDviTien);
-						element.k102NghienCuuKhoaHoc = divMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
-						element.k398DamBaoXaHoi = divMoney(element.k398DamBaoXaHoi, this.maDviTien);
-					});
+					this.divMoneyTotal();
 					this.updateEditCache();
 					this.lstFile = data.data.lstFile;
 					this.listFile = [];
@@ -685,6 +652,10 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	// huy thay doi
 	cancelEdit(id: string): void {
 		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		if (!this.lstCTietBCao[index].maDvi){
+			this.deleteById(id);
+			return;
+		}
 		this.editCache[id] = {
 			data: { ...this.lstCTietBCao[index] },
 			edit: false
@@ -759,7 +730,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			maLoaiBcao: this.maLoaiBacao,
 			namHienTai: this.nam,
 		}
-		this.quanLyVonPhiService.tongHop(objtonghop).subscribe(res => {
+		this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
 			if (res.statusCode == 0) {
 				this.lstCTietBCao = res.data;
 				this.lstCTietBCao.forEach(e => {
@@ -778,7 +749,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		}, err => {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);;
 		});
-		this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
+		this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(res => {
 			if (res.statusCode == 0) {
 				this.maBaoCao = res.data;
 			} else {
@@ -804,6 +775,54 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		} else {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
+	}
+
+	divMoneyTotal() {
+		this.lstCTietBCao.forEach(element => {
+			element.k331KhongTchuCoDmucNx = divMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
+			element.k331KhongTchuCoDmucVtct = divMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
+			element.k331KhongTchuCoDmucBquan = divMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
+			element.k331KhongTchuChuaDmucCntt = divMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
+			element.k331KhongTchuChuaDmucThueKho = divMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
+			element.k331KhongTchuChuaDmucMsamTsan = divMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
+			element.k331KhongTchuChuaDmucBhiemHhoa = divMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
+			element.k331KhongTchuChuaDmucPhongChongMoiKplb = divMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
+			element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = divMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
+			element.k331KhongTchuChuaDmucSchuaKhoTang = divMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
+			element.k341LuongTuChu = divMoney(element.k341LuongTuChu, this.maDviTien);
+			element.k341ChiTxKhongDmucTuChu = divMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
+			element.k341TxTheoDmucTuChu = divMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
+			element.k341LuongKhongTuChu = divMoney(element.k341LuongKhongTuChu, this.maDviTien);
+			element.k341ChiTxKhongDmucKhongTuChu = divMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
+			element.k341TxTheoDmucKhongTuChu = divMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
+			element.k085DaoTao = divMoney(element.k085DaoTao, this.maDviTien);
+			element.k102NghienCuuKhoaHoc = divMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
+			element.k398DamBaoXaHoi = divMoney(element.k398DamBaoXaHoi, this.maDviTien);
+		});
+	}
+
+	mulMoneyTotal() {
+		this.lstCTietBCao.forEach(element => {
+			element.k331KhongTchuCoDmucNx = mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
+			element.k331KhongTchuCoDmucVtct = mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
+			element.k331KhongTchuCoDmucBquan = mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
+			element.k331KhongTchuChuaDmucCntt = mulMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
+			element.k331KhongTchuChuaDmucThueKho = mulMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
+			element.k331KhongTchuChuaDmucMsamTsan = mulMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
+			element.k331KhongTchuChuaDmucBhiemHhoa = mulMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
+			element.k331KhongTchuChuaDmucPhongChongMoiKplb = mulMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
+			element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = mulMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
+			element.k331KhongTchuChuaDmucSchuaKhoTang = mulMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
+			element.k341LuongTuChu = mulMoney(element.k341LuongTuChu, this.maDviTien);
+			element.k341ChiTxKhongDmucTuChu = mulMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
+			element.k341TxTheoDmucTuChu = mulMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
+			element.k341LuongKhongTuChu = mulMoney(element.k341LuongKhongTuChu, this.maDviTien);
+			element.k341ChiTxKhongDmucKhongTuChu = mulMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
+			element.k341TxTheoDmucKhongTuChu = mulMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
+			element.k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
+			element.k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
+			element.k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
+		});
 	}
 
 	// action copy

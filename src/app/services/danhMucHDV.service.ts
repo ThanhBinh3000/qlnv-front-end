@@ -305,6 +305,22 @@ export class DanhMucHDVService extends BaseService {
       }
     );
   }
+
+  dMThietBi(): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + "/qlnv-category/dmuc-khoachvon/111",
+      {
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": "",
+        "trangThai": "",
+      }
+    );
+  }
+
+
   dMMaLoaiKhoan(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/175",

@@ -175,7 +175,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       );
     }
     //get danh muc chi tiêu
-    await this.danhMucService.dMVatTu().toPromise().then(
+    await this.danhMucService.dMThietBi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTieus = data.data?.content;

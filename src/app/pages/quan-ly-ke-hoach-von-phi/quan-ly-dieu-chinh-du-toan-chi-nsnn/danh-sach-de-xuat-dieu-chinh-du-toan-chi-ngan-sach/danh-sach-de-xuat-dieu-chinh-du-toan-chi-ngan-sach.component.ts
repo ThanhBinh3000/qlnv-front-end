@@ -75,23 +75,6 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
      statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
 
-     validateForm!: FormGroup;           // form
-
-     submitForm() {
-          if (this.validateForm.valid) {
-               return true;
-          } else {
-               Object.values(this.validateForm.controls).forEach(control => {
-                    if (control.invalid) {
-                         control.markAsDirty();
-                         control.updateValueAndValidity({ onlySelf: true });
-                    }
-               });
-               return false;
-          }
-     }
-
-
      constructor(private router: Router,
           private routerActive: ActivatedRoute,
           private spinner: NgxSpinnerService,
@@ -102,18 +85,11 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
           private modal: NzModalService,
-          private fb: FormBuilder,
      ) {
      }
 
 
      async ngOnInit() {
-
-          this.validateForm = this.fb.group({
-               namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
-               temp: null,
-               dviTemp: [null],
-          });
 
           let userName = this.userService.getUserName();
           await this.getUserInfo(userName); //get user info
@@ -226,6 +202,10 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
 
      // call chi tiet bao cao
      getDetailReport() {
+          if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+			return;
+		}
           this.spinner.show();
 
           let request = {

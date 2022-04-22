@@ -187,7 +187,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       },
     );
     //get danh muc dự án
-    this.danhMucService.dMKhoiDuAn().toPromise().then(
+    this.danhMucService.dMLoaiDan().toPromise().then(
       (data) => {
           if (data.statusCode == 0) {
               this.listLoaiduan = data.data?.content;
