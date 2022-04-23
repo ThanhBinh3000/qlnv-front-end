@@ -308,14 +308,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
-      element.kphiDaDuocBoTriDenNamN = mulMoney(element.kphiDaDuocBoTriDenNamN, this.maDviTien);
-      element.kphiDuKienBtriN1 = mulMoney(element.kphiDuKienBtriN1, this.maDviTien);
-      element.kphiDuKienBtriN2 = mulMoney(element.kphiDuKienBtriN2, this.maDviTien);
-      element.kphiDuKienBtriN3 = mulMoney(element.kphiDuKienBtriN3, this.maDviTien);
-      element.kphiDuocThienDenThoiDiemBcao = mulMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
-      element.kphiTgianThuhoi = mulMoney(element.kphiTgianThuhoi, this.maDviTien);
-      element.kphiTongPhiDuocDuyet = mulMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
-      element.kphiThuhoi = mulMoney(element.kphiThuhoi, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -325,6 +317,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       return;
     }
 
+    this.mullMoneyTotal()
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -364,10 +357,12 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -379,9 +374,11 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
+        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -436,17 +433,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.maDviTien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.kphiDaDuocBoTriDenNamN = divMoney(element.kphiDaDuocBoTriDenNamN, this.maDviTien);
-            element.kphiDuKienBtriN1 = divMoney(element.kphiDuKienBtriN1, this.maDviTien);
-            element.kphiDuKienBtriN2 = divMoney(element.kphiDuKienBtriN2, this.maDviTien);
-            element.kphiDuKienBtriN3 = divMoney(element.kphiDuKienBtriN3, this.maDviTien);
-            element.kphiDuocThienDenThoiDiemBcao = divMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
-            element.kphiTgianThuhoi = divMoney(element.kphiTgianThuhoi, this.maDviTien);
-            element.kphiTongPhiDuocDuyet = divMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
-            element.kphiThuhoi = divMoney(element.kphiThuhoi, this.maDviTien);
-
-          });
+          this.divMoneyTotal()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -627,6 +614,10 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maDvi){
+			this.deleteById(id);
+			return;
+		}
     if (!this.editCache[id].data.maDvi){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -723,5 +714,31 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   // action print
   doPrint(){
 
+  }
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.kphiDaDuocBoTriDenNamN = mulMoney(element.kphiDaDuocBoTriDenNamN, this.maDviTien);
+      element.kphiDuKienBtriN1 = mulMoney(element.kphiDuKienBtriN1, this.maDviTien);
+      element.kphiDuKienBtriN2 = mulMoney(element.kphiDuKienBtriN2, this.maDviTien);
+      element.kphiDuKienBtriN3 = mulMoney(element.kphiDuKienBtriN3, this.maDviTien);
+      element.kphiDuocThienDenThoiDiemBcao = mulMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
+      element.kphiTgianThuhoi = mulMoney(element.kphiTgianThuhoi, this.maDviTien);
+      element.kphiTongPhiDuocDuyet = mulMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
+      element.kphiThuhoi = mulMoney(element.kphiThuhoi, this.maDviTien);
+    });
+  }
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.kphiDaDuocBoTriDenNamN = divMoney(element.kphiDaDuocBoTriDenNamN, this.maDviTien);
+      element.kphiDuKienBtriN1 = divMoney(element.kphiDuKienBtriN1, this.maDviTien);
+      element.kphiDuKienBtriN2 = divMoney(element.kphiDuKienBtriN2, this.maDviTien);
+      element.kphiDuKienBtriN3 = divMoney(element.kphiDuKienBtriN3, this.maDviTien);
+      element.kphiDuocThienDenThoiDiemBcao = divMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
+      element.kphiTgianThuhoi = divMoney(element.kphiTgianThuhoi, this.maDviTien);
+      element.kphiTongPhiDuocDuyet = divMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
+      element.kphiThuhoi = divMoney(element.kphiThuhoi, this.maDviTien);
+    });
   }
 }

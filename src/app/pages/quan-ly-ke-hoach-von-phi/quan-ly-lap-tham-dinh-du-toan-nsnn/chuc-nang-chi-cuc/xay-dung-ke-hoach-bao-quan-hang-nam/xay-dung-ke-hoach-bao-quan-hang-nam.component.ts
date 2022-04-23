@@ -199,7 +199,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
-    this.getStatusButton();
 
     //get danh muc noi dung
     this.danhMucService.dMNhom().subscribe(
@@ -230,7 +229,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     );
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
@@ -347,15 +346,17 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTiet.filter(element => {
-      element.kphi = mulMoney(element.kphi, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
     });
+
+
     if (checkSaveEdit == false) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal()
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -405,10 +406,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -420,9 +423,11 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         }, err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     }
@@ -434,6 +439,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     this.updateEditCache();
     this.spinner.hide();
   }
+
 
   // chuc nang check role
   async onSubmit(mcn: String) {
@@ -479,9 +485,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.kphiBquanThocLd = this.lstCTietBCao.kphiBquanThocLd;
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
           this.maDviTien = data.data.maDviTien;
-          this.lstCTiet.filter(element => {
-            element.kphi = divMoney(element.kphi, this.maDviTien);
-          });
+          this.divMoneyTotal()
           this.changeTong()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -665,6 +669,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maMatHang){
+			this.deleteById(id);
+			return;
+		}
     if (!this.editCache[id].data.maMatHang || !this.editCache[id].data.maNhom) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -766,5 +774,15 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   // action print
   doPrint(){
 
+  }
+  mullMoneyTotal() {
+    this.lstCTiet.filter(element => {
+      element.kphi = mulMoney(element.kphi, this.maDviTien);
+    });
+  }
+  divMoneyTotal(){
+    this.lstCTiet.filter(element => {
+      element.kphi = divMoney(element.kphi, this.maDviTien);
+    });
   }
 }

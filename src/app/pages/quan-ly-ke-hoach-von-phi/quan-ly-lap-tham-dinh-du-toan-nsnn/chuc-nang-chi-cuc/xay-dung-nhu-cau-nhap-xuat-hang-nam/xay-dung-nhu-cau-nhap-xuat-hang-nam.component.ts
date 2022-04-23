@@ -466,10 +466,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
           this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
-          this.tong = 0;
-          this.lstCTiet.forEach(e => {
-            this.tong += e.slNhap;
-          })
+          this.changeTong()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -647,6 +644,10 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maTbi){
+			this.deleteById(id);
+			return;
+		}
     if (!this.editCache[id].data.maTbi){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -673,6 +674,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       Object.assign(this.lstCTiet[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
     }
+    this.changeTong()
   }
 
   updateEditCache(): void {
@@ -711,6 +713,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       },err =>{
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
+      this.changeTong()
       this.updateEditCache()
       this.spinner.hide();
       }
@@ -730,6 +733,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           }else {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
           }
+        }
+        changeTong(){
+          this.tong = 0
+          this.lstCTiet.forEach(e => {
+            this.tong += e.slNhap;
+          })
         }
           // action copy
         doCopy(){

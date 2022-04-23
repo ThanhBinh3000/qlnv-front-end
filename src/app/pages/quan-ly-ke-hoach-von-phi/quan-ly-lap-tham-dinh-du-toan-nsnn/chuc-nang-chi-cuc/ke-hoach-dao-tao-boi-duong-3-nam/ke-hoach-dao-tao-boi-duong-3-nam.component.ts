@@ -498,7 +498,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 						this.status = true;
 					}
 
-					
+
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

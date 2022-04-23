@@ -80,10 +80,10 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle=" Căn cứ q/đ BTC">
-                <!-- <input class="search__input" nz-input [(ngModel)]="qDinhBTC" /> -->
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="qDinhBTC">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="maQdCha">
                 <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
               </nz-select>
+              <!-- {{maQdCha}} -->
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
                 {{ngayQdBTC}}
@@ -127,19 +127,21 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Nhập quyết định của Tổng Cục và phân bổ cho các đơn vị'">
             <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
-              <div nz-col nzSpan="6" >
+              <div nz-col nzSpan="6">
                 <label class="search__label">Đ/v thực hiện:</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao">
-                  <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao"
+                  (ngModelChange)="changeMaCucKhuVuc($event)">
+                  <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                  </nz-option>
                 </nz-select>
               </div>
               <div nz-col nzSpan="6">
-                <label class="search__label" >Mã ngân sách:</label>
-                <input class="search__input" nz-input [(ngModel)]="maNganSach" />
+                <label class="search__label">Mã ngân sách:</label>
+                <input class="search__input" nz-input [(ngModel)]="maNganSach" disabled />
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Mã số KBNN</label>
-                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" disabled />
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Trạng thái</label>

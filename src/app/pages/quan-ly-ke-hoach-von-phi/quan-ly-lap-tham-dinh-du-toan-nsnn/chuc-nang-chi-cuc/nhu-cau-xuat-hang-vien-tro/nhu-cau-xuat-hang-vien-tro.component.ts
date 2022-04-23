@@ -192,7 +192,6 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       this.namBcao = this.namBaoCaoHienHanh + 1
     }
 
-    this.getStatusButton();
 
     //get danh muc noi dung
     this.danhMucService.dMVatTu().subscribe(

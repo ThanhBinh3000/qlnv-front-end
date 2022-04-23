@@ -91,7 +91,9 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   QDGiaoChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/chi-tiet/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+
     );
   }
 

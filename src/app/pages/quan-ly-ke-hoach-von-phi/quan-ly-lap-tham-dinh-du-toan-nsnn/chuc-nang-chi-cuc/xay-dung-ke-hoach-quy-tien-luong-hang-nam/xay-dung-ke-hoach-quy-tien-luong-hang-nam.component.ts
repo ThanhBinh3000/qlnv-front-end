@@ -318,16 +318,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
-      element.bcheGiaoN1 = mulMoney(element.bcheGiaoN1, this.maDviTien);
-      element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-      element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
-      element.ccvcDuKienCoMatN1LuongTheoBac = mulMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
-      element.ccvcDuKienCoMatN1Pcap = mulMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
-      element.ccvcDuKienCoMatN1Ckdg = mulMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
-      element.quyLuongTangNangBacLuongN1 = mulMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
-      element.bcheChuaSdungLuong = mulMoney(element.bcheChuaSdungLuong, this.maDviTien);
-      element.bcheChuaSdungCkdg = mulMoney(element.bcheChuaSdungCkdg, this.maDviTien);
-      element.quyLuongPcapTheoHdld = mulMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -336,6 +326,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mulMoneyTotal()
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -376,10 +367,12 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -391,9 +384,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
+        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -457,19 +452,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           this.maDviTien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
-            element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-            element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
-            element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
-            element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
-            element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
-            element.quyLuongTangNangBacLuongN1 = divMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
-            element.bcheChuaSdungLuong = divMoney(element.bcheChuaSdungLuong, this.maDviTien);
-            element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
-            element.quyLuongPcapTheoHdld = divMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
-
-          });
+          this.divMoneyTotal()
           this.listFile=[]
 
 
@@ -651,6 +634,10 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].bcheGiaoN1){
+			this.deleteById(id);
+			return;
+		}
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -751,5 +738,34 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   // action print
   doPrint(){
 
+  }
+  divMoneyTotal() {
+    this.lstCTietBCao.filter(element => {
+      element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
+      element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+      element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
+      element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
+      element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
+      element.quyLuongTangNangBacLuongN1 = divMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+      element.bcheChuaSdungLuong = divMoney(element.bcheChuaSdungLuong, this.maDviTien);
+      element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+      element.quyLuongPcapTheoHdld = divMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
+
+    });
+  }
+  mulMoneyTotal() {
+    this.lstCTietBCao.filter(element => {
+      element.bcheGiaoN1 = mulMoney(element.bcheGiaoN1, this.maDviTien);
+      element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+      element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      element.ccvcDuKienCoMatN1LuongTheoBac = mulMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
+      element.ccvcDuKienCoMatN1Pcap = mulMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
+      element.ccvcDuKienCoMatN1Ckdg = mulMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
+      element.quyLuongTangNangBacLuongN1 = mulMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+      element.bcheChuaSdungLuong = mulMoney(element.bcheChuaSdungLuong, this.maDviTien);
+      element.bcheChuaSdungCkdg = mulMoney(element.bcheChuaSdungCkdg, this.maDviTien);
+      element.quyLuongPcapTheoHdld = mulMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
+    });
   }
 }

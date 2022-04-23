@@ -42,8 +42,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of danhSachBaoCao; let i = index">
-          <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-          <td>{{ item.soQd }}</td>
+          <td><input type="radio" name="options" ng-control="options" type="radio" [value]="item.id" [(ngModel)]="radioValue"></td>
+          <td>{{item.soQd }}</td>
           <td>{{item.ngayQd}}</td>
           <td>{{item.nam}}</td>
           <td>{{item.ngayTao}}</td>

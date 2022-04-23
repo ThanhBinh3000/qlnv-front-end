@@ -334,9 +334,6 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
-      element.khoachChiNsnnN1 = mulMoney(element.khoachChiNsnnN1, this.maDviTien);
-      element.khoachChiNsnnN2 = mulMoney(element.khoachChiNsnnN2, this.maDviTien);
-      element.khoachChiNsnnN3 = mulMoney(element.khoachChiNsnnN3, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -345,6 +342,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mulMoneyTotal()
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -477,11 +476,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           }
 
           this.maDviTien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.khoachChiNsnnN1 = divMoney(element.khoachChiNsnnN1, this.maDviTien);
-            element.khoachChiNsnnN2 = divMoney(element.khoachChiNsnnN2, this.maDviTien);
-            element.khoachChiNsnnN3 = divMoney(element.khoachChiNsnnN3, this.maDviTien);
-          });
+          this.divMoneyTotal()
           this.listFile=[]
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -641,6 +636,10 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maNdungChi){
+			this.deleteById(id);
+			return;
+		}
     const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
@@ -755,5 +754,19 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   // action print
   doPrint(){
 
+  }
+  divMoneyTotal() {
+    this.lstCTietBCao.filter(element => {
+      element.khoachChiNsnnN1 = divMoney(element.khoachChiNsnnN1, this.maDviTien);
+      element.khoachChiNsnnN2 = divMoney(element.khoachChiNsnnN2, this.maDviTien);
+      element.khoachChiNsnnN3 = divMoney(element.khoachChiNsnnN3, this.maDviTien);
+    });
+  }
+  mulMoneyTotal() {
+    this.lstCTietBCao.filter(element => {
+      element.khoachChiNsnnN1 = mulMoney(element.khoachChiNsnnN1, this.maDviTien);
+      element.khoachChiNsnnN2 = mulMoney(element.khoachChiNsnnN2, this.maDviTien);
+      element.khoachChiNsnnN3 = mulMoney(element.khoachChiNsnnN3, this.maDviTien);
+    });
   }
 }

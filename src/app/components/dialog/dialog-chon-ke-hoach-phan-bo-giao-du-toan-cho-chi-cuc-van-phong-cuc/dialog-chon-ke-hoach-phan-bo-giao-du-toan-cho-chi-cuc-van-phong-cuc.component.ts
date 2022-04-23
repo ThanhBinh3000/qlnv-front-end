@@ -16,10 +16,17 @@ import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent implements OnInit {
 
   @Input() danhSachKhoanMuc:any;
+  @Input() qDinhBTC: any;
+  @Input() ngayQd: any;
+  @Input() nam: any;
+  @Input() nguoiKyBTC: any
+  @Input() maQdCha: any;
+  @Input() maDvi: any
   danhSachBaoCao: any;
   khoanMucs: any = [];
   trangThais: any = TRANGTHAITIMKIEM;
-
+  radioValue!: any;
+  options: []
   searchFilter = {
     trangThai: "",
     nam: "",
@@ -34,6 +41,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   totalPages = 0;
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
+
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucHDVService,
@@ -46,9 +54,6 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
     this.validateForm = this.fb.group({
       nam: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
-    console.log(this.danhSachKhoanMuc);
-    console.log(this.trangThais);
-
     //get danh muc nhom chi
     this.danhMucService.dMKhoanMuc().toPromise().then(
       (data) => {
@@ -92,9 +97,32 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
     );
   }
 
-  handleOk() {
-    let req ={
+  async handleOk() {
+    await this.QuanLyVonPhiService.QDGiaoChiTiet(this.radioValue).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          console.log(data);
+          this.maQdCha = data.data.maQdCha
+          this.ngayQd = data.data.ngayQd
+          this.nam = data.data.nam
+          this.nguoiKyBTC = data.data.nguoiKyBTC
+          this.maDvi = data.data.maDvi
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+
+    let req = {
       danhSachKhoanMuc : this.danhSachKhoanMuc,
+      maQdCha: this.maQdCha ,
+      ngayQd: this.ngayQd ,
+      nam: this.nam ,
+      nguoiKyBTC:this.nguoiKyBTC ,
+      maDvi: this.maDvi ,
       id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);

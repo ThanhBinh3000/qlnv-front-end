@@ -35,7 +35,7 @@ export class ItemData {
   styleUrls: ['./nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi.component.scss']
 })
 export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnInit {
-  qDinhBTC!: any;
+  maQdCha!: any;
   userInfo: any;
   errorMessage!: String;                      //
   ngayQd!: any;
@@ -591,8 +591,10 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
   addKmuc() {
     // KHOANMUCLIST.forEach(item => item.status = false);
     // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
-
     var danhSach = this.khoanMucs
+    var nam = this.nam
+    var maQdCha = this.maQdCha
+    var maDvi = this.maDonViTao
 
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
@@ -602,17 +604,23 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
          nzWidth: '600px',
          nzFooter: null,
          nzComponentParams: {
-              danhSachKhoanMuc: danhSach
+              danhSachKhoanMuc: danhSach,
+              nam: nam,
+              maQdCha: maQdCha,
+              maDvi: maDvi
          },
     });
     modalIn.afterClose.subscribe((res) => {
+        this.nam = res.nam
+        this.maQdCha = res.maQdCha
+        this.maDonViTao = res.maDvi
          if (res) {
            this.maKhoanMucs.forEach(e => {
              if(res.id == e.id){
                  return res.id = e.tenDm
-             }
-           })
-
+                }
+              })
+              console.log(res);
           this.lstCTietBCao.push({
             id: uuid.v4(),
             stt: "I",
@@ -623,7 +631,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
             pBoChoDviTT: 0,
             tong: 0,
             checked: false,
-       });
+          });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({
@@ -648,5 +656,13 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     let index = this.lstCTietBCao.findIndex(item => item.id == id);
     // this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
     // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
+  }
+  changeMaCucKhuVuc(maDvi: any) {
+    this.maCucDtnnKvucs.forEach(e => {
+      if (maDvi == e.maDvi) {
+        this.maNganSach = e.maNsnn;
+        this.maSoKBNN = e.maKbnn;
+      }
+    });
   }
 }
