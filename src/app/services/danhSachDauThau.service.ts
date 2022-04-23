@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
@@ -58,5 +59,13 @@ export class DanhSachDauThauService extends BaseService {
   deleteKeHoachLCNT(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt-gao/xoa`;
     return this.httpClient.post(url, body).toPromise();
+  }
+  // export(body: any): Promise<any> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt-gao/ket-xuat`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
+  export(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt-gao/ket-xuat`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

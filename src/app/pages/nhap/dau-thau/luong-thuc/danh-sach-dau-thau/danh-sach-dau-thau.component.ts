@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -222,6 +223,34 @@ export class DanhSachDauThauComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
+    });
+  }
+  export() {
+    let maDonVi = null;
+    if (this.inputDonVi && this.inputDonVi.length > 0) {
+      let getDonVi = this.optionsDonVi.filter(
+        (x) => x.labelDonVi == this.inputDonVi,
+      );
+      if (getDonVi && getDonVi.length > 0) {
+        maDonVi = getDonVi[0].maDvi;
+      }
+    }
+    let body = {
+      denNgayKy: this.endValue
+        ? dayjs(this.endValue).format('YYYY-MM-DD')
+        : null,
+      id: 0,
+      maDvi: maDonVi,
+      paggingReq: null,
+      soDxuat: this.searchFilter.soDxuat,
+      str: null,
+      trichYeu: this.searchFilter.trichYeu,
+      tuNgayKy: this.startValue
+        ? dayjs(this.startValue).format('YYYY-MM-DD')
+        : null,
+    };
+    this.danhSachDauThauService.export(body).subscribe((blob) => {
+      saveAs(blob, 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu.xlsx');
     });
   }
 }
