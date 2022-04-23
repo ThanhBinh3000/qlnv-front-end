@@ -22,7 +22,7 @@
             <label class="search__label">Đến ngày</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
           </div>
-          <div nz-col nzSpan="24" class="search-advanced">
+          <div nz-col nzSpan="24" class="search-advanced" *ngIf="type == 1">
             <nz-collapse>
               <nz-collapse-panel nzHeader="Tìm kiếm nâng cao">
                 <div class="search__body" nz-row [nzGutter]="[18, 12]">

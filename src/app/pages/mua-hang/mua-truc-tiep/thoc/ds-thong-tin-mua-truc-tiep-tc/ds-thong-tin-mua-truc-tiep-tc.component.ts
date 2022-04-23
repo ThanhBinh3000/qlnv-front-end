@@ -35,6 +35,8 @@ export class DsThongTinMuaTrucTiepTCComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  type: number = 1; //1-TC, 2-C, 3-CC
+
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -43,11 +45,16 @@ export class DsThongTinMuaTrucTiepTCComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-tc') != -1) {
+        this.type = 1;
+      } else if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-cuc') != -1) {
+        this.type = 2;
+      }
       const res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -71,10 +78,17 @@ export class DsThongTinMuaTrucTiepTCComponent implements OnInit {
   }
 
   redirectThongTinChiTieuKeHoachNam() {
-    this.router.navigate([
-      'mua-hang/mua-truc-tiep/thoc/ds-thong-tin-mua-truc-tiep-tc/thong-tin-mua-truc-tiep-tc',
-      0,
-    ]);
+    if (this.type == 1) {
+      this.router.navigate([
+        'mua-hang/mua-truc-tiep/thoc/ds-thong-tin-mua-truc-tiep-tc/thong-tin-mua-truc-tiep-tc',
+        0,
+      ]);
+    } else if (this.type == 2) {
+      this.router.navigate([
+        'mua-hang/mua-truc-tiep/thoc/ds-thong-tin-mua-truc-tiep-cuc/thong-tin-mua-truc-tiep-cuc',
+        0,
+      ]);
+    }
   }
 
   onInput(e: Event): void {

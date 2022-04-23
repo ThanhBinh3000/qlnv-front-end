@@ -10,19 +10,33 @@ import { DialogChiTietQuyetDinhGiaNhapComponent } from 'src/app/components/dialo
   styleUrls: ['./thong-tin-mua-truc-tiep-tc.component.scss'],
 })
 export class ThongTinMuaTrucTiepTCComponent implements OnInit {
+  type: number = 1; //1-TC, 2-C, 3-CC
+
   constructor(
     public globals: Globals,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
-  back() {
-    this.router.navigate([
-      '/mua-hang/mua-truc-tiep/thoc/quyet-dinh-gia-nhap-tc',
-    ]);
+  ngOnInit(): void {
+    if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-tc') != -1) {
+      this.type = 1;
+    } else if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-cuc') != -1) {
+      this.type = 2;
+    }
   }
-  huyBo() {}
+  back() {
+    if (this.type == 1) {
+      this.router.navigate([
+        '/mua-hang/mua-truc-tiep/thoc/ds-thong-tin-mua-truc-tiep-tc',
+      ]);
+    } else if (this.type == 2) {
+      this.router.navigate([
+        '/mua-hang/mua-truc-tiep/thoc/ds-thong-tin-mua-truc-tiep-cuc',
+      ]);
+    }
+  }
+  huyBo() { }
   themMoi() {
     const modalLuongThuc = this.modal.create({
       nzTitle: 'Chi tiết quyết định giá nhập',

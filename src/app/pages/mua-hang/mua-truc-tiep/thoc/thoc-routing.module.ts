@@ -1,7 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
+import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
+import { PhieuKiemNghiemChatLuongHangDTQGComponent } from './phieu-kiem-nghiem-chat-luong-hang-dtqg/phieu-kiem-nghiem-chat-luong-hang-dtqg.component';
+import { ThongTinPhieuKiemNghiemChatLuongHangDTQGComponent } from './phieu-kiem-nghiem-chat-luong-hang-dtqg/thong-tin-phieu-kiem-nghiem-chat-luong-hang-dtqg/thong-tin-phieu-kiem-nghiem-chat-luong-hang-dtqg.component';
 import { PhieuKiemTraChatLuongHangDTQGNhapKhoComponent } from './phieu-kiem-tra-chat-luong-hang-dtqg-nhap-kho/phieu-kiem-tra-chat-luong-hang-dtqg-nhap-kho.component';
 import { ThongTinPhieuKiemTraChatLuongHangDTQGNhapKhoComponent } from './phieu-kiem-tra-chat-luong-hang-dtqg-nhap-kho/thong-tin-phieu-kiem-tra-chat-luong-hang-dtqg-nhap-kho/thong-tin-phieu-kiem-tra-chat-luong-hang-dtqg-nhap-kho.component';
+import { PhieuNhapDieuChinhComponent } from './phieu-nhap-dieu-chinh/phieu-nhap-dieu-chinh.component';
 import { PhieuNhapKhoComponent } from './phieu-nhap-kho/phieu-nhap-kho.component';
 import { ThongTinPhieuNhapKhoComponent } from './phieu-nhap-kho/thong-tin-phieu-nhap-kho/thong-tin-phieu-nhap-kho.component';
 import { ThocComponent } from './thoc.component';
@@ -26,6 +31,26 @@ const routes: Routes = [
       {
         path: 'phieu-nhap-kho/thong-tin-phieu-nhap-kho/:id',
         component: ThongTinPhieuNhapKhoComponent
+      },
+      {
+        path: 'bien-ban-ket-thuc-nhap-kho',
+        component: BienBanKetThucNhapKhoComponent
+      },
+      {
+        path: 'bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/:id',
+        component: ThongTinBienBanKetThucNhapKhoComponent
+      },
+      {
+        path: 'phieu-nhap-dieu-chinh',
+        component: PhieuNhapDieuChinhComponent
+      },
+      {
+        path: 'phieu-kiem-nghiem-chat-luong-hang-dtqg',
+        component: PhieuKiemNghiemChatLuongHangDTQGComponent
+      },
+      {
+        path: 'phieu-kiem-nghiem-chat-luong-hang-dtqg/thong-tin-phieu-kiem-nghiem-chat-luong-hang-dtqg/:id',
+        component: ThongTinPhieuKiemNghiemChatLuongHangDTQGComponent
       },
       {
         path: 'ds-quyet-dinh-phe-duyet-mua-truc-tiep-tc',
@@ -64,6 +89,20 @@ const routes: Routes = [
       },
       {
         path: 'ds-thong-tin-mua-truc-tiep-tc/thong-tin-mua-truc-tiep-tc/:id',
+        loadChildren: () =>
+          import(
+            '../thoc/thong-tin-mua-truc-tiep-tc/thong-tin-mua-truc-tiep-tc.module'
+          ).then((m) => m.ThongTinMuaTrucTiepTCModule),
+      },
+      {
+        path: 'ds-thong-tin-mua-truc-tiep-cuc',
+        loadChildren: () =>
+          import(
+            '../thoc/ds-thong-tin-mua-truc-tiep-tc/ds-thong-tin-mua-truc-tiep-tc.module'
+          ).then((m) => m.DsThongTinMuaTrucTiepTCModule),
+      },
+      {
+        path: 'ds-thong-tin-mua-truc-tiep-cuc/thong-tin-mua-truc-tiep-cuc/:id',
         loadChildren: () =>
           import(
             '../thoc/thong-tin-mua-truc-tiep-tc/thong-tin-mua-truc-tiep-tc.module'
