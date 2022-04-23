@@ -31,7 +31,7 @@ export class TimKiemComponent implements OnInit {
 
   
   searchFilter = {
-    nam: "",
+    nam: null,
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
@@ -49,6 +49,7 @@ export class TimKiemComponent implements OnInit {
   validateForm!: FormGroup;           // form
 
   submitForm(){
+    
     if (this.validateForm.valid) {
       return true;
     } else {
@@ -58,6 +59,12 @@ export class TimKiemComponent implements OnInit {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      if(!this.searchFilter.nam || !this.searchFilter.loaiBaoCao){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      }
+      if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      }
       return false;
     }
   }
