@@ -256,9 +256,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
           this.donvitien = data.data.maDviTien;
-          this.lstCTietBCao.filter(item =>{
-            item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
-          })
+          this.divMoneyTotal();
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N;
@@ -279,7 +277,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             this.status = true;
           }
           this.listFile =[];
-          
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR,data?.msg);
         }
@@ -407,6 +405,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -496,7 +495,6 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     }
     //tinh đon vi tien
     this.lstCTietBCao.filter(item => {
-      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
       if (this.editCache[item.id].edit === true) {
         checkSaveEdit = false
       }
@@ -505,6 +503,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
@@ -541,9 +540,11 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
         } else {
+          this.divMoneyTotal();
          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err => {
+        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -555,10 +556,12 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal();
            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
+          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -622,6 +625,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
 
             this.namBcaohienhanh = this.namBcaohienhanh;
             this.updateEditCache();
+            this.tinhTong();
         }else{
           this.notification.error(MESSAGE.ERROR,MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -655,13 +659,117 @@ xoaBaoCao(){
     }
   }
 
+
+  tinhTong():number{
+    let tongDtoanKphi =0;
+    this.lstCTietBCao.forEach(e =>{
+      tongDtoanKphi += e.dtoanKphi;
+    })
+    return tongDtoanKphi;
+  }
    // action copy
-   doCopy(){
+   async doCopy(){
+    this.spinner.show();
+
+    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          return data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          return null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        return null;
+      }
+    );
+    if (!maBaoCao) {
+      return;
+    }
+    this.mullMoneyTotal();
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
     
+   
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: null,
+      fileDinhKems: null,
+      listIdDeleteFiles: null,
+      listIdDeletes: null,  
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: maBaoCao,
+      maDvi: this.donvitao,
+      maDviTien: this.donvitien,
+      maLoaiBcao: this.maLoaiBacao,
+      namBcao: this.namBcaohienhanh +1,
+      namHienHanh: this.namBcaohienhanh,
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          this.id = data.data.id;
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/' + this.id);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.divMoneyTotal();
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.divMoneyTotal();
+      },
+    );
+
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+
+    this.updateEditCache();
+    this.spinner.hide();
   }
 
   // action print
   doPrint(){
-    
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div> <div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div> </div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+
+
+  mullMoneyTotal(){
+    this.lstCTietBCao.filter( item =>{
+      item.dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
+    })
+  }
+
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(item =>{
+      item.dtoanKphi = divMoney(item.dtoanKphi, this.donvitien);
+    })
   }
 }

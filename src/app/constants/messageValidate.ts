@@ -4,7 +4,7 @@ export const MESSAGEVALIDATE = {
     YEAR: 'Vui lòng nhập từ 1000 đến 2999',
     TYPE_OF_TEXT: 'Vui lòng chọn loại văn bản',
 
-    NOTEMPTYS:'Vui lòng nhập giá trị cho các trường bôi đỏ!',
+    NOTEMPTYS:'Vui lòng nhập đúng giá trị cho các trường bôi đỏ!',
     NOTSAVE:'Vui lòng lưu các trường dữ liệu trong bảng!',
     WRONG_FORMAT: 'Vui lòng nhập năm đúng định dạng số từ 1000 đến 2999',
   };

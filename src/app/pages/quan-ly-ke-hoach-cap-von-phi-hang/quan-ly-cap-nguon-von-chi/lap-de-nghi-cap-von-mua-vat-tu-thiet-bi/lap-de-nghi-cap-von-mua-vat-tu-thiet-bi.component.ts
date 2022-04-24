@@ -224,7 +224,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDeletes,              
-			lstCTietBCao: this.lstCTietBCao,
+			listCtiet: this.lstCTietBCao,
 			maDvi: this.maDviTao,
 			soQd: this.soQd,
 			ngayQd: this.datePipe.transform(this.ngayQd, Utils.FORMAT_DATE_STR),
@@ -522,6 +522,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 				this.tongGtriHd = 0;
 				this.lstHopDong.forEach(item => {
 					this.tongGtriHd += item.gtriHd;
+					this.maHdong += item.maHd + ",";
 				})
 			}
 		});

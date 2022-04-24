@@ -29,21 +29,21 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
   trangThais: any = TRANGTHAITIMKIEM;
 
-  listBcaoKqua:any []=[];
-  lenght:any=0;
+  listBcaoKqua: any[] = [];
+  lenght: any = 0;
 
 
   searchFilter = {
     maPhanBcao: '0',
-    maDvi:'',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
-    trangThai:'',
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
+    maDvi: '',
+    ngayTaoTu: '',
+    ngayTaoDen: '',
+    trangThai: '',
+    maBcao: '',
+    maLoaiBcao: '',
+    namBcao: '',
     thangBCao: '',
-    dotBcao:'',
+    dotBcao: '',
     paggingReq: {
       limit: 20,
       page: 1
@@ -63,7 +63,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notifi: NzNotificationService,
   ) {
   }
 
@@ -84,7 +84,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
   // lay ten don vi tao
-  getUnitName(dvitao:any){
+  getUnitName(dvitao: any) {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
@@ -103,64 +103,38 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
 
-  timkiem(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+  timkiem() {
+    if (this.searchFilter.maLoaiBcao == '') {
+      this.notifi.error('Tìm kiếm', 'Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
-      if(res.statusCode==0){
+      if (res.statusCode == 0) {
 
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
-        if(this.listBcaoKqua.length!=0){
+        if (this.listBcaoKqua.length != 0) {
           this.lenght = this.listBcaoKqua.length;
         }
-      }else{
+      } else {
         this.notifi.error(MESSAGE.ERROR, res?.msg);
       }
       console.log(res);
-    },err =>{
+    }, err => {
       this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
-  themMoi(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+  themMoi() {
+    if (this.searchFilter.maLoaiBcao == '') {
+      this.notifi.error('Thêm mới', 'Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url +'/' +this.searchFilter.thangBCao+'/'+this.searchFilter.namBcao])
   }
 
   //set url khi
-  setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
-        break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
+  setUrl(lbaocao: any) {
+    this.url = '/bao-cao/'+lbaocao;
   }
 
   //doi so trang
