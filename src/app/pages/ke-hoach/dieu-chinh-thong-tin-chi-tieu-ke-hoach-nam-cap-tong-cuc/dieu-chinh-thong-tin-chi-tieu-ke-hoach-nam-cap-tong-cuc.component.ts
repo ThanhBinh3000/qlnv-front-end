@@ -28,6 +28,7 @@ import { KeHoachVatTu } from 'src/app/models/KeHoachVatTu';
 import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 interface DataItem {
   name: string;
   age: number;
@@ -91,6 +92,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     },
   ];
 
+  dataVatTuCha: any[] = [];
+  dataVatTuCon: any[] = [];
+
   selectDataMultipleTag(data: any) {
 
   }
@@ -108,6 +112,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private danhMucService: DanhMucService,
     private helperService: HelperService,
     private cdr: ChangeDetectorRef,
   ) { }
@@ -124,6 +129,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
+      await this.loadDanhMucHang();
       this.spinner.hide();
     }
     catch (e) {
@@ -131,6 +137,51 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loadDanhMucHangGiaoChiTieu();
+    let data = res.data;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].cap == 2) {
+        let child = [];
+        if (data[i].child && data[i].child.length > 0) {
+          for (let j = 0; j < data[i].child.length; j++) {
+            let itemChild = {
+              id: data[i].child[j].id,
+              ten: data[i].child[j].ten,
+              idParent: data[i].id,
+              tenParent: data[i].ten,
+            }
+            child.push(itemChild);
+            let itemCon = {
+              id: data[i].child[j].id,
+              ten: data[i].child[j].ten,
+              idParent: data[i].id,
+              tenParent: data[i].ten,
+            }
+            this.dataVatTuCon.push(itemCon);
+          }
+        }
+        let item = {
+          id: data[i].id,
+          ten: data[i].ten,
+          child: child
+        }
+        this.dataVatTuCha.push(item);
+      }
+      else if (data[i].cap == 3) {
+        let itemCon = {
+          id: data[i].id,
+          ten: data[i].ten,
+          idParent: 0,
+          tenParent: '',
+        }
+        this.dataVatTuCon.push(itemCon);
+      }
+    }
+    console.log(this.dataVatTuCha);
+    console.log(this.dataVatTuCon);
   }
 
   selectNam() {
