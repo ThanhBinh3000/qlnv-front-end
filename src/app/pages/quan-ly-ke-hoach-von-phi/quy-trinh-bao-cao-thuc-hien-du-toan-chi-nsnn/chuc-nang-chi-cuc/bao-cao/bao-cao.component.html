@@ -60,7 +60,7 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Lãnh đạo trả lại</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('6',null)" [hidden]="statusBtnLD">
+        <a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
@@ -108,7 +108,7 @@
               <td>{{ i + 1 }}</td>
               <td>{{item.tenPhuLuc}}</td>
               <td>{{item.tieuDe}}</td>
-              <td>{{getStatusName(item.trangThai)}}</td>
+              <td>{{getStatusAppendixName(item.trangThai)}}</td>
               <td>
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="status">
                   <span>Nhập dữ liệu</span>
@@ -395,164 +395,182 @@
                   {{editCachePL1[item.id].data.kphiChuyenSangTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangDtoan" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangDtoan" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNguonKhac"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNguonKhac" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNguonQuy"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNguonQuy" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNstt" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangNstt" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangCk" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.kphiChuyenSangCk" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
                   {{editCachePL1[item.id].data.dtoanGiaoTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoDtoan" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoDtoan" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNguonKhac" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNguonKhac" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNguonQuy" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNguonQuy" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNstt" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoNstt" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoCk" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.dtoanGiaoCk" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
                   {{editCachePL1[item.id].data.giaiNganThangBcaoTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoTcongTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoDtoan"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoDtoan" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoDtoanTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNguonKhac"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNguonKhacTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNguonQuy"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNguonQuyTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNstt" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNstt" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoNsttTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoCk" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoCk" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoCkTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.giaiNganThangBcaoCkTle" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
                   {{editCachePL1[item.id].data.luyKeGiaiNganTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganTcongTle" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganTcongTle" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganDtoan" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganDtoan" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganDtoanTle" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganDtoanTle" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonKhac"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonKhac" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonKhacTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonQuy" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonQuy" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
+                  <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNguonQuyTle"
-                    (change)="changeModelPL1(item.id)" ></nz-input-number>
+                    (change)="changeModelPL1(item.id)"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNstt" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNstt" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNsttTle" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganNsttTle" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganCk" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganCk" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganCkTle" (change)="changeModelPL1(item.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCachePL1[item.id].data.luyKeGiaiNganCkTle" (change)="changeModelPL1(item.id)">
+                  </nz-input-number>
                 </td>
                 <td>
                   <i class="fa fa-trash-o do"></i>
                 </td>
                 <td>
                   <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i)" [hidden]="statusB"></i>
-                  <a (click)="saveEditPL1(item.id)" class="save" [hidden]="!statusB">Save</a>
-                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEditPL1(item.id)"
-                    class="save" [hidden]="!statusB">Cancel</a>
+                  <a (click)="saveEditPL1(item.id)" class="save" [hidden]="!statusB">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                    (nzOnConfirm)="cancelEditPL1(item.id)" class="save" [hidden]="!statusB">Hủy</a>
                 </td>
                 <td>
                   <div [hidden]="lessThan(item.level)">
@@ -802,87 +820,96 @@
                   {{editCache[data.id].data.dtoanSdungNamTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonNsnn" (change)="changeModelPL2(data.id)"></nz-input-number> 
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonNsnn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonSn" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonSn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonQuy" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.dtoanSdungNamNguonQuy" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
                   {{editCache[data.id].data.giaiNganThangTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangTcongTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangTcongTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnn" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnnTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonNsnnTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSn" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSnTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonSnTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuy" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuy" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuyTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganThangNguonQuyTle"></nz-input-number>
                 </td>
                 <td>
                   {{editCache[data.id].data.luyKeGiaiNganTcong}}
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganTcongTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganTcongTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonNsnn" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonNsnn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonNsnnTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonNsnnTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonSn" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonSn" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonSnTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonSnTle"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonQuy" (change)="changeModelPL2(data.id)" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonQuy" (change)="changeModelPL2(data.id)">
+                  </nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonQuyTle" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganNguonQuyTle"></nz-input-number>
                 </td>
 
                 <td [hidden]="status">
                   <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id)" class="save">Save</a>
-                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                    class="save">Cancel</a>
+                  <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                    (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
@@ -906,14 +933,15 @@
               <th rowspan="4" nzWidth="170px">Danh mục Dự án</th>
               <th rowspan="4" nzWidth="170px">Địa điểm XD</th>
               <th colspan="3" nzWidth="150px">Quyết định đầu tư</th>
-              <th colspan="2" nzWidth="150px">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch</th>
+              <th colspan="5" nzWidth="150px">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch</th>
               <th colspan="3" nzWidth="150px">Lũy kế giải ngân vốn đã bố trí đến hết năm trước năm kế hoạch</th>
-              <th rowspan="4" nzWidth="150px">kế hoạch vốn đầu tư phát triển nguồn NSNN năm trước được cấp có thẩm quyền
+              <th colspan="3" nzWidth="150px">kế hoạch vốn đầu tư phát triển nguồn NSNN năm trước được cấp có thẩm quyền
                 cho phép kéo dài sang năm KH(nếu có)</th>
-              <th colspan="2" nzWidth="150px">Kế hoạch năm kế hoạch</th>
-              <th rowspan="3" colspan="2" nzWidth="150px">Khối lượng thực hiện từ đầu năm đến ngày 15 của tháng báo cáo</th>
+              <th colspan="5" nzWidth="150px">Kế hoạch năm kế hoạch</th>
+              <th rowspan="3" colspan="2" nzWidth="150px">Khối lượng thực hiện từ đầu năm đến ngày 15 của tháng báo cáo
+              </th>
               <th colspan="10" nzWidth="150px">Giải ngân tháng báo cáo</th>
-              <th rowspan="2" colspan="4" nzWidth="150px">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo
+              <th colspan="10" nzWidth="150px">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo
                 tháng(đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm) </th>
               <th colspan="3" rowspan="2" nzWidth="150px">Tình hình thực hiện dự án</th>
               <th rowspan="4" nzWidth="150px">Ghi chú</th>
@@ -934,8 +962,8 @@
               <th style="width: 50px" rowspan="3">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" rowspan="3">
-                Trong đó: vốn NSNN
+              <th style="width: 50px" colspan="4">
+                Trong đó
               </th>
               <th style="width: 50px" rowspan="3">
                 Tổng số(tất cả các nguồn vốn)
@@ -944,20 +972,37 @@
                 Trong đó: NSNN
               </th>
               <th style="width: 50px" rowspan="3">
-                Tổng số(tất cả các nguồn vốn)
+                Tổng số
+              </th>
+              <th style="width: 50px" colspan="2">
+                Trong đó
               </th>
               <th style="width: 50px" rowspan="3">
-                Trong đó: NSNN
+                Tổng số(tất cả các nguồn vốn)
+              </th>
+              <th style="width: 50px" colspan="4">
+                Trong đó
               </th>
               <th style="width: 50px" colspan="2" rowspan="2">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="4" >
+              <th style="width: 50px" colspan="4">
                 Trong đó
-              </th><th style="width: 50px" colspan="4" >
+              </th>
+              <th style="width: 50px" colspan="4">
+                Tỷ lệ giải ngân
+              </th>
+              <th style="width: 50px" colspan="2" rowspan="2">
+                Tổng số(tất cả các nguồn vốn)
+              </th>
+              <th style="width: 50px" colspan="4">
+                Trong đó
+              </th>
+              <th style="width: 50px" colspan="4">
                 Tỷ lệ giải ngân
               </th>
             </tr>
+            <!-- dong3 -->
             <tr>
               <th style="width: 50px" rowspan="2">
                 Tổng số(tất cả các nguồn vốn)
@@ -966,16 +1011,50 @@
                 Trong đó: vốn NSNN
               </th>
               <th style="width: 50px" rowspan="2">
+                Vốn NSNN
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn ngành DT
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn ngành Thuế
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn SCL
+              </th>
+              <!--  -->
+              <th style="width: 50px" rowspan="2">
                 Tổng số
               </th>
               <th style="width: 50px" rowspan="2">
-                Trong đó KH năm trước
+                Trong đó: riêng năm trước năm KH
               </th>
+              <!--  -->
+              <th style="width: 50px" rowspan="2">
+                Vốn ĐTPT
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn khác
+              </th>
+              <!--  -->
+              <th style="width: 50px" rowspan="2">
+                Vốn ĐTPT nguồn NSNN
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn ngành DT
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn ngành thuế
+              </th>
+              <th style="width: 50px" rowspan="2">
+                Vốn SCL
+              </th>
+              <!--  -->
               <th style="width: 50px">
                 Vốn NSNN
               </th>
               <th style="width: 50px">
-                Vốn ngành DT 
+                Vốn ngành DT
               </th>
               <th style="width: 50px">
                 Vốn ngành Thuế
@@ -987,7 +1066,7 @@
                 Vốn NSNN
               </th>
               <th style="width: 50px">
-                Vốn ngành DT 
+                Vốn ngành DT
               </th>
               <th style="width: 50px">
                 Vốn ngành Thuế
@@ -995,12 +1074,32 @@
               <th style="width: 50px">
                 Vốn SCL
               </th>
-              <th style="width: 50px" colspan="2">
-                Tổng số(tất cả các nguồn vốn)
+              <!--  -->
+              <th style="width: 50px">
+                Vốn NSNN
               </th>
-              <th style="width: 50px" colspan="2">
-                Trong đó: vốn NSNN
+              <th style="width: 50px">
+                Vốn ngành DT
               </th>
+              <th style="width: 50px">
+                Vốn ngành Thuế
+              </th>
+              <th style="width: 50px">
+                Vốn SCL
+              </th>
+              <th style="width: 50px">
+                Vốn NSNN
+              </th>
+              <th style="width: 50px">
+                Vốn ngành DT
+              </th>
+              <th style="width: 50px">
+                Vốn ngành Thuế
+              </th>
+              <th style="width: 50px">
+                Vốn SCL
+              </th>
+              <!--  -->
               <th style="width: 50px" rowspan="2">
                 Nội dung các công việc chủ yếu đã hoàn thành đến cuối tháng báo cáo
               </th>
@@ -1048,6 +1147,7 @@
               <th style="width: 50px">
                 Tỷ lệ(%)
               </th>
+
               <th style="width: 50px">
                 Số tiền
               </th>
@@ -1058,8 +1158,29 @@
                 Số tiền
               </th>
               <th style="width: 50px">
+                Số tiền
+              </th>
+              <th style="width: 50px">
+                Số tiền
+              </th>
+              <th style="width: 50px">
+                Số tiền
+              </th>
+              <th style="width: 50px">
                 Tỷ lệ(%)
               </th>
+              <th style="width: 50px">
+                Tỷ lệ(%)
+              </th>
+              <th style="width: 50px">
+                Tỷ lệ(%)
+              </th>
+              <th style="width: 50px">
+                Tỷ lệ(%)
+              </th>
+
+
+
             </tr>
           </thead>
           <tbody>
@@ -1072,12 +1193,20 @@
               <td>4</td>
               <td>5</td>
               <td>6</td>
+              <td>6a</td>
+              <td>6b</td>
+              <td>6c</td>
               <td>7</td>
               <td>8</td>
               <td>9</td>
               <td>10</td>
+              <td>10a</td>
+              <td>10b</td>
               <td>11</td>
               <td>12</td>
+              <td>12a</td>
+              <td>12b</td>
+              <td>12c</td>
               <td>13</td>
               <td>13a</td>
               <td>14</td>
@@ -1093,7 +1222,13 @@
               <td>18</td>
               <td>19</td>
               <td>20</td>
+              <td>20a</td>
+              <td>20b</td>
+              <td>20c</td>
               <td>21</td>
+              <td>21a</td>
+              <td>21b</td>
+              <td>21c</td>
               <td>22</td>
               <td>23</td>
               <td>24</td>
@@ -1125,21 +1260,42 @@
                 <td>{{ data.qddtTmdtNsnn }}</td>
                 <td>{{ data.luyKeVonTso }}</td>
                 <td>{{ data.luyKeVonNsnn }}</td>
+                <td>{{ data.luyKeVonDt }}</td>
+                <td>{{ data.luyKeVonThue }}</td>
+                <td>{{ data.luyKeVonScl }}</td>
                 <td>{{ data.luyKeGiaiNganHetNamTso }}</td>
                 <td>{{ data.luyKeGiaiNganHetNamNsnnTso }}</td>
                 <td>{{ data.luyKeGiaiNganHetNamNsnnKhNamTruoc }}</td>
-                <td>{{ data.khoachVonDtu }}</td>
-                <td>{{ data.khoachTso }}</td>
-                <td>{{ data.khoachNsnn }}</td>
-                <td>{{ data.kluongThien }}</td>
+                <td>{{ data.khoachVonNamTruocKeoDaiTso }}</td>
+                <td>{{ data.khoachVonNamTruocKeoDaiDtpt }}</td>
+                <td>{{ data.khoachVonNamTruocKeoDaiVonKhac }}</td>
+                <td>{{ data.khoachNamVonTso }}</td>
+                <td>{{ data.khoachNamVonNsnn }}</td>
+                <td>{{ data.khoachNamVonDt }}</td>
+                <td>{{ data.khoachNamVonThue }}</td>
+                <td>{{ data.khoachNamVonScl }}</td>
+                <td>{{ data.kluongThienTso }}</td>
+                <td>{{ data.kluongThienThangBcao }}</td>
                 <td>{{ data.giaiNganTso }}</td>
                 <td>{{ data.giaiNganTsoTle }}</td>
                 <td>{{ data.giaiNganNsnn }}</td>
+                <td>{{ data.giaiNganNsnnVonDt }}</td>
+                <td>{{ data.giaiNganNsnnVonThue }}</td>
+                <td>{{ data.giaiNganNsnnVonScl }}</td>
                 <td>{{ data.giaiNganNsnnTle }}</td>
-                <td>{{ data.luyKeGiaiNganDauNamNsnnTso }}</td>
-                <td>{{ data.luyKeGiaiNganDauNamNsnnTsoTle }}</td>
+                <td>{{ data.giaiNganNsnnTleVonDt }}</td>
+                <td>{{ data.giaiNganNsnnTleVonThue }}</td>
+                <td>{{ data.giaiNganNsnnTleVonScl }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamTso }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamTsoTle }}</td>
                 <td>{{ data.luyKeGiaiNganDauNamNsnn }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnVonDt }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnVonThue }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnVonScl }}</td>
                 <td>{{ data.luyKeGiaiNganDauNamNsnnTle }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnTleVonDt }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnTleVonThue }}</td>
+                <td>{{ data.luyKeGiaiNganDauNamNsnnTleVonScl }}</td>
                 <td>{{ data.ndungCviecHthanhCuoiThang }}</td>
                 <td>{{ data.ndungCviecDangThien }}</td>
                 <td>{{ data.khoachThienNdungCviecThangConLaiNam }}</td>
@@ -1174,107 +1330,194 @@
                   </nz-select>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.qddtSoQdinh" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.qddtSoQdinh"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.qddtTmdtTso" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.qddtTmdtTso"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeVonTso" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeVonTso"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeVonNsnn" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeVonNsnn"></nz-input-number>
+                </td>
+                
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeVonDt"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamTso" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeVonThue"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnTso" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeVonScl"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnKhNamTruoc" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamTso"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.khoachVonDtu" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnKhNamTruoc"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiDtpt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiVonKhac"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachNamVonTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachNamVonNsnn"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachNamVonDt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachNamVonThue"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachNamVonScl"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.kluongThienTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.kluongThienThangBcao"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganTsoTle"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnn"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnTle"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnTleVonDt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnTleVonThue"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnTleVonScl"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamTso"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamTsoTle"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnn"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonDt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonThue"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonScl"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTle"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonDt"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonThue"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonScl"></nz-input-number>
                 </td>
 
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.khoachTso" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.ndungCviecHthanhCuoiThang"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.khoachNsnn" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.ndungCviecDangThien"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.kluongThien" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.khoachThienNdungCviecThangConLaiNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganTso" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganTsoTle" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganNsnn" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.giaiNganNsnnTle" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTso" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTsoTle" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnn" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.luyKeGiaiNganDauNamNsnnTle" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.ndungCviecHthanhCuoiThang" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.ndungCviecDangThien" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'"
-                    [(ngModel)]="editCache[data.id].data.khoachThienNdungCviecThangConLaiNam" ></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number class="search__input"  [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.ghiChu" ></nz-input-number>
+                  <nz-input-number class="search__input" [nzSize]="'small'"
+                    [(ngModel)]="editCache[data.id].data.ghiChu"></nz-input-number>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit(data.id)" class="save">Save</a>
-                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                    class="save">Cancel</a>
+                  <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                    (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
                   <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
@@ -1343,7 +1586,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstFile; let i = index">
-                  <td>{{ i + 1 }}</td>
+                  <td>{{ i + 1 }} </td>
                   <td>{{ data.fileName }}</td>
                   <td>
                     <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
