@@ -72,7 +72,6 @@
                                    <th nzWidth="200px">Trạng thái</th>
                                    <th nzWidth="100px"></th>
                                    <th nzWidth="100px"></th>
-                                   <th nzWidth="100px"></th>
                               </tr>
                          </thead>
                          <tbody>
@@ -91,22 +90,24 @@
                                         </div>
                                    </td>
                                    <td>
-                                        {{data.namPb}}
+                                        {{data.nam}}
                                    </td>
                                    <td [hidden]="status">
-                                        {{data.noiDung}}
+                                        {{data.ghiChu}}
                                    </td>
                                    <td>
                                         {{getStatusName(data.trangThai)}}
                                    </td>
                                    <td>
-                                        <a routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Xem</a>
+                                        <ng-container *ngIf="getStatusEdit(data.trangThai); else abc">
+                                             <i nz-icon nzType="eye" nzTheme="outline" (click)="xem(data.id)"></i>
+                                        </ng-container>
+                                        <ng-template #abc>
+                                             <i class="fa fa-pencil" (click)="xem(data.id)"></i>
+                                        </ng-template>
                                    </td>
                                    <td>
-                                        <a routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
-                                   </td>
-                                   <td>
-                                        <a routerLink="#">Xóa</a>
+                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                    </td>
                               </tr>
                          </tbody>

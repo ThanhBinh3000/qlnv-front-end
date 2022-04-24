@@ -37,6 +37,7 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
         nam: null,
     };
 
+    donVis: any = [];
     trangThais: any[] = TRANGTHAIBANGHI;
 
     totalPages: number = 0;
@@ -56,10 +57,22 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private datePipe: DatePipe,
+        private danhMucService: DanhMucHDVService,
     ) { }
 
     async ngOnInit() {
-
+        await this.danhMucService.dMDonVi().toPromise().then(
+            (data) => {
+                 if (data.statusCode == 0) {
+                      this.donVis = data.data;
+                 } else {
+                      this.notification.error(MESSAGE.ERROR, data?.msg);
+                 }
+            },
+            (err) => {
+                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+       );
     }
 
     getDetailReport() {
@@ -79,13 +92,10 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
             },
         }
 
-        this.quanLyVonPhiService.timKiemGiaoPhanBo(request).toPromise().then(
+        this.quanLyVonPhiService.timkiemDieuChinh(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.lstCTietBCao = data.data.content;
-                    this.lstCTietBCao.forEach(item => {
-                        item.ngayQd = this.datePipe.transform(item.ngayQd, Utils.FORMAT_DATE_STR);
-                    })
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
 
@@ -119,13 +129,23 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
         this.pages.size = size;
         this.getDetailReport();
     }
+
+    getUnitName(maDvi: string){
+        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    }
+
     getStatusName(trangThai: string){
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
     handleOk() {
-        this.lstCTietBCao = this.lstCTietBCao.filter(e => e.checked == true);
-        this._modalRef.close(this.lstCTietBCao[0]?.id);
+        let listId: string = "";
+        this.lstCTietBCao.forEach(item => {
+            if (item.checked){
+                listId += item.id + ',';
+            }
+        })
+        this._modalRef.close(listId);
     }
 
     handleCancel() {

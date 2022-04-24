@@ -469,7 +469,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 					this.lstCTietBCao.forEach(item => {
 						this.tinhTong(1, item);
 					})
-					
+
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -652,7 +652,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	// huy thay doi
 	cancelEdit(id: string): void {
 		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
-		if (!this.lstCTietBCao[index].maDvi){
+		if (!this.lstCTietBCao[index].maDvi) {
 			this.deleteById(id);
 			return;
 		}
@@ -826,12 +826,95 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	}
 
 	// action copy
-	doCopy() {
+	async doCopy() {
+		this.spinner.show();
 
+		let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					return data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return null;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return null;
+			}
+		);
+		if (!maBaoCao) {
+			return;
+		}
+		this.mulMoneyTotal();
+		// replace nhung ban ghi dc them moi id thanh null
+		this.lstCTietBCao.filter(item => {
+			if (typeof item.id != "number") {
+				item.id = null;
+			}
+		})
+		let request = {
+			id: null,
+			listIdDeletes: null,
+			fileDinhKems: null,
+			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstCTietBCao: this.lstCTietBCao,
+			maBcao: maBaoCao,
+			maDvi: this.maDonViTao,
+			maDviTien: this.maDviTien,
+			maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM,
+			namHienHanh: this.namBaoCaoHienHanh,
+			namBcao: this.namBaoCaoHienHanh + 1,
+			soVban: null,
+		};
+
+		//call service them moi
+		this.spinner.show();
+		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.id = data.data.id;
+					await this.getDetailReport();
+					this.getStatusButton();
+					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/' + this.id);
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					this.divMoneyTotal();
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				this.divMoneyTotal();
+			},
+		);
+
+		this.lstCTietBCao.filter(item => {
+			if (!item.id) {
+				item.id = uuid.v4();
+			}
+		});
+
+		this.updateEditCache();
+		this.spinner.hide();
 	}
 
 	// action print
 	doPrint() {
-
+		let WindowPrt = window.open(
+			'',
+			'',
+			'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+		);
+		let printContent = '';
+		printContent = printContent + '<div>';
+		printContent =
+			printContent + document.getElementById('tablePrint').innerHTML;
+		printContent = printContent + '</div>';
+		WindowPrt.document.write(printContent);
+		WindowPrt.document.close();
+		WindowPrt.focus();
+		WindowPrt.print();
+		WindowPrt.close();
 	}
 }

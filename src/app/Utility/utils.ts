@@ -475,6 +475,48 @@ export const LOAIBAOCAO =[
         },
     ]
 
+    // trang thai ban ghi cua anh Ninh
+    export const TRANGTHAIBANGHI =[
+        {
+            id:'1',
+            tenDm:'Đang soạn'
+        },
+        {
+            id:'2',
+            tenDm:'Trình duyệt'
+        },
+        {
+            id:'3',
+            tenDm:'Từ chối'
+        },
+        {
+            id:'4',
+            tenDm:'Duyệt'
+        },
+        {
+            id:'5',
+            tenDm:'Từ chối'
+        },
+        {
+            id:'6',
+            tenDm:'Phê duyệt'
+        },
+        {
+            id:'7',
+            tenDm:'Chờ ghi nhận'
+        },
+        {
+            id:'8',
+            tenDm:'Từ chối ghi nhận'
+        },
+        {
+            id:'9',
+            tenDm:'Ghi nhận'
+        },
+    ]
+
+
+
     // trang thai ban ghi
     export const TRANGTHAI =[
         {

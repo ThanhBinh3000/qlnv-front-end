@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { Utils } from "../../../../Utility/utils";
+import { TRANGTHAIBANGHI, Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -14,7 +14,6 @@ import { min } from 'moment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -25,8 +24,8 @@ export class ItemData {
      checked!: boolean;
      ngayTao!: string;
      maDvi!: string;
-     namPb!: number;
-     noiDung!: string;
+     nam!: number;
+     ghiChu!: string;
      trangThai!: string;
 }
 
@@ -45,6 +44,8 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      totalElements!: number;
      donVis: any = [];                            //don vi se hien thi
      messageValidate: any = MESSAGEVALIDATE;
+
+     trangThais: any[] = TRANGTHAIBANGHI;
 
      searchFilter = {
           tuNgay: "",
@@ -101,12 +102,16 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                (data) => {
                     if (data.statusCode == 0) {
                          this.donVis = data.data;
-                         console.log(this.donVis);
                          this.donVis.forEach(e => {
                               if (e.maDvi == this.searchFilter.maDvi) {
                                    this.capDvi = e.capDvi;
                               }
                          })
+                         if (this.capDvi == Utils.CHI_CUC){
+                              this.status = false;
+                         } else {
+                              this.status = true;
+                         }
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -115,28 +120,11 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                }
           );
-          if (this.capDvi == '3') {
-               this.status = false;
-          } else {
-               this.status = true;
-          }
-
           this.tenDvi = this.getUnitName();
           this.spinner.hide();
      }
 
-     getStatusButton() {
-          const utils = new Utils();
-          // this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          // this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-     }
-
+     
      //get user info
      async getUserInfo(username: string) {
           await this.userService.getUserInfo(username).toPromise().then(
@@ -154,52 +142,6 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
           );
      }
 
-     // chuc nang check role
-     onSubmit(mcn: String, lyDoTuChoi: string) {
-          this.lstCTietBCao.forEach(item => {
-               if (item.checked) {
-                    const requestGroupButtons = {
-                         id: item.id,
-                         maChucNang: mcn,
-                         lyDotuChoi: lyDoTuChoi,
-                    };
-                    this.spinner.show();
-                    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
-                         (data) => {
-                              if (data.statusCode == 0) {
-                                   //this.getDetailReport();
-                                   this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                              } else {
-                                   this.notification.error(MESSAGE.ERROR, data?.msg);
-                              }
-                         },
-                         err => {
-                              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                         }
-                    );
-                    this.spinner.hide();
-               }
-          })
-     }
-
-     tuChoi(mcn: string) {
-          const modalTuChoi = this.modal.create({
-               nzTitle: 'Từ chối',
-               nzContent: DialogTuChoiComponent,
-               nzMaskClosable: false,
-               nzClosable: false,
-               nzWidth: '900px',
-               nzFooter: null,
-               nzComponentParams: {},
-          });
-          modalTuChoi.afterClose.subscribe(async (text) => {
-               if (text) {
-                    this.onSubmit(mcn, text);
-               }
-          });
-     }
-
-
      // call chi tiet bao cao
      getDetailReport() {
           if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
@@ -212,30 +154,20 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                maDvi: this.searchFilter.maDvi,
                ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
                ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-               namHienHanh: this.searchFilter.nam,
+               nam: this.searchFilter.nam,
                paggingReq: {
                     limit: this.pages.size,
                     page: this.pages.page,
                },
                trangThai: "",
                soQd: "",
-               str: "",
           }
 
-          this.quanLyVonPhiService.timkiem325(request).subscribe(
+          this.quanLyVonPhiService.timkiemDieuChinh(request).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
 
                          this.lstCTietBCao = data.data.content;
-                         if (!this.statusBtnTBP) {
-                              this.lstCTietBCao = this.lstCTietBCao.filter(e => e.trangThai == '2');
-                         } else {
-                              if (!this.statusBtnLD) {
-                                   this.lstCTietBCao = this.lstCTietBCao.filter(e => e.trangThai == '4');
-                              } else {
-                                   this.lstCTietBCao = this.lstCTietBCao.filter(e => ((e.trangThai) != '2') && (e.trangThai != '4'));
-                              }
-                         }
                          this.lstCTietBCao.forEach(e => {
                               e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
                          });
@@ -260,9 +192,15 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      }
 
      taoMoi() {
-          this.router.navigate([
-               '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
-          ]);
+          if (this.capDvi == Utils.CHI_CUC){
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
+               ]);
+          } else {
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-kiem-tra',
+               ]);
+          }
      }
 
      // xoa dong
@@ -277,12 +215,35 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
 
      // lay ten trang thai
      getStatusName(trangThaiBanGhi: string) {
-          const utils = new Utils();
-          return utils.getStatusName(trangThaiBanGhi);
+          return this.trangThais.find(e => e.id == trangThaiBanGhi)?.tenDm;
      }
 
      redirectChiTieuKeHoachNam() {
           this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+     }
+
+     xem(id: any){
+          if (this.capDvi == Utils.CHI_CUC){
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn' + id,
+               ]);
+          } else {
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-kiem-tra' + id,
+               ]);
+          }
+     }
+
+     getStatusEdit(trangThai: any): boolean{
+          if (
+               trangThai == Utils.TT_BC_1 ||
+               trangThai == Utils.TT_BC_3 ||
+               trangThai == Utils.TT_BC_5 ||
+               trangThai == Utils.TT_BC_8
+          ) {
+               return false;
+          }
+          return true;
      }
 
      //doi so trang
