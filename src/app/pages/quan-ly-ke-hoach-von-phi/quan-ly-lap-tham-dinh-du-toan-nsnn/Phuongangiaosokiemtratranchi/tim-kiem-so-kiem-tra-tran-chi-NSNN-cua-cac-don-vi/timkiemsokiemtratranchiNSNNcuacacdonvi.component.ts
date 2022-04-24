@@ -101,6 +101,24 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     );
   }
 
+  submitForm(){
+    if (this.validateForm.valid) {
+      return true;
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      
+      if (this.namgiao >= 3000 || this.namgiao < 1000){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+        return;
+      }
+      return false;
+    }
+  }
   //lay ten don vi tạo
   getUnitName(mdv:any):string {
     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
@@ -113,8 +131,9 @@ export class TimkiemsokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   }
 
   getlistsogiaokiemtra(){
-
-    console.log(this.datepipe.transform(this.ngaygiao,'dd/MM/yyyy'));
+    if(!this.submitForm()){
+      return;
+    }
     let req ={
         maDviNhan:this.donvinhan,
         maDviTao:this.donvitao,

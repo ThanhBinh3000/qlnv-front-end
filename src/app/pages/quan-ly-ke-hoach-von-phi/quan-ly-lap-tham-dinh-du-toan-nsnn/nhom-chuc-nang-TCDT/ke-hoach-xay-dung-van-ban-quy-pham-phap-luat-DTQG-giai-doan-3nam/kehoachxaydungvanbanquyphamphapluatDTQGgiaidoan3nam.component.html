@@ -127,7 +127,7 @@
                 <!-- </div> -->
               </div>
             </div>
-            <nz-table nzBordered class="table__body">
+            <nz-table nzBordered class="table__body" id="tablePrint">
               <thead>
                 <tr>
                   <th >STT</th>
@@ -212,7 +212,7 @@
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dtoanKphi" [class]="editCache[data.id].data.dtoanKphi || editCache[data.id].data.dtoanKphi ===0 ?'' : 'input-error-validate'"></nz-input-number>
                     </td>
                     <td>
-                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan" [class]="editCache[data.id].data.dviPhop ?'' : 'input-error-validate'"/>
+                      <input class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ccuLapDtoan" [class]="editCache[data.id].data.ccuLapDtoan ?'' : 'input-error-validate'"/>
                     </td>
                     <td [hidden]="status">
                       <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
@@ -230,6 +230,20 @@
                       (ngModelChange)="updateSingleChecked()"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Tổng</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{tinhTong()}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </tbody>
             </nz-table>

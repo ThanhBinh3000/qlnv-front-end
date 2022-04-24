@@ -4,19 +4,18 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
-
+import { UserService } from 'src/app/services/user.service';
+import {  LBCKETQUATHUCHIENHANGDTQG, TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
 
 @Component({
-  selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC',
-  templateUrl: './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.component.html',
-  styleUrls: ['./ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.component.scss']
+  selector: 'app-duyet-bao-cao-thuc-hien-von-phi',
+  templateUrl: './duyet-bao-cao-thuc-hien-von-phi.component.html',
+  styleUrls: ['./duyet-bao-cao-thuc-hien-von-phi.component.scss']
 })
-
-export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
+export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
   nzTreeComponent!: NzTreeComponent;
@@ -25,30 +24,32 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/';
 
+  userInfor:any;
+  maDonVi:any;
+  listDonViTao:any []=[];
   listBcaoKqua:any []=[];
   lenght:any=0;
 
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
 
   searchFilter = {
-    maDvi:'',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
-    trangThai:'',
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
-    thangBCao: '',
     dotBcao:'',
+    maBcao:'',
+    maDvi:'',
+    maLoaiBcao:'',
+    maPhanBcao:'1',
+    namBcao:'',
+    ngayTaoDen:'',
+    ngayTaoTu:'',
     paggingReq: {
       limit: 20,
       page: 1
     },
     str: '',
-    donVi:'',
-    maPhanBcao:'0'
+    thangBCao: '',
+    trangThai:'',
   };
 
 
@@ -57,17 +58,21 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
+  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notifi:NzNotificationService,
+    private nguoiDungSerivce : UserService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    let userName = this.nguoiDungSerivce.getUserName();
+    await this.getUserInfo(userName); //get user info
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -81,8 +86,59 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
         this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+
+    let objectDonViThuocQuanLy={
+      
+      capDvi: null,
+      kieuDvi: null,
+      loaiDvi: null,
+      maDvi: this.userInfor.dvql,
+      maKbnn: null,
+      maNsnn: null,
+      maPhuong: null,
+      maQuan: null,
+      maTinh: null,
+      paggingReq: {
+        limit: 20,
+        page: 1
+      },
+      str: '',
+      tenDvi: '',
+      trangThai: '01'
+    
+  }
+  this.danhMuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
+    if(res.statusCode==0){
+     this.listDonViTao = res?.data;
+     
+    }else{
+      this.notifi.error(MESSAGE.ERROR, res?.msg);
+    }
+  },err =>{
+    this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+  })
   }
 
+
+  //get user info
+  async getUserInfo(username: string) {
+    await this.nguoiDungSerivce
+      .getUserInfo(username)
+      .toPromise()
+      .then(
+        (data) => {
+          if (data?.statusCode == 0) {
+            this.userInfor = data?.data;
+            return data?.data;
+          } else {
+            this.notifi.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+  }
   // lay ten don vi tao
   getUnitName(dvitao:any){
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
@@ -104,17 +160,21 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
 
   timkiem(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+    // if(this.searchFilter.maLoaiBcao==''){
+    //   this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+    //   return;
+    // }
+    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
+          this.listBcaoKqua.forEach(e => {
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh,Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+          })
         }
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
@@ -136,26 +196,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   setUrl(lbaocao:any) {
     console.log(lbaocao)
     switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
+      case 1:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
         break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
+      case 2:
+        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
         break;
       default:
         this.url = null;

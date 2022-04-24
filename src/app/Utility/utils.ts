@@ -253,6 +253,12 @@ export class Utils {
         }
         return statusName;
     }
+
+    // lay ten trang thai theo ma trang thai
+    public getStatusAppendixName(id: any) {
+        let statusName = TRANGTHAIPHULUC.find(item => item.id == id)
+        return statusName?.ten;
+    }
 }
 
 // loai bao cao quan ly von phi
@@ -762,3 +768,5 @@ export const LOAIBAOCAO =[
             return null;
         }
     }
+
+    
