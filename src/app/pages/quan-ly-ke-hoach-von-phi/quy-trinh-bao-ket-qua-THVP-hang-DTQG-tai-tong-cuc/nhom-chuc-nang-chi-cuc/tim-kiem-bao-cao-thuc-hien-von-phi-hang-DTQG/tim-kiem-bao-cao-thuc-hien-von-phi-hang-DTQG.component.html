@@ -9,6 +9,10 @@
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
+        <button nz-button class="search__button--search" (click)="themMoi();submitForm()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tạo mới</span>
+        </button>
         <button nz-button class="search__button--search" routerLink="../">
           <i nz-icon nzType="stop"></i>
           Đóng
@@ -141,14 +145,11 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" routerLink="../{{url}}">
+        <!-- <button type="button" class="btn btn-main" routerLink="../{{url}}">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Tổng hợp báo cáo từ chi cục trực thuộc</span>
-        </button>
-        <button type="button" class="btn btn-main" (click)="themMoi();submitForm()">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Tạo mới</span>
-        </button>
+        </button> -->
+        
       </ng-template>
     </div>
   </div>

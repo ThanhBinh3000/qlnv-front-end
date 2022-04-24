@@ -332,7 +332,7 @@ export class QuanLyVonPhiService extends BaseService {
   approveBaoCao(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/chuc-nang',
-      // 'http://192.168.1.118:8094/bao-cao/chuc-nang',
+      // 'http://192.168.1.111:8094/bao-cao/chuc-nang',
       request,
     );
   }
@@ -399,4 +399,15 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     );
   }
+
+  // tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)
+  timKiemDuyetBaoCao(request:any):Observable<any>{
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tim-kiem-thong-tin-phe-duyet', request);
+    return this.httpClient.post('http://192.168.1.111:8094/bao-cao/tim-kiem-thong-tin-phe-duyet',request);
+  }
+
+  //sinh ma bao cao (3.2.9)
+  taoMaBaoCao():Observable<any>{
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma-bcao');
+  } 
 }
