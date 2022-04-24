@@ -1,3 +1,21 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Giao chỉ tiêu kế hoạch đầu năm</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{lastBreadcrumb}}</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+    </div>
+  </div>
+</nz-affix>
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
@@ -7,15 +25,21 @@
             <label class="search__label">Số QĐ</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <label class="search__label">Ngày ký từ ngày</label>
             <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
               [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày"></nz-date-picker>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <label class="search__label">Đến ngày</label>
             <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
               nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Năm kế hoạch</label>
+            <nz-select [(ngModel)]="searchFilter.namKeHoach">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Trích yếu</label>

@@ -126,3 +126,29 @@
     opacity: 0.5;
   }
 }
+.thong-tin-chi-tieu {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 16px;
+  .title-chi-tieu {
+    display: flex;
+    align-items: center;
+    & > span:nth-child(1) {
+      color: #ff4d4f;
+      font-weight: 500;
+      font-size: 13px;
+      padding: 4px;
+      border-radius: 5px;
+      border: 1px solid #eaeaea;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+    & > span:nth-child(2) {
+      text-transform: uppercase;
+      color: #444444;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 4px;
+    }
+  }
+}

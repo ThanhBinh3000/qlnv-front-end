@@ -152,11 +152,20 @@ export const STATUS_TYPE_CHECK = {
 
 export const LOAI_QUYET_DINH = {
   NHAP: '00',
-  XUAT: '01'
-}
+  XUAT: '01',
+};
 
 export const LOAI_HANG_DTQG = {
   GAO: '00',
   THOC: '01',
-  MUOI: '02'
-}
+  MUOI: '02',
+};
+
+export const LEVEL = {
+  TONG_CUC: 'tong-cuc',
+  CUC: 'cuc',
+  CHI_CUC: 'chi-cuc',
+  TONG_CUC_SHOW: 'Tổng cục',
+  CUC_SHOW: 'Cục',
+  CHI_CUC_SHOW: 'Chi cục',
+};

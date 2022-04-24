@@ -1,3 +1,4 @@
+import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { Globals } from './../../../shared/globals';
 import { DonviService } from 'src/app/services/donvi.service';
 import { saveAs } from 'file-saver';
@@ -290,6 +291,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           ? this.thongTinChiTieuKeHoachNam.ghiChu
           : null,
         [Validators.required],
+      ],
+      canCu: [
+        this.thongTinChiTieuKeHoachNam
+          ? this.thongTinChiTieuKeHoachNam.canCu
+          : null,
       ],
     });
   }
@@ -1818,5 +1824,26 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     return this.dsMuoiClone[i].tkcnTongSoMuoi
       ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
       : '0';
+  }
+
+  openDialogQuyetDinhGiaoChiTieu() {
+    if (this.id == 0) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+        nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+          this.formData.patchValue({
+            canCu: data.soQuyetDinh,
+          });
+        }
+      });
+    }
   }
 }

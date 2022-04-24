@@ -1,4 +1,4 @@
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
-import * as XLSX from 'xlsx';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
@@ -24,6 +23,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     donViId: '',
     tenDonVi: '',
     trichYeu: '',
+    namKeHoach: '',
   };
   optionsDonVi: any[] = [];
   options: any[] = [];
@@ -35,19 +35,35 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  listNam: any[] = [];
+  lastBreadcrumb: string;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private notification: NzNotificationService,
     private donViService: DonviService,
-    private helperService: HelperService,
     private modal: NzModalService,
   ) {}
 
   async ngOnInit() {
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    }
+
     this.spinner.show();
     try {
+      let dayNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: dayNow - i,
+          text: dayNow - i,
+        });
+      }
       const res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -180,6 +196,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       donViId: '',
       tenDonVi: '',
       trichYeu: '',
+      namKeHoach: '',
     };
     this.startValue = null;
     this.endValue = null;

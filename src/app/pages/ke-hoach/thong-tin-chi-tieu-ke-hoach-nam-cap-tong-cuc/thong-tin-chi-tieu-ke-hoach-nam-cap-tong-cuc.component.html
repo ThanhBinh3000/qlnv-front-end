@@ -40,7 +40,12 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
+      <!-- <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16"> -->
+      <div class="thong-tin-chi-tieu">
+        <div class="title-chi-tieu">
+          <span>DỰ THẢO</span>
+          <span>Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao</span>
+        </div>
         <form nz-form [formGroup]="formData" class="mt-16">
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="6">
@@ -109,6 +114,14 @@
                   [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' ? 'disable' : ''"></textarea>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                  <input nz-input [readonly]="true" formControlName="canCu" />
+                </nz-input-group>
+              </nz-form-item>
+            </div>
             <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
               <button class="btn btn-tep btn-sm waves-effect waves-light" (click)="selectFile('file-dinh-kem')"
                 [disabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
@@ -119,8 +132,8 @@
             </div>
           </div>
         </form>
-
-      </nz-card>
+      </div>
+      <!-- </nz-card> -->
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
@@ -773,24 +786,28 @@
               <tr>
                 <th rowspan="3">STT</th>
                 <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                <th rowspan="3">MẶT HÀNG</th>
+                <th rowspan="3">Mã hàng</th>
+                <th rowspan="3">Ký hiệu</th>
+                <th rowspan="3">Tên hàng</th>
+                <th rowspan="3">Chủng loại hàng</th>
                 <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                <th colspan="6">CHỈ TIÊU NHẬP NĂM {{yearNow}}</th>
+                <th colspan="6">CHỈ TIÊU NHẬP TRONG NĂM KẾ HOẠCH NĂM</th>
+                <th rowspan="3">HÀNH ĐỘNG</th>
               </tr>
               <tr>
                 <th rowspan="2">
                   Tổng số
                 </th>
-                <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
+                <th colspan="4">Chỉ tiêu nhập các năm trước chuyển</th>
                 <th rowspan="2">
-                  Kế hoạch {{yearNow}}
+                  Kế hoạch năm hiện tại
                 </th>
               </tr>
               <tr>
                 <th>Tổng</th>
-                <th>Kế hoạch <br> {{yearNow - 3}}</th>
-                <th>Kế hoạch <br> {{yearNow - 2}}</th>
-                <th>Kế hoạch <br> {{yearNow - 1}}</th>
+                <th class="text-center">KH năm <br> (1)</th>
+                <th class="text-center">KH năm <br> (2)</th>
+                <th class="text-center">KH năm <br> (3)</th>
               </tr>
             </thead>
             <tbody>
