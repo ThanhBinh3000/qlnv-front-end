@@ -30,6 +30,12 @@ export class TongHopComponent implements OnInit {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      if(!this.namhientai || !this.loaiBaocao){
+        this.notifi.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      }
+      if (this.namhientai >= 3000 || this.namhientai < 1000){
+        this.notifi.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      }
     }
   }
   constructor(
@@ -118,20 +124,11 @@ export class TongHopComponent implements OnInit {
   }
 
   tonghop(){
-
-      // if(this.namhientai==undefined || this.loaiBaocao ==null){
-
-      //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
-      // } else{
         if(this.validateForm.valid){
           this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
         }else{
           return;
         }
-
-      // }
-
-
   }
 
   taomoi(){
@@ -140,12 +137,6 @@ export class TongHopComponent implements OnInit {
     }else{
       return;
     }
-    // if(this.namhientai==undefined || this.loaiBaocao ==null){
-
-    //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop'])
-    // } else{
-    //   this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
-    // }
   }
   dong(){
     // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])

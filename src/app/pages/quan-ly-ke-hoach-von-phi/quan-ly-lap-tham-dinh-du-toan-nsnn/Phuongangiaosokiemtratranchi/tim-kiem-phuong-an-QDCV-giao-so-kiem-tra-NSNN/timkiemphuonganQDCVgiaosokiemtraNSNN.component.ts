@@ -17,13 +17,13 @@ import { TRANGTHAI, Utils } from 'src/app/Utility/utils';
 })
 export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   nguoinhap!: any;
-  namPa!: string;
+  namPa: number = null;
   ngaylap: string = null;
   denngay: string = null;
   donViTao: number = null;
   donvinhan: string = null;
   trangthai: string = null;
-  loaivanban: string = '';
+  loaivanban: string = null;
   soQd: string = null;
   soCV: string = null;
   maPa: string = null;
@@ -104,6 +104,14 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      if( !this.namPa || this.loaivanban==null){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+        return;
+      }
+      if (this.namPa >= 3000 || this.namPa < 1000){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+        return;
+      }
       return false;
     }
   }
@@ -123,6 +131,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
 
   //tim kiếm
   timkiem(){
+    
     let objsearch={
         maDviTao:this.donViTao,
         maPa:this.maPa,
@@ -160,8 +169,9 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
 
   //tao moi
   taomoi(){
-
-    
+    if(!this.submitForm()){
+      return;
+    }
      if(this.loaivanban=="CV"){
         this.router.navigate(["/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/qd-cv-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi"]);
     }if(this.loaivanban=="PA"){
