@@ -8,25 +8,11 @@ const routes: Routes = [
     component: QuanLyDieuChinhDuToanChiNSNNComponent,
   },
   {
-    path: 'test-link-list',
-    loadChildren: () =>
-      import(
-        './test-link-list/test-link-list.module'
-      ).then((m) => m.TestLinkListModule),
-  },
-  {
     path: 'danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach',
     loadChildren: () =>
       import(
         './danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach/danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach.module'
       ).then((m) => m.DanhSachDeXuatDieuChinhDuToanChiNganSachModule),
-  },
-  {
-    path: 'danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
-    loadChildren: () =>
-      import(
-        './danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.module'
-      ).then((m) => m.DanhSachKeHoachPhanBoGiaoDuToanCuaDonViModule),
   },
   {
     path: 'lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
@@ -41,6 +27,20 @@ const routes: Routes = [
       import(
         './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.module'
       ).then((m) => m.LapBaoCaoDieuChinhDuToanChiNsnnModule),
+  },
+  {
+    path: 'lap-bao-cao-dieu-chinh-kiem-tra',
+    loadChildren: () =>
+      import(
+        './lap-bao-cao-dieu-chinh-kiem-tra/lap-bao-cao-dieu-chinh-kiem-tra.module'
+      ).then((m) => m.LapBaoCaoDieuChinhKiemTraModule),
+  },
+  {
+    path: 'lap-bao-cao-dieu-chinh-kiem-tra/:id',
+    loadChildren: () =>
+      import(
+        './lap-bao-cao-dieu-chinh-kiem-tra/lap-bao-cao-dieu-chinh-kiem-tra.module'
+      ).then((m) => m.LapBaoCaoDieuChinhKiemTraModule),
   },
 ];
 

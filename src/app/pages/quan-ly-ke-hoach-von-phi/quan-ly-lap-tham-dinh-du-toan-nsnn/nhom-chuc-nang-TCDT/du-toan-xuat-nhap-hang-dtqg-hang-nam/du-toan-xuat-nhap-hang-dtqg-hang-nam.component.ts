@@ -196,7 +196,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 			await this.calltonghop();
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -215,7 +215,7 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
 			this.spinner.show();
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -341,6 +341,11 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 				checkSaveEdit = false
 			}
 		});
+		this.lstVtu.forEach(item => {
+			if (this.editCache1[item.id].edit === true) {
+				checkSaveEdit = false;
+			}
+		})
 		if (checkSaveEdit == false) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
@@ -756,11 +761,12 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 
 	// huy thay doi
 	cancelEdit(id: string): void {
-		if (!this.editCache[id].data.maCucDtnnKvuc) {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+
+		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		if (!this.lstCTietBCao[index].maCucDtnnKvuc) {
+			this.deleteById(id);
 			return;
 		}
-		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
 		var item: ItemData = this.lstCTietBCao[index];
 		this.editCache[id].data.maCucDtnnKvuc = item.maCucDtnnKvuc;
 		this.editCache[id].data.nxuatThocLuongNhap = item.nxuatThocLuongNhap;
@@ -1203,12 +1209,92 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 	}
 
 	// action copy
-	doCopy() {
+	async doCopy() {
+		this.spinner.show();
 
+		let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					return data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return null;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return null;
+			}
+		);
+		if (!maBaoCao) {
+			return;
+		}
+		// replace nhung ban ghi dc them moi id thanh null
+		this.lstCTietBCao.filter(item => {
+			if (typeof item.id != "number") {
+				item.id = null;
+			}
+		})
+		let request = {
+			id: null,
+			listIdDeletes: null,
+			fileDinhKems: null,
+			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstCTietBCao: this.lstCTietBCao,
+			maBcao: maBaoCao,
+			maDvi: this.maDonViTao,
+			maDviTien: this.maDviTien,
+			maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM,
+			namHienHanh: this.namBaoCaoHienHanh,
+			namBcao: this.namBaoCaoHienHanh + 1,
+			soVban: null,
+		};
+
+		//call service them moi
+		this.spinner.show();
+		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.id = data.data.id;
+					await this.getDetailReport();
+					this.getStatusButton();
+					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-xuat-nhap-hang-dtqg-hang-nam/' + this.id);
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+
+		this.lstCTietBCao.filter(item => {
+			if (!item.id) {
+				item.id = uuid.v4();
+			}
+		});
+
+		this.updateEditCache();
+		this.spinner.hide();
 	}
 
 	// action print
 	doPrint() {
-
+		let WindowPrt = window.open(
+			'',
+			'',
+			'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+		);
+		let printContent = '';
+		printContent = printContent + '<div>';
+		printContent =
+			printContent + document.getElementById('tablePrint').innerHTML;
+		printContent = printContent + '</div>';
+		WindowPrt.document.write(printContent);
+		WindowPrt.document.close();
+		WindowPrt.focus();
+		WindowPrt.print();
+		WindowPrt.close();
 	}
 }

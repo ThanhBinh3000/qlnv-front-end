@@ -12,12 +12,12 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
-import { KHOANMUCLIST } from './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant'
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemKhoanMucComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { KHOANMUCLIST } from '../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant';
 
 export class ItemData {
      id: any;
@@ -36,12 +36,12 @@ export class ItemData {
 }
 
 @Component({
-     selector: 'app-lap-bao-cao-dieu-chinh-du-toan-chi-nsnn',
-     templateUrl: './lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.html',
-     styleUrls: ['./lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.component.scss'],
+     selector: 'app-lap-bao-cao-dieu-chinh-kiem-tra',
+     templateUrl: './lap-bao-cao-dieu-chinh-kiem-tra.component.html',
+     styleUrls: ['./lap-bao-cao-dieu-chinh-kiem-tra.component.scss'],
 })
 
-export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
+export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      donVis: any = [];                            //don vi se hien thi
      donViTiens: any[] = DONVITIEN;
      trangThais: any[] = TRANGTHAIBANGHI;

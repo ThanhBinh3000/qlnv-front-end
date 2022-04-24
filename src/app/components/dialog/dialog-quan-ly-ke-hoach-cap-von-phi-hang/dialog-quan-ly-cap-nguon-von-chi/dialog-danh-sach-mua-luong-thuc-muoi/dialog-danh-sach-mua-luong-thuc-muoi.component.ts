@@ -105,7 +105,7 @@ export class DialogDanhSachMuaLuongThucMuoiComponent implements OnInit {
                   },
             }
 
-            this.quanLyVonPhiService.timkiem325(request).toPromise().then(
+            this.quanLyVonPhiService.timkiemDieuChinh(request).toPromise().then(
                   (data) => {
                         if (data.statusCode == 0) {
                               this.lstCTietBCao = data.data.content;
