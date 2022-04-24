@@ -1,0 +1,52 @@
+.multiple-box {
+  border: 1px solid #c4c9cc;
+  border-radius: 3px;
+
+  .input-multiple {
+    background: #fff;
+    border-right: 1px solid #c4c9cc;
+
+    .item-tag {
+      background: #b8f0f1;
+      border-radius: 3px;
+      width: auto;
+      float: left;
+      margin-left: 4px;
+      padding-left: 4px;
+      padding-right: 4px;
+      display: inline-flex;
+
+      .text-item-tag {
+        color: #20a1a4;
+        font-size: 13px;
+        max-width: 90px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .icon-cancel-tag {
+        color: #19797b;
+        font-size: 13px;
+        padding-top: 3px;
+      }
+    }
+  }
+
+  .select-tag {
+    padding-left: 6px;
+    border-left: 0px;
+    background: #eaeaea;
+    font-size: 13px;
+    color: #828282;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      margin-right: 6px;
+      font-size: 14px;
+    }
+  }
+}

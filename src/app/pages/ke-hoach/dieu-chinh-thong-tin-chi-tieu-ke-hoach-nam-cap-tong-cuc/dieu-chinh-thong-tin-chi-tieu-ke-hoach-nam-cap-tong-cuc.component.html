@@ -123,6 +123,16 @@
                   [readonly]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)"></textarea>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
+                <div nz-col nzSpan="24">
+                  <multiple-tag buttonName="Chọn file" icon="htvbdh_tcdt_tep" [data]="dataTag"
+                    (selectDataEvent)="selectDataMultipleTag($event)" (removeDataEvent)="deleteDataMultipleTag($event)">
+                  </multiple-tag>
+                </div>
+              </nz-form-item>
+            </div>
             <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
               <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
                 (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"

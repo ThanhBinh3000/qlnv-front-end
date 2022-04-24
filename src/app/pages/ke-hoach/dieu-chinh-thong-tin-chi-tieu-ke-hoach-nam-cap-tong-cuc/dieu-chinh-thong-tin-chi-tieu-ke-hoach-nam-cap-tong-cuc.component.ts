@@ -82,7 +82,22 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   fileList: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+
+  dataTag: any[] = [
+    {
+      id: 1,
+      text: '489/Về việc absgdh'
+    },
+  ];
+
+  selectDataMultipleTag(data: any) {
+
+  }
+
+  deleteDataMultipleTag(data: any) {
+    this.dataTag = this.dataTag.filter(x => x.id != data.id);
+  }
 
   constructor(
     private router: Router,
