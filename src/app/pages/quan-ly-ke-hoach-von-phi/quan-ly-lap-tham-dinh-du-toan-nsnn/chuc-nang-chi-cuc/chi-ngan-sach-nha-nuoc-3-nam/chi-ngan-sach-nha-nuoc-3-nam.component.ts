@@ -155,7 +155,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                this.nguoiNhap = this.userInfo?.username;
                this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
                this.maDonViTao = this.userInfo?.dvql;
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+               this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
                     (data) => {
                          if (data.statusCode == 0) {
                               this.maBaoCao = data.data;
@@ -174,7 +174,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                this.nguoiNhap = this.userInfo?.username;
                this.maDonViTao = this.userInfo?.dvql;
                this.spinner.show();
-               this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+               this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
                     (data) => {
                          if (data.statusCode == 0) {
                               this.maBaoCao = data.data;
@@ -344,17 +344,6 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           //check xem tat ca cac dong du lieu da luu chua?
           //chua luu thi bao loi, luu roi thi cho di
           this.lstCTietBCao.forEach(element => {
-               element.dtoanN = mulMoney(element.dtoanN, this.maDviTien);
-               element.uocThienN = mulMoney(element.uocThienN, this.maDviTien);
-               element.tranChiN1 = mulMoney(element.tranChiN1, this.maDviTien);
-               element.ncauChiN1 = mulMoney(element.ncauChiN1, this.maDviTien);
-               element.clechTranChiVsNcauChiN1 = mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
-               element.tranChiN2 = mulMoney(element.tranChiN2, this.maDviTien);
-               element.ncauChiN2 = mulMoney(element.ncauChiN2, this.maDviTien);
-               element.clechTranChiVsNcauChiN2 = mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
-               element.tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
-               element.ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
-               element.clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
                if (this.editCache[element.id].edit === true) {
                     checkSaveEdit = false
                }
@@ -363,6 +352,8 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
                return;
           }
+
+          this.mullMoneyTotal();
 
           let listFile: any = [];
           for (const iterator of this.listFile) {
@@ -401,10 +392,12 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                               await this.getDetailReport();
                               this.getStatusButton();
                          } else {
+                              this.divMoneyTotal();
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     },
                     err => {
+                         this.divMoneyTotal();
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     },
                );
@@ -416,9 +409,11 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                               await this.getDetailReport();
                               this.getStatusButton();
                          } else {
+                              this.divMoneyTotal();
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     }, err => {
+                         this.divMoneyTotal();
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           }
@@ -472,19 +467,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
                          this.maDviTien = data.data.maDviTien;
-                         this.lstCTietBCao.forEach(element => {
-                              element.dtoanN = divMoney(element.dtoanN, this.maDviTien);
-                              element.uocThienN = divMoney(element.uocThienN, this.maDviTien);
-                              element.tranChiN1 = divMoney(element.tranChiN1, this.maDviTien);
-                              element.ncauChiN1 = divMoney(element.ncauChiN1, this.maDviTien);
-                              element.clechTranChiVsNcauChiN1 = divMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
-                              element.tranChiN2 = divMoney(element.tranChiN2, this.maDviTien);
-                              element.ncauChiN2 = divMoney(element.ncauChiN2, this.maDviTien);
-                              element.clechTranChiVsNcauChiN2 = divMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
-                              element.tranChiN3 = divMoney(element.tranChiN3, this.maDviTien);
-                              element.ncauChiN3 = divMoney(element.ncauChiN3, this.maDviTien);
-                              element.clechTranChiVsNcauChiN3 = divMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
-                         });
+                         this.divMoneyTotal();
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
                          this.listFile = [];
@@ -556,7 +539,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                maMucChi: '',
                maLoaiChiTx: '',
                dtoanN: 0,
-               uocThienN: 0,
+               uocThienN: 1,
                tranChiN1: 0,
                ncauChiN1: 0,
                clechTranChiVsNcauChiN1: 0,
@@ -682,6 +665,10 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      // huy thay doi
      cancelEdit(id: string): void {
           const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+          if (!this.lstCTietBCao[index].maNdung) {
+               this.deleteById(id);
+               return;
+          }
           this.editCache[id] = {
                data: { ...this.lstCTietBCao[index] },
                edit: false
@@ -691,12 +678,13 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      // luu thay doi
      saveEdit(id: string): void {
           if (!this.editCache[id].data.maNdung ||
+               !this.editCache[id].data.tenDan ||
                !this.editCache[id].data.maLoaiChi ||
                !this.editCache[id].data.maKhoanChi ||
                !this.editCache[id].data.maMucChi ||
                !this.editCache[id].data.maLoaiChiTx ||
                (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !== 0) ||
-               (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !== 0) ||
+               (!this.editCache[id].data.uocThienN) ||
                (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0) ||
                (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !== 0)) {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -722,7 +710,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      //gia tri cac o input thay doi thi tinh toan lai
      changeModel(id: string): void {
           this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-          
+
           this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
           this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
      }
@@ -769,13 +757,128 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           }
      }
 
-     // action copy
-     doCopy() {
+     divMoneyTotal() {
+          this.lstCTietBCao.forEach(element => {
+               element.dtoanN = divMoney(element.dtoanN, this.maDviTien);
+               element.uocThienN = divMoney(element.uocThienN, this.maDviTien);
+               element.tranChiN1 = divMoney(element.tranChiN1, this.maDviTien);
+               element.ncauChiN1 = divMoney(element.ncauChiN1, this.maDviTien);
+               element.clechTranChiVsNcauChiN1 = divMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+               element.tranChiN2 = divMoney(element.tranChiN2, this.maDviTien);
+               element.ncauChiN2 = divMoney(element.ncauChiN2, this.maDviTien);
+               element.clechTranChiVsNcauChiN2 = divMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+               element.tranChiN3 = divMoney(element.tranChiN3, this.maDviTien);
+               element.ncauChiN3 = divMoney(element.ncauChiN3, this.maDviTien);
+               element.clechTranChiVsNcauChiN3 = divMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+          });
+     }
 
+     mullMoneyTotal() {
+          this.lstCTietBCao.forEach(element => {
+               element.dtoanN = mulMoney(element.dtoanN, this.maDviTien);
+               element.uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               element.tranChiN1 = mulMoney(element.tranChiN1, this.maDviTien);
+               element.ncauChiN1 = mulMoney(element.ncauChiN1, this.maDviTien);
+               element.clechTranChiVsNcauChiN1 = mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+               element.tranChiN2 = mulMoney(element.tranChiN2, this.maDviTien);
+               element.ncauChiN2 = mulMoney(element.ncauChiN2, this.maDviTien);
+               element.clechTranChiVsNcauChiN2 = mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+               element.tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
+               element.ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
+               element.clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+          });
+     }
+
+     // action copy
+     async doCopy() {
+          this.spinner.show();
+
+          let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         return data.data;
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                         return null;
+                    }
+               },
+               (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    return null;
+               }
+          );
+          if (!maBaoCao) {
+               return;
+          }
+          this.mullMoneyTotal();
+          // replace nhung ban ghi dc them moi id thanh null
+          this.lstCTietBCao.filter(item => {
+               if (typeof item.id != "number") {
+                    item.id = null;
+               }
+          })
+          let request = {
+               id: null,
+               listIdDeletes: null,
+               fileDinhKems: null,
+               listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+               lstCTietBCao: this.lstCTietBCao,
+               maBcao: maBaoCao,
+               maDvi: this.maDonViTao,
+               maDviTien: this.maDviTien,
+               maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N,
+               namHienHanh: this.namBaoCaoHienHanh,
+               namBcao: this.namBaoCaoHienHanh + 1,
+               soVban: null,
+          };
+
+          //call service them moi
+          this.spinner.show();
+          this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+               async data => {
+                    if (data.statusCode == 0) {
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+                         this.id = data.data.id;
+                         await this.getDetailReport();
+                         this.getStatusButton();
+                         this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-ngan-sach-nha-nuoc-3-nam/' + this.id);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                         this.divMoneyTotal();
+                    }
+               },
+               err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    this.divMoneyTotal();
+               },
+          );
+
+          this.lstCTietBCao.filter(item => {
+               if (!item.id) {
+                    item.id = uuid.v4();
+               }
+          });
+
+          this.updateEditCache();
+          this.spinner.hide();
      }
 
      // action print
      doPrint() {
-
+          let WindowPrt = window.open(
+               '',
+               '',
+               'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+          );
+          let printContent = '';
+          printContent = printContent + '<div>';
+          printContent =
+               printContent + document.getElementById('tablePrint').innerHTML;
+          printContent = printContent + '</div>';
+          WindowPrt.document.write(printContent);
+          WindowPrt.document.close();
+          WindowPrt.focus();
+          WindowPrt.print();
+          WindowPrt.close();
      }
 }

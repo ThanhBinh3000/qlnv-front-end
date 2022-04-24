@@ -1,4 +1,3 @@
-
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
      <div class="tab-content tab-menu" id="myTabContent">
           <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
@@ -29,37 +28,33 @@
           <div class="main-content">
 
                <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-                    <form nz-form [formGroup]="validateForm">
-                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                              <div nz-col nzSpan="12">
-                                   <label class="search__label">Năm hiện tại (N)</label>
-                                   <nz-form-item>
-                                        <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                                             <input nz-input [(ngModel)]="searchFilter.nam"
-                                                  formControlName="namhientai" />
-                                        </nz-form-control>
-                                   </nz-form-item>
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">Ngày lập từ</label>
-                                   <nz-date-picker formControlName="temp" class="search__input"
-                                        [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-                              </div>
-                              <div nz-col nzSpan="6">
-                                   <label class="search__label">Đến ngày</label>
-                                   <nz-date-picker formControlName="temp" class="search__input"
-                                        [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-                              </div>
-                              <div nz-col nzSpan="12">
-                                   <label class="search__label">Đơn vị tạo</label>
-                                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
-                                        [(ngModel)]="searchFilter.maDvi" formControlName="dviTemp" nzDisabled>
-                                        <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
-                                             [nzLabel]="item.tenDvi"></nz-option>
-                                   </nz-select>
-                              </div>
+                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                         <div nz-col nzSpan="12">
+                              <label class="search__label">Năm hiện tại (N)</label>
+                              <nz-input-number nzSize="small"
+                                   [class]="searchFilter.nam && searchFilter.nam < 3000 && searchFilter.nam > 999 ?'' : 'input-error-validate' "
+                                   [(ngModel)]="searchFilter.nam">
+                              </nz-input-number>
                          </div>
-                    </form>
+                         <div nz-col nzSpan="6">
+                              <label class="search__label">Ngày lập từ</label>
+                              <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay"
+                                   nzFormat="dd/MM/yyyy"></nz-date-picker>
+                         </div>
+                         <div nz-col nzSpan="6">
+                              <label class="search__label">Đến ngày</label>
+                              <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay"
+                                   nzFormat="dd/MM/yyyy"></nz-date-picker>
+                         </div>
+                         <div nz-col nzSpan="12">
+                              <label class="search__label">Đơn vị tạo</label>
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo"
+                                   [(ngModel)]="searchFilter.maDvi" nzDisabled>
+                                   <nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi"
+                                        [nzLabel]="item.tenDvi"></nz-option>
+                              </nz-select>
+                         </div>
+                    </div>
                </nz-card>
                <nz-card nzTitle="DANH SÁCH ĐỀ XUẤT ĐIỀU CHỈNH DỰ TOÁN CHI NGÂN SÁCH" [nzExtra]="tableCard1"
                     class="mt16 flex-card p-lr16">
@@ -75,16 +70,14 @@
                                    <th nzWidth="100px">Năm</th>
                                    <th nzWidth="300px" [hidden]="status">Nội dung</th>
                                    <th nzWidth="200px">Trạng thái</th>
-                                   <th nzWidth="100px" [hidden]="!statusBtnSave"></th>
-                                   <th nzWidth="100px" [hidden]="statusBtnSave"></th>
-                                   <th nzWidth="100px" [hidden]="statusBtnDel"></th>
+                                   <th nzWidth="100px"></th>
+                                   <th nzWidth="100px"></th>
                               </tr>
                          </thead>
                          <tbody>
                               <tr *ngFor="let data of lstCTietBCao; let i = index">
                                    <td>
-                                        <label nz-checkbox [nzValue]="data.id"
-                                             [(ngModel)]="data.checked"></label>
+                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"></label>
                                    </td>
                                    <td>
                                         {{data.ngayTao}}
@@ -97,24 +90,24 @@
                                         </div>
                                    </td>
                                    <td>
-                                        {{data.namPb}}
+                                        {{data.nam}}
                                    </td>
                                    <td [hidden]="status">
-                                        {{data.noiDung}}
+                                        {{data.ghiChu}}
                                    </td>
                                    <td>
                                         {{getStatusName(data.trangThai)}}
                                    </td>
-                                   <td [hidden]="!statusBtnSave">
-                                        <a
-                                             routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Xem</a>
+                                   <td>
+                                        <ng-container *ngIf="getStatusEdit(data.trangThai); else abc">
+                                             <i nz-icon nzType="eye" nzTheme="outline" (click)="xem(data.id)"></i>
+                                        </ng-container>
+                                        <ng-template #abc>
+                                             <i class="fa fa-pencil" (click)="xem(data.id)"></i>
+                                        </ng-template>
                                    </td>
-                                   <td [hidden]="statusBtnSave">
-                                        <a
-                                             routerLink="../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/{{data.id}}">Sửa</a>
-                                   </td>
-                                   <td [hidden]="statusBtnDel">
-                                        <a routerLink="#">Xóa</a>
+                                   <td>
+                                        <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                                    </td>
                               </tr>
                          </tbody>
@@ -145,8 +138,8 @@
                          <span>Tạo mới</span>
                     </button>
                     <button type="button" class="btn btn-sub">
-                         <i class="icon htvbdh_chuyen-xu-ly"></i>
-                         <span>Export</span>
+                         <i class="icon htvbdh_tcdt_import"></i>
+                         <span>Xuất</span>
                     </button>
                </ng-template>
           </div>

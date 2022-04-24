@@ -9,39 +9,31 @@ export const TAB_SELECTED = {
 
 export const KHOANMUCLIST = [
      {
-          maKmuc: "1",
-          tenKmuc: 'Khoản mục 1',
-          tieuDe: 'Kinh phí giao tự chủ',
-          status: false,
+          id: "504",
+          tenDm: "HOẠT ĐỘNG DỰ TRỮ QUỐC GIA (Khoản 331)",
      },
      {
-          maKmuc: "2",
-          tenKmuc: 'Khoản mục 2',
-          tieuDe: 'Quỹ lương',
-          status: false,
+          id: "582",
+          tenDm: "Kinh phí giao tự chủ",
      },
      {
-          maKmuc: "2.1",
-          tenKmuc: 'Khoản mục 2.1',
-          tieuDe: 'Chi phí quản lý hành chính theo hạn mức',
-          status: false,
+          id: "581",
+          tenDm: "Kinh phí thực hiện không tự chủ",
      },
      {
-          maKmuc:"2.2",
-          tenKmuc: 'Khoản mục 2.2',
-          tieuDe: 'Khác',
-          status: false,
-        },
-        {
-          maKmuc:"2.3",
-          tenKmuc: 'Khoản mục 2.3',
-          tieuDe: 'Chi hỗ trợ đảm bảo chi thường xuyên của đơn vị sự nghiệp',
-          status: false,
-        },
-        {
-          maKmuc:"2.4",
-          tenKmuc: 'Khoản mục 2.4',
-          tieuDe: 'Chi khác',
-          status: false,
-        },
+          id: "583",
+          tenDm: "Chi ứng dụng công nghệ thông tin",
+     },
+     {
+          id: "584",
+          tenDm: "Chi sửa chữa kho tàng và các đơn vị phụ trợ",
+     },
+     {
+          id: "585",
+          tenDm: "Chi bảo quản hàng dự trữ",
+     },
+     {
+          id: "586",
+          tenDm: "Chi khác",
+     },
 ]

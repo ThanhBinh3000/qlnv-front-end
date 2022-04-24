@@ -15,10 +15,10 @@ const routes: Routes = [
       ).then((m) => m.TimKiemBaoCaoThucHienVonPhiHangDTQGModule),
   },
   {
-    path: 'tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg',
+    path: 'tong-hop-bao-tu-chi-cuc',
     loadChildren: () =>
       import(
-        './tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG/tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.module'
+        './nhom-chuc-nang-khu-vuc/tong-hop-bao-cao/tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG/tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.module'
       ).then((m) => m.TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGModule),
   },
   {
@@ -32,8 +32,15 @@ const routes: Routes = [
     path: 'duyet-bao-cao-thuc-hien-von-phi-hang-dtqg',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-chi-cuc/duyet-bao-cao-thuc-hien-von-phi/duyet-bao-cao-thuc-hien-von-phi.module'
+        './nhom-chuc-nang-khu-vuc/duyet-bao-cao-thuc-hien-von-phi/duyet-bao-cao-thuc-hien-von-phi.module'
       ).then((m) => m.DuyetBaoCaoThucHienVonPhiModule),
+  },
+  {
+    path: 'kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc',
+    loadChildren: () =>
+      import(
+        './nhom-chuc-nang-khu-vuc/tong-hop-bao-cao/kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc/kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc.module'
+      ).then((m) => m.KiemTraTinhTrangPheDuyetBaoCaoTuChiCucModule),
   },
   {
     path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/:id',

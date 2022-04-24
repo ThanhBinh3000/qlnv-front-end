@@ -326,36 +326,6 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
-      element.tongCboN = mulMoney(element.tongCboN, this.maDviTien);
-      element.tongBcheDuocPdN = mulMoney(element.tongBcheDuocPdN, this.maDviTien);
-      element.tongQuyLuongCoTchatLuongN = mulMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
-      element.tuongCbanN = mulMoney(element.tuongCbanN, this.maDviTien);
-      element.phuCapN = mulMoney(element.phuCapN, this.maDviTien);
-      element.cacKhoanDgopN = mulMoney(element.cacKhoanDgopN, this.maDviTien);
-      element.tongCboThienN = mulMoney(element.tongCboThienN, this.maDviTien);
-      element.tongBcheDuocPdThienN = mulMoney(element.tongBcheDuocPdThienN, this.maDviTien);
-      element.tongQuyLuongCoTchatLuongThienN = mulMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
-      element.luongCbanThienN = mulMoney(element.luongCbanThienN, this.maDviTien);
-      element.phuCapThienN = mulMoney(element.phuCapThienN, this.maDviTien);
-      element.cacKhoanDgopThienN = mulMoney(element.cacKhoanDgopThienN, this.maDviTien);
-      element.tongCboN1 = mulMoney(element.tongCboN1, this.maDviTien);
-      element.tongBcheDuocPdN1 = mulMoney(element.tongBcheDuocPdN1, this.maDviTien);
-      element.tongQuyLuongCoTchatLuongN1 = mulMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
-      element.luongCbanN1 = mulMoney(element.luongCbanN1, this.maDviTien);
-      element.phuCapN1 = mulMoney(element.phuCapN1, this.maDviTien);
-      element.cacKhoanDgopN1 = mulMoney(element.cacKhoanDgopN1, this.maDviTien);
-      element.tongCboN2 = mulMoney(element.tongCboN2, this.maDviTien);
-      element.tongBcheDuocPdN2 = mulMoney(element.tongBcheDuocPdN2, this.maDviTien);
-      element.tongQuyLuongCoTchatLuongN2 = mulMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
-      element.luongCbanN2 = mulMoney(element.luongCbanN2, this.maDviTien);
-      element.phuCapN2 = mulMoney(element.phuCapN2, this.maDviTien);
-      element.cacKhoanDgopN2 = mulMoney(element.cacKhoanDgopN2, this.maDviTien);
-      element.tongCboN3 = mulMoney(element.tongCboN3, this.maDviTien);
-      element.tongBcheDuocPdN3 = mulMoney(element.tongBcheDuocPdN3, this.maDviTien);
-      element.tongQuyLuongCoTchatLuongN3 = mulMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
-      element.luongCbanN3 = mulMoney(element.luongCbanN3, this.maDviTien);
-      element.phuCapN3 = mulMoney(element.phuCapN3, this.maDviTien);
-      element.cacKhoanDgopN3 = mulMoney(element.cacKhoanDgopN3, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
@@ -364,6 +334,8 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
+    this.mulMoneyTotal()
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -403,10 +375,12 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -418,9 +392,11 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
+        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -493,38 +469,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
             this.status = true;
           }
           this.maDviTien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.tongCboN = divMoney(element.tongCboN, this.maDviTien);
-            element.tongBcheDuocPdN = divMoney(element.tongBcheDuocPdN, this.maDviTien);
-            element.tongQuyLuongCoTchatLuongN = divMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
-            element.tuongCbanN = divMoney(element.tuongCbanN, this.maDviTien);
-            element.phuCapN = divMoney(element.phuCapN, this.maDviTien);
-            element.cacKhoanDgopN = divMoney(element.cacKhoanDgopN, this.maDviTien);
-            element.tongCboThienN = divMoney(element.tongCboThienN, this.maDviTien);
-            element.tongBcheDuocPdThienN = divMoney(element.tongBcheDuocPdThienN, this.maDviTien);
-            element.tongQuyLuongCoTchatLuongThienN = divMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
-            element.luongCbanThienN = divMoney(element.luongCbanThienN, this.maDviTien);
-            element.phuCapThienN = divMoney(element.phuCapThienN, this.maDviTien);
-            element.cacKhoanDgopThienN = divMoney(element.cacKhoanDgopThienN, this.maDviTien);
-            element.tongCboN1 = divMoney(element.tongCboN1, this.maDviTien);
-            element.tongBcheDuocPdN1 = divMoney(element.tongBcheDuocPdN1, this.maDviTien);
-            element.tongQuyLuongCoTchatLuongN1 = divMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
-            element.luongCbanN1 = divMoney(element.luongCbanN1, this.maDviTien);
-            element.phuCapN1 = divMoney(element.phuCapN1, this.maDviTien);
-            element.cacKhoanDgopN1 = divMoney(element.cacKhoanDgopN1, this.maDviTien);
-            element.tongCboN2 = divMoney(element.tongCboN2, this.maDviTien);
-            element.tongBcheDuocPdN2 = divMoney(element.tongBcheDuocPdN2, this.maDviTien);
-            element.tongQuyLuongCoTchatLuongN2 = divMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
-            element.luongCbanN2 = divMoney(element.luongCbanN2, this.maDviTien);
-            element.phuCapN2 = divMoney(element.phuCapN2, this.maDviTien);
-            element.cacKhoanDgopN2 = divMoney(element.cacKhoanDgopN2, this.maDviTien);
-            element.tongCboN3 = divMoney(element.tongCboN3, this.maDviTien);
-            element.tongBcheDuocPdN3 = divMoney(element.tongBcheDuocPdN3, this.maDviTien);
-            element.tongQuyLuongCoTchatLuongN3 = divMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
-            element.luongCbanN3 = divMoney(element.luongCbanN3, this.maDviTien);
-            element.phuCapN3 = divMoney(element.phuCapN3, this.maDviTien);
-            element.cacKhoanDgopN3 = divMoney(element.cacKhoanDgopN3, this.maDviTien);
-          });
+          this.divMoneyTotal()
 
           this.listFile=[]
 
@@ -718,6 +663,10 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maDvi){
+			this.deleteById(id);
+			return;
+		}
     if (!this.editCache[id].data.maDvi){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -764,13 +713,14 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       (!this.editCache[id].data.phuCapN3 && this.editCache[id].data.phuCapN3 ===0) ||
       (!this.editCache[id].data.cacKhoanDgopN3 && this.editCache[id].data.cacKhoanDgopN3 ===0)
     ){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
+    }else{
+      const index = this.lstCTietBCao.findIndex(item => item.id === id);
+      this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
+      Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
+      this.editCache[id].edit = false;
     }
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked;
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
   }
 
   updateEditCache(): void {
@@ -835,12 +785,163 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       }
     }
       // action copy
-  doCopy(){
+  async doCopy() {
+    this.spinner.show();
 
+    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          return data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          return null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        return null;
+      }
+    );
+    if (!maBaoCao) {
+      return;
+    }
+    this.mulMoneyTotal();
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
+    let request = {
+      id: null,
+      listIdDeletes: null,
+      fileDinhKems: null,
+      listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N,
+      namHienHanh: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
+      soVban: null,
+    };
+
+    //call service them moi
+    this.spinner.show();
+    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          this.id = data.data.id;
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.divMoneyTotal();
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.divMoneyTotal();
+      },
+    );
+
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+
+    this.updateEditCache();
+    this.spinner.hide();
   }
 
   // action print
-  doPrint(){
-
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.tongCboN = divMoney(element.tongCboN, this.maDviTien);
+      element.tongBcheDuocPdN = divMoney(element.tongBcheDuocPdN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN = divMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+      element.tuongCbanN = divMoney(element.tuongCbanN, this.maDviTien);
+      element.phuCapN = divMoney(element.phuCapN, this.maDviTien);
+      element.cacKhoanDgopN = divMoney(element.cacKhoanDgopN, this.maDviTien);
+      element.tongCboThienN = divMoney(element.tongCboThienN, this.maDviTien);
+      element.tongBcheDuocPdThienN = divMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongThienN = divMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+      element.luongCbanThienN = divMoney(element.luongCbanThienN, this.maDviTien);
+      element.phuCapThienN = divMoney(element.phuCapThienN, this.maDviTien);
+      element.cacKhoanDgopThienN = divMoney(element.cacKhoanDgopThienN, this.maDviTien);
+      element.tongCboN1 = divMoney(element.tongCboN1, this.maDviTien);
+      element.tongBcheDuocPdN1 = divMoney(element.tongBcheDuocPdN1, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN1 = divMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
+      element.luongCbanN1 = divMoney(element.luongCbanN1, this.maDviTien);
+      element.phuCapN1 = divMoney(element.phuCapN1, this.maDviTien);
+      element.cacKhoanDgopN1 = divMoney(element.cacKhoanDgopN1, this.maDviTien);
+      element.tongCboN2 = divMoney(element.tongCboN2, this.maDviTien);
+      element.tongBcheDuocPdN2 = divMoney(element.tongBcheDuocPdN2, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN2 = divMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+      element.luongCbanN2 = divMoney(element.luongCbanN2, this.maDviTien);
+      element.phuCapN2 = divMoney(element.phuCapN2, this.maDviTien);
+      element.cacKhoanDgopN2 = divMoney(element.cacKhoanDgopN2, this.maDviTien);
+      element.tongCboN3 = divMoney(element.tongCboN3, this.maDviTien);
+      element.tongBcheDuocPdN3 = divMoney(element.tongBcheDuocPdN3, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN3 = divMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+      element.luongCbanN3 = divMoney(element.luongCbanN3, this.maDviTien);
+      element.phuCapN3 = divMoney(element.phuCapN3, this.maDviTien);
+      element.cacKhoanDgopN3 = divMoney(element.cacKhoanDgopN3, this.maDviTien);
+    });
+  }
+  mulMoneyTotal() {
+    this.lstCTietBCao.filter(element => {
+      element.tongCboN = mulMoney(element.tongCboN, this.maDviTien);
+      element.tongBcheDuocPdN = mulMoney(element.tongBcheDuocPdN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN = mulMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+      element.tuongCbanN = mulMoney(element.tuongCbanN, this.maDviTien);
+      element.phuCapN = mulMoney(element.phuCapN, this.maDviTien);
+      element.cacKhoanDgopN = mulMoney(element.cacKhoanDgopN, this.maDviTien);
+      element.tongCboThienN = mulMoney(element.tongCboThienN, this.maDviTien);
+      element.tongBcheDuocPdThienN = mulMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongThienN = mulMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+      element.luongCbanThienN = mulMoney(element.luongCbanThienN, this.maDviTien);
+      element.phuCapThienN = mulMoney(element.phuCapThienN, this.maDviTien);
+      element.cacKhoanDgopThienN = mulMoney(element.cacKhoanDgopThienN, this.maDviTien);
+      element.tongCboN1 = mulMoney(element.tongCboN1, this.maDviTien);
+      element.tongBcheDuocPdN1 = mulMoney(element.tongBcheDuocPdN1, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN1 = mulMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
+      element.luongCbanN1 = mulMoney(element.luongCbanN1, this.maDviTien);
+      element.phuCapN1 = mulMoney(element.phuCapN1, this.maDviTien);
+      element.cacKhoanDgopN1 = mulMoney(element.cacKhoanDgopN1, this.maDviTien);
+      element.tongCboN2 = mulMoney(element.tongCboN2, this.maDviTien);
+      element.tongBcheDuocPdN2 = mulMoney(element.tongBcheDuocPdN2, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN2 = mulMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+      element.luongCbanN2 = mulMoney(element.luongCbanN2, this.maDviTien);
+      element.phuCapN2 = mulMoney(element.phuCapN2, this.maDviTien);
+      element.cacKhoanDgopN2 = mulMoney(element.cacKhoanDgopN2, this.maDviTien);
+      element.tongCboN3 = mulMoney(element.tongCboN3, this.maDviTien);
+      element.tongBcheDuocPdN3 = mulMoney(element.tongBcheDuocPdN3, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongN3 = mulMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+      element.luongCbanN3 = mulMoney(element.luongCbanN3, this.maDviTien);
+      element.phuCapN3 = mulMoney(element.phuCapN3, this.maDviTien);
+      element.cacKhoanDgopN3 = mulMoney(element.cacKhoanDgopN3, this.maDviTien);
+    });
   }
 }

@@ -153,7 +153,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.maDonViTao = this.userInfo?.dvql;
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -172,7 +172,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.nguoiNhap = this.userInfo?.username;
 			this.maDonViTao = this.userInfo?.dvql;
 			this.spinner.show();
-			this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
+			this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 				(data) => {
 					if (data.statusCode == 0) {
 						this.maBaoCao = data.data;
@@ -189,7 +189,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		}
 
 		//get danh muc noi dung
-		this.danhMucService.dMVatTu().toPromise().then(
+		this.danhMucService.dMThietBi().toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.listMachitieu = data.data?.content;
@@ -294,9 +294,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		//check xem tat ca cac dong du lieu da luu chua?
 		//chua luu thi bao loi, luu roi thi cho di
 		this.lstCTietBCao.filter(element => {
-			element.n1 = mulMoney(element.n1, this.maDviTien);
-			element.n2 = mulMoney(element.n2, this.maDviTien);
-			element.n3 = mulMoney(element.n3, this.maDviTien);
 			if (this.editCache[element.id].edit === true) {
 				checkSaveEdit = false
 			}
@@ -305,6 +302,8 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
+		this.mullMoneyTotal();
+
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -341,10 +340,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -356,9 +357,11 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
+						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
+					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 
@@ -415,11 +418,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
-					this.lstCTietBCao.filter(element => {
-						element.n1 = divMoney(element.n1, this.maDviTien);
-						element.n2 = divMoney(element.n2, this.maDviTien);
-						element.n3 = divMoney(element.n3, this.maDviTien);
-					});
+					this.divMoneyTotal();
 					if (this.lstCTietBCao.length != null) {
 						this.updateEditCache();
 					}
@@ -452,7 +451,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						})
 					}
 
-					
+
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -614,7 +613,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 
 	// huy thay doi
 	cancelEdit(id: string): void {
-		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		const index = this.lstCTietBCao.findIndex(item => item.id === id);
+		if (!this.lstCTietBCao[index].maTbi) {
+			this.deleteById(id);
+			return;
+		}
+		// lay vi tri hang minh sua
 		this.editCache[id] = {
 			data: { ...this.lstCTietBCao[index] },
 			edit: false
@@ -701,14 +705,114 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		}
 	}
 
+	divMoneyTotal() {
+		this.lstCTietBCao.forEach(element => {
+			element.n1 = divMoney(element.n1, this.maDviTien);
+			element.n2 = divMoney(element.n2, this.maDviTien);
+			element.n3 = divMoney(element.n3, this.maDviTien);
+		});
+	}
+
+	mullMoneyTotal() {
+		this.lstCTietBCao.forEach(element => {
+			element.n1 = mulMoney(element.n1, this.maDviTien);
+			element.n2 = mulMoney(element.n2, this.maDviTien);
+			element.n3 = mulMoney(element.n3, this.maDviTien);
+		});
+	}
+
 	// action copy
-	doCopy(){
-    
+	async doCopy() {
+		this.spinner.show();
+
+		let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					return data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					return null;
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				return null;
+			}
+		);
+		if (!maBaoCao) {
+			return;
+		}
+		this.mullMoneyTotal();
+		// replace nhung ban ghi dc them moi id thanh null
+		this.lstCTietBCao.filter(item => {
+			if (typeof item.id != "number") {
+				item.id = null;
+			}
+		})
+		let request = {
+			id: null,
+			listIdDeletes: null,
+			fileDinhKems: null,
+			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+			lstCTietBCao: this.lstCTietBCao,
+			maBcao: maBaoCao,
+			maDvi: this.maDonViTao,
+			maDviTien: this.maDviTien,
+			maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N,
+			namHienHanh: this.namBaoCaoHienHanh,
+			namBcao: this.namBaoCaoHienHanh + 1,
+			soVban: null,
+		};
+
+		//call service them moi
+		this.spinner.show();
+		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+					this.id = data.data.id;
+					await this.getDetailReport();
+					this.getStatusButton();
+					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/' + this.id);
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+					this.divMoneyTotal();
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				this.divMoneyTotal();
+			},
+		);
+
+		this.lstCTietBCao.filter(item => {
+			if (!item.id) {
+				item.id = uuid.v4();
+			}
+		});
+
+		this.updateEditCache();
+		this.spinner.hide();
 	}
-  
+
 	// action print
-	doPrint(){
-	  
+	doPrint() {
+		let WindowPrt = window.open(
+			'',
+			'',
+			'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+		);
+		let printContent = '';
+		printContent = printContent + '<div>';
+		printContent =
+			printContent + document.getElementById('tablePrint').innerHTML;
+		printContent = printContent + '</div>';
+		WindowPrt.document.write(printContent);
+		WindowPrt.document.close();
+		WindowPrt.focus();
+		WindowPrt.print();
+		WindowPrt.close();
 	}
+
 
 }

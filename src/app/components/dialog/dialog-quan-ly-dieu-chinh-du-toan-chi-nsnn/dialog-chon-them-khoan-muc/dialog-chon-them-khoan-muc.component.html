@@ -1,0 +1,55 @@
+<div class="modal__content">
+	<div class="tab__container">
+		<nz-tabset nzType="card" class="tab__container">
+			<nz-tab [nzTitle]="'Chi tiết của phân bổ dự toán chi đã giao'">
+				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+
+				</div>
+				<nz-table nzBordered class="table__body">
+					<thead>
+						<tr>
+							<th nzWidth="10%">Chọn</th>
+							<th nzWidth="15%">Tên loại, Khoản</th>
+							<th nzWidth="50%">Nội dung</th>
+							<th nzWidth="25%">
+								Dự toán giao
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let data of lstCTietBCao; let i = index">
+							<td>
+								<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"></label>
+							</td>
+							<td>
+								{{data.tenLoaiKhoan}}
+							</td>
+							<td>
+								{{getKmName(data.maNdung)}}
+							</td>
+							<td>
+								{{data.dtoanGiao}}
+							</td>
+						</tr>
+					</tbody>
+				</nz-table>
+			</nz-tab>
+		</nz-tabset>
+	</div>
+</div>
+<div class="modal-footer">
+	<div class="nut">
+		<div class="cantrai">
+		</div>
+		<div class="canphai">
+			<button nz-button (click)="handleOk()" class="modal__button--save">
+				<i class="icon htvbdh_tcdt_save"></i>
+				Chọn
+			</button>
+			<button nz-button (click)="handleCancel()" class="modal__button--cancel">
+				<i nz-icon nzType="close"></i>
+				Đóng
+			</button>
+		</div>
+	</div>
+</div>

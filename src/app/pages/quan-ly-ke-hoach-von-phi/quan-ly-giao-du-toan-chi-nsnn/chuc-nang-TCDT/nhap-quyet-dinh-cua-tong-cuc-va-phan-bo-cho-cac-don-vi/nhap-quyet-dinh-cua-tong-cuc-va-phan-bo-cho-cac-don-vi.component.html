@@ -24,7 +24,7 @@
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()" >
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -80,35 +80,28 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle=" Căn cứ q/đ BTC">
-                <!-- <input class="search__input" nz-input [(ngModel)]="qDinhBTC" /> -->
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="qDinhBTC">
-                <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-              </nz-select>
+                {{soQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayQdBTC}}
+                {{ngayQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
-                <form nz-form  [formGroup]="validateForm" class="login-form" >
-                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input type="number" nz-input  [(ngModel)]="nam"  formControlName="nam"/>
-                  </nz-form-control>
-                </form>
+                {{namQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
                 {{nguoiKyBTC}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Số quyết định">
-                {{soQd}}
+                <input class="search__input" nz-input [(ngModel)]="soQd"  />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayQdTC}}
+                <!-- <input class="search__input" nz-input [(ngModel)]="ngayQd"  /> -->
+                  <nz-date-picker [(ngModel)]="ngayQd" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
                 <input class="search__input" nz-input [(ngModel)]="nam" />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
-                {{nguoiKyTC}}
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC">
                   <nz-option *ngFor="let item of nguoiKyTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                 </nz-select>
@@ -127,19 +120,21 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Nhập quyết định của Tổng Cục và phân bổ cho các đơn vị'">
             <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
-              <div nz-col nzSpan="6" >
+              <div nz-col nzSpan="6">
                 <label class="search__label">Đ/v thực hiện:</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao">
-                  <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao"
+                  (ngModelChange)="changeMaCucKhuVuc($event)">
+                  <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                  </nz-option>
                 </nz-select>
               </div>
               <div nz-col nzSpan="6">
-                <label class="search__label" >Mã ngân sách:</label>
-                <input class="search__input" nz-input [(ngModel)]="maNganSach" />
+                <label class="search__label">Mã ngân sách:</label>
+                <input class="search__input" nz-input [(ngModel)]="maNganSach" disabled />
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Mã số KBNN</label>
-                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" disabled />
               </div>
               <div nz-col nzSpan="6">
                 <label class="search__label">Trạng thái</label>
@@ -186,7 +181,7 @@
                       {{data.stt}}
                     </td>
                     <div>
-                      {{data.maNdung}}
+                      {{getNameContent(data.maNdung)}}
                     </div>
                     <td>{{data.uocThucHienNam}}</td>
                     <td>{{data.duToanGiao2021}}</td>
@@ -202,9 +197,6 @@
                     </td>
                     <td>
                       {{editCache[data.id].data.maNdung}}
-                    </td>
-                    <td>
-                           {{editCache[data.id].data.tong}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
@@ -231,9 +223,6 @@
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                         class="save">Cancel</a>
                     </td>
-                    <!-- <td [hidden]="status">
-                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                    </td> -->
                   </ng-template>
                 </tr>
                 <tr>

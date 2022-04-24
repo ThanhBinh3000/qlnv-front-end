@@ -120,6 +120,20 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  tongqdDuyetDanDtuTongVon: number;
+  tongqdDuyetTkDtoanXl: number;
+  tongklthCapDen3006Nstt: number;
+  tongklthCapDen3006DtoanChiTx: number;
+  tongklthCapDen3112Nstt: number;
+  tongklthCapDen3112DtoanChiTx: number;
+  tongqdDchinhDanDtuTongVon: number;
+  tongqdDuyetTkDtoanTb: number;
+  tongqdDuyetTkDtoanCk: number;
+  tongklthCapDen3006Quykhac: number;
+  tongklthCapDen3112Quykhac: number;
+  tongncauVonN1: number;
+  tongncauVonN2: number;
+  tongncauVonN3: number;
 
   // upload file
   addFile() {
@@ -365,24 +379,18 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
     this.lstCTietBCao.filter(element => {
-      element.qdDuyetDanDtuTongVon = mulMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
-      element.qdDchinhDanDtuTongVon = mulMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
-      element.qdDuyetTkDtoanXl = mulMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
-      element.qdDuyetTkDtoanTb = mulMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
-      element.qdDuyetTkDtoanCk = mulMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
-      element.klthCapDen3006Nstt = mulMoney(element.klthCapDen3006Nstt, this.maDviTien);
-      element.klthCapDen3006DtoanChiTx = mulMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
-      element.klthCapDen3112Nstt = mulMoney(element.klthCapDen3112Nstt, this.maDviTien);
-      element.klthCapDen3112DtoanChiTx = mulMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
       if (this.editCache[element.id].edit === true) {
         checkSaveEdit = false
       }
     });
+
+
     if (checkSaveEdit == false) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
 
+    this.mulMoneyTotal()
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -422,10 +430,12 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
+            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -436,9 +446,11 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           await this.getDetailReport();
             this.getStatusButton();
         } else {
+          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       }, err => {
+        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -501,17 +513,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.soVban = data.data.soVban;
           this.maDviTien = data.data.maDviTien;
-          this.lstCTietBCao.filter(element => {
-            element.qdDuyetDanDtuTongVon = divMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
-            element.qdDchinhDanDtuTongVon = divMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
-            element.qdDuyetTkDtoanXl = divMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
-            element.qdDuyetTkDtoanTb = divMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
-            element.qdDuyetTkDtoanCk = divMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
-            element.klthCapDen3006Nstt = divMoney(element.klthCapDen3006Nstt, this.maDviTien);
-            element.klthCapDen3006DtoanChiTx = divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
-            element.klthCapDen3112Nstt = divMoney(element.klthCapDen3112Nstt, this.maDviTien);
-            element.klthCapDen3112DtoanChiTx = divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
-          });
+          this.divMoneyTotal()
+          this.changeTong()
           this.listFile=[]
 
 
@@ -703,6 +706,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
+    if (!this.lstCTietBCao[id].maKhoach){
+			this.deleteById(id);
+			return;
+		}
     if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -750,6 +757,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+      this.changeTong()
     }
   }
 
@@ -786,6 +794,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   },err =>{
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
   });
+  this.changeTong()
   this.updateEditCache()
   this.spinner.hide();
   }
@@ -806,13 +815,155 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
       }
     }
-     // action copy
-  doCopy(){
+    // action copy
+  async doCopy() {
+    this.spinner.show();
 
+    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          return data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          return null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        return null;
+      }
+    );
+    if (!maBaoCao) {
+      return;
+    }
+    this.mulMoneyTotal();
+    // replace nhung ban ghi dc them moi id thanh null
+    this.lstCTietBCao.filter(item => {
+      if (typeof item.id != "number") {
+        item.id = null;
+      }
+    })
+    let request = {
+      id: null,
+      listIdDeletes: null,
+      fileDinhKems: null,
+      listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCTietBCao: this.lstCTietBCao,
+      maBcao: maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_DM_VONDT_XDCBGD3N,
+      namHienHanh: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
+      soVban: null,
+    };
+
+    //call service them moi
+    this.spinner.show();
+    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          this.id = data.data.id;
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.divMoneyTotal();
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.divMoneyTotal();
+      },
+    );
+
+    this.lstCTietBCao.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
+      }
+    });
+
+    this.updateEditCache();
+    this.spinner.hide();
   }
 
   // action print
-  doPrint(){
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
+  divMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.qdDuyetDanDtuTongVon = divMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
+      element.qdDchinhDanDtuTongVon = divMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+      element.qdDuyetTkDtoanXl = divMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
+      element.qdDuyetTkDtoanTb = divMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
+      element.qdDuyetTkDtoanCk = divMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
+      element.klthCapDen3006Nstt = divMoney(element.klthCapDen3006Nstt, this.maDviTien);
+      element.klthCapDen3006DtoanChiTx = divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
+      element.klthCapDen3112Nstt = divMoney(element.klthCapDen3112Nstt, this.maDviTien);
+      element.klthCapDen3112DtoanChiTx = divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+    });
+  }
 
+  mulMoneyTotal(){
+    this.lstCTietBCao.filter(element => {
+      element.qdDuyetDanDtuTongVon = mulMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
+      element.qdDchinhDanDtuTongVon = mulMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+      element.qdDuyetTkDtoanXl = mulMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
+      element.qdDuyetTkDtoanTb = mulMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
+      element.qdDuyetTkDtoanCk = mulMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
+      element.klthCapDen3006Nstt = mulMoney(element.klthCapDen3006Nstt, this.maDviTien);
+      element.klthCapDen3006DtoanChiTx = mulMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
+      element.klthCapDen3112Nstt = mulMoney(element.klthCapDen3112Nstt, this.maDviTien);
+      element.klthCapDen3112DtoanChiTx = mulMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+    });
+  }
+  changeTong(){
+    this.tongqdDuyetDanDtuTongVon = 0
+    this.tongqdDchinhDanDtuTongVon = 0
+    this.tongqdDuyetTkDtoanXl = 0
+    this.tongqdDuyetTkDtoanTb = 0
+    this.tongqdDuyetTkDtoanCk = 0
+    this.tongklthCapDen3006Nstt = 0
+    this.tongklthCapDen3006DtoanChiTx = 0
+    this.tongklthCapDen3006Quykhac = 0
+    this.tongklthCapDen3112Nstt = 0
+    this.tongklthCapDen3112DtoanChiTx = 0
+    this.tongklthCapDen3112Quykhac = 0
+    this.tongncauVonN1 = 0
+    this.tongncauVonN2 = 0
+    this.tongncauVonN3 = 0
+    this.lstCTietBCao.forEach(e => {
+      this.tongqdDuyetDanDtuTongVon += e.qdDuyetDanDtuTongVon
+      this.tongqdDchinhDanDtuTongVon += e.qdDchinhDanDtuTongVon
+      this.tongqdDuyetTkDtoanXl += e.qdDuyetTkDtoanXl
+      this.tongqdDuyetTkDtoanTb += e.qdDuyetTkDtoanTb
+      this.tongqdDuyetTkDtoanCk += e.qdDuyetTkDtoanCk
+      this.tongklthCapDen3006Nstt += e.klthCapDen3006Nstt
+      this.tongklthCapDen3006DtoanChiTx += e.klthCapDen3006DtoanChiTx
+      this.tongklthCapDen3006Quykhac += e.klthCapDen3006Quykhac
+      this.tongklthCapDen3112Nstt += e.klthCapDen3112Nstt
+      this.tongklthCapDen3112DtoanChiTx += e.klthCapDen3112DtoanChiTx
+      this.tongklthCapDen3112Quykhac += e.klthCapDen3112Quykhac
+      this.tongncauVonN1 += e.ncauVonN1
+      this.tongncauVonN2 += e.ncauVonN2
+      this.tongncauVonN3 += e.ncauVonN3
+    })
   }
 }
