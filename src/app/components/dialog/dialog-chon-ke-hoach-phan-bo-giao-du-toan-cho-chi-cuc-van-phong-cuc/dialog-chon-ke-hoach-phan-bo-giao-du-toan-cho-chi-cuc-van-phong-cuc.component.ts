@@ -110,12 +110,12 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
           this.maQdCha = data.data.qdCha.id
           this.soQdCha = data.data.qdCha.soQd
           this.ngayQdCha =this.datePipe.transform( data.data.qdCha.ngayQd , Utils.FORMAT_DATE_STR,)
-
           this.namQdCha = data.data.qdCha.nam
           this.ngayQd = data.data.ngayQd
           this.nam = data.data.nam
           this.nguoiKyBTC = data.data.nguoiKyBTC
           this.maDvi = data.data.maDvi
+          this.danhSachKhoanMuc = data.data.lstCtiet
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

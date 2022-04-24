@@ -24,7 +24,6 @@ export class ItemData {
   duToanGiao2021!: number;
   duToanDapBo!: number;
   pBoChoDviTT!: number;
-  tong!: number;
   checked!:boolean;
   id!: any;
 }
@@ -97,7 +96,6 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     duToanDapBo: 0,
     duToanGiao2021: 0,
     pBoChoDviTT: 0,
-    tong: 0,
     checked: true,
   };
   khoanMucs: any = [];
@@ -127,6 +125,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
   soQdCha: any;
   ngayQdCha: any;
   namQdCha: any;
+  loaiQd: string;
 
   // upload file
   addFile() {
@@ -300,25 +299,45 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
 
     // gui du lieu trinh duyet len server
     let request = {
+      // id: this.id,
+      // fileDinhKems: listFile,
+      // listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      // lstCtiet: this.lstCTietBCao,
+      // maBcao: this.maBaoCao,
+      // // maDvi: this.maDonViTao,
+      // maDvi: this.maDonViTao,
+      // maDviTien: this.maDviTien,
+      // soQdCha: this.soQdCha,
+      // ngayQd: this.ngayQd,
+      // noiQd: "12",
+      // nguoiKyTC: this.nguoiKyTC,
+      // trangThai: this.trangThaiBanGhi,
+      // vanBan: this.vanBan,
+      // veViec: this.veViec,
+
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: this.lstCTietBCao,
-      maBcao: this.maBaoCao,
-      // maDvi: this.maDonViTao,
+      loaiQd: this.loaiQd = "2",
+      lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      ngayQd: this.ngayQd,
-      noiQd: "12",
+      maDviTien: "01",
+      maNguoiKy: this.nguoiKy,
+      maQdCha: this.maQdCha,
+      nam: this.nam,
+      ngayQD: this.ngayQd,
+      // noiDung: "1",
       soQd: this.soQd,
-      trangThai: this.trangThaiBanGhi,
+      trangThai: "1",
       vanBan: this.vanBan,
+      veViec: this.veViec,
     };
 
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetGiaoService(request).subscribe(
         data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -450,7 +469,6 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
       duToanGiao2021: 0,
       duToanDapBo: 0,
       pBoChoDviTT: 0,
-      tong: 0,
       id: uuid.v4(),
       checked:false,
     }
@@ -627,44 +645,47 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
         this.nguoiKyBTC = res.nguoiKyBTC
         this.changeMaCucKhuVuc(res.maDvi)
          if (res) {
-           this.maKhoanMucs.forEach(e => {
-             if(res.id == e.id){
-                 return res.id = e.tenDm
-                }
-              })
-              console.log(res);
-          this.lstCTietBCao.push({
-            id: uuid.v4(),
-            stt: "I",
-            maNdung: res.id,
-            uocThucHienNam: 0,
-            duToanGiao2021: 0,
-            duToanDapBo: 0,
-            pBoChoDviTT: 0,
-            tong: 0,
-            checked: false,
-          });
               res.danhSachKhoanMuc.forEach(item => {
-                   if (item.status) {
-                        this.lstCTietBCao.push({
-                             id: uuid.v4(),
-                             stt: "",
-                             maNdung: item.tenDm,
-                             uocThucHienNam: 0,
-                             duToanGiao2021: 0,
-                             duToanDapBo: 0,
-                             pBoChoDviTT: 0,
-                             tong: 0,
-                             checked: false,
-                        });
-                   }
+                this.lstCTietBCao.push({
+                      id: uuid.v4(),
+                      stt: item.tenLoaiKhoan,
+                      maNdung: item.maNdung,
+                      uocThucHienNam: item.uocThien,
+                      duToanGiao2021: item.dtoanGiao,
+                      duToanDapBo: item.dtoanDaPbo,
+                      pBoChoDviTT: item.pboChoCacDvi,
+                      checked: false,
+                });
               })
+              let requestReport = {
+                id: this.lstCTietBCao[0].maNdung,
+              };
+              this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
+                (data) => {
+                  if (data.statusCode == 0) {
+                    var tempArr = data.data;
+                    tempArr.forEach(e =>{
+                      this.maKhoanMucs.push(e);
+                      e.lstQlnvDmKhoachVonPhi.forEach( el => {
+                        this.maKhoanMucs.push(el);
+                      })
+                    })
+                  } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                  }
+                },
+                (err) => {
+                  this.notification.error(MESSAGE.ERROR, err?.msg);
+                }
+              );
               this.updateEditCache();
          }
-
     });
 }
 
+  getNameContent(id: any):string{
+    return this.maKhoanMucs.find( item => item.id ==id )?.thongTin;
+  }
   changeTong(id: string): void {
     let index = this.lstCTietBCao.findIndex(item => item.id == id);
     // this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;

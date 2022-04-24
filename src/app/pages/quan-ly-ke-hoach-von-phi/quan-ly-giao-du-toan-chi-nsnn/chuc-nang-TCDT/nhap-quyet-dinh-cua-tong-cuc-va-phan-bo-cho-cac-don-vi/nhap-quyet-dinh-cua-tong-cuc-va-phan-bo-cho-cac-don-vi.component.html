@@ -24,7 +24,7 @@
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()" >
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -80,7 +80,7 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle=" Căn cứ q/đ BTC">
-                  {{soQdCha}}
+                {{soQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
                 {{ngayQdCha}}
@@ -95,7 +95,8 @@
                 <input class="search__input" nz-input [(ngModel)]="soQd"  />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                <input class="search__input" nz-input [(ngModel)]="ngayQdTC"  />
+                <!-- <input class="search__input" nz-input [(ngModel)]="ngayQd"  /> -->
+                  <nz-date-picker [(ngModel)]="ngayQd" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
                 <input class="search__input" nz-input [(ngModel)]="nam" />
@@ -180,7 +181,7 @@
                       {{data.stt}}
                     </td>
                     <div>
-                      {{data.maNdung}}
+                      {{getNameContent(data.maNdung)}}
                     </div>
                     <td>{{data.uocThucHienNam}}</td>
                     <td>{{data.duToanGiao2021}}</td>
@@ -196,9 +197,6 @@
                     </td>
                     <td>
                       {{editCache[data.id].data.maNdung}}
-                    </td>
-                    <td>
-                           {{editCache[data.id].data.tong}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
@@ -225,9 +223,6 @@
                       <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                         class="save">Cancel</a>
                     </td>
-                    <!-- <td [hidden]="status">
-                      <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                    </td> -->
                   </ng-template>
                 </tr>
                 <tr>
