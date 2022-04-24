@@ -91,6 +91,7 @@ import { DialogCanhBaoComponent } from './dialog/dialog-canh-bao/dialog-canh-bao
 import { DialogThongTinLenhNhapKhoComponent } from './dialog/dialog-thong-tin-lenh-nhap-kho/dialog-thong-tin-lenh-nhap-kho.component';
 import { DialogThongTinKeLotBaoQuanBanDauComponent } from './dialog/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau.component';
 import { DialogBaoCaoBienBanNghiemThuKeLotComponent } from './dialog/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot.component';
+import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
 
 @NgModule({
   declarations: [
