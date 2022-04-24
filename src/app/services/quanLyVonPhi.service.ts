@@ -412,6 +412,7 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+
   // trinh duyet
   timKiemGiaoPhanBo(request: any): Observable<any> {
     return this.httpClient.post(
@@ -426,6 +427,7 @@ export class QuanLyVonPhiService extends BaseService {
       'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
     );
   }
+
   // tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)
   timKiemDuyetBaoCao(request:any):Observable<any>{
     // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tim-kiem-thong-tin-phe-duyet', request);
@@ -436,5 +438,5 @@ export class QuanLyVonPhiService extends BaseService {
   taoMaBaoCao():Observable<any>{
     return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma-bcao');
   } 
-  
+
 }
