@@ -48,6 +48,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     },
     str: '',
     donVi:'',
+    maPhanBcao:'0'
   };
 
 
