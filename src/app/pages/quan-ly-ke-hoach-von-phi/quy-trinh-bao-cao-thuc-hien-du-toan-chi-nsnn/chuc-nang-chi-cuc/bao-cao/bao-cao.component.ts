@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { Utils } from 'src/app/Utility/utils';
+import { DONVITIEN, Utils } from 'src/app/Utility/utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { TAB_SELECTED, PHULUCLIST, } from './bao-cao.constant';
 import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
@@ -178,6 +178,8 @@ export class BaoCaoComponent implements OnInit {
   errorMessage = "";
   url!: string;
   id!: any;                                   // id truyen tu router
+  loaiBaoCao!: any;                           // loai bao cao (thang/nam)
+
 
   pages = {
     size: 10,
@@ -192,7 +194,7 @@ export class BaoCaoComponent implements OnInit {
   nhomChis: any = [];                          // danh muc nhom chi
   loaiChis: any = [];                          // danh muc loai chi
   donVis: any = [];                            // danh muc don vi
-  donViTiens: any = [];                        // danh muc don vi tien
+  donViTiens: any = DONVITIEN;                        // danh muc don vi tien
   lstFile: any = [];                          // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
@@ -215,6 +217,8 @@ export class BaoCaoComponent implements OnInit {
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
+  statusBtnCopy: boolean;                      // trang thai copy
+  statusBtnPrint: boolean;                     // trang thai print
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -247,6 +251,7 @@ export class BaoCaoComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -266,8 +271,11 @@ export class BaoCaoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
-      this.baoCao.namBcao = new Date().getFullYear();
-      this.baoCao.thangBcao = new Date().getMonth();
+      this.baoCao.maLoaiBcao = this.routerActive.snapshot.paramMap.get('loaiBaoCao');
+      this.baoCao.namBcao = Number(this.routerActive.snapshot.paramMap.get('nam'));
+      this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang'));
+      // this.baoCao.namBcao = new Date().getFullYear();
+      // this.baoCao.thangBcao = new Date().getMonth();
       this.baoCao.ngayTao = new Date().toDateString();
       this.baoCao.trangThai = "1";
       PHULUCLIST.forEach(item => {
@@ -277,13 +285,13 @@ export class BaoCaoComponent implements OnInit {
           tieuDe: item.tieuDe,
           maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
-          trangThai: '1',
+          trangThai: '2',
           lstCTietBCao: []
         });
       })
     }
     
-    this.getStatusButton();
+    
 
     //lay danh sach loai bao cao
     this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
@@ -338,7 +346,7 @@ export class BaoCaoComponent implements OnInit {
     );
 
     //lay danh sach danh muc don vi
-    this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
@@ -351,32 +359,36 @@ export class BaoCaoComponent implements OnInit {
       }
     );
 
-    //lay danh sach danh muc don vi tien
-    this.danhMucService.dMDonViTien().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.donViTiens = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+    
+    this.getStatusButton();
     this.spinner.hide();
   }
 
-  getStatusButton(){
-    const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, 2, this.userInfo?.roles[0]?.id);
-  }
+    getStatusButton() {
+
+      let checkParent = false;
+      let checkChirld = false;
+      let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+      if (dVi && dVi.maDvi == this.userInfo.dvql) {
+        checkChirld = true;
+      }
+      if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+        checkParent = true;
+      }
+  
+      const utils = new Utils();
+      this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfo?.roles[0]?.id);
+      // this.statusBtnLDDC = utils.getRoleLDDC(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+      this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    }
+  
 
   // lay ten don vi tao
   getUnitName(dvitao: any) {
@@ -496,22 +508,6 @@ export class BaoCaoComponent implements OnInit {
       this.getLinkList(obj, item.stt, lvl + 1);
       data.next.push(obj);
     })
-  }
-
-  //set url khi
-  setUrl(lbaocao: any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 527:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
   }
 
   //doi so trang
@@ -905,7 +901,6 @@ export class BaoCaoComponent implements OnInit {
     //   namHienHanh: this.namBaoCaoHienHanh,
     //   namBcao: this.namBaoCaoHienHanh,
     // };
-    this.baoCao.maLoaiBcao = '526';
     this.baoCao.fileDinhKems = listFile;
     this.baoCao.listIdFiles = this.listIdFiles;
     this.baoCao.trangThai = "1";
@@ -1567,6 +1562,11 @@ export class BaoCaoComponent implements OnInit {
   getStatusName(id) {
     const utils = new Utils();
     return utils.getStatusName(id);
+  }
+
+  getStatusAppendixName(id){
+    const utils = new Utils();
+    return utils.getStatusAppendixName(id);
   }
 
   //show popup tu choi

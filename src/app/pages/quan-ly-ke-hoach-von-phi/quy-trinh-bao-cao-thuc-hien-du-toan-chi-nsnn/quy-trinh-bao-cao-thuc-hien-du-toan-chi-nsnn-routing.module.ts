@@ -45,6 +45,13 @@ const routes: Routes = [
       ).then((m) => m.BaoCaoModule),
   },
   {
+    path: 'bao-cao/:loaiBaoCao/:thang/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
+  {
     path: 'tong-hop',
     loadChildren: () =>
       import(
