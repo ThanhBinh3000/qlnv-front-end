@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -6,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
-import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { TRANGTHAITIMKIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc',
@@ -21,7 +22,10 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   @Input() nam: any;
   @Input() nguoiKyBTC: any
   @Input() maQdCha: any;
-  @Input() maDvi: any
+  @Input() maDvi: any;
+  @Input() soQdCha: any;
+  @Input() ngayQdCha: any;
+  @Input() namQdCha: any;
   danhSachBaoCao: any;
   khoanMucs: any = [];
   trangThais: any = TRANGTHAITIMKIEM;
@@ -48,6 +52,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
     private notification: NzNotificationService,
     private QuanLyVonPhiService: QuanLyVonPhiService,
     private fb:FormBuilder,
+    private datePipe: DatePipe,
   ) { }
 
   async ngOnInit() {
@@ -102,7 +107,11 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
-          this.maQdCha = data.data.maQdCha
+          this.maQdCha = data.data.qdCha.id
+          this.soQdCha = data.data.qdCha.soQd
+          this.ngayQdCha =this.datePipe.transform( data.data.qdCha.ngayQd , Utils.FORMAT_DATE_STR,)
+
+          this.namQdCha = data.data.qdCha.nam
           this.ngayQd = data.data.ngayQd
           this.nam = data.data.nam
           this.nguoiKyBTC = data.data.nguoiKyBTC
@@ -123,6 +132,9 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
       nam: this.nam ,
       nguoiKyBTC:this.nguoiKyBTC ,
       maDvi: this.maDvi ,
+      soQdCha: this.soQdCha ,
+      ngayQdCha: this.ngayQdCha,
+      namQdCha: this.namQdCha,
       id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);

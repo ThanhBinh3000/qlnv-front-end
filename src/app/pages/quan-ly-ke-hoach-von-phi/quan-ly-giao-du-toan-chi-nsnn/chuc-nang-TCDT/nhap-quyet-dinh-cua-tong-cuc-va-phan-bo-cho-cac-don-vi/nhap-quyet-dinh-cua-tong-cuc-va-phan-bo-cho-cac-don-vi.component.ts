@@ -124,6 +124,9 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  soQdCha: any;
+  ngayQdCha: any;
+  namQdCha: any;
 
   // upload file
   addFile() {
@@ -592,10 +595,12 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     // KHOANMUCLIST.forEach(item => item.status = false);
     // .filter(item => this.lstCTietBCao?.findIndex(data => data.maNdung == item.maKmuc) == -1);
     var danhSach = this.khoanMucs
-    var nam = this.nam
     var maQdCha = this.maQdCha
     var maDvi = this.maDonViTao
-
+    var soQdCha = this.soQdCha
+    var ngayQdCha = this.ngayQdCha
+    var namQdCha = this.namQdCha
+    var nguoiKyBTC = this.nguoiKyBTC
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
          nzContent: DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
@@ -605,15 +610,22 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
          nzFooter: null,
          nzComponentParams: {
               danhSachKhoanMuc: danhSach,
-              nam: nam,
               maQdCha: maQdCha,
-              maDvi: maDvi
+              maDvi: maDvi,
+              soQdCha: soQdCha,
+              ngayQdCha: ngayQdCha,
+              namQdCha: namQdCha,
+              nguoiKyBTC: nguoiKyBTC
          },
     });
     modalIn.afterClose.subscribe((res) => {
-        this.nam = res.nam
         this.maQdCha = res.maQdCha
         this.maDonViTao = res.maDvi
+        this.soQdCha = res.soQdCha
+        this.ngayQdCha = res.ngayQdCha
+        this.namQdCha = res.namQdCha
+        this.nguoiKyBTC = res.nguoiKyBTC
+        this.changeMaCucKhuVuc(res.maDvi)
          if (res) {
            this.maKhoanMucs.forEach(e => {
              if(res.id == e.id){
@@ -649,6 +661,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
               })
               this.updateEditCache();
          }
+
     });
 }
 

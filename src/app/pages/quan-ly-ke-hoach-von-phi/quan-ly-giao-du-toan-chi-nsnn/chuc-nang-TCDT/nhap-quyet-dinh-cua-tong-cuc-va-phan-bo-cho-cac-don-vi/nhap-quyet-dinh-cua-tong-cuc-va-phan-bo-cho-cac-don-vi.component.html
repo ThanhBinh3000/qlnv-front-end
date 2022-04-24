@@ -80,35 +80,27 @@
           <div>
             <nz-descriptions [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" [nzColon]="false">
               <nz-descriptions-item nzTitle=" Căn cứ q/đ BTC">
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="maQdCha">
-                <nz-option *ngFor="let item of qDinhBTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-              </nz-select>
-              <!-- {{maQdCha}} -->
+                  {{soQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayQdBTC}}
+                {{ngayQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
-                <form nz-form  [formGroup]="validateForm" class="login-form" >
-                  <nz-form-control [nzErrorTip]="messageValidate.YEAR">
-                    <input type="number" nz-input  [(ngModel)]="nam"  formControlName="nam"/>
-                  </nz-form-control>
-                </form>
+                {{namQdCha}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
                 {{nguoiKyBTC}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Số quyết định">
-                {{soQd}}
+                <input class="search__input" nz-input [(ngModel)]="soQd"  />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Ngày quyết định">
-                {{ngayQdTC}}
+                <input class="search__input" nz-input [(ngModel)]="ngayQdTC"  />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Năm">
                 <input class="search__input" nz-input [(ngModel)]="nam" />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
-                {{nguoiKyTC}}
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC">
                   <nz-option *ngFor="let item of nguoiKyTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                 </nz-select>
