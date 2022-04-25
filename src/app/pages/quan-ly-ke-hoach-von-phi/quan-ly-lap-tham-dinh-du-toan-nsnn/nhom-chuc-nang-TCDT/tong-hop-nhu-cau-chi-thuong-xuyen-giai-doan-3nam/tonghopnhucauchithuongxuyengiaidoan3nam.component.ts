@@ -769,6 +769,7 @@ xoaBaoCao(){
 
   mullMoneyTotal(){
     this.lstCTietBCao.filter(item =>{
+      item.namHhanhN = mulMoney(item.namHhanhN, this.donvitien);
       item.tranChiN1 = mulMoney(item.tranChiN1, this.donvitien);
       item.ncauChiN1 = mulMoney(item.ncauChiN1, this.donvitien);
       item.clechTranChiVsNcauChiN1 = mulMoney(item.clechTranChiVsNcauChiN1, this.donvitien);
@@ -783,6 +784,7 @@ xoaBaoCao(){
   
   divMoneyTotal(){
     this.lstCTietBCao.filter(item =>{
+      item.namHhanhN = divMoney(item.namHhanhN, this.donvitien);
       item.tranChiN1 = divMoney(item.tranChiN1, this.donvitien);
       item.ncauChiN1 = divMoney(item.ncauChiN1, this.donvitien);
       item.clechTranChiVsNcauChiN1 = divMoney(item.clechTranChiVsNcauChiN1, this.donvitien);

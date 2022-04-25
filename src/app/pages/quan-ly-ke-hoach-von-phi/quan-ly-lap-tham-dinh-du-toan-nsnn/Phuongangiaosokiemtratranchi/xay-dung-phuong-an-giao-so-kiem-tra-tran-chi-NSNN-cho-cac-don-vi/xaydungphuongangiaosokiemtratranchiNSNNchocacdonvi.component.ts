@@ -13,13 +13,13 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { O } from '@angular/cdk/keycodes';
+
 
 export class ItemData {
   id!: any;
   stt: any;
-  maNoiDung: any;
-  maNhom: any;
+  maNoiDung:number;
+  maNhom: number;
   tongSo: any;
   listCtietDvi: ItemDvi[] = [];
   checked!: boolean;
@@ -127,7 +127,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       this.nguoinhap = this.userInfor?.username;
       this.donvitao = this.userInfor?.dvql;
       this.namBcaohienhanh = this.currentday.getFullYear();
-      this.nampa = this.namBcaohienhanh+1;
+      this.nampa = this.namBcaohienhanh;
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.spinner.show();
       this.quanLyVonPhiService.maPhuongAn().toPromise().then(
@@ -145,7 +145,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     }
     this.danhmuc.dMNoiDung().toPromise().then(
       (res) => {
-        if (res.statusCode == 0) {
+        if (res.statusCode == 0) {          
           this.listNoidung = res.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -262,12 +262,12 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   }
 
   tinhNam(){
-    this.nampa = this.namBcaohienhanh+1;
+    this.nampa = this.namBcaohienhanh;
   }
   // call chi tiet bao cao
-  getDetailReport() {
-    this.spinner.hide();
-    this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
+  async getDetailReport() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
       async (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
@@ -275,6 +275,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.lstCTietBCao = data.data.listCtiet;
           this.donvitien = data.data.maDviTien;
           this.divMoneyTotal();
+          this.updateEditCache();
           // this.maBaoCao = this.chiTietBcaos?.maBcao;
           this.nampa = this.chiTietBcaos.namPa;
           this.namBcaohienhanh = this.chiTietBcaos.namHienHanh;
@@ -328,6 +329,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
             this.cols = this.listColNames.length;
           }
         })
+          
           this.changeInput();
           this.updateEditCache();
           if (soqd != null && socv != null) {
@@ -343,6 +345,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.spinner.hide();
   }
 
   //lay ten don vi tạo
@@ -483,8 +486,14 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     var arr = this.editCache[id].data.listCtietDvi;
     let checkValidSoTranChi;
     arr.forEach( e => {
-      e.soTranChi
+      if(!e.soTranChi && e.soTranChi!==0){
+        checkValidSoTranChi = false;
+      }
     })
+    if(checkValidSoTranChi==false){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
     this.editCache[id].data.checked = this.lstCTietBCao.find(
       (item) => item.id === id,
     ).checked; // set checked editCache = checked lstCTietBCao
