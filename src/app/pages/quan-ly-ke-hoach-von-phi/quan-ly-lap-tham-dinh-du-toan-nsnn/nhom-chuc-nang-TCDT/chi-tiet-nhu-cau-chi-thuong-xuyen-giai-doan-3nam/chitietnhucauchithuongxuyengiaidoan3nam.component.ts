@@ -772,6 +772,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
   mullMoneyTotal(){
     this.lstCTietBCao.filter(item => {
+      item.thienNamHhanhN = mulMoney(item.thienNamHhanhN, this.donvitien);
       item.ncauDtoanN1 = mulMoney(item.ncauDtoanN1, this.donvitien);
       item.ncauDtoanN2 = mulMoney(item.ncauDtoanN2, this.donvitien);
       item.ncauDtoanN3 = mulMoney(item.ncauDtoanN3, this.donvitien);
@@ -780,6 +781,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   
   divMoneyTotal(){
     this.lstCTietBCao.filter( item =>{
+      item.thienNamHhanhN = divMoney(item.thienNamHhanhN, this.donvitien);
       item.ncauDtoanN1 = divMoney(item.ncauDtoanN1, this.donvitien);
       item.ncauDtoanN2 = divMoney(item.ncauDtoanN2, this.donvitien);
       item.ncauDtoanN3 = divMoney(item.ncauDtoanN3, this.donvitien);
