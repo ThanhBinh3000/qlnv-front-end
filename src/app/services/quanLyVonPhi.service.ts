@@ -294,7 +294,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //tong hop bao cao ket qua thuc hien von phi hang DTQG
   tonghopbaocaoketqua(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+    return this.httpClient.post('http://192.168.1.111:8094/bao-cao/tong-hop', request);
   }
   //search list danh sach cong van de nghi cap von
   timDsachCvanDnghi(request: any): Observable<any> {
