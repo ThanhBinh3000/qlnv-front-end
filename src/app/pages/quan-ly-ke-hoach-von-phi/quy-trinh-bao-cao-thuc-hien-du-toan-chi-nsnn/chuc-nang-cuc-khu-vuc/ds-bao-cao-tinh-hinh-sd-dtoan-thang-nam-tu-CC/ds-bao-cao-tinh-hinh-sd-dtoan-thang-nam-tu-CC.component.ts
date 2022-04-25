@@ -33,7 +33,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
 
   searchFilter = {
-    maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
     trangThai:'',
@@ -88,27 +87,12 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
   timkiem(){
     if(this.searchFilter.maLoaiBcao==''){
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);

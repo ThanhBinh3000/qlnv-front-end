@@ -439,8 +439,10 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.trangThai == Utils.TT_BC_5 ||
             this.baoCao.trangThai == Utils.TT_BC_8) {
             this.status = false;
+            this.statusB = false;
           } else {
             this.status = true;
+            this.statusB = true;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -1102,7 +1104,7 @@ export class BaoCaoComponent implements OnInit {
     data.next.forEach((item) => this.subUpdateChecked(item, kt));
   }
 
-  // them dong moi phu luc 2
+  // them dong moi phu luc 1
   addLinePL1(id: number): void {
     var lv: number = 0;
     if (id > 0) {

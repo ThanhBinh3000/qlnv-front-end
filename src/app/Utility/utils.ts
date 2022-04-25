@@ -627,7 +627,7 @@ export const LOAIBAOCAO =[
             ten:'Không chấp nhận'
         },
         {
-            id:11,
+            id:7,
             ten:'Chưa đánh giá (để trống)'
         },
     ]
