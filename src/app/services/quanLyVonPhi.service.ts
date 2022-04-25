@@ -291,6 +291,13 @@ export class QuanLyVonPhiService extends BaseService {
       request);
   }
 
+  danhSachDieuChinh(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach', 
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach-dieu-chinh',
+      request);
+  }
+
 
   //tong hop bao cao ket qua thuc hien von phi hang DTQG
   tonghopbaocaoketqua(request: any): Observable<any> {

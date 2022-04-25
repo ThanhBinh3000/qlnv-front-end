@@ -87,7 +87,7 @@
                                              <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                                   <td>{{ i + 1 }}</td>
                                                   <td>
-                                                       <a routerLink="../{{data.url}}">{{data.objResp.maBcao}}</a>
+                                                       <a (click)="xemChiTiet(data.objResp.maLoaiBcao, data.objResp.id)" style="color: #1890ff;">{{data.objResp.maBcao}}</a>
 
                                                   </td>
                                                   <td>
