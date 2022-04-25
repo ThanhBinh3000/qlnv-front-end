@@ -446,9 +446,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
+                         this.tong = 0;
                          this.chiTietBcaos = data.data;
                          this.lstCTietBCao = data.data.lstCTietBCao;
-                         console.log(this.lstCTietBCao);
                          this.maDviTien = data.data.maDviTien;
                          this.divMoneyTotal();
                          this.lstCTietBCao.forEach(e => {
@@ -677,7 +677,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
 
      //gia tri cac o input thay doi thi tinh toan lai
      changeModel(id: string): void {
-          this.editCache[id].data.thanhTien = Number((this.editCache[id].data.sl * this.editCache[id].data.dmucPhiTc).toFixed(3));
+          this.editCache[id].data.thanhTien = Number((this.editCache[id].data.sl * this.editCache[id].data.dmucPhiTc).toFixed(Utils.ROUND));
      }
 
      async calltonghop() {
