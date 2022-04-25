@@ -378,8 +378,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //sinh đợt báo cáo 3.2.9
   sinhDotBaoCao(): Observable<any> {
-    // return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
+    return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
+    // return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
   }
 
   //tim kiem giao danh sách nội dung khoản mục

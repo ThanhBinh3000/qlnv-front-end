@@ -61,7 +61,7 @@
           </div> -->
         </div>
       </nz-card>
-      <nz-card  class="mt16 flex-card p-lr16">
+      <nz-card  class="mt16 flex-card p-lr16" [nzExtra]="tableCard2">
         <div style="margin: 15px;">
           
         </div>
@@ -121,25 +121,18 @@
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="tongHop();">
-          <i nz-icon nzType="search"></i>
-          <span>Tổng hợp</span>
-        </button>
+        
         <button type="button" class="btn btn-main" routerLink="../">
           <i nz-icon nzType="stop"></i>
           <span>Đóng</span>
         </button>
       </ng-template>
-      <!-- <ng-template #tableCard2>
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
+      <ng-template #tableCard2>
+        <button type="button" class="btn btn-main" (click)="tongHop();" [hidden]="statusBtnTongHop">
+          <i nz-icon ></i>
+          <span>Tổng hợp</span>
         </button>
-        <button nz-button class="search__button--search" routerLink="../">
-          <i nz-icon nzType="stop"></i>
-          Đóng
-        </button>
-      </ng-template> -->
+      </ng-template>
     </div>
   </div>
 </div>

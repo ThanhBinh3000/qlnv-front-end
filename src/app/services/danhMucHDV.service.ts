@@ -641,7 +641,7 @@ dMucBcaoDuyet(): Observable<any> {
 
 
 
-  //danh muc ke hoach von
+  //danh muc ke hoach von (trung vs ma 81)
   dMMaHthucVban(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-category/dmuc-khoachvon/258',
