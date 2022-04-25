@@ -240,7 +240,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input  [(ngModel)]="editCache[data.id].data.thienNamHhanhN" [class]="editCache[data.id].data.thienNamHhanhN || editCache[data.id].data.thienNamHhanhN ===0?'' : 'input-error-validate'"/>
+                      <nz-input-number class="search__input" nzSize="small"  [(ngModel)]="editCache[data.id].data.thienNamHhanhN" [class]="editCache[data.id].data.thienNamHhanhN || editCache[data.id].data.thienNamHhanhN ===0?'' : 'input-error-validate'"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauDtoanN1"  [class]="editCache[data.id].data.ncauDtoanN1 || editCache[data.id].data.ncauDtoanN1 ===0?'' : 'input-error-validate'"></nz-input-number>
