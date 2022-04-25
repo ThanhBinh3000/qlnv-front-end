@@ -158,7 +158,7 @@
                 </div>
               </div>
             </ng-template>
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body">
+            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body" id="tablePrint">
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
@@ -298,24 +298,25 @@
                   <th></th>
                   <th></th>
                   <th></th>
+                  <th>{{tongqdDuyetDanDtuTongVon}}</th>
+                  <th></th>
+                  <th>{{tongqdDchinhDanDtuTongVon}}</th>
                   <th></th>
                   <th></th>
+                  <th>{{tongqdDuyetTkDtoanXl}}</th>
+                  <th>{{tongqdDuyetTkDtoanTb}}</th>
+                  <th>{{tongqdDuyetTkDtoanCk}}</th>
                   <th></th>
+                  <th>{{tongklthCapDen3006Nstt}}</th>
+                  <th>{{tongklthCapDen3006DtoanChiTx}}</th>
+                  <th>{{tongklthCapDen3006Quykhac}}</th>
                   <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th>{{tongklthCapDen3112Nstt}}</th>
+                  <th>{{tongklthCapDen3112DtoanChiTx}}</th>
+                  <th>{{tongklthCapDen3112Quykhac}}</th>
+                  <th>{{tongncauVonN1}}</th>
+                  <th>{{tongncauVonN2}}</th>
+                  <th>{{tongncauVonN3}}</th>
                   <th></th>
                   <th width="2.25%" [hidden]="status"></th>
                   <th width="2.25%" [hidden]="status"></th>
@@ -493,7 +494,7 @@
                     </td>
                     <td>
                       <nz-input-number class="search__input" style="width: 100px;" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl" (change)="changeModel(data.id)"
+                        [(ngModel)]="editCache[data.id].data.qdDuyetTkDtoanXl" (change)="changeModel(data.id); changeTong()"
                         [class]="editCache[data.id].data.qdDuyetTkDtoanXl || editCache[data.id].data.qdDuyetTkDtoanXl ===0 ? '' : 'input-error-validate' ">
                       </nz-input-number>
                     </td>

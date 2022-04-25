@@ -8,7 +8,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
+import { LBCKETQUATHUCHIENHANGDTQG, Utils } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG',
   templateUrl: './tong-hop-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.component.html',
@@ -30,7 +30,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   listDonViTao:any []=[];
   listBcaoKqua:any []=[];
   lenght:any=0;
-
+  currentDate = new Date();
   trangThais: any = LISTTRANGTHAIKIEMTRABAOCAO;                          // danh muc loai bao cao
 
   searchFilter = {
@@ -40,7 +40,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     maDviCha: '',
     maLoaiBcao:'',
     maPhanBcao:'1',
-    namBcao:'',
+    namBcao:this.currentDate.getFullYear().toString(),
     ngayTaoDen:'',
     ngayTaoTu:'',
     paggingReq: {
@@ -144,7 +144,10 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  
+  //statusName 
+  getStatusName(status:string){
+    return this.trangThais.find(item => item.id == status).ten;
+  }
   redirectThongTinTimKiem() {
     this.router.navigate([
       '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -165,6 +168,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
       this.notifi.error('Kiểm tra','Bạn chưa nhập năm báo cáo!');
       return;
     }
+    this.searchFilter.trangThai = '9';
     this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
@@ -172,21 +176,24 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
+          this.listBcaoKqua.forEach(e =>{
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet,Utils.FORMAT_DATE_STR);
+          })
         }
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
       }
-      console.log(res);
     },err =>{
       this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
-  themMoi(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
-      return;
+  tongHop(){
+    
+    if(this.searchFilter.dotBcao==''){
+      this.searchFilter.dotBcao ='1';
     }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/"+ this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao]);
   }
 
   //set url khi

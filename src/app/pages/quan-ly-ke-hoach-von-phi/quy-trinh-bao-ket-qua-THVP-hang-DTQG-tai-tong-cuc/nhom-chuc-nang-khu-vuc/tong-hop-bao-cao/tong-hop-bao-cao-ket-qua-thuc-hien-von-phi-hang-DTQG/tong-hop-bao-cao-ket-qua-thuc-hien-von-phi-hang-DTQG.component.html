@@ -44,7 +44,7 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
-              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
+              <nz-option  nzValue="9" nzLabel="Chấp nhận"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="6">
@@ -88,7 +88,7 @@
               <td>{{item.dotBcao}}</td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}</td>
               <td>
                 <button type="button" class="btn btn-main">
                   <span>Xem</span>
@@ -121,7 +121,7 @@
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>
-        <button type="button" class="btn btn-main" >
+        <button type="button" class="btn btn-main" (click)="tongHop();">
           <i nz-icon nzType="search"></i>
           <span>Tổng hợp</span>
         </button>

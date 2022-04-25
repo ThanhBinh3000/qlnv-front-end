@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -6,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
-import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { TRANGTHAITIMKIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc',
@@ -16,10 +17,20 @@ import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent implements OnInit {
 
   @Input() danhSachKhoanMuc:any;
+  @Input() qDinhBTC: any;
+  @Input() ngayQd: any;
+  @Input() nam: any;
+  @Input() nguoiKyBTC: any
+  @Input() maQdCha: any;
+  @Input() maDvi: any;
+  @Input() soQdCha: any;
+  @Input() ngayQdCha: any;
+  @Input() namQdCha: any;
   danhSachBaoCao: any;
   khoanMucs: any = [];
   trangThais: any = TRANGTHAITIMKIEM;
-
+  radioValue!: any;
+  options: []
   searchFilter = {
     trangThai: "",
     nam: "",
@@ -34,21 +45,20 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   totalPages = 0;
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
+
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
     private QuanLyVonPhiService: QuanLyVonPhiService,
     private fb:FormBuilder,
+    private datePipe: DatePipe,
   ) { }
 
   async ngOnInit() {
     this.validateForm = this.fb.group({
       nam: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     });
-    console.log(this.danhSachKhoanMuc);
-    console.log(this.trangThais);
-
     //get danh muc nhom chi
     this.danhMucService.dMKhoanMuc().toPromise().then(
       (data) => {
@@ -92,9 +102,39 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
     );
   }
 
-  handleOk() {
-    let req ={
+  async handleOk() {
+    await this.QuanLyVonPhiService.QDGiaoChiTiet(this.radioValue).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          console.log(data);
+          this.maQdCha = data.data.qdCha.id
+          this.soQdCha = data.data.qdCha.soQd
+          this.ngayQdCha =this.datePipe.transform( data.data.qdCha.ngayQd , Utils.FORMAT_DATE_STR,)
+          this.namQdCha = data.data.qdCha.nam
+          this.ngayQd = data.data.ngayQd
+          this.nam = data.data.nam
+          this.nguoiKyBTC = data.data.nguoiKyBTC
+          this.maDvi = data.data.maDvi
+          this.danhSachKhoanMuc = data.data.lstCtiet
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
+
+    let req = {
       danhSachKhoanMuc : this.danhSachKhoanMuc,
+      maQdCha: this.maQdCha ,
+      ngayQd: this.ngayQd ,
+      nam: this.nam ,
+      nguoiKyBTC:this.nguoiKyBTC ,
+      maDvi: this.maDvi ,
+      soQdCha: this.soQdCha ,
+      ngayQdCha: this.ngayQdCha,
+      namQdCha: this.namQdCha,
       id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);

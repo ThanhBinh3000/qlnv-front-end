@@ -91,7 +91,9 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   QDGiaoChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/chi-tiet/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+
     );
   }
 
@@ -292,7 +294,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //tong hop bao cao ket qua thuc hien von phi hang DTQG
   tonghopbaocaoketqua(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+    return this.httpClient.post('http://192.168.1.111:8094/bao-cao/tong-hop', request);
   }
   //search list danh sach cong van de nghi cap von
   timDsachCvanDnghi(request: any): Observable<any> {

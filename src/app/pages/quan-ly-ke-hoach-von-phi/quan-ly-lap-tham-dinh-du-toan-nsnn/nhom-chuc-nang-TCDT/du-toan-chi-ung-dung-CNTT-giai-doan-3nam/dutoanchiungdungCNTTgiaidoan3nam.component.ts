@@ -318,6 +318,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
             this.status = true;
           }
           this.listFile = [];
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
