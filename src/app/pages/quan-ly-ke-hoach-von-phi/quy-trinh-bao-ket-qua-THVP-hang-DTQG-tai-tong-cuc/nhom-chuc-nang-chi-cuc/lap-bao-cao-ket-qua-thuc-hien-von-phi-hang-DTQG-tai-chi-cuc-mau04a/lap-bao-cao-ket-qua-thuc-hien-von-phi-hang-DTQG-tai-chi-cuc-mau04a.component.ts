@@ -233,7 +233,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   maLoaiBaocao: any; // phân biệt kiểu báo cáo năm hoặc đợt
   maPhanBcao:string ='1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
-
+  namBcao:string;
   maBcao:any;
   maDonViTao:any;
   donvitien: any;
@@ -252,7 +252,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   statusButton: boolean = false;
   maDvi:any;
   nam:any;
-  dotBaocao:any;
+  dotBcao:any;
   checkxemkhaithac:any;
   
 
@@ -324,10 +324,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.maDonViTao = this.userInfor?.dvql;
     //check router
     this.id = this.router.snapshot.paramMap.get('id');
-    // this.maDvi = this.router.snapshot.paramMap.get('maDvi');
-    // this.maLoaiBaocao = this.router.snapshot.paramMap.get('maLoaiBaocao');
-    // this.nam = this.router.snapshot.paramMap.get('nam');
-    // this.dotBaocao = this.router.snapshot.paramMap.get('dotBaocao');
+    this.namBcao = this.router.snapshot.paramMap.get('namBcao');
+    this.dotBcao = this.router.snapshot.paramMap.get('dotBcao');
 
     this.loaiBaoCaoParam = this.router.snapshot.paramMap.get('loai');
     //xem chi tiet xuất file exel;
@@ -343,14 +341,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-    
-    if ( this.id!=null && this.checkxemkhaithac!=null) {
-      this.getDetailReportToExportFile();
+    debugger
+    if ( this.namBcao!=null && this.dotBcao!=null) {
+      // this.getDetailReportToExportFile();\
+      this.callTonghop();
     }else if (this.id != null) {
       //call service lay chi tiet
      await this.getDetailReport();
-    }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBaocao !=null){
-      this.callTonghop();
+    }else if(this.maDvi!=null && this.maLoaiBaocao !=null && this.nam !=null && this.dotBcao !=null){
+     
     }
      else {
       //tạo mã báo cáo
@@ -1652,61 +1651,18 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   callTonghop(){
 
-    if(Number(this.maLoaiBaocao) == 407){
-      this.maLoaiBaocao ='90';
-    }
-    if(Number(this.maLoaiBaocao) == 408){
-      this.maLoaiBaocao ='91';
-    }
-    if(Number(this.maLoaiBaocao) == 409){
-      this.maLoaiBaocao ='92';
-    }
-    if(Number(this.maLoaiBaocao) == 410){
-      this.maLoaiBaocao ='93';
-    }
-    if(Number(this.maLoaiBaocao) == 411){
-      this.maLoaiBaocao ='94';
-    }
+    
     let objTonghop ={
-      maDvi:this.maDvi = '0402',
-      maLoaiBcao:this.maLoaiBaocao,
-      namBcao:this.nam,
-      thangordotBcao:this.dotBaocao,
+      dotBcao: this.dotBcao,
+      maDvi: "",
+      maPhanBCao: "1",
+      namBcao:this.namBcao,
+      thangBcao:null,
     }
     this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).subscribe(res => {
       if(res.statusCode==0){
-        this.lstCTietBCao04ax = res.data;
-        this.lstFile = res.data.lstFile;
-        this.maLoaiBaocao = '92';
-        let e = this.lstCTietBCao04ax[0];
-        e.listCtiet.forEach((el) => {
-            if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
-                if (vt.id == el.maVtu) {
-                  let objTrongdot = {
-                    id: el.id,
-                    maVtu: vt.id,
-                    loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
-                    sl: el.sl,
-                  };
-                  this.listColTrongDot4ax.push(objTrongdot);
-                }
-              });
-            }
-          });
-       
-        this.updateLstCTietBCao(1);
-        this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
-
-        // set list id file ban dau
-        this.lstFile.filter((item) => {
-          this.listIdFiles += item.id + ',';
-        });
-        this.updateLstCTietBCao(1);
-
-
-
+        console.log(res);
+        
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
