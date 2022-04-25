@@ -865,11 +865,19 @@ doPrint() {
   WindowPrt.close();
 }
   mullMoneyTotal() {
+    this.kphiBquanGaoLd = mulMoney(this.kphiBquanGaoLd, this.maDviTien)
+    this.kphiBquanGaoTx = mulMoney(this.kphiBquanGaoTx, this.maDviTien)
+    this.kphiBquanThocLd = mulMoney(this.kphiBquanThocLd, this.maDviTien)
+    this.kphiBquanThocTx = mulMoney(this.kphiBquanThocTx, this.maDviTien)
     this.lstCTiet.filter(element => {
       element.kphi = mulMoney(element.kphi, this.maDviTien);
     });
   }
   divMoneyTotal(){
+    this.kphiBquanGaoLd = divMoney(this.kphiBquanGaoLd, this.maDviTien)
+    this.kphiBquanGaoTx = divMoney(this.kphiBquanGaoTx, this.maDviTien)
+    this.kphiBquanThocLd = divMoney(this.kphiBquanThocLd, this.maDviTien)
+    this.kphiBquanThocTx = divMoney(this.kphiBquanThocTx, this.maDviTien)
     this.lstCTiet.filter(element => {
       element.kphi = divMoney(element.kphi, this.maDviTien);
     });

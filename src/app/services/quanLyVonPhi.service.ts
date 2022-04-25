@@ -272,7 +272,7 @@ export class QuanLyVonPhiService extends BaseService {
 
   updateDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/cap-nhat', 
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/cap-nhat',
       'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/cap-nhat',
       request);
   }
@@ -286,7 +286,7 @@ export class QuanLyVonPhiService extends BaseService {
 
   timkiemDieuChinh(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach', 
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
       'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
@@ -440,6 +440,6 @@ export class QuanLyVonPhiService extends BaseService {
   //sinh ma bao cao (3.2.9)
   taoMaBaoCao():Observable<any>{
     return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma-bcao');
-  } 
+  }
 
 }

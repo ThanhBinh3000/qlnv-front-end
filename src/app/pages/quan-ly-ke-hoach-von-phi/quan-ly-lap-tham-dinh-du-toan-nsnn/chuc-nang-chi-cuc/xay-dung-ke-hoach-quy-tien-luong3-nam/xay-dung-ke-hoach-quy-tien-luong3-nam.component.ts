@@ -680,36 +680,36 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   saveEdit(id: string): void {
     if (
       !this.editCache[id].data.maDvi ||
-      (!this.editCache[id].data.tongCboN && this.editCache[id].data.tongCboN ===0) ||
-      (!this.editCache[id].data.tongBcheDuocPdN && this.editCache[id].data.tongBcheDuocPdN ===0) ||
-      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN && this.editCache[id].data.tongQuyLuongCoTchatLuongN ===0) ||
-      (!this.editCache[id].data.tuongCbanN && this.editCache[id].data.tuongCbanN ===0) ||
-      (!this.editCache[id].data.phuCapN && this.editCache[id].data.phuCapN ===0) ||
-      (!this.editCache[id].data.cacKhoanDgopN && this.editCache[id].data.cacKhoanDgopN ===0) ||
-      (!this.editCache[id].data.tongCboThienN && this.editCache[id].data.tongCboThienN ===0) ||
-      (!this.editCache[id].data.tongBcheDuocPdThienN && this.editCache[id].data.tongBcheDuocPdThienN ===0) ||
-      (!this.editCache[id].data.tongQuyLuongCoTchatLuongThienN && this.editCache[id].data.tongQuyLuongCoTchatLuongThienN ===0) ||
-      (!this.editCache[id].data.luongCbanThienN && this.editCache[id].data.luongCbanThienN ===0) ||
-      (!this.editCache[id].data.phuCapThienN && this.editCache[id].data.phuCapThienN ===0) ||
-      (!this.editCache[id].data.cacKhoanDgopThienN && this.editCache[id].data.cacKhoanDgopThienN ===0) ||
-      (!this.editCache[id].data.tongCboN1 && this.editCache[id].data.tongCboN1 ===0) ||
-      (!this.editCache[id].data.tongBcheDuocPdN1 && this.editCache[id].data.tongBcheDuocPdN1 ===0) ||
-      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN1 && this.editCache[id].data.tongQuyLuongCoTchatLuongN1 ===0) ||
-      (!this.editCache[id].data.luongCbanN1 && this.editCache[id].data.luongCbanN1 ===0) ||
-      (!this.editCache[id].data.phuCapN1 && this.editCache[id].data.phuCapN1 ===0) ||
-      (!this.editCache[id].data.cacKhoanDgopN1 && this.editCache[id].data.cacKhoanDgopN1 ===0) ||
-      (!this.editCache[id].data.tongCboN2 && this.editCache[id].data.tongCboN2 ===0) ||
-      (!this.editCache[id].data.tongBcheDuocPdN2 && this.editCache[id].data.tongBcheDuocPdN2 ===0) ||
-      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN2 && this.editCache[id].data.tongQuyLuongCoTchatLuongN2 ===0) ||
-      (!this.editCache[id].data.luongCbanN2 && this.editCache[id].data.luongCbanN2 ===0) ||
-      (!this.editCache[id].data.phuCapN2 && this.editCache[id].data.phuCapN2 ===0) ||
-      (!this.editCache[id].data.cacKhoanDgopN2 && this.editCache[id].data.cacKhoanDgopN2 ===0) ||
-      (!this.editCache[id].data.tongCboN3 && this.editCache[id].data.tongCboN3 ===0) ||
-      (!this.editCache[id].data.tongBcheDuocPdN3 && this.editCache[id].data.tongBcheDuocPdN3 ===0) ||
-      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN3 && this.editCache[id].data.tongQuyLuongCoTchatLuongN3 ===0) ||
-      (!this.editCache[id].data.luongCbanN3 && this.editCache[id].data.luongCbanN3 ===0) ||
-      (!this.editCache[id].data.phuCapN3 && this.editCache[id].data.phuCapN3 ===0) ||
-      (!this.editCache[id].data.cacKhoanDgopN3 && this.editCache[id].data.cacKhoanDgopN3 ===0)
+      (!this.editCache[id].data.tongCboN && this.editCache[id].data.tongCboN !==0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN && this.editCache[id].data.tongBcheDuocPdN !==0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN && this.editCache[id].data.tongQuyLuongCoTchatLuongN !==0) ||
+      (!this.editCache[id].data.tuongCbanN && this.editCache[id].data.tuongCbanN !==0) ||
+      (!this.editCache[id].data.phuCapN && this.editCache[id].data.phuCapN !==0) ||
+      (!this.editCache[id].data.cacKhoanDgopN && this.editCache[id].data.cacKhoanDgopN !==0) ||
+      (!this.editCache[id].data.tongCboThienN && this.editCache[id].data.tongCboThienN !==0) ||
+      (!this.editCache[id].data.tongBcheDuocPdThienN && this.editCache[id].data.tongBcheDuocPdThienN !==0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongThienN && this.editCache[id].data.tongQuyLuongCoTchatLuongThienN !==0) ||
+      (!this.editCache[id].data.luongCbanThienN && this.editCache[id].data.luongCbanThienN !==0) ||
+      (!this.editCache[id].data.phuCapThienN && this.editCache[id].data.phuCapThienN !==0) ||
+      (!this.editCache[id].data.cacKhoanDgopThienN && this.editCache[id].data.cacKhoanDgopThienN !==0) ||
+      (!this.editCache[id].data.tongCboN1 && this.editCache[id].data.tongCboN1 !==0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN1 && this.editCache[id].data.tongBcheDuocPdN1 !==0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN1 && this.editCache[id].data.tongQuyLuongCoTchatLuongN1 !==0) ||
+      (!this.editCache[id].data.luongCbanN1 && this.editCache[id].data.luongCbanN1 !==0) ||
+      (!this.editCache[id].data.phuCapN1 && this.editCache[id].data.phuCapN1 !==0) ||
+      (!this.editCache[id].data.cacKhoanDgopN1 && this.editCache[id].data.cacKhoanDgopN1 !==0) ||
+      (!this.editCache[id].data.tongCboN2 && this.editCache[id].data.tongCboN2 !==0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN2 && this.editCache[id].data.tongBcheDuocPdN2 !==0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN2 && this.editCache[id].data.tongQuyLuongCoTchatLuongN2 !==0) ||
+      (!this.editCache[id].data.luongCbanN2 && this.editCache[id].data.luongCbanN2 !==0) ||
+      (!this.editCache[id].data.phuCapN2 && this.editCache[id].data.phuCapN2 !==0) ||
+      (!this.editCache[id].data.cacKhoanDgopN2 && this.editCache[id].data.cacKhoanDgopN2 !==0) ||
+      (!this.editCache[id].data.tongCboN3 && this.editCache[id].data.tongCboN3 !==0) ||
+      (!this.editCache[id].data.tongBcheDuocPdN3 && this.editCache[id].data.tongBcheDuocPdN3 !==0) ||
+      (!this.editCache[id].data.tongQuyLuongCoTchatLuongN3 && this.editCache[id].data.tongQuyLuongCoTchatLuongN3 !==0) ||
+      (!this.editCache[id].data.luongCbanN3 && this.editCache[id].data.luongCbanN3 !==0) ||
+      (!this.editCache[id].data.phuCapN3 && this.editCache[id].data.phuCapN3 !==0) ||
+      (!this.editCache[id].data.cacKhoanDgopN3 && this.editCache[id].data.cacKhoanDgopN3 !==0)
     ){
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
