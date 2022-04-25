@@ -467,7 +467,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					console.log(data.data);
+					this.tongCong(-1, this.tong);
 					// set thong tin chung bao cao
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.nguoiNhap = data.data.nguoiTao;
@@ -1029,8 +1029,8 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 	}
 
 	thanhTien(id: any) {
-		this.editCache1[id].data.ttienNhapVttbDvi = Number((this.editCache1[id].data.tongDvi * this.editCache1[id].data.dmucNhapVttbDvi).toFixed(3));
-		this.editCache1[id].data.ttienNhapVttbVphong = Number((this.editCache1[id].data.tongVphong * this.editCache1[id].data.dmucNhapVttbVphong).toFixed(3));
+		this.editCache1[id].data.ttienNhapVttbDvi = Number((this.editCache1[id].data.tongDvi * this.editCache1[id].data.dmucNhapVttbDvi).toFixed(Utils.ROUND));
+		this.editCache1[id].data.ttienNhapVttbVphong = Number((this.editCache1[id].data.tongVphong * this.editCache1[id].data.dmucNhapVttbVphong).toFixed(Utils.ROUND));
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
