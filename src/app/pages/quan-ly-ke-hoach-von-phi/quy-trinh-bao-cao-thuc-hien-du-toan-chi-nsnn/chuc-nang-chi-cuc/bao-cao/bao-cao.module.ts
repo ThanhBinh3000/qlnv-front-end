@@ -8,5 +8,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 @NgModule({
   declarations: [BaoCaoComponent],
   imports: [CommonModule, BaoCaoRoutingModule, ComponentsModule],
+  exports: [BaoCaoComponent],
 })
 export class BaoCaoModule {}

@@ -1659,7 +1659,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       namBcao:this.namBcao,
       thangBcao:null,
     }
-    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).subscribe(res => {
+    this.quanLyVonPhiService.tongHopBaoCaoKetQua(objTonghop).subscribe(res => {
       if(res.statusCode==0){
         console.log(res);
         

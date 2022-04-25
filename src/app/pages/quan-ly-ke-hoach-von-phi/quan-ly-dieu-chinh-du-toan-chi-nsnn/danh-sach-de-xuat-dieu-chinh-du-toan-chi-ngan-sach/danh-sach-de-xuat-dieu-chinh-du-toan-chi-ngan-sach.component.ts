@@ -163,7 +163,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
                soQd: "",
           }
 
-          this.quanLyVonPhiService.timkiemDieuChinh(request).subscribe(
+          this.quanLyVonPhiService.timKiemDieuChinh(request).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
 

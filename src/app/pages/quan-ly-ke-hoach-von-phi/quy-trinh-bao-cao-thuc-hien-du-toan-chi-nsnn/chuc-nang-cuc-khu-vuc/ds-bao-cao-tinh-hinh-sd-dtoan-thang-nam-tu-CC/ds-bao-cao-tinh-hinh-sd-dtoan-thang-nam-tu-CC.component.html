@@ -139,11 +139,11 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;timkiem()">
+        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;timKiem()">
           <i nz-icon nzType="search"></i>
           <span>Tìm kiếm</span>
         </button>
-        <button type="button" class="btn btn-main" routerLink="../">
+        <button type="button" class="btn btn-main" (click)="close()">
           <i nz-icon nzType="stop"></i>
           <span>Đóng</span>
         </button>

@@ -414,7 +414,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      // call chi tiet bao cao
      async getDetailReport() {
           this.spinner.show();
-          await this.quanLyVonPhiService.chitietDieuChinh(this.id).subscribe(
+          await this.quanLyVonPhiService.chiTietDieuChinh(this.id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
                          this.maDonViTao = data.data.maDvi;
