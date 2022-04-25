@@ -168,10 +168,20 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      }
 
      getStatusButton() {
+          let checkParent = false;
+          let checkChirld = false;
+          let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          if (dVi && dVi.maDvi == this.userInfo.dvql) {
+               checkChirld = true;
+          }
+          if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+               checkParent = true;
+          }
+
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          if ((this.capDvi == '2') && (this.trangThaiBanGhi == '1')) {
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+          if ((this.capDvi == Utils.CUC_KHU_VUC) && (this.trangThaiBanGhi == '1')) {
                this.statusBtnGuiDVCT = false;
           } else {
                this.statusBtnGuiDVCT = true;
@@ -307,6 +317,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          // set thong tin chung bao cao
                          this.ngayDuyetVban = data.data.ngayDuyetVban;
                          this.nguoiNhap = data.data.nguoiTao;
+                         this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                          this.maDonViTao = data.data.maDonVi;
                          this.soVban = data.data.soVban;
                          this.namBaoCaoHienHanh = data.data.namBcao;

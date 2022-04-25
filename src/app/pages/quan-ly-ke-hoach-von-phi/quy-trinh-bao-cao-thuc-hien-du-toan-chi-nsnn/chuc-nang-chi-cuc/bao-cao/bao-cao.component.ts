@@ -48,7 +48,7 @@ export class ItemDanhSach {
   ngayPheDuyet!: string;
   ngayTraKq!: string;
 
-  
+
 
   // dung cho request
   fileDinhKems!: any[];
@@ -251,7 +251,7 @@ export class BaoCaoComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    
+
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.id) {
@@ -290,8 +290,8 @@ export class BaoCaoComponent implements OnInit {
         });
       })
     }
-    
-    
+
+
 
     //lay danh sach loai bao cao
     this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
@@ -359,36 +359,35 @@ export class BaoCaoComponent implements OnInit {
       }
     );
 
-    
+
     this.getStatusButton();
     this.spinner.hide();
   }
 
-    getStatusButton() {
+  getStatusButton() {
 
-      let checkParent = false;
-      let checkChirld = false;
-      let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-      if (dVi && dVi.maDvi == this.userInfo.dvql) {
-        checkChirld = true;
-      }
-      if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
-        checkParent = true;
-      }
-  
-      const utils = new Utils();
-      this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfo?.roles[0]?.id);
-      // this.statusBtnLDDC = utils.getRoleLDDC(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-      this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfo.dvql) {
+      checkChirld = true;
     }
-  
+    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+      checkParent = true;
+    }
+    const utils = new Utils();
+    this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfo?.roles[0]?.id);
+    // this.statusBtnLDDC = utils.getRoleLDDC(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
+  }
+
 
   // lay ten don vi tao
   getUnitName(dvitao: any) {
@@ -424,13 +423,21 @@ export class BaoCaoComponent implements OnInit {
           this.updateEditCache();
           this.updateEditCachePL1();
           this.lstFile = data.data.lstFile;
+          this.listFile = [];
+          this.maDonViTao = data.data.maDvi;
+          this.maDviTien = data.data.maDviTien;
+          // set thong tin chung bao cao
+          // this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+          // this.nguoiNhap = data.data.nguoiTao;
+          // this.maBaoCao = data.data.maBcao;
+          // this.namBaoCaoHienHanh = data.data.namHienHanh;
+          // this.trangThaiBanGhi = data.data.trangThai;
+          // this.soVban = data.data.soVban;
 
-          // set list id file ban dau
-          this.lstFile.filter(item => {
-            this.listIdFiles += item.id + ",";
-          })
-
-          if (this.baoCao.trangThai == '1' || this.baoCao.trangThai == '3' || this.baoCao.trangThai == '5' || this.baoCao.trangThai == '8') {
+          if (this.baoCao.trangThai == Utils.TT_BC_1 ||
+            this.baoCao.trangThai == Utils.TT_BC_3 ||
+            this.baoCao.trangThai == Utils.TT_BC_5 ||
+            this.baoCao.trangThai == Utils.TT_BC_8) {
             this.status = false;
           } else {
             this.status = true;
@@ -519,25 +526,31 @@ export class BaoCaoComponent implements OnInit {
   onPageSizeChange(size) {
     this.pages.size = size;
   }
+
+  // chuc nang check role
   onSubmit(mcn: String, lyDoTuChoi: string) {
-    const requestGroupButtons = {
-      id: this.id,
-      maChucNang: mcn,
-      lyDoTuChoi: lyDoTuChoi,
-    };
-    this.spinner.show();
-    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        await this.getDetailReport();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-        this.getStatusButton();
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
+    if (this.id) {
+      const requestGroupButtons = {
+        id: this.id,
+        maChucNang: mcn,
+        lyDoTuChoi: lyDoTuChoi,
+      };
+      this.spinner.show();
+      this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
   }
 
   //get user info
@@ -819,7 +832,7 @@ export class BaoCaoComponent implements OnInit {
               tieuDe: item.tieuDe,
               maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
-              trangThai: '1',
+              trangThai: '2',
               lstCTietBCao: []
             });
           }
@@ -839,18 +852,25 @@ export class BaoCaoComponent implements OnInit {
   }
 
   //download file về máy tính
-  downloadFile(id: string) {
+  async downloadFile(id: string) {
     let file!: File;
-    this.listFile.forEach(element => {
-      if (element?.lastModified.toString() == id) {
-        file = element;
+    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    if (!file) {
+      let fileAttach = this.lstFile.find(element => element?.id == id);
+      if (fileAttach) {
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+          (data) => {
+            fileSaver.saveAs(data, fileAttach.fileName);
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
-    });
-    const blob = new Blob([file], { type: "application/octet-stream" });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL(blob)
-    );
-    fileSaver.saveAs(blob, file.name);
+    } else {
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
   }
 
   // xoa file trong bang file
@@ -1564,7 +1584,7 @@ export class BaoCaoComponent implements OnInit {
     return utils.getStatusName(id);
   }
 
-  getStatusAppendixName(id){
+  getStatusAppendixName(id) {
     const utils = new Utils();
     return utils.getStatusAppendixName(id);
   }
@@ -1589,9 +1609,9 @@ export class BaoCaoComponent implements OnInit {
 
 
   //show popup tu choi dùng cho nut ok - not ok
-  pheDuyetChiTiet(mcn: string,maLoai:any) {
+  pheDuyetChiTiet(mcn: string, maLoai: any) {
     if (mcn == OK) {
-      this.pheDuyetBieuMau(mcn,maLoai, null);
+      this.pheDuyetBieuMau(mcn, maLoai, null);
     } else if (mcn == NOTOK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
@@ -1604,29 +1624,29 @@ export class BaoCaoComponent implements OnInit {
       });
       modalTuChoi.afterClose.subscribe(async (text) => {
         if (text) {
-          this.pheDuyetBieuMau(mcn,maLoai, text);
+          this.pheDuyetBieuMau(mcn, maLoai, text);
         }
       });
     }
   }
 
   //call api duyet bieu mau
-  pheDuyetBieuMau(trangThai:any,maLoai:any,lyDo:string){
-    var idBieuMau:any  = this.baoCao.lstBCao.find((item)=> item.maLoai==maLoai).id;
+  pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
+    var idBieuMau: any = this.baoCao.lstBCao.find((item) => item.maLoai == maLoai).id;
     const requestPheDuyetBieuMau = {
       id: idBieuMau,
       trangThai: trangThai,
       lyDoTuChoi: lyDo,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
-        if(res.statusCode==0){
-          this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
-          this.getDetailReport();
-        }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-    },err => {
+    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res => {
+      if (res.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        this.getDetailReport();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
@@ -1638,7 +1658,7 @@ export class BaoCaoComponent implements OnInit {
     let chiSo: any = str.split('.');
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
-    if (n == 0) { 
+    if (n == 0) {
       for (var i = 0; i < this.soLaMa.length; i++) {
         while (k >= this.soLaMa[i].gTri) {
           xau += this.soLaMa[i].kyTu;
@@ -1667,7 +1687,7 @@ export class BaoCaoComponent implements OnInit {
     return level > 3;
   }
 
-  close(){
+  close() {
     this.location.back();
   }
 }

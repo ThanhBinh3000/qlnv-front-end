@@ -58,6 +58,13 @@ const routes: Routes = [
         './chuc-nang-cuc-khu-vuc/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC.module'
       ).then((m) => m.TongHopBCTinhHinhSuDungDuToanTuCCModule),
   },
+  {
+    path: 'kiem-tra',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/kiem-tra/kiem-tra.module'
+      ).then((m) => m.KiemTraModule),
+  },
 ];
 
 @NgModule({
