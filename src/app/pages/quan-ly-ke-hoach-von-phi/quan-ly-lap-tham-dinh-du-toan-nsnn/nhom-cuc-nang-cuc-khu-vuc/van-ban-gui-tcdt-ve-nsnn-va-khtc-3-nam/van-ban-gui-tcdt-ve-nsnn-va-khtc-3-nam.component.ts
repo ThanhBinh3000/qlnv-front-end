@@ -21,9 +21,7 @@ export class ObjResp {
 
 export class ItemData {
      id!: any;
-     stt!: string;
      objResp: ObjResp;
-     url: string;
      checked!: boolean;
 }
 
@@ -146,7 +144,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           );
 
           console.log(this.capDvi);
-          
+
 
           this.getStatusButton();
 
@@ -301,13 +299,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          this.chiTietBcaos.forEach(item => {
                               let mm: ItemData = {
                                    id: item.id,
-                                   stt: item.stt,
                                    objResp: {
                                         id: item.objResp.id,
                                         maBcao: item.objResp.maBcao,
                                         maLoaiBcao: item.objResp.maLoaiBcao,
                                    },
-                                   url: this.getUrl(item.objResp.maLoaiBcao) + '/' + item.objResp.id,
                                    checked: false,
                               }
                               this.lstCTietBCao.push(mm);
@@ -340,13 +336,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      addLine(id: number): void {
           let item: ItemData = {
                id: uuid.v4(),
-               stt: "",
                objResp: {
                     id: "",
                     maBcao: "",
                     maLoaiBcao: "",
                },
-               url: "",
                checked: false,
           }
 
@@ -462,14 +456,12 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           console.log(mm);
           this.editCache[id].data.objResp.id = mm[0].id;
           this.editCache[id].data.objResp.maLoaiBcao = mm[0].maLoaiBcao;
-          this.editCache[id].data.url = this.getUrl(mm[0].maLoaiBcao) + '/' + mm[0].id;
           console.log(this.editCache[id].data);
      }
 
-     //set url khi
-     getUrl(maLoaiBcao: string) {
-          var url: string;
-          switch (maLoaiBcao) {
+     xemChiTiet(maLoaiBaoCao: string, id: string) {
+          let url: string;
+          switch (maLoaiBaoCao) {
                case '12':
                     url = '/chi-thuong-xuyen-3-nam/'
                     break;
@@ -570,7 +562,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     url = null;
                     break;
           }
-          return url;
+          if (url != null) {
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/' + url + id
+               ]);
+          }
      }
 
      dong() {

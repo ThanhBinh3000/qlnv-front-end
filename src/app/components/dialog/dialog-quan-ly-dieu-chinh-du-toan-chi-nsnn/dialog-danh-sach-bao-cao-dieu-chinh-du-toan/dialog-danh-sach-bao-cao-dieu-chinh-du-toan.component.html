@@ -1,44 +1,46 @@
-<div class="modal__content">
-    <div class="search__body" nz-row [nzGutter]="[18, 12]">
-        <div nz-col nzSpan="6">
-            <label class="search__label">Năm:</label>
-            <nz-input-number class="search__input" nzSize="small" [(ngModel)]="searchFilter.nam"></nz-input-number>
-        </div>
-        <div nz-col nzSpan="6">
-            <label class="search__label">Ngày quyết định từ:</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgayQd" nzFormat="dd/MM/yyyy"></nz-date-picker>
-        </div>
-        <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày:</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgayQd" nzFormat="dd/MM/yyyy"></nz-date-picker>
-        </div>
-        <div nz-col nzSpan="6"></div>
-        <div nz-col nzSpan="6">
-            <label class="search__label">Số quyết định:</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd"/>
-        </div>
-        <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ghi nhận từ:</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgayGn"></nz-date-picker>
-        </div>
-        <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày:</label>
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgayGn"></nz-date-picker>
-        </div>
-        <div nz-col nzSpan="6">
-            <br />
-            <button class="btn btn-main" (click)="getDetailReport()">
-                Tìm kiếm
-            </button>
-        </div>
-    </div>
-    <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container">
-            <nz-tab [nzTitle]="'Danh sách hợp đồng'">
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-
-                </div>
-                <nz-table nzBordered class="table__body">
+<div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+        <div class="main-content">
+            <nz-card nzTitle="Thông tin tìm kiếm" class="mt16 flex-card p-lr16">
+                    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Năm:</label>
+                            <nz-input-number class="search__input" nzSize="small" [(ngModel)]="searchFilter.nam"></nz-input-number>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Ngày quyết định từ:</label>
+                            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgayQd" nzFormat="dd/MM/yyyy">
+                            </nz-date-picker>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Đến ngày:</label>
+                            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgayQd" nzFormat="dd/MM/yyyy">
+                            </nz-date-picker>
+                        </div>
+                        <div nz-col nzSpan="6"></div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Số quyết định:</label>
+                            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Ngày ghi nhận từ:</label>
+                            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgayGn"></nz-date-picker>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <label class="search__label">Đến ngày:</label>
+                            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgayGn"></nz-date-picker>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <br />
+                            <button class="btn btn-main" (click)="getDetailReport()">
+                                Tìm kiếm
+                            </button>
+                        </div>
+                    </div>
+            </nz-card>
+            <nz-card nzTitle="Danh sách" 
+                class="mt16 flex-card p-lr16">
+                <nz-table #basicTable class="nowrap">
                     <thead>
                         <tr>
                             <th nzWidth="5%">Chọn</th>
@@ -59,7 +61,7 @@
                         <tr *ngFor="let data of lstCTietBCao; let i = index">
                             <td>
                                 <label nz-checkbox [nzValue]="data.id" 
-                                [(ngModel)]="data.checked" (change)="updateChecked(data.id)"></label>
+                                [(ngModel)]="data.checked" ></label>
                             </td>
                             <td>
                                 {{data.ngayLap}}
@@ -68,7 +70,7 @@
                                 {{getUnitName(data.maDvi)}}
                             </td>
                             <td>
-                                {{data.veViec}}
+                                {{data.ghiChu}}
                             </td>
                             <td>
                                 {{getStatusName(data.trangThai)}}
@@ -81,6 +83,9 @@
                 </nz-table>
                 <div class="tab-content tab-menu" id="myTabContent">
                     <div class="tab-pane fade show active justify-content-between">
+                        <div class="trai">
+
+                        </div>
                         <div class="canphai">
                             <!-- begin phân trang  -->
                             <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
@@ -95,10 +100,12 @@
                         </div>
                     </div>
                 </div>
-            </nz-tab>
-        </nz-tabset>
+            </nz-card>
+        </div>
     </div>
 </div>
+
+
 <div class="modal-footer">
     <div class="nut">
         <div class="cantrai">
