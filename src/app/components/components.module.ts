@@ -93,6 +93,7 @@ import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from '
 import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
 import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component';
+import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-bao-cao-dieu-chinh-du-toan/dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component';
 @NgModule({
   declarations: [
     //components
@@ -139,6 +140,7 @@ import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from './dialog/dialog-
     DialogDanhSachMuaLuongThucMuoiComponent,
     //
     DialogDanhSachKeHoachPhanBoGiaoDuToanComponent,
+    DialogDanhSachBaoCaoDieuChinhDuToanComponent,
     
   ],
   imports: [
