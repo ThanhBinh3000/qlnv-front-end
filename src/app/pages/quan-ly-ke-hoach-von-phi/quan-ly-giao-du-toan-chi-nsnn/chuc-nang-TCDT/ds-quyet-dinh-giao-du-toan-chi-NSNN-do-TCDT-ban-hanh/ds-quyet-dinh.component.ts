@@ -20,7 +20,7 @@ export class DsQuyetDinhComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  url: string = "nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi/";
 
   // phan cu cua teca
   visible = false;

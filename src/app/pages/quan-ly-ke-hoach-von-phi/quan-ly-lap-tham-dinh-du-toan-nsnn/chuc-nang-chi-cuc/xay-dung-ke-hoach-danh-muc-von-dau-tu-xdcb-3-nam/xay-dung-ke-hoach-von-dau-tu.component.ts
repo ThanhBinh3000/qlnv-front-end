@@ -134,6 +134,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   tongncauVonN1: number;
   tongncauVonN2: number;
   tongncauVonN3: number;
+  tongTongQdDuyetTkDtoan: number;
 
   // upload file
   addFile() {
@@ -962,6 +963,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.tongncauVonN1 += e.ncauVonN1
       this.tongncauVonN2 += e.ncauVonN2
       this.tongncauVonN3 += e.ncauVonN3
+      this.tongTongQdDuyetTkDtoan = this.tongqdDuyetTkDtoanXl + this.tongqdDuyetTkDtoanTb + this.tongqdDuyetTkDtoanCk
     })
   }
 }

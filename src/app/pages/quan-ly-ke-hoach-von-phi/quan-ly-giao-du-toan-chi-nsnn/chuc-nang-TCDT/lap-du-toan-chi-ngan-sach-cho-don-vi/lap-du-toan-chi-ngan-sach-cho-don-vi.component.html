@@ -170,13 +170,13 @@
                     <td>
                       {{data.tenLoaiKhoan}}
                     </td>
-                    <div>
+                    <td>
                       <div *ngFor="let item of khoanMucs">
                         <div *ngIf="item.id == data.maNdung">
                           {{item.thongTin}}
                         </div>
                       </div>
-                    </div>
+                    </td>
                     <td>{{data.uocThien}}</td>
                     <td>{{data.dtoanGiao}}</td>
                     <td>{{data.dtoanDaPbo}}</td>

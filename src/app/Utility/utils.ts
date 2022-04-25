@@ -23,7 +23,7 @@ export class Utils {
     public static BCAO_03 = "03";
 
     // Trang thái báo cáo
-    public static TT_BC_0 = "0"; // Đã xóa 
+    public static TT_BC_0 = "0"; // Đã xóa
     public static TT_BC_1 = "1"; // Đang soạn,
     public static TT_BC_2 = "2"; // Trình duyệt,
     public static TT_BC_3 = "3"; // Trưởng BP từ chối,
@@ -749,7 +749,7 @@ export const LOAIBAOCAO =[
         if(!value && value!=0){
             return null;
         }
-        
+
         if(donVi){
             return Number((value/donVi.giaTri).toFixed(Utils.ROUND));
         }else{
@@ -758,12 +758,12 @@ export const LOAIBAOCAO =[
     }
 
     export function mulMoney(value,maDonViTien){
-        
+
         let donVi = DONVITIEN.find(item => item.id == maDonViTien);
         if(!value && value!=0){
             return null;
         }
-        
+
         if(donVi){
             return Number((value*donVi.giaTri).toFixed(Utils.ROUND));
         }else{
@@ -771,4 +771,23 @@ export const LOAIBAOCAO =[
         }
     }
 
-    
+
+    // trang thai phan bo du toan chi nsnn
+    export const TRANGTHAIPHANBO =[
+      {
+          id:'1',
+          ten:'Chưa ghi nhận',
+      },
+      {
+          id:'2',
+          ten:'Chờ ghi nhận',
+      },
+      {
+          id:'3',
+          ten:'Đã ghi nhận',
+      },
+      {
+          id:'4',
+          ten:'Chờ tiếp nhận',
+      },
+    ]

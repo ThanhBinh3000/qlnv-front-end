@@ -205,7 +205,6 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       );
     }
 
-    this.getStatusButton();
     //get danh muc noi dung
     this.danhMucService.mDCQQD().toPromise().then(
       (data) => {
@@ -224,6 +223,8 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.nguonVons = data.data?.content;
+          console.log(this.nguonVons);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
