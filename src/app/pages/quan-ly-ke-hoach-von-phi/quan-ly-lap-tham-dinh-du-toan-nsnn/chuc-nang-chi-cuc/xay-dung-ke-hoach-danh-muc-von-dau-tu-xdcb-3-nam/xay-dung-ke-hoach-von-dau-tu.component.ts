@@ -501,7 +501,6 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
@@ -516,8 +515,6 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.divMoneyTotal()
           this.changeTong()
           this.listFile=[]
-
-
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -528,6 +525,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

@@ -440,9 +440,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
           this.lstFile = data.data.lstFile;
-
           // set thong tin chung bao cao
           this.ngayNhap = this.datePipe.transform(data.data.ngayTao,Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
@@ -454,8 +452,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.listFile=[]
-
-
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -466,6 +462,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
