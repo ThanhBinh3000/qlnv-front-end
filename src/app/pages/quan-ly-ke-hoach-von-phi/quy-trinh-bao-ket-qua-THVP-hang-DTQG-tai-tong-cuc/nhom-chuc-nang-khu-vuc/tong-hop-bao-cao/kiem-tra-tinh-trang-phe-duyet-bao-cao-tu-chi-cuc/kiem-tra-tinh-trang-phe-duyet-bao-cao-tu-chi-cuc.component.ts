@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANGTHAIGUIDVCT, LBCKETQUATHUCHIENHANGDTQG } from 'src/app/Utility/utils';
+import { TRANGTHAIGUIDVCT, LBCKETQUATHUCHIENHANGDTQG, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc',
@@ -173,6 +173,10 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
+          this.listBcaoKqua.forEach(e =>{
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet,Utils.FORMAT_DATE_STR);
+          })
         }
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
