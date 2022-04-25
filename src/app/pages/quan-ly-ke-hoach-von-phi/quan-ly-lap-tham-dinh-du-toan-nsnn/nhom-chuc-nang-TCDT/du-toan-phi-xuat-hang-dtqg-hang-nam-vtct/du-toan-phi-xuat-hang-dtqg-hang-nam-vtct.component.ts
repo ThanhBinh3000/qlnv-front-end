@@ -460,6 +460,7 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
+					this.tinhTong(-1, this.tong);
 					// set thong tin chung bao cao
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.nguoiNhap = data.data.nguoiTao;
@@ -1047,8 +1048,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 	}
 
 	thanhTien(id: any) {
-		this.editCache1[id].data.thanhTienCoDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatCoDmuc).toFixed(3));
-		this.editCache1[id].data.thanhTienKhongDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatChuaDmuc).toFixed(3));
+		this.editCache1[id].data.thanhTienCoDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatCoDmuc).toFixed(Utils.ROUND));
+		this.editCache1[id].data.thanhTienKhongDmuc = Number((this.editCache1[id].data.tong * this.editCache1[id].data.cphiXuatChuaDmuc).toFixed(Utils.ROUND));
 		this.editCache1[id].data.thanhTienCong = this.editCache1[id].data.thanhTienCoDmuc + this.editCache1[id].data.thanhTienKhongDmuc;
 	}
 

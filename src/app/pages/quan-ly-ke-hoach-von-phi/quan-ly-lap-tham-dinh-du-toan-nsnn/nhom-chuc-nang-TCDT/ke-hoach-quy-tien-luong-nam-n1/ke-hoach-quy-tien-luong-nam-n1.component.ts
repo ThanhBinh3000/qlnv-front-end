@@ -437,7 +437,6 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.lstCTietBCao = data.data.lstCTietBCao;
-          this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
           // set thong tin chung bao cao
@@ -462,7 +461,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.listFile=[]
-
+          this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
