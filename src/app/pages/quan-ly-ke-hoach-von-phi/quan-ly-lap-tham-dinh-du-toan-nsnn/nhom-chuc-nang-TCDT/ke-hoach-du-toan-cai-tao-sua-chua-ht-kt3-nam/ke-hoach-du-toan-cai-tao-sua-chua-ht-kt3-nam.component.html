@@ -126,31 +126,33 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'">
-            <ng-container *ngIf="status;else templateName">
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  Đơn vị:
-                  <div *ngFor="let item of donViTiens">
-                    <div *ngIf="item.id == maDviTien">
-                      {{item.tenDm}}
+            <div id="tablePrint">
+              <ng-container *ngIf="status;else templateName">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                  <div nz-col class="gutter-row" [nzSpan]="3">
+                    Đơn vị:
+                    <div *ngFor="let item of donViTiens">
+                      <div *ngIf="item.id == maDviTien">
+                        {{item.tenDm}}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </ng-container>
-            <ng-template #templateName>
-              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col class="gutter-row" [nzSpan]="3">
-                  <!-- <div class="inner-box">Đơn vị: -->
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                    [class]="maDviTien ?'' : 'input-error-validate' ">
-                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
-                  <!-- </div> -->
+              </ng-container>
+              <ng-template #templateName>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                  <div nz-col class="gutter-row" [nzSpan]="3">
+                    <!-- <div class="inner-box">Đơn vị: -->
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
+                      [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
+                      <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
+                        [nzLabel]="item.tenDm"></nz-option>
+                    </nz-select>
+                    <!-- </div> -->
+                  </div>
                 </div>
-              </div>
-            </ng-template>
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body" id="tablePrint">
+              </ng-template>
+            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body" >
               <thead>
                 <tr>
                   <th style="width:35px" rowspan="3">STT</th>
@@ -376,6 +378,7 @@
                 </tr>
               </tbody>
             </nz-table>
+          </div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
