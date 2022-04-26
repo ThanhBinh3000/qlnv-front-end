@@ -278,7 +278,8 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           if (this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8) {
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10) {
             this.status = false;
           } else {
             this.status = true;
@@ -744,15 +745,15 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
-      if (res.statusCode == 0) {
-        this.maBaoCao = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
-    })
+    // this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
+    //   if (res.statusCode == 0) {
+    //     this.maBaoCao = res.data;
+    //   } else {
+    //     this.notification.error(MESSAGE.ERROR, res?.msg);
+    //   }
+    // },err => {
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+    // })
     this.spinner.hide();
   }
 
@@ -812,10 +813,12 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     }
     this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+    let lstTemp = [];
+    this.lstCTietBCao.filter( item =>{
+      lstTemp.push({
+        ...item,
+        id:null
+      })
     })
     
    
@@ -825,7 +828,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       fileDinhKems: null,
       listIdDeleteFiles: null,
       listIdDeletes: null,  
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
