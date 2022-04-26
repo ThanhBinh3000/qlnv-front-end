@@ -180,8 +180,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dataVatTuCon.push(itemCon);
       }
     }
-    console.log(this.dataVatTuCha);
-    console.log(this.dataVatTuCon);
   }
 
   selectNam() {
