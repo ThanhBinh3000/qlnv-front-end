@@ -84,13 +84,13 @@
                     <td>
                       {{data.tenDm}}
                     </td>
-                    <div>
+                    <td>
                       <div *ngFor="let item of khoanMucs">
                         <div *ngIf="item.id == data.maNdung">
                           {{item.thongTin}}
                         </div>
                       </div>
-                    </div>
+                    </td>
                     <td>{{data.tong}}</td>
                     <td>{{data.nguonNsnn}}</td>
                     <td>{{data.nguonKhac}}</td>

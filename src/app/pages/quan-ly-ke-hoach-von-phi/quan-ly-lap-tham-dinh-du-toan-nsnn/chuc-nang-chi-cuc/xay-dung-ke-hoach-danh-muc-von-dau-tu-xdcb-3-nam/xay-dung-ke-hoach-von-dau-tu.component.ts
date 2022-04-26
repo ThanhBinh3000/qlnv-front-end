@@ -134,6 +134,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   tongncauVonN1: number;
   tongncauVonN2: number;
   tongncauVonN3: number;
+  tongTongQdDuyetTkDtoan: number;
 
   // upload file
   addFile() {
@@ -519,7 +520,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -836,17 +838,20 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
+
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -865,7 +870,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();
@@ -916,6 +921,13 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       element.klthCapDen3006DtoanChiTx = divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt = divMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx = divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.qdDuyetTkDtoanTong = divMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
+      element.klthCapDen3006Quykhac = divMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = divMoney(element.klthCapDen3112Quykhac, this.maDviTien);
+      element.ncauVonN1 = divMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = divMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = divMoney(element.ncauVonN3, this.maDviTien);
+
     });
   }
 
@@ -930,6 +942,12 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       element.klthCapDen3006DtoanChiTx = mulMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt = mulMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx = mulMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.qdDuyetTkDtoanTong = mulMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
+      element.klthCapDen3006Quykhac = mulMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = mulMoney(element.klthCapDen3112Quykhac, this.maDviTien);
+      element.ncauVonN1 = mulMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = mulMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = mulMoney(element.ncauVonN3, this.maDviTien);
     });
   }
   changeTong(){
@@ -962,6 +980,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       this.tongncauVonN1 += e.ncauVonN1
       this.tongncauVonN2 += e.ncauVonN2
       this.tongncauVonN3 += e.ncauVonN3
+      this.tongTongQdDuyetTkDtoan = this.tongqdDuyetTkDtoanXl + this.tongqdDuyetTkDtoanTb + this.tongqdDuyetTkDtoanCk
     })
   }
 }

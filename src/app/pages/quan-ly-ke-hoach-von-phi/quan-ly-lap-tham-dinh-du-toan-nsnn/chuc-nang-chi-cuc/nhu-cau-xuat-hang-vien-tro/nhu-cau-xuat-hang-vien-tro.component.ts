@@ -483,7 +483,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -742,19 +743,25 @@ saveEdit(id: string): void {
     if (!maBaoCao) {
       return;
     }
-    let ob = [{
-      id: this.lstCTietBCao.id,
-      luongXuatGaoVtro: this.luongXuatGaoVtro,
-      luongXuatThocVtro: this.luongXuatThocVtro,
-      lstCTiet: this.lstCTiet
-    }]
+
 
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTiet.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
+
+    let ob = [{
+      id: null,
+      luongXuatGaoVtro: this.luongXuatGaoVtro,
+      luongXuatThocVtro: this.luongXuatThocVtro,
+      lstCTiet: lstTemp
+    }]
+
+
     let request = {
       id: null,
       listIdDeletes: null,

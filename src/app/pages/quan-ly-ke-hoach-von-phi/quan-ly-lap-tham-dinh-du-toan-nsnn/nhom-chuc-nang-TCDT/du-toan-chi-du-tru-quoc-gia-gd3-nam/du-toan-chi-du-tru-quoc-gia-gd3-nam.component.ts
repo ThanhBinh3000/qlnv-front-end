@@ -467,7 +467,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -476,6 +477,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
+          this.tinhtong()
           this.listFile=[]
           this.updateEditCache();
 
@@ -663,6 +665,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+      this.tinhtong()
     }
   }
 
@@ -695,7 +698,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
               e.id= uuid.v4();
             })
             this.updateEditCache()
-            console.log(this.lstCTietBCao);
+            this.tinhtong()
 
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -763,17 +766,19 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -792,7 +797,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-chi-du-tru-quoc-gia-gd3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();

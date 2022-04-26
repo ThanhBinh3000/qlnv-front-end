@@ -205,7 +205,6 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       );
     }
 
-    this.getStatusButton();
     //get danh muc noi dung
     this.danhMucService.mDCQQD().toPromise().then(
       (data) => {
@@ -224,6 +223,8 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.nguonVons = data.data?.content;
+          console.log(this.nguonVons);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -474,7 +475,8 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -768,17 +770,19 @@ xoaBaoCao(){
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -797,7 +801,7 @@ xoaBaoCao(){
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();

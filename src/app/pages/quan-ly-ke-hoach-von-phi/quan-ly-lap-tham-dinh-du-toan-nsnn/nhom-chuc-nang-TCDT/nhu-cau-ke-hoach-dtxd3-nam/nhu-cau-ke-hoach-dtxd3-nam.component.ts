@@ -17,11 +17,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ItemData {
   tenDan!:string;
-  maLoaiKhoach!:string;
+  maKhoach!:string;
   maKhoiDan!:string;
-  maDdiemXdung!:string;
-  ddiemMoTk!:string;
-  maSoDan!:string;
+  maDdiemXd!:string;
+  ddiemMoTaikhoan!:string;
+  masoDan!:string;
   maNganhKte!:string;
   nlucTke!:string;
   namKcTte!:number;
@@ -34,7 +34,7 @@ export class ItemData {
   qdDuyetTkDtoanTong!:number;
   qdDuyetTkDtoanXl!:number;
   qdDuyetTkDtoanTb!:number;
-  qdDuyetTkDtoanCx!:number;
+  qdDuyetTkDtoanCk!:number;
   klthCapDen3006Songaythang!:string;
   klthCapDen3006Nstt!:number;
   klthCapDen3006DtoanChiTx!:number;
@@ -510,7 +510,8 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -560,11 +561,11 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDan:"",
-      maLoaiKhoach:"",
+      maKhoach:"",
       maKhoiDan:"",
-      maDdiemXdung:"",
-      ddiemMoTk:"",
-      maSoDan:"",
+      maDdiemXd:"",
+      ddiemMoTaikhoan:"",
+      masoDan:"",
       maNganhKte:"",
       nlucTke:"",
       namKcTte:0,
@@ -577,7 +578,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       qdDuyetTkDtoanTong:0,
       qdDuyetTkDtoanXl:0,
       qdDuyetTkDtoanTb:0,
-      qdDuyetTkDtoanCx:0,
+      qdDuyetTkDtoanCk:0,
       klthCapDen3006Songaythang:"",
       klthCapDen3006Nstt:0,
       klthCapDen3006DtoanChiTx:0,
@@ -698,7 +699,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maLoaiKhoach){
+    if (!this.lstCTietBCao[id].maKhoach){
 			this.deleteById(id);
 			return;
 		}
@@ -713,26 +714,26 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     if (
-      !this.editCache[id].data.maLoaiKhoach ||
+      !this.editCache[id].data.maKhoach ||
       !this.editCache[id].data.maKhoiDan ||
-      !this.editCache[id].data.maDdiemXdung ||
-      !this.editCache[id].data.maDdiemXdung ||
+      !this.editCache[id].data.maDdiemXd ||
+      !this.editCache[id].data.maDdiemXd ||
       !this.editCache[id].data.tenDan||
-      !this.editCache[id].data.maSoDan||
-      !this.editCache[id].data.ddiemMoTk||
+      !this.editCache[id].data.masoDan||
+      !this.editCache[id].data.ddiemMoTaikhoan||
       !this.editCache[id].data.klthCapDen3006Songaythang ||
       !this.editCache[id].data.qdDuyetTkDtoanSongaythang||
       !this.editCache[id].data.qdDuyetDanDtuSongaythang||
       !this.editCache[id].data.nlucTke||
       !this.editCache[id].data.ghiChu||
       !this.editCache[id].data.klthCapDen3112Songaythang ||
-      !this.editCache[id].data.namKcTte||
-      !this.editCache[id].data.namHtTte||
+      // !this.editCache[id].data.namKcTte||
+      // !this.editCache[id].data.namHtTte||
       (!this.editCache[id].data.qdDuyetDanDtuTongVon && this.editCache[id].data.qdDuyetDanDtuTongVon !==0)||
       // (!this.editCache[id].data.qdDchinhDanDtuTongVon && this.editCache[id].data.qdDchinhDanDtuTongVon !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanXl && this.editCache[id].data.qdDuyetTkDtoanXl !==0)||
       (!this.editCache[id].data.qdDuyetTkDtoanTb && this.editCache[id].data.qdDuyetTkDtoanTb !==0)||
-      (!this.editCache[id].data.qdDuyetTkDtoanCx && this.editCache[id].data.qdDuyetTkDtoanCx !==0)||
+      (!this.editCache[id].data.qdDuyetTkDtoanCk && this.editCache[id].data.qdDuyetTkDtoanCk !==0)||
       (!this.editCache[id].data.klthCapDen3006Nstt && this.editCache[id].data.klthCapDen3006Nstt !==0)||
       (!this.editCache[id].data.klthCapDen3006DtoanChiTx && this.editCache[id].data.klthCapDen3006DtoanChiTx !==0)||
       (!this.editCache[id].data.klthCapDen3006Quykhac && this.editCache[id].data.klthCapDen3006Quykhac !==0)||
@@ -746,11 +747,11 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return
     }
-    if((this.editCache[id].data.namKcTte <= 1000 ||  this.editCache[id].data.namKcTte >= 2999) || (this.editCache[id].data.namHtTte <= 1000 ||  this.editCache[id].data.namHtTte >= 2999))
-    {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-      return
-    }
+    // if((this.editCache[id].data.namKcTte <= 1000 ||  this.editCache[id].data.namKcTte >= 2999) || (this.editCache[id].data.namHtTte <= 1000 ||  this.editCache[id].data.namHtTte >= 2999))
+    // {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+    //   return
+    // }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
@@ -768,7 +769,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   changeModel(id: string): void {
-    this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) +  Number(this.editCache[id].data.qdDuyetTkDtoanCx);
+    this.editCache[id].data.qdDuyetTkDtoanTong = Number(this.editCache[id].data.qdDuyetTkDtoanXl) + Number(this.editCache[id].data.qdDuyetTkDtoanTb) +  Number(this.editCache[id].data.qdDuyetTkDtoanCk);
   }
   //call tong hop
   async calltonghop(){
@@ -835,17 +836,19 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -864,7 +867,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/nhu-cau-ke-hoach-dtxd3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();
@@ -907,27 +910,39 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   divMoneyTotal() {
     this.lstCTietBCao.filter(element => {
       element.qdDuyetDanDtuTongVon= divMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
+      element.qdDuyetTkDtoanTong = divMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
       element.qdDchinhDanDtuTongVon= divMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+      element.klthCapDen3006Quykhac = divMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = divMoney(element.klthCapDen3112Quykhac, this.maDviTien);
       element.qdDuyetTkDtoanXl= divMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
       element.qdDuyetTkDtoanTb= divMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
-      element.qdDuyetTkDtoanCx= divMoney(element.qdDuyetTkDtoanCx, this.maDviTien);
+      element.qdDuyetTkDtoanCk= divMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
       element.klthCapDen3006Nstt= divMoney(element.klthCapDen3006Nstt, this.maDviTien);
       element.klthCapDen3006DtoanChiTx= divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt= divMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx= divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.ncauVonN1 = divMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = divMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = divMoney(element.ncauVonN3, this.maDviTien);
     });
   }
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
       element.qdDuyetDanDtuTongVon= mulMoney(element.qdDuyetDanDtuTongVon, this.maDviTien);
       element.qdDchinhDanDtuTongVon= mulMoney(element.qdDchinhDanDtuTongVon, this.maDviTien);
+      element.qdDuyetTkDtoanTong = mulMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
+      element.klthCapDen3006Quykhac = mulMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = mulMoney(element.klthCapDen3112Quykhac, this.maDviTien);
       element.qdDuyetTkDtoanXl= mulMoney(element.qdDuyetTkDtoanXl, this.maDviTien);
       element.qdDuyetTkDtoanTb= mulMoney(element.qdDuyetTkDtoanTb, this.maDviTien);
-      element.qdDuyetTkDtoanCx= mulMoney(element.qdDuyetTkDtoanCx, this.maDviTien);
+      element.qdDuyetTkDtoanCk= mulMoney(element.qdDuyetTkDtoanCk, this.maDviTien);
       element.klthCapDen3006Nstt= mulMoney(element.klthCapDen3006Nstt, this.maDviTien);
       element.klthCapDen3006DtoanChiTx= mulMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt= mulMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx= mulMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.ncauVonN1 = mulMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = mulMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = mulMoney(element.ncauVonN3, this.maDviTien);
     });
   }
 }

@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe ,Location} from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -32,21 +32,21 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
 
   searchFilter = {
-    maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
-    trangThai:'',
+    trangThai:9,
     maBcao:'',
     maLoaiBcao:'',
     namBcao:'',
     thangBCao: '',
     dotBcao:'',
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     },
     str: '',
     donVi:'',
+    maPhanBcao:'0'
   };
 
 
@@ -62,6 +62,8 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private notifi:NzNotificationService,
+    private location: Location,
+
   ) {
   }
 
@@ -87,27 +89,12 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
   timkiem(){
     if(this.searchFilter.maLoaiBcao==''){
       this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
         this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
@@ -131,33 +118,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
-        break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
+    this.url = '/bao-cao/'
   }
 
   //doi so trang
@@ -170,4 +131,18 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     this.pages.size = size;
   }
 
+  // tong hop bao cao tu cap duoi
+  tongHop(){
+    let request = {
+    dotBcao: null,
+    maLoaiBcao: this.searchFilter.maLoaiBcao,
+    maPhanBCao: '0',
+    namBcao: this.searchFilter.namBcao,
+    thangBcao: this.searchFilter.thangBCao
+    }
+  }
+
+  close() {
+    this.location.back();
+  }
 }

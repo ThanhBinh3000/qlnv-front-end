@@ -133,6 +133,7 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm'">
+            <div id="tablePrint">
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất Thóc (tấn)</label>
@@ -160,7 +161,7 @@
                 <label for="">Nhu cầu nhập thiết bị vật tư</label>
               </div>
             </div>
-            <nz-table #editRowTable nzBordered class="table__body" id="tablePrint">
+            <nz-table #editRowTable nzBordered class="table__body" >
               <thead>
                 <tr>
                   <th rowspan="" style="width: 2%">STT</th>
@@ -243,6 +244,7 @@
                 </tr>
               </tbody>
             </nz-table>
+          </div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm

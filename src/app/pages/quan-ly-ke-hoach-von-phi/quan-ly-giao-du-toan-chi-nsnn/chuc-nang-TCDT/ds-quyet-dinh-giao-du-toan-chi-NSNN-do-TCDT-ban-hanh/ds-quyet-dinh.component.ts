@@ -20,7 +20,7 @@ export class DsQuyetDinhComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  url: string = "nhap-quyet-dinh-cua-tong-cuc-va-phan-bo-cho-cac-don-vi/";
 
   // phan cu cua teca
   visible = false;
@@ -126,7 +126,7 @@ export class DsQuyetDinhComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timBaoCaoGiao1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

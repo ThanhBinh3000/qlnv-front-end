@@ -448,7 +448,8 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -729,17 +730,19 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     }
     this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = [];
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null,
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -806,7 +809,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       element.kphiDuKienBtriN2 = mulMoney(element.kphiDuKienBtriN2, this.maDviTien);
       element.kphiDuKienBtriN3 = mulMoney(element.kphiDuKienBtriN3, this.maDviTien);
       element.kphiDuocThienDenThoiDiemBcao = mulMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
-      element.kphiTgianThuhoi = mulMoney(element.kphiTgianThuhoi, this.maDviTien);
       element.kphiTongPhiDuocDuyet = mulMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
       element.kphiThuhoi = mulMoney(element.kphiThuhoi, this.maDviTien);
     });
@@ -819,7 +821,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       element.kphiDuKienBtriN2 = divMoney(element.kphiDuKienBtriN2, this.maDviTien);
       element.kphiDuKienBtriN3 = divMoney(element.kphiDuKienBtriN3, this.maDviTien);
       element.kphiDuocThienDenThoiDiemBcao = divMoney(element.kphiDuocThienDenThoiDiemBcao, this.maDviTien);
-      element.kphiTgianThuhoi = divMoney(element.kphiTgianThuhoi, this.maDviTien);
       element.kphiTongPhiDuocDuyet = divMoney(element.kphiTongPhiDuocDuyet, this.maDviTien);
       element.kphiThuhoi = divMoney(element.kphiThuhoi, this.maDviTien);
     });

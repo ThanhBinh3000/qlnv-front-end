@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe,Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,7 +33,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
 
   searchFilter = {
-    maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
     trangThai:'',
@@ -43,7 +42,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     thangBCao: '',
     dotBcao:'',
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     },
     str: '',
@@ -63,7 +62,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notification:NzNotificationService,
+    private location:Location,
   ) {
   }
 
@@ -74,11 +74,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
         } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
@@ -88,45 +88,30 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
-  timkiem(){
+  timKiem(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
 
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
         }
       }else{
-        this.notifi.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
       console.log(res);
     },err =>{
-      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
   themMoi(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
@@ -173,4 +158,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     this.pages.size = size;
   }
 
+  close() {
+    this.location.back();
+  }
 }

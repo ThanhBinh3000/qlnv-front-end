@@ -26,6 +26,8 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   @Input() soQdCha: any;
   @Input() ngayQdCha: any;
   @Input() namQdCha: any;
+  @Input() matrangThaiPbo: any
+  @Input() maNguoiKyBTC: any
   danhSachBaoCao: any;
   khoanMucs: any = [];
   trangThais: any = TRANGTHAITIMKIEM;
@@ -84,7 +86,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
         page: this.pages.page
       },
     };
-     this.QuanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
+     this.QuanLyVonPhiService.timDanhSachPhanBo1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -103,7 +105,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   }
 
   async handleOk() {
-    await this.QuanLyVonPhiService.QDGiaoChiTiet(this.radioValue).toPromise().then(
+    await this.QuanLyVonPhiService.QDGiaoChiTiet1(this.radioValue).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
@@ -113,9 +115,10 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
           this.namQdCha = data.data.qdCha.nam
           this.ngayQd = data.data.ngayQd
           this.nam = data.data.nam
-          this.nguoiKyBTC = data.data.nguoiKyBTC
+          this.maNguoiKyBTC = data.data.qdCha.maNguoiKy
           this.maDvi = data.data.maDvi
           this.danhSachKhoanMuc = data.data.lstCtiet
+          this.matrangThaiPbo = data.data.trangThaiPbo
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -135,6 +138,8 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
       soQdCha: this.soQdCha ,
       ngayQdCha: this.ngayQdCha,
       namQdCha: this.namQdCha,
+      matrangThaiPbo: this.matrangThaiPbo ,
+      maNguoiKyBTC: this.maNguoiKyBTC,
       id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);

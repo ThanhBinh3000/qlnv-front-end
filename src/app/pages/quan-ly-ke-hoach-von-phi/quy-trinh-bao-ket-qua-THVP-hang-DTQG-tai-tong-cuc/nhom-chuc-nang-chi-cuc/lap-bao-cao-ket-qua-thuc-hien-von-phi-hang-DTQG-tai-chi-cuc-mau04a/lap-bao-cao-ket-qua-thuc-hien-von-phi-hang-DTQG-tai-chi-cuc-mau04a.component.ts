@@ -81,8 +81,8 @@ export class ItemDataMau02 {
 export class ItemDataMau03 {
   id: any;
   stt: any;
-  maVtu: string;
-  maDviTinh: string;
+  maVtu: number;
+  maDviTinh: number;
   soLuongKhoach: string;
   soLuongTte: number;
   dgGiaKhoach: number;
@@ -233,7 +233,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   maLoaiBaocao: any; // phân biệt kiểu báo cáo năm hoặc đợt
   maPhanBcao:string ='1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
-  namBcao:string;
+
   maBcao:any;
   maDonViTao:any;
   donvitien: any;
@@ -252,7 +252,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   statusButton: boolean = false;
   maDvi:any;
   nam:any;
+  //bien router goi tong hop
+  namBcao:string;
   dotBcao:any;
+  trThai:any;
+  loaiBaoCaoTongHop:any;
+  listBcaoKqua:any []; //danh sach bao cao cac chi cuc truc thuoc kem theo
+  //khai thac bao cao
   checkxemkhaithac:any;
   
 
@@ -326,7 +332,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.id = this.router.snapshot.paramMap.get('id');
     this.namBcao = this.router.snapshot.paramMap.get('namBcao');
     this.dotBcao = this.router.snapshot.paramMap.get('dotBcao');
-
+    this.trThai = this.router.snapshot.paramMap.get('trangThai');
+    this.loaiBaoCaoTongHop = this.router.snapshot.paramMap.get('maLoaiBcao');
+    //-----
     this.loaiBaoCaoParam = this.router.snapshot.paramMap.get('loai');
     //xem chi tiet xuất file exel;
     this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
@@ -341,8 +349,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-    debugger
-    if ( this.namBcao!=null && this.dotBcao!=null) {
+    if ( this.namBcao!=null && this.dotBcao!=null && this.loaiBaoCaoTongHop!=null) {
       // this.getDetailReportToExportFile();\
       this.callTonghop();
     }else if (this.id != null) {
@@ -1651,7 +1658,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   callTonghop(){
 
-    
+    this.baoCao.namBcao = this.currentday.getFullYear();
+      this.baoCao.ngayTao = this.datepipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
+      this.nam = this.currentday.getFullYear();
+      //khởi tạo trạng thái tạo mới
+      this.baoCao.trangThai = '1';
+      
     let objTonghop ={
       dotBcao: this.dotBcao,
       maDvi: "",
@@ -1659,10 +1671,238 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       namBcao:this.namBcao,
       thangBcao:null,
     }
-    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).subscribe(res => {
+
+    let objKiemTraBaoCao = {
+    dotBcao:this.dotBcao,
+    maBcao:'',
+    maDvi:'',
+    maDviCha: '',
+    maLoaiBcao:this.loaiBaoCaoTongHop,
+    maPhanBcao:'1',
+    namBcao:this.namBcao,
+    ngayTaoDen:'',
+    ngayTaoTu:'',
+    paggingReq: {
+      limit: 20,
+      page: 1
+    },
+    str: '',
+    thangBCao: '',
+    trangThai:this.trThai,
+    }
+
+    this.quanLyVonPhiService.tongHopBaoCaoKetQua(objTonghop).toPromise().then(async res => {
       if(res.statusCode==0){
         console.log(res);
-        
+                this.baoCao.lstBCao= res.data.lstBCao;
+                this.listBcaoKqua = res.data.lstBCaoDviTrucThuoc;
+                this.listBcaoKqua.forEach(e =>{
+                  e.ngayTrinhDuyet = this.datepipe.transform(e.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
+                  e.ngayDuyet = this.datepipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+                })
+                this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
+                  (res) => {
+                    if (res.statusCode == 0) {            
+                      this.baoCao.maBcao = res.data.data;
+                      // this.notification.success(MESSAGE.SUCCESS, res?.msg);
+                    } else {
+                      this.notification.error(MESSAGE.ERROR, res?.msg);
+                    }
+                  },
+                  (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                  },
+                );
+                if(this.loaiBaoCaoTongHop=='1'){
+                  //thiếu service lấy đợt báo cáo
+                 await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
+                    if(res.statusCode==0){            
+                      this.baoCao.dotBcao = res.data;
+                    }else{
+                      this.notification.error(MESSAGE.ERROR,res?.msg);
+                    }
+                  },err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                  })
+                  this.maLoaiBaocao = '1';
+                  this.baoCao?.lstBCao?.forEach(item => {
+                    let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
+                    if(index !== -1){
+                      item.id = uuid.v4();
+                      item.checked=false;
+                      item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
+                      item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
+                      item.trangThai = '2';
+                    }
+                  })
+                }else{
+                  this.maLoaiBaocao ='2';
+                  this.baoCao?.lstBCao?.forEach(item => {
+                    let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
+                    if(index !== -1){
+                      item.id=uuid.v4();
+                      item.checked=false;
+                      item.tieuDe = LISTBIEUMAUNAM[index].tieuDe;
+                      item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
+                      item.trangThai ='2';
+                    }
+                  })
+                }
+                console.log(this.baoCao);
+          //set data cho cac bieu mau
+          this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
+          this.lstCTietBCao02.forEach(e => {
+            if(e.maVtuHeader =='1'){
+              this.lstCTietBCao1.push(e);
+            }else{
+              this.lstCTietBCao2.push(e);
+            }
+          })
+          this.lstCTietBCao03 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_XUAT_HANG_DTQG)?.lstCTietBCao; // xuất hàng
+          this.lstCTietBCao03.forEach(e => {
+            if(e.maVtuHeader=='1'){
+              this.lstCTietBCao031.push(e);
+            }else if(e.maVtuHeader=='2'){
+              this.lstCTietBCao032.push(e);
+            }else{
+              this.lstCTietBCao033.push(e);
+            }
+          })
+          //------ mẫu 04a xuất
+          this.lstCTietBCao04ax = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG)?.lstCTietBCao;
+          this.lstCTietBCao04ax.forEach(item => {
+            item.level = item.stt.split('.').length -1;
+          })
+          this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
+          this.stt = 0;
+          this.updateSTT(this.chiTietBcao4ax);
+          
+          //-----mẫu 04a nhập
+          this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
+          this.lstCTietBCao04an.forEach(item => {
+            item.level = item.stt.split('.').length -1;
+          })
+          this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
+          this.stt = 0;
+          this.updateSTT(this.chiTietBcao4an);
+          //-- mẫu 04b xuất
+          this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
+          this.lstCTietBCao04bx.forEach(item => {
+            item.level = item.stt.split('.').length -1;
+          })
+          this.getLinkList(this.chiTietBcao4bx,'',0,this.lstCTietBCao04bx);
+          this.stt = 0;
+          this.updateSTT(this.chiTietBcao4bx);
+          //-- mẫu 05
+          this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCTietBCao;
+          this.lstCTietBCao05.forEach(item => {
+            item.level = item.stt.split('.').length -1;
+          })
+          this.getLinkList(this.chiTietBcao5,'',0,this.lstCTietBCao05);
+          this.stt = 0;
+          this.updateSTT(this.chiTietBcao5);
+
+
+          //lấy tên cột 
+          if(this.lstCTietBCao04ax.length!=0){
+            let e = this.lstCTietBCao04ax[0];
+            e.listCtiet.forEach((el) => {
+              if (el.loaiMatHang == 0) {
+                this.listVattu.forEach((vt) => {
+                  if (vt.id == el.maVtu) {
+                    let objTrongdot = {
+                      id: el.id,
+                      maVtu: vt.id,
+                      loaiMatHang: el.loaiMatHang,
+                      colName: vt.tenDm,
+                      sl: el.sl,
+                      col:el.col,
+                    };
+                    this.listColTrongDot4ax.push(objTrongdot);
+                  }
+                });
+              }
+            });
+            this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
+          }
+          
+          //-------
+          if(this.lstCTietBCao04an.length!=0){
+            let e1 = this.lstCTietBCao04an[0];
+            e1.listCtiet.forEach((el) => {
+              if (el.loaiMatHang == 0) {
+                this.listVattu.forEach((vt) => {
+                  if (vt.id == el.maVtu) {
+                    let objTrongdot = {
+                      id: el.id,
+                      maVtu: vt.id,
+                      loaiMatHang: el.loaiMatHang,
+                      colName: vt.tenDm,
+                      sl: el.sl,
+                      col:el.col,
+                    };
+                    this.listColTrongDot4an.push(objTrongdot);
+                  }
+                });
+              }
+            });
+            this.cols4an = this.cols4an + this.listColTrongDot4an.length;
+          }
+          //-------
+          if(this.lstCTietBCao04bx.length!=0){
+            let e2 = this.lstCTietBCao04bx[0];
+            e2.listCtiet.forEach((el) => {
+              if (el.loaiMatHang == 0) {
+                this.listVattu.forEach((vt) => {
+                  if (vt.id == el.maVtu) {
+                    let objTrongdot = {
+                      id: el.id,
+                      maVtu: vt.id,
+                      loaiMatHang: el.loaiMatHang,
+                      colName: vt.tenDm,
+                      sl: el.sl,
+                      col:el.col,
+                    };
+                    this.listColTrongDot4bx.push(objTrongdot);
+                  }
+                });
+              }
+            });
+            this.cols4bx = this.cols4bx + this.listColTrongDot4bx.length;
+          }
+          //-------
+          if(this.lstCTietBCao05.length!=0){
+            let e3 = this.lstCTietBCao05[0];
+          e3.listCtiet.forEach((el) => {
+            if (el.loaiMatHang == 0) {
+              this.listVattu.forEach((vt) => {
+                if (vt.id == el.maVtu) {
+                  let objTrongdot = {
+                    id: el.id,
+                    maVtu: vt.id,
+                    loaiMatHang: el.loaiMatHang,
+                    colName: vt.tenDm,
+                    sl: el.sl,
+                    col:el.col,
+                  };
+                  this.listColTrongDot5.push(objTrongdot);
+                }
+              });
+            }
+          });
+          this.cols05 = this.cols05 + this.listColTrongDot5.length;
+          }
+          
+          // set list id file ban dau
+          this.listFile =[];
+          this.getStatusButton();
+          this.updateEditCache();
+          this.updateEditCache02();
+          this.updateEditCache03();
+          this.updateLstCTietBCao(1);
+          this.updateLstCTietBCao(2);
+          this.updateLstCTietBCao(3);
+          this.updateLstCTietBCao(4);
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -3138,8 +3378,8 @@ updateSingleCheckedBcao(maLoai:any): void {
     let item: ItemDataMau03 = {
       id: uuid.v4(),
       stt: 0,
-      maVtu: '',
-      maDviTinh: '',
+      maVtu: 0,
+      maDviTinh: 0,
       soLuongKhoach: '',
       soLuongTte: 0,
       dgGiaKhoach: 0,

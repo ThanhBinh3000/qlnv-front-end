@@ -155,7 +155,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
         },
       );
     }
-    this.danhMucService.dMMaHthucVban().toPromise().then(
+    this.danhMucService.dMHinhThucVanBan().toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.listHinhThucVanBan = res.data?.content;

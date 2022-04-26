@@ -23,7 +23,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: string='/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/';
 
   userInfor:any;
   maDonVi:any;
@@ -31,10 +31,11 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   listBcaoKqua:any []=[];
   lenght:any=0;
   currentDate = new Date();
+  statusBtnTongHop:boolean = true;
   trangThais: any = LISTTRANGTHAIKIEMTRABAOCAO;                          // danh muc loai bao cao
 
   searchFilter = {
-    dotBcao:'',
+    dotBcao:0,
     maBcao:'',
     maDvi:'',
     maDviCha: '',
@@ -117,6 +118,18 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   },err =>{
     this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
   })
+
+  this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
+    if(res.statusCode== 0){
+        var dotBaoCao= res.data;
+        if(dotBaoCao!=1){
+          this.searchFilter.dotBcao = Number(dotBaoCao) - 1;
+        }else{
+          this.searchFilter.dotBcao = dotBaoCao;
+        }
+        
+    }
+  })
   }
 
 
@@ -168,11 +181,12 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
       this.notifi.error('Kiểm tra','Bạn chưa nhập năm báo cáo!');
       return;
     }
-    this.searchFilter.trangThai = '9';
+    if(this.searchFilter.maLoaiBcao==""){
+      this.searchFilter.maLoaiBcao ='1';
+    }
+    this.searchFilter.trangThai = '9';    
     this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         if(this.listBcaoKqua.length!=0){
           this.lenght = this.listBcaoKqua.length;
@@ -180,6 +194,9 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
             e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
             e.ngayDuyet = this.datePipe.transform(e.ngayDuyet,Utils.FORMAT_DATE_STR);
           })
+        if(this.listBcaoKqua){
+          this.statusBtnTongHop = false;
+        }
         }
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
@@ -189,11 +206,8 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     })
   }
   tongHop(){
-    
-    if(this.searchFilter.dotBcao==''){
-      this.searchFilter.dotBcao ='1';
-    }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/"+ this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao]);
+        
+    this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao+"/"+this.searchFilter.maLoaiBcao]);
   }
 
   //set url khi

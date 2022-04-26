@@ -8,11 +8,7 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Thực hiện phân bổ</span>
-        </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')" [hidden] = "statusBtnApprove">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -102,8 +98,8 @@
                 <input class="search__input" nz-input [(ngModel)]="nam" />
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Người ký">
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC">
-                  <nz-option *ngFor="let item of nguoiKyTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="maNguoiKyTC">
+                  <nz-option *ngFor="let item of nguoiKys" [nzValue]="item.maNguoiKy" [nzLabel]="item.tenNguoiKy"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Về việc" nzSpan="4">
@@ -137,18 +133,35 @@
                 <input class="search__input" nz-input [(ngModel)]="maSoKBNN" disabled />
               </div>
               <div nz-col nzSpan="6">
-                <label class="search__label">Trạng thái</label>
-                <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+                <label class="search__label pt-4">{{trangThaiPbo}}</label>
+                <!-- <input class="search__input" nz-input [(ngModel)]="trangThaiPbo" /> -->
               </div>
               <div nz-col nzSpan="6" class="mt ">
-                <div class="search__label">Đơn vị Tiền:
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="1.000 đồng"></nz-option>
-                  <nz-option nzValue="2" nzLabel="100.000 đồng"></nz-option>
-                  <nz-option nzValue="3" nzLabel="1.000.000 đồng"></nz-option>
-                  <nz-option nzValue="4" nzLabel="1.000.000.000 đồng"></nz-option>
-                </nz-select>
-                </div>
+                <ng-container *ngIf="status;else templateName">
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                      Đơn vị:
+                      <div *ngFor="let item of donViTiens">
+                        <div *ngIf="item.id == maDviTien">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #templateName>
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                      <!-- <div class="inner-box">Đơn vị: -->
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                        [class]="maDviTien ?'' : 'input-error-validate' ">
+                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </ng-template>
+
               </div>
             </div>
             <nz-table nzBordered class="table__body">
@@ -178,45 +191,41 @@
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
-                      {{data.stt}}
+                      {{data.tenLoaiKhoan}}
                     </td>
-                    <div>
+                    <td>
                       {{getNameContent(data.maNdung)}}
-                    </div>
-                    <td>{{data.uocThucHienNam}}</td>
-                    <td>{{data.duToanGiao2021}}</td>
-                    <td>{{data.duToanDapBo}}</td>
-                    <td>{{data.pBoChoDviTT}}</td>
+                    </td>
+                    <td>{{data.uocThien}}</td>
+                    <td>{{data.dtoanGiao}}</td>
+                    <td>{{data.dtoanDaPbo}}</td>
+                    <td>{{data.pboChoCacDvi}}</td>
                     <td [hidden]="status">
                       <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                     </td>
                   </ng-container>
                   <ng-template #editTemplate>
                     <td>
-                      {{editCache[data.id].data.stt}}
+                      {{editCache[data.id].data.tenLoaiKhoan}}
                     </td>
                     <td>
                       {{editCache[data.id].data.maNdung}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.uocThucHienNam"
-                           (change)="changeTong(data.id)" ></nz-input-number>
+                           [(ngModel)]="editCache[data.id].data.uocThien"></nz-input-number>
+                    </td>
+                    <td>
+                      <!-- <nz-input-number nzSize="small" class="search__input" [(ngModel)]="editCache[data.id].data.duToanGiao2021"></nz-input-number> -->
+                      {{editCache[data.id].data.dtoanGiao}}
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.duToanGiao2021"
-                           (change)="changeTong(data.id)" ></nz-input-number>
+                           [(ngModel)]="editCache[data.id].data.dtoanDaPbo" (change)="changeTong(data.id)"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.duToanDapBo"
-                           (change)="changeTong(data.id)" ></nz-input-number>
-                    </td>
-                    <td>
-                      <nz-input-number nzSize="small" class="search__input"
-                           [(ngModel)]="editCache[data.id].data.pBoChoDviTT"
-                           (change)="changeTong(data.id)" ></nz-input-number>
+                           [(ngModel)]="editCache[data.id].data.pboChoCacDvi" (change)="changeTong(data.id)"></nz-input-number>
                     </td>
                     <td>
                       <a (click)="saveEdit(data.id)" class="save">Save</a>
@@ -229,16 +238,16 @@
                   <td></td>
                   <td>Tổng cộng</td>
                   <td>
-                       {{tongCong?.uocThucHienNam}}
+                       {{tongUocTHien}}
                   </td>
                   <td>
-                       {{tongCong?.duToanGiao2021}}
+                       {{tongDuToanGiao}}
                   </td>
                   <td>
-                       {{tongCong?.duToanDapBo}}
+                       {{tongDuToanPb}}
                   </td>
                   <td>
-                       {{tongCong?.pBoChoDviTT}}
+                       {{tongPBoChoDviTT}}
                   </td>
                 </tr>
               </tbody>
@@ -285,23 +294,23 @@
               <label class="search__label">Lý do từ chối</label>
               <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
             </div>
-            <div nz-col nzSpan="6">
+            <!-- <div nz-col nzSpan="6">
               <label class="search__label">Nơi nhận</label>
-              <!-- <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" /> -->
               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="noiNhan">
                   <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
               </nz-select>
-            </div>
+            </div> -->
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
-            <i class="fa fa-trash-o"></i>
-            <span>Xóa</span>
+          <button type="button" class="btn btn-main">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Thực hiện phân bổ</span>
           </button>
           <button type="button" class="btn btn-main" (click)="addKmuc()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
+            <!-- <i class="icon htvbdh_dau-cong"></i> -->
+            <i nz-icon nzType="copy" nzTheme="outline"></i>
+            <span>Sao chép từ dự thảo</span>
           </button>
         </div>
       </div>
