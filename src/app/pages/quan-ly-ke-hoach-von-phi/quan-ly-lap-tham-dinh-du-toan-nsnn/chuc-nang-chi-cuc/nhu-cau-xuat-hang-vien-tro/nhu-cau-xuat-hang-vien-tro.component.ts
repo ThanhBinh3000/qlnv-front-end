@@ -461,12 +461,12 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
           console.log(this.lstCTietBCao);
 
           this.luongXuatGaoVtro = this.lstCTietBCao.luongXuatGaoVtro;
           this.luongXuatThocVtro = this.lstCTietBCao.luongXuatThocVtro;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -483,7 +483,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -742,19 +743,25 @@ saveEdit(id: string): void {
     if (!maBaoCao) {
       return;
     }
-    let ob = [{
-      id: this.lstCTietBCao.id,
-      luongXuatGaoVtro: this.luongXuatGaoVtro,
-      luongXuatThocVtro: this.luongXuatThocVtro,
-      lstCTiet: this.lstCTiet
-    }]
+
 
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTiet.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
+
+    let ob = [{
+      id: null,
+      luongXuatGaoVtro: this.luongXuatGaoVtro,
+      luongXuatThocVtro: this.luongXuatThocVtro,
+      lstCTiet: lstTemp
+    }]
+
+
     let request = {
       id: null,
       listIdDeletes: null,

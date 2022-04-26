@@ -53,7 +53,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   kphiBquanThocTx: number = 0;                   // kinh phi bao quan thoc thuong xuyen
   kphiBquanThocLd: number = 0;                   // kinh phi bao quan thoc lan dau
   kphiBquanGaoTx: number = 0;                    // kinh phi bao quan gao thuong xuyen
-  kphiBquanGaoLd: number =0 ;                    // kinh phi bao quna gao lan dau
+  kphiBquanGaoLd: number = 0;                    // kinh phi bao quna gao lan dau
   tongSo: number = 0;                            // tong kinh phi
   donVis: any = [];
   id!: any;                                   // id truyen tu router
@@ -273,10 +273,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     let checkParent = false;
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-    if(dVi && dVi.maDvi == this.userInfo.dvql){
+    if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
+    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
 
@@ -478,12 +478,13 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
+          console.log(this.lstCTietBCao);
           this.kphiBquanGaoLd = this.lstCTietBCao.kphiBquanGaoLd;
           this.kphiBquanGaoTx = this.lstCTietBCao.kphiBquanGaoTx;
           this.kphiBquanThocTx = this.lstCTietBCao.kphiBquanThocTx;
           this.kphiBquanThocLd = this.lstCTietBCao.kphiBquanThocLd;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.changeTong()
@@ -503,14 +504,15 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
             this.status = true;
           }
 
-          this.listFile=[]
+          this.listFile = []
 
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
@@ -667,10 +669,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maMatHang){
-			this.deleteById(id);
-			return;
-		}
+    if (!this.lstCTietBCao[id].maMatHang) {
+      this.deleteById(id);
+      return;
+    }
     if (!this.editCache[id].data.maMatHang || !this.editCache[id].data.maNhom) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
       return;
@@ -688,8 +690,8 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     if (
       !this.editCache[id].data.maMatHang ||
       !this.editCache[id].data.maNhom ||
-      (!this.editCache[id].data.kphi && this.editCache[id].data.kphi !==0 )
-      ) {
+      (!this.editCache[id].data.kphi && this.editCache[id].data.kphi !== 0)
+    ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
       this.editCache[id].data.checked = this.lstCTiet.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
@@ -720,11 +722,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.kphiBquanGaoLd = res.data.kphiBquanGaoLd;
-        this.kphiBquanGaoTx = res.data.kphiBquanGaoTx;
-        this.kphiBquanThocLd = res.data.kphiBquanThocLd;
-        this.kphiBquanThocTx = res.data.kphiBquanThocTx;
-        this.lstCTiet = res.data.lstCTiet;
+        let chiTiet = res.data[0];
+        this.kphiBquanGaoLd = chiTiet.kphiBquanGaoLd;
+        this.kphiBquanGaoTx = chiTiet.kphiBquanGaoTx;
+        this.kphiBquanThocLd = chiTiet.kphiBquanThocLd;
+        this.kphiBquanThocTx = chiTiet.kphiBquanThocTx;
+        this.lstCTiet = chiTiet.lstCTiet;
         // this.lstCTiet.forEach(e => {
         //   this.tongSo += e.kphi;
         // })
@@ -758,24 +761,83 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
     }
   }
-  changeTong(){
+  changeTong() {
     this.tongSo = 0
     this.lstCTiet.forEach(e => {
       this.tongSo += e.kphi;
     })
   }
- // action copy
- async doCopy() {
-  this.spinner.show();
+  // action copy
+  async doCopy() {
+    this.spinner.show();
 
-  let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
-    (data) => {
-      if (data.statusCode == 0) {
-        return data.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
+    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          return data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          return null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         return null;
       }
+    );
+    if (!maBaoCao) {
+      return;
+    }
+    this.mullMoneyTotal();
+    // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
+    this.lstCTiet.filter(item => {
+      lstTemp.push({
+        ...item,
+        id: null
+      })
+    })
+    let ob = [{
+      id: null,
+      kphiBquanThocTx: this.kphiBquanThocTx,
+      kphiBquanThocLd: this.kphiBquanThocLd,
+      kphiBquanGaoTx: this.kphiBquanGaoTx,
+      kphiBquanGaoLd: this.kphiBquanGaoLd,
+      lstCTiet: lstTemp
+    }]
+
+    let request = {
+      id: null,
+      listIdDeletes: null,
+      fileDinhKems: null,
+      listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCTietBCao: ob,
+      maBcao: maBaoCao,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG,
+      namHienHanh: this.namBaoCaoHienHanh,
+      namBcao: this.namBaoCaoHienHanh + 1,
+      soVban: null,
+    };
+
+    //call service them moi
+    this.spinner.show();
+    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+          this.id = data.data.id;
+          await this.getDetailReport();
+          this.getStatusButton();
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-bao-quan-hang-nam/' + this.id);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.divMoneyTotal();
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     },
     (err) => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -786,20 +848,23 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     return;
   }
   this.mullMoneyTotal();
+  // replace nhung ban ghi dc them moi id thanh null
+  let lstTemp = []
+  this.lstCTiet.filter(item => {
+    lstTemp.push({
+      ...item,
+      id: null
+    })
+  })
   let ob = [{
-    id: this.lstCTietBCao.id,
+    id: null,
     kphiBquanThocTx: this.kphiBquanThocTx,
     kphiBquanThocLd: this.kphiBquanThocLd,
     kphiBquanGaoTx: this.kphiBquanGaoTx,
     kphiBquanGaoLd: this.kphiBquanGaoLd,
-    lstCTiet: this.lstCTiet
+    lstCTiet: lstTemp
   }]
-  // replace nhung ban ghi dc them moi id thanh null
-  this.lstCTiet.filter(item => {
-    if (typeof item.id != "number") {
-      item.id = null;
-    }
-  })
+
   let request = {
     id: null,
     listIdDeletes: null,
@@ -824,46 +889,41 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         this.id = data.data.id;
         await this.getDetailReport();
         this.getStatusButton();
-        this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+        this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-bao-quan-hang-nam/' + this.id);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
         this.divMoneyTotal();
+      },
+    );
+
+    this.lstCTiet.filter(item => {
+      if (!item.id) {
+        item.id = uuid.v4();
       }
-    },
-    err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      this.divMoneyTotal();
-    },
-  );
+    });
 
-  this.lstCTiet.filter(item => {
-    if (!item.id) {
-      item.id = uuid.v4();
-    }
-  });
+    this.updateEditCache();
+    this.spinner.hide();
+  }
 
-  this.updateEditCache();
-  this.spinner.hide();
-}
-
-// action print
-doPrint() {
-  let WindowPrt = window.open(
-    '',
-    '',
-    'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-  );
-  let printContent = '';
-  printContent = printContent + '<div>';
-  printContent =
-    printContent + document.getElementById('tablePrint').innerHTML;
-  printContent = printContent + '</div>';
-  WindowPrt.document.write(printContent);
-  WindowPrt.document.close();
-  WindowPrt.focus();
-  WindowPrt.print();
-  WindowPrt.close();
-}
+  // action print
+  doPrint() {
+    let WindowPrt = window.open(
+      '',
+      '',
+      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    let printContent = '';
+    printContent = printContent + '<div>';
+    printContent =
+      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent = printContent + '</div>';
+    WindowPrt.document.write(printContent);
+    WindowPrt.document.close();
+    WindowPrt.focus();
+    WindowPrt.print();
+    WindowPrt.close();
+  }
   mullMoneyTotal() {
     this.kphiBquanGaoLd = mulMoney(this.kphiBquanGaoLd, this.maDviTien)
     this.kphiBquanGaoTx = mulMoney(this.kphiBquanGaoTx, this.maDviTien)
@@ -873,6 +933,19 @@ doPrint() {
       element.kphi = mulMoney(element.kphi, this.maDviTien);
     });
   }
+
+  divMoneyTotal() {
+    console.log(this.lstCTiet);
+    this.lstCTiet.forEach(element => {
+      this.kphiBquanGaoLd = divMoney(this.kphiBquanGaoLd, this.maDviTien)
+      this.kphiBquanGaoTx = divMoney(this.kphiBquanGaoTx, this.maDviTien)
+      this.kphiBquanThocLd = divMoney(this.kphiBquanThocLd, this.maDviTien)
+      this.kphiBquanThocTx = divMoney(this.kphiBquanThocTx, this.maDviTien)
+      this.lstCTiet.filter(element => {
+        element.kphi = divMoney(element.kphi, this.maDviTien);
+      });
+    })
+
   divMoneyTotal(){
     this.kphiBquanGaoLd = divMoney(this.kphiBquanGaoLd, this.maDviTien)
     this.kphiBquanGaoTx = divMoney(this.kphiBquanGaoTx, this.maDviTien)
@@ -883,3 +956,4 @@ doPrint() {
     });
   }
 }
+

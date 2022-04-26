@@ -460,12 +460,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
           this.luongThocXuat = this.lstCTietBCao.luongThocXuat;
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.changeTong()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -483,7 +483,8 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -697,11 +698,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       }
       await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
           if(res.statusCode==0){
-              this.luongThocXuat = res.data.luongThocXuat;
-              this.luongThocNhap = res.data.luongThocNhap;
-              this.luongGaoXuat = res.data.luongGaoXuat;
-              this.luongGaoNhap = res.data.luongGaoNhap;
-              this.lstCTiet = res.data.lstCTiet;
+              let chiTiet = res.data[0];
+              this.luongThocXuat = chiTiet.luongThocXuat;
+              this.luongThocNhap = chiTiet.luongThocNhap;
+              this.luongGaoXuat = chiTiet.luongGaoXuat;
+              this.luongGaoNhap = chiTiet.luongGaoNhap;
+              this.lstCTiet = chiTiet.lstCTiet;
               this.lstCTiet.forEach(e => {
                 this.tong += e.slNhap;
                 e.id = uuid.v4();
@@ -761,20 +763,23 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
+
+    // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
+    this.lstCTiet.filter(item => {
+      lstTemp.push({
+        ...item,
+        id: null
+      })
+    })
     let ob =[{
-      id: this.lstCTietBCao.id,
+      id: null,
       luongThocXuat:this.luongThocXuat,
       luongThocNhap:this.luongThocNhap,
       luongGaoXuat:this.luongGaoXuat,
       luongGaoNhap:this.luongGaoNhap,
-      lstCTiet:this.lstCTiet
+      lstCTiet: lstTemp
     }]
-    // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTiet.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
-    })
     let request = {
       id: null,
       listIdDeletes: null,
@@ -799,7 +804,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
 

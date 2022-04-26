@@ -137,14 +137,31 @@
                 <!-- <input class="search__input" nz-input [(ngModel)]="trangThaiPbo" /> -->
               </div>
               <div nz-col nzSpan="6" class="mt ">
-                <div class="search__label">Đơn vị Tiền:
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                  <nz-option nzValue="1" nzLabel="1.000 đồng"></nz-option>
-                  <nz-option nzValue="2" nzLabel="100.000 đồng"></nz-option>
-                  <nz-option nzValue="3" nzLabel="1.000.000 đồng"></nz-option>
-                  <nz-option nzValue="4" nzLabel="1.000.000.000 đồng"></nz-option>
-                </nz-select>
-                </div>
+                <ng-container *ngIf="status;else templateName">
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                      Đơn vị:
+                      <div *ngFor="let item of donViTiens">
+                        <div *ngIf="item.id == maDviTien">
+                          {{item.tenDm}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #templateName>
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="3">
+                      <!-- <div class="inner-box">Đơn vị: -->
+                      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                        [class]="maDviTien ?'' : 'input-error-validate' ">
+                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                      </nz-select>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </ng-template>
+
               </div>
             </div>
             <nz-table nzBordered class="table__body">

@@ -456,7 +456,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -750,17 +751,19 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -779,7 +782,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong-hang-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();
@@ -822,8 +825,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   divMoneyTotal() {
     this.lstCTietBCao.filter(element => {
       element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
-      element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-      element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      // element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+      // element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
       element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
       element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
       element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
@@ -837,8 +840,8 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
       element.bcheGiaoN1 = mulMoney(element.bcheGiaoN1, this.maDviTien);
-      element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-      element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      // element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
+      // element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
       element.ccvcDuKienCoMatN1LuongTheoBac = mulMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
       element.ccvcDuKienCoMatN1Pcap = mulMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
       element.ccvcDuKienCoMatN1Ckdg = mulMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
