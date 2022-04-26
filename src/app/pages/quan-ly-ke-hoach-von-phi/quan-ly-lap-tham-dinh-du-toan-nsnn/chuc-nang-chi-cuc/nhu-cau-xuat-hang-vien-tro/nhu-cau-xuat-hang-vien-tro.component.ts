@@ -461,12 +461,12 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
           console.log(this.lstCTietBCao);
 
           this.luongXuatGaoVtro = this.lstCTietBCao.luongXuatGaoVtro;
           this.luongXuatThocVtro = this.lstCTietBCao.luongXuatThocVtro;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 

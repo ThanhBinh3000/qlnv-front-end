@@ -478,12 +478,13 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
+          console.log(this.lstCTietBCao);
           this.kphiBquanGaoLd = this.lstCTietBCao.kphiBquanGaoLd;
           this.kphiBquanGaoTx = this.lstCTietBCao.kphiBquanGaoTx;
           this.kphiBquanThocTx = this.lstCTietBCao.kphiBquanThocTx;
           this.kphiBquanThocLd = this.lstCTietBCao.kphiBquanThocLd;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.changeTong()
@@ -720,11 +721,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.kphiBquanGaoLd = res.data.kphiBquanGaoLd;
-        this.kphiBquanGaoTx = res.data.kphiBquanGaoTx;
-        this.kphiBquanThocLd = res.data.kphiBquanThocLd;
-        this.kphiBquanThocTx = res.data.kphiBquanThocTx;
-        this.lstCTiet = res.data.lstCTiet;
+        let chiTiet = res.data[0];
+        this.kphiBquanGaoLd = chiTiet.kphiBquanGaoLd;
+        this.kphiBquanGaoTx = chiTiet.kphiBquanGaoTx;
+        this.kphiBquanThocLd = chiTiet.kphiBquanThocLd;
+        this.kphiBquanThocTx = chiTiet.kphiBquanThocTx;
+        this.lstCTiet = chiTiet.lstCTiet;
         // this.lstCTiet.forEach(e => {
         //   this.tongSo += e.kphi;
         // })
@@ -870,7 +872,8 @@ doPrint() {
     });
   }
   divMoneyTotal(){
-    this.lstCTiet.filter(element => {
+    console.log(this.lstCTiet);
+    this.lstCTiet.forEach(element => {
       element.kphi = divMoney(element.kphi, this.maDviTien);
     });
   }

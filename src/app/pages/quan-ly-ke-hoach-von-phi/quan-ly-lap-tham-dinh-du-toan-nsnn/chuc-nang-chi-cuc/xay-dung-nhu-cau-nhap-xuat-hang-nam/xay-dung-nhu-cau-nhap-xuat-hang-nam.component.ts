@@ -460,12 +460,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
           this.luongThocXuat = this.lstCTietBCao.luongThocXuat;
           this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
           this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
           this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.changeTong()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -697,11 +697,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       }
       await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
           if(res.statusCode==0){
-              this.luongThocXuat = res.data.luongThocXuat;
-              this.luongThocNhap = res.data.luongThocNhap;
-              this.luongGaoXuat = res.data.luongGaoXuat;
-              this.luongGaoNhap = res.data.luongGaoNhap;
-              this.lstCTiet = res.data.lstCTiet;
+              let chiTiet = res.data[0];
+              this.luongThocXuat = chiTiet.luongThocXuat;
+              this.luongThocNhap = chiTiet.luongThocNhap;
+              this.luongGaoXuat = chiTiet.luongGaoXuat;
+              this.luongGaoNhap = chiTiet.luongGaoNhap;
+              this.lstCTiet = chiTiet.lstCTiet;
               this.lstCTiet.forEach(e => {
                 this.tong += e.slNhap;
                 e.id = uuid.v4();

@@ -220,7 +220,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       }
     );
     //get danh muc noi dung
-    this.danhMucService.mDChiTiet().toPromise().then(
+    this.danhMucService.dMNguonVon().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.nguonVons = data.data?.content;

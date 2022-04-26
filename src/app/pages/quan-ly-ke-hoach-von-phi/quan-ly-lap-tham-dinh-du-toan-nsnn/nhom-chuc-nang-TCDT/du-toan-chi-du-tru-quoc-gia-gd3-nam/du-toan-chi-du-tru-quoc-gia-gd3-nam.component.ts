@@ -653,9 +653,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     if (
       !this.editCache[id].data.maNdungChi ||
       !this.editCache[id].data.chiTiet||
-      (!this.editCache[id].data.khoachChiNsnnN1 && this.editCache[id].data.khoachChiNsnnN1 ===0)||
-      (!this.editCache[id].data.khoachChiNsnnN2 && this.editCache[id].data.khoachChiNsnnN2 ===0)||
-      (!this.editCache[id].data.khoachChiNsnnN3 && this.editCache[id].data.khoachChiNsnnN3 ===0)
+      (!this.editCache[id].data.khoachChiNsnnN1 && this.editCache[id].data.khoachChiNsnnN1 !==0)||
+      (!this.editCache[id].data.khoachChiNsnnN2 && this.editCache[id].data.khoachChiNsnnN2 !==0)||
+      (!this.editCache[id].data.khoachChiNsnnN3 && this.editCache[id].data.khoachChiNsnnN3 !==0)
       ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     } else {
@@ -704,13 +704,6 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       console.log(err);
     });
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe(res => {
-        if (res.statusCode == 0) {
-            this.mabaocao = res.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-    })
 
     this.spinner.show();
 }

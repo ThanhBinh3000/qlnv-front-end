@@ -459,7 +459,8 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 						this.trangThaiBanGhi == Utils.TT_BC_1 ||
 						this.trangThaiBanGhi == Utils.TT_BC_3 ||
 						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
+						this.trangThaiBanGhi == Utils.TT_BC_8 ||
+						this.trangThaiBanGhi == Utils.TT_BC_10
 					) {
 						this.status = false;
 					} else {
@@ -725,6 +726,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	//call tong hop
 	calltonghop() {
 		this.spinner.hide();
+		this.maDviTien = '1';
 		let objtonghop = {
 			maDvi: this.maDvi,
 			maLoaiBcao: this.maLoaiBacao,
@@ -749,13 +751,6 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		}, err => {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);;
 		});
-		this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(res => {
-			if (res.statusCode == 0) {
-				this.maBaoCao = res.data;
-			} else {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		})
 
 		this.spinner.show();
 	}
@@ -779,6 +774,11 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
 	divMoneyTotal() {
 		this.lstCTietBCao.forEach(element => {
+			element.tongCong = divMoney(element.tongCong, this.maDviTien);
+			element.k331Tcong = divMoney(element.k331Tcong, this.maDviTien);
+			element.k331KhongTchuCoDmucCong = divMoney(element.k331KhongTchuCoDmucCong, this.maDviTien);
+			element.k331KhongTchuChuaDmucCong = divMoney(element.k331KhongTchuChuaDmucCong, this.maDviTien);
+			element.k341Tcong = divMoney(element.k341Tcong, this.maDviTien);
 			element.k331KhongTchuCoDmucNx = divMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
 			element.k331KhongTchuCoDmucVtct = divMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
 			element.k331KhongTchuCoDmucBquan = divMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
@@ -803,6 +803,11 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
 	mulMoneyTotal() {
 		this.lstCTietBCao.forEach(element => {
+			element.tongCong = mulMoney(element.tongCong, this.maDviTien);
+			element.k331Tcong = mulMoney(element.k331Tcong, this.maDviTien);
+			element.k331KhongTchuCoDmucCong = mulMoney(element.k331KhongTchuCoDmucCong, this.maDviTien);
+			element.k331KhongTchuChuaDmucCong = mulMoney(element.k331KhongTchuChuaDmucCong, this.maDviTien);
+			element.k341Tcong = mulMoney(element.k341Tcong, this.maDviTien);
 			element.k331KhongTchuCoDmucNx = mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
 			element.k331KhongTchuCoDmucVtct = mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
 			element.k331KhongTchuCoDmucBquan = mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
@@ -848,17 +853,19 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		}
 		this.mulMoneyTotal();
 		// replace nhung ban ghi dc them moi id thanh null
+		let lstTemp = [];
 		this.lstCTietBCao.filter(item => {
-			if (typeof item.id != "number") {
-				item.id = null;
-			}
+			lstTemp.push({
+				...item,
+				id: null,
+			})
 		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: lstTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,

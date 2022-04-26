@@ -42,6 +42,13 @@ const routes: Routes = [
         './lap-bao-cao-dieu-chinh-kiem-tra/lap-bao-cao-dieu-chinh-kiem-tra.module'
       ).then((m) => m.LapBaoCaoDieuChinhKiemTraModule),
   },
+  {
+    path: 'test-link-list',
+    loadChildren: () =>
+      import(
+        './test-link-list/test-link-list.module'
+      ).then((m) => m.TestLinkListModule),
+  },
 ];
 
 @NgModule({

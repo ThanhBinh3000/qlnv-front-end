@@ -481,7 +481,8 @@ export class DuToanXuatNhapHangDtqgHangNamComponent implements OnInit {
 						this.trangThaiBanGhi == Utils.TT_BC_1 ||
 						this.trangThaiBanGhi == Utils.TT_BC_3 ||
 						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
+						this.trangThaiBanGhi == Utils.TT_BC_8 ||
+						this.trangThaiBanGhi == Utils.TT_BC_10
 					) {
 						this.status = false;
 					} else {
