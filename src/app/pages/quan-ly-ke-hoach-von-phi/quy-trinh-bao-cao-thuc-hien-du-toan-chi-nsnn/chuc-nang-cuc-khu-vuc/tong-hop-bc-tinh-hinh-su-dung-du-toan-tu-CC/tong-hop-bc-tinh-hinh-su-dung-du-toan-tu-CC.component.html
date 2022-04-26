@@ -20,7 +20,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" nzDisabled>
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
@@ -33,7 +33,8 @@
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ chi cục" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ chi cục"
+        class="mt16 flex-card p-lr16" [nzExtra]="tableCard2">
         <div style="margin: 15px;">
         </div>
         <nz-table nzBordered #basicTable [nzData]="listBcaoKqua" class="nowrap">
@@ -53,7 +54,7 @@
           <tbody>
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ i + 1 }}</td>
-              <td>mã đơn vị nè</td>
+              <td>{{getUnitName(item.maDvi)}}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
@@ -92,13 +93,15 @@
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>
-        <button type="button" class="btn btn-main">
-          <i nz-icon nzType="close"></i>
-          <span>Xóa</span>
-        </button>
-        <button type="button" class="btn btn-main" routerLink="../">
+        <button type="button" class="btn btn-main" (click)="close()">
           <i nz-icon nzType="stop"></i>
           <span>Đóng</span>
+        </button>
+      </ng-template>
+      <ng-template #tableCard2>
+        <button type="button" class="btn btn-main" (click)="tongHop()" [hidden]="listBcaoKqua.length > 0 ? false : true">
+          <i nz-icon nzType="area-chart" nzTheme="outline"></i>
+          <span>Tổng hợp</span>
         </button>
       </ng-template>
     </div>
