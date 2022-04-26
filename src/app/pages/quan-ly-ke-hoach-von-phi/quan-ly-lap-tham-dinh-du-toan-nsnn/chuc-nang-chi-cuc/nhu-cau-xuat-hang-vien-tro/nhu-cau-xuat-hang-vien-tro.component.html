@@ -142,6 +142,7 @@
                 </nz-select> -->
               </div>
             </div>
+            <div id="tablePrint">
             <div class="search__body" nz-row [nzGutter]="[16, 12]">
               <div nz-col nzSpan="12">
                 <label class="search__label">Lượng xuất gạo viện trợ (tấn)</label>
@@ -160,7 +161,7 @@
                 <label for="">Thông tin vật tư</label>
               </div>
             </div>
-            <nz-table #editRowTable nzBordered class="table__body" id="tablePrint">
+            <nz-table #editRowTable nzBordered class="table__body" >
               <thead>
                 <tr>
                   <th rowspan="" style="width: 2%">STT</th>
@@ -288,6 +289,7 @@
                 </tr>
               </tbody>
             </nz-table>
+          </div>
           </nz-tab>
         </nz-tabset>
         <div class="action">

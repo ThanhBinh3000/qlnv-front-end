@@ -917,6 +917,13 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       element.klthCapDen3006DtoanChiTx = divMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt = divMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx = divMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.qdDuyetTkDtoanTong = divMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
+      element.klthCapDen3006Quykhac = divMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = divMoney(element.klthCapDen3112Quykhac, this.maDviTien);
+      element.ncauVonN1 = divMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = divMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = divMoney(element.ncauVonN3, this.maDviTien);
+
     });
   }
 
@@ -931,6 +938,12 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       element.klthCapDen3006DtoanChiTx = mulMoney(element.klthCapDen3006DtoanChiTx, this.maDviTien);
       element.klthCapDen3112Nstt = mulMoney(element.klthCapDen3112Nstt, this.maDviTien);
       element.klthCapDen3112DtoanChiTx = mulMoney(element.klthCapDen3112DtoanChiTx, this.maDviTien);
+      element.qdDuyetTkDtoanTong = mulMoney(element.qdDuyetTkDtoanTong, this.maDviTien);
+      element.klthCapDen3006Quykhac = mulMoney(element.klthCapDen3006Quykhac, this.maDviTien);
+      element.klthCapDen3112Quykhac = mulMoney(element.klthCapDen3112Quykhac, this.maDviTien);
+      element.ncauVonN1 = mulMoney(element.ncauVonN1, this.maDviTien);
+      element.ncauVonN2 = mulMoney(element.ncauVonN2, this.maDviTien);
+      element.ncauVonN3 = mulMoney(element.ncauVonN3, this.maDviTien);
     });
   }
   changeTong(){
