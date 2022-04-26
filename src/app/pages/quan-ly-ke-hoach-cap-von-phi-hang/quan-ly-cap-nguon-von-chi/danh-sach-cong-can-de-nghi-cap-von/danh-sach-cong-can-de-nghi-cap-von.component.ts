@@ -169,7 +169,7 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
             trangThai: this.searchFilter.trangThai,
         }
 
-        this.quanLyVonPhiService.timkiemDieuChinh(request).toPromise().then(
+        this.quanLyVonPhiService.timKiemDieuChinh(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.lstCTietBCao = data.data.content;

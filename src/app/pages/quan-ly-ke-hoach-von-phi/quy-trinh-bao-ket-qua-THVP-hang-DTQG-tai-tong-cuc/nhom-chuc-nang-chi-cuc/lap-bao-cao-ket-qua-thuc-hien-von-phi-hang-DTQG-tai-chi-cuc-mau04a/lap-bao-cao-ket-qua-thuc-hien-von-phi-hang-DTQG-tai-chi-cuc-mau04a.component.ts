@@ -1691,7 +1691,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     trangThai:this.trThai,
     }
 
-    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).toPromise().then(async res => {
+    this.quanLyVonPhiService.tongHopBaoCaoKetQua(objTonghop).toPromise().then(async res => {
       if(res.statusCode==0){
         console.log(res);
                 this.baoCao.lstBCao= res.data.lstBCao;
