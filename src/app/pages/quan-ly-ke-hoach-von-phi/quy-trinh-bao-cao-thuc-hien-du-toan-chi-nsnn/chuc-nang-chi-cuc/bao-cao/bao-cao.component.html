@@ -111,10 +111,10 @@
               <td>{{item.tieuDe}}</td>
               <td>{{getStatusAppendixName(item.trangThai)}}</td>
               <td>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="status">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="status">
                   <span>Nhập dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai)" [hidden]="!status">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="!status">
                   <span>Xem</span>
                 </button>
                 <button type="button" class="btn btn-main">
@@ -399,14 +399,13 @@
                   </td>
                 </ng-container>
                 <ng-template #content>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteByStt(i+1)"></i>
                   </td>
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEditPL1(item.id)"></i>
                   </td>
-
-                  <td>
+                  <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLinePL1(i + 1)"></i>
                   </td>
                 </ng-template>
@@ -616,13 +615,13 @@
                 <td>
                   <i class="fa fa-trash-o do"></i>
                 </td>
-                <td>
+                <td [hidden]="status">
                   <i class="fa fa-arrows-h" (click)="saveEdit1(item.id, i)" [hidden]="statusB"></i>
                   <a (click)="saveEditPL1(item.id)" class="save" [hidden]="!statusB">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                     (nzOnConfirm)="cancelEditPL1(item.id)" class="save" [hidden]="!statusB">Hủy</a>
                 </td>
-                <td>
+                <td [hidden]="status">
                   <div [hidden]="lessThan(item.level)">
                     <i class="fa fa-arrow-down" [hidden]="statusB" (click)="saveEdit2(item.id, i)"></i>
                   </div>
@@ -655,10 +654,10 @@
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);">
+        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);">
+        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -1600,10 +1599,10 @@
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);">
+        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);">
+        <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
           <span>Not OK</span>
         </button>
       </ng-template>
