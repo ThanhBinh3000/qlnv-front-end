@@ -10,9 +10,9 @@
             </div>
             <div class="canphai phai">
                  <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
-                      [hidden]="statusBtnApprove">
+                      >
                       <i class="icon htvbdh_tcdt_guiduyet"></i>
-                      <span>Ghi nhận</span>
+                      <span>Lưu</span>
                  </button>
                  <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
                   <i nz-icon nzType="close"></i>
@@ -37,7 +37,7 @@
                   <input class="search__input" nz-input [(ngModel)]="ngayQdBTC" />
                 </nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Người ký">
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC" formControlName="temp">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="nguoiKyTC" >
                     <nz-option *ngFor="let item of nguoiKyTCs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </nz-descriptions-item>
@@ -60,7 +60,7 @@
               <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
                 <div nz-col nzSpan="6" >
                   <label class="search__label">Đ/v thực hiện:</label>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" formControlName="temp">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" >
                     <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                   </nz-select>
                 </div>
@@ -73,8 +73,8 @@
                   <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
                 </div>
                 <div nz-col nzSpan="6">
-                  <label class="search__label">Trạng thái</label>
-                  <input class="search__input" nz-input [(ngModel)]="maSoKBNN" />
+                  <label class="search__label pt-4">{{trangThaiPbo}}</label>
+                  <!-- <input class="search__input" nz-input [(ngModel)]="trangThaiPbo" /> -->
                 </div>
                 <div nz-col nzSpan="6">
                   <div class="search__label">Đơn vị Tiền:
@@ -85,6 +85,9 @@
                     <nz-option nzValue="4" nzLabel="1.000.000.000 đồng"></nz-option>
                   </nz-select>
                   </div>
+                </div>
+                <div nz-col nzSpan="6">
+                  <label class="pt-4" nz-checkbox [(ngModel)]="checked">Ghi nhận</label>
                 </div>
               </div>
               <nz-table nzBordered class="table__body">
@@ -162,9 +165,6 @@
                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                           class="save">Cancel</a>
                       </td>
-                      <!-- <td [hidden]="status">
-                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                      </td> -->
                     </ng-template>
                   </tr>
                   <tr>
@@ -227,25 +227,8 @@
                 <label class="search__label">Lý do từ chối</label>
                 <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" />
               </div>
-              <div nz-col nzSpan="6">
-                <label class="search__label">Nơi nhận</label>
-                <!-- <input class="search__input" nz-input [(ngModel)]="lyDoTuChoi" /> -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn q/đ" [(ngModel)]="noiNhan" formControlName="temp">
-                    <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-                </nz-select>
-              </div>
             </nz-tab>
           </nz-tabset>
-          <div class="action">
-            <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
-              <i class="fa fa-trash-o"></i>
-              <span>Xóa</span>
-            </button>
-            <button type="button" class="btn btn-main" (click)="addKmuc()">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
-            </button>
-          </div>
         </div>
             <div class="ghi-chu">
                  <nz-form-label nzRequired [nzNoColon]="true">

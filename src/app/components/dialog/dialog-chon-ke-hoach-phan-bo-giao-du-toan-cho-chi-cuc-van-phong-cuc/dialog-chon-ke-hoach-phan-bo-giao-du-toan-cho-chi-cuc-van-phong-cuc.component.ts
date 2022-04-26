@@ -86,7 +86,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
         page: this.pages.page
       },
     };
-     this.QuanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
+     this.QuanLyVonPhiService.timDanhSachPhanBo1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -105,7 +105,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   }
 
   async handleOk() {
-    await this.QuanLyVonPhiService.QDGiaoChiTiet(this.radioValue).toPromise().then(
+    await this.QuanLyVonPhiService.QDGiaoChiTiet1(this.radioValue).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);

@@ -129,6 +129,7 @@
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Kế hoạch quỹ tiền lương năm N+1'">
+            <div id="tablePrint">
             <ng-container *ngIf="status;else templateName">
               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                 <div nz-col class="gutter-row" [nzSpan]="3">
@@ -153,7 +154,7 @@
                 </div>
               </div>
             </ng-template>
-            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body" id="tablePrint">
+            <nz-table #editRowTable [nzData]="lstCTietBCao" nzBordered class="table__body" >
               <thead>
                 <tr>
                   <th rowspan="4" style="width: 35px">STT</th>
@@ -363,6 +364,7 @@
                 </tr>
               </tbody>
             </nz-table>
+          </div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm

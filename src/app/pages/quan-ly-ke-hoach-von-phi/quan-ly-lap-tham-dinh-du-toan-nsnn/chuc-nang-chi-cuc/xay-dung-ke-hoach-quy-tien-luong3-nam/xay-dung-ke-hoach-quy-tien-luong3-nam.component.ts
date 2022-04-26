@@ -461,7 +461,8 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10
           ) {
             this.status = false;
           } else {
@@ -805,17 +806,19 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
     }
     this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = []
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+      lstTemp.push({
+        ...item,
+        id: null
+      })
     })
     let request = {
       id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -834,7 +837,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
           this.divMoneyTotal();
@@ -876,33 +879,37 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
   divMoneyTotal(){
     this.lstCTietBCao.filter(element => {
-      element.tongCboN = divMoney(element.tongCboN, this.maDviTien);
-      element.tongBcheDuocPdN = divMoney(element.tongBcheDuocPdN, this.maDviTien);
+
       element.tongQuyLuongCoTchatLuongN = divMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN, this.maDviTien);
+
       element.tuongCbanN = divMoney(element.tuongCbanN, this.maDviTien);
       element.phuCapN = divMoney(element.phuCapN, this.maDviTien);
       element.cacKhoanDgopN = divMoney(element.cacKhoanDgopN, this.maDviTien);
-      element.tongCboThienN = divMoney(element.tongCboThienN, this.maDviTien);
-      element.tongBcheDuocPdThienN = divMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+
+
       element.tongQuyLuongCoTchatLuongThienN = divMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheThienN = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheThienN, this.maDviTien);
       element.luongCbanThienN = divMoney(element.luongCbanThienN, this.maDviTien);
       element.phuCapThienN = divMoney(element.phuCapThienN, this.maDviTien);
       element.cacKhoanDgopThienN = divMoney(element.cacKhoanDgopThienN, this.maDviTien);
-      element.tongCboN1 = divMoney(element.tongCboN1, this.maDviTien);
-      element.tongBcheDuocPdN1 = divMoney(element.tongBcheDuocPdN1, this.maDviTien);
+
+
       element.tongQuyLuongCoTchatLuongN1 = divMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN1 = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien);
       element.luongCbanN1 = divMoney(element.luongCbanN1, this.maDviTien);
       element.phuCapN1 = divMoney(element.phuCapN1, this.maDviTien);
       element.cacKhoanDgopN1 = divMoney(element.cacKhoanDgopN1, this.maDviTien);
-      element.tongCboN2 = divMoney(element.tongCboN2, this.maDviTien);
-      element.tongBcheDuocPdN2 = divMoney(element.tongBcheDuocPdN2, this.maDviTien);
+
+
       element.tongQuyLuongCoTchatLuongN2 = divMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN2 = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN2, this.maDviTien);
       element.luongCbanN2 = divMoney(element.luongCbanN2, this.maDviTien);
       element.phuCapN2 = divMoney(element.phuCapN2, this.maDviTien);
       element.cacKhoanDgopN2 = divMoney(element.cacKhoanDgopN2, this.maDviTien);
-      element.tongCboN3 = divMoney(element.tongCboN3, this.maDviTien);
-      element.tongBcheDuocPdN3 = divMoney(element.tongBcheDuocPdN3, this.maDviTien);
+
       element.tongQuyLuongCoTchatLuongN3 = divMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN3 = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN3, this.maDviTien);
       element.luongCbanN3 = divMoney(element.luongCbanN3, this.maDviTien);
       element.phuCapN3 = divMoney(element.phuCapN3, this.maDviTien);
       element.cacKhoanDgopN3 = divMoney(element.cacKhoanDgopN3, this.maDviTien);
@@ -910,33 +917,36 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
-      element.tongCboN = mulMoney(element.tongCboN, this.maDviTien);
-      element.tongBcheDuocPdN = mulMoney(element.tongBcheDuocPdN, this.maDviTien);
+
+
       element.tongQuyLuongCoTchatLuongN = mulMoney(element.tongQuyLuongCoTchatLuongN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN = mulMoney(element.tongQuyLuongCoTchatLuongTheoBcheN, this.maDviTien);
+
       element.tuongCbanN = mulMoney(element.tuongCbanN, this.maDviTien);
       element.phuCapN = mulMoney(element.phuCapN, this.maDviTien);
       element.cacKhoanDgopN = mulMoney(element.cacKhoanDgopN, this.maDviTien);
-      element.tongCboThienN = mulMoney(element.tongCboThienN, this.maDviTien);
-      element.tongBcheDuocPdThienN = mulMoney(element.tongBcheDuocPdThienN, this.maDviTien);
+
       element.tongQuyLuongCoTchatLuongThienN = mulMoney(element.tongQuyLuongCoTchatLuongThienN, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheThienN = mulMoney(element.tongQuyLuongCoTchatLuongTheoBcheThienN, this.maDviTien);
       element.luongCbanThienN = mulMoney(element.luongCbanThienN, this.maDviTien);
       element.phuCapThienN = mulMoney(element.phuCapThienN, this.maDviTien);
       element.cacKhoanDgopThienN = mulMoney(element.cacKhoanDgopThienN, this.maDviTien);
-      element.tongCboN1 = mulMoney(element.tongCboN1, this.maDviTien);
-      element.tongBcheDuocPdN1 = mulMoney(element.tongBcheDuocPdN1, this.maDviTien);
+
+      element.tongQuyLuongCoTchatLuongTheoBcheN1 = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien);
       element.tongQuyLuongCoTchatLuongN1 = mulMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
       element.luongCbanN1 = mulMoney(element.luongCbanN1, this.maDviTien);
       element.phuCapN1 = mulMoney(element.phuCapN1, this.maDviTien);
       element.cacKhoanDgopN1 = mulMoney(element.cacKhoanDgopN1, this.maDviTien);
-      element.tongCboN2 = mulMoney(element.tongCboN2, this.maDviTien);
-      element.tongBcheDuocPdN2 = mulMoney(element.tongBcheDuocPdN2, this.maDviTien);
+
       element.tongQuyLuongCoTchatLuongN2 = mulMoney(element.tongQuyLuongCoTchatLuongN2, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN2 = mulMoney(element.tongQuyLuongCoTchatLuongTheoBcheN2, this.maDviTien);
       element.luongCbanN2 = mulMoney(element.luongCbanN2, this.maDviTien);
       element.phuCapN2 = mulMoney(element.phuCapN2, this.maDviTien);
       element.cacKhoanDgopN2 = mulMoney(element.cacKhoanDgopN2, this.maDviTien);
-      element.tongCboN3 = mulMoney(element.tongCboN3, this.maDviTien);
-      element.tongBcheDuocPdN3 = mulMoney(element.tongBcheDuocPdN3, this.maDviTien);
+
+
       element.tongQuyLuongCoTchatLuongN3 = mulMoney(element.tongQuyLuongCoTchatLuongN3, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN3 = mulMoney(element.tongQuyLuongCoTchatLuongTheoBcheN3, this.maDviTien);
       element.luongCbanN3 = mulMoney(element.luongCbanN3, this.maDviTien);
       element.phuCapN3 = mulMoney(element.phuCapN3, this.maDviTien);
       element.cacKhoanDgopN3 = mulMoney(element.cacKhoanDgopN3, this.maDviTien);
