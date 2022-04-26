@@ -838,6 +838,60 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    },
+    (err) => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      return null;
+    }
+  );
+  if (!maBaoCao) {
+    return;
+  }
+  this.mullMoneyTotal();
+  // replace nhung ban ghi dc them moi id thanh null
+  let lstTemp = []
+  this.lstCTiet.filter(item => {
+    lstTemp.push({
+      ...item,
+      id: null
+    })
+  })
+  let ob = [{
+    id: null,
+    kphiBquanThocTx: this.kphiBquanThocTx,
+    kphiBquanThocLd: this.kphiBquanThocLd,
+    kphiBquanGaoTx: this.kphiBquanGaoTx,
+    kphiBquanGaoLd: this.kphiBquanGaoLd,
+    lstCTiet: lstTemp
+  }]
+
+  let request = {
+    id: null,
+    listIdDeletes: null,
+    fileDinhKems: null,
+    listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+    lstCTietBCao: ob,
+    maBcao: maBaoCao,
+    maDvi: this.maDonViTao,
+    maDviTien: this.maDviTien,
+    maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG,
+    namHienHanh: this.namBaoCaoHienHanh,
+    namBcao: this.namBaoCaoHienHanh + 1,
+    soVban: null,
+  };
+
+  //call service them moi
+  this.spinner.show();
+  this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+    async data => {
+      if (data.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
+        this.id = data.data.id;
+        await this.getDetailReport();
+        this.getStatusButton();
+        this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-bao-quan-hang-nam/' + this.id);
+      } else {
+        this.notification.error(MESSAGE.ERROR, data?.msg);
         this.divMoneyTotal();
       },
     );
@@ -879,6 +933,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       element.kphi = mulMoney(element.kphi, this.maDviTien);
     });
   }
+
   divMoneyTotal() {
     console.log(this.lstCTiet);
     this.lstCTiet.forEach(element => {
@@ -890,6 +945,15 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         element.kphi = divMoney(element.kphi, this.maDviTien);
       });
     })
+
+  divMoneyTotal(){
+    this.kphiBquanGaoLd = divMoney(this.kphiBquanGaoLd, this.maDviTien)
+    this.kphiBquanGaoTx = divMoney(this.kphiBquanGaoTx, this.maDviTien)
+    this.kphiBquanThocLd = divMoney(this.kphiBquanThocLd, this.maDviTien)
+    this.kphiBquanThocTx = divMoney(this.kphiBquanThocTx, this.maDviTien)
+    this.lstCTiet.filter(element => {
+      element.kphi = divMoney(element.kphi, this.maDviTien);
+    });
   }
 }
 
