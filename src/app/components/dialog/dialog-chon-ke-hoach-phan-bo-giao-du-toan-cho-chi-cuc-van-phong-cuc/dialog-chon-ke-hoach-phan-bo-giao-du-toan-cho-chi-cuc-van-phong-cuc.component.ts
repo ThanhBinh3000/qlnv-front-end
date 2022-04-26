@@ -26,6 +26,8 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   @Input() soQdCha: any;
   @Input() ngayQdCha: any;
   @Input() namQdCha: any;
+  @Input() matrangThaiPbo: any
+  @Input() maNguoiKyBTC: any
   danhSachBaoCao: any;
   khoanMucs: any = [];
   trangThais: any = TRANGTHAITIMKIEM;
@@ -113,9 +115,10 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
           this.namQdCha = data.data.qdCha.nam
           this.ngayQd = data.data.ngayQd
           this.nam = data.data.nam
-          this.nguoiKyBTC = data.data.nguoiKyBTC
+          this.maNguoiKyBTC = data.data.qdCha.maNguoiKy
           this.maDvi = data.data.maDvi
           this.danhSachKhoanMuc = data.data.lstCtiet
+          this.matrangThaiPbo = data.data.trangThaiPbo
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -135,6 +138,8 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
       soQdCha: this.soQdCha ,
       ngayQdCha: this.ngayQdCha,
       namQdCha: this.namQdCha,
+      matrangThaiPbo: this.matrangThaiPbo ,
+      maNguoiKyBTC: this.maNguoiKyBTC,
       id: this.searchFilter.trangThai
     }
     this._modalRef.close(req);
