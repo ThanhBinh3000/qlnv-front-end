@@ -1691,31 +1691,51 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     trangThai:this.trThai,
     }
 
-    this.quanLyVonPhiService.tonghopbaocaoketqua(objTonghop).toPromise().then(async res => {
+    this.quanLyVonPhiService.tongHopBaoCaoKetQua(objTonghop).toPromise().then(async res => {
       if(res.statusCode==0){
         console.log(res);
                 this.baoCao.lstBCao= res.data.lstBCao;
-                this.listBcaoKqua = res.data.lstBcaoChilds;
+                this.listBcaoKqua = res.data.lstBCaoDviTrucThuoc;
+                this.listBcaoKqua.forEach(e =>{
+                  e.ngayTrinhDuyet = this.datepipe.transform(e.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
+                  e.ngayDuyet = this.datepipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+                })
                 if(this.loaiBaoCaoTongHop=='1'){
+                  //thiếu service lấy đợt báo cáo
+                 await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
+                    if(res.statusCode==0){            
+                      this.baoCao.dotBcao = res.data;
+                    }else{
+                      this.notification.error(MESSAGE.ERROR,res?.msg);
+                    }
+                  },err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                  })
+                  this.maLoaiBaocao = '1';
                   this.baoCao?.lstBCao?.forEach(item => {
                     let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
                     if(index !== -1){
+                      item.id = uuid.v4();
+                      item.checked=false;
                       item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
                       item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
+                      item.trangThai = '2';
                     }
                   })
                 }else{
+                  this.maLoaiBaocao ='2';
                   this.baoCao?.lstBCao?.forEach(item => {
                     let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
                     if(index !== -1){
+                      item.id=uuid.v4();
+                      item.checked=false;
                       item.tieuDe = LISTBIEUMAUNAM[index].tieuDe;
                       item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
+                      item.trangThai ='2';
                     }
                   })
                 }
-                await this.resetList();
-         this.initLinkList();
-        
+                console.log(this.baoCao);
           //set data cho cac bieu mau
           this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
           this.lstCTietBCao02.forEach(e => {
@@ -1859,19 +1879,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           });
           this.cols05 = this.cols05 + this.listColTrongDot5.length;
           }
-          
-          if (
-            this.baoCao.trangThai == '1' ||
-            this.baoCao.trangThai == '3' ||
-            this.baoCao.trangThai == '5' ||
-            this.baoCao.trangThai == '8'
-          ) {
-            this.status = false;
-          } else {
-            this.status = true;
-          }
-          
-
           
           // set list id file ban dau
           this.listFile =[];

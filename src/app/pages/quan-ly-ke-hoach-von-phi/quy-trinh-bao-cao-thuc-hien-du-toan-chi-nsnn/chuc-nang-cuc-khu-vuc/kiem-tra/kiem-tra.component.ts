@@ -42,7 +42,7 @@ export class KiemTraComponent implements OnInit {
     thangBCao: '',
     dotBcao:'',
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     },
     str: '',

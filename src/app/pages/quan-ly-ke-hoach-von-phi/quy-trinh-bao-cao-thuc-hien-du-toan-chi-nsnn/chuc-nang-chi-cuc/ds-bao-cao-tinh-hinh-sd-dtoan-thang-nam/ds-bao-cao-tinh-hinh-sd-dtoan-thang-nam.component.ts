@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe,Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -45,7 +45,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     thangBCao: '',
     dotBcao: '',
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     },
     str: "",
@@ -64,6 +64,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private notifi: NzNotificationService,
+    private location: Location,
+
   ) {
   }
 
@@ -147,4 +149,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     this.pages.size = size;
   }
 
+  close() {
+    this.location.back();
+  }
 }

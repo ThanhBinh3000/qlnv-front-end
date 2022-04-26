@@ -1,26 +1,23 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UserService } from 'src/app/services/user.service';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { DONVITIEN, Utils } from 'src/app/Utility/utils';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { TAB_SELECTED, PHULUCLIST, } from './bao-cao.constant';
-import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
-import * as uuid from "uuid";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { OK, NOTOK } from 'src/app/Utility/utils';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { DONVITIEN, NOTOK, OK, Utils } from 'src/app/Utility/utils';
+import * as uuid from "uuid";
+import * as XLSX from 'xlsx';
 import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.constant';
+import { PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
   id!: any;
   maLoai!: number;
@@ -61,6 +58,40 @@ export class ItemDanhSach {
   checked!: boolean;
   lstBCao: ItemData[] = [];
   lstFile: any[] = [];
+  lstBCaoDviTrucThuoc: any[] = [
+    {
+      id: 551,
+      maBcao: "BC16063",
+      namBcao: 2022,
+      thangBcao: 12,
+      namHienHanh: null,
+      trangThai: "9",
+      tenTrangThai: null,
+      maLoaiBcao: "526",
+      maPhanBcao: "0",
+      ngayTao: "2022-04-23T10:07:13.000+00:00",
+      nguoiTao: "canbo2",
+      ngaySua: null,
+      nguoiSua: null,
+      maDviTien: null,
+      maDvi: "040207",
+      maDviCha: null,
+      tenDvi: null,
+      dotBcao: null,
+      lyDoTuChoi: null,
+      proccessId: "25ff2ac5-c2ed-11ec-8242-6eea1dc5fedb",
+      tongHopTu: null,
+      ngayTrinh: "2022-04-23T10:07:11.000+00:00",
+      nguoiTrinh: "canbo2",
+      ngayDuyet: "2022-04-24T09:48:21.000+00:00",
+      nguoiDuyet: "lanhdao2",
+      ngayPheDuyet: null,
+      nguoiPheDuyet: null,
+      ngayTraKq: null,
+      nguoiTraKq: null
+    }
+  ];
+  tongHopTu!: string;
 }
 
 export class ItemDataPL1 {
@@ -170,7 +201,9 @@ export class linkList {
   templateUrl: './bao-cao.component.html',
   styleUrls: ['./bao-cao.component.scss']
 })
+
 export class BaoCaoComponent implements OnInit {
+  @Input() idDialog: any;
   soLaMa: any = SOLAMA;
   baoCao: ItemDanhSach = new ItemDanhSach();
   totalElements = 0;
@@ -233,6 +266,7 @@ export class BaoCaoComponent implements OnInit {
   nho!: boolean;                              // bien nho phuc vu sort
   tab = TAB_SELECTED;
   constructor(
+    // private _modalRef: NzModalRef,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private sanitizer: DomSanitizer,
@@ -246,14 +280,19 @@ export class BaoCaoComponent implements OnInit {
     private notifi: NzNotificationService,
     private modal: NzModalService,
     private location: Location,
+
   ) {
   }
 
   async ngOnInit() {
+
     this.id = this.routerActive.snapshot.paramMap.get('id');
 
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
+    if (this.idDialog) {
+      this.id = this.idDialog;
+    }
     if (this.id) {
       await this.getDetailReport();
     } else {
@@ -439,8 +478,10 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.trangThai == Utils.TT_BC_5 ||
             this.baoCao.trangThai == Utils.TT_BC_8) {
             this.status = false;
+            this.statusB = false;
           } else {
             this.status = true;
+            this.statusB = true;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -908,6 +949,12 @@ export class BaoCaoComponent implements OnInit {
       })
     })
 
+    // replace nhung ban ghi dc them moi id thanh null
+    this.baoCao.tongHopTu= '';
+    this.baoCao?.lstBCaoDviTrucThuoc?.filter(item => {
+      this.baoCao.tongHopTu +=item.id + ',';
+    })
+
     // gui du lieu trinh duyet len server
     // let request = {
     //   id: this.id,
@@ -1102,7 +1149,7 @@ export class BaoCaoComponent implements OnInit {
     data.next.forEach((item) => this.subUpdateChecked(item, kt));
   }
 
-  // them dong moi phu luc 2
+  // them dong moi phu luc 1
   addLinePL1(id: number): void {
     var lv: number = 0;
     if (id > 0) {
@@ -1609,9 +1656,10 @@ export class BaoCaoComponent implements OnInit {
 
 
   //show popup tu choi dùng cho nut ok - not ok
-  pheDuyetChiTiet(mcn: string, maLoai: any) {
+  async pheDuyetChiTiet(mcn: string, maLoai: any) {
+    this.spinner.show();
     if (mcn == OK) {
-      this.pheDuyetBieuMau(mcn, maLoai, null);
+      await this.pheDuyetBieuMau(mcn, maLoai, null);
     } else if (mcn == NOTOK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
@@ -1624,10 +1672,11 @@ export class BaoCaoComponent implements OnInit {
       });
       modalTuChoi.afterClose.subscribe(async (text) => {
         if (text) {
-          this.pheDuyetBieuMau(mcn, maLoai, text);
+        await this.pheDuyetBieuMau(mcn, maLoai, text);
         }
       });
     }
+    this.spinner.hide();
   }
 
   //call api duyet bieu mau
@@ -1689,5 +1738,25 @@ export class BaoCaoComponent implements OnInit {
 
   close() {
     this.location.back();
+  }
+
+  viewDetail(id) {
+    const modalIn = this.modal.create({
+      nzTitle: 'Danh sách phụ lục',
+      nzContent: BaoCaoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: [
+        {
+          label: 'Đóng',
+          shape: 'round',
+          onClick: () => this.modal.closeAll()
+        },
+      ],
+      nzComponentParams: {
+        idDialog: id
+      },
+    });
   }
 }
