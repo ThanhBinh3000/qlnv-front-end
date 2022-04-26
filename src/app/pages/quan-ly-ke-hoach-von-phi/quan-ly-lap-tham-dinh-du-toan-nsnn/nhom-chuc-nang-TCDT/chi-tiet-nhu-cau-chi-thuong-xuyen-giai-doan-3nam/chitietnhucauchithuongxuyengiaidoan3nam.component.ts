@@ -649,15 +649,6 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.quanLyVonPhiService.sinhMaBaoCao().subscribe((res) => {
-      if (res.statusCode == 0) {
-        this.mabaocao = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
-      }
-    },err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
     this.spinner.hide();
   }
 
