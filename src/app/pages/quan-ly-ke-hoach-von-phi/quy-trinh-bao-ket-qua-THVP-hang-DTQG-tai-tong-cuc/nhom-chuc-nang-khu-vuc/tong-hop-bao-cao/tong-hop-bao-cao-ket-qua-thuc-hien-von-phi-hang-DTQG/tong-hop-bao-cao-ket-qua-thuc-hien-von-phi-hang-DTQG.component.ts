@@ -122,7 +122,6 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
     if(res.statusCode== 0){
         var dotBaoCao= res.data;
-        console.log(dotBaoCao);
         if(dotBaoCao!=1){
           this.searchFilter.dotBcao = Number(dotBaoCao) - 1;
         }else{

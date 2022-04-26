@@ -672,6 +672,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
                 e.id = uuid.v4();
               })
             }
+            this.tinhTong();
             this.updateEditCache();
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
