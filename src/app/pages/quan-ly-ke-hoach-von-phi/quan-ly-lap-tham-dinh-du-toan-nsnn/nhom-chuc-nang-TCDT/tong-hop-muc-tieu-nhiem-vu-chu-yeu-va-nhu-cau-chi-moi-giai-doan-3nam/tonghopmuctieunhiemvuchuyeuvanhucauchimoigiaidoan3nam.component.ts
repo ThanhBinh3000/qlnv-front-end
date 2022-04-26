@@ -253,7 +253,8 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
           if(this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8){
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+            this.trangThaiBanGhi == Utils.TT_BC_10){
             this.status = false;
           }else{
             this.status = true;
@@ -739,10 +740,12 @@ changeModel(id: string): void {
     }
     this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
-        item.id = null;
-      }
+    let lstTemp = [];
+    this.lstCTietBCao.filter( item =>{
+      lstTemp.push({
+        ...item,
+        id:null
+      })
     })
     
    
@@ -752,7 +755,7 @@ changeModel(id: string): void {
       fileDinhKems: null,
       listIdDeleteFiles: null,
       listIdDeletes: null,  
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
