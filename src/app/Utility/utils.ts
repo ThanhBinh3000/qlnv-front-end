@@ -2,6 +2,8 @@ export class Utils {
     public static FORMAT_DATE_STR = "dd/MM/yyyy";
     public static FORMAT_DATE_TIME_STR = "dd/MM/yyyy HH:mm:ss";
 
+    public static ROUND = 3;
+
     // Trang thai response
     public static RESP_SUCC = 0;
     public static RESP_FAIL = 1;
@@ -749,7 +751,7 @@ export const LOAIBAOCAO =[
         }
         
         if(donVi){
-            return value/donVi.giaTri;
+            return Number((value/donVi.giaTri).toFixed(Utils.ROUND));
         }else{
             return null;
         }
@@ -763,7 +765,7 @@ export const LOAIBAOCAO =[
         }
         
         if(donVi){
-            return value*donVi.giaTri;
+            return Number((value*donVi.giaTri).toFixed(Utils.ROUND));
         }else{
             return null;
         }

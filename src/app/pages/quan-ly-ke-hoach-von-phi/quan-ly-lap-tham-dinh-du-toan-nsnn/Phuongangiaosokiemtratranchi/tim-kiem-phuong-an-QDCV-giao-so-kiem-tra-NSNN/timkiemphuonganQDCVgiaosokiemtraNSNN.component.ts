@@ -43,6 +43,8 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     page: 1,
   }
 
+  checkTaoMoi:boolean;
+
   constructor(
     private userService: UserService,
      private router: Router,
@@ -72,8 +74,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
     await this.getUserInfo(username); //get user info
     this.quankhoachvon.dMDonVi().subscribe(res => {
       this.donViTaos = res.data;
-      this.checkroleDvi = this.donViTaos.find(e => e.maDvi == this.donViTaoChiCuc).capDvi;
-    
+      this.checkroleDvi = this.donViTaos.find(e => e.maDvi == this.donViTaoChiCuc).capDvi;      
     })
   }
 
@@ -170,6 +171,10 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   //tao moi
   taomoi(){
     if(!this.submitForm()){
+      return;
+    }
+    if(this.checkroleDvi==Utils.CHI_CUC){
+      this.notification.warning(MESSAGE.WARNING,'Người dùng không có quyền tạo mới!');
       return;
     }
      if(this.loaivanban=="CV"){

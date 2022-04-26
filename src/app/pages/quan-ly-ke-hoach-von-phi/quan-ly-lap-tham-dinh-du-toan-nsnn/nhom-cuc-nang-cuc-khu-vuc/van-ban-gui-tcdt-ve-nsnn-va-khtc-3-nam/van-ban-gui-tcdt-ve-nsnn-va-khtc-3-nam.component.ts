@@ -21,9 +21,7 @@ export class ObjResp {
 
 export class ItemData {
      id!: any;
-     stt!: string;
      objResp: ObjResp;
-     url: string;
      checked!: boolean;
 }
 
@@ -146,7 +144,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           );
 
           console.log(this.capDvi);
-          
+
 
           this.getStatusButton();
 
@@ -168,10 +166,20 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      }
 
      getStatusButton() {
+          let checkParent = false;
+          let checkChirld = false;
+          let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          if (dVi && dVi.maDvi == this.userInfo.dvql) {
+               checkChirld = true;
+          }
+          if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+               checkParent = true;
+          }
+
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, this.userInfo?.roles[0]?.id);
-          if ((this.capDvi == '2') && (this.trangThaiBanGhi == '1')) {
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+          if ((this.capDvi == Utils.CUC_KHU_VUC) && (this.trangThaiBanGhi == '1')) {
                this.statusBtnGuiDVCT = false;
           } else {
                this.statusBtnGuiDVCT = true;
@@ -291,13 +299,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          this.chiTietBcaos.forEach(item => {
                               let mm: ItemData = {
                                    id: item.id,
-                                   stt: item.stt,
                                    objResp: {
                                         id: item.objResp.id,
                                         maBcao: item.objResp.maBcao,
                                         maLoaiBcao: item.objResp.maLoaiBcao,
                                    },
-                                   url: this.getUrl(item.objResp.maLoaiBcao) + '/' + item.objResp.id,
                                    checked: false,
                               }
                               this.lstCTietBCao.push(mm);
@@ -307,6 +313,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                          // set thong tin chung bao cao
                          this.ngayDuyetVban = data.data.ngayDuyetVban;
                          this.nguoiNhap = data.data.nguoiTao;
+                         this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                          this.maDonViTao = data.data.maDonVi;
                          this.soVban = data.data.soVban;
                          this.namBaoCaoHienHanh = data.data.namBcao;
@@ -329,13 +336,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
      addLine(id: number): void {
           let item: ItemData = {
                id: uuid.v4(),
-               stt: "",
                objResp: {
                     id: "",
                     maBcao: "",
                     maLoaiBcao: "",
                },
-               url: "",
                checked: false,
           }
 
@@ -451,14 +456,12 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
           console.log(mm);
           this.editCache[id].data.objResp.id = mm[0].id;
           this.editCache[id].data.objResp.maLoaiBcao = mm[0].maLoaiBcao;
-          this.editCache[id].data.url = this.getUrl(mm[0].maLoaiBcao) + '/' + mm[0].id;
           console.log(this.editCache[id].data);
      }
 
-     //set url khi
-     getUrl(maLoaiBcao: string) {
-          var url: string;
-          switch (maLoaiBcao) {
+     xemChiTiet(maLoaiBaoCao: string, id: string) {
+          let url: string;
+          switch (maLoaiBaoCao) {
                case '12':
                     url = '/chi-thuong-xuyen-3-nam/'
                     break;
@@ -559,7 +562,11 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
                     url = null;
                     break;
           }
-          return url;
+          if (url != null) {
+               this.router.navigate([
+                    '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/' + url + id
+               ]);
+          }
      }
 
      dong() {

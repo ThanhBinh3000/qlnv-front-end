@@ -13,11 +13,10 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogChonThemKhoanMucComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { KHOANMUCLIST } from '../lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant';
+import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from 'src/app/components/dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-bao-cao-dieu-chinh-du-toan/dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component';
 
 export class ItemData {
      id: any;
@@ -35,6 +34,15 @@ export class ItemData {
      checked!: boolean;
 }
 
+export class BanGhi {
+     id: any;
+     maDvi: string;
+     trangThai: string;
+     lstCtiet: ItemData[];
+     tenDvi: string;
+     maDviTien: string;
+}
+
 @Component({
      selector: 'app-lap-bao-cao-dieu-chinh-kiem-tra',
      templateUrl: './lap-bao-cao-dieu-chinh-kiem-tra.component.html',
@@ -46,6 +54,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      donViTiens: any[] = DONVITIEN;
      trangThais: any[] = TRANGTHAIBANGHI;
      khoanMucs: any[] = KHOANMUCLIST;
+     lstDieuChinh: any = [];
 
      maDviTien: any;
      status: boolean = false;
@@ -73,6 +82,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
+     idBanGhi!: string;
      id!: any;                                   // id truyen tu router
      chiTietBcaos: any;                          // thong tin chi tiet bao cao
      lstFile: any = [];                            // trang thai an/ hien cua trang thai
@@ -156,7 +166,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           let userName = this.userService.getUserName();
           await this.getUserInfo(userName); //get user info
           if (this.id) {
-               await this.getDetailReport();
+              // await this.getDetailReport();
           } else {
                this.maDonViTao = this.userInfo?.dvql;
                this.trangThaiBanGhi = '1';
@@ -257,43 +267,43 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
                nam: this.namBcao,
           };
           this.spinner.show();
-          if (this.id == null) {
-               this.quanLyVonPhiService.themmoiDieuChinh(request).subscribe(
-                    res => {
-                         if (res.statusCode == 0) {
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                              this.id = res.data.id;
-                              this.getDetailReport();
-                              this.getStatusButton();
-                         } else {
-                              this.divMoneyTotal(this.lstCTietBCao);
-                              this.notification.error(MESSAGE.ERROR, res?.msg);
-                         }
-                    },
-                    err => {
-                         this.divMoneyTotal(this.lstCTietBCao);
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    }
-               )
+          // if (this.id == null) {
+          //      this.quanLyVonPhiService.themmoiDieuChinh(request).subscribe(
+          //           res => {
+          //                if (res.statusCode == 0) {
+          //                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          //                     this.id = res.data.id;
+          //                     this.getDetailReport();
+          //                     this.getStatusButton();
+          //                } else {
+          //                     this.divMoneyTotal(this.lstCTietBCao);
+          //                     this.notification.error(MESSAGE.ERROR, res?.msg);
+          //                }
+          //           },
+          //           err => {
+          //                this.divMoneyTotal(this.lstCTietBCao);
+          //                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          //           }
+          //      )
 
-          } else {
-               this.quanLyVonPhiService.updateDieuChinh(request).subscribe(
-                    res => {
-                         if (res.statusCode == 0) {
-                              this.getDetailReport();
-                              this.getStatusButton();
-                              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                         } else {
-                              this.divMoneyTotal(this.lstCTietBCao);
-                              this.notification.error(MESSAGE.ERROR, res?.msg);
-                         }
-                    },
-                    err => {
-                         this.divMoneyTotal(this.lstCTietBCao);
-                         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    }
-               )
-          }
+          // } else {
+          //      this.quanLyVonPhiService.updateDieuChinh(request).subscribe(
+          //           res => {
+          //                if (res.statusCode == 0) {
+          //                     this.getDetailReport();
+          //                     this.getStatusButton();
+          //                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          //                } else {
+          //                     this.divMoneyTotal(this.lstCTietBCao);
+          //                     this.notification.error(MESSAGE.ERROR, res?.msg);
+          //                }
+          //           },
+          //           err => {
+          //                this.divMoneyTotal(this.lstCTietBCao);
+          //                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          //           }
+          //      )
+          // }
 
           this.lstCTietBCao.filter(item => {
                if (!item.id) {
@@ -304,10 +314,10 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           this.spinner.hide();
      }
 
-     addPhanBo() {
+     addDieuChinh(){
           const modalIn = this.modal.create({
-               nzTitle: 'Danh sách kế hoạch phân bổ, giao dự toán của đơn vị',
-               nzContent: DialogDanhSachKeHoachPhanBoGiaoDuToanComponent,
+               nzTitle: 'Danh sách báo cáo điều chỉnh dự toán từ cấp dưới',
+               nzContent: DialogDanhSachBaoCaoDieuChinhDuToanComponent,
                nzMaskClosable: false,
                nzClosable: false,
                nzWidth: '65%',
@@ -318,49 +328,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           });
           modalIn.afterClose.subscribe((res) => {
                if (res) {
-                    this.addKmuc(res);
-               }
-          });
-     }
-
-     addKmuc(id: any) {
-
-          const modalIn = this.modal.create({
-               nzTitle: 'Danh sách khoản mục',
-               nzContent: DialogChonThemKhoanMucComponent,
-               nzMaskClosable: false,
-               nzClosable: false,
-               nzWidth: '65%',
-               nzFooter: null,
-               nzComponentParams: {
-                    id: id
-               },
-          });
-          modalIn.afterClose.subscribe((res) => {
-               if (res) {
-                    res.forEach(item => {
-                         if(item.checked){
-                              this.lstCTietBCao.push({
-                                   id: uuid.v4(),
-                                   stt: "",
-                                   loaiKhoan: item.tenLoaiKhoan,
-                                   maNdung: item.maNdung,
-                                   tongNhuCauKphiNam: 0,
-                                   namTruocChuyenSang: 0,
-                                   daGiaoTrongNam: item.dtoanGiao,
-                                   cong: item.dtoanGiao,
-                                   kphiUocThien: 0,
-                                   tang: 0,
-                                   giam: 0,
-                                   ghiChu: "",
-                                   checked: false,
-                              });
-                         }
-                    })
-                    this.lstCTietBCao.forEach(item => {
-                         this.tinhTong(1, item);
-                    })
-                    this.updateEditCache();
+                    this.getList(res);
                }
           });
      }
@@ -412,30 +380,21 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
 
 
      // call chi tiet bao cao
-     async getDetailReport() {
+     async getDetailReport(id: any) {
           this.spinner.show();
-          await this.quanLyVonPhiService.chiTietDieuChinh(this.id).subscribe(
+          await this.quanLyVonPhiService.chiTietDieuChinh(id).subscribe(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.maDonViTao = data.data.maDvi;
-                         this.maDviTien = data.data.maDviTien;
-                         this.lstCTietBCao = data.data.listCtiet;
-                         this.divMoneyTotal(this.lstCTietBCao);
-                         this.updateEditCache();
-                         this.lstFile = data.data.lstFile;
-                         this.noiDung = data.data.ghiChu;
-                         this.trangThaiBanGhi = data.data.trangThai;
-                         if (
-						this.trangThaiBanGhi == Utils.TT_BC_1 ||
-						this.trangThaiBanGhi == Utils.TT_BC_3 ||
-						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
-					) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
-
+                         var chiTiet: BanGhi = {
+                              id: data.data.id,
+                              maDvi: data.data.maDvi,
+                              lstCtiet: data.data.listCtiet,
+                              tenDvi: this.getUnitName(data.data.maDvi),
+                              trangThai: data.data.trangThai,
+                              maDviTien: data.data.maDviTien,
+                         }
+                         //this.mulMoneyTotal(chiTiet.lstCtiet);
+                         this.lstDieuChinh.push(chiTiet);
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -507,8 +466,8 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      getStatusName() {
           return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
      }
-     getUnitName() {
-          return this.donVis.find(e => e.maDvi == this.maDonViTao)?.tenDvi;
+     getUnitName(maDvi: string) {
+          return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
      }
      // start edit
      startEdit(id: string): void {
@@ -563,6 +522,15 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
 		return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
 	}
 
+     changeUnit(id: any) {
+          var chiTiet: BanGhi = this.lstDieuChinh.find(e => e.id === id);
+          this.lstCTietBCao = chiTiet.lstCtiet;
+          this.maDviTien = chiTiet.maDviTien;
+          this.dvql = this.donVis.find(e => e.maDvi == chiTiet.maDvi);
+          this.trangThaiBanGhi = chiTiet.trangThai;
+          this.updateEditCache();
+     }
+
      divMoneyTotal(data: ItemData[]) {
           data.forEach(item => {
                item.tongNhuCauKphiNam = divMoney(item.tongNhuCauKphiNam, this.maDviTien);
@@ -584,6 +552,19 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
                item.kphiUocThien = mulMoney(item.kphiUocThien, this.maDviTien);
                item.tang = mulMoney(item.tang, this.maDviTien);
                item.giam = mulMoney(item.giam, this.maDviTien);
+          })
+     }
+
+     xoaToanBo(){
+          this.lstDieuChinh = [];
+     }
+
+     getList(str: string){
+          var listId: any = str.split(',');
+          listId.forEach(item => {
+               if (item){
+                    this.getDetailReport(parseInt(item,10));
+               }
           })
      }
 }

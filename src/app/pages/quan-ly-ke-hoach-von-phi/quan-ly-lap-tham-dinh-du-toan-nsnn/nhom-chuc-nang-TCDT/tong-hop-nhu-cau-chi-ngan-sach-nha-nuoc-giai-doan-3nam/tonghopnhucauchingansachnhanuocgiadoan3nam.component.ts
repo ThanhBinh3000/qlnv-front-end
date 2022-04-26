@@ -169,7 +169,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       },
     );
     //get danh muc dự án
-    this.danhMuc.dMNhomChi().toPromise().then(
+    this.danhMuc.dMLoaiChi().toPromise().then(
       (data) => {
           if (data.statusCode == 0) {
               this.listNhomchi = data.data?.content;

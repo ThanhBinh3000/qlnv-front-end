@@ -290,6 +290,13 @@ export class QuanLyVonPhiService extends BaseService {
       request);
   }
 
+  danhSachDieuChinh(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach', 
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach-dieu-chinh',
+      request);
+  }
+
 
   //tong hop bao cao ket qua thuc hien von phi hang DTQG
   tongHopBaoCaoKetQua(request: any): Observable<any> {
@@ -377,8 +384,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //sinh đợt báo cáo 3.2.9
   sinhDotBaoCao(): Observable<any> {
-    // return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
+    return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
+    // return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
   }
 
   //tim kiem giao danh sách nội dung khoản mục

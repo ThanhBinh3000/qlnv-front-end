@@ -7,25 +7,22 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { TRANGTHAIBANGHI, Utils } from 'src/app/Utility/utils';
-
 export class ItemData {
     id!: any;
     checked!: boolean;
-    soQd!: string;
-    ngayQd!: string;
-    veViec!: string;
-    ngayGn!: string;
+    ngayLap!: string;
+    maDvi!: string;
+    ghiChu!: string;
     trangThai!: string;
-    lstCtiet!: any[];
     nam!: number;
 }
 
 @Component({
-    selector: 'dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi',
-    templateUrl: './dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component.html',
-    styleUrls: ['./dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component.scss'],
+    selector: 'dialog-danh-sach-bao-cao-dieu-chinh-du-toan',
+    templateUrl: './dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component.html',
+    styleUrls: ['./dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component.scss'],
 })
-export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
+export class DialogDanhSachBaoCaoDieuChinhDuToanComponent implements OnInit {
     @Input() maDvi: any;
 
     searchFilter = {
@@ -49,6 +46,7 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
     };
 
 
+    listId: string = "";
 
     lstCTietBCao: ItemData[] = [];
     constructor(
@@ -90,9 +88,10 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
                 limit: this.pages.size,
                 page: this.pages.page,
             },
+            soQd: "",
         }
 
-        this.quanLyVonPhiService.timKiemDieuChinh(request).toPromise().then(
+        this.quanLyVonPhiService.danhSachDieuChinh(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.lstCTietBCao = data.data.content;
@@ -110,23 +109,18 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
         this.spinner.hide();
     }
 
-    updateChecked(id: any) {
-        this.lstCTietBCao.forEach(item => {
-            if (item.id != id) {
-                item.checked = false;
-            }
-        })
-    }
 
     //doi so trang
     onPageIndexChange(page) {
         this.pages.page = page;
+        this.updateListId();
         this.getDetailReport();
     }
 
     //doi so luong phan tu tren 1 trang
     onPageSizeChange(size) {
         this.pages.size = size;
+        this.updateListId();
         this.getDetailReport();
     }
 
@@ -137,15 +131,22 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
     getStatusName(trangThai: string){
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
-
-    handleOk() {
-        let listId: string = "";
+    
+    updateListId(){
         this.lstCTietBCao.forEach(item => {
-            if (item.checked){
-                listId += item.id + ',';
+            if (item.checked && this.listId.indexOf(item.id.toString())==-1){
+                this.listId += item.id.toString() + ',';
+            }
+            if (!item.checked && this.listId.indexOf(item.id.toString())!=-1){
+                let str = item.id.toString()+',';
+                this.listId.replace(str, '');
             }
         })
-        this._modalRef.close(listId);
+    }
+
+    handleOk() {
+        this.updateListId();
+        this._modalRef.close(this.listId);
     }
 
     handleCancel() {

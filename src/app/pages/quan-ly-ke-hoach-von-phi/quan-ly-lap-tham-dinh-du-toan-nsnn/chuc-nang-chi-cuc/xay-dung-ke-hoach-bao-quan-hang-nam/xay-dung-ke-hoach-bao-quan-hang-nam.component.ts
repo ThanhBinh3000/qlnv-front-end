@@ -499,8 +499,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           this.soVban = data.data.soVban;
-          console.log(this.lstCTiet);
-
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||

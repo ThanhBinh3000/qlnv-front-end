@@ -185,10 +185,10 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <tr *ngFor="let item of listBcaoKqua; let i = index">
+              <tr *ngFor="let item of listBcaoKqua; let i = index">
                 <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
                 <td>{{getUnitName(item.maDvi)}}</td>
-                <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+                <td><a routerLink="">{{ item.maBcao }}</a></td>
                 <td>{{item.namBcao}}</td>
                 <td>{{item.dotBcao}}</td>
                 <td>{{item.ngayTrinh}}</td>
@@ -199,7 +199,7 @@
                     <span>Xem</span>
                   </button>
                 </td>
-              </tr> -->
+              </tr>
             </tbody>
           </nz-table>
           <div class="tab-content tab-menu" id="myTabContent">
