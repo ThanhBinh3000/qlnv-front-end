@@ -115,7 +115,8 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
   qDinhBTCs: any = []; // danh sach qd cua BTC
   maKhoanMucs: any = [];
   maCucDtnnKvucs: any = [];
-
+  trangThaiPbo: any;
+  checked: boolean = false;                       // trang thai
      beforeUpload = (file: NzUploadFile): boolean => {
           this.fileList = this.fileList.concat(file);
           return false;
@@ -639,4 +640,13 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
     // this.editCache[id].data.tong = this.editCache[id].data.nguonNSNN + this.editCache[id].data.nguonKhac;
     // this.tongCong.nguonNSNN += this.editCache[id].data.nguonNSNN - this.lstCTietBCao[index].nguonNSNN;
   }
+
+  checkBoxChecked(checked: boolean){
+    if(!checked){
+      this.trangThaiPbo = "1"
+    }else{
+      this.trangThaiPbo = "2"
+    }
+  }
+
 }
