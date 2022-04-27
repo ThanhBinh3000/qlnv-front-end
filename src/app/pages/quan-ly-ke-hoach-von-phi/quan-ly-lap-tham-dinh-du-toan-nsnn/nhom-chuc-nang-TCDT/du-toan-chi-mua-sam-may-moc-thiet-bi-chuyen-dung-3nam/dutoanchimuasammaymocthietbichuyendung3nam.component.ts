@@ -15,6 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { miniData } from '../du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TimkiemphuonganQDCVgiaosokiemtraNSNNComponent } from '../../Phuongangiaosokiemtratranchi/tim-kiem-phuong-an-QDCV-giao-so-kiem-tra-NSNN/timkiemphuonganQDCVgiaosokiemtraNSNN.component';
 
 export class MiniData {
   id!: any;
@@ -52,7 +53,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   chiTieus: any = [];                         // danh muc chi tieu
   lstRows: any = [];
   donVis: any = [];
-  cucKhuVucs: any = [];                       // danh muc cuc khu vuc
+  cucKhuVucs: any [] = [];                       // danh muc cuc khu vuc
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -114,6 +115,13 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       if (data.statusCode == 0) {
         this.donVis = data.data;
         this.cucKhuVucs = this.donVis.filter(item => item.capDvi=='2');
+        this.cucKhuVucs.forEach(element => {
+          element.tong1 =0;
+          element.tong2 =0;
+          element.tong3 =0;
+        });
+        console.log(this.cucKhuVucs);
+        
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -285,6 +293,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             this.status = true;
           }
           this.listFile =[];
+          this.tinhTong2();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -457,6 +466,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     });
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.tinhTong(index);
+    this.tinhTong2();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -729,14 +739,13 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
                   e.listCtiet[idx].id = uuid.v4();
                 }
               })
-            
+            e.listCtiet.sort((a,b) => Number(a.maDvi) - Number(b.maDvi))
             const index = this.lstCTietBCao.findIndex((item) => item.id === e.id);
             this.tinhTong(index); 
             e.id = uuid.v4();
           })
-          
+          this.tinhTong2();
           this.updateEditCache();
-          console.log(this.lstCTietBCao);
         }
         
       } else {
@@ -768,6 +777,34 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     })
   }
 
+  tongcong1:number=0;
+  tongcong2:number=0;
+  tongcong3:number=0;
+  tinhTong2(){
+    this.cucKhuVucs.forEach(e =>{
+      e.tong1 = 0;
+      e.tong2 = 0;
+      e.tong3 = 0;
+      this.tongcong1=0;
+      this.tongcong2=0;
+      this.tongcong3=0;
+      this.lstCTietBCao.forEach(item => {
+        item.listCtiet.forEach(el =>{
+         if(e.maDvi===el.maDvi){
+           e.tong1 += el.n1;
+           e.tong2 += el.n2;
+           e.tong3 += el.n3;
+         }
+        })
+        this.tongcong1 +=item.tcongN1;
+        this.tongcong2 +=item.tcongN2;
+        this.tongcong3 +=item.tcongN3;
+      })
+    })
+  
+    
+    
+  }
  
   dong(){
     this.location.back();

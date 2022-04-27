@@ -270,17 +270,13 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     this.spinner.show();
     await this.quanLyVonPhiService.chitietPhuongAn(this.maPa).subscribe(
       async (data) => {
-        debugger
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
           this.id = data.data.id;
           this.lstCTietBCao = data.data.listCtiet;
           this.lstCTietBCao.forEach( e =>{
             e.listCtietDvi.sort((a,b)=> a.maKhuVuc-b.maKhuVuc)
-          })
-
-          console.log(this.lstCTietBCao);
-          
+          })          
           this.donvitien = data.data.maDviTien;
           this.divMoneyTotal();
           this.updateEditCache();
@@ -902,13 +898,16 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter( item =>{
+      item.id =null;
+      item.listCtietDvi.forEach(e =>{
+        e.id = null;
+      })
       lstTemp.push({
         ...item,
         id:null
       })
     })
-    
-   
+
     // gui du lieu trinh duyet len server
     let request = {
       id:null,
@@ -923,16 +922,16 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       trangThai: this.trangThaiBanGhi,
     };
     this.spinner.show();
-    if (this.maPa == null) {
+    
       this.quanLyVonPhiService.themmoiPhuongAn(request).subscribe(
         (res) => {
           if (res.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
             this.id = res.data.id;
             this.maPa = res.data.maPa;
             this.getDetailReport();
             this.getStatusButton();
-            this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/' + this.id);
+            this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/' + this.maPa);
           } else {
             this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -943,7 +942,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-    } 
+    
 
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
