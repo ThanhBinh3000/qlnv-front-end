@@ -392,8 +392,6 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			return;
 		}
 
-		this.mullMoneyTotal();
-
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -412,7 +410,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDelete,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: this.mulMoneyTotal(0),
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -430,12 +428,10 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -447,11 +443,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
@@ -571,7 +565,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	addLine(id: number): void {
 		let item: ItemData = {
 			loaiKhoach: "",
-			maDvi: '',
+			maDvi: this.maDonViTao,
 			loaiDan: "",
 			tongDtoanSl: 0,
 			tongDtoanGtri: 0,
@@ -824,19 +818,29 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		});
 	}
 
-	mullMoneyTotal() {
-		this.lstCTietBCao.filter(element => {
-			element.tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.maDviTien);
-			element.cbDtuN = mulMoney(element.cbDtuN, this.maDviTien);
-			element.thienNamTruoc = mulMoney(element.thienNamTruoc, this.maDviTien);
-			element.thDtuN = mulMoney(element.thDtuN, this.maDviTien);
-			element.cbDtuN1 = mulMoney(element.cbDtuN1, this.maDviTien);
-			element.thDtuN1 = mulMoney(element.thDtuN1, this.maDviTien);
-			element.cbDtuN2 = mulMoney(element.cbDtuN2, this.maDviTien);
-			element.thDtuN2 = mulMoney(element.thDtuN2, this.maDviTien);
-			element.cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
-			element.thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
+	mulMoneyTotal(id: number) {
+		let lstCTietBCaoTemp = [];
+		this.lstCTietBCao.forEach(element => {
+			lstCTietBCaoTemp.push({
+				...element,
+				tongDtoanGtri: mulMoney(element.tongDtoanGtri, this.maDviTien),
+				cbDtuN: mulMoney(element.cbDtuN, this.maDviTien),
+				thienNamTruoc: mulMoney(element.thienNamTruoc, this.maDviTien),
+				thDtuN: mulMoney(element.thDtuN, this.maDviTien),
+				cbDtuN1: mulMoney(element.cbDtuN1, this.maDviTien),
+				thDtuN1: mulMoney(element.thDtuN1, this.maDviTien),
+				cbDtuN2: mulMoney(element.cbDtuN2, this.maDviTien),
+				thDtuN2: mulMoney(element.thDtuN2, this.maDviTien),
+				cbDtuN3: mulMoney(element.cbDtuN3, this.maDviTien),
+				thDtuN3: mulMoney(element.thDtuN3, this.maDviTien),
+			})
 		});
+		if (id == 1) {
+			lstCTietBCaoTemp.forEach(item => {
+				item.id = null;
+			})
+		}
+		return lstCTietBCaoTemp;
 	}
 
 	// action copy
@@ -860,21 +864,12 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
-		this.mullMoneyTotal();
-		// replace nhung ban ghi dc them moi id thanh null
-		let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: lstTemp,
+			lstCTietBCao: this.mulMoneyTotal(1),
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,

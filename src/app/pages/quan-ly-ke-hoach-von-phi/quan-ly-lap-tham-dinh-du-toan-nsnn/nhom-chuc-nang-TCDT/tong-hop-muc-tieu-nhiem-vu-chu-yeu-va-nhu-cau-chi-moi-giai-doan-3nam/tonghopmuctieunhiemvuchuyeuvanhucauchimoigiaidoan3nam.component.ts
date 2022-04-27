@@ -179,7 +179,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
   this.danhMuc.linhvucchi().subscribe(res => {
       this.listlinhvucchi = res.data.content;
   });
-  this.danhMuc.mucchi().subscribe( res => {
+  this.danhMuc.dMMucChi().subscribe( res => {
       this.listMucchi = res.data.content;
   })
 }
