@@ -47,14 +47,14 @@ export class Utils {
 
     //role xoa
     public static btnRoleDel = {
-        "status": ['1', '3', '5', '8'],
+        "status": ['1', '3', '5', '8','10'],
         "unit": [1, 2],
         "role": [3],
     }
 
     //role luu
     public static btnRoleSave = {
-        "status": ['1', '3', '5', '8'],
+        "status": ['1', '3', '5', '8','10'],
         "unit": [1, 2],
         "role": [3],
     }

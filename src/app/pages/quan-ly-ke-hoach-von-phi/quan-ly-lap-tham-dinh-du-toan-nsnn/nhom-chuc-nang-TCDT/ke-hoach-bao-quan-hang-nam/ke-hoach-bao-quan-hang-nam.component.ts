@@ -480,7 +480,8 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 						this.trangThaiBanGhi == Utils.TT_BC_1 ||
 						this.trangThaiBanGhi == Utils.TT_BC_3 ||
 						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
+						this.trangThaiBanGhi == Utils.TT_BC_8 ||
+						this.trangThaiBanGhi == Utils.TT_BC_10
 					) {
 						this.status = false;
 					} else {
@@ -998,9 +999,9 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 				data.listCtiet.forEach(e => {
 					if (item.col == e.col) {
 						if (this.vanPhongs.findIndex(et => et.maDvi === data.maCucDtnnKvuc) != -1) {
-							item.tongVphong += e.col;
+							item.tongVphong += e.sl;
 						} else {
-							item.tongDvi += e.col;
+							item.tongDvi += e.sl;
 						}
 					}
 				})

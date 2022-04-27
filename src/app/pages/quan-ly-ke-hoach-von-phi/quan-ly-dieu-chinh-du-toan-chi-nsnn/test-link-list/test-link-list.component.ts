@@ -509,4 +509,9 @@ export class TestLinkListComponent implements OnInit {
         return level > 3;
     }
 
+    //lay stt cua thang cha
+    getHeader(str: string): string {
+        return str.substring(0, str.lastIndexOf('.'));
+    }
+
 }

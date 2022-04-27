@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
@@ -478,12 +477,13 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCTietBCao = data.data.lstCTietBCao[0];
+          console.log(this.lstCTietBCao);
           this.kphiBquanGaoLd = this.lstCTietBCao.kphiBquanGaoLd;
           this.kphiBquanGaoTx = this.lstCTietBCao.kphiBquanGaoTx;
           this.kphiBquanThocTx = this.lstCTietBCao.kphiBquanThocTx;
           this.kphiBquanThocLd = this.lstCTietBCao.kphiBquanThocLd;
-          this.lstCTiet = data.data.lstCTietBCao.lstCTiet;
+          this.lstCTiet = this.lstCTietBCao.lstCTiet;
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.changeTong()
@@ -511,7 +511,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             this.status = true;
           }
 
-          this.listFile=[]
+          this.listFile = []
 
         } else {
           this.errorMessage = "Có lỗi trong quá trình vấn tin!";
@@ -524,6 +524,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     );
     this.spinner.hide();
   }
+
 
   //upload file
   async uploadFile(file: File) {

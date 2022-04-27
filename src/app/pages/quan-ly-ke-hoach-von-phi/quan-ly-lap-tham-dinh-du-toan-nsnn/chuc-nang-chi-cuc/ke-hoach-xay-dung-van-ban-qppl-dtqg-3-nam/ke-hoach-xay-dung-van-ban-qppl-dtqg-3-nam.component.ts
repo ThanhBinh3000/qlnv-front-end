@@ -454,7 +454,8 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 						this.trangThaiBanGhi == Utils.TT_BC_1 ||
 						this.trangThaiBanGhi == Utils.TT_BC_3 ||
 						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
+						this.trangThaiBanGhi == Utils.TT_BC_8 ||
+						this.trangThaiBanGhi == Utils.TT_BC_10
 					) {
 						this.status = false;
 					} else {
@@ -733,17 +734,19 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		}
 		this.mulMoneyTotal();
 		// replace nhung ban ghi dc them moi id thanh null
+		let lstTemp = [];
 		this.lstCTietBCao.filter(item => {
-			if (typeof item.id != "number") {
-				item.id = null;
-			}
+			lstTemp.push({
+				...item,
+				id: null,
+			})
 		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: lstTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,

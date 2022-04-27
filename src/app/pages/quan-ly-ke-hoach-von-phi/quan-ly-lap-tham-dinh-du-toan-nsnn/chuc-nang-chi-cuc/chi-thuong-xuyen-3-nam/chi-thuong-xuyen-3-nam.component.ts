@@ -464,7 +464,8 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           if (this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
             this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8) {
+            this.trangThaiBanGhi == Utils.TT_BC_8 ||
+						this.trangThaiBanGhi == Utils.TT_BC_10) {
             this.status = false;
           } else {
             this.status = true;
@@ -810,6 +811,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   divMoneyTotal() {
     this.lstCTietBCao.filter(item => {
       item.tranChiDuocTbN1 = divMoney(item.tranChiDuocTbN1, this.maDviTien);
+      item.namHhanhN = divMoney(item.namHhanhN, this.maDviTien);
       item.ncauChiCuaDviN1 = divMoney(item.ncauChiCuaDviN1, this.maDviTien);
       item.clechTranChiVsNcauN1 = divMoney(item.clechTranChiVsNcauN1, this.maDviTien);
       item.tranChiDuocTbN2 = divMoney(item.tranChiDuocTbN2, this.maDviTien);
@@ -824,6 +826,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
       element.tranChiDuocTbN1 = mulMoney(element.tranChiDuocTbN1, this.maDviTien);
+      element.namHhanhN = mulMoney(element.namHhanhN, this.maDviTien);
       element.ncauChiCuaDviN1 = mulMoney(element.ncauChiCuaDviN1, this.maDviTien);
       element.clechTranChiVsNcauN1 = mulMoney(element.clechTranChiVsNcauN1, this.maDviTien);
       element.tranChiDuocTbN2 = mulMoney(element.tranChiDuocTbN2, this.maDviTien);
