@@ -119,7 +119,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
   })
 
-  this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
+  await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
     if(res.statusCode== 0){
         var dotBaoCao= res.data;
         if(dotBaoCao!=1){

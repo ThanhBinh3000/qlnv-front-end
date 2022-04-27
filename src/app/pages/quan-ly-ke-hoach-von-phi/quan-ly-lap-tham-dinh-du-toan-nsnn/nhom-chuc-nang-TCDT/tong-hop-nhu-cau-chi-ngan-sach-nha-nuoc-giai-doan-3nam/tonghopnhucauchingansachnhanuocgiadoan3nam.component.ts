@@ -273,6 +273,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
           }
           // set list id file ban dau
           this.listFile =[];
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -409,6 +410,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -632,7 +634,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
               })
             }
             this.updateEditCache();
-            
+            this.tinhTong();
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -799,6 +801,49 @@ xoaBaoCao(){
       item.tranChiN3 = divMoney(item.tranChiN3, this.donvitien);
       item.ncauChiN3 = divMoney(item.ncauChiN3, this.donvitien);
       item.clechTranChiVsNcauChiN3 = divMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
+    })
+  }
+
+
+  tongDuToan:number =0;
+  tongUocTh:number =0;
+  tongTChi1:number =0;
+  tongNhuCau1:number =0;
+  tongChenhLech1:number =0;
+  tongSoSanh:number=0;
+  tongTChi2:number =0;
+  tongNhuCau2:number =0;
+  tongChenhLech2:number =0;
+  tongTChi3:number =0;
+  tongNhuCau3:number =0;
+  tongChenhLech3:number =0;
+  
+  tinhTong(){
+    this.tongDuToan =0;
+    this.tongUocTh =0;
+    this.tongTChi1 =0;
+    this.tongNhuCau1 =0;
+    this.tongChenhLech1 =0;
+    this.tongSoSanh=0;
+    this.tongTChi2 =0;
+    this.tongNhuCau2 =0;
+    this.tongChenhLech2 =0;
+    this.tongTChi3 =0;
+    this.tongNhuCau3 =0;
+    this.tongChenhLech3 =0;
+    this.lstCTietBCao.forEach( e =>{
+      this.tongDuToan +=e.dtoanN;
+      this.tongUocTh +=e.uocThienN;
+      this.tongTChi1 +=e.ncauChiN1;
+      this.tongNhuCau1 +=e.ncauChiN1;
+      this.tongChenhLech1 +=e.clechTranChiVsNcauChiN1;
+      this.tongSoSanh +=e.ssanhNcauNVoiN1;
+      this.tongTChi2 +=e.ncauChiN2;
+      this.tongNhuCau2 +=e.ncauChiN2;
+      this.tongChenhLech2 +=e.clechTranChiVsNcauChiN2;
+      this.tongTChi3 +=e.ncauChiN3;
+      this.tongNhuCau3 +=e.ncauChiN3;
+      this.tongChenhLech3 +=e.clechTranChiVsNcauChiN3;
     })
   }
 }
