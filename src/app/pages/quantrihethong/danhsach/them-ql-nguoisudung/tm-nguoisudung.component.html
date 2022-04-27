@@ -1,0 +1,164 @@
+<form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+  <div nz-row [nzGutter]="24">
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Đơn vị quản lý</nz-form-label>
+        <nz-select nzShowSearch nzAllowClear formControlName="meetingRoomId">
+          <nz-option>
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Kiểu xác thực</nz-form-label>
+        <nz-form-control nzErrorTip="Phòng họp là bắt buộc!">
+          <nz-select nzShowSearch nzAllowClear formControlName="meetingRoomId">
+            <nz-option>
+            </nz-option>
+          </nz-select>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Loại NSD</nz-form-label>
+        <nz-form-control nzErrorTip="Tên cuộc là bắt buộc!">
+          <input type="text" nz-input formControlName="meetingName" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzFor="fromDate" nzRequired>Mã Người dùng</nz-form-label>
+        <nz-form-control nzErrorTip="Thời gian bắt đầu là bắt buộc!" class="dateandtime">
+          <nz-input-group [nzAddOnAfter]="addOn">
+            <!-- <nz-date-picker  [nzAllowClear]="true" nzFormat="dd/MM/yyyy"
+            formControlName="fromDate"></nz-date-picker> -->
+
+          </nz-input-group>
+          <ng-template #addOn>
+            <nz-time-picker formControlName="fromTime" nzFormat="HH:mm" [nzPlaceHolder]="'hh:mm'"></nz-time-picker>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzFor="toDate" nzRequired>Tên đăng nhập đầy đủ</nz-form-label>
+        <nz-form-control nzErrorTip="Thời gian kết thúc là bắt buộc!" class="dateandtime">
+          <nz-input-group [nzAddOnAfter]="addOn2">
+
+
+          </nz-input-group>
+          <ng-template #addOn2>
+            <nz-time-picker formControlName="toTime" nzFormat="HH:mm" [nzPlaceHolder]="'hh:mm'"></nz-time-picker>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label nzRequired>Mật khẩu</nz-form-label>
+        <nz-form-control nzErrorTip="Lãnh đạo chủ trì là bắt buộc!">
+          <nz-select nzShowSearch nzAllowClear formControlName="userLeadId">
+            <nz-option>
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Nhập lại mật khẩu</nz-form-label>
+        <input type="string" maxlength="7" appNumberOnly nz-input formControlName="numberUser" id="numberUser" />
+      </nz-form-item>
+    </div>
+
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label nzRequired>Họ và tên Người dùng</nz-form-label>
+        <nz-form-control nzErrorTip="Nội dung là bắt buộc!">
+          <textarea type="text" nz-input formControlName="content"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Số điện thoại</nz-form-label>
+        <nz-select nzMode="multiple" nzPlaceHolder="Vui lòng chọn" formControlName="userJoins">
+          <nz-option></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+      <nz-form-item>
+        <nz-form-label>Email</nz-form-label>
+        <nz-select nzMode="multiple" nzPlaceHolder="Chọn yêu cầu phục vụ" formControlName="items">
+          <nz-option></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label>Nhóm người dùng</nz-form-label>
+        <nz-select formControlName="noticeBefor" nzPlaceHolder="Vui lòng chọn">
+          <nz-option [nzValue]="15" nzLabel="15 phút">
+          </nz-option>
+          <nz-option [nzValue]="30" nzLabel="30 phút">
+          </nz-option>
+          <nz-option [nzValue]="60" nzLabel="60 phút">
+          </nz-option>
+          <nz-option [nzValue]="1440" nzLabel="1 ngày">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label>Phạm vi báo cáo</nz-form-label>
+        <nz-form-control>
+          <input type="text" nz-input formControlName="otherRequirement" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <nz-form-item>
+        <nz-form-label>Trạng thái</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="status">
+            <label nz-radio nzValue="A">Mở</label>
+            <label nz-radio nzValue="B">Khóa</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="m-footer">
+      <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light active">
+            <i class="icon htvbdh_luu" aria-hidden="true"></i>
+            Lưu
+          </a>
+
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+            <i aria-hidden="true" class="fa fa-sign-out"></i>
+            <span>Hủy</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>

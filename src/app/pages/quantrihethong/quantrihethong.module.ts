@@ -11,6 +11,7 @@ import { QlQuyenComponent } from './ql-quyen/ql-quyen.component';
 import { QlNhomQuyenComponent } from './ql-nhomquyen/ql-nhomquyen.component';
 import { QlLsTruyCapComponent } from './ql-ls-truycap/ql-ls-truycap.component';
 import { QlThamSoHeThongComponent } from './ql-ts-hethong/ql-ts-hethong.component';
+import { ThemMoiNSDComponent } from './danhsach/them-ql-nguoisudung/tm-nguoisudung.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { QlThamSoHeThongComponent } from './ql-ts-hethong/ql-ts-hethong.componen
     QlQuyenComponent,
     QlNhomQuyenComponent,
     QlLsTruyCapComponent,
-    QlThamSoHeThongComponent
+    QlThamSoHeThongComponent,
+    ThemMoiNSDComponent
   ],
   imports: [CommonModule, QuanTriHeThongRoutingModule, ComponentsModule, MainModule],
 
