@@ -387,8 +387,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            await this.getDetailReport();
-            this.getStatusButton();
+            // await this.getDetailReport();
+            // this.getStatusButton();
+            this.divMoneyTotal();
           } else {
             this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);

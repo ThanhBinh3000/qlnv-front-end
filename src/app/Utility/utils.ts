@@ -624,6 +624,10 @@ export const LOAIBAOCAO =[
             id:"9",
             tenDm:'Đv cấp trên duyệt'
         },
+        {
+            id:"10",
+            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
+        },
     ]
 
     // trang thai chi tiet bao cao
