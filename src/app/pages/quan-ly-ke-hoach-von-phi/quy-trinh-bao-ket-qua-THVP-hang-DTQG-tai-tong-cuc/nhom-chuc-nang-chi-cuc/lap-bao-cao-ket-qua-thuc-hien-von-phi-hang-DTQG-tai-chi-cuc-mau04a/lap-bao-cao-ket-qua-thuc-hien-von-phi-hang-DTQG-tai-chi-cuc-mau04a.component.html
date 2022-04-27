@@ -181,7 +181,11 @@
                 <th nzWidth="175px">Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span></th>
                 <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày cục khu vực  kiểm tra đánh giá báo cáo)</span></th>
                 <th nzWidth="100px" class="text-center">Trạng thái<br> <span>(Cục khu vực đánh giá)</span></th>
-                <th>Hành động</th>
+                <th>Hành động
+                  <button type="button" class="btn btn-main" (click)="viewDetail(571)">
+                    <span>Xem</span>
+                  </button>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -195,7 +199,7 @@
                 <td>{{item.ngayDuyet}}</td>
                 <td class="text-center">{{item.tenTrangThai}}</td>
                 <td>
-                  <button type="button" class="btn btn-main">
+                  <button type="button" class="btn btn-main" (click)="viewDetail(item.id)">
                     <span>Xem</span>
                   </button>
                 </td>

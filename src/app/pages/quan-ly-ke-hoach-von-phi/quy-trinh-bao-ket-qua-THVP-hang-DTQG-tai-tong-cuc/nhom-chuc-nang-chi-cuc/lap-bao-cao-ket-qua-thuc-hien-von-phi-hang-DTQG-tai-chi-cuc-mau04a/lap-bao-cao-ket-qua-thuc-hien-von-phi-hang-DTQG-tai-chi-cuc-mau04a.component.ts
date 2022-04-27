@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -158,13 +158,14 @@ export class linkList {
 export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   implements OnInit
 {
+  @Input() idDialog: any;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private sanitizer: DomSanitizer,
     private nguoiDungSerivce: UserService,
-    private datepipe: DatePipe,
+    private datePipe: DatePipe,
     private notification: NzNotificationService,
     private router: ActivatedRoute,
     private modal: NzModalService,
@@ -349,6 +350,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     },err => {
     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+
+    if (this.idDialog) {
+      this.id = this.idDialog;
+    }
     if ( this.namBcao!=null && this.dotBcao!=null && this.loaiBaoCaoTongHop!=null) {
       // this.getDetailReportToExportFile();\
       this.callTonghop();
@@ -363,7 +368,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {            
-            this.baoCao.maBcao = res.data.data;
+            this.baoCao.maBcao = res.data;
             // this.notification.success(MESSAGE.SUCCESS, res?.msg);
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -374,7 +379,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         },
       );
       this.baoCao.namBcao = this.currentday.getFullYear();
-      this.baoCao.ngayTao = this.datepipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
+      this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.nam = this.currentday.getFullYear();
       //khởi tạo trạng thái tạo mới
       this.baoCao.trangThai = '1';
@@ -1379,10 +1384,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao.maBcao = data.data.maBcao;
           this.baoCao.namBcao = data.data.namBcao;
           this.baoCao.maDvi = data.data.maDvi;
-          this.baoCao.ngayDuyet = this.datepipe.transform(data.data.ngayDuyet, 'dd/MM/yyyy');
-          this.baoCao.ngayPheDuyet = this.datepipe.transform(data.data.ngayPheDuyet,'dd/MM/yyyy');
-          this.baoCao.ngayCapTrenTraKq = this.datepipe.transform(data.data.ngayTraKq,'dd/MM/yyyy');
-          this.baoCao.ngayTrinhDuyet = this.datepipe.transform(data.data.ngayTrinh,'dd/MM/yyyy');
+          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, 'dd/MM/yyyy');
+          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet,'dd/MM/yyyy');
+          this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq,'dd/MM/yyyy');
+          this.baoCao.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh,'dd/MM/yyyy');
           this.baoCao.trangThai = data.data.trangThai;
           this.donvitien = data.data.maDviTien;
           this.maLoaiBaocao = data.data.maLoaiBcao;
@@ -1659,7 +1664,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   callTonghop(){
 
     this.baoCao.namBcao = this.currentday.getFullYear();
-      this.baoCao.ngayTao = this.datepipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
+      this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.nam = this.currentday.getFullYear();
       //khởi tạo trạng thái tạo mới
       this.baoCao.trangThai = '1';
@@ -1695,15 +1700,20 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       if(res.statusCode==0){
         console.log(res);
                 this.baoCao.lstBCao= res.data.lstBCao;
+                this.baoCao.lstBCao.forEach( e =>{
+                  e.lstCTietBCao.forEach(element => {
+                    element.id = uuid.v4();
+                  });
+                })
                 this.listBcaoKqua = res.data.lstBCaoDviTrucThuoc;
                 this.listBcaoKqua.forEach(e =>{
-                  e.ngayTrinhDuyet = this.datepipe.transform(e.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
-                  e.ngayDuyet = this.datepipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+                  e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+                  e.ngayDuyet = this.datePipe.transform(e.ngayDuyet,Utils.FORMAT_DATE_STR);
                 })
                 this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
                   (res) => {
                     if (res.statusCode == 0) {            
-                      this.baoCao.maBcao = res.data.data;
+                      this.baoCao.maBcao = res.data;
                       // this.notification.success(MESSAGE.SUCCESS, res?.msg);
                     } else {
                       this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -3567,5 +3577,26 @@ updateSingleCheckedBcao(maLoai:any): void {
       }
     })
     this.updateEditCache03();
+  }
+
+
+  viewDetail(id) {
+    const modalIn = this.modal.create({
+      nzTitle: 'Danh sách phụ lục',
+      nzContent: LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: [
+        {
+          label: 'Đóng',
+          shape: 'round',
+          onClick: () => this.modal.closeAll()
+        },
+      ],
+      nzComponentParams: {
+        idDialog: id
+      },
+    });
   }
 }
