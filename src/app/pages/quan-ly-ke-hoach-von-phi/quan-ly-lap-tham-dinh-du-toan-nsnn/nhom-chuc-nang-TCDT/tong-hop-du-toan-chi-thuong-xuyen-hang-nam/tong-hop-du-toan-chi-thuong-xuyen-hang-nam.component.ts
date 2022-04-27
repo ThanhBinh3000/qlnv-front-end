@@ -328,8 +328,6 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			return;
 		}
 
-		this.mulMoneyTotal();
-
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -346,7 +344,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			fileDinhKems: listFile,
 			listIdDeleteFiles: this.listIdDeleteFiles,
 			listIdDeletes: this.listIdDelete,
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: this.mulMoneyTotal(0),
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -364,12 +362,10 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				(err) => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		} else {
@@ -380,11 +376,9 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
@@ -801,33 +795,43 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		});
 	}
 
-	mulMoneyTotal() {
+	mulMoneyTotal(id: number) {
+		let lstCTietBCaoTemp = [];
 		this.lstCTietBCao.forEach(element => {
-			element.tongCong = mulMoney(element.tongCong, this.maDviTien);
-			element.k331Tcong = mulMoney(element.k331Tcong, this.maDviTien);
-			element.k331KhongTchuCoDmucCong = mulMoney(element.k331KhongTchuCoDmucCong, this.maDviTien);
-			element.k331KhongTchuChuaDmucCong = mulMoney(element.k331KhongTchuChuaDmucCong, this.maDviTien);
-			element.k341Tcong = mulMoney(element.k341Tcong, this.maDviTien);
-			element.k331KhongTchuCoDmucNx = mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien);
-			element.k331KhongTchuCoDmucVtct = mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien);
-			element.k331KhongTchuCoDmucBquan = mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien);
-			element.k331KhongTchuChuaDmucCntt = mulMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien);
-			element.k331KhongTchuChuaDmucThueKho = mulMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien);
-			element.k331KhongTchuChuaDmucMsamTsan = mulMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien);
-			element.k331KhongTchuChuaDmucBhiemHhoa = mulMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien);
-			element.k331KhongTchuChuaDmucPhongChongMoiKplb = mulMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien);
-			element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem = mulMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien);
-			element.k331KhongTchuChuaDmucSchuaKhoTang = mulMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien);
-			element.k341LuongTuChu = mulMoney(element.k341LuongTuChu, this.maDviTien);
-			element.k341ChiTxKhongDmucTuChu = mulMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien);
-			element.k341TxTheoDmucTuChu = mulMoney(element.k341TxTheoDmucTuChu, this.maDviTien);
-			element.k341LuongKhongTuChu = mulMoney(element.k341LuongKhongTuChu, this.maDviTien);
-			element.k341ChiTxKhongDmucKhongTuChu = mulMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien);
-			element.k341TxTheoDmucKhongTuChu = mulMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien);
-			element.k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
-			element.k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
-			element.k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
+			lstCTietBCaoTemp.push({
+				...element,
+				tongCong: mulMoney(element.tongCong, this.maDviTien),
+				k331Tcong: mulMoney(element.k331Tcong, this.maDviTien),
+				k331KhongTchuCoDmucCong: mulMoney(element.k331KhongTchuCoDmucCong, this.maDviTien),
+				k331KhongTchuChuaDmucCong: mulMoney(element.k331KhongTchuChuaDmucCong, this.maDviTien),
+				k341Tcong: mulMoney(element.k341Tcong, this.maDviTien),
+				k331KhongTchuCoDmucNx: mulMoney(element.k331KhongTchuCoDmucNx, this.maDviTien),
+				k331KhongTchuCoDmucVtct: mulMoney(element.k331KhongTchuCoDmucVtct, this.maDviTien),
+				k331KhongTchuCoDmucBquan: mulMoney(element.k331KhongTchuCoDmucBquan, this.maDviTien),
+				k331KhongTchuChuaDmucCntt: mulMoney(element.k331KhongTchuChuaDmucCntt, this.maDviTien),
+				k331KhongTchuChuaDmucThueKho: mulMoney(element.k331KhongTchuChuaDmucThueKho, this.maDviTien),
+				k331KhongTchuChuaDmucMsamTsan: mulMoney(element.k331KhongTchuChuaDmucMsamTsan, this.maDviTien),
+				k331KhongTchuChuaDmucBhiemHhoa: mulMoney(element.k331KhongTchuChuaDmucBhiemHhoa, this.maDviTien),
+				k331KhongTchuChuaDmucPhongChongMoiKplb: mulMoney(element.k331KhongTchuChuaDmucPhongChongMoiKplb, this.maDviTien),
+				k331KhongTchuChuaDmucVchuyenBquanTsanQhiem: mulMoney(element.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem, this.maDviTien),
+				k331KhongTchuChuaDmucSchuaKhoTang: mulMoney(element.k331KhongTchuChuaDmucSchuaKhoTang, this.maDviTien),
+				k341LuongTuChu: mulMoney(element.k341LuongTuChu, this.maDviTien),
+				k341ChiTxKhongDmucTuChu: mulMoney(element.k341ChiTxKhongDmucTuChu, this.maDviTien),
+				k341TxTheoDmucTuChu: mulMoney(element.k341TxTheoDmucTuChu, this.maDviTien),
+				k341LuongKhongTuChu: mulMoney(element.k341LuongKhongTuChu, this.maDviTien),
+				k341ChiTxKhongDmucKhongTuChu: mulMoney(element.k341ChiTxKhongDmucKhongTuChu, this.maDviTien),
+				k341TxTheoDmucKhongTuChu: mulMoney(element.k341TxTheoDmucKhongTuChu, this.maDviTien),
+				k085DaoTao: mulMoney(element.k085DaoTao, this.maDviTien),
+				k102NghienCuuKhoaHoc: mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien),
+				k398DamBaoXaHoi: mulMoney(element.k398DamBaoXaHoi, this.maDviTien),
+			})
 		});
+		if (id == 1) {
+			lstCTietBCaoTemp.forEach(item => {
+				item.id = null;
+			})
+		}
+		return lstCTietBCaoTemp;
 	}
 
 	// action copy
@@ -851,21 +855,12 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
-		this.mulMoneyTotal();
-		// replace nhung ban ghi dc them moi id thanh null
-		let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: lstTemp,
+			lstCTietBCao: this.mulMoneyTotal(1),
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,

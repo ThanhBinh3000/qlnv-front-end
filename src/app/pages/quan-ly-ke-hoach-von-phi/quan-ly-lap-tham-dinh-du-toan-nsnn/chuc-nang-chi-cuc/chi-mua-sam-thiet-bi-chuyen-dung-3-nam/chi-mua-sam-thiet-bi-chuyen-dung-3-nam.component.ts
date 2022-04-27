@@ -302,7 +302,6 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
 			return;
 		}
-		this.mullMoneyTotal();
 
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
@@ -321,7 +320,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDelete,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: this.mulMoneyTotal(0),
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -340,12 +339,10 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -357,11 +354,9 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 
@@ -414,7 +409,9 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					console.log(data);
+					this.tong1 = 0;
+					this.tong2 = 0;
+					this.tong3 = 0;
 					this.chiTietBcaos = data.data;
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
@@ -714,12 +711,22 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		});
 	}
 
-	mullMoneyTotal() {
+	mulMoneyTotal(id: number) {
+		let lstCTietBCaoTemp = [];
 		this.lstCTietBCao.forEach(element => {
-			element.n1 = mulMoney(element.n1, this.maDviTien);
-			element.n2 = mulMoney(element.n2, this.maDviTien);
-			element.n3 = mulMoney(element.n3, this.maDviTien);
+			lstCTietBCaoTemp.push({
+				...element,
+				n1: mulMoney(element.n1, this.maDviTien),
+				n2: mulMoney(element.n2, this.maDviTien),
+				n3: mulMoney(element.n3, this.maDviTien),
+			})
 		});
+		if (id == 1){
+			lstCTietBCaoTemp.forEach(item => {
+				item.id = null;
+			})
+		}
+		return lstCTietBCaoTemp;
 	}
 
 	// action copy
@@ -743,21 +750,13 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
-		this.mullMoneyTotal();
-		// replace nhung ban ghi dc them moi id thanh null
-		let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
+		
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: lstTemp,
+			lstCTietBCao: this.mulMoneyTotal(1),
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
