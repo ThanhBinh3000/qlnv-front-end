@@ -748,17 +748,17 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      }
 
      tinhTong(heSo: number, item: ItemData) {
-          this.tong.dtoanN = heSo * item.dtoanN;
-          this.tong.uocThienN = heSo * item.uocThienN;
-          this.tong.tranChiN1 = heSo * item.tranChiN1;
-          this.tong.ncauChiN1 = heSo * item.ncauChiN1;
-          this.tong.clechTranChiVsNcauChiN1 = heSo * item.clechTranChiVsNcauChiN1;
-          this.tong.tranChiN2 = heSo * item.tranChiN2;
-          this.tong.ncauChiN2 = heSo * item.ncauChiN2;
-          this.tong.clechTranChiVsNcauChiN2 = heSo * item.clechTranChiVsNcauChiN2;
-          this.tong.tranChiN3 = heSo * item.tranChiN3;
-          this.tong.ncauChiN3 = heSo * item.ncauChiN3;
-          this.tong.clechTranChiVsNcauChiN3 = heSo * item.clechTranChiVsNcauChiN3;
+          this.tong.dtoanN += heSo * item.dtoanN;
+          this.tong.uocThienN += heSo * item.uocThienN;
+          this.tong.tranChiN1 += heSo * item.tranChiN1;
+          this.tong.ncauChiN1 += heSo * item.ncauChiN1;
+          this.tong.clechTranChiVsNcauChiN1 += heSo * item.clechTranChiVsNcauChiN1;
+          this.tong.tranChiN2 += heSo * item.tranChiN2;
+          this.tong.ncauChiN2 += heSo * item.ncauChiN2;
+          this.tong.clechTranChiVsNcauChiN2 += heSo * item.clechTranChiVsNcauChiN2;
+          this.tong.tranChiN3 += heSo * item.tranChiN3;
+          this.tong.ncauChiN3 += heSo * item.ncauChiN3;
+          this.tong.clechTranChiVsNcauChiN3 += heSo * item.clechTranChiVsNcauChiN3;
           if (this.tong.uocThienN != 0) {
                this.tong.ssanhNcauNVoiN1 = this.tong.ncauChiN1 / this.tong.uocThienN;
           } else {

@@ -1232,17 +1232,20 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 			return;
 		}
 		// replace nhung ban ghi dc them moi id thanh null
-		this.lstCTietBCao.filter(item => {
-			if (typeof item.id != "number") {
-				item.id = null;
-			}
+		let lstTemp = [];
+
+		this.lstCTietBCao.forEach(item => {
+			lstTemp.push({
+				...item,
+				id: null,
+			})
 		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: lstTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -1271,13 +1274,6 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 			},
 		);
 
-		this.lstCTietBCao.filter(item => {
-			if (!item.id) {
-				item.id = uuid.v4();
-			}
-		});
-
-		this.updateEditCache();
 		this.spinner.hide();
 	}
 
