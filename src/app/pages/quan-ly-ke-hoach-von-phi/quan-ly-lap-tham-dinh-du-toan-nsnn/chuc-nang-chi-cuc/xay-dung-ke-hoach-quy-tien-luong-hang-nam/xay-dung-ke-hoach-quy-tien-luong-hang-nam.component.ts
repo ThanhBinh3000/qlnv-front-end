@@ -465,6 +465,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           this.maDviTien = data.data.maDviTien;
+          this.soVban = data.data.soVban;
           this.divMoneyTotal()
           this.listFile=[]
           if (
