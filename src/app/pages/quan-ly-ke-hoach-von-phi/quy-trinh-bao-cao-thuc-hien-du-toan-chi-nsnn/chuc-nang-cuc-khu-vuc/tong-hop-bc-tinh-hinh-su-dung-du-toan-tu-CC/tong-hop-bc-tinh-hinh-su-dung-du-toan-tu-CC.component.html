@@ -13,10 +13,6 @@
             <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Đơn vị lập</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="searchFilter.donVi">
-              <nz-option *ngFor="let item of donViTaos" [nzValue]="item.id" [nzLabel]="item.tenDvi"></nz-option>
-            </nz-select>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>

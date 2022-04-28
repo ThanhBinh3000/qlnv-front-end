@@ -461,37 +461,42 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.lstCTietBCao = data.data?.lstCTietBCao[0];
-          this.luongThocXuat = this.lstCTietBCao?.luongThocXuat;
-          this.luongThocNhap = this.lstCTietBCao?.luongThocNhap;
-          this.luongGaoXuat = this.lstCTietBCao?.luongGaoXuat;
-          this.luongGaoNhap = this.lstCTietBCao?.luongGaoNhap;
-          this.lstCTiet = this.lstCTietBCao?.lstCTiet;
-          this.changeTong()
-          this.updateEditCache();
-          this.lstFile = data.data.lstFile;
+          if(data.data.lstCTietBCao[0]){
+            this.luongThocXuat = this.lstCTietBCao?.luongThocXuat;
+            this.luongThocNhap = this.lstCTietBCao?.luongThocNhap;
+            this.luongGaoXuat = this.lstCTietBCao?.luongGaoXuat;
+            this.luongGaoNhap = this.lstCTietBCao?.luongGaoNhap;
+            this.lstCTiet = this.lstCTietBCao?.lstCTiet;
+            this.changeTong()
+            this.updateEditCache();
+            this.lstFile = data.data.lstFile;
 
-          // set thong tin chung bao cao
-          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-          this.nguoiNhap = data.data.nguoiTao;
-          this.maDonViTao = data.data.maDvi;
-          this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namHienHanh;
-          this.trangThaiBanGhi = data.data.trangThai;
-          this.namBcao = data.data.namBcao;
-          this.soVban = data.data.soVban;
-          if (
-            this.trangThaiBanGhi == Utils.TT_BC_1 ||
-            this.trangThaiBanGhi == Utils.TT_BC_3 ||
-            this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8 ||
-            this.trangThaiBanGhi == Utils.TT_BC_10
-          ) {
-            this.status = false;
-          } else {
-            this.status = true;
+            // set thong tin chung bao cao
+            this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+            this.nguoiNhap = data.data.nguoiTao;
+            this.maDonViTao = data.data.maDvi;
+            this.maBaoCao = data.data.maBcao;
+            this.namBaoCaoHienHanh = data.data.namHienHanh;
+            this.trangThaiBanGhi = data.data.trangThai;
+            this.namBcao = data.data.namBcao;
+            this.soVban = data.data.soVban;
+            if (
+              this.trangThaiBanGhi == Utils.TT_BC_1 ||
+              this.trangThaiBanGhi == Utils.TT_BC_3 ||
+              this.trangThaiBanGhi == Utils.TT_BC_5 ||
+              this.trangThaiBanGhi == Utils.TT_BC_8 ||
+              this.trangThaiBanGhi == Utils.TT_BC_10
+            ) {
+              this.status = false;
+            } else {
+              this.status = true;
+            }
+
+            this.listFile=[]
+          }else{
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
 
-          this.listFile=[]
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -757,6 +762,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
         return null;
       }
     );
+    this.spinner.hide();
     if (!maBaoCao) {
       return;
     }

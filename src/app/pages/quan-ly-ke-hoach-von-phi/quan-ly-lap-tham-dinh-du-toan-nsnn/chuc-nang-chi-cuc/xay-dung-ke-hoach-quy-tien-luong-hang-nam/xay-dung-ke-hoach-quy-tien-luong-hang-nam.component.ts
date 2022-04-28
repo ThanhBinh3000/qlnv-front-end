@@ -201,7 +201,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          console.log(this.donVis);
 
           this.donVis.forEach(e => {
             if(e.maDvi==this.maDonViTao){
@@ -454,8 +453,9 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
-          this.lstFile = data.data.lstFile;
+          this.lstCTietBCao = data.data?.lstCTietBCao
+          if(data.data.lstCTietBCao){
+            this.lstFile = data.data.lstFile;
           // set thong tin chung bao cao
           this.ngayNhap = this.datePipe.transform(data.data.ngayTao,Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
@@ -466,7 +466,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.namBcao = data.data.namBcao;
           this.maDviTien = data.data.maDviTien;
           this.soVban = data.data.soVban;
-          this.divMoneyTotal()
+
           this.listFile=[]
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
@@ -479,7 +479,14 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           } else {
             this.status = true;
           }
+          this.divMoneyTotal()
           this.updateEditCache();
+          }else{
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+
+          }
+
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -762,6 +769,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         return null;
       }
     );
+    this.spinner.hide();
     if (!maBaoCao) {
       return;
     }
