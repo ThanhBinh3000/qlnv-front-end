@@ -17,7 +17,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   tenDtaiDan!: String;
-  maDvi!: number;
+  maDvi!: string;
   tgBdau!: number;
   tgKthuc!: number;
   kphiTongPhiDuocDuyet!: number;
@@ -457,6 +457,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.soVban = data.data.soVban
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -507,7 +508,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDtaiDan: "",
-      maDvi: 0,
+      maDvi: "",
       tgBdau: this.namBaoCaoHienHanh,
       tgKthuc: this.namBaoCaoHienHanh,
       kphiTongPhiDuocDuyet: 0,

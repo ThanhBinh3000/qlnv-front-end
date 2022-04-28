@@ -380,7 +380,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban: "",
+      soVban:this.soVban,
     };
 
     //call service them moi
@@ -641,12 +641,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTiet[id].maVtuTbi){
+    const index = this.lstCTiet.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		if (!this.lstCTiet[index].maVtuTbi) {
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTiet.findIndex(item => item.id === id);
-
     this.editCache[id] = {
       data: { ...this.lstCTiet[index] },
       edit: false

@@ -8,6 +8,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 
 @Component({
@@ -37,8 +38,8 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     trangThai:9,
     maBcao:'',
     maLoaiBcao:'',
-    namBcao:'',
-    thangBCao: '',
+    namBcao:null,
+    thangBCao: null,
     dotBcao:'',
     paggingReq: {
       limit: 10,
@@ -61,7 +62,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notification:NzNotificationService,
     private location: Location,
 
   ) {
@@ -74,11 +75,11 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
         } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.listBcaoKqua = []
@@ -91,26 +92,26 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   timkiem(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
       if(res.statusCode==0){
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
+        this.notification.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
       }else{
-        this.notifi.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
       console.log(res);
     },err =>{
-      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
   }
   themMoi(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
@@ -118,7 +119,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    this.url = '/bao-cao/'
+    this.url = '/tong-hop/'
   }
 
   //doi so trang
@@ -134,12 +135,23 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
   // tong hop bao cao tu cap duoi
   tongHop(){
     let request = {
-    dotBcao: null,
-    maLoaiBcao: this.searchFilter.maLoaiBcao,
-    maPhanBCao: '0',
-    namBcao: this.searchFilter.namBcao,
-    thangBcao: this.searchFilter.thangBCao
+      dotBcao: null,
+      maLoaiBcao: this.searchFilter.maLoaiBcao,
+      maPhanBCao: '0',
+      namBcao: this.searchFilter.namBcao,
+      thangBcao: this.searchFilter.thangBCao
     }
+
+      if(!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBCao && this.searchFilter.maLoaiBcao == '526')){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+        return;
+      }
+      if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000){
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+        return;
+      }
+  
+      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url +'/' + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0')+'/'+this.searchFilter.namBcao])
   }
 
   close() {

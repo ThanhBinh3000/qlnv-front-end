@@ -326,7 +326,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -466,6 +465,7 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
           this.maDviTien = data.data.maDviTien;
+          this.soVban = data.data.soVban;
           this.divMoneyTotal()
           this.listFile=[]
           if (
@@ -648,11 +648,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].bcheGiaoN1){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].bcheGiaoN1){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },

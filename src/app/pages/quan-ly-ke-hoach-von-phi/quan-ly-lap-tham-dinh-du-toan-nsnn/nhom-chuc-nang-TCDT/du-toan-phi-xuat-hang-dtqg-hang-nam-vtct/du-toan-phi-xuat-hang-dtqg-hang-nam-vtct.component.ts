@@ -1228,14 +1228,31 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 				return null;
 			}
 		);
+		this.spinner.hide();
 		if (!maBaoCao) {
 			return;
 		}
 		// replace nhung ban ghi dc them moi id thanh null
 		let lstTemp = [];
+		let lstVtuTemp= [];
 
 		this.lstCTietBCao.forEach(item => {
+			var lstCTietTemp = [];
+			item.listCtiet.forEach(e => {
+				lstCTietTemp.push({
+					...e,
+					id: null,
+				})
+			})
 			lstTemp.push({
+				...item,
+				id: null,
+				listCtiet: lstCTietTemp,
+			})
+		})
+
+		this.lstVtu.forEach(item => {
+			lstVtuTemp.push({
 				...item,
 				id: null,
 			})
@@ -1253,6 +1270,8 @@ export class DuToanPhiXuatHangDtqgHangNamVtctComponent implements OnInit {
 			namHienHanh: this.namBaoCaoHienHanh,
 			namBcao: this.namBaoCaoHienHanh + 1,
 			soVban: null,
+			listDeleteVtus: null,
+			lstTongVtu: lstVtuTemp,
 		};
 
 		//call service them moi

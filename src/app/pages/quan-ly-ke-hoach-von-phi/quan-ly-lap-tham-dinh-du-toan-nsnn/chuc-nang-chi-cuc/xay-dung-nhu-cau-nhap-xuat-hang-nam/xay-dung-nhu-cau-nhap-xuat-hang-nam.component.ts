@@ -378,7 +378,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban:"",
+      soVban: this.soVban,
     };
 
     //call service them moi
@@ -646,15 +646,11 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maTbi){
+    const index = this.lstCTiet.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].maTbi){
 			this.deleteById(id);
 			return;
 		}
-    if (!this.editCache[id].data.maTbi){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
-    const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTiet[index] },
@@ -805,7 +801,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-nhu-cau-nhap-xuat-hang-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
 

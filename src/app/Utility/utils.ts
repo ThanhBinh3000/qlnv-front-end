@@ -115,6 +115,13 @@ export class Utils {
         "role": [1,2,3],
     }
 
+    //role copy
+    public static btnRoleOK = {
+        "statusBaoCao": ['2','4','7'],
+        "statusChiTiet": ['2'],
+        "unit": [1]
+    }
+
     //get role xoa
     public getRoleDel(status: any, unit: any, role: any) {
         return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
@@ -163,6 +170,12 @@ export class Utils {
     //role in
     public getRolePrint(status: any, unit: any, role: any) {
         return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
+    }
+
+    //role OK/not Ok
+    public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
+        debugger
+        return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
 
     // lay quyen
@@ -610,6 +623,10 @@ export const LOAIBAOCAO =[
         {
             id:"9",
             tenDm:'Đv cấp trên duyệt'
+        },
+        {
+            id:"10",
+            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
         },
     ]
 

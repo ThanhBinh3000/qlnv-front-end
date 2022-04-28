@@ -10,7 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { Utils } from "../../../../../Utility/utils";
+import { DONVITIEN, Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 // import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -40,7 +40,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   maLoais: any = [];                          // ma loai
   maNhoms: any = [];                          // ma nhom
   maMatHangs: any = [] ;                      // ma mat hang
-  maDviTiens: any = [];                       // ma don vi tien
+  maDviTiens: any = DONVITIEN;                // ma don vi tien
   maDviTinhs:any = [];                        // ma don vi tinh
   donVis: any = [];                           // ma don vi
   ngayQd!: any;                               // ngay quyet dinh
@@ -103,6 +103,13 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   tenDvi!: any;
   veViec!: any;
   validateForm!: FormGroup;
+  nguoiKys: any [] = [
+    {maNguoiKy: "111", tenNguoiKy: "Đoàn Minh Vương"},
+    {maNguoiKy: "112", tenNguoiKy: "Nguyễn Thành Công"},
+    {maNguoiKy: "113", tenNguoiKy: "Nguyễn Xuân Hùng"},
+    {maNguoiKy: "114", tenNguoiKy: "Vú Anh Tuấn"},
+  ]
+  maNguoiKyTC: any
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -215,20 +222,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.maDviTinhs = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
-    //get danh muc đơn vị tiền quyết định giao dự toán
-    this.danhMucService.dMDonViTien().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maDviTiens = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -657,22 +650,22 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     });
     modalIn.afterClose.subscribe((res) => {
       console.log(res);
-         if (res) {
-           this.maKhoanMucs.forEach(e => {
-             if(res.id == e.id){
-                this.khoanMucs.push({id: e.id, thongTin: e.thongTin})
-                return res.id = e.id
-                }
-           })
-          this.lstCTietBCao.push({
-            id: uuid.v4(),
-            tenDm: "I",
-            maNdung: res.id,
-            nguonKhac: 0,
-            nguonNsnn: 0,
-            tong: 0,
-            checked: false,
-       });
+      if (res) {
+          //  this.maKhoanMucs.forEach(e => {
+          //    if (res.id == e.id) {
+          //      this.khoanMucs.push({ id: e.id, thongTin: e.thongTin })
+          //      return res.id = e.id
+          //    }
+          //  })
+          //  this.lstCTietBCao.push({
+          //    id: uuid.v4(),
+          //    tenDm: "I",
+          //    maNdung: res.id,
+          //    nguonKhac: 0,
+          //    nguonNsnn: 0,
+          //    tong: 0,
+          //    checked: false,
+          //  });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({

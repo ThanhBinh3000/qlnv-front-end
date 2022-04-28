@@ -95,7 +95,6 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   capDvi:any;
   namBcaohienhanh: any;
   mabaocao: any;
-  soVban:any;
   capDv:any;
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
@@ -376,8 +375,8 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       lstCTietBCaoTemp.push({
         ...e,
         thanhTienN1 : mulMoney(e.thanhTienN1, this.maDviTien),
-        thanhTienN2 : mulMoney(e.thanhTienN2, this.maDviTien),
-        thanhTienN3 : mulMoney(e.thanhTienN3, this.maDviTien),
+      thanhTienN2 : mulMoney(e.thanhTienN2, this.maDviTien),
+      thanhTienN3 : mulMoney(e.thanhTienN3, this.maDviTien),
       })
     })
     // gui du lieu trinh duyet len server
@@ -386,7 +385,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       idFileDinhKem: listFile,
       listIdDeletes: this.listIdDelete,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao ,
       maDviTien: this.maDviTien ,
@@ -501,7 +500,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
           this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
-
+          this.tinhTong()
           this.listFile=[]
           this.updateEditCache();
 
@@ -570,6 +569,13 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+
+    this.tongthanhTienN1 -= this.lstCTietBCao.find(e => e.id == id).thanhTienN1
+    this.tongthanhTienN2 -= this.lstCTietBCao.find(e => e.id == id).thanhTienN2
+    this.tongthanhTienN3 -= this.lstCTietBCao.find(e => e.id == id).thanhTienN3
+    this.tongsoLuotNguoiN1 -= this.lstCTietBCao.find(e => e.id == id).soLuotNguoiN1
+    this.tongsoLuotNguoiN2 -= this.lstCTietBCao.find(e => e.id == id).soLuotNguoiN2
+    this.tongsoLuotNguoiN3 -= this.lstCTietBCao.find(e => e.id == id).soLuotNguoiN3
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
@@ -580,6 +586,14 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if(item.checked){
+        this.tongthanhTienN1 -= item.thanhTienN1
+        this.tongthanhTienN2 -= item.thanhTienN2
+        this.tongthanhTienN3 -= item.thanhTienN3
+        this.tongsoLuotNguoiN1 -= item.soLuotNguoiN1
+        this.tongsoLuotNguoiN2 -= item.soLuotNguoiN2
+        this.tongsoLuotNguoiN3 -= item.soLuotNguoiN3
+      }
       if (item.checked == true && typeof item.id == "number") {
         this.listIdDelete += item.id + ","
       }
@@ -671,11 +685,11 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maChiMuc){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    if (!this.lstCTietBCao[index].maChiMuc){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -702,6 +716,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+      this.tinhTong()
     }
   }
 
@@ -737,6 +752,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       console.log(err);
     });
+    this.tinhTong()
     this.updateEditCache()
     this.spinner.hide();
   }

@@ -111,7 +111,6 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   namBcaohienhanh: any;
   currentday: Date = new Date();
   mabaocao: any;
-  soVban:any;
   capDv:any;
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
@@ -359,14 +358,14 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban:this.soVban,
+
     };
 
     //call service them moi
@@ -639,11 +638,11 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maCucDtnnKvuc){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].maCucDtnnKvuc){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },

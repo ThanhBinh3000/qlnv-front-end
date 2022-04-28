@@ -360,7 +360,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
         luongCbanThienN : mulMoney(e.luongCbanThienN, this.maDviTien),
         phuCapThienN : mulMoney(e.phuCapThienN, this.maDviTien),
         cacKhoanDgopThienN : mulMoney(e.cacKhoanDgopThienN, this.maDviTien),
-        tongQuyLuongCoTchatLuongTheoBcheN1 : divMoney(e.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien),
+        tongQuyLuongCoTchatLuongTheoBcheN1 : mulMoney(e.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien),
         tongQuyLuongCoTchatLuongN1 : mulMoney(e.tongQuyLuongCoTchatLuongN1, this.maDviTien),
         luongCbanN1 : mulMoney(e.luongCbanN1, this.maDviTien),
         phuCapN1 : mulMoney(e.phuCapN1, this.maDviTien),
@@ -482,6 +482,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
           this.maBaoCao = data.data.maBcao;
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
+          this.soVban = data.data.soVban;
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -687,11 +688,11 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maDvi){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].maDvi){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
@@ -842,7 +843,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
         luongCbanThienN : mulMoney(item.luongCbanThienN, this.maDviTien),
         phuCapThienN : mulMoney(item.phuCapThienN, this.maDviTien),
         cacKhoanDgopThienN : mulMoney(item.cacKhoanDgopThienN, this.maDviTien),
-        tongQuyLuongCoTchatLuongTheoBcheN1 : divMoney(item.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien),
+        tongQuyLuongCoTchatLuongTheoBcheN1 : mulMoney(item.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien),
         tongQuyLuongCoTchatLuongN1 : mulMoney(item.tongQuyLuongCoTchatLuongN1, this.maDviTien),
         luongCbanN1 : mulMoney(item.luongCbanN1, this.maDviTien),
         phuCapN1 : mulMoney(item.phuCapN1, this.maDviTien),
@@ -976,7 +977,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       element.phuCapThienN = mulMoney(element.phuCapThienN, this.maDviTien);
       element.cacKhoanDgopThienN = mulMoney(element.cacKhoanDgopThienN, this.maDviTien);
 
-      element.tongQuyLuongCoTchatLuongTheoBcheN1 = divMoney(element.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien);
+      element.tongQuyLuongCoTchatLuongTheoBcheN1 = mulMoney(element.tongQuyLuongCoTchatLuongTheoBcheN1, this.maDviTien);
       element.tongQuyLuongCoTchatLuongN1 = mulMoney(element.tongQuyLuongCoTchatLuongN1, this.maDviTien);
       element.luongCbanN1 = mulMoney(element.luongCbanN1, this.maDviTien);
       element.phuCapN1 = mulMoney(element.phuCapN1, this.maDviTien);

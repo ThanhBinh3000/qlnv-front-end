@@ -82,7 +82,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
 
   fileList: NzUploadFile[] = [];
-
+  soVban : any;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -98,6 +98,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   donViTiens: any = DONVITIEN;
   capDv: any;
   checkDv: boolean;
+  tongnam1:number;
+  tongnam2:number;
+  tongnam3:number;
 
   // upload file
   addFile() {
@@ -370,7 +373,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,   // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -470,7 +473,6 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
-
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -546,6 +548,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tongnam1 -= this.lstCTietBCao.find(e => e.id == id).khoachChiNsnnN1
+    this.tongnam1 -= this.lstCTietBCao.find(e => e.id == id).khoachChiNsnnN1
+    this.tongnam1 -= this.lstCTietBCao.find(e => e.id == id).khoachChiNsnnN1
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ",";
@@ -556,6 +561,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if(item.checked){
+        this.tongnam1 -= item.khoachChiNsnnN1
+        this.tongnam2 -= item.khoachChiNsnnN2
+        this.tongnam3 -= item.khoachChiNsnnN3
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -647,11 +657,11 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maNdungChi){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    if (!this.lstCTietBCao[index].maNdungChi){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -719,9 +729,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     this.spinner.show();
 }
 
-  tongnam1:number;
-  tongnam2:number;
-  tongnam3:number;
+
 
   tinhtong(){
     this.tongnam1=0;
