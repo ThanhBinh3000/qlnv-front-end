@@ -326,7 +326,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
 
     let listFile: any = [];
     for (const iterator of this.listFile) {

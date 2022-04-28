@@ -391,7 +391,6 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       return;
     }
 
-    this.mulMoneyTotal()
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
