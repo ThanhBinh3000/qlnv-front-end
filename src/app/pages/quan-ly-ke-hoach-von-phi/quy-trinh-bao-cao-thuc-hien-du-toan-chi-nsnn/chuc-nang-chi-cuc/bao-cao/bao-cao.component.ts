@@ -59,37 +59,37 @@ export class ItemDanhSach {
   lstBCao: ItemData[] = [];
   lstFile: any[] = [];
   lstBCaoDviTrucThuoc: any[] = [
-    {
-      id: 551,
-      maBcao: "BC16063",
-      namBcao: 2022,
-      thangBcao: 12,
-      namHienHanh: null,
-      trangThai: "9",
-      tenTrangThai: null,
-      maLoaiBcao: "526",
-      maPhanBcao: "0",
-      ngayTao: "2022-04-23T10:07:13.000+00:00",
-      nguoiTao: "canbo2",
-      ngaySua: null,
-      nguoiSua: null,
-      maDviTien: null,
-      maDvi: "040207",
-      maDviCha: null,
-      tenDvi: null,
-      dotBcao: null,
-      lyDoTuChoi: null,
-      proccessId: "25ff2ac5-c2ed-11ec-8242-6eea1dc5fedb",
-      tongHopTu: null,
-      ngayTrinh: "2022-04-23T10:07:11.000+00:00",
-      nguoiTrinh: "canbo2",
-      ngayDuyet: "2022-04-24T09:48:21.000+00:00",
-      nguoiDuyet: "lanhdao2",
-      ngayPheDuyet: null,
-      nguoiPheDuyet: null,
-      ngayTraKq: null,
-      nguoiTraKq: null
-    }
+    // {
+    //   id: 551,
+    //   maBcao: "BC16063",
+    //   namBcao: 2022,
+    //   thangBcao: 12,
+    //   namHienHanh: null,
+    //   trangThai: "9",
+    //   tenTrangThai: null,
+    //   maLoaiBcao: "526",
+    //   maPhanBcao: "0",
+    //   ngayTao: "2022-04-23T10:07:13.000+00:00",
+    //   nguoiTao: "canbo2",
+    //   ngaySua: null,
+    //   nguoiSua: null,
+    //   maDviTien: null,
+    //   maDvi: "040207",
+    //   maDviCha: null,
+    //   tenDvi: null,
+    //   dotBcao: null,
+    //   lyDoTuChoi: null,
+    //   proccessId: "25ff2ac5-c2ed-11ec-8242-6eea1dc5fedb",
+    //   tongHopTu: null,
+    //   ngayTrinh: "2022-04-23T10:07:11.000+00:00",
+    //   nguoiTrinh: "canbo2",
+    //   ngayDuyet: "2022-04-24T09:48:21.000+00:00",
+    //   nguoiDuyet: "lanhdao2",
+    //   ngayPheDuyet: null,
+    //   nguoiPheDuyet: null,
+    //   ngayTraKq: null,
+    //   nguoiTraKq: null
+    // }
   ];
   tongHopTu!: string;
 }

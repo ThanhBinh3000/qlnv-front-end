@@ -27,9 +27,6 @@ export class TimKiemComponent implements OnInit {
   messageValidate:any = MESSAGEVALIDATE
 
   trangThais: any = TRANGTHAITIMKIEM;
-
-
-  
   searchFilter = {
     nam: null,
     tuNgay: "",

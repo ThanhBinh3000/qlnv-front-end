@@ -119,33 +119,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
-        break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
+    this.url = '/bao-cao/'
   }
 
   //doi so trang
