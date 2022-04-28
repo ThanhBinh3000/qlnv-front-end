@@ -520,13 +520,22 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal();
     this.lstCTietBCao.forEach((e) => {
       if (typeof e.id != 'number') {
         e.id = null;
       }
     });
-    
+
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(element => {
+      lstCTietBCaoTemp.push({
+        ...element,
+        thienNamHhanhN : mulMoney(element.thienNamHhanhN, this.donvitien),
+        ncauDtoanN1 : mulMoney(element.ncauDtoanN1, this.donvitien),
+        ncauDtoanN2 : mulMoney(element.ncauDtoanN2, this.donvitien),
+        ncauDtoanN3 : mulMoney(element.ncauDtoanN3, this.donvitien),
+      })
+    });
     // gui du lieu trinh duyet len server
 
     
@@ -540,7 +549,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles, // lay id file dinh kem (gửi file theo danh sách )
       listIdDeletes: this.listIdDelete,  
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
@@ -558,11 +567,9 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           await this.getDetailReport();
           this.getStatusButton();
         } else {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err =>{
-        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -574,12 +581,10 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -675,8 +680,6 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
 
     // action copy
   async doCopy(){
-    this.spinner.show();
-
     let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -694,12 +697,15 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter( item =>{
       lstTemp.push({
         ...item,
+        thienNamHhanhN : mulMoney(item.thienNamHhanhN, this.donvitien),
+        ncauDtoanN1 : mulMoney(item.ncauDtoanN1, this.donvitien),
+        ncauDtoanN2 : mulMoney(item.ncauDtoanN2, this.donvitien),
+        ncauDtoanN3 : mulMoney(item.ncauDtoanN3, this.donvitien),
         id:null
       })
     })
@@ -729,22 +735,12 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
           this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
 

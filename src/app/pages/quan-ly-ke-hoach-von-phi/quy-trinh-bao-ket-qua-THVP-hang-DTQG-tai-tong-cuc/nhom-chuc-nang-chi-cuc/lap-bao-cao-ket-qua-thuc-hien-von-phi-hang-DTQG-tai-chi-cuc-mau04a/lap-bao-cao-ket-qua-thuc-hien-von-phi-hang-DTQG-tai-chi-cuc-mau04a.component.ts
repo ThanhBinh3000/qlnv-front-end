@@ -1388,10 +1388,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao.maBcao = data.data.maBcao;
           this.baoCao.namBcao = data.data.namBcao;
           this.baoCao.maDvi = data.data.maDvi;
-          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, 'dd/MM/yyyy');
-          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet,'dd/MM/yyyy');
-          this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq,'dd/MM/yyyy');
-          this.baoCao.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh,'dd/MM/yyyy');
+          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet,Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq,Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh,Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR)
           this.baoCao.trangThai = data.data.trangThai;
           this.donvitien = data.data.maDviTien;
           this.maLoaiBaocao = data.data.maLoaiBcao;
