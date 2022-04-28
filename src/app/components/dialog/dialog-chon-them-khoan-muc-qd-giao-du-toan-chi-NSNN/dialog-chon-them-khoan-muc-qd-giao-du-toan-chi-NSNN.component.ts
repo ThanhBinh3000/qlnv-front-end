@@ -11,7 +11,7 @@ import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
   styleUrls: ['./dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component.scss'],
 })
 export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnInit {
-  @Input() danhSachKhoanMuc:any;
+  @Input() danhSachKhoanMuc: any =[];
   khoanMucs: any = [];
 
   searchFilter = {
@@ -26,7 +26,6 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   ) { }
 
   async ngOnInit() {
-    console.log(this.danhSachKhoanMuc);
     //get danh muc nhom chi
     this.danhMucService.dMKhoanMuc().toPromise().then(
       (data) => {
@@ -47,15 +46,13 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
       id: this.searchFilter.khoanMuc,
     };
 
-    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD1(requestReport).toPromise().then(
+    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           var tempArr = data.data;
           tempArr.forEach(e =>{
             this.danhSachKhoanMuc.push(e);
-            e.lstQlnvDmKhoachVonPhi.forEach( el => {
-            this.danhSachKhoanMuc.push(el);
-            })
+            console.log(this.danhSachKhoanMuc);
           })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -68,10 +65,12 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   }
 
   handleOk() {
+
     let req ={
       danhSachKhoanMuc : this.danhSachKhoanMuc,
       id: this.searchFilter.khoanMuc
     }
+    this.danhSachKhoanMuc = []
     this._modalRef.close(req);
   }
 
