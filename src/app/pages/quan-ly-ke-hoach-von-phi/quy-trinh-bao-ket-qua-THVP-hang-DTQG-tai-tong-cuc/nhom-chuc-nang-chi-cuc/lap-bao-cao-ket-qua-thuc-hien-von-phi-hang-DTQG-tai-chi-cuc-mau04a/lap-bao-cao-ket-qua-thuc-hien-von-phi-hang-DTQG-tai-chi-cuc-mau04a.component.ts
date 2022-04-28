@@ -801,12 +801,16 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.lstCTietBCao03 = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
       }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
         this.lstCTietBCao04ax = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
+        this.updateLstCTietBCao(1);
       }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
         this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
+        this.updateLstCTietBCao(2);
       }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
         this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => item.maLoai== maPhuLuc)?.lstCTietBCao;
+        this.updateLstCTietBCao(3);
       }else if(this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
         this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => item.maLoai== maPhuLuc)?.lstCTietBCao;
+        this.updateLstCTietBCao(4);
       }
     }
     
@@ -1662,7 +1666,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.updateEditCache();
   }
   callTonghop(){
-      console.log(this.baoCao);
       this.baoCao.lstBCao=[];
       this.baoCao.namBcao = this.currentday.getFullYear();
       this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
@@ -1682,10 +1685,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.baoCao.lstBCao = res.data.lstBCao;
         this.listBcaoKqua = res.data.lstBCaoDviTrucThuoc;
         this.baoCao.lstBCao.forEach( e =>{
-          e.lstCTietBCao.sort((a,b)=> a.stt -b.stt)
-          // e.lstCTietBCao.forEach(el =>{
-          //   el.id = uuid.v4();
-          // })
+          e.lstCTietBCao.forEach(el =>{
+            el.id = uuid.v4();
+          })
         })
         
         
@@ -1727,6 +1729,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         
         await this.resetList();
         this.initLinkList();
+        
         //set data cho cac bieu mau
         this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
         this.lstCTietBCao02.forEach(e => {
@@ -1755,7 +1758,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
         this.stt = 0;
         this.updateSTT(this.chiTietBcao4ax);
-        console.log(this.chiTietBcao4ax);
         //-----mẫu 04a nhập
         this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
         this.lstCTietBCao04an.forEach(item => {
@@ -1812,28 +1814,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
               }
             })
           })
-
-          // this.lstCTietBCao.forEach(e => {
-        //   this.cucKhuVucs.forEach(item => {
-        //     var idx = e.listCtiet.findIndex( (i) => i.maDvi ==item.maDvi);
-        //     if(idx==-1){
-        //         var obJect = {
-        //           id!: uuid.v4(),
-        //           maDvi: item.maDvi,
-        //           n1: 0,
-        //           n2: 0,
-        //           n3: 0,
-        //         }
-        //       e.listCtiet.push(obJect);
-        //     }else{
-        //       e.listCtiet[idx].id = uuid.v4();
-        //     }
-        //   })
-        
-        // const index = this.lstCTietBCao.findIndex((item) => item.id === e.id);
-        // this.tinhTong(index); 
-        // e.id = uuid.v4();
-      // })
         }
         
         //-------
@@ -1903,14 +1883,20 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.cols05 = this.cols05 + this.listColTrongDot5.length;
         }
         this.listFile =[];
-          this.getStatusButton();
-          this.updateEditCache();
-          this.updateEditCache02();
-          this.updateEditCache03();
-          this.updateLstCTietBCao(1);
-          this.updateLstCTietBCao(2);
-          this.updateLstCTietBCao(3);
-          this.updateLstCTietBCao(4);
+         
+        await this.updateLstCTietBCao(1);
+         await this.updateLstCTietBCao(2);
+         await this.updateLstCTietBCao(3);
+         await this.updateLstCTietBCao(4);
+         this.getStatusButton();
+         this.updateEditCache();
+         this.updateEditCache02();
+         this.updateEditCache03();
+         console.log(this.lstCTietBCao04ax);
+         console.log(this.lstCTietBCao04an);
+         console.log(this.lstCTietBCao04bx);
+         console.log(this.lstCTietBCao05);
+         
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
@@ -2310,6 +2296,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if(maloai==1){
       this.lstCTietBCao04ax = [];
       this.duyet(this.chiTietBcao4ax, '', 0, 0,this.lstCTietBCao04ax, -1);
+      console.log(this.lstCTietBCao04ax);
+      
       this.updateEditCache();
     }else if(maloai==2){
       this.lstCTietBCao04an =[];
