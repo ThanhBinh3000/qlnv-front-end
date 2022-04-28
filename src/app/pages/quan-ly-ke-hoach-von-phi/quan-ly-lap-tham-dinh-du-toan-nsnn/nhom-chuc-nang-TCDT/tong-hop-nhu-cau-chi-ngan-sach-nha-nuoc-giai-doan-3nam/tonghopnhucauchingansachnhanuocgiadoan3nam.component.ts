@@ -508,13 +508,30 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
       }
     })
     
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(item => {
+      lstCTietBCaoTemp.push({
+        ...item,
+        dtoanN : mulMoney(item.dtoanN, this.donvitien),
+        uocThienN : mulMoney(item.uocThienN, this.donvitien),
+        tranChiN1 : mulMoney(item.tranChiN1, this.donvitien),
+        ncauChiN1 : mulMoney(item.ncauChiN1, this.donvitien),
+        clechTranChiVsNcauChiN1 : mulMoney(item.clechTranChiVsNcauChiN1, this.donvitien),
+        ssanhNcauNVoiN1 : mulMoney(item.ssanhNcauNVoiN1, this.donvitien),
+        tranChiN2 : mulMoney(item.tranChiN2, this.donvitien),
+        ncauChiN2 : mulMoney(item.ncauChiN2, this.donvitien),
+        clechTranChiVsNcauChiN2 : mulMoney(item.clechTranChiVsNcauChiN2, this.donvitien),
+        tranChiN3 : mulMoney(item.tranChiN3, this.donvitien),
+        ncauChiN3 : mulMoney(item.ncauChiN3, this.donvitien),
+        clechTranChiVsNcauChiN3 : mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien),
+      })
+    });
     // gui du lieu trinh duyet len server
     
     let listFile: any = [];
@@ -527,7 +544,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles, // lay id file dinh kem (gửi file theo danh sách )
       listIdDeletes: this.listIdDelete,  
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
@@ -548,11 +565,9 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
           await this.getDetailReport();
           this.getStatusButton();
         } else {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err => {
-        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -564,12 +579,10 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
             await this.getDetailReport();
             this.getStatusButton();
           }else{
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -680,8 +693,6 @@ xoaBaoCao(){
 
   // action copy
   async doCopy(){
-    this.spinner.show();
-
     let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -699,12 +710,23 @@ xoaBaoCao(){
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter( item =>{
       lstTemp.push({
         ...item,
+        dtoanN : mulMoney(item.dtoanN, this.donvitien),
+        uocThienN : mulMoney(item.uocThienN, this.donvitien),
+        tranChiN1 : mulMoney(item.tranChiN1, this.donvitien),
+        ncauChiN1 : mulMoney(item.ncauChiN1, this.donvitien),
+        clechTranChiVsNcauChiN1 : mulMoney(item.clechTranChiVsNcauChiN1, this.donvitien),
+        ssanhNcauNVoiN1 : mulMoney(item.ssanhNcauNVoiN1, this.donvitien),
+        tranChiN2 : mulMoney(item.tranChiN2, this.donvitien),
+        ncauChiN2 : mulMoney(item.ncauChiN2, this.donvitien),
+        clechTranChiVsNcauChiN2 : mulMoney(item.clechTranChiVsNcauChiN2, this.donvitien),
+        tranChiN3 : mulMoney(item.tranChiN3, this.donvitien),
+        ncauChiN3 : mulMoney(item.ncauChiN3, this.donvitien),
+        clechTranChiVsNcauChiN3 : mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien),
         id:null
       })
     })
@@ -734,21 +756,12 @@ xoaBaoCao(){
           this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
   // action print

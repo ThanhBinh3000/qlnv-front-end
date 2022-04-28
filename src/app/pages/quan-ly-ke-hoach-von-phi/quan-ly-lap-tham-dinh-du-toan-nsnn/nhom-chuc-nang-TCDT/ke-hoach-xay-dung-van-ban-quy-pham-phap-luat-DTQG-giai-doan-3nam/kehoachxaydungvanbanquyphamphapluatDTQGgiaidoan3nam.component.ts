@@ -504,13 +504,19 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if(typeof e.id !="number"){
         e.id = null;
       }
     })
     
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(element => {
+      lstCTietBCaoTemp.push({
+        ...element,
+        dtoanKphi : mulMoney(element.dtoanKphi, this.donvitien),
+      })
+    });
     // gui du lieu trinh duyet len server
     // lay id file dinh kem (gửi file theo danh sách )
     let listFile: any = [];
@@ -523,7 +529,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,
       listIdDeletes: this.listIdDelete,  
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
@@ -541,11 +547,9 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
         } else {
-          this.divMoneyTotal();
          this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       },err => {
-        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -557,12 +561,10 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -670,8 +672,6 @@ xoaBaoCao(){
   }
    // action copy
    async doCopy(){
-    this.spinner.show();
-
     let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -689,12 +689,12 @@ xoaBaoCao(){
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter( item =>{
       lstTemp.push({
         ...item,
+        dtoanKphi : mulMoney(item.dtoanKphi, this.donvitien),
         id:null
       })
     })
@@ -725,22 +725,12 @@ xoaBaoCao(){
           this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
 
@@ -754,7 +744,7 @@ xoaBaoCao(){
     let printContent = '';
     printContent = printContent + '<div> <div>';
     printContent =
-      printContent + document.getElementById('tablePrint').innerHTML;
+    printContent + document.getElementById('tablePrint').innerHTML;
     printContent = printContent + '</div> </div>';
     WindowPrt.document.write(printContent);
     WindowPrt.document.close();
