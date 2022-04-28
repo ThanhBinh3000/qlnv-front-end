@@ -391,7 +391,6 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       return;
     }
 
-    this.mulMoneyTotal()
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -403,13 +402,34 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         item.id = null;
       }
     })
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        qdDuyetDanDtuTongVo:  mulMoney(e.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon : mulMoney(e.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanXl : mulMoney(e.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb : mulMoney(e.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk : mulMoney(e.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt : mulMoney(e.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx : mulMoney(e.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt : mulMoney(e.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx : mulMoney(e.klthCapDen3112DtoanChiTx, this.maDviTien),
+        qdDuyetTkDtoanTong : mulMoney(e.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac : mulMoney(e.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac : mulMoney(e.klthCapDen3112Quykhac, this.maDviTien),
+        ncauVonN1 : mulMoney(e.ncauVonN1, this.maDviTien),
+        ncauVonN2 : mulMoney(e.ncauVonN2, this.maDviTien),
+        ncauVonN3 : mulMoney(e.ncauVonN3, this.maDviTien),
+      })
+    });
 
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -431,12 +451,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -447,11 +465,9 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           await this.getDetailReport();
             this.getStatusButton();
         } else {
-          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
       }, err => {
-        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -572,8 +588,8 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       masoDan: "",
       maNganhKte: "",
       nlucTke: "",
-      namKcTte: 0,
-      namHtTte: 0,
+      namKcTte: this.namBaoCaoHienHanh,
+      namHtTte: this.namBaoCaoHienHanh,
       qdDuyetDanDtuSongaythang: "",
       qdDuyetDanDtuTongVon: 0,
       qdDchinhDanDtuSongaythang: "",
@@ -710,10 +726,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
 			this.deleteById(id);
 			return;
 		}
-    if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    // if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
+    //   return;
+    // }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -752,13 +768,17 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       (!this.editCache[id].data.klthCapDen3112DtoanChiTx && this.editCache[id].data.klthCapDen3112DtoanChiTx !==0)
       ) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    } else {
+    }
+
+    if((this.editCache[id].data.namKcTte <= 1000 ||  this.editCache[id].data.namKcTte >= 2999) || (this.editCache[id].data.namHtTte <= 1000 &&  this.editCache[id].data.namHtTte >= 2999)){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+    }
       this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
       this.changeTong()
-    }
+
   }
 
   updateEditCache(): void {
@@ -836,13 +856,27 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        qdDuyetDanDtuTongVo:  mulMoney(item.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon : mulMoney(item.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanXl : mulMoney(item.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb : mulMoney(item.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk : mulMoney(item.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt : mulMoney(item.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx : mulMoney(item.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt : mulMoney(item.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx : mulMoney(item.klthCapDen3112DtoanChiTx, this.maDviTien),
+        qdDuyetTkDtoanTong : mulMoney(item.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac : mulMoney(item.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac : mulMoney(item.klthCapDen3112Quykhac, this.maDviTien),
+        ncauVonN1 : mulMoney(item.ncauVonN1, this.maDviTien),
+        ncauVonN2 : mulMoney(item.ncauVonN2, this.maDviTien),
+        ncauVonN3 : mulMoney(item.ncauVonN3, this.maDviTien),
       })
     })
 
@@ -873,12 +907,10 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
 

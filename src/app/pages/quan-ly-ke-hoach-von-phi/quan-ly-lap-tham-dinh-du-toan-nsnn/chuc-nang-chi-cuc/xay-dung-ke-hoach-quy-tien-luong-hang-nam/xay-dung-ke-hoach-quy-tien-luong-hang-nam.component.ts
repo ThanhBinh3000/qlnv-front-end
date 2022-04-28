@@ -326,7 +326,6 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -339,13 +338,29 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
         item.id = null;
       }
     })
-
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        tongquyLuongPcapTheoLuongCcvcHdld: mulMoney(e.tongquyLuongPcapTheoLuongCcvcHdld, this.maDviTien),
+        tongSo: mulMoney(e.tongSo, this.maDviTien),
+        ccvcDuKienCoMatN1Cong: mulMoney(e.ccvcDuKienCoMatN1Cong, this.maDviTien),
+        ccvcDuKienCoMatN1LuongTheoBac: mulMoney(e.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien),
+        ccvcDuKienCoMatN1Pcap: mulMoney(e.ccvcDuKienCoMatN1Pcap, this.maDviTien),
+        ccvcDuKienCoMatN1Ckdg: mulMoney(e.ccvcDuKienCoMatN1Ckdg, this.maDviTien),
+        quyLuongTangNangBacLuongN1: mulMoney(e.quyLuongTangNangBacLuongN1, this.maDviTien),
+        bcheChuaSdungCong: mulMoney(e.bcheChuaSdungCong, this.maDviTien),
+        bcheChuaSdungLuong: mulMoney(e.bcheChuaSdungLuong, this.maDviTien),
+        bcheChuaSdungCkdg: mulMoney(e.bcheChuaSdungCkdg, this.maDviTien),
+        quyLuongPcapTheoHdld: mulMoney(e.quyLuongPcapTheoHdld, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       listIdDeletes: this.listIdDelete,// id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
@@ -749,13 +764,23 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        tongquyLuongPcapTheoLuongCcvcHdld: mulMoney(item.tongquyLuongPcapTheoLuongCcvcHdld, this.maDviTien),
+        tongSo: mulMoney(item.tongSo, this.maDviTien),
+        ccvcDuKienCoMatN1Cong: mulMoney(item.ccvcDuKienCoMatN1Cong, this.maDviTien),
+        ccvcDuKienCoMatN1LuongTheoBac: mulMoney(item.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien),
+        ccvcDuKienCoMatN1Pcap: mulMoney(item.ccvcDuKienCoMatN1Pcap, this.maDviTien),
+        ccvcDuKienCoMatN1Ckdg: mulMoney(item.ccvcDuKienCoMatN1Ckdg, this.maDviTien),
+        quyLuongTangNangBacLuongN1: mulMoney(item.quyLuongTangNangBacLuongN1, this.maDviTien),
+        bcheChuaSdungCong: mulMoney(item.bcheChuaSdungCong, this.maDviTien),
+        bcheChuaSdungLuong: mulMoney(item.bcheChuaSdungLuong, this.maDviTien),
+        bcheChuaSdungCkdg: mulMoney(item.bcheChuaSdungCkdg, this.maDviTien),
+        quyLuongPcapTheoHdld: mulMoney(item.quyLuongPcapTheoHdld, this.maDviTien),
       })
     })
     let request = {
@@ -785,12 +810,12 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong-hang-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
+
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
+
       },
     );
 
@@ -824,13 +849,15 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
   divMoneyTotal() {
     this.lstCTietBCao.filter(element => {
-      element.bcheGiaoN1 = divMoney(element.bcheGiaoN1, this.maDviTien);
-      // element.duKienSoCcvcCoMatN1 = divMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-      // element.duKienSoHdongCoMatN1 = divMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+
+      element.tongquyLuongPcapTheoLuongCcvcHdld = divMoney(element.tongquyLuongPcapTheoLuongCcvcHdld, this.maDviTien);
+      element.tongSo = divMoney(element.tongSo, this.maDviTien);
+      element.ccvcDuKienCoMatN1Cong = divMoney(element.ccvcDuKienCoMatN1Cong, this.maDviTien);
       element.ccvcDuKienCoMatN1LuongTheoBac = divMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
       element.ccvcDuKienCoMatN1Pcap = divMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
       element.ccvcDuKienCoMatN1Ckdg = divMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
       element.quyLuongTangNangBacLuongN1 = divMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+      element.bcheChuaSdungCong = divMoney(element.bcheChuaSdungCong, this.maDviTien);
       element.bcheChuaSdungLuong = divMoney(element.bcheChuaSdungLuong, this.maDviTien);
       element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
       element.quyLuongPcapTheoHdld = divMoney(element.quyLuongPcapTheoHdld, this.maDviTien);
@@ -839,13 +866,14 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
-      element.bcheGiaoN1 = mulMoney(element.bcheGiaoN1, this.maDviTien);
-      // element.duKienSoCcvcCoMatN1 = mulMoney(element.duKienSoCcvcCoMatN1, this.maDviTien);
-      // element.duKienSoHdongCoMatN1 = mulMoney(element.duKienSoHdongCoMatN1, this.maDviTien);
+      element.tongquyLuongPcapTheoLuongCcvcHdld = mulMoney(element.tongquyLuongPcapTheoLuongCcvcHdld, this.maDviTien);
+      element.tongSo = mulMoney(element.tongSo, this.maDviTien);
+      element.ccvcDuKienCoMatN1Cong = mulMoney(element.ccvcDuKienCoMatN1Cong, this.maDviTien);
       element.ccvcDuKienCoMatN1LuongTheoBac = mulMoney(element.ccvcDuKienCoMatN1LuongTheoBac, this.maDviTien);
       element.ccvcDuKienCoMatN1Pcap = mulMoney(element.ccvcDuKienCoMatN1Pcap, this.maDviTien);
       element.ccvcDuKienCoMatN1Ckdg = mulMoney(element.ccvcDuKienCoMatN1Ckdg, this.maDviTien);
       element.quyLuongTangNangBacLuongN1 = mulMoney(element.quyLuongTangNangBacLuongN1, this.maDviTien);
+      element.bcheChuaSdungCong = mulMoney(element.bcheChuaSdungCong, this.maDviTien);
       element.bcheChuaSdungLuong = mulMoney(element.bcheChuaSdungLuong, this.maDviTien);
       element.bcheChuaSdungCkdg = mulMoney(element.bcheChuaSdungCkdg, this.maDviTien);
       element.quyLuongPcapTheoHdld = mulMoney(element.quyLuongPcapTheoHdld, this.maDviTien);

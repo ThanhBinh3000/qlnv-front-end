@@ -293,6 +293,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
             this.status = true;
           }
           this.listFile =[];
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -420,6 +421,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
     const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.tinhTong();
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
@@ -642,6 +644,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
             })
           }
           this.updateEditCache();
+          this.tinhTong();
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -779,6 +782,23 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
       item.ncauDtoanN1 = divMoney(item.ncauDtoanN1, this.donvitien);
       item.ncauDtoanN2 = divMoney(item.ncauDtoanN2, this.donvitien);
       item.ncauDtoanN3 = divMoney(item.ncauDtoanN3, this.donvitien);
+    })
+  }
+
+  tongNamN:number =0;
+  tongNam1:number =0;
+  tongNam2:number=0;
+  tongNam3:number =0;
+  tinhTong(){
+    this.tongNamN =0;
+    this.tongNam1 =0;
+    this.tongNam2=0;
+    this.tongNam3 =0;
+    this.lstCTietBCao.forEach(e => {
+      this.tongNamN +=e.thienNamHhanhN;
+      this.tongNam1 +=e.ncauDtoanN1;
+      this.tongNam2 +=e.ncauDtoanN2;
+      this.tongNam3 +=e.ncauDtoanN3;
     })
   }
 }

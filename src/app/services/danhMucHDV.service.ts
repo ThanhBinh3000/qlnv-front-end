@@ -700,21 +700,6 @@ dMucBcaoDuyet(): Observable<any> {
       });
   }
 
-  //muc chi
-  mucchi(): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/135',
-
-      {
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": "",
-        "trangThai": "",
-      })
-  }
-
-
   //lay danh sach don vi nhan
   dmDonViNhan(): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/341',

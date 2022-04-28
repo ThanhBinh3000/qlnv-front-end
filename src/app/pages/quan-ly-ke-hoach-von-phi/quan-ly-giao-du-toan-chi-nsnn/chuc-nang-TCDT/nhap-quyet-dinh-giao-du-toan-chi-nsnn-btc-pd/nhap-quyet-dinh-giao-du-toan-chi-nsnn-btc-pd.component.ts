@@ -658,21 +658,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     modalIn.afterClose.subscribe((res) => {
       console.log(res);
          if (res) {
-           this.maKhoanMucs.forEach(e => {
-             if(res.id == e.id){
-                this.khoanMucs.push({id: e.id, thongTin: e.thongTin})
-                return res.id = e.id
-                }
-           })
-          this.lstCTietBCao.push({
-            id: uuid.v4(),
-            tenDm: "I",
-            maNdung: res.id,
-            nguonKhac: 0,
-            nguonNsnn: 0,
-            tong: 0,
-            checked: false,
-       });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({

@@ -246,7 +246,8 @@
                     <td>
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mặt hàng"
                         [class]="editCache[data.id].data.maMatHang ? '' : 'input-error-validate'"
-                        [(ngModel)]="editCache[data.id].data.maMatHang">
+                        [(ngModel)]="editCache[data.id].data.maMatHang"
+                        (ngModelChange)="checkVtu(data.id)">
                         <nz-option *ngFor="let item of matHangs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                       </nz-select>
                     </td>

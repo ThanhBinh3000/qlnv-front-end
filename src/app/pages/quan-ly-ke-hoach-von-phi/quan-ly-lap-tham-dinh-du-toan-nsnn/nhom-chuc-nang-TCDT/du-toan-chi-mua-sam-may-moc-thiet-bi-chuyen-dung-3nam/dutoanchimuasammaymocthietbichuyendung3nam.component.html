@@ -158,6 +158,7 @@
                   <th>Năm N+1</th>
                   <th>Năm N+2</th>
                   <th>Năm N+3</th>
+                </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
@@ -250,6 +251,23 @@
                         (ngModelChange)="updateSingleChecked()"></label>
                     </td>
                   </ng-template>
+                </tr>
+                <tr >
+                  <td></td>
+                  <td>Tổng cộng</td>
+                  
+                  <ng-container *ngFor="let data of cucKhuVucs">
+                    <td>{{data.tong1}}</td>
+                    <td>{{data.tong2}}</td>
+                    <td>{{data.tong3}}</td>
+                  </ng-container>
+                  <td>{{tongcong1}}</td>
+                  <td>{{tongcong2}}</td>
+                  <td>{{tongcong3}}</td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
+                  <td [hidden]="status"></td>
                 </tr>
               </tbody>
             </nz-table>

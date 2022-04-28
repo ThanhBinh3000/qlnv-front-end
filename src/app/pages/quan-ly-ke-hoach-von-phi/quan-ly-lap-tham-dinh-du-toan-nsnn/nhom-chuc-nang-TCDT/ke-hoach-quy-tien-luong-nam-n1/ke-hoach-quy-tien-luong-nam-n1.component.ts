@@ -323,7 +323,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -336,6 +336,23 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       }
     })
 
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld : mulMoney(e.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien),
+        tongSo : mulMoney(e.tongSo, this.maDviTien),
+        ccvc0101n1Cong : mulMoney(e.ccvc0101n1Cong, this.maDviTien),
+        ccvc0101n1Luong : mulMoney(e.ccvc0101n1Luong, this.maDviTien),
+        ccvc0101n1Pcap : mulMoney(e.ccvc0101n1Pcap, this.maDviTien),
+        ccvc0101n1Ckdg : mulMoney(e.ccvc0101n1Ckdg, this.maDviTien),
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 : mulMoney(e.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien),
+        bcheChuaSdungCong : mulMoney(e.bcheChuaSdungCong, this.maDviTien),
+        bcheChuaSdungLuongHeSo234 : mulMoney(e.bcheChuaSdungLuongHeSo234, this.maDviTien),
+        bcheChuaSdungCkdg : mulMoney(e.bcheChuaSdungCkdg, this.maDviTien),
+        quyLuongPcapCkdgTheoLuongHdld : mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -363,12 +380,10 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -380,11 +395,9 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
-        this.divMoneyTotal()
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -742,13 +755,23 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld : mulMoney(item.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien),
+        tongSo : mulMoney(item.tongSo, this.maDviTien),
+        ccvc0101n1Cong : mulMoney(item.ccvc0101n1Cong, this.maDviTien),
+        ccvc0101n1Luong : mulMoney(item.ccvc0101n1Luong, this.maDviTien),
+        ccvc0101n1Pcap : mulMoney(item.ccvc0101n1Pcap, this.maDviTien),
+        ccvc0101n1Ckdg : mulMoney(item.ccvc0101n1Ckdg, this.maDviTien),
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 : mulMoney(item.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien),
+        bcheChuaSdungCong : mulMoney(item.bcheChuaSdungCong, this.maDviTien),
+        bcheChuaSdungLuongHeSo234 : mulMoney(item.bcheChuaSdungLuongHeSo234, this.maDviTien),
+        bcheChuaSdungCkdg : mulMoney(item.bcheChuaSdungCkdg, this.maDviTien),
+        quyLuongPcapCkdgTheoLuongHdld : mulMoney(item.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien),
       })
     })
     let request = {
@@ -778,12 +801,10 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-quy-tien-luong-nam-n1/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
 
@@ -817,13 +838,14 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   }
   divMoneyTotal() {
     this.lstCTietBCao.filter(element => {
-      element.bcheGia0N1 = divMoney(element.bcheGia0N1, this.maDviTien);
-      element.dkienCcvcCoMat0101n1 = divMoney(element.dkienCcvcCoMat0101n1, this.maDviTien);
-      element.dkienHdongCoMat0101n1 = divMoney(element.dkienHdongCoMat0101n1, this.maDviTien);
+      element.tongQuyLuongPcapCkdgTheoLuongCcvcHdld = divMoney(element.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien);
+      element.tongSo = divMoney(element.tongSo, this.maDviTien);
+      element.ccvc0101n1Cong = divMoney(element.ccvc0101n1Cong, this.maDviTien);
       element.ccvc0101n1Luong = divMoney(element.ccvc0101n1Luong, this.maDviTien);
       element.ccvc0101n1Pcap = divMoney(element.ccvc0101n1Pcap, this.maDviTien);
       element.ccvc0101n1Ckdg = divMoney(element.ccvc0101n1Ckdg, this.maDviTien);
       element.quyLuongTangThemDoNangBacLuongCcvc0101n1 = divMoney(element.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien);
+      element.bcheChuaSdungCong = divMoney(element.bcheChuaSdungCong, this.maDviTien);
       element.bcheChuaSdungLuongHeSo234 = divMoney(element.bcheChuaSdungLuongHeSo234, this.maDviTien);
       element.bcheChuaSdungCkdg = divMoney(element.bcheChuaSdungCkdg, this.maDviTien);
       element.quyLuongPcapCkdgTheoLuongHdld = divMoney(element.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien);
@@ -831,13 +853,14 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   }
   mulMoneyTotal() {
     this.lstCTietBCao.filter(element => {
-      element.bcheGia0N1 = mulMoney(element.bcheGia0N1, this.maDviTien);
-      element.dkienCcvcCoMat0101n1 = mulMoney(element.dkienCcvcCoMat0101n1, this.maDviTien);
-      element.dkienHdongCoMat0101n1 = mulMoney(element.dkienHdongCoMat0101n1, this.maDviTien);
+      element.tongQuyLuongPcapCkdgTheoLuongCcvcHdld = mulMoney(element.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien);
+      element.tongSo = mulMoney(element.tongSo, this.maDviTien);
+      element.ccvc0101n1Cong = mulMoney(element.ccvc0101n1Cong, this.maDviTien);
       element.ccvc0101n1Luong = mulMoney(element.ccvc0101n1Luong, this.maDviTien);
       element.ccvc0101n1Pcap = mulMoney(element.ccvc0101n1Pcap, this.maDviTien);
       element.ccvc0101n1Ckdg = mulMoney(element.ccvc0101n1Ckdg, this.maDviTien);
       element.quyLuongTangThemDoNangBacLuongCcvc0101n1 = mulMoney(element.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien);
+      element.bcheChuaSdungCong = mulMoney(element.bcheChuaSdungCong, this.maDviTien);
       element.bcheChuaSdungLuongHeSo234 = mulMoney(element.bcheChuaSdungLuongHeSo234, this.maDviTien);
       element.bcheChuaSdungCkdg = mulMoney(element.bcheChuaSdungCkdg, this.maDviTien);
       element.quyLuongPcapCkdgTheoLuongHdld = mulMoney(element.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien);

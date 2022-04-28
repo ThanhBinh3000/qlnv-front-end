@@ -641,10 +641,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.editCache[id].data.maVtuTbi || !this.editCache[id].data.maDviVtuTbi) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    if (!this.lstCTiet[id].maVtuTbi){
+			this.deleteById(id);
+			return;
+		}
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -690,9 +690,10 @@ saveEdit(id: string): void {
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.luongXuatGaoVtro = res.data.luongXuatGaoVtro;
-        this.luongXuatThocVtro = res.data.luongXuatThocVtro;
-        this.lstCTiet = res.data.lstCTiet;
+        let chiTiet = res.data[0];
+        this.luongXuatGaoVtro = chiTiet.luongXuatGaoVtro;
+        this.luongXuatThocVtro = chiTiet.luongXuatThocVtro;
+        this.lstCTiet = chiTiet.lstCTiet;
         this.lstCTiet.forEach(e => {
           e.id = uuid.v4();
         })

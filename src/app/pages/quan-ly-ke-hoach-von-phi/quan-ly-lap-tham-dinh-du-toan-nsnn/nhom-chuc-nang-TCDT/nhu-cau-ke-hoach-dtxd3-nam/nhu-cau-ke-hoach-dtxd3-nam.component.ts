@@ -127,6 +127,23 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   donViTiens: any = DONVITIEN;
   capDv: any;
 
+  // tong cong
+  tongqdDuyetDanDtuTongVon: number;
+  tongqdDchinhDanDtuTongVon: number;
+  tongqdDuyetTkDtoanTong: number;
+  tongklthCapDen3006Quykhac: number;
+  tongklthCapDen3112Quykhac: number;
+  tongqdDuyetTkDtoanXl: number;
+  tongqdDuyetTkDtoanTb: number;
+  tongqdDuyetTkDtoanCk: number;
+  tongklthCapDen3006Nstt: number;
+  tongklthCapDen3006DtoanChiTx: number;
+  tongklthCapDen3112Nstt: number;
+  tongklthCapDen3112DtoanChiTx: number;
+  tongncauVonN1: number;
+  tongncauVonN2: number;
+  tongncauVonN3: number;
+
   // upload file
   addFile() {
     const id = this.fileToUpload?.lastModified.toString();
@@ -384,7 +401,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -396,7 +413,27 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         item.id = null;
       }
     })
-
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        qdDuyetDanDtuTongVon : mulMoney(e.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon : mulMoney(e.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanTong  : mulMoney(e.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac  : mulMoney(e.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac  : mulMoney(e.klthCapDen3112Quykhac, this.maDviTien),
+        qdDuyetTkDtoanXl : mulMoney(e.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb : mulMoney(e.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk : mulMoney(e.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt : mulMoney(e.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx : mulMoney(e.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt : mulMoney(e.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx : mulMoney(e.klthCapDen3112DtoanChiTx, this.maDviTien),
+        ncauVonN1  : mulMoney(e.ncauVonN1, this.maDviTien),
+        ncauVonN2  : mulMoney(e.ncauVonN2, this.maDviTien),
+        ncauVonN3  : mulMoney(e.ncauVonN3, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -793,6 +830,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       console.log(err);
     });
+    this.tinhTong()
     this.updateEditCache()
     this.spinner.hide();
   }
@@ -834,13 +872,28 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
+
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        qdDuyetDanDtuTongVon: mulMoney(item.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon: mulMoney(item.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanTong : mulMoney(item.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac : mulMoney(item.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac : mulMoney(item.klthCapDen3112Quykhac, this.maDviTien),
+        qdDuyetTkDtoanXl: mulMoney(item.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb: mulMoney(item.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk: mulMoney(item.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt: mulMoney(item.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx: mulMoney(item.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt: mulMoney(item.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx: mulMoney(item.klthCapDen3112DtoanChiTx, this.maDviTien),
+        ncauVonN1 : mulMoney(item.ncauVonN1, this.maDviTien),
+        ncauVonN2 : mulMoney(item.ncauVonN2, this.maDviTien),
+        ncauVonN3 : mulMoney(item.ncauVonN3, this.maDviTien),
       })
     })
     let request = {
@@ -870,12 +923,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/nhu-cau-ke-hoach-dtxd3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
 
@@ -945,4 +996,40 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       element.ncauVonN3 = mulMoney(element.ncauVonN3, this.maDviTien);
     });
   }
+
+  tinhTong(){
+    this.tongqdDuyetDanDtuTongVon = 0;
+    this.tongqdDchinhDanDtuTongVon = 0;
+    this.tongqdDuyetTkDtoanTong = 0;
+    this.tongklthCapDen3006Quykhac = 0;
+    this.tongklthCapDen3112Quykhac = 0;
+    this.tongqdDuyetTkDtoanXl = 0;
+    this.tongqdDuyetTkDtoanTb = 0;
+    this.tongqdDuyetTkDtoanCk = 0;
+    this.tongklthCapDen3006Nstt = 0;
+    this.tongklthCapDen3006DtoanChiTx = 0;
+    this.tongklthCapDen3112Nstt = 0;
+    this.tongklthCapDen3112DtoanChiTx = 0;
+    this.tongncauVonN1 = 0;
+    this.tongncauVonN2 = 0;
+    this.tongncauVonN3 = 0;
+    this.lstCTietBCao.forEach( e => {
+      this.tongqdDuyetDanDtuTongVon += e.qdDuyetDanDtuTongVon
+      this.tongqdDchinhDanDtuTongVon += e.qdDchinhDanDtuTongVon
+      this.tongqdDuyetTkDtoanTong += e.qdDuyetTkDtoanTong
+      this.tongklthCapDen3006Quykhac += e.klthCapDen3006Quykhac
+      this.tongklthCapDen3112Quykhac += e.klthCapDen3112Quykhac
+      this.tongqdDuyetTkDtoanXl += e.qdDuyetTkDtoanXl
+      this.tongqdDuyetTkDtoanTb += e.qdDuyetTkDtoanTb
+      this.tongqdDuyetTkDtoanCk += e.qdDuyetTkDtoanCk
+      this.tongklthCapDen3006Nstt += e.klthCapDen3006Nstt
+      this.tongklthCapDen3006DtoanChiTx += e.klthCapDen3006DtoanChiTx
+      this.tongklthCapDen3112Nstt += e.klthCapDen3112Nstt
+      this.tongklthCapDen3112DtoanChiTx += e.klthCapDen3112DtoanChiTx
+      this.tongncauVonN1 += e.ncauVonN1
+      this.tongncauVonN2 += e.ncauVonN2
+      this.tongncauVonN3 += e.ncauVonN3
+    })
+  }
+
 }

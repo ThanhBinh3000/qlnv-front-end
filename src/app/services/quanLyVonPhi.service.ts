@@ -16,7 +16,6 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   urlDefault = environment.SERVICE_API;
-
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
@@ -53,7 +52,7 @@ export class QuanLyVonPhiService extends BaseService {
   //search list phan bo du toan giao chi nsnn
   timDanhSachPhanBo(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/phan-bo-dtoan-chi/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
       // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
       request,
     );
@@ -92,7 +91,7 @@ export class QuanLyVonPhiService extends BaseService {
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
 
@@ -114,8 +113,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet1(id: any): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
-      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
     );
   }
 
@@ -144,7 +143,7 @@ export class QuanLyVonPhiService extends BaseService {
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/them-moi',
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
       request,
     );
   }
@@ -152,7 +151,7 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   trinhDuyetGiaoService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/them-moi',
       request,
     );
   }
@@ -177,8 +176,8 @@ export class QuanLyVonPhiService extends BaseService {
   // upload list
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
-      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
+      // this.urlDefault + '/qlnv-khoach/phi/lap-tham-dinh-du-toan/cap-nhat',
+      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
@@ -202,8 +201,8 @@ export class QuanLyVonPhiService extends BaseService {
   //tong hop
   tongHop(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
-      // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/tong-hop',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/tong-hop',
       request,
     );
   }
@@ -414,8 +413,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //sinh đợt báo cáo 3.2.9
   sinhDotBaoCao(): Observable<any> {
-    return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
-    // return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
+    // return this.httpClient.get('http://192.168.1.111:8094/bao-cao/lay-dot-bao-cao');
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
   }
 
   //tim kiem giao danh sách nội dung khoản mục
@@ -429,6 +428,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tim kiem giao danh sách nội dung khoản mục
   timDanhSachBCGiaoBTCPD1(request: any): Observable<any> {
     return this.httpClient.post(
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
       'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
       request
     )

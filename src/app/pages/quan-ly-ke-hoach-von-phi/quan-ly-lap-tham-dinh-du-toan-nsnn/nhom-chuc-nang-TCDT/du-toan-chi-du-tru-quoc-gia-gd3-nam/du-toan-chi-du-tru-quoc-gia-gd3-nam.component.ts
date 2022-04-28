@@ -342,7 +342,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
+
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -355,7 +355,15 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         item.id = null;
       }
     })
-
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        khoachChiNsnnN1 : mulMoney(e.khoachChiNsnnN1, this.maDviTien),
+        khoachChiNsnnN2 : mulMoney(e.khoachChiNsnnN2, this.maDviTien),
+        khoachChiNsnnN3 : mulMoney(e.khoachChiNsnnN3, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -764,13 +772,15 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        khoachChiNsnnN1 : mulMoney(item.khoachChiNsnnN1, this.maDviTien),
+        khoachChiNsnnN2 : mulMoney(item.khoachChiNsnnN2, this.maDviTien),
+        khoachChiNsnnN3 : mulMoney(item.khoachChiNsnnN3, this.maDviTien),
       })
     })
     let request = {
@@ -800,12 +810,10 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-chi-du-tru-quoc-gia-gd3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
 
