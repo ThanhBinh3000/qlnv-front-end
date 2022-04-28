@@ -313,7 +313,8 @@ export class BaoCaoComponent implements OnInit {
       );
       this.baoCao.maLoaiBcao = this.routerActive.snapshot.paramMap.get('loaiBaoCao');
       this.baoCao.namBcao = Number(this.routerActive.snapshot.paramMap.get('nam'));
-      this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang'));
+      this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang'));
+      
       this.baoCao.ngayTao = new Date().toDateString();
       this.baoCao.trangThai = "1";
       PHULUCLIST.forEach(item => {
@@ -735,17 +736,17 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
-    let check = false;
     debugger
-    if(this.baoCao?.trangThai == Utils.TT_BC_7){
-      check = checkParent;
-    }else if(this.userInfo?.roles[0]?.id != '3'){
-      // if(this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfo?.roles[0]?.id != '2' ||
-      //     this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfo?.roles[0]?.id != '2' ||
-      //     this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfo?.roles[0]?.id != '2')
-      check = checkChirld;
+    let a = this.userInfo?.roles[0]?.id;
+    if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfo?.roles[0]?.id == '3' && checkParent && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfo?.roles[0]?.id == '2' && checkChirld && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfo?.roles[0]?.id == '1' && checkChirld && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else{
+      this.statusBtnOk = true;
     }
-    this.statusBtnOk = utils.getRoleOk(this.baoCao?.trangThai, check, this.trangThaiChiTiet);
   }
 
   changeModel(id) {
@@ -1666,7 +1667,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   //call api duyet bieu mau
-  pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
+  async pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
     var idBieuMau: any = this.baoCao.lstBCao.find((item) => item.maLoai == maLoai).id;
     const requestPheDuyetBieuMau = {
       id: idBieuMau,
@@ -1674,9 +1675,10 @@ export class BaoCaoComponent implements OnInit {
       lyDoTuChoi: lyDo,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).toPromise().then(res => {
+    await this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        this.trangThaiChiTiet = trangThai;
         this.getDetailReport();
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);

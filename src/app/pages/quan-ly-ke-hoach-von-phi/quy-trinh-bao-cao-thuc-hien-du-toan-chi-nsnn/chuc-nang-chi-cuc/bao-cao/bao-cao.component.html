@@ -108,7 +108,7 @@
             <tr *ngFor="let item of baoCao?.lstBCao; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{item.tenPhuLuc}}</td>
-              <td>{{item.tieuDe}}</td>
+              <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/</ng-template>{{baoCao.namBcao}}</td>
               <td>{{getStatusAppendixName(item.trangThai)}}</td>
               <td>
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="status">
@@ -200,7 +200,7 @@
       </nz-card>
 
       <!-- Table phụ lục I -->
-      <nz-card nzTitle="Phụ lục I: - Báo cáo kết quả giải ngân dự toán chi NSNN định kỳ tháng/năm"
+      <nz-card [nzTitle]="'Phụ lục I: - Báo cáo kết quả giải ngân dự toán chi NSNN'"
         [nzExtra]="tableCard3" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc1">
         <nz-table nzBordered class="table__body">
           <thead>
@@ -662,7 +662,7 @@
         </button>
       </ng-template>
       <!-- Table phụ lục II -->
-      <nz-card nzTitle="Phụ lục II: - Báo cáo công tác giải ngân ứng dụng CNTT định kỳ tháng/năm" [nzExtra]="tableCard2"
+      <nz-card nzTitle="Phụ lục II: - Báo cáo công tác giải ngân ứng dụng CNTT" [nzExtra]="tableCard2"
         class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc2">
         <nz-table nzBordered class="table__body">
           <thead>
@@ -973,7 +973,7 @@
         </nz-table>
       </nz-card>
       <!-- Table phụ lục III -->
-      <nz-card nzTitle="Phụ lục III: - Báo cáo công tác giải ngân vốn đầu tư xây dựng và sửa chữa lớn định kỳ tháng/năm"
+      <nz-card nzTitle="Phụ lục III: - Báo cáo công tác giải ngân vốn đầu tư xây dựng và sửa chữa lớn"
         [nzExtra]="tableCard2" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc3">
         <nz-table nzBordered class="table__body">
           <thead>
