@@ -690,9 +690,10 @@ saveEdit(id: string): void {
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.luongXuatGaoVtro = res.data.luongXuatGaoVtro;
-        this.luongXuatThocVtro = res.data.luongXuatThocVtro;
-        this.lstCTiet = res.data.lstCTiet;
+        let chiTiet = res.data[0];
+        this.luongXuatGaoVtro = chiTiet.luongXuatGaoVtro;
+        this.luongXuatThocVtro = chiTiet.luongXuatThocVtro;
+        this.lstCTiet = chiTiet.lstCTiet;
         this.lstCTiet.forEach(e => {
           e.id = uuid.v4();
         })

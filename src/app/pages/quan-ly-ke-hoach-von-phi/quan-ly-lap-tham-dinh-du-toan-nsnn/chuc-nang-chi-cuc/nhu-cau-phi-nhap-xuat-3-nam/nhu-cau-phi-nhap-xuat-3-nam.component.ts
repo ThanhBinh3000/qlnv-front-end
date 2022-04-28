@@ -332,7 +332,6 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
                return;
           }
-          this.mulMoneyTotal();
 
           let listFile: any = [];
           for (const iterator of this.listFile) {
@@ -352,7 +351,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                fileDinhKems: listFile,
                listIdDeletes: this.listIdDelete,
                listIdDeleteFiles: this.listIdDeleteFiles,
-               lstCTietBCao: this.lstCTietBCao,
+               lstCTietBCao: this.mulMoneyTotal(0),
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,
@@ -371,12 +370,10 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                               await this.getDetailReport();
                               this.getStatusButton();
                          } else {
-                              this.divMoneyTotal();
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     },
                     err => {
-                         this.divMoneyTotal();
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     },
                );
@@ -388,11 +385,9 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                               await this.getDetailReport();
                               this.getStatusButton();
                          } else {
-                              this.divMoneyTotal();
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
                     }, err => {
-                         this.divMoneyTotal();
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           }
@@ -471,7 +466,7 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
                               this.trangThaiBanGhi == Utils.TT_BC_3 ||
                               this.trangThaiBanGhi == Utils.TT_BC_5 ||
                               this.trangThaiBanGhi == Utils.TT_BC_8 ||
-						this.trangThaiBanGhi == Utils.TT_BC_10
+                              this.trangThaiBanGhi == Utils.TT_BC_10
                          ) {
                               this.status = false;
                          } else {
@@ -732,11 +727,21 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           });
      }
 
-     mulMoneyTotal() {
+     mulMoneyTotal(id: number) {
+          let lstCTietBCaoTemp = [];
           this.lstCTietBCao.forEach(element => {
-               element.dmucPhiTc = mulMoney(element.dmucPhiTc, this.maDviTien);
-               element.thanhTien = mulMoney(element.thanhTien, this.maDviTien);
+               lstCTietBCaoTemp.push({
+                    ...element,
+                    dmucPhiTc: mulMoney(element.dmucPhiTc, this.maDviTien),
+                    thanhTien: mulMoney(element.thanhTien, this.maDviTien),
+               })
           });
+          if (id == 1) {
+               lstCTietBCaoTemp.forEach(item => {
+                    item.id = null;
+               })
+          }
+          return lstCTietBCaoTemp;
      }
 
      // action copy
@@ -760,21 +765,12 @@ export class NhuCauPhiNhapXuat3NamComponent implements OnInit {
           if (!maBaoCao) {
                return;
           }
-          this.mulMoneyTotal();
-          // replace nhung ban ghi dc them moi id thanh null
-          let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
           let request = {
                id: null,
                listIdDeletes: null,
                fileDinhKems: null,
                listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-               lstCTietBCao: lstTemp,
+               lstCTietBCao: this.mulMoneyTotal(1),
                maBcao: maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,

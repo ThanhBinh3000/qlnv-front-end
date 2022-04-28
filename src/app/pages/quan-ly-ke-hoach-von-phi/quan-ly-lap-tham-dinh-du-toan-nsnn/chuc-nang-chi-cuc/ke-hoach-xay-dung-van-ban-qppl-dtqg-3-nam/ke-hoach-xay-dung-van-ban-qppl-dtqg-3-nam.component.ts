@@ -318,8 +318,6 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 			return;
 		}
 
-		this.mulMoneyTotal();
-
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
@@ -337,7 +335,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.lstCTietBCao,
+			lstCTietBCao: this.mulMoneyTotal(0),
 			listIdDeletes: this.listIdDelete,
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao = this.maDonViTao,
@@ -357,12 +355,10 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				},
 				err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				},
 			);
@@ -374,11 +370,9 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
-						this.divMoneyTotal();
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
 				}, err => {
-					this.divMoneyTotal();
 					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 				})
 		}
@@ -705,10 +699,20 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		})
 	}
 
-	mulMoneyTotal() {
-		this.lstCTietBCao.filter(item => {
-			item.dtoanKphi = mulMoney(item.dtoanKphi, this.maDviTien);
-		})
+	mulMoneyTotal(id: number) {
+		let lstCTietBCaoTemp = [];
+		this.lstCTietBCao.forEach(element => {
+			lstCTietBCaoTemp.push({
+				...element,
+				dtoanKphi: mulMoney(element.dtoanKphi, this.maDviTien),
+			})
+		});
+		if (id == 1) {
+			lstCTietBCaoTemp.forEach(item => {
+				item.id = null;
+			})
+		}
+		return lstCTietBCaoTemp;
 	}
 
 	// action copy
@@ -732,21 +736,12 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
-		this.mulMoneyTotal();
-		// replace nhung ban ghi dc them moi id thanh null
-		let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: lstTemp,
+			lstCTietBCao: this.mulMoneyTotal(1),
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
