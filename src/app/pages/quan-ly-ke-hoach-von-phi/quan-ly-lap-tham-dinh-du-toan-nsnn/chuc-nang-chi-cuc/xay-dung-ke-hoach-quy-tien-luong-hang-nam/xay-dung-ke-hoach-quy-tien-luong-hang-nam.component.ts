@@ -647,11 +647,11 @@ export class XayDungKeHoachQuyTienLuongHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].bcheGiaoN1){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].bcheGiaoN1){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },

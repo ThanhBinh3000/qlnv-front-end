@@ -28,11 +28,16 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao"
+              [class]="searchFilter.namBcao ?'' : 'input-error-validate' ">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
+              [(ngModel)]="searchFilter.thangBCao" 
+              [class]="((searchFilter.thangBCao && searchFilter.maLoaiBcao == '526') || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
@@ -51,7 +56,8 @@
           <div nz-col nzSpan="13"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person"  [(ngModel)]="searchFilter.maLoaiBcao" (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.maLoaiBcao"
+              (ngModelChange)="setUrl($event)" [class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -65,7 +71,7 @@
       <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
-          
+
         </div>
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -80,7 +86,7 @@
               <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo chi cục phê duyệt)</span></th>
               <th nzWidth="175px">Ngày cấp trên trả kết quả</th>
               <th nzWidth="100px" class="text-center">Trạng thái</th>
-              <th >Hành động</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -119,8 +125,9 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
-                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>
@@ -139,4 +146,3 @@
     </div>
   </div>
 </div>
-

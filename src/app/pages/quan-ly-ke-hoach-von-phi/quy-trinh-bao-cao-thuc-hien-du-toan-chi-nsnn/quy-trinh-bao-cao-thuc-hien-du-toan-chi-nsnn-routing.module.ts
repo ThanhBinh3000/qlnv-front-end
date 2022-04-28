@@ -21,13 +21,6 @@ const routes: Routes = [
         './chuc-nang-cuc-khu-vuc/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-CC.module'
       ).then((m) => m.DsBaoCaoTinhHinhSdDtoanThangNamTuCCModule),
   },
-  {
-    path: 'ds-chi-tiet-nhap-lieu-bao-cao',
-    loadChildren: () =>
-      import(
-        './chuc-nang-chi-cuc/ds-chi-tiet-nhap-lieu-bao-cao/ds-chi-tiet-nhap-lieu-bao-cao.module'
-      ).then((m) => m.DsChiTietNhapLieuBaoCaoModule),
-  },
 
   //hung
   {
@@ -57,6 +50,13 @@ const routes: Routes = [
       import(
         './chuc-nang-cuc-khu-vuc/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC/tong-hop-bc-tinh-hinh-su-dung-du-toan-tu-CC.module'
       ).then((m) => m.TongHopBCTinhHinhSuDungDuToanTuCCModule),
+  },
+  {
+    path: 'tong-hop/:loaiBaoCao/:thang/:nam',
+    loadChildren: () =>
+      import(
+        './chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
   },
   {
     path: 'kiem-tra',

@@ -587,21 +587,6 @@ dMDviHangQDGiaoDT(): Observable<any> {
   );
 }
 
-//danh muc noi dung
-dMDonViTien(): Observable<any> {
-  return this.httpClient.post(
-    this.urlDefault + "/qlnv-category/dmuc-khoachvon/401",
-    {
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": "",
-      "trangThai": ""
-    }
-  );
-}
-
 //danh muc Khoan muc
 dMKhoanMuc(): Observable<any> {
   return this.httpClient.post(

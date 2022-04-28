@@ -677,11 +677,11 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTiet[id].maMatHang){
+    const index = this.lstCTiet.findIndex(item => item.id === id);
+    if (!this.lstCTiet[index].maMatHang){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTiet[index] },
@@ -717,6 +717,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
 
   //call tong hop
   async calltonghop() {
+
     this.spinner.show();
     this.maDviTien = "1"
     let objtonghop = {
@@ -725,12 +726,14 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       namHienTai: this.namBaoCaoHienHanh,
     }
     await this.quanLyVonPhiService.tongHop(objtonghop).toPromise().then(res => {
+
       if (res.statusCode == 0) {
-        this.kphiBquanGaoLd = res.data.kphiBquanGaoLd;
-        this.kphiBquanGaoTx = res.data.kphiBquanGaoTx;
-        this.kphiBquanThocLd = res.data.kphiBquanThocLd;
-        this.kphiBquanThocTx = res.data.kphiBquanThocTx;
-        this.lstCTiet = res.data.lstCTiet;
+
+        this.kphiBquanGaoLd = res.data[0].kphiBquanGaoLd;
+        this.kphiBquanGaoTx = res.data[0].kphiBquanGaoTx;
+        this.kphiBquanThocLd = res.data[0].kphiBquanThocLd;
+        this.kphiBquanThocTx = res.data[0].kphiBquanThocTx;
+        this.lstCTiet = res.data[0]?.lstCTiet;
         // this.lstCTiet.forEach(e => {
         //   this.tongSo += e.kphi;
         // })
@@ -826,7 +829,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   };
 
   //call service them moi
-  this.spinner.show();
   this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
     async data => {
       if (data.statusCode == 0) {
