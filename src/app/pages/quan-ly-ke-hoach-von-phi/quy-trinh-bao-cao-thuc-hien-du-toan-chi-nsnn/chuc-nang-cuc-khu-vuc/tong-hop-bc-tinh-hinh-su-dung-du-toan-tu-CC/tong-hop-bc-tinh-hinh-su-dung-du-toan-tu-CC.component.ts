@@ -119,7 +119,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   //set url khi
   setUrl(lbaocao:any) {
-    this.url = '/tong-hop/'
+    // this.url = '/tong-hop/'
   }
 
   //doi so trang
@@ -151,7 +151,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
         return;
       }
   
-      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url +'/' + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0')+'/'+this.searchFilter.namBcao])
+      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0')+'/'+this.searchFilter.namBcao])
   }
 
   close() {

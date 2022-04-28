@@ -637,14 +637,14 @@
       </nz-card>
       <!-- Action Table chi tiết phụ lục I -->
       <ng-template #tableCard3>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCaoPL1.length!=0" [hidden]="status"
-          (click)="addLinePL1(this.lstCTietBCaoPL1.length)">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm dòng</span>
-        </button>
         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCaoPL1.length!=0" [hidden]="status"
+          (click)="addLinePL1(this.lstCTietBCaoPL1.length)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
         </button>
         <button type="button" class="btn btn-sub" [hidden]="status">
           <i class="icon htvbdh_tcdt_import"></i>
