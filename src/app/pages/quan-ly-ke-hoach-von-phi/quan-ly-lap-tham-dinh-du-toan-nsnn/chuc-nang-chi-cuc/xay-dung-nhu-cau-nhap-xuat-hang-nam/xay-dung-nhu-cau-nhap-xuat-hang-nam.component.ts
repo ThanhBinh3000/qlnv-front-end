@@ -378,7 +378,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban:"",
+      soVban: this.soVban,
     };
 
     //call service them moi
