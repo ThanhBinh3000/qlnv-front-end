@@ -23,7 +23,6 @@ export class ItemData {
   maLoai!: number;
   lstCTietBCao!: any;
   trangThai!: string;
-
   checked!: boolean;
   tieuDe!: string;
   tenPhuLuc!: string;
@@ -45,8 +44,6 @@ export class ItemDanhSach {
   ngayPheDuyet!: string;
   ngayTraKq!: string;
 
-
-
   // dung cho request
   fileDinhKems!: any[];
   listIdDeletes!: string;
@@ -58,39 +55,7 @@ export class ItemDanhSach {
   checked!: boolean;
   lstBCao: ItemData[] = [];
   lstFile: any[] = [];
-  lstBCaoDviTrucThuoc: any[] = [
-    // {
-    //   id: 551,
-    //   maBcao: "BC16063",
-    //   namBcao: 2022,
-    //   thangBcao: 12,
-    //   namHienHanh: null,
-    //   trangThai: "9",
-    //   tenTrangThai: null,
-    //   maLoaiBcao: "526",
-    //   maPhanBcao: "0",
-    //   ngayTao: "2022-04-23T10:07:13.000+00:00",
-    //   nguoiTao: "canbo2",
-    //   ngaySua: null,
-    //   nguoiSua: null,
-    //   maDviTien: null,
-    //   maDvi: "040207",
-    //   maDviCha: null,
-    //   tenDvi: null,
-    //   dotBcao: null,
-    //   lyDoTuChoi: null,
-    //   proccessId: "25ff2ac5-c2ed-11ec-8242-6eea1dc5fedb",
-    //   tongHopTu: null,
-    //   ngayTrinh: "2022-04-23T10:07:11.000+00:00",
-    //   nguoiTrinh: "canbo2",
-    //   ngayDuyet: "2022-04-24T09:48:21.000+00:00",
-    //   nguoiDuyet: "lanhdao2",
-    //   ngayPheDuyet: null,
-    //   nguoiPheDuyet: null,
-    //   ngayTraKq: null,
-    //   nguoiTraKq: null
-    // }
-  ];
+  lstBCaoDviTrucThuoc: any[] = [];
   tongHopTu!: string;
 }
 
@@ -221,7 +186,6 @@ export class BaoCaoComponent implements OnInit {
   donViTaos: any = [];
   loaiBaoCaos: any = [];                          // danh muc loai bao cao
 
-
   userInfo: any;
   noiDungs: any = [];                         // danh muc noi dung
   nhomChis: any = [];                          // danh muc nhom chi
@@ -267,17 +231,13 @@ export class BaoCaoComponent implements OnInit {
   nho!: boolean;                              // bien nho phuc vu sort
   tab = TAB_SELECTED;
   constructor(
-    // private _modalRef: NzModalRef,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private sanitizer: DomSanitizer,
     private danhMucService: DanhMucHDVService,
     private userService: UserService,
     private notification: NzNotificationService,
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
-    private router: Router,
-    private datePipe: DatePipe,
     private notifi: NzNotificationService,
     private modal: NzModalService,
     private location: Location,
@@ -736,7 +696,7 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
-    debugger
+    
     let a = this.userInfo?.roles[0]?.id;
     if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfo?.roles[0]?.id == '3' && checkParent && this.trangThaiChiTiet == 2){
       this.statusBtnOk = false;
@@ -1661,7 +1621,6 @@ export class BaoCaoComponent implements OnInit {
         }
       });
     }
-    debugger
     this.getStatusButtonOk();
     this.spinner.hide();
   }
