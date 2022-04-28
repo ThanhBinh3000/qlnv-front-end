@@ -400,7 +400,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban: "",
+      soVban: this.soVban,
     };
 
     //call service them moi

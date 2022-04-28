@@ -399,7 +399,7 @@ export class QuanLyVonPhiService extends BaseService {
       this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
       request,
     );
-    // return this.httpClient.put('http://192.168.1.118:8094/bao-cao/cap-nhat',
+    // return this.httpClient.put('http://192.168.1.111:8094/bao-cao/cap-nhat',
     // request)
   }
 

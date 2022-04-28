@@ -380,7 +380,7 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban: "",
+      soVban:this.soVban,
     };
 
     //call service them moi

@@ -484,7 +484,6 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal();
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -497,13 +496,26 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       }
     })
 
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(element => {
+      lstCTietBCaoTemp.push({
+        ...element,
+      kphiTongPhiDuocDuyet : mulMoney(element.kphiTongPhiDuocDuyet, this.donvitien),
+      kphiDaDuocBoTriDenNamN : mulMoney(element.kphiDaDuocBoTriDenNamN, this.donvitien),
+      kphiDaDuocThienDenTdiemBcao : mulMoney(element.kphiDaDuocThienDenTdiemBcao, this.donvitien),
+      kphiDkienBtriN1 : mulMoney(element.kphiDkienBtriN1, this.donvitien),
+      kphiDkienBtriN2 : mulMoney(element.kphiDkienBtriN2, this.donvitien),
+      kphiDkienBtriN3 : mulMoney(element.kphiDkienBtriN3, this.donvitien),
+      kphiThuHoi : mulMoney(element.kphiThuHoi, this.donvitien),
+      })
+    });
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles, 
       listIdDeletes: this.listIdDelete,                     // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.mabaocao,
       maDvi: this.donvitao,
       maDviTien: this.donvitien,
@@ -523,12 +535,10 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -540,11 +550,9 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
-        this.divMoneyTotal();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -674,7 +682,6 @@ xoaBaoCao(){
 
   // action copy
   async doCopy(){
-    this.spinner.show();
 
     let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
       (data) => {
@@ -693,13 +700,19 @@ xoaBaoCao(){
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter( item =>{
       lstTemp.push({
         ...item,
-        id:null
+      kphiTongPhiDuocDuyet : mulMoney(item.kphiTongPhiDuocDuyet, this.donvitien),
+      kphiDaDuocBoTriDenNamN : mulMoney(item.kphiDaDuocBoTriDenNamN, this.donvitien),
+      kphiDaDuocThienDenTdiemBcao : mulMoney(item.kphiDaDuocThienDenTdiemBcao, this.donvitien),
+      kphiDkienBtriN1 : mulMoney(item.kphiDkienBtriN1, this.donvitien),
+      kphiDkienBtriN2 : mulMoney(item.kphiDkienBtriN2, this.donvitien),
+      kphiDkienBtriN3 : mulMoney(item.kphiDkienBtriN3, this.donvitien),
+      kphiThuHoi : mulMoney(item.kphiThuHoi, this.donvitien),
+      id:null
       })
     })
 
@@ -729,22 +742,12 @@ xoaBaoCao(){
           this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
 

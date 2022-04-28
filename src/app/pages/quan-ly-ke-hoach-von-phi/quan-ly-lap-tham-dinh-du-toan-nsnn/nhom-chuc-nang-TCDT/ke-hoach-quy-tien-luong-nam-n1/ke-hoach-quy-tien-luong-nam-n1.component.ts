@@ -111,7 +111,6 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   namBcaohienhanh: any;
   currentday: Date = new Date();
   mabaocao: any;
-  soVban:any;
   capDv:any;
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
@@ -366,7 +365,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       maLoaiBcao: QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
       namHienHanh: this.namBaoCaoHienHanh,
       namBcao: this.namBcao,
-      soVban:this.soVban,
+
     };
 
     //call service them moi
