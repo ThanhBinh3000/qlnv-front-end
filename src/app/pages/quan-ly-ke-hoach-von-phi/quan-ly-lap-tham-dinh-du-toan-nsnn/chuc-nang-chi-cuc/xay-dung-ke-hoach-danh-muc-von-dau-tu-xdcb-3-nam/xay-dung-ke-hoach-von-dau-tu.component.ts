@@ -406,7 +406,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
     this.lstCTietBCao.filter(e => {
       lstCTietBCaoTemp.push({
         ...e,
-        qdDuyetDanDtuTongVo:  mulMoney(e.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDuyetDanDtuTongVon:  mulMoney(e.qdDuyetDanDtuTongVon, this.maDviTien),
         qdDchinhDanDtuTongVon : mulMoney(e.qdDchinhDanDtuTongVon, this.maDviTien),
         qdDuyetTkDtoanXl : mulMoney(e.qdDuyetTkDtoanXl, this.maDviTien),
         qdDuyetTkDtoanTb : mulMoney(e.qdDuyetTkDtoanTb, this.maDviTien),
@@ -627,6 +627,22 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tongqdDuyetDanDtuTongVon -= this.lstCTietBCao.find(e => e.id == id).qdDuyetDanDtuTongVon
+    this.tongqdDchinhDanDtuTongVon -= this.lstCTietBCao.find(e => e.id == id).qdDchinhDanDtuTongVon
+    this.tongqdDuyetTkDtoanXl -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanXl
+    this.tongqdDuyetTkDtoanTb -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanTb
+    this.tongqdDuyetTkDtoanCk -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanCk
+    this.tongklthCapDen3006Nstt -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006Nstt
+    this.tongklthCapDen3006DtoanChiTx -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006DtoanChiTx
+    this.tongklthCapDen3006Quykhac -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006Quykhac
+    this.tongklthCapDen3112Nstt -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112Nstt
+    this.tongklthCapDen3112DtoanChiTx -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112DtoanChiTx
+    this.tongklthCapDen3112Quykhac -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112Quykhac
+    this.tongncauVonN1 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN1
+    this.tongncauVonN2 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN2
+    this.tongncauVonN3 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN3
+    this.tongTongQdDuyetTkDtoan -= (this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanXl + this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanTb + this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanCk)
+
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -637,6 +653,23 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if(item.checked){
+        this.tongqdDuyetDanDtuTongVon -= item.qdDuyetDanDtuTongVon
+        this.tongqdDchinhDanDtuTongVon -= item.qdDchinhDanDtuTongVon
+        this.tongqdDuyetTkDtoanXl -= item.qdDuyetTkDtoanXl
+        this.tongqdDuyetTkDtoanTb -= item.qdDuyetTkDtoanTb
+        this.tongqdDuyetTkDtoanCk -= item.qdDuyetTkDtoanCk
+        this.tongklthCapDen3006Nstt -= item.klthCapDen3006Nstt
+        this.tongklthCapDen3006DtoanChiTx -= item.klthCapDen3006DtoanChiTx
+        this.tongklthCapDen3006Quykhac -= item.klthCapDen3006Quykhac
+        this.tongklthCapDen3112Nstt -= item.klthCapDen3112Nstt
+        this.tongklthCapDen3112DtoanChiTx -= item.klthCapDen3112DtoanChiTx
+        this.tongklthCapDen3112Quykhac -= item.klthCapDen3112Quykhac
+        this.tongncauVonN1 -= item.ncauVonN1
+        this.tongncauVonN2 -= item.ncauVonN2
+        this.tongncauVonN3 -= item.ncauVonN3
+        this.tongTongQdDuyetTkDtoan -= (this.tongqdDuyetTkDtoanXl + this.tongqdDuyetTkDtoanTb + this.tongqdDuyetTkDtoanCk)
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -722,16 +755,11 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maKhoach){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+		if (!this.lstCTietBCao[index].maKhoach) {
 			this.deleteById(id);
 			return;
 		}
-    // if (!this.editCache[id].data.maKhoach || !this.editCache[id].data.maKhoiDan || !this.editCache[id].data.maDdiemXd || !this.editCache[id].data.maNganhKte){
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-    //   return;
-    // }
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
-
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
       edit: false
@@ -862,7 +890,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       lstTemp.push({
         ...item,
         id: null,
-        qdDuyetDanDtuTongVo:  mulMoney(item.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDuyetDanDtuTongVon:  mulMoney(item.qdDuyetDanDtuTongVon, this.maDviTien),
         qdDchinhDanDtuTongVon : mulMoney(item.qdDchinhDanDtuTongVon, this.maDviTien),
         qdDuyetTkDtoanXl : mulMoney(item.qdDuyetTkDtoanXl, this.maDviTien),
         qdDuyetTkDtoanTb : mulMoney(item.qdDuyetTkDtoanTb, this.maDviTien),

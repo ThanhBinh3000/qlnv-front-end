@@ -17,7 +17,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemData {
   tenDtaiDan!: String;
-  maDvi!: number;
+  maDvi!: string;
   tgBdau!: number;
   tgKthuc!: number;
   kphiTongPhiDuocDuyet!: number;
@@ -507,7 +507,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   addLine(id: number): void {
     let item : ItemData = {
       tenDtaiDan: "",
-      maDvi: 0,
+      maDvi: "",
       tgBdau: this.namBaoCaoHienHanh,
       tgKthuc: this.namBaoCaoHienHanh,
       kphiTongPhiDuocDuyet: 0,
