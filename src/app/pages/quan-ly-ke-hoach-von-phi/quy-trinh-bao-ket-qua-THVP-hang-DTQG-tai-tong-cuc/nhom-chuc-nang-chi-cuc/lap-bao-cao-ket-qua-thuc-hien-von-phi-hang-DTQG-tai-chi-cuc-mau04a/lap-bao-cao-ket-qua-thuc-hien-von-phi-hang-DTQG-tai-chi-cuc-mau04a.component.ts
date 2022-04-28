@@ -1672,7 +1672,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       //khởi tạo trạng thái tạo mới
       this.baoCao.trangThai = '1';
-      
+      this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(res =>{
+        this.baoCao.maBcao = res?.data.data;
+      })
+
       let objTonghop ={
         dotBcao: this.dotBcao,
         maDvi: "",
@@ -1767,6 +1770,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
         this.stt = 0;
         this.updateSTT(this.chiTietBcao4an);
+        console.log(this.lstCTietBCao04an);
+        this.updateLstCTietBCao(2);
+        console.log(this.lstCTietBCao04an);
         //-- mẫu 04b xuất
         this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
         this.lstCTietBCao04bx.forEach(item => {
@@ -2296,9 +2302,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   updateLstCTietBCao(maloai:any) {
     if(maloai==1){
       this.lstCTietBCao04ax = [];
-      this.duyet(this.chiTietBcao4ax, '', 0, 0,this.lstCTietBCao04ax, -1);
-      console.log(this.lstCTietBCao04ax);
-      
+      this.duyet(this.chiTietBcao4ax, '', 0, 0,this.lstCTietBCao04ax, -1);      
       this.updateEditCache();
     }else if(maloai==2){
       this.lstCTietBCao04an =[];
