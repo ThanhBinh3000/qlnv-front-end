@@ -733,6 +733,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 				return null;
 			}
 		);
+		this.spinner.hide();
 		if (!maBaoCao) {
 			return;
 		}
@@ -763,22 +764,12 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/' + this.id);
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
-					this.divMoneyTotal();
 				}
 			},
 			err => {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				this.divMoneyTotal();
 			},
 		);
-
-		this.lstCTietBCao.filter(item => {
-			if (!item.id) {
-				item.id = uuid.v4();
-			}
-		});
-
-		this.updateEditCache();
 		this.spinner.hide();
 	}
 

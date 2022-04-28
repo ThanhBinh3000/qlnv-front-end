@@ -20,7 +20,8 @@ export class ItemData {
     abc!: number;
     id!: any;
     stt!: string;
-    level!: number;
+    head!: string;
+    tail!: number;
     checked!: boolean;
 }
 
@@ -40,7 +41,7 @@ export class LinkList {
 export class TestLinkListComponent implements OnInit {
     lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
     chiTietBcaos: LinkList = {
-        vt: 0,  
+        vt: 0,
         abc: 0,
         checked: false,
         next: [],
@@ -125,357 +126,388 @@ export class TestLinkListComponent implements OnInit {
 
 
     async ngOnInit() {
-
+        
         this.lstCTietBCao = [
-            
-            {
-                abc: 0,
-                checked: false,
-                id: 4,
-                level: 2,
-                stt: "2.1.1",
-            },
+
             {
                 abc: 1,
                 checked: false,
+                id: 1,
+                tail: 1,
+                head: "0",
+                stt: "0.1",
+            },
+            {
+                abc: 2,
+                checked: false,
                 id: 2,
-                level: 0,
-                stt: "2",
+                tail: 1,
+                head: "0.1",
+                stt: "0.1.1",
             },
             {
                 abc: 0,
                 checked: false,
                 id: 3,
-                level: 1,
-                stt: "2.1",
+                tail: 2,
+                head: "0.1",
+                stt: "0.1.2",
             },
-            
+
+            {
+                abc: 0,
+                checked: false,
+                id: 4,
+                tail: 2,
+                head: "0",
+                stt: "0.2",
+            },
             {
                 abc: 0,
                 checked: false,
                 id: 5,
-                level: 1,
-                stt: "2.2",
+                tail: 1,
+                head: "0.2",
+                stt: "0.2.1",
             },
             {
                 abc: 0,
                 checked: false,
                 id: 6,
-                level: 0,
-                stt: "3",
+                tail: 2,
+                head: "0.2",
+                stt: "0.2.2",
             },
             {
                 abc: 0,
                 checked: false,
-                id: 1,
-                level: 0,
-                stt: "1",
+                id: 7,
+                tail: 1,
+                head: "0.2.2",
+                stt: "0.2.2.1",
+            },
+            {
+                abc: 0,
+                checked: false,
+                id: 8,
+                tail: 3,
+                head: "0",
+                stt: "0.3",
+            },
+            {
+                abc: 0,
+                checked: false,
+                id: 9,
+                tail: 1,
+                head: "0.3",
+                stt: "0.3.1",
             },
         ];
-        
-        this.getLinkList(this.chiTietBcaos, "", 0);
-        this.stt = 0;
-        this.updateSTT(this.chiTietBcaos);
-        this.updateLstCTietBCao();
-    }
-
-    getLinkList(data: LinkList, head: string, lvl: number){
-        var lst: ItemData[] = [];
-        this.lstCTietBCao.forEach(item =>  {
-            if ((item.level == lvl) && (item.stt.indexOf(head) == 0)){
-                lst.push(item);
-            }
-        });
-        if (lst.length == 0) return;
-        lst.forEach(item => {
-            var obj: LinkList = {
-                abc: item.abc,
-                vt: 0,
-                checked: false,
-                next: [],
-            }
-            this.getLinkList(obj, item.stt, lvl + 1);
-            data.next.push(obj);
-        })
-    }
-    //khoi tao
-    duyet(data: LinkList, str: string, index: number, le: number) {
-        if (index != 0) {
-            let mm = {
-                id: uuid.v4(),
-                stt: str + index.toString(),
-                level: le,
-                abc: data.abc,
-                checked: false,
-            }
-            this.lstCTietBCao.push(mm);
-        }
-        if (data.next.length == 0) return;
-        for (var i = 0; i < data.next.length; i++) {
-            if (index == 0) {
-                this.duyet(data.next[i], str, i + 1, le + 1);
-            } else {
-                this.duyet(data.next[i], str + index.toString() + ".", i + 1, le + 1);
-            }
-
-        }
-    }
-
-    updateLstCTietBCao() {
-        this.lstCTietBCao = [];
-        this.duyet(this.chiTietBcaos, "", 0, -1);
-        console.log(this.lstCTietBCao);
         this.updateEditCache();
+
+        // this.getLinkList(this.chiTietBcaos, "", 0);
+        // this.stt = 0;
+        // this.updateSTT(this.chiTietBcaos);
+        // this.updateLstCTietBCao();
     }
 
-    // gan editCache.data == lstCTietBCao
-    updateEditCache(): void {
-        this.lstCTietBCao.forEach(item => {
-            this.editCache[item.id] = {
-                edit: false,
-                data: { ...item }
-            };
-        });
-    }
+    // getLinkList(data: LinkList, head: string, lvl: number){
+    //     var lst: ItemData[] = [];
+    //     this.lstCTietBCao.forEach(item =>  {
+    //         if ((item.level == lvl) && (item.stt.indexOf(head) == 0)){
+    //             lst.push(item);
+    //         }
+    //     });
+    //     if (lst.length == 0) return;
+    //     lst.forEach(item => {
+    //         var obj: LinkList = {
+    //             abc: item.abc,
+    //             vt: 0,
+    //             checked: false,
+    //             next: [],
+    //         }
+    //         this.getLinkList(obj, item.stt, lvl + 1);
+    //         data.next.push(obj);
+    //     })
+    // }
+    // //khoi tao
+    // duyet(data: LinkList, str: string, index: number, le: number) {
+    //     if (index != 0) {
+    //         let mm = {
+    //             id: uuid.v4(),
+    //             stt: str + index.toString(),
+    //             level: le,
+    //             abc: data.abc,
+    //             checked: false,
+    //         }
+    //         this.lstCTietBCao.push(mm);
+    //     }
+    //     if (data.next.length == 0) return;
+    //     for (var i = 0; i < data.next.length; i++) {
+    //         if (index == 0) {
+    //             this.duyet(data.next[i], str, i + 1, le + 1);
+    //         } else {
+    //             this.duyet(data.next[i], str + index.toString() + ".", i + 1, le + 1);
+    //         }
 
-    //chinh sua
-    // them dong moi
-    addLine(id: number): void {
-        let item: ItemData = {
-            abc: 0,
-            stt: "",
-            level: this.lstCTietBCao[id - 1].level,
-            id: uuid.v4(),
-            checked: false,
-        }
+    //     }
+    // }
 
+    // updateLstCTietBCao() {
+    //     this.lstCTietBCao = [];
+    //     this.duyet(this.chiTietBcaos, "", 0, -1);
+    //     console.log(this.lstCTietBCao);
+    //     this.updateEditCache();
+    // }
 
-        this.lstCTietBCao.splice(id, 0, item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-        this.status = false;
-        this.disable = true;
-    }
+    // // gan editCache.data == lstCTietBCao
+    // updateEditCache(): void {
+    //     this.lstCTietBCao.forEach(item => {
+    //         this.editCache[item.id] = {
+    //             edit: false,
+    //             data: { ...item }
+    //         };
+    //     });
+    // }
 
-    updateSTT(data: LinkList) {
-        if (data.next.length == 0) {
-            return;
-        }
-        data.next.forEach(item => {
-            item.vt = this.stt + 1;
-            this.stt += 1;
-            this.updateSTT(item);
-        })
-    }
-    // xoa dong
-    deleteByStt(idx: any): void {
-        this.delete(this.chiTietBcaos, idx);
-        this.stt = 0;
-        this.updateSTT(this.chiTietBcaos);
-        this.updateLstCTietBCao();
-    }
-
-    delete(data: LinkList, idx: number) {
-        if (data.next.length == 0) return;
-        var index = data.next.findIndex(item => item.vt == idx);
-        if (index == -1) {
-            data.next.forEach(item => {
-                this.delete(item, idx);
-            })
-        } else {
-            this.kt = true;
-            data.next = data.next.filter(item => item.vt != idx);
-            return;
-        }
-    }
-
-    deleteSelected() {
-        this.deleteAllSelected(this.chiTietBcaos);
-        this.updateSTT(this.chiTietBcaos);
-        this.updateLstCTietBCao();
-        this.allChecked = false;
-        this.chiTietBcaos.checked = false;
-    }
-
-    deleteAllSelected(data: LinkList) {
-        if (data.next.length == 0) {
-            return;
-        }
-        data.next = data.next.filter(item => item.checked == false);
-        this.stt = 0;
-
-        data.next.forEach(item => this.deleteAllSelected(item));
-    }
-
-    // click o checkbox all
-    updateAllChecked(): void {
-        this.subUpdateChecked(this.chiTietBcaos, this.allChecked);
-    }
-
-    updateChecked() {
-        this.updateCheckedLL(this.chiTietBcaos);
-    }
-
-    updateCheckedLL(data: LinkList) {
-        if (data.vt != 0) {
-            if (data.checked != this.lstCTietBCao[data.vt - 1].checked) {
-                this.subUpdateChecked(data, !data.checked);
-                return;
-            }
-        }
-
-        if (data.next.length == 0) return;
-        var kt = true;
-        data.next.forEach(item => {
-            this.updateCheckedLL(item);
-            if (!item.checked) kt = false;
-        })
-        if (data.vt == 0) {
-            this.allChecked = kt;
-        } else {
-            this.lstCTietBCao[data.vt - 1].checked = kt;
-        }
-        data.checked = kt;
-    }
-    // gan tat ca con cua nó co cung trang thai
-    subUpdateChecked(data: LinkList, kt: boolean) {
-        data.checked = kt;
-        
-        if (data.vt > 0)
-            this.lstCTietBCao[data.vt - 1].checked = kt;
-        if (data.next.length == 0) return;
-        data.next.forEach(item => this.subUpdateChecked(item, kt));
-    }
+    // //chinh sua
+    // // them dong moi
+    // addLine(id: number): void {
+    //     let item: ItemData = {
+    //         abc: 0,
+    //         stt: "",
+    //         level: this.lstCTietBCao[id - 1].level,
+    //         id: uuid.v4(),
+    //         checked: false,
+    //     }
 
 
+    //     this.lstCTietBCao.splice(id, 0, item);
+    //     this.editCache[item.id] = {
+    //         edit: true,
+    //         data: { ...item }
+    //     };
+    //     this.status = false;
+    //     this.disable = true;
+    // }
 
-    // start edit
-    startEdit(id: string): void {
-        this.editCache[id].edit = true;
-        this.status = true;
-        this.disable = true;
-    }
+    // updateSTT(data: LinkList) {
+    //     if (data.next.length == 0) {
+    //         return;
+    //     }
+    //     data.next.forEach(item => {
+    //         item.vt = this.stt + 1;
+    //         this.stt += 1;
+    //         this.updateSTT(item);
+    //     })
+    // }
+    // // xoa dong
+    // deleteByStt(idx: any): void {
+    //     this.delete(this.chiTietBcaos, idx);
+    //     this.stt = 0;
+    //     this.updateSTT(this.chiTietBcaos);
+    //     this.updateLstCTietBCao();
+    // }
 
-    // huy thay doi
-    cancelEdit(id: string): void {
-        const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
-        this.editCache[id] = {
-            data: { ...this.lstCTietBCao[index] },
-            edit: false
-        };
-    }
+    // delete(data: LinkList, idx: number) {
+    //     if (data.next.length == 0) return;
+    //     var index = data.next.findIndex(item => item.vt == idx);
+    //     if (index == -1) {
+    //         data.next.forEach(item => {
+    //             this.delete(item, idx);
+    //         })
+    //     } else {
+    //         this.kt = true;
+    //         data.next = data.next.filter(item => item.vt != idx);
+    //         return;
+    //     }
+    // }
 
-    saveEdit(id: string): void {
-        this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-        const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-        Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-        this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-        this.saveEditLL(this.chiTietBcaos, index + 1);
-        this.disable = false;
-    }
-    //save vao tu editcache vao trong linklist
-    saveEditLL(data: LinkList, idx: number) {
-        if (data.vt == idx) {
-            data.abc = this.lstCTietBCao[idx - 1].abc;
-            return;
-        }
-        if (data.next.length == 0) return;
-        if (data.vt > idx) return;
-        data.next.forEach(item => {
-            this.saveEditLL(item, idx);
-        })
-    }
+    // deleteSelected() {
+    //     this.deleteAllSelected(this.chiTietBcaos);
+    //     this.updateSTT(this.chiTietBcaos);
+    //     this.updateLstCTietBCao();
+    //     this.allChecked = false;
+    //     this.chiTietBcaos.checked = false;
+    // }
 
-    // luu thay doi
-    saveEdit1(id: string, index: number): void {
-        var item: LinkList = {
-            abc: this.editCache[id].data.abc,
-            vt: 0,
-            checked: false,
-            next: [],
-        }
-        this.kt = false;
-        this.addEqual(this.chiTietBcaos, item, index);
-        if (!this.kt) {
-            this.addEqual1(this.chiTietBcaos, item);
-        }
-        this.stt = 0;
-        this.updateSTT(this.chiTietBcaos);
+    // deleteAllSelected(data: LinkList) {
+    //     if (data.next.length == 0) {
+    //         return;
+    //     }
+    //     data.next = data.next.filter(item => item.checked == false);
+    //     this.stt = 0;
 
-        this.updateLstCTietBCao();
-        this.disable = false;
-        console.log(this.lstCTietBCao);
-    }
+    //     data.next.forEach(item => this.deleteAllSelected(item));
+    // }
 
-    // luu thay doi
-    saveEdit2(id: string, index: number): void {
-        var item: LinkList = {
-            abc: this.editCache[id].data.abc,
-            vt: 0,
-            checked: false,
-            next: [],
-        }
-        this.kt = false;
-        this.addLess(this.chiTietBcaos, item, index);
-        if (!this.kt) {
-            this.addLess1(this.chiTietBcaos, item);
-        }
-        this.stt = 0;
-        this.updateSTT(this.chiTietBcaos);
-        this.updateLstCTietBCao();
-        this.disable = false;
-        console.log(this.lstCTietBCao);
-    }
+    // // click o checkbox all
+    // updateAllChecked(): void {
+    //     this.subUpdateChecked(this.chiTietBcaos, this.allChecked);
+    // }
+
+    // updateChecked() {
+    //     this.updateCheckedLL(this.chiTietBcaos);
+    // }
+
+    // updateCheckedLL(data: LinkList) {
+    //     if (data.vt != 0) {
+    //         if (data.checked != this.lstCTietBCao[data.vt - 1].checked) {
+    //             this.subUpdateChecked(data, !data.checked);
+    //             return;
+    //         }
+    //     }
+
+    //     if (data.next.length == 0) return;
+    //     var kt = true;
+    //     data.next.forEach(item => {
+    //         this.updateCheckedLL(item);
+    //         if (!item.checked) kt = false;
+    //     })
+    //     if (data.vt == 0) {
+    //         this.allChecked = kt;
+    //     } else {
+    //         this.lstCTietBCao[data.vt - 1].checked = kt;
+    //     }
+    //     data.checked = kt;
+    // }
+    // // gan tat ca con cua nó co cung trang thai
+    // subUpdateChecked(data: LinkList, kt: boolean) {
+    //     data.checked = kt;
+
+    //     if (data.vt > 0)
+    //         this.lstCTietBCao[data.vt - 1].checked = kt;
+    //     if (data.next.length == 0) return;
+    //     data.next.forEach(item => this.subUpdateChecked(item, kt));
+    // }
 
 
 
-    addEqual(data: LinkList, value: LinkList, idx: number) {
-        if (data.next.length == 0) return;
-        var index = data.next.findIndex(item => item.vt == idx);
-        if (index == -1) {
-            data.next.forEach(item => {
-                this.addEqual(item, value, idx);
-            })
-        } else {
-            this.kt = true;
-            data.next.splice(index + 1, 0, value);
-            return;
-        }
-    }
+    // // start edit
+    // startEdit(id: string): void {
+    //     this.editCache[id].edit = true;
+    //     this.status = true;
+    //     this.disable = true;
+    // }
 
-    addEqual1(data: LinkList, value: LinkList) {
-        var idx = data.next.length - 1;
-        if (data.next[idx].next.length != 0) {
-            this.addEqual1(data.next[idx], value);
-        } else {
-            data.next.push(value);
-            return;
-        }
-    }
+    // // huy thay doi
+    // cancelEdit(id: string): void {
+    //     const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    //     this.editCache[id] = {
+    //         data: { ...this.lstCTietBCao[index] },
+    //         edit: false
+    //     };
+    // }
 
-    addLess(data: LinkList, value: LinkList, idx: number) {
-        if (data.next.length == 0) return;
-        var index = data.next.findIndex(item => item.vt == idx);
-        if (index == -1) {
-            data.next.forEach(item => {
-                this.addLess(item, value, idx);
-            })
-        } else {
-            this.kt = true;
-            data.next[index].next.splice(0, 0, value);
-            return;
-        }
-    }
+    // saveEdit(id: string): void {
+    //     this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+    //     const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    //     Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    //     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
+    //     this.saveEditLL(this.chiTietBcaos, index + 1);
+    //     this.disable = false;
+    // }
+    // //save vao tu editcache vao trong linklist
+    // saveEditLL(data: LinkList, idx: number) {
+    //     if (data.vt == idx) {
+    //         data.abc = this.lstCTietBCao[idx - 1].abc;
+    //         return;
+    //     }
+    //     if (data.next.length == 0) return;
+    //     if (data.vt > idx) return;
+    //     data.next.forEach(item => {
+    //         this.saveEditLL(item, idx);
+    //     })
+    // }
 
-    addLess1(data: LinkList, value: LinkList) {
-        if (data.next.length == 0) {
-            data.next.push(value);
-            return;
-        }
-        this.addLess1(data.next[data.next.length - 1], value);
-    }
+    // // luu thay doi
+    // saveEdit1(id: string, index: number): void {
+    //     var item: LinkList = {
+    //         abc: this.editCache[id].data.abc,
+    //         vt: 0,
+    //         checked: false,
+    //         next: [],
+    //     }
+    //     this.kt = false;
+    //     this.addEqual(this.chiTietBcaos, item, index);
+    //     if (!this.kt) {
+    //         this.addEqual1(this.chiTietBcaos, item);
+    //     }
+    //     this.stt = 0;
+    //     this.updateSTT(this.chiTietBcaos);
+
+    //     this.updateLstCTietBCao();
+    //     this.disable = false;
+    //     console.log(this.lstCTietBCao);
+    // }
+
+    // // luu thay doi
+    // saveEdit2(id: string, index: number): void {
+    //     var item: LinkList = {
+    //         abc: this.editCache[id].data.abc,
+    //         vt: 0,
+    //         checked: false,
+    //         next: [],
+    //     }
+    //     this.kt = false;
+    //     this.addLess(this.chiTietBcaos, item, index);
+    //     if (!this.kt) {
+    //         this.addLess1(this.chiTietBcaos, item);
+    //     }
+    //     this.stt = 0;
+    //     this.updateSTT(this.chiTietBcaos);
+    //     this.updateLstCTietBCao();
+    //     this.disable = false;
+    //     console.log(this.lstCTietBCao);
+    // }
+
+
+
+    // addEqual(data: LinkList, value: LinkList, idx: number) {
+    //     if (data.next.length == 0) return;
+    //     var index = data.next.findIndex(item => item.vt == idx);
+    //     if (index == -1) {
+    //         data.next.forEach(item => {
+    //             this.addEqual(item, value, idx);
+    //         })
+    //     } else {
+    //         this.kt = true;
+    //         data.next.splice(index + 1, 0, value);
+    //         return;
+    //     }
+    // }
+
+    // addEqual1(data: LinkList, value: LinkList) {
+    //     var idx = data.next.length - 1;
+    //     if (data.next[idx].next.length != 0) {
+    //         this.addEqual1(data.next[idx], value);
+    //     } else {
+    //         data.next.push(value);
+    //         return;
+    //     }
+    // }
+
+    // addLess(data: LinkList, value: LinkList, idx: number) {
+    //     if (data.next.length == 0) return;
+    //     var index = data.next.findIndex(item => item.vt == idx);
+    //     if (index == -1) {
+    //         data.next.forEach(item => {
+    //             this.addLess(item, value, idx);
+    //         })
+    //     } else {
+    //         this.kt = true;
+    //         data.next[index].next.splice(0, 0, value);
+    //         return;
+    //     }
+    // }
+
+    // addLess1(data: LinkList, value: LinkList) {
+    //     if (data.next.length == 0) {
+    //         data.next.push(value);
+    //         return;
+    //     }
+    //     this.addLess1(data.next[data.next.length - 1], value);
+    // }
 
     getChiMuc(str: string): string {
         var xau: string = "";
@@ -505,13 +537,73 @@ export class TestLinkListComponent implements OnInit {
         return xau;
     }
 
-    lessThan(level: number): boolean {
-        return level > 3;
-    }
+    // lessThan(level: number): boolean {
+    //     return level > 3;
+    // }
 
     //lay stt cua thang cha
-    getHeader(str: string): string {
-        return str.substring(0, str.lastIndexOf('.'));
+    getDetail(str: string): any {
+        let detail = {
+            head: str.substring(0, str.lastIndexOf('.')),
+            tail: parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10),
+        }
+        return detail;
     }
+
+    findVt(str: string): number {
+        var index: number = -1;
+        for (var i = 0; i < this.lstCTietBCao.length; i++) {
+            if (this.lstCTietBCao[i].stt.startsWith(str)) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    addSame(id: any) {
+        var index: number = this.lstCTietBCao.findIndex(e => e.id === id);
+        var ind: number = this.findVt(this.lstCTietBCao[index].stt);
+        let lstIndex: number[] = [];
+        for (var i = this.lstCTietBCao.length - 1; i >= ind; i--) {
+            if (this.lstCTietBCao[i].head == this.lstCTietBCao[index].head) {
+                lstIndex.push(i);
+            }
+        }
+        console.log(lstIndex);
+        lstIndex.forEach(item => {
+            var str = this.lstCTietBCao[item].head + "." +(this.lstCTietBCao[item].tail + 1).toString();
+            var nho = this.lstCTietBCao[item].stt;
+            this.lstCTietBCao.forEach(data => {
+                if (data.stt.startsWith(nho)) {
+                    data.stt = data.stt.replace(nho, str);
+                }
+            })
+        })
+
+        let item: ItemData = {
+            id: uuid.v4(),
+            stt: this.lstCTietBCao[index].head + "." +(this.lstCTietBCao[index].tail + 1).toString(),
+            abc: ind+1,
+            head: "",
+            tail: 0,
+            checked: false,
+        }
+
+        item.head = this.getDetail(item.stt).head;
+        item.tail = this.getDetail(item.stt).tail;
+        this.lstCTietBCao.splice(ind + 1, 0, item);
+
+        this.updateEditCache();
+    }
+
+    // gan editCache.data == lstCTietBCao
+	updateEditCache(): void {
+		this.lstCTietBCao.forEach(item => {
+			this.editCache[item.id] = {
+				edit: false,
+				data: { ...item }
+			};
+		});
+	}
 
 }
