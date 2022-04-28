@@ -37,11 +37,13 @@
                   <nz-date-picker class="search__input" [(ngModel)]="ngayQd" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </nz-descriptions-item>
                 <nz-descriptions-item ></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Về việc" nzSpan="4" >
-                  <input class="search__input" nz-input [(ngModel)]="vanBan" />
+                <nz-descriptions-item nzTitle="Về việc" [nzSpan]="12">
+                  <textarea [nzAutosize]="{ minRows: 2, maxRows: 6 }" nz-input [(ngModel)]="veViec"></textarea>
                 </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Người ký" nzSpan="1">
-                  <input class="search__input" nz-input [(ngModel)]="nguoiKy" />
+                <nz-descriptions-item nzTitle="Người ký">
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="maNguoiKyTC">
+                    <nz-option *ngFor="let item of nguoiKys" [nzValue]="item.maNguoiKy" [nzLabel]="item.tenNguoiKy"></nz-option>
+                  </nz-select>
                 </nz-descriptions-item>
                 <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
                 <nz-descriptions-item nzSpan="1"></nz-descriptions-item>

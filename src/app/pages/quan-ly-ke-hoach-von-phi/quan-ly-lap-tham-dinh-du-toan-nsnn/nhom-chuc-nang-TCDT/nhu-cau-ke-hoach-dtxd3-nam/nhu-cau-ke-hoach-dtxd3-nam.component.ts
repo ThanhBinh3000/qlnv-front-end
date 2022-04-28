@@ -440,7 +440,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       listIdDeletes: this.listIdDelete,
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -559,7 +559,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.divMoneyTotal()
           this.listFile=[]
           this.updateEditCache();
-
+          this.tinhTong()
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -643,6 +643,21 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
+    this.tongqdDuyetDanDtuTongVon -= this.lstCTietBCao.find(e => e.id == id).qdDuyetDanDtuTongVon
+    this.tongqdDchinhDanDtuTongVon -= this.lstCTietBCao.find(e => e.id == id).qdDchinhDanDtuTongVon
+    this.tongqdDuyetTkDtoanTong -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanTong
+    this.tongklthCapDen3006Quykhac -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006Quykhac
+    this.tongklthCapDen3112Quykhac -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112Quykhac
+    this.tongqdDuyetTkDtoanXl -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanXl
+    this.tongqdDuyetTkDtoanTb -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanTb
+    this.tongqdDuyetTkDtoanCk -= this.lstCTietBCao.find(e => e.id == id).qdDuyetTkDtoanCk
+    this.tongklthCapDen3006Nstt -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006Nstt
+    this.tongklthCapDen3006DtoanChiTx -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3006DtoanChiTx
+    this.tongklthCapDen3112Nstt -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112Nstt
+    this.tongklthCapDen3112DtoanChiTx -= this.lstCTietBCao.find(e => e.id == id).klthCapDen3112DtoanChiTx
+    this.tongncauVonN1 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN1
+    this.tongncauVonN2 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN2
+    this.tongncauVonN3 -= this.lstCTietBCao.find(e => e.id == id).ncauVonN3
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
     if (typeof id == "number") {
       this.listIdDelete += id + ","
@@ -653,6 +668,23 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
+      if(item.checked){
+        this.tongqdDuyetDanDtuTongVon -= item.qdDuyetDanDtuTongVon
+        this.tongqdDchinhDanDtuTongVon -= item.qdDchinhDanDtuTongVon
+        this.tongqdDuyetTkDtoanTong -= item.qdDuyetTkDtoanTong
+        this.tongklthCapDen3006Quykhac -= item.klthCapDen3006Quykhac
+        this.tongklthCapDen3112Quykhac -= item.klthCapDen3112Quykhac
+        this.tongqdDuyetTkDtoanXl -= item.qdDuyetTkDtoanXl
+        this.tongqdDuyetTkDtoanTb -= item.qdDuyetTkDtoanTb
+        this.tongqdDuyetTkDtoanCk -= item.qdDuyetTkDtoanCk
+        this.tongklthCapDen3006Nstt -= item.klthCapDen3006Nstt
+        this.tongklthCapDen3006DtoanChiTx -= item.klthCapDen3006DtoanChiTx
+        this.tongklthCapDen3112Nstt -= item.klthCapDen3112Nstt
+        this.tongklthCapDen3112DtoanChiTx -= item.klthCapDen3112DtoanChiTx
+        this.tongncauVonN1 -= item.ncauVonN1
+        this.tongncauVonN2 -= item.ncauVonN2
+        this.tongncauVonN3 -= item.ncauVonN3
+      }
       if(item.checked == true && typeof item.id == "number"){
         this.listIdDelete += item.id + ","
       }
@@ -736,11 +768,11 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maKhoach){
+    const index = this.lstCTietBCao.findIndex(item => item.id === id);
+    if (!this.lstCTietBCao[index].maKhoach){
 			this.deleteById(id);
 			return;
 		}
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
       data: { ...this.lstCTietBCao[index] },
@@ -793,7 +825,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
       Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-
+      this.tinhTong()
   }
 
   updateEditCache(): void {
