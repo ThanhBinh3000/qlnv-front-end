@@ -103,6 +103,13 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   tenDvi!: any;
   veViec!: any;
   validateForm!: FormGroup;
+  nguoiKys: any [] = [
+    {maNguoiKy: "111", tenNguoiKy: "Đoàn Minh Vương"},
+    {maNguoiKy: "112", tenNguoiKy: "Nguyễn Thành Công"},
+    {maNguoiKy: "113", tenNguoiKy: "Nguyễn Xuân Hùng"},
+    {maNguoiKy: "114", tenNguoiKy: "Vú Anh Tuấn"},
+  ]
+  maNguoiKyTC: any
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -657,7 +664,22 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     });
     modalIn.afterClose.subscribe((res) => {
       console.log(res);
-         if (res) {
+      if (res) {
+          //  this.maKhoanMucs.forEach(e => {
+          //    if (res.id == e.id) {
+          //      this.khoanMucs.push({ id: e.id, thongTin: e.thongTin })
+          //      return res.id = e.id
+          //    }
+          //  })
+          //  this.lstCTietBCao.push({
+          //    id: uuid.v4(),
+          //    tenDm: "I",
+          //    maNdung: res.id,
+          //    nguonKhac: 0,
+          //    nguonNsnn: 0,
+          //    tong: 0,
+          //    checked: false,
+          //  });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({
