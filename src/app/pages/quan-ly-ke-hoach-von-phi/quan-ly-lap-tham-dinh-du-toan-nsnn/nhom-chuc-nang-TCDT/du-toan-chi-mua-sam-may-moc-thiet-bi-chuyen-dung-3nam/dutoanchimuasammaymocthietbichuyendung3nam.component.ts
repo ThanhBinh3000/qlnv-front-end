@@ -53,7 +53,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   chiTieus: any = [];                         // danh muc chi tieu
   lstRows: any = [];
   donVis: any = [];
-  cucKhuVucs: any [] = [];                       // danh muc cuc khu vuc
+  cucKhuVucs: any[] = [];                       // danh muc cuc khu vuc
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -75,7 +75,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
   listIdDeleteVtus: string = "";
-  listDonViTien:any []= DONVITIEN;
+  listDonViTien: any[] = DONVITIEN;
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -84,10 +84,10 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   statusBtnLD: boolean;                        // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean;                   // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean;                      // trang thai nut don vi cap tren
-  statusBtnLDDC:boolean;  // trang thai nut lanh dao dieu chinh so tran chi
-  statusBtnCopy:boolean; // trang thai nut copy
-  statusBtnPrint:boolean; // trang thai nut in
-  
+  statusBtnLDDC: boolean;  // trang thai nut lanh dao dieu chinh so tran chi
+  statusBtnCopy: boolean; // trang thai nut copy
+  statusBtnPrint: boolean; // trang thai nut in
+
   listIdDeleteFiles: string = '';                        // id file luc call chi tiet
 
 
@@ -114,14 +114,14 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     await this.danhMucService.dMDonVi().toPromise().then(data => {
       if (data.statusCode == 0) {
         this.donVis = data.data;
-        this.cucKhuVucs = this.donVis.filter(item => item.capDvi=='2');
+        this.cucKhuVucs = this.donVis.filter(item => item.capDvi == '2');
         this.cucKhuVucs.forEach(element => {
-          element.tong1 =0;
-          element.tong2 =0;
-          element.tong3 =0;
+          element.tong1 = 0;
+          element.tong2 = 0;
+          element.tong3 = 0;
         });
         console.log(this.cucKhuVucs);
-        
+
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
       }
@@ -199,7 +199,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     // this.danhMucService.dMCucKhuVuc().toPromise().then(data => {
     //   if (data.statusCode == 0) {
     //     this.cucKhuVucs = data.data;
-       
+
     //   } else {
     //     this.notification.error(MESSAGE.ERROR, data?.msg);
     //   }
@@ -237,13 +237,13 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     let checkParent = false;
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-    if(dVi && dVi.maDvi == this.userInfo.dvql){ 
+    if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
-    if(dVi && dVi.parent?.maDvi == this.userInfo.dvql){
+    if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
-    
+
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
     this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
@@ -277,7 +277,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           this.lstFile = data.data.lstFile;
           this.maLoaiBacao = QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N;
           // set thong tin chung bao cao
-          this.ngayNhap = this.datepipe.transform(data.data.ngayTao,'dd/MM/yyyy');
+          this.ngayNhap = this.datepipe.transform(data.data.ngayTao, 'dd/MM/yyyy');
           this.nguoiNhap = data.data.nguoiTao;
           this.maDonViTao = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
@@ -292,7 +292,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           } else {
             this.status = true;
           }
-          this.listFile =[];
+          this.listFile = [];
           this.tinhTong2();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -322,7 +322,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       maChucNang: mcn,
       type: "",
     };
-    if(this.id){
+    if (this.id) {
       this.spinner.show();
       this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
@@ -336,10 +336,10 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
       this.spinner.hide();
-    }else{
+    } else {
       this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
     }
-    
+
   }
 
   //check all input
@@ -369,7 +369,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   //chọn row cần sửa và trỏ vào template
   startEdit(id: string): void {
     console.log(this.editCache[id].data);
-    
+
     this.editCache[id].edit = true;
   }
 
@@ -445,13 +445,13 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       return;
     }
     var arr = this.editCache[id].data.listCtiet;
-    let checkNam:boolean;
-    arr.forEach(e =>{
-      if( (!e.n1 && e.n1!==0) || (!e.n2 && e.n2!==0) || (!e.n3 && e.n3!==0)){
+    let checkNam: boolean;
+    arr.forEach(e => {
+      if ((!e.n1 && e.n1 !== 0) || (!e.n2 && e.n2 !== 0) || (!e.n3 && e.n3 !== 0)) {
         checkNam = true;
       }
     })
-    if(checkNam){
+    if (checkNam) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -503,10 +503,10 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   //download file về máy tính
   async downloadFile(id: string) {
     let file!: File;
-    file = this.listFile.find(element => element?.lastModified.toString() == id );
-    if(!file){
-      let fileAttach = this.lstFile.find(element => element?.id == id );
-      if(fileAttach){
+    file = this.listFile.find(element => element?.lastModified.toString() == id);
+    if (!file) {
+      let fileAttach = this.lstFile.find(element => element?.id == id);
+      if (fileAttach) {
         await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
             fileSaver.saveAs(data, fileAttach.fileName);
@@ -516,7 +516,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           },
         );
       }
-    }else{
+    } else {
       const blob = new Blob([file], { type: "application/octet-stream" });
       fileSaver.saveAs(blob, file.name);
     }
@@ -528,7 +528,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.listFile = this.listFile.filter(
       (a: any) => a?.lastModified.toString() !== id,
     );
-    this.listIdDeleteFiles +=id+',';
+    this.listIdDeleteFiles += id + ',';
   }
 
   // xóa với checkbox
@@ -548,13 +548,13 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
 
   // luu
   async luu() {
-    
+
     let checkSaveEdit;
-    if(!this.maDviTien || !this.namBaoCaoHienHanh){
+    if (!this.maDviTien || !this.namBaoCaoHienHanh) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000){
+    if (this.namBaoCaoHienHanh >= 3000 || this.namBaoCaoHienHanh < 1000) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
@@ -567,36 +567,56 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal();
     this.lstCTietBCao.forEach(e => {
       if (typeof e.id != "number") {
         e.id = null;
       }
       e.listCtiet.forEach(item => {
-        if (typeof item.id != "number"){
+        if (typeof item.id != "number") {
           item.id = null;
         }
       })
     })
-    
+
     // gui du lieu trinh duyet len server
-   
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
+
+    // replace nhung ban ghi dc them moi id thanh null
+    let lstTemp = [];
+    this.lstCTietBCao.forEach(item => {
+      let lstCTietTemp = [];
+      item.listCtiet.forEach(e => {
+        lstCTietTemp.push({
+          ...e,
+          n1: mulMoney(e.n1, this.maDviTien),
+          n2: mulMoney(e.n2, this.maDviTien),
+          n3: mulMoney(e.n3, this.maDviTien),
+        })
+      })
+      lstTemp.push({
+        ...item,
+        listCtiet: lstCTietTemp,
+        tcongN1: mulMoney(item.tcongN1, this.maDviTien),
+        tcongN2: mulMoney(item.tcongN2, this.maDviTien),
+        tcongN3: mulMoney(item.tcongN3, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles, // lay id file dinh kem (gửi file theo danh sách )
-      listIdDeletes: this.listIdDelete, 
-      lstCTietBCao: this.lstCTietBCao,
+      listIdDeletes: this.listIdDelete,
+      lstCTietBCao: lstTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBaoCaoHienHanh+1,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.spinner.show();
@@ -609,11 +629,9 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
         }, err => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
@@ -625,12 +643,10 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -640,7 +656,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         item.id = uuid.v4();
       }
       item.listCtiet.forEach(e => {
-        if (!e.id){
+        if (!e.id) {
           e.id = uuid.v4();
         }
       })
@@ -707,7 +723,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
 
   //call tong hop
   calltonghop() {
-    
+
     this.maDviTien = '1';
     let objtonghop = {
       maDvi: this.maDvi,
@@ -721,33 +737,33 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
         this.namBaoCaoHienHanh = this.currentday.getFullYear();
         if (this.lstCTietBCao == null) {
           this.lstCTietBCao = [];
-        }else{
-         
+        } else {
+
           this.lstCTietBCao.forEach(e => {
-              this.cucKhuVucs.forEach(item => {
-                var idx = e.listCtiet.findIndex( (i) => i.maDvi ==item.maDvi);
-                if(idx==-1){
-                    var obJect = {
-                      id!: uuid.v4(),
-                      maDvi: item.maDvi,
-                      n1: 0,
-                      n2: 0,
-                      n3: 0,
-                    }
-                  e.listCtiet.push(obJect);
-                }else{
-                  e.listCtiet[idx].id = uuid.v4();
+            this.cucKhuVucs.forEach(item => {
+              var idx = e.listCtiet.findIndex((i) => i.maDvi == item.maDvi);
+              if (idx == -1) {
+                var obJect = {
+                  id!: uuid.v4(),
+                  maDvi: item.maDvi,
+                  n1: 0,
+                  n2: 0,
+                  n3: 0,
                 }
-              })
-            e.listCtiet.sort((a,b) => Number(a.maDvi) - Number(b.maDvi))
+                e.listCtiet.push(obJect);
+              } else {
+                e.listCtiet[idx].id = uuid.v4();
+              }
+            })
+            e.listCtiet.sort((a, b) => Number(a.maDvi) - Number(b.maDvi))
             const index = this.lstCTietBCao.findIndex((item) => item.id === e.id);
-            this.tinhTong(index); 
+            this.tinhTong(index);
             e.id = uuid.v4();
           })
           this.tinhTong2();
           this.updateEditCache();
         }
-        
+
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -777,58 +793,58 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     })
   }
 
-  tongcong1:number=0;
-  tongcong2:number=0;
-  tongcong3:number=0;
-  tinhTong2(){
-    this.cucKhuVucs.forEach(e =>{
+  tongcong1: number = 0;
+  tongcong2: number = 0;
+  tongcong3: number = 0;
+  tinhTong2() {
+    this.cucKhuVucs.forEach(e => {
       e.tong1 = 0;
       e.tong2 = 0;
       e.tong3 = 0;
-      this.tongcong1=0;
-      this.tongcong2=0;
-      this.tongcong3=0;
+      this.tongcong1 = 0;
+      this.tongcong2 = 0;
+      this.tongcong3 = 0;
       this.lstCTietBCao.forEach(item => {
-        item.listCtiet.forEach(el =>{
-         if(e.maDvi===el.maDvi){
-           e.tong1 += el.n1;
-           e.tong2 += el.n2;
-           e.tong3 += el.n3;
-         }
+        item.listCtiet.forEach(el => {
+          if (e.maDvi === el.maDvi) {
+            e.tong1 += el.n1;
+            e.tong2 += el.n2;
+            e.tong3 += el.n3;
+          }
         })
-        this.tongcong1 +=item.tcongN1;
-        this.tongcong2 +=item.tcongN2;
-        this.tongcong3 +=item.tcongN3;
+        this.tongcong1 += item.tcongN1;
+        this.tongcong2 += item.tcongN2;
+        this.tongcong3 += item.tcongN3;
       })
     })
-  
-    
-    
+
+
+
   }
- 
-  dong(){
+
+  dong() {
     this.location.back();
   }
 
-  xoaBaoCao(){
-    if(this.id){
-      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then( async res => {
-        if(res.statusCode==0){
+  xoaBaoCao() {
+    if (this.id) {
+      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.location.back();
-        }else {
+        } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-      },err => {
+      }, err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
-      }else {
-        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-      }
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
     }
+  }
 
-     // action copy
-   async doCopy(){
+  // action copy
+  async doCopy() {
     this.spinner.show();
 
     let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
@@ -848,29 +864,42 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
-    this.lstCTietBCao.filter( item =>{
+    this.lstCTietBCao.forEach(item => {
+      let lstCTietTemp = [];
+      item.listCtiet.forEach(e => {
+        lstCTietTemp.push({
+          ...e,
+          id: null,
+          n1: mulMoney(e.n1, this.maDviTien),
+          n2: mulMoney(e.n2, this.maDviTien),
+          n3: mulMoney(e.n3, this.maDviTien),
+        })
+      })
       lstTemp.push({
         ...item,
-        id:null
+        id: null,
+        listCtiet: lstCTietTemp,
+        tcongN1: mulMoney(item.tcongN1, this.maDviTien),
+        tcongN2: mulMoney(item.tcongN2, this.maDviTien),
+        tcongN3: mulMoney(item.tcongN3, this.maDviTien),
       })
     })
-    
-   
+
+
     // gui du lieu trinh duyet len server
     let request = {
       id: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,
-      listIdDeletes: null,  
+      listIdDeletes: null,
       lstCTietBCao: lstTemp,
       maBcao: maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiBcao: this.maLoaiBacao,
-      namBcao: this.namBaoCaoHienHanh +1,
+      namBcao: this.namBaoCaoHienHanh + 1,
       namHienHanh: this.namBaoCaoHienHanh,
     };
     this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
@@ -880,30 +909,20 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-chi-ung-dung-cntt-giai-doan-3nam/' + this.id);
+          this.route.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
 
   // action print
-  doPrint(){
+  doPrint() {
     let WindowPrt = window.open(
       '',
       '',
@@ -921,9 +940,9 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     WindowPrt.close();
   }
 
-  mullMoneyTotal(){
-    this.lstCTietBCao.filter(item =>{
-      item.listCtiet.forEach( e =>{
+  mullMoneyTotal() {
+    this.lstCTietBCao.filter(item => {
+      item.listCtiet.forEach(e => {
         e.n1 = mulMoney(e.n1, this.maDviTien);
         e.n2 = mulMoney(e.n2, this.maDviTien);
         e.n3 = mulMoney(e.n3, this.maDviTien);
@@ -934,10 +953,10 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     })
   }
 
-  divMoneyTotal(){
-    this.lstCTietBCao.filter( item =>{
-      item.listCtiet.forEach( e =>{
-        e.n1 =divMoney(e.n1, this.maDviTien);
+  divMoneyTotal() {
+    this.lstCTietBCao.filter(item => {
+      item.listCtiet.forEach(e => {
+        e.n1 = divMoney(e.n1, this.maDviTien);
         e.n2 = divMoney(e.n2, this.maDviTien);
         e.n3 = divMoney(e.n3, this.maDviTien);
       })
