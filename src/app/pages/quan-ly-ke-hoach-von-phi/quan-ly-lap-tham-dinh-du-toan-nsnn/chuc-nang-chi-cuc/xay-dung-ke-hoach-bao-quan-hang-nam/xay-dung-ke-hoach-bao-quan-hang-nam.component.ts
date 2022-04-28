@@ -829,7 +829,6 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   };
 
   //call service them moi
-  this.spinner.show();
   this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
     async data => {
       if (data.statusCode == 0) {

@@ -331,7 +331,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
       return;
     }
 
-    this.mulMoneyTotal();
+    // this.mulMoneyTotal();
 
     //upload file
     let listFile: any = [];
@@ -345,14 +345,29 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
         item.id = null;
       }
     })
-
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(element => {
+      lstCTietBCaoTemp.push({
+        ...element,
+        tranChiDuocTbN1 : mulMoney(element.tranChiDuocTbN1, this.maDviTien),
+        namHhanhN : mulMoney(element.namHhanhN, this.maDviTien),
+        ncauChiCuaDviN1 : mulMoney(element.ncauChiCuaDviN1, this.maDviTien),
+        clechTranChiVsNcauN1 : mulMoney(element.clechTranChiVsNcauN1, this.maDviTien),
+        tranChiDuocTbN2 : mulMoney(element.tranChiDuocTbN2, this.maDviTien),
+        ncauChiCuaDviN2 : mulMoney(element.ncauChiCuaDviN2, this.maDviTien),
+        clechTranChiVsNcauN2 : mulMoney(element.clechTranChiVsNcauN2, this.maDviTien),
+        tranChiDuocTbN3 : mulMoney(element.tranChiDuocTbN3, this.maDviTien),
+        ncauChiCuaDviN3 : mulMoney(element.ncauChiCuaDviN3, this.maDviTien),
+        clechTranChiVsNcauN3 : mulMoney(element.clechTranChiVsNcauN3, this.maDviTien),
+      })
+    });
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       listIdDeletes: this.listIdDelete,
       fileDinhKems: listFile,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -373,12 +388,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -390,11 +403,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal();
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         }, err => {
-          this.divMoneyTotal();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     }
@@ -733,17 +744,27 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
+    
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
-		this.lstCTietBCao.filter(item => {
-			lstTemp.push({
-				...item,
-				id: null,
-			})
-		})
+    this.lstCTietBCao.filter(item => {
+      lstTemp.push({
+        ...item,
+        id:null,
+        tranChiDuocTbN1 : mulMoney(item.tranChiDuocTbN1, this.maDviTien),
+        namHhanhN : mulMoney(item.namHhanhN, this.maDviTien),
+        ncauChiCuaDviN1 : mulMoney(item.ncauChiCuaDviN1, this.maDviTien),
+        clechTranChiVsNcauN1 : mulMoney(item.clechTranChiVsNcauN1, this.maDviTien),
+        tranChiDuocTbN2 : mulMoney(item.tranChiDuocTbN2, this.maDviTien),
+        ncauChiCuaDviN2 : mulMoney(item.ncauChiCuaDviN2, this.maDviTien),
+        clechTranChiVsNcauN2 : mulMoney(item.clechTranChiVsNcauN2, this.maDviTien),
+        tranChiDuocTbN3 : mulMoney(item.tranChiDuocTbN3, this.maDviTien),
+        ncauChiCuaDviN3 : mulMoney(item.ncauChiCuaDviN3, this.maDviTien),
+        clechTranChiVsNcauN3 : mulMoney(item.clechTranChiVsNcauN3, this.maDviTien),
+      })
+    })
+    
     let request = {
-      id: null,
       listIdDeletes: null,
       fileDinhKems: null,
       listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
@@ -769,22 +790,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-thuong-xuyen-3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
     this.spinner.hide();
   }
 

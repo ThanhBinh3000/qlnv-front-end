@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { Utils } from "../../../../Utility/utils";
+import { DONVITIEN, Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { stringify } from 'querystring';
@@ -43,7 +43,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
 
   vatTus: any = [];
   dviTinhs: any = [];
-  dviTiens: any = [];
+  dviTiens: any = DONVITIEN;
   donVis: any = [];
 
   lstCTietBCao: ItemData[] = [];
@@ -129,20 +129,6 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.dviTinhs = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
-
-    //get don vi tinh
-    this.danhMucService.dMDonViTien().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.dviTiens = data.data?.content;
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
