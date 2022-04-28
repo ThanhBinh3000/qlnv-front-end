@@ -686,7 +686,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		this.editCache[id].data.k331KhongTchuCoDmucCong = k.k331KhongTchuCoDmucNx + k.k331KhongTchuCoDmucVtct + k.k331KhongTchuCoDmucBquan;
 		this.editCache[id].data.k331KhongTchuChuaDmucCong = k.k331KhongTchuChuaDmucCntt + k.k331KhongTchuChuaDmucThueKho + k.k331KhongTchuChuaDmucMsamTsan + k.k331KhongTchuChuaDmucBhiemHhoa + k.k331KhongTchuChuaDmucPhongChongMoiKplb + k.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem + k.k331KhongTchuChuaDmucSchuaKhoTang;
 		this.editCache[id].data.k331Tcong = k.k331KhongTchuCoDmucCong + k.k331KhongTchuChuaDmucCong;
-		this.editCache[id].data.k341Tcong = k.k341LuongTuChu + k.k341TxTheoDmucTuChu + k.k341ChiTxKhongDmucTuChu;
+		this.editCache[id].data.k341Tcong = k.k341LuongTuChu + k.k341TxTheoDmucTuChu + k.k341ChiTxKhongDmucTuChu + k.k341LuongKhongTuChu + k.k341TxTheoDmucKhongTuChu+ k.k341ChiTxKhongDmucKhongTuChu;
 		this.editCache[id].data.tongCong = k.k331Tcong + k.k341Tcong + k.k085DaoTao + k.k102NghienCuuKhoaHoc + k.k398DamBaoXaHoi;
 	}
 
@@ -852,6 +852,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 				return null;
 			}
 		);
+		this.spinner.hide();
 		if (!maBaoCao) {
 			return;
 		}
@@ -882,22 +883,12 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/' + this.id);
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
-					this.divMoneyTotal();
 				}
 			},
 			err => {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				this.divMoneyTotal();
 			},
 		);
-
-		this.lstCTietBCao.filter(item => {
-			if (!item.id) {
-				item.id = uuid.v4();
-			}
-		});
-
-		this.updateEditCache();
 		this.spinner.hide();
 	}
 

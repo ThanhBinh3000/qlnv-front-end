@@ -115,7 +115,7 @@ export class TimKiemComponent implements OnInit {
   }
 
   //search list bao cao theo tieu chi
-  onSubmit() {
+  async onSubmit() {
 
     let requestReport = {
       maBcao: this.searchFilter.maBaoCao,
@@ -133,7 +133,7 @@ export class TimKiemComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

@@ -1227,14 +1227,34 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 				return null;
 			}
 		);
+		this.spinner.hide();
 		if (!maBaoCao) {
 			return;
 		}
 		// replace nhung ban ghi dc them moi id thanh null
-		this.lstCTietBCao.filter(item => {
-			if (typeof item.id != "number") {
-				item.id = null;
-			}
+		let lstTemp = [];
+		let lstVtuTemp= [];
+
+		this.lstCTietBCao.forEach(item => {
+			var lstCTietTemp = [];
+			item.listCtiet.forEach(e => {
+				lstCTietTemp.push({
+					...e,
+					id: null,
+				})
+			})
+			lstTemp.push({
+				...item,
+				id: null,
+				listCtiet: lstCTietTemp,
+			})
+		})
+
+		this.lstVtu.forEach(item => {
+			lstVtuTemp.push({
+				...item,
+				id: null,
+			})
 		})
 		let request = {
 			id: null,
@@ -1249,6 +1269,8 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 			namHienHanh: this.namBaoCaoHienHanh,
 			namBcao: this.namBaoCaoHienHanh + 1,
 			soVban: null,
+			listDeleteVtus: null,
+			lstTongVtu: lstVtuTemp,
 		};
 
 		//call service them moi
