@@ -47,7 +47,7 @@
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Nơi nhận">
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận" formControlName="temp" [(ngModel)]="donvinhan"> 
-                  <nz-option *ngFor="let dvn of listDonViNhan" [nzValue]="dvn.id" [nzLabel]="dvn.tenDvi"></nz-option>
+                  <nz-option *ngFor="let dvn of listDonViNhan" [nzValue]="dvn.maDvi" [nzLabel]="dvn.tenDvi"></nz-option>
                 </nz-select>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Số QĐ">
