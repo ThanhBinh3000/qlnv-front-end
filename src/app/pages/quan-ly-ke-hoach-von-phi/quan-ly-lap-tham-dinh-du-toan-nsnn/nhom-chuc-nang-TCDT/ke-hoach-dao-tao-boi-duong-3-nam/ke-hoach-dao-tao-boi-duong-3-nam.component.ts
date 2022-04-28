@@ -95,7 +95,6 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   capDvi:any;
   namBcaohienhanh: any;
   mabaocao: any;
-  soVban:any;
   capDv:any;
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
