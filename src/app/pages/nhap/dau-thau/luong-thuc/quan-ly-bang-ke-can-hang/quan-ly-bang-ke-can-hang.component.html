@@ -56,7 +56,8 @@
         </nz-card>
         <div class="tab__luong-thuc mt-16">
           <nz-card class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
-            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+              [nzData]="dataTable">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
@@ -72,12 +73,12 @@
               <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                  <td>PKM01</td>
-                  <td>17/02/2022</td>
-                  <td>Cục DTNNKV Tây Nam Bộ</td>
-                  <td>Gạo...</td>
-                  <td>Nguyễn Văn Nho</td>
-                  <td>123</td>
+                  <td>{{ data.soBke }}</td>
+                  <td>{{ data.ngayLap }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>{{ data.tenNguoiGiao }}</td>
+                  <td>{{ data.soKho }}</td>
                   <td class="text-center">
                     <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-pencil"></i>

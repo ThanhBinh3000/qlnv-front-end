@@ -107,25 +107,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   async search() {
     let param = {
-      "denNgayLap": this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      "loaiBke": null,
-      "maDvi": this.selectedDonVi.maDvi,
-      "maHhoa": this.loaiVTHH,
-      "orderBy": "",
-      "orderDirection": "",
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page
-      },
-      "soBke": this.soPhieu,
-      "soHdong": "",
-      "str": "",
-      "trangThai": "",
-      "tuNgayLap": this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "denNgay": this.endValue ? dayjs(this.endValue).format('YYYY-MM-DD') : null,
+      "maDonVi": this.selectedDonVi.maDvi,
+      "maHang": this.loaiVTHH,
+      "pageSize": this.pageSize,
+      "pageNumber": this.page,
+      "soBangKe": this.soPhieu,
+      "tuNgay": this.startValue ? dayjs(this.startValue).format('YYYY-MM-DD') : null,
     }
     let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {

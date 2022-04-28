@@ -92,15 +92,15 @@
                 <td>{{ data.veViec }}</td>
                 <td>{{ data.soHd }}</td>
                 <td>{{ data.tenDvi }}</td>
-                <td>{{ data.loaiQd }}</td>
-                <td></td>
+                <td>{{ data.tenLoaiQd }}</td>
+                <td>{{ data.tenHangDTQG }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a>
-                    <span class="icon htvbdh_tcdt_print"></span>
+                  <a (click)="duyet(data)">
+                    <span class="icon htvbdh_tcdt_pheduyet"></span>
                   </a>
                   <a (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
