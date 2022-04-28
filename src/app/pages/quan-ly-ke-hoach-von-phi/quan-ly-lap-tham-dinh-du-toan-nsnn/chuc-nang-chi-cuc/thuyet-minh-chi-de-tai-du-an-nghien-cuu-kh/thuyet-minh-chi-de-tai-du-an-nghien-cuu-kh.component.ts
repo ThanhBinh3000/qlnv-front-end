@@ -317,7 +317,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       return;
     }
 
-    this.mullMoneyTotal()
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -330,13 +329,27 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       }
     })
 
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        kphiDaDuocBoTriDenNamN : mulMoney(e.kphiDaDuocBoTriDenNamN, this.maDviTien),
+        kphiDuKienBtriN1 : mulMoney(e.kphiDuKienBtriN1, this.maDviTien),
+        kphiDuKienBtriN2 : mulMoney(e.kphiDuKienBtriN2, this.maDviTien),
+        kphiDuKienBtriN3 : mulMoney(e.kphiDuKienBtriN3, this.maDviTien),
+        kphiDuocThienDenThoiDiemBcao : mulMoney(e.kphiDuocThienDenThoiDiemBcao, this.maDviTien),
+        kphiTongPhiDuocDuyet : mulMoney(e.kphiTongPhiDuocDuyet, this.maDviTien),
+        kphiThuhoi : mulMoney(e.kphiThuhoi, this.maDviTien),
+      })
+    });
+
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
       listIdDeletes: this.listIdDelete,
       listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCTietBCao: lstCTietBCaoTemp,
       maBcao: this.maBaoCao,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
@@ -357,12 +370,12 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
+
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal()
+
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -374,11 +387,11 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
+
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
       },err =>{
-        this.divMoneyTotal()
+
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
@@ -619,10 +632,6 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 			this.deleteById(id);
 			return;
 		}
-    if (!this.editCache[id].data.maDvi){
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
     const index = this.lstCTietBCao.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -728,13 +737,20 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mullMoneyTotal();
+
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
         id: null,
+        kphiDaDuocBoTriDenNamN : mulMoney(item.kphiDaDuocBoTriDenNamN, this.maDviTien),
+        kphiDuKienBtriN1 : mulMoney(item.kphiDuKienBtriN1, this.maDviTien),
+        kphiDuKienBtriN2 : mulMoney(item.kphiDuKienBtriN2, this.maDviTien),
+        kphiDuKienBtriN3 : mulMoney(item.kphiDuKienBtriN3, this.maDviTien),
+        kphiDuocThienDenThoiDiemBcao : mulMoney(item.kphiDuocThienDenThoiDiemBcao, this.maDviTien),
+        kphiTongPhiDuocDuyet : mulMoney(item.kphiTongPhiDuocDuyet, this.maDviTien),
+        kphiThuhoi : mulMoney(item.kphiThuhoi, this.maDviTien),
       })
     })
     let request = {
@@ -764,12 +780,12 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
+
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
+
       },
     );
 

@@ -641,10 +641,10 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.editCache[id].data.maVtuTbi || !this.editCache[id].data.maDviVtuTbi) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
+    if (!this.lstCTiet[id].maVtuTbi){
+			this.deleteById(id);
+			return;
+		}
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {

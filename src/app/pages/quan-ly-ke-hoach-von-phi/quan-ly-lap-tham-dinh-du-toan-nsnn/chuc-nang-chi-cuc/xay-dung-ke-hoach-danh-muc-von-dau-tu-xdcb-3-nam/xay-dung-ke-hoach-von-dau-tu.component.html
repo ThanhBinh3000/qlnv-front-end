@@ -455,13 +455,13 @@
                     <td>
                       <nz-input-number class="search__input" style="width: 100px;" [nzMin]="0" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.namKcTte"
-                        [class]="editCache[data.id].data.namKcTte || editCache[data.id].data.namKcTte ===0 ? '' : 'input-error-validate' ">
+                        [class]="editCache[data.id].data.namKcTte >= 1000 &&  editCache[data.id].data.namKcTte <= 2999 ? '' : 'input-error-validate' ">
                       </nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" style="width: 100px;" [nzMin]="0" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.namHtTte"
-                        [class]="editCache[data.id].data.namHtTte || editCache[data.id].data.namHtTte ===0 ? '' : 'input-error-validate' ">
+                        [class]="editCache[data.id].data.namHtTte >= 1000 &&  editCache[data.id].data.namHtTte <= 2999 ? '' : 'input-error-validate' ">
                       </nz-input-number>
                     </td>
                     <td>

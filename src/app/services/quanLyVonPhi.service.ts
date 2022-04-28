@@ -16,7 +16,6 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   urlDefault = environment.SERVICE_API;
-
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
     // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
@@ -53,7 +52,7 @@ export class QuanLyVonPhiService extends BaseService {
   //search list phan bo du toan giao chi nsnn
   timDanhSachPhanBo(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/phan-bo-dtoan-chi/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
       // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
       request,
     );
@@ -114,8 +113,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet1(id: any): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
-      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
     );
   }
 
@@ -152,7 +151,7 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   trinhDuyetGiaoService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/quyet-dinh-giao-du-toan-chi/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/them-moi',
       request,
     );
   }
@@ -429,6 +428,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tim kiem giao danh sách nội dung khoản mục
   timDanhSachBCGiaoBTCPD1(request: any): Observable<any> {
     return this.httpClient.post(
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
       'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
       request
     )

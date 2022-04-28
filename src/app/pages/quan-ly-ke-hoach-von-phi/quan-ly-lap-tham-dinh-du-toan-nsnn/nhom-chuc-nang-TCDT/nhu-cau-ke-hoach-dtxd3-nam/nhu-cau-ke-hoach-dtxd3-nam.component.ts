@@ -401,7 +401,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mulMoneyTotal()
+
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -413,7 +413,27 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
         item.id = null;
       }
     })
-
+    let lstCTietBCaoTemp = [];
+    this.lstCTietBCao.filter(e => {
+      lstCTietBCaoTemp.push({
+        ...e,
+        qdDuyetDanDtuTongVon : mulMoney(e.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon : mulMoney(e.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanTong  : mulMoney(e.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac  : mulMoney(e.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac  : mulMoney(e.klthCapDen3112Quykhac, this.maDviTien),
+        qdDuyetTkDtoanXl : mulMoney(e.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb : mulMoney(e.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk : mulMoney(e.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt : mulMoney(e.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx : mulMoney(e.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt : mulMoney(e.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx : mulMoney(e.klthCapDen3112DtoanChiTx, this.maDviTien),
+        ncauVonN1  : mulMoney(e.ncauVonN1, this.maDviTien),
+        ncauVonN2  : mulMoney(e.ncauVonN2, this.maDviTien),
+        ncauVonN3  : mulMoney(e.ncauVonN3, this.maDviTien),
+      })
+    })
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -852,13 +872,28 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
     if (!maBaoCao) {
       return;
     }
-    this.mulMoneyTotal();
+
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
     this.lstCTietBCao.filter(item => {
       lstTemp.push({
         ...item,
-        id: null
+        id: null,
+        qdDuyetDanDtuTongVon: mulMoney(item.qdDuyetDanDtuTongVon, this.maDviTien),
+        qdDchinhDanDtuTongVon: mulMoney(item.qdDchinhDanDtuTongVon, this.maDviTien),
+        qdDuyetTkDtoanTong : mulMoney(item.qdDuyetTkDtoanTong, this.maDviTien),
+        klthCapDen3006Quykhac : mulMoney(item.klthCapDen3006Quykhac, this.maDviTien),
+        klthCapDen3112Quykhac : mulMoney(item.klthCapDen3112Quykhac, this.maDviTien),
+        qdDuyetTkDtoanXl: mulMoney(item.qdDuyetTkDtoanXl, this.maDviTien),
+        qdDuyetTkDtoanTb: mulMoney(item.qdDuyetTkDtoanTb, this.maDviTien),
+        qdDuyetTkDtoanCk: mulMoney(item.qdDuyetTkDtoanCk, this.maDviTien),
+        klthCapDen3006Nstt: mulMoney(item.klthCapDen3006Nstt, this.maDviTien),
+        klthCapDen3006DtoanChiTx: mulMoney(item.klthCapDen3006DtoanChiTx, this.maDviTien),
+        klthCapDen3112Nstt: mulMoney(item.klthCapDen3112Nstt, this.maDviTien),
+        klthCapDen3112DtoanChiTx: mulMoney(item.klthCapDen3112DtoanChiTx, this.maDviTien),
+        ncauVonN1 : mulMoney(item.ncauVonN1, this.maDviTien),
+        ncauVonN2 : mulMoney(item.ncauVonN2, this.maDviTien),
+        ncauVonN3 : mulMoney(item.ncauVonN3, this.maDviTien),
       })
     })
     let request = {
@@ -888,12 +923,10 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
           this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/nhu-cau-ke-hoach-dtxd3-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
-          this.divMoneyTotal();
         }
       },
       err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        this.divMoneyTotal();
       },
     );
 
