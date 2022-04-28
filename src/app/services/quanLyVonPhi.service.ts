@@ -176,8 +176,8 @@ export class QuanLyVonPhiService extends BaseService {
   // upload list
   updatelist(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoach/phi/lap-tham-dinh-du-toan/cap-nhat',
-      'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
+      this.urlDefault + '/qlnv-khoach/phi/lap-tham-dinh-du-toan/cap-nhat',
+      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/cap-nhat',
       request,
     );
   }
@@ -329,8 +329,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //tong hop bao cao ket qua thuc hien von phi hang DTQG
   tongHopBaoCaoKetQua(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
-    // return this.httpClient.post('http://192.168.1.111:8094/bao-cao/tong-hop', request);
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop', request);
+    return this.httpClient.post('http://192.168.1.111:8094/bao-cao/tong-hop', request);
   }
   //search list danh sach cong van de nghi cap von
   timDsachCvanDnghi(request: any): Observable<any> {

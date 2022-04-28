@@ -1683,9 +1683,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.listBcaoKqua = res.data.lstBCaoDviTrucThuoc;
         this.baoCao.lstBCao.forEach( e =>{
           e.lstCTietBCao.sort((a,b)=> a.stt -b.stt)
-          e.lstCTietBCao.forEach(el =>{
-            el.id = uuid.v4();
-          })
+          // e.lstCTietBCao.forEach(el =>{
+          //   el.id = uuid.v4();
+          // })
         })
         
         
@@ -1695,7 +1695,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao?.lstBCao?.forEach(item => {
             let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
             if(index !== -1){
-              item.id = uuid.v4();
               item.checked = false;
               item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
               item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
@@ -1715,7 +1714,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao?.lstBCao?.forEach(item =>{
             let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
             if(index !== -1){
-              item.id = uuid.v4();
               item.checked = false;
               item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
               item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
@@ -1723,6 +1721,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             }
           })
         }
+        
+        
         await this.resetList();
         this.initLinkList();
         //set data cho cac bieu mau
@@ -1753,6 +1753,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
         this.stt = 0;
         this.updateSTT(this.chiTietBcao4ax);
+        console.log(this.chiTietBcao4ax);
         //-----mẫu 04a nhập
         this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
         this.lstCTietBCao04an.forEach(item => {
