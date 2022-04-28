@@ -1695,6 +1695,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao?.lstBCao?.forEach(item => {
             let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
             if(index !== -1){
+              item.id = uuid.v4();
               item.checked = false;
               item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
               item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
@@ -1714,6 +1715,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao?.lstBCao?.forEach(item =>{
             let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
             if(index !== -1){
+              item.id = uuid.v4();
               item.checked = false;
               item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
               item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
