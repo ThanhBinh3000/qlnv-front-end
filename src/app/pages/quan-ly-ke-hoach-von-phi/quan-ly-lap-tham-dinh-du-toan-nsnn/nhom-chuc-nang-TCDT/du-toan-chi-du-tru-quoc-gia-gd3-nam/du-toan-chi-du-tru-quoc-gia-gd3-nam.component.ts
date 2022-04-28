@@ -462,9 +462,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
-          this.lstFile = data.data.lstFile;
-
+          this.lstCTietBCao = data.data?.lstCTietBCao;
+          if( this.lstCTietBCao){
+            this.lstFile = data.data.lstFile;
           // set thong tin chung bao cao
           this.ngayNhap = this.datePipe.transform(data.data.ngayTao,Utils.FORMAT_DATE_STR);
           this.nguoiNhap = data.data.nguoiTao;
@@ -473,6 +473,8 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
           this.namBaoCaoHienHanh = data.data.namHienHanh;
           this.trangThaiBanGhi = data.data.trangThai;
           this.namBcao = data.data.namBcao;
+          this.maDviTien = data.data.maDviTien;
+          this.listFile=[]
           if (
             this.trangThaiBanGhi == Utils.TT_BC_1 ||
             this.trangThaiBanGhi == Utils.TT_BC_3 ||
@@ -485,12 +487,12 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
             this.status = true;
           }
 
-          this.maDviTien = data.data.maDviTien;
           this.divMoneyTotal()
           this.tinhtong()
-          this.listFile=[]
           this.updateEditCache();
-
+          }else{
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -777,6 +779,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         return null;
       }
     );
+    this.spinner.hide();
     if (!maBaoCao) {
       return;
     }

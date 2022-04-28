@@ -461,8 +461,8 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao[0];
-          console.log(this.lstCTietBCao);
+          this.lstCTietBCao = data.data?.lstCTietBCao[0];
+          if(data.data.lstCTietBCao[0]){
 
           this.luongXuatGaoVtro = this.lstCTietBCao.luongXuatGaoVtro;
           this.luongXuatThocVtro = this.lstCTietBCao.luongXuatThocVtro;
@@ -491,6 +491,11 @@ export class NhuCauXuatHangVienTroComponent implements OnInit {
             this.status = true;
           }
           this.listFile=[]
+          }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+
+          }
+
 
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -740,6 +745,7 @@ saveEdit(id: string): void {
         return null;
       }
     );
+    this.spinner.hide();
     if (!maBaoCao) {
       return;
     }
@@ -813,7 +819,7 @@ saveEdit(id: string): void {
     let WindowPrt = window.open(
       '',
       '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+      'left=0,top=0,width=595.28,height=841.89,toolbar=0,scrollbars=0,status=0',
     );
     let printContent = '';
     printContent = printContent + '<div>';

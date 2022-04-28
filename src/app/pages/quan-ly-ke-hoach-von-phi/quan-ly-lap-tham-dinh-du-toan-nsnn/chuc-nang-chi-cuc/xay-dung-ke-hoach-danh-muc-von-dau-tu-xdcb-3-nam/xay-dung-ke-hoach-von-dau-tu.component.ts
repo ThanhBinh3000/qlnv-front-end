@@ -517,33 +517,38 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
-          this.lstFile = data.data.lstFile;
+          this.lstCTietBCao = data.data?.lstCTietBCao;
+          if(data.data.lstCTietBCao){
+            this.lstFile = data.data.lstFile;
+            // set thong tin chung bao cao
+            this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+            this.nguoiNhap = data.data.nguoiTao;
+            this.maDonViTao = data.data.maDvi;
+            this.maBaoCao = data.data.maBcao;
+            this.namBaoCaoHienHanh = data.data.namHienHanh;
+            this.trangThaiBanGhi = data.data.trangThai;
+            this.soVban = data.data.soVban;
+            this.maDviTien = data.data.maDviTien;
 
-          // set thong tin chung bao cao
-          this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-          this.nguoiNhap = data.data.nguoiTao;
-          this.maDonViTao = data.data.maDvi;
-          this.maBaoCao = data.data.maBcao;
-          this.namBaoCaoHienHanh = data.data.namHienHanh;
-          this.trangThaiBanGhi = data.data.trangThai;
-          this.soVban = data.data.soVban;
-          this.maDviTien = data.data.maDviTien;
-          this.divMoneyTotal()
-          this.changeTong()
-          this.listFile=[]
-          if (
-            this.trangThaiBanGhi == Utils.TT_BC_1 ||
-            this.trangThaiBanGhi == Utils.TT_BC_3 ||
-            this.trangThaiBanGhi == Utils.TT_BC_5 ||
-            this.trangThaiBanGhi == Utils.TT_BC_8 ||
-            this.trangThaiBanGhi == Utils.TT_BC_10
-          ) {
-            this.status = false;
-          } else {
-            this.status = true;
+            this.listFile=[]
+            if (
+              this.trangThaiBanGhi == Utils.TT_BC_1 ||
+              this.trangThaiBanGhi == Utils.TT_BC_3 ||
+              this.trangThaiBanGhi == Utils.TT_BC_5 ||
+              this.trangThaiBanGhi == Utils.TT_BC_8 ||
+              this.trangThaiBanGhi == Utils.TT_BC_10
+            ) {
+              this.status = false;
+            } else {
+              this.status = true;
+            }
+            this.divMoneyTotal()
+            this.changeTong()
+            this.updateEditCache();
+          }else {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
-          this.updateEditCache();
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -881,6 +886,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
         return null;
       }
     );
+    this.spinner.hide();
     if (!maBaoCao) {
       return;
     }
@@ -932,7 +938,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-danh-muc-von-dau-tu-xdcb-3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-von-dau-tu/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
