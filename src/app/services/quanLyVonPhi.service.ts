@@ -167,8 +167,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet bao cao thuc hien du toan chi 3.2.8
   trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
-      'http://192.168.1.111:8094/bao-cao/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
+      // 'http://192.168.1.111:8094/bao-cao/them-moi',
       request,
     );
   }
@@ -395,12 +395,12 @@ export class QuanLyVonPhiService extends BaseService {
 
   // upload bao cao thuc hien du toan chi
   updateBaoCaoThucHienDTC(request: any): Observable<any> {
-    // return this.httpClient.put(
-    //   this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
-    //   request,
-    // );
-    return this.httpClient.put('http://192.168.1.111:8094/bao-cao/cap-nhat',
-    request)
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+      request,
+    );
+    // return this.httpClient.put('http://192.168.1.111:8094/bao-cao/cap-nhat',
+    // request)
   }
 
   // call api chi tiết báo cáo
