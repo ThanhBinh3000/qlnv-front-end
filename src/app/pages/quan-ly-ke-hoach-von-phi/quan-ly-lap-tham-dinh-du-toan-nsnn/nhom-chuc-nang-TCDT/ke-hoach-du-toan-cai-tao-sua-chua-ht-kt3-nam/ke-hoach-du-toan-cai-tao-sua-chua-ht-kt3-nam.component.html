@@ -199,6 +199,40 @@
                 </tr>
               </thead>
               <tbody>
+
+                <tr>
+                    <td></td>
+                    <td>Tổng cộng</td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{tongdtoanDuocDuyetTongGtri}}</td>
+
+                    <td>{{tongthienKluongNDtoanKphiDen3006n}}</td>
+                    <td>{{tongthienKluongNUocThienCaNamN}}</td>
+                    <td>{{tongttoanKluongNDaTtoanDen3006n}}</td>
+                    <td>{{tongttoanKluongNUocThienCaNamN}}</td>
+
+                    <td>{{tongtongSoN1}}</td>
+                    <td>{{tongttoanNamTruocChuyenSangN1}}</td>
+                    <td>{{tongpsinhMoiN1}}</td>
+
+                    <td>{{tongtongSoN2}}</td>
+                    <td>{{tongttoanNamTruocChuyenSangN2}}</td>
+                    <td>{{tongpsinhMoiN2}}</td>
+
+                    <td>{{tongtongSoN3}}</td>
+                    <td>{{tongttoanNamTruocChuyenSangN3}}</td>
+                    <td>{{tongpsinhMoiN3}}</td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                </tr>
+
                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>{{ i + 1 }}</td>

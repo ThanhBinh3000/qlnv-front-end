@@ -167,6 +167,8 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2');
+          console.log(this.maCucDtnnKvucs);
           // let Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
           // this.capDv = Dvi?.capDvi;
           // if (this.capDv == '2') {
@@ -604,6 +606,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     var namQdCha = this.namQdCha
     var maNguoiKyBTC = this.maNguoiKyBTC
     var matrangThaiPbo = this.matrangThaiPbo
+    var maDviTien = this.maDviTien
     const modalIn = this.modal.create({
          nzTitle: 'Danh sách khoản mục',
          nzContent: DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
@@ -619,7 +622,8 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
               ngayQdCha: ngayQdCha,
               namQdCha: namQdCha,
               maNguoiKyBTC: maNguoiKyBTC,
-              matrangThaiPbo: matrangThaiPbo
+              matrangThaiPbo: matrangThaiPbo,
+              maDviTien: maDviTien
          },
     });
     modalIn.afterClose.subscribe((res) => {
@@ -631,7 +635,11 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
         this.nguoiKyBTC = res.nguoiKyBTC
         this.matrangThaiPbo = res.matrangThaiPbo
         this.maNguoiKyBTC = res.maNguoiKyBTC
+        this.maDviTien = res.maDviTien
         this.changeMaCucKhuVuc(res.maDvi)
+        // this.changeDonViTien()
+        console.log(this.maDviTien);
+
         this.changeTrangThaiPbo()
         this.changeNguoiKy()
          if (res) {
@@ -668,6 +676,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
                   this.notification.error(MESSAGE.ERROR, err?.msg);
                 }
               );
+              this.tinhTong1()
               this.updateEditCache();
          }
     });
@@ -698,6 +707,13 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
       }
     })
   }
+  // changeDonViTien(){
+  //   this.donViTiens.forEach(e => {
+  //     if(this.maDviTien == e.id){
+  //       console.log(this.maDviTien);
+  //     }
+  //   })
+  // }
 
   changeTong(id: string): void {
     this.editCache[id].data.dtoanGiao = this.editCache[id].data.dtoanDaPbo + this.editCache[id].data.pboChoCacDvi

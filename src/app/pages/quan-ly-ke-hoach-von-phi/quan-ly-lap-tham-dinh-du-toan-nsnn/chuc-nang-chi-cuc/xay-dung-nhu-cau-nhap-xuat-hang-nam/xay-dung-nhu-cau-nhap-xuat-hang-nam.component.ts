@@ -64,7 +64,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   namBaoCaoHienHanh!: any;                    // nam bao cao hien hanh
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maLoaiBaoCao: string = QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU;                // nam bao cao
-  maDviTien: any;                   // ma don vi tien
+  maDviTien: any = "1";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -460,12 +460,12 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao[0];
-          this.luongThocXuat = this.lstCTietBCao.luongThocXuat;
-          this.luongThocNhap = this.lstCTietBCao.luongThocNhap;
-          this.luongGaoXuat = this.lstCTietBCao.luongGaoXuat;
-          this.luongGaoNhap = this.lstCTietBCao.luongGaoNhap;
-          this.lstCTiet = this.lstCTietBCao.lstCTiet;
+          this.lstCTietBCao = data.data?.lstCTietBCao[0];
+          this.luongThocXuat = this.lstCTietBCao?.luongThocXuat;
+          this.luongThocNhap = this.lstCTietBCao?.luongThocNhap;
+          this.luongGaoXuat = this.lstCTietBCao?.luongGaoXuat;
+          this.luongGaoNhap = this.lstCTietBCao?.luongGaoNhap;
+          this.lstCTiet = this.lstCTietBCao?.lstCTiet;
           this.changeTong()
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
@@ -493,12 +493,13 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
           this.listFile=[]
         } else {
-          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
         console.log(err);
-        this.errorMessage = err.error.message;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+
       }
     );
     this.spinner.hide();

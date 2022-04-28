@@ -39,4 +39,5 @@ export const MESSAGE = {
   GIAO_SO_TRAN_CHI_SUCCESS:'Giao số trần chi thành công!',
   GIAO_SO_TRAN_CHI_TOAN_BO:'Giao toàn bộ thành công!',
   MESSAGE_DELETE_WARNING:'Cần lưu trước khi thực hiện thao tác',
+  ERROR_ADD_MAT_HANG: 'Không được chọn trùng mặt hàng '
 };

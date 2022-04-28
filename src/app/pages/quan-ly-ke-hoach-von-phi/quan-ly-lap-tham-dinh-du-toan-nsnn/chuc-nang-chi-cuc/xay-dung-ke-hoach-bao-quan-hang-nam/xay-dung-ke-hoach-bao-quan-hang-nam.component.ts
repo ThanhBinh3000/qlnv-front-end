@@ -108,6 +108,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
+  listIdDeleteVtus: any = "";
 
   // upload file
   addFile() {
@@ -355,7 +356,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
       return;
     }
-    this.mullMoneyTotal()
+
 
     let listFile: any = [];
     for (const iterator of this.listFile) {
@@ -369,13 +370,21 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
       }
     })
 
+    let lstCTietTemp = [];
+    this.lstCTiet.filter(e => {
+      lstCTietTemp.push({
+        ...e,
+        kphi : divMoney(e.kphi, this.maDviTien)
+      })
+    });
+
     let ob = [{
       id: this.lstCTietBCao.id,
-      kphiBquanThocTx: this.kphiBquanThocTx,
-      kphiBquanThocLd: this.kphiBquanThocLd,
-      kphiBquanGaoTx: this.kphiBquanGaoTx,
-      kphiBquanGaoLd: this.kphiBquanGaoLd,
-      lstCTiet: this.lstCTiet
+      kphiBquanThocTx: mulMoney(this.kphiBquanThocTx, this.maDviTien),
+      kphiBquanThocLd: mulMoney(this.kphiBquanThocLd, this.maDviTien),
+      kphiBquanGaoTx: mulMoney(this.kphiBquanGaoTx, this.maDviTien),
+      kphiBquanGaoLd: mulMoney(this.kphiBquanGaoLd, this.maDviTien),
+      lstCTiet: lstCTietTemp
     }]
 
     // gui du lieu trinh duyet len server
@@ -405,12 +414,12 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
+
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         err => {
-          this.divMoneyTotal()
+
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
@@ -422,11 +431,9 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
             await this.getDetailReport();
             this.getStatusButton();
           } else {
-            this.divMoneyTotal()
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         }, err => {
-          this.divMoneyTotal()
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     }
@@ -574,6 +581,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     if (typeof id == "number") {
       this.listIdDelete += id + ","
     }
+    this.changeTong()
   }
 
   // xóa với checkbox
@@ -669,14 +677,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    if (!this.lstCTietBCao[id].maMatHang){
+    if (!this.lstCTiet[id].maMatHang){
 			this.deleteById(id);
 			return;
 		}
-    if (!this.editCache[id].data.maMatHang || !this.editCache[id].data.maNhom) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.NULL_ERROR);
-      return;
-    }
     const index = this.lstCTiet.findIndex(item => item.id === id);
 
     this.editCache[id] = {
@@ -787,21 +791,22 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   if (!maBaoCao) {
     return;
   }
-  this.mullMoneyTotal();
+
   // replace nhung ban ghi dc them moi id thanh null
   let lstTemp = []
   this.lstCTiet.filter(item => {
     lstTemp.push({
       ...item,
-      id: null
+      id: null,
+      kphi : mulMoney(item.kphi, this.maDviTien)
     })
   })
   let ob = [{
     id: null,
-    kphiBquanThocTx: this.kphiBquanThocTx,
-    kphiBquanThocLd: this.kphiBquanThocLd,
-    kphiBquanGaoTx: this.kphiBquanGaoTx,
-    kphiBquanGaoLd: this.kphiBquanGaoLd,
+    kphiBquanThocTx: mulMoney(this.kphiBquanThocTx, this.maDviTien),
+    kphiBquanThocLd: mulMoney(this.kphiBquanThocLd, this.maDviTien),
+    kphiBquanGaoTx: mulMoney(this.kphiBquanGaoTx, this.maDviTien),
+    kphiBquanGaoLd: mulMoney(this.kphiBquanGaoLd, this.maDviTien),
     lstCTiet: lstTemp
   }]
 
@@ -832,12 +837,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
         this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-bao-quan-hang-nam/' + this.id);
       } else {
         this.notification.error(MESSAGE.ERROR, data?.msg);
-        this.divMoneyTotal();
       }
     },
     err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      this.divMoneyTotal();
     },
   );
 
@@ -874,6 +877,7 @@ doPrint() {
     this.kphiBquanGaoTx = mulMoney(this.kphiBquanGaoTx, this.maDviTien)
     this.kphiBquanThocLd = mulMoney(this.kphiBquanThocLd, this.maDviTien)
     this.kphiBquanThocTx = mulMoney(this.kphiBquanThocTx, this.maDviTien)
+    this.tongSo = mulMoney(this.tongSo, this.maDviTien)
     this.lstCTiet.filter(element => {
       element.kphi = mulMoney(element.kphi, this.maDviTien);
     });
@@ -883,8 +887,25 @@ doPrint() {
     this.kphiBquanGaoTx = divMoney(this.kphiBquanGaoTx, this.maDviTien)
     this.kphiBquanThocLd = divMoney(this.kphiBquanThocLd, this.maDviTien)
     this.kphiBquanThocTx = divMoney(this.kphiBquanThocTx, this.maDviTien)
+    this.tongSo = divMoney(this.tongSo, this.maDviTien)
     this.lstCTiet.filter(element => {
       element.kphi = divMoney(element.kphi, this.maDviTien);
     });
   }
+  //kiem tra xem vat tu da duoc chon hay chua
+	checkVtu(id: any) {
+		var index: number = this.lstCTiet.findIndex(e => e.id === id);
+		var ma: any = this.editCache[id].data.maMatHang;
+		var kt: boolean = false;
+		this.lstCTiet.forEach(item => {
+			if ((id != item.id) && (item.maMatHang == ma)) {
+				kt = true;
+			}
+		})
+		if (kt) {
+			this.notification.warning(MESSAGE.ERROR, MESSAGE.ERROR_ADD_MAT_HANG);
+      this.deleteById(id);
+			this.addLine(index + 1);
+		}
+	}
 }

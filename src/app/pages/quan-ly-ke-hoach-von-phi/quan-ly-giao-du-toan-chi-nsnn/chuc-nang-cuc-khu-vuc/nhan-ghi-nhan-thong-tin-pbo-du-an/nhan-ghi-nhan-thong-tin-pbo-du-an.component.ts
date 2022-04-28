@@ -95,17 +95,17 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
   maSoKBNN!:any;
   lanLapThu: number = 1;
 
-  tongCong: ItemData = {
-    id: "",
-    stt: "",
-    maNdung: "",
-    uocThucHienNam: 0,
-    duToanDapBo: 0,
-    duToanGiao2021: 0,
-    pBoChoDviTT: 0,
-    tong: 0,
-    checked: true,
-  };
+  // tongCong: ItemData = {
+  //   id: "",
+  //   stt: "",
+  //   maNdung: "",
+  //   uocThucHienNam: 0,
+  //   duToanDapBo: 0,
+  //   duToanGiao2021: 0,
+  //   pBoChoDviTT: 0,
+  //   tong: 0,
+  //   checked: true,
+  // };
   khoanMucs: any = [];
   vanBan!: any;
   nguoiKy!: any;
