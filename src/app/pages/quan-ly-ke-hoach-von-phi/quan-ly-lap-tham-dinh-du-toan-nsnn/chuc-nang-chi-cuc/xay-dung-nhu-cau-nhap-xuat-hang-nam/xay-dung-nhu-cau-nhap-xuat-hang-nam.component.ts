@@ -805,7 +805,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
           this.id = data.data.id;
           await this.getDetailReport();
           this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-ke-hoach-quy-tien-luong3-nam/' + this.id);
+          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-nhu-cau-nhap-xuat-hang-nam/' + this.id);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
 

@@ -374,7 +374,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     this.lstCTiet.filter(e => {
       lstCTietTemp.push({
         ...e,
-        kphi : divMoney(e.kphi, this.maDviTien)
+        kphi : mulMoney(e.kphi, this.maDviTien)
       })
     });
 
