@@ -65,7 +65,6 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   }
 
   handleOk() {
-
     let req ={
       danhSachKhoanMuc : this.danhSachKhoanMuc,
       id: this.searchFilter.khoanMuc
