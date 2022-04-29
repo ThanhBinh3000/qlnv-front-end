@@ -921,6 +921,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
     this.spinner.hide();
   }
 
+  
   // action print
   doPrint() {
     let WindowPrt = window.open(

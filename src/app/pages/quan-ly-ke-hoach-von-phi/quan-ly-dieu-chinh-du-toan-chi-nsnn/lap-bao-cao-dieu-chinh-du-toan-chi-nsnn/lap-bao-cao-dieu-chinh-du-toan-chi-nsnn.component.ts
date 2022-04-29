@@ -215,19 +215,19 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      // luu
      async luu() {
           let checkSaveEdit;
-		if (!this.maDviTien ) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
-		this.lstCTietBCao.filter(element => {
-			if (this.editCache[element.id].edit === true) {
-				checkSaveEdit = false
-			}
-		});
-		if (checkSaveEdit == false) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          this.lstCTietBCao.filter(element => {
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
 
           this.mulMoneyTotal(this.lstCTietBCao);
 
@@ -339,7 +339,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           modalIn.afterClose.subscribe((res) => {
                if (res) {
                     res.forEach(item => {
-                         if(item.checked){
+                         if (item.checked) {
                               this.lstCTietBCao.push({
                                    id: uuid.v4(),
                                    stt: "",
@@ -367,30 +367,27 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
 
      // chuc nang check role
      onSubmit(mcn: String, lyDoTuChoi: string) {
-          this.lstCTietBCao.forEach(item => {
-               if (item.checked) {
-                    const requestGroupButtons = {
-                         id: item.id,
-                         maChucNang: mcn,
-                         lyDotuChoi: lyDoTuChoi,
-                    };
-                    this.spinner.show();
-                    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
-                         (data) => {
-                              if (data.statusCode == 0) {
-                                   //this.getDetailReport();
-                                   this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                              } else {
-                                   this.notification.error(MESSAGE.ERROR, data?.msg);
-                              }
-                         },
-                         err => {
-                              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                         }
-                    );
-                    this.spinner.hide();
+          const requestGroupButtons = {
+               id: this.id,
+               maChucNang: mcn,
+               lyDotuChoi: lyDoTuChoi,
+          };
+          this.spinner.show();
+          this.quanLyVonPhiService.approveDieuChinh(requestGroupButtons).toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         //this.getDetailReport();
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
-          })
+          );
+          this.spinner.hide();
+
      }
 
      tuChoi(mcn: string) {
@@ -426,15 +423,15 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                          this.noiDung = data.data.ghiChu;
                          this.trangThaiBanGhi = data.data.trangThai;
                          if (
-						this.trangThaiBanGhi == Utils.TT_BC_1 ||
-						this.trangThaiBanGhi == Utils.TT_BC_3 ||
-						this.trangThaiBanGhi == Utils.TT_BC_5 ||
-						this.trangThaiBanGhi == Utils.TT_BC_8
-					) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
+                              this.trangThaiBanGhi == Utils.TT_BC_1 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_3 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_5 ||
+                              this.trangThaiBanGhi == Utils.TT_BC_8
+                         ) {
+                              this.status = false;
+                         } else {
+                              this.status = true;
+                         }
 
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -559,9 +556,9 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           this.tongCong.giam += heSo * item.giam;
      }
 
-     getKmName(maNdung: string){
-		return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
-	}
+     getKmName(maNdung: string) {
+          return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
+     }
 
      divMoneyTotal(data: ItemData[]) {
           data.forEach(item => {

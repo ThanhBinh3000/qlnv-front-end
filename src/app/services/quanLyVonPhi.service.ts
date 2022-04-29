@@ -113,8 +113,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet1(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
-      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
     );
   }
 
@@ -241,6 +241,10 @@ export class QuanLyVonPhiService extends BaseService {
     // return this.httpClient.put('http://192.168.1.103:8094/pa-giao-so-kt/cap-nhat',requestUpdate);
   }
 
+  //xoa phuong an 
+  xoaPhuongAn(id:any):Observable<any>{
+    return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/pa-giao-so-kt/xoa/'+id);
+  }
   //xem chi tiet so giao tran chi
   getchitiettranchi(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/ctiet-giao-so/', request);
@@ -384,6 +388,15 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/chuc-nang',
       // 'http://192.168.1.111:8094/bao-cao/chuc-nang',
+      request,
+    );
+  }
+
+  // call api nút chức năng
+  approveDieuChinh(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chuc-nang',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chuc-nang',
       request,
     );
   }

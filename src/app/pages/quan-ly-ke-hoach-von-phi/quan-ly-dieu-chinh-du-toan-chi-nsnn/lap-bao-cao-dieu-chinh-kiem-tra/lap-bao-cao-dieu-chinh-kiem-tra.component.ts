@@ -166,7 +166,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           let userName = this.userService.getUserName();
           await this.getUserInfo(userName); //get user info
           if (this.id) {
-              // await this.getDetailReport();
+               // await this.getDetailReport();
           } else {
                this.maDonViTao = this.userInfo?.dvql;
                this.trangThaiBanGhi = '1';
@@ -225,19 +225,19 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
      // luu
      async luu() {
           let checkSaveEdit;
-		if (!this.maDviTien ) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
-		this.lstCTietBCao.filter(element => {
-			if (this.editCache[element.id].edit === true) {
-				checkSaveEdit = false
-			}
-		});
-		if (checkSaveEdit == false) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          this.lstCTietBCao.filter(element => {
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
 
           this.mulMoneyTotal(this.lstCTietBCao);
 
@@ -314,7 +314,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           this.spinner.hide();
      }
 
-     addDieuChinh(){
+     addDieuChinh() {
           const modalIn = this.modal.create({
                nzTitle: 'Danh sách báo cáo điều chỉnh dự toán từ cấp dưới',
                nzContent: DialogDanhSachBaoCaoDieuChinhDuToanComponent,
@@ -335,30 +335,26 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
 
      // chuc nang check role
      onSubmit(mcn: String, lyDoTuChoi: string) {
-          this.lstCTietBCao.forEach(item => {
-               if (item.checked) {
-                    const requestGroupButtons = {
-                         id: item.id,
-                         maChucNang: mcn,
-                         lyDotuChoi: lyDoTuChoi,
-                    };
-                    this.spinner.show();
-                    this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(
-                         (data) => {
-                              if (data.statusCode == 0) {
-                                   //this.getDetailReport();
-                                   this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-                              } else {
-                                   this.notification.error(MESSAGE.ERROR, data?.msg);
-                              }
-                         },
-                         err => {
-                              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                         }
-                    );
-                    this.spinner.hide();
+          const requestGroupButtons = {
+               id: this.id,
+               maChucNang: mcn,
+               lyDotuChoi: lyDoTuChoi,
+          };
+          this.spinner.show();
+          this.quanLyVonPhiService.approveDieuChinh(requestGroupButtons).toPromise().then(
+               (data) => {
+                    if (data.statusCode == 0) {
+                         //this.getDetailReport();
+                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+                    } else {
+                         this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+               },
+               err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                }
-          })
+          );
+          this.spinner.hide();
      }
 
      tuChoi(mcn: string) {
@@ -518,9 +514,9 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           this.tongCong.giam += heSo * item.giam;
      }
 
-     getKmName(maNdung: string){
-		return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
-	}
+     getKmName(maNdung: string) {
+          return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
+     }
 
      changeUnit(id: any) {
           var chiTiet: BanGhi = this.lstDieuChinh.find(e => e.id === id);
@@ -555,15 +551,15 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           })
      }
 
-     xoaToanBo(){
+     xoaToanBo() {
           this.lstDieuChinh = [];
      }
 
-     getList(str: string){
+     getList(str: string) {
           var listId: any = str.split(',');
           listId.forEach(item => {
-               if (item){
-                    this.getDetailReport(parseInt(item,10));
+               if (item) {
+                    this.getDetailReport(parseInt(item, 10));
                }
           })
      }

@@ -23,7 +23,27 @@
               <td>{{baoCao.maBcao}}</td>
               <td>{{baoCao.namBcao}}</td>
               <td>{{baoCao.dotBcao}}</td>
-              <td>Biểu Số nè</td>
+              <ng-container>
+                <td>
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <button nz-button style="margin-top:15px">
+                    <i nz-icon nzType="upload"></i>
+                    Upload File
+                  </button>
+                </nz-upload>
+                <!-- <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                  [hidden]="status" style="margin-top: 16px">
+                  Thêm vào danh sách
+                </button> -->
+                <button nz-button style="margin-top:15px" (click)="downloadFile('1')">
+                  <i nz-icon nzType="download"></i>
+                  Download
+                </button>
+              </td>
+              </ng-container>
+              <ng-template>
+                               
+              </ng-template>
               <td>{{baoCao.ngayTao}}</td>             
               <td>{{baoCao.ngayTrinhDuyet}}</td>
               <td>{{baoCao.ngayDuyet}}</td>
@@ -928,10 +948,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',5);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',5);">
           <span>Not OK</span>
         </button>
       </ng-template>
