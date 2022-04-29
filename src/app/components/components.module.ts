@@ -94,6 +94,9 @@ import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoa
 import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component';
 import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-bao-cao-dieu-chinh-du-toan/dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
+
 @NgModule({
   declarations: [
     //components
@@ -141,7 +144,7 @@ import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-qu
     //
     DialogDanhSachKeHoachPhanBoGiaoDuToanComponent,
     DialogDanhSachBaoCaoDieuChinhDuToanComponent,
-    
+    DialogCopyComponent,
   ],
   imports: [
     CommonModule,
@@ -198,6 +201,7 @@ import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-qu
     NzAlertModule,
     DragDropModule,
     NzPopconfirmModule,
+    NzResultModule,
   ],
   exports: [
     FormsModule,
@@ -253,6 +257,7 @@ import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-qu
     FilterPipe,
     NzAlertModule,
     NzPopconfirmModule,
+    NzResultModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

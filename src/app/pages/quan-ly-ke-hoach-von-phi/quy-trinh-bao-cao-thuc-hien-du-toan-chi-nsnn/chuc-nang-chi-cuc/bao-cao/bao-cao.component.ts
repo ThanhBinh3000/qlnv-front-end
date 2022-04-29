@@ -248,7 +248,7 @@ export class BaoCaoComponent implements OnInit {
   async ngOnInit() {
 
     this.id = this.routerActive.snapshot.paramMap.get('id');
-
+    let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName); //get user info
     if (this.idDialog) {
@@ -256,6 +256,28 @@ export class BaoCaoComponent implements OnInit {
     }
     if (this.id) {
       await this.getDetailReport();
+    }else if(lbc =='tong-hop'){
+      await this.callSynthetic();
+      this.maDonViTao = this.userInfo?.dvql;
+      this.spinner.show();
+      this.quanLyVonPhiService.taoMaBaoCao().subscribe(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.baoCao.maBcao = data.data.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      );
+      this.baoCao.maLoaiBcao = this.routerActive.snapshot.paramMap.get('loaiBaoCao');
+      this.baoCao.namBcao = Number(this.routerActive.snapshot.paramMap.get('nam'));
+      this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang'));
+      
+      this.baoCao.ngayTao = new Date().toDateString();
+      this.baoCao.trangThai = "1";
     } else {
       this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
@@ -284,7 +306,7 @@ export class BaoCaoComponent implements OnInit {
           tieuDe: item.tieuDe,
           maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
-          trangThai: '2',
+          trangThai: null,
           lstCTietBCao: []
         });
       })
@@ -406,6 +428,7 @@ export class BaoCaoComponent implements OnInit {
             if (index !== -1) {
               item.tieuDe = PHULUCLIST[index].tieuDe;
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+              item.checked = false;
             }
           })
           this.baoCao?.lstBCao?.forEach((item) => {
@@ -465,52 +488,8 @@ export class BaoCaoComponent implements OnInit {
     if (lst.length == 0) return;
     lst.forEach(item => {
       var obj: linkList = {
-        id: item.id,
+        ...item,
         vt: 0,
-        maNdung: item.maNdung,
-        kphiSdungTcong: item.kphiSdungTcong,
-        kphiSdungDtoan: item.kphiSdungDtoan,
-        kphiSdungNguonKhac: item.kphiSdungNguonKhac,
-        kphiSdungNguonQuy: item.kphiSdungNguonQuy,
-        kphiSdungNstt: item.kphiSdungNstt,
-        kphiSdungCk: item.kphiSdungCk,
-        kphiChuyenSangTcong: item.kphiChuyenSangTcong,
-        kphiChuyenSangDtoan: item.kphiChuyenSangDtoan,
-        kphiChuyenSangNguonKhac: item.kphiChuyenSangNguonKhac,
-        kphiChuyenSangNguonQuy: item.kphiChuyenSangNguonQuy,
-        kphiChuyenSangNstt: item.kphiChuyenSangNstt,
-        kphiChuyenSangCk: item.kphiChuyenSangCk,
-        dtoanGiaoTcong: item.dtoanGiaoTcong,
-        dtoanGiaoDtoan: item.dtoanGiaoDtoan,
-        dtoanGiaoNguonKhac: item.dtoanGiaoNguonKhac,
-        dtoanGiaoNguonQuy: item.dtoanGiaoNguonQuy,
-        dtoanGiaoNstt: item.dtoanGiaoNstt,
-        dtoanGiaoCk: item.dtoanGiaoCk,
-        giaiNganThangBcaoTcong: item.giaiNganThangBcaoTcong,
-        giaiNganThangBcaoTcongTle: item.giaiNganThangBcaoTcongTle,
-        giaiNganThangBcaoDtoan: item.giaiNganThangBcaoDtoan,
-        giaiNganThangBcaoDtoanTle: item.giaiNganThangBcaoDtoanTle,
-        giaiNganThangBcaoNguonKhac: item.giaiNganThangBcaoNguonKhac,
-        giaiNganThangBcaoNguonKhacTle: item.giaiNganThangBcaoNguonKhacTle,
-        giaiNganThangBcaoNguonQuy: item.giaiNganThangBcaoNguonQuy,
-        giaiNganThangBcaoNguonQuyTle: item.giaiNganThangBcaoNguonQuyTle,
-        giaiNganThangBcaoNstt: item.giaiNganThangBcaoNstt,
-        giaiNganThangBcaoNsttTle: item.giaiNganThangBcaoNsttTle,
-        giaiNganThangBcaoCk: item.giaiNganThangBcaoCk,
-        giaiNganThangBcaoCkTle: item.giaiNganThangBcaoCkTle,
-        luyKeGiaiNganTcong: item.luyKeGiaiNganTcong,
-        luyKeGiaiNganTcongTle: item.luyKeGiaiNganTcongTle,
-        luyKeGiaiNganDtoan: item.luyKeGiaiNganDtoan,
-        luyKeGiaiNganDtoanTle: item.luyKeGiaiNganDtoanTle,
-        luyKeGiaiNganNguonKhac: item.luyKeGiaiNganNguonKhac,
-        luyKeGiaiNganNguonKhacTle: item.luyKeGiaiNganNguonKhacTle,
-        luyKeGiaiNganNguonQuy: item.luyKeGiaiNganNguonQuy,
-        luyKeGiaiNganNguonQuyTle: item.luyKeGiaiNganNguonQuyTle,
-        luyKeGiaiNganNstt: item.luyKeGiaiNganNstt,
-        luyKeGiaiNganNsttTle: item.luyKeGiaiNganNsttTle,
-        luyKeGiaiNganCk: item.luyKeGiaiNganCk,
-        luyKeGiaiNganCkTle: item.luyKeGiaiNganCkTle,
-        // listCtiet: vatTu[] = [];
         next: [],
         checked: false,
       };
@@ -836,7 +815,7 @@ export class BaoCaoComponent implements OnInit {
               tieuDe: item.tieuDe,
               maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
-              trangThai: '2',
+              trangThai: null,
               lstCTietBCao: []
             });
           }
@@ -922,6 +901,7 @@ export class BaoCaoComponent implements OnInit {
     this.baoCao.listIdFiles = this.listIdFiles;
     this.baoCao.trangThai = "1";
     this.baoCao.maDvi = this.maDonViTao;
+    this.baoCao.maPhanBcao = '0';
     this.lstCTietBCaoPL1.filter(item => {
       if (typeof item.id != "number") {
         item.id = null;
@@ -1270,6 +1250,8 @@ export class BaoCaoComponent implements OnInit {
 
   //khoi tao
   duyet(data: linkList, str: string, index: number, parent: number, le: number) {
+    
+    debugger
     if (index != 0) {
       let mm = {
         id: data.id,
@@ -1705,5 +1687,64 @@ export class BaoCaoComponent implements OnInit {
         idDialog: id
       },
     });
+  }
+
+  // call chi tiet bao cao
+  async callSynthetic() {
+    this.spinner.show();
+    let request = {
+      maLoaiBcao : this.routerActive.snapshot.paramMap.get('loaiBaoCao'),
+      namBcao : Number(this.routerActive.snapshot.paramMap.get('nam')),
+      thangBcao : Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang')),
+      dotBcao: null,
+      maPhanBCao: '0',
+    }
+    await this.quanLyVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.baoCao = data.data;
+          this.baoCao?.lstBCao?.forEach(item => {
+            let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
+            if (index !== -1) {
+              item.tieuDe = PHULUCLIST[index].tieuDe;
+              item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+              item.checked = false;
+            }
+          })
+          this.baoCao?.lstBCao?.forEach((item,index) => {
+            if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
+              this.lstCTietBCaoPL1 = item?.lstCTietBCao;
+              this.lstCTietBCaoPL1.forEach(item => {
+                item.level = item.stt?.split('.').length - 1;
+              })
+              this.getLinkList(this.chiTietBcaosPL1, "", 0);
+              this.updateSTT(this.chiTietBcaosPL1);
+              this.updateLstCTietBCaoPL1();
+            }
+          });
+
+          this.updateEditCache();
+          this.updateEditCachePL1();
+          this.listFile = [];
+
+          if (this.baoCao.trangThai == Utils.TT_BC_1 ||
+            this.baoCao.trangThai == Utils.TT_BC_3 ||
+            this.baoCao.trangThai == Utils.TT_BC_5 ||
+            this.baoCao.trangThai == Utils.TT_BC_8) {
+            this.status = false;
+            this.statusB = false;
+          } else {
+            this.status = true;
+            this.statusB = true;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+    this.spinner.hide();
   }
 }

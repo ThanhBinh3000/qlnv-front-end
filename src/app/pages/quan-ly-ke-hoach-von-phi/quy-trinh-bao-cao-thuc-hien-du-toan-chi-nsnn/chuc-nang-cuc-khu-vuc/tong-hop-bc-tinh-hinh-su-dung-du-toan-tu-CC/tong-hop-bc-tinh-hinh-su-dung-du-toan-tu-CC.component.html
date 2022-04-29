@@ -6,11 +6,14 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao"
+              [class]="searchFilter.namBcao ?'' : 'input-error-validate' " ></nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" 
+              [class]="((searchFilter.thangBCao && searchFilter.maLoaiBcao == '526') || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="6">
           </div>
@@ -23,7 +26,8 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)">
+              (ngModelChange)="setUrl($event)"
+              [class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
