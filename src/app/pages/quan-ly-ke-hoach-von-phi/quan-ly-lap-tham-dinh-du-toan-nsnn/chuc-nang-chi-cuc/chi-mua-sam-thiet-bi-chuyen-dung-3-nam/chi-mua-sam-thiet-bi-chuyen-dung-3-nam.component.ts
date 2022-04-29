@@ -335,6 +335,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+						// this.changeRoute(data.data.id);
 						this.id = data.data.id;
 						await this.getDetailReport();
 						this.getStatusButton();
@@ -351,6 +352,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+						// this.changeRoute(this.id);
 						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
@@ -382,6 +384,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			this.spinner.show();
 			this.quanLyVonPhiService.approve(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
+					// this.changeRoute(this.id);
 					await this.getDetailReport();
 					this.getStatusButton();
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -806,6 +809,12 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		WindowPrt.print();
 		WindowPrt.close();
 	}
+
+	changeRoute(id) {
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/' + id
+		]);
+	  }
 
 
 }
