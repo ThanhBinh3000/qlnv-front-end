@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { DONVITIEN, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -51,6 +51,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
 
+  listDonViTien:any []=DONVITIEN;
   currentday: Date = new Date();
   //////
     id!: any;
@@ -72,7 +73,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     trangThaiBanGhi:string ='1';
     donViTaos:any []=[];
     donvitao:any;
-
+    maDviTien:any;
     //bien url
     maDonviNhan:any;
     maPa:any;
@@ -104,6 +105,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
           if (res.statusCode == 0) {
               this.listchitiet = res.data.lstCTiet;
               this.objChitiet = res.data;
+              this.maDviTien = res.data.maDviTien;
              this.objChitiet.ngayTao = this.datepipe.transform(this.objChitiet?.ngayTao, 'dd/MM/yyyy');
               this.checkdata = true;
               if (this.listchitiet.length != 0) {

@@ -55,15 +55,23 @@
           <nz-tab [nzTitle]="'Danh sách giao số kiểm tra NSNN'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == maDviTien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+              <!-- <div nz-col class="gutter-row" [nzSpan]="3"> -->
                 <!-- <div class="inner-box">Đơn vị: -->
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" >
+                <!-- <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" >
                   <nz-option nzValue="1" nzLabel="Nghìn"></nz-option>
                   <nz-option nzValue="2" nzLabel="Trăm"></nz-option>
                   <nz-option nzValue="3" nzLabel="Triệu"></nz-option>
                   <nz-option nzValue="4" nzLabel="Tỷ"></nz-option>
-                </nz-select>
+                </nz-select> -->
                 <!-- </div> -->
-              </div>
+              <!-- </div> -->
             </div>
             <nz-table nzBordered class="table__body">
               <thead>
