@@ -781,6 +781,9 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                     this.lstCTietBCao.forEach(e => {
                          e.id = uuid.v4();
                     })
+                    this.lstCTietBCao.forEach(item => {
+                         this.tinhTong(1, item);
+                    })
                } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                }

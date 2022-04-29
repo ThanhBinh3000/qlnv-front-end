@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden] = "statusBtnSave">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -31,24 +31,25 @@
                   Bộ Tài Chính
                 </nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Số quyết định">
-                    <input class="search__input" nz-input [(ngModel)]="soQd" />
+                    <!-- <input class="search__input" nz-input [(ngModel)]="soQd" /> -->
+                    <nz-input-group nzAddOnAfter="/QĐ-BTC">
+                      <nz-input-number [(ngModel)]="soQd" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
+                      </nz-input-number>
+                    </nz-input-group>
                 </nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Ngày quyết định">
                   <nz-date-picker class="search__input" [(ngModel)]="ngayQd" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </nz-descriptions-item>
-                <nz-descriptions-item ></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Về việc" [nzSpan]="12">
-                  <textarea [nzAutosize]="{ minRows: 2, maxRows: 6 }" nz-input [(ngModel)]="veViec"></textarea>
-                </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Người ký">
+                <nz-descriptions-item nzTitle="Người ký" >
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người ký" [(ngModel)]="maNguoiKyTC">
                     <nz-option *ngFor="let item of nguoiKys" [nzValue]="item.maNguoiKy" [nzLabel]="item.tenNguoiKy"></nz-option>
                   </nz-select>
                 </nz-descriptions-item>
-                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
-                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
-                <nz-descriptions-item nzSpan="1"></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Ghi Chú" [nzSpan]="12">
+                <nz-descriptions-item nzTitle="Về việc" nzSpan="12" >
+                  <!-- <input class="search__input" nz-input [(ngModel)]="vanBan" /> -->
+                  <textarea [nzAutosize]="{ minRows: 2, maxRows: 6 }" nz-input [(ngModel)]="veViec"></textarea>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Ghi Chú" nzSpan="12">
                   <textarea [nzAutosize]="{ minRows: 2, maxRows: 6 }" nz-input [(ngModel)]="ghiChu"></textarea>
                 </nz-descriptions-item>
               </nz-descriptions>
@@ -85,6 +86,7 @@
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td>
                       {{data.tenDm}}
+                      <!-- {{i+1}} -->
                     </td>
                     <td>
                       <div *ngFor="let item of khoanMucs">
