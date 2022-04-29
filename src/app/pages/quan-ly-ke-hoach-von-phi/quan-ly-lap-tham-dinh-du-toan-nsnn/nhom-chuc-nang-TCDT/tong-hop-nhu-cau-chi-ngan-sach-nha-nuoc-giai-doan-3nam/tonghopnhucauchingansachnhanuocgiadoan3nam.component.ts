@@ -123,18 +123,6 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       this.nguoinhap = this.userInfor?.username;
       this.ngaynhap = this.datepipe.transform(this.currentday, 'dd/MM/yyyy');
       this.donvitao = this.userInfor?.dvql;
-      this.quanLyVonPhiService.sinhMaBaoCao().subscribe(
-        (res) => {
-          if (res.statusCode == 0) {
-            this.mabaocao = res.data;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res?.msg);
-          }
-        },
-        (err) => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
     } else {
       this.trangThaiBanGhi = '1';
       this.nguoinhap = this.userInfor?.username;
@@ -169,7 +157,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
       },
     );
     //get danh muc dự án
-    this.danhMuc.dMNhomChi().toPromise().then(
+    this.danhMuc.dMLoaiChi().toPromise().then(
       (data) => {
           if (data.statusCode == 0) {
               this.listNhomchi = data.data?.content;
