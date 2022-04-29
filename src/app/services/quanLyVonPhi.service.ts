@@ -391,6 +391,15 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  // call api nút chức năng
+  approveDieuChinh(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chuc-nang',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chuc-nang',
+      request,
+    );
+  }
+
   // call api chức năng duyet bieu mau
   approveBieuMau(request: any): Observable<any> {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/phe-duyet-chi-tiet', request);
