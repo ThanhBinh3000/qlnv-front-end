@@ -241,6 +241,10 @@ export class QuanLyVonPhiService extends BaseService {
     // return this.httpClient.put('http://192.168.1.103:8094/pa-giao-so-kt/cap-nhat',requestUpdate);
   }
 
+  //xoa phuong an 
+  xoaPhuongAn(id:any):Observable<any>{
+    return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/pa-giao-so-kt/xoa/'+id);
+  }
   //xem chi tiet so giao tran chi
   getchitiettranchi(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/ctiet-giao-so/', request);

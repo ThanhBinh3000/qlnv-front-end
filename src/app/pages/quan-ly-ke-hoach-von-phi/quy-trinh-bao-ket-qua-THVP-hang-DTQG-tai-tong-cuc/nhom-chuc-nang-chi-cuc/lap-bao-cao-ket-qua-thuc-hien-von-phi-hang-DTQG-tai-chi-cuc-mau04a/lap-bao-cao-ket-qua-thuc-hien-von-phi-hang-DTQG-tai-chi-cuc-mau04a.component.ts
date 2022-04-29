@@ -182,7 +182,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   statusBtnLD: boolean; // trang thai an/hien nut lanh dao
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
-
+  statusBtnOk:boolean; //trang thai nut ok - not ok
   statusBtnDuyetBieuMau:boolean = true;
   //-------------
   id: any;
@@ -194,7 +194,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   urlDetail:string ='qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
 
   loaiBaoCaoParam:any;
-  
+  trangThaiChiTiet:any;
   nho: boolean;
   tab =TAB_SELECTED;
   tabSelected: number;
@@ -637,6 +637,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         }
       });
     }
+    this.getStatusButtonOk();
   }
 
   //call api duyet bieu mau
@@ -651,6 +652,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
+          this.trangThaiChiTiet = trangThai;
           this.getDetailReport();
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -818,6 +820,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
    this.updateEditCache02();
    this.updateEditCache03();
    this.updateEditCache();
+   this.getStatusButtonOk();
   }
 
 
@@ -875,6 +878,31 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     // this.location.back();  
     this.route.navigate(['/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/'])
   }
+
+  getStatusButtonOk(){
+    const utils = new Utils();
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donViTaos.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfor.dvql) {
+      checkChirld = true;
+    }
+    if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
+      checkParent = true;
+    }
+    
+    let a = this.userInfor?.roles[0]?.id;
+    if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfor?.roles[0]?.id == '3' && checkParent && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfor?.roles[0]?.id == '2' && checkChirld && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfor?.roles[0]?.id == '1' && checkChirld && this.trangThaiChiTiet == 2){
+      this.statusBtnOk = false;
+    }else{
+      this.statusBtnOk = true;
+    }
+  }
+
   async luu() {
     this.baoCao.lstBCao.forEach((e) => {
       
