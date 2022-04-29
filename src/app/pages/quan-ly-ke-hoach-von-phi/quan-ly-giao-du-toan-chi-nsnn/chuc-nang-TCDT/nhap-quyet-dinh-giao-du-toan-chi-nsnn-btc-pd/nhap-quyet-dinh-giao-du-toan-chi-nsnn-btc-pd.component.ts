@@ -316,7 +316,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       lyDoTuChoi: this.lyDoTuChoi,
       maDvi: this.maDonViTao,
       maDviTien: "01",
-      maNguoiKy: this.nguoiKy,
+      maNguoiKy: this.maNguoiKyTC,
       maQdCha: this.maQdCha,
       nam: this.nam,
       ngayQD: this.ngayQd,
@@ -332,7 +332,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     //call service them moi
     this.spinner.show();
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetGiaoService(request).subscribe(
+      this.quanLyVonPhiService.trinhDuyetGiaoService1(request).subscribe(
         data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -394,24 +394,24 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCtiet;
-          this.updateEditCache();
-          this.lstFile = data.data.lstFile;
+          this.lstCTietBCao = data.data?.lstCtiet;
+
+          this.lstFile = data.data?.lstFile;
 
           // set thong tin chung bao cao
-          this.ngayQd = data.data.ngayQD;
-          this.nguoiKy = data.data.maNguoiKy;
-          this.maDonViTao = data.data.maDvi;
-          this.maBaoCao = data.data.maBcao;
-          this.vanBan = data.data.vanBan;
-          this.soQd = data.data.soQd;
-          this.trangThaiBanGhi = data.data.trangThai;
-          this.ghiChu = data.data.ghiChu;
-
+          this.ngayQd = data.data?.ngayQD;
+          this.maNguoiKyTC = data.data?.maNguoiKy;
+          this.maDonViTao = data.data?.maDvi;
+          this.maBaoCao = data.data?.maBcao;
+          this.vanBan = data.data?.vanBan;
+          this.soQd = data.data?.soQd;
+          this.trangThaiBanGhi = data.data?.trangThai;
+          this.ghiChu = data.data?.ghiChu;
+          this.veViec = data.data?.veViec;
           // set list id file ban dau
           this.lstFile?.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -443,20 +443,25 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
           this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(res => {
             if (data.statusCode == 0) {
               console.log(res);
-              var tempArr = res.data;
+              var tempArr = res?.data;
+              tempArr.shift()
               tempArr.forEach(e =>{
                 this.khoanMucs.push(e);
-                e.lstQlnvDmKhoachVonPhi.forEach( el => {
-                this.khoanMucs.push(el);
-                })
               })
-              this.khoanMucs.forEach(e => {
-                this.lstCTietBCao.push(e)
-              })
+              // this.khoanMucs.forEach(e => {
+              //   this.lstCTietBCao.push(e)
+              //   console.log(this.lstCTietBCao);
+              // })
             } else {
               this.notification.error(MESSAGE.ERROR, data?.msg);
             }
-
+            this.changeNguoiKy()
+            this.tinhTong1()
+            // tinh tong
+            this.lstCTietBCao.forEach(e => {
+              e.tong = e.nguonKhac + e.nguonNsnn
+            })
+            this.updateEditCache();
            })
 
         } else {
@@ -651,21 +656,21 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
     modalIn.afterClose.subscribe((res) => {
       console.log(res);
       if (res) {
-          //  this.maKhoanMucs.forEach(e => {
-          //    if (res.id == e.id) {
-          //      this.khoanMucs.push({ id: e.id, thongTin: e.thongTin })
-          //      return res.id = e.id
-          //    }
-          //  })
-          //  this.lstCTietBCao.push({
-          //    id: uuid.v4(),
-          //    tenDm: "I",
-          //    maNdung: res.id,
-          //    nguonKhac: 0,
-          //    nguonNsnn: 0,
-          //    tong: 0,
-          //    checked: false,
-          //  });
+           this.maKhoanMucs.forEach(e => {
+             if (res.id == e.id) {
+               this.khoanMucs.push({ id: e.id, thongTin: e.thongTin })
+               return res.id = e.id
+             }
+           })
+           this.lstCTietBCao.push({
+             id: uuid.v4(),
+             tenDm: "I",
+             maNdung: res.id,
+             nguonKhac: 0,
+             nguonNsnn: 0,
+             tong: 0,
+             checked: false,
+           });
               res.danhSachKhoanMuc.forEach(item => {
                    if (item.status) {
                         this.lstCTietBCao.push({
@@ -694,6 +699,13 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       this.tongNguonNsnn += e.nguonNsnn;
       this.tongNguonKhac += e.nguonKhac;
       this.tongDtoanChiNSNN= this.tongNguonNsnn + this.tongNguonKhac;
+    })
+  }
+  changeNguoiKy(){
+    this.nguoiKys.forEach(e => {
+      if(this.maNguoiKyTC == e.maNguoiKy){
+        this.nguoiKy = e.tenNguoiKy
+      }
     })
   }
 }
