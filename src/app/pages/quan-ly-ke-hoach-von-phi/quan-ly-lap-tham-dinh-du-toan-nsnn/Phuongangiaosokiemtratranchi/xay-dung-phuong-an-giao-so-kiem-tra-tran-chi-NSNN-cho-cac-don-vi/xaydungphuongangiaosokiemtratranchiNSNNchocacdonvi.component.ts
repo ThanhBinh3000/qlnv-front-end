@@ -857,6 +857,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.location.back();
+          console.log(this.location.getState());
         }else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -897,12 +898,14 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       item.listCtietDvi.forEach(e => {
         listCtietDvi.push({
           ...e,
+          id:null,
           soTranChi: mulMoney(e.soTranChi, this.donvitien),
         })
       })
       lstTemp.push({
         ...item,
         listCtietDvi: listCtietDvi,
+        id:null
       })
     })
     

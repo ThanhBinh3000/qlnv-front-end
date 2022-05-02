@@ -174,7 +174,6 @@ export class Utils {
 
     //role OK/not Ok
     public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
-        debugger
         return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
     }
 
@@ -274,6 +273,7 @@ export class Utils {
         let statusName = TRANGTHAIPHULUC.find(item => item.id == id)
         return statusName?.ten;
     }
+    
 }
 
 // loai bao cao quan ly von phi
@@ -808,3 +808,4 @@ export const LOAIBAOCAO =[
           ten:'Chờ tiếp nhận',
       },
     ]
+    export const MONEYLIMIT = 9000000000000000000;

@@ -725,6 +725,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   // xoa phu luc
   deletePhuLucList(){
+    debugger
     this.baoCao.lstBCao = this.baoCao?.lstBCao.filter(item => item.checked == false);
     if(this.baoCao?.lstBCao?.findIndex(item => Number(item.maLoai) == this.tabSelected) == -1){
       this.tabSelected = null;
@@ -923,7 +924,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         }
       })
     });
-  
     
     // donvi tien
     if (this.donvitien == undefined) {
@@ -1430,6 +1430,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.baoCao?.lstBCao?.forEach(item => {
               let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
               if(index !== -1){
+                item.checked = false;
                 item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
                 item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
               }
@@ -1438,6 +1439,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.baoCao?.lstBCao?.forEach(item => {
               let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
               if(index !== -1){
+                item.checked = false;
                 item.tieuDe = LISTBIEUMAUNAM[index].tieuDe;
                 item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
               }
@@ -1719,9 +1721,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.baoCao.lstBCao.forEach( e =>{
           e.lstCTietBCao.forEach(el =>{
             el.id = uuid.v4();
+            el.listCtiet?.forEach(element => {
+                  element.id = null;            
+            });
           })
-        })
-        
+        })        
         
         this.maLoaiBaocao = this.loaiBaoCaoTongHop;
         if(this.loaiBaoCaoTongHop=='1'){
@@ -1785,7 +1789,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         //------ mẫu 04a xuất
         this.lstCTietBCao04ax = this.baoCao?.lstBCao?.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG)?.lstCTietBCao;
         this.lstCTietBCao04ax.forEach(item => {
-          item.level = item.stt.split('.').length -1;
+          item.level = item.stt?.split('.').length -1;
         })
         this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
         this.stt = 0;
@@ -1793,18 +1797,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         //-----mẫu 04a nhập
         this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
         this.lstCTietBCao04an.forEach(item => {
-          item.level = item.stt.split('.').length -1;
+          item.level = item.stt?.split('.').length -1;
         })
         this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
         this.stt = 0;
-        this.updateSTT(this.chiTietBcao4an);
-        console.log(this.lstCTietBCao04an);
-        this.updateLstCTietBCao(2);
-        console.log(this.lstCTietBCao04an);
+        this.updateSTT(this.chiTietBcao4an);;
         //-- mẫu 04b xuất
         this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
         this.lstCTietBCao04bx.forEach(item => {
-          item.level = item.stt.split('.').length -1;
+          item.level = item.stt?.split('.').length -1;
         })
         this.getLinkList(this.chiTietBcao4bx,'',0,this.lstCTietBCao04bx);
         this.stt = 0;
@@ -1812,7 +1813,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         //-- mẫu 05
         this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCTietBCao;
         this.lstCTietBCao05.forEach(item => {
-          item.level = item.stt.split('.').length -1;
+          item.level = item.stt?.split('.').length -1;
         })
         this.getLinkList(this.chiTietBcao5,'',0,this.lstCTietBCao05);
         this.stt = 0;
@@ -2084,9 +2085,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
 
   //update khi sửa
-  saveEdit(id: string, maLoai:any): void {
-    console.log(this.lstCTietBCao04ax);
-    
+  saveEdit(id: string, maLoai:any): void {    
     if(maLoai==1){
       this.editCache04ax[id].data.checked = this.lstCTietBCao04ax.find(
         (item) => item.id === id,
