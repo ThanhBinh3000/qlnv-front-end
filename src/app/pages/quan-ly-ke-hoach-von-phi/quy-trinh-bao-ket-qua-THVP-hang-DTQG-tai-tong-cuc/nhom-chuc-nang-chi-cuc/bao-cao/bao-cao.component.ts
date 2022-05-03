@@ -1088,7 +1088,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   addCol(){
-    var listVtu: vatTu[] = [];
+    var listVtu: vatTu[]=[];
     var loai:number =0;
     var colname;
     if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
@@ -1110,31 +1110,53 @@ export class BaoCaoComponent implements OnInit {
         this.cols4ax++;
         this.listColTemp = this.listColTrongDot4ax;
         this.cols = this.cols + this.cols4ax;
+
+        let objTrongD = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '0',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
+        let objLke = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '1',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
         this.listColTemp.forEach((e) => {
-          let objTrongD = {
-            id: e.id,
-            maVtu: e.maVtu,
-            loaiMatHang: '0',
-            colName: null,
-            sl: 0,
-            col:e.col,
-          };
-          let objLke = {
-            id: e.id,
-            maVtu: e.maVtu,
-            loaiMatHang: '1',
-            colName: null,
-            sl: 0,
-            col:e.col,
-          };
+            objTrongD.id = e.id;
+            objTrongD.maVtu= e.maVtu;
+            objTrongD.col=e.col;
+          
+       
+            objLke.id= e.id,
+            objLke.maVtu= e.maVtu;
+            objLke.col=e.col;
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
         loai=6;
         this.lstCTietBaoCaoTemp.forEach( e =>{
-          e.listCtiet = listVtu;
-          e.loai = loai;
+          if(e.listCtiet.length==0){
+            e.listCtiet=listVtu;
+          }else{
+            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
+            if(idx==-1){
+              e.listCtiet.push(objTrongD);
+              e.listCtiet.push(objLke);
+            }else{
+              this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+              return;
+            }
+          }
+          
         })
+        console.log(this.lstCTietBaoCaoTemp);
+        
       }
     }
     
@@ -1293,7 +1315,31 @@ export class BaoCaoComponent implements OnInit {
     }
 
     this.replaceIndex(lstIndex, 1);
-    
+    var listVtu: vatTu[] = [];
+    var loai:number =0;
+    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+      this.listColTemp.forEach((e) => {
+        let objTrongD = {
+          id: e.id,
+          maVtu: e.maVtu,
+          loaiMatHang: '0',
+          colName: null,
+          sl: 0,
+          col:e.col,
+        };
+        let objLke = {
+          id: e.id,
+          maVtu: e.maVtu,
+          loaiMatHang: '1',
+          colName: null,
+          sl: 0,
+          col:e.col,
+        };
+        listVtu.push(objTrongD);
+        listVtu.push(objLke);
+      });
+      loai=6;
+    }
     // them moi phan tu
     let item: ItemDataMau04a1 = {
       id: uuid.v4(),
@@ -1306,11 +1352,11 @@ export class BaoCaoComponent implements OnInit {
       luyKeTcong: 0,
       luyKeThoc: 0,
       luyKeGao: 0,
-      listCtiet: this.lstCTietBaoCaoTemp[index].listCtiet,
+      listCtiet:listVtu,
       parentId: null,
       ghiChu: '',
       level:this.lstCTietBaoCaoTemp[index].level + 1, //level chỉ dùng để in các stt thụt lùi trong html
-      maLoai: this.lstCTietBaoCaoTemp[index].maLoai,
+      maLoai: loai,
       checked: false,
   }
     this.lstCTietBaoCaoTemp.splice(index + 1, 0, item);
