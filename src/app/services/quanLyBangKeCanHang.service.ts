@@ -15,32 +15,47 @@ export class QuanLyBangKeCanHangService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/tra-cuu`
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-  loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/chi-tiet/${id}`;
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt?`
+    if (body.denNgay)
+      url_ += 'denNgay=' + encodeURIComponent('' + body.denNgay) + '&';
+    if (body.maDonVi)
+      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
+    if (body.maHang)
+      url_ += 'maHang=' + encodeURIComponent('' + body.maHang) + '&';
+    if (body.soBangKe)
+      url_ += 'soBangKe=' + encodeURIComponent('' + body.soBangKe) + '&';
+    if (body.tuNgay)
+      url_ += 'tuNgay=' + encodeURIComponent('' + body.tuNgay) + '&';
+    if (body.pageNumber != null || body.pageNumber != undefined)
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+    if (body.pageSize)
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+    url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
 
-  danhSachChuaQuyetDinh(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/tra-cuu/ds-chua-qd`
-    return this.httpClient.post<any>(url, body).toPromise();
+  loadChiTiet(id: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/cap-nhat`;
-    return this.httpClient.post<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
+    return this.httpClient.put<any>(url, body).toPromise();
   }
 
-  xoa(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bke-can-hang/xoa`;
-    return this.httpClient.post<any>(url, body).toPromise();
+  xoa(id: number): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/${id}`;
+    return this.httpClient.delete<any>(url).toPromise();
+  }
+
+  updateStatus(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/status`;
+    return this.httpClient.put<any>(url, body).toPromise();
   }
 }

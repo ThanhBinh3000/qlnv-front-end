@@ -102,7 +102,7 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
   async loadNganLo() {
     let body = {
       "maNganLo": "",
-      "nganKhoId": 0,
+      "nganKhoId": null,
       "paggingReq": {
         "limit": 1000,
         "page": 1
@@ -114,9 +114,19 @@ export class DialogThongTinDonViThucHienQuyetDinhComponent implements OnInit {
     const res = await this.tinhTrangKhoHienThoiService.timKiemNganLo(body);
     this.listNganLo = [];
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNganLo = res.data;
+      this.listNganLo = res.data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  selectNganLo(nganLo, item) {
+    if (nganLo) {
+      item.maKhoNganLo = nganLo;
+      let getNganLo = this.listNganLo.filter(x => x.maNganlo == item.maKhoNganLo);
+      if (getNganLo && getNganLo.length > 0) {
+        item.tenKhoNganLo = getNganLo[0].tenNganlo;
+      }
     }
   }
 
