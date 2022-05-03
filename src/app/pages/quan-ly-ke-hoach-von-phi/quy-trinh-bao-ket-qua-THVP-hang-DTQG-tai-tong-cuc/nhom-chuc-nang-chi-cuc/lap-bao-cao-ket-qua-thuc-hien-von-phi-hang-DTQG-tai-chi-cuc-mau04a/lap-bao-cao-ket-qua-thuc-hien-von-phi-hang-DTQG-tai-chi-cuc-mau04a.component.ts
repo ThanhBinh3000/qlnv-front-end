@@ -91,7 +91,7 @@ export class ItemDataMau03 {
   dgGiaBanTte:any;
   ttGiaHtoan:any;
   ttGiaBanTte:any;
-  ttClechGiaTteVaGiaHtoan
+  ttClechGiaTteVaGiaHtoan:number;
   ghiChu:any;
   maVtuHeader:any;
   loai:any;
@@ -387,7 +387,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       //khởi tạo trạng thái tạo mới
       this.baoCao.trangThai = '1';
       if(this.loaiBaoCaoParam=='1'){
-        //thiếu service lấy đợt báo cáo
+        
        await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
           if(res.statusCode==0){            
             this.baoCao.dotBcao = res.data;

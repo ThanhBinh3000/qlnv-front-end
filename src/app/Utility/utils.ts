@@ -495,7 +495,8 @@ export const LOAIBAOCAO =[
             tenDm:'Năm'
         },
     ]
-
+    export	const BAOCAODOT = "1";
+    export	const BAOCAONAM = "2";
     // trang thai ban ghi cua anh Ninh
     export const TRANGTHAIBANGHI =[
         {
