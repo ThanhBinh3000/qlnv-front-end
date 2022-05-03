@@ -27,7 +27,7 @@ export const KHOAN_MUC: any[] = [
 		idCha: 10000,
 	},
 	{
-		id:  12100,
+		id: 12100,
 		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
 		idCha: 12000,
 	},
@@ -48,7 +48,7 @@ export const KHOAN_MUC: any[] = [
 	},
 	{
 		id: 12121,
-		tenDm: "Phí bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trọ, hỗ trợ chính sách",
+		tenDm: "Phí bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ, hỗ trợ chính sách",
 		idCha: 12120,
 	},
 	{
@@ -118,7 +118,7 @@ export const KHOAN_MUC: any[] = [
 		idCha: 30000,
 	},
 	{
-		id:  32100,
+		id: 32100,
 		tenDm: "Giao đơn vị thực hiện nhiệm vụ",
 		idCha: 32000,
 	},
@@ -142,4 +142,59 @@ export const KHOAN_MUC: any[] = [
 		tenDm: "Kinh phí không thực hiện tự chủ",
 		idCha: 40000,
 	},
-]
+];
+
+export const LA_MA: any[] = [
+	{
+		kyTu: "M",
+		gTri: 1000,
+	},
+	{
+		kyTu: "CM",
+		gTri: 900,
+	},
+	{
+		kyTu: "D",
+		gTri: 500,
+	},
+	{
+		kyTu: "CD",
+		gTri: 400,
+	},
+	{
+		kyTu: "C",
+		gTri: 100,
+	},
+	{
+		kyTu: "XC",
+		gTri: 90,
+	},
+	{
+		kyTu: "L",
+		gTri: 50,
+	},
+	{
+		kyTu: "XL",
+		gTri: 40,
+	},
+	{
+		kyTu: "X",
+		gTri: 10,
+	},
+	{
+		kyTu: "IX",
+		gTri: 9,
+	},
+	{
+		kyTu: "V",
+		gTri: 5,
+	},
+	{
+		kyTu: "IV",
+		gTri: 4,
+	},
+	{
+		kyTu: "I",
+		gTri: 1,
+	},
+];
