@@ -17,6 +17,7 @@ import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { throwIfEmpty } from 'rxjs/operators';
 
 
 export class ItemDanhSach {
@@ -354,9 +355,11 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (this.idDialog) {
       this.id = this.idDialog;
     }
-    if ( this.namBcao!=null && this.dotBcao!=null && this.loaiBaoCaoTongHop!=null) {
+    if ( this.namBcao!=null && this.loaiBaoCaoTongHop!=null && this.dotBcao!=null) {
       // this.getDetailReportToExportFile();\
-      this.callTonghop();
+      this.callTonghop(); // loại báo cáo đợt
+    }else if( this.namBcao!=null && this.loaiBaoCaoTongHop!=null){
+      this.callTonghop(); //loại báo cáo năm
     }else if (this.id != null) {
       //call service lay chi tiet
      await this.getDetailReport();
@@ -495,14 +498,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       checkParent = true;
     }
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, checkParent, this.userInfor?.roles[0]?.id);
-  
+    this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfor?.roles[0]?.id);
+    
     //check chi cục
     // debugger
     if(this.userInfor?.roles[0]?.id !='3' && dVi?.capDvi =='3'){
@@ -725,7 +727,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   // xoa phu luc
   deletePhuLucList(){
-    debugger
     this.baoCao.lstBCao = this.baoCao?.lstBCao.filter(item => item.checked == false);
     if(this.baoCao?.lstBCao?.findIndex(item => Number(item.maLoai) == this.tabSelected) == -1){
       this.tabSelected = null;
@@ -735,7 +736,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
  
   checkLuu:boolean;
   // doi tab
-  changeTab(maPhuLuc){
+  changeTab(maPhuLuc ,trangThaiChiTiet){
     let checkLuu1;
     this.lstCTietBCao1.filter(item =>{
       if(this.editCache1[item.id].edit ==true){
@@ -815,6 +816,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => item.maLoai== maPhuLuc)?.lstCTietBCao;
         this.updateLstCTietBCao(4);
       }
+      this.trangThaiChiTiet = trangThaiChiTiet;
+      this.getStatusButtonOk();
     }
     
    
@@ -1134,7 +1137,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       this.addColLL(this.chiTietBcao5, objTrongdot);
       this.updateLstCTietBCao(maLoai);
       this.cols05++;
-      console.log(this.listColTrongDot5);
     }
     
   }
@@ -1834,22 +1836,62 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
                     sl: el.sl,
                     col:el.col,
                   };
-                  this.listColTrongDot4ax.push(objTrongdot);
+                  this.listColTrongDot4ax.push(objTrongdot);                  
                 }
               });
             }
           });
           this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
-          this.lstCTietBCao04ax.forEach(e=>{
-            this.listColTrongDot4ax.forEach(item =>{
-              var idx = e.listCtiet.findIndex((i) => i.maVtu == item.maDvi);
+          console.log(this.lstCTietBCao04ax);
+          var listCols =[];
+          for(var i =0; i< this.lstCTietBCao04ax.length; i++){
+          
+            var uniq = this.lstCTietBCao04ax[i]?.listCtiet.map(item => item.maVtu)
+            listCols = [...listCols,...uniq]
+            listCols = listCols.reduce(function(a,b){
+              if (a.indexOf(b) < 0 ) a.push(b);
+              return a;
+            },[]);
+          }
+          let obJChiTiet1 ={
+            id: null,
+            maVtu: '',
+            loaiMatHang:0,
+            colName: null,
+            sl: 0,
+            col:null,
+          }
+          let obJChiTiet2 ={
+            id: null,
+            maVtu: '',
+            loaiMatHang:1,
+            colName: null,
+            sl: 0,
+            col:null,
+          }
+          debugger
+          for (let i = 0; i < this.lstCTietBCao04ax.length; i++) {
+            listCols.forEach( el =>{
+              var idx = this.lstCTietBCao04ax[i].listCtiet.findIndex(item => item.maVtu == el);
+              var u = this.lstCTietBCao04ax[i-1]?.listCtiet.find(item => item.maVtu ==el);
+              console.log(u);
+              
               if(idx==-1){
-                var ojbChiTiet ={
-                  
-                }
+                obJChiTiet1.maVtu=el;
+                obJChiTiet1.col=u.col;
+                obJChiTiet2.maVtu=el;
+                obJChiTiet2.col=u.col;
+                this.lstCTietBCao04ax[i].listCtiet.push(obJChiTiet1);
+                this.lstCTietBCao04ax[i].listCtiet.push(obJChiTiet2);
               }
             })
+            
+          }
+          this.lstCTietBCao04ax.forEach(e => {
+              
+              
           })
+          
         }
         
         //-------
@@ -1920,19 +1962,15 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         }
         this.listFile =[];
          
-        await this.updateLstCTietBCao(1);
-         await this.updateLstCTietBCao(2);
-         await this.updateLstCTietBCao(3);
-         await this.updateLstCTietBCao(4);
+       
          this.getStatusButton();
          this.updateEditCache();
          this.updateEditCache02();
          this.updateEditCache03();
-         console.log(this.lstCTietBCao04ax);
-         console.log(this.lstCTietBCao04an);
-         console.log(this.lstCTietBCao04bx);
-         console.log(this.lstCTietBCao05);
-         
+         await this.updateLstCTietBCao(1);
+         await this.updateLstCTietBCao(2);
+         await this.updateLstCTietBCao(3);
+         await this.updateLstCTietBCao(4);
       }else{
         this.notification.error(MESSAGE.ERROR,res?.msg);
       }
