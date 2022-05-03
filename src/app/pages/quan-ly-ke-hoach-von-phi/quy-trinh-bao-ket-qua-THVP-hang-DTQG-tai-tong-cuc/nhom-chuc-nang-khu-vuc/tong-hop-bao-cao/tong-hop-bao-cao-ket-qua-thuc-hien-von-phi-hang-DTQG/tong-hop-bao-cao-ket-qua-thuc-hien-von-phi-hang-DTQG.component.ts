@@ -39,7 +39,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     maBcao:'',
     maDvi:'',
     maDviCha: '',
-    maLoaiBcao:'',
+    maLoaiBcao:0,
     maPhanBcao:'1',
     namBcao:this.currentDate.getFullYear().toString(),
     ngayTaoDen:'',
@@ -181,8 +181,8 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
       this.notifi.error('Kiểm tra','Bạn chưa nhập năm báo cáo!');
       return;
     }
-    if(this.searchFilter.maLoaiBcao==""){
-      this.searchFilter.maLoaiBcao ='1';
+    if(this.searchFilter.maLoaiBcao==0){
+      this.searchFilter.maLoaiBcao =1;
     }
     this.searchFilter.trangThai = '9';    
     this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
@@ -206,25 +206,31 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     })
   }
   tongHop(){
-        
-    this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao+"/"+this.searchFilter.maLoaiBcao]);
+    debugger
+      if(this.searchFilter.maLoaiBcao == 1){
+        this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao+"/"+this.searchFilter.dotBcao]);
+      }else{
+        this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao]);
+      }
+    console.log(this.url);
+    
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 1:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
-        break;
-      case 2:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
-  }
+  // //set url khi
+  // setUrl(lbaocao:any) {
+  //   console.log(lbaocao)
+  //   switch (lbaocao) {
+  //     case 1:
+  //       this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
+  //       break;
+  //     case 2:
+  //       this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
+  //       break;
+  //     default:
+  //       this.url = null;
+  //       break;
+  //   }
+  // }
 
   //doi so trang
   onPageIndexChange(page) {

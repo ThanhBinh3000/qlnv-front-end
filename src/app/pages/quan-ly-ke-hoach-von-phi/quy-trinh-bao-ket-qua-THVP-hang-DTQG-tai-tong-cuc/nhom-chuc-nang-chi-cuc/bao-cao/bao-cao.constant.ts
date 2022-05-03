@@ -108,55 +108,55 @@ export const TAB_SELECTED = {
 
   export const SOLAMA: any = [
     {
-      kyTu: "M",
+      kyTu: 'M',
       gTri: 1000,
     },
     {
-      kyTu: "CM",
+      kyTu: 'CM',
       gTri: 900,
     },
     {
-      kyTu: "D",
+      kyTu: 'D',
       gTri: 500,
     },
     {
-      kyTu: "CD",
+      kyTu: 'CD',
       gTri: 400,
     },
     {
-      kyTu: "C",
+      kyTu: 'C',
       gTri: 100,
     },
     {
-      kyTu: "XC",
+      kyTu: 'XC',
       gTri: 90,
     },
     {
-      kyTu: "L",
+      kyTu: 'L',
       gTri: 50,
     },
     {
-      kyTu: "XL",
+      kyTu: 'XL',
       gTri: 40,
     },
     {
-      kyTu: "X",
+      kyTu: 'X',
       gTri: 10,
     },
     {
-      kyTu: "IX",
+      kyTu: 'IX',
       gTri: 9,
     },
     {
-      kyTu: "V",
+      kyTu: 'V',
       gTri: 5,
     },
     {
-      kyTu: "IV",
+      kyTu: 'IV',
       gTri: 4,
     },
     {
-      kyTu: "I",
+      kyTu: 'I',
       gTri: 1,
     },
   ];
