@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -15,6 +15,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { Location } from '@angular/common'
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 export class ItemData {
   maCucDtnnKvuc!:string;
@@ -144,6 +146,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
               private notification : NzNotificationService,
               private location: Location,
               private fb:FormBuilder,
+              private modal: NzModalService,
 
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
@@ -336,69 +339,103 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     })
 
     let lstCTietBCaoTemp = [];
+    let checkMoneyRange = true;
     this.lstCTietBCao.filter(e => {
+      let tongQuyLuongPcapCkdgTheoLuongCcvcHdld = mulMoney(e.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien)
+      let tongSo = mulMoney(e.tongSo, this.maDviTien)
+      let ccvc0101n1Cong = mulMoney(e.ccvc0101n1Cong, this.maDviTien)
+      let ccvc0101n1Luong = mulMoney(e.ccvc0101n1Luong, this.maDviTien)
+      let ccvc0101n1Pcap = mulMoney(e.ccvc0101n1Pcap, this.maDviTien)
+      let ccvc0101n1Ckdg = mulMoney(e.ccvc0101n1Ckdg, this.maDviTien)
+      let quyLuongTangThemDoNangBacLuongCcvc0101n1 = mulMoney(e.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien)
+      let bcheChuaSdungCong = mulMoney(e.bcheChuaSdungCong, this.maDviTien)
+      let bcheChuaSdungLuongHeSo234 = mulMoney(e.bcheChuaSdungLuongHeSo234, this.maDviTien)
+      let bcheChuaSdungCkdg = mulMoney(e.bcheChuaSdungCkdg, this.maDviTien)
+      let quyLuongPcapCkdgTheoLuongHdld = mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien)
+      if(
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEYLIMIT ||
+        tongSo > MONEYLIMIT ||
+        ccvc0101n1Cong > MONEYLIMIT ||
+        ccvc0101n1Luong > MONEYLIMIT ||
+        ccvc0101n1Pcap > MONEYLIMIT ||
+        ccvc0101n1Ckdg > MONEYLIMIT ||
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEYLIMIT ||
+        bcheChuaSdungCong > MONEYLIMIT ||
+        bcheChuaSdungLuongHeSo234 > MONEYLIMIT ||
+        bcheChuaSdungCkdg > MONEYLIMIT ||
+        quyLuongPcapCkdgTheoLuongHdld > MONEYLIMIT
+      ){
+        checkMoneyRange = false;
+        return
+      }
+
       lstCTietBCaoTemp.push({
         ...e,
-        tongQuyLuongPcapCkdgTheoLuongCcvcHdld : mulMoney(e.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien),
-        tongSo : mulMoney(e.tongSo, this.maDviTien),
-        ccvc0101n1Cong : mulMoney(e.ccvc0101n1Cong, this.maDviTien),
-        ccvc0101n1Luong : mulMoney(e.ccvc0101n1Luong, this.maDviTien),
-        ccvc0101n1Pcap : mulMoney(e.ccvc0101n1Pcap, this.maDviTien),
-        ccvc0101n1Ckdg : mulMoney(e.ccvc0101n1Ckdg, this.maDviTien),
-        quyLuongTangThemDoNangBacLuongCcvc0101n1 : mulMoney(e.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien),
-        bcheChuaSdungCong : mulMoney(e.bcheChuaSdungCong, this.maDviTien),
-        bcheChuaSdungLuongHeSo234 : mulMoney(e.bcheChuaSdungLuongHeSo234, this.maDviTien),
-        bcheChuaSdungCkdg : mulMoney(e.bcheChuaSdungCkdg, this.maDviTien),
-        quyLuongPcapCkdgTheoLuongHdld : mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien),
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld :tongQuyLuongPcapCkdgTheoLuongCcvcHdld ,
+        tongSo :tongSo ,
+        ccvc0101n1Cong :ccvc0101n1Cong ,
+        ccvc0101n1Luong :ccvc0101n1Luong ,
+        ccvc0101n1Pcap :ccvc0101n1Pcap ,
+        ccvc0101n1Ckdg :ccvc0101n1Ckdg ,
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 :quyLuongTangThemDoNangBacLuongCcvc0101n1 ,
+        bcheChuaSdungCong :bcheChuaSdungCong ,
+        bcheChuaSdungLuongHeSo234 :bcheChuaSdungLuongHeSo234 ,
+        bcheChuaSdungCkdg :bcheChuaSdungCkdg ,
+        quyLuongPcapCkdgTheoLuongHdld :quyLuongPcapCkdgTheoLuongHdld ,
       })
     })
-    // gui du lieu trinh duyet len server
-    let request = {
-      id: this.id,
-      fileDinhKems: listFile,
-      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      listIdDeletes: this.listIdDelete,
-      lstCTietBCao: lstCTietBCaoTemp,
-      maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBcao,
 
-    };
+    if(!checkMoneyRange == true){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE)
+    }else{
+      // gui du lieu trinh duyet len server
+      let request = {
+        id: this.id,
+        fileDinhKems: listFile,
+        listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+        listIdDeletes: this.listIdDelete,
+        lstCTietBCao: lstCTietBCaoTemp,
+        maBcao: this.maBaoCao,
+        maDvi: this.maDonViTao,
+        maDviTien: this.maDviTien,
+        maLoaiBcao: QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
+        namHienHanh: this.namBaoCaoHienHanh,
+        namBcao: this.namBcao,
 
-    //call service them moi
-    this.spinner.show();
-    if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        async data => {
-          if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.id = data.data.id;
-            await this.getDetailReport();
-            this.getStatusButton();
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        err => {
+      };
+
+      //call service them moi
+      this.spinner.show();
+      if (this.id == null) {
+        this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+          async data => {
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.id = data.data.id;
+              await this.getDetailReport();
+              this.getStatusButton();
+            } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
+      } else {
+        this.quanLyVonPhiService.updatelist(request).toPromise().then(
+          async data => {
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              await this.getDetailReport();
+              this.getStatusButton();
+            } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        },err =>{
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
-    } else {
-      this.quanLyVonPhiService.updatelist(request).toPromise().then(
-        async data => {
-          if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            await this.getDetailReport();
-            this.getStatusButton();
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-      },err =>{
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        })
+      }
     }
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
@@ -763,65 +800,95 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
     }
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = []
-    this.lstCTietBCao.filter(item => {
+    let checkMoneyRange = true;
+    this.lstCTietBCao.filter(e => {
+      let tongQuyLuongPcapCkdgTheoLuongCcvcHdld = mulMoney(e.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien)
+      let tongSo = mulMoney(e.tongSo, this.maDviTien)
+      let ccvc0101n1Cong = mulMoney(e.ccvc0101n1Cong, this.maDviTien)
+      let ccvc0101n1Luong = mulMoney(e.ccvc0101n1Luong, this.maDviTien)
+      let ccvc0101n1Pcap = mulMoney(e.ccvc0101n1Pcap, this.maDviTien)
+      let ccvc0101n1Ckdg = mulMoney(e.ccvc0101n1Ckdg, this.maDviTien)
+      let quyLuongTangThemDoNangBacLuongCcvc0101n1 = mulMoney(e.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien)
+      let bcheChuaSdungCong = mulMoney(e.bcheChuaSdungCong, this.maDviTien)
+      let bcheChuaSdungLuongHeSo234 = mulMoney(e.bcheChuaSdungLuongHeSo234, this.maDviTien)
+      let bcheChuaSdungCkdg = mulMoney(e.bcheChuaSdungCkdg, this.maDviTien)
+      let quyLuongPcapCkdgTheoLuongHdld = mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien)
+      if(
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEYLIMIT ||
+        tongSo > MONEYLIMIT ||
+        ccvc0101n1Cong > MONEYLIMIT ||
+        ccvc0101n1Luong > MONEYLIMIT ||
+        ccvc0101n1Pcap > MONEYLIMIT ||
+        ccvc0101n1Ckdg > MONEYLIMIT ||
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEYLIMIT ||
+        bcheChuaSdungCong > MONEYLIMIT ||
+        bcheChuaSdungLuongHeSo234 > MONEYLIMIT ||
+        bcheChuaSdungCkdg > MONEYLIMIT ||
+        quyLuongPcapCkdgTheoLuongHdld > MONEYLIMIT
+      ){
+        checkMoneyRange = false;
+        return
+      }
+
       lstTemp.push({
-        ...item,
-        id: null,
-        tongQuyLuongPcapCkdgTheoLuongCcvcHdld : mulMoney(item.tongQuyLuongPcapCkdgTheoLuongCcvcHdld, this.maDviTien),
-        tongSo : mulMoney(item.tongSo, this.maDviTien),
-        ccvc0101n1Cong : mulMoney(item.ccvc0101n1Cong, this.maDviTien),
-        ccvc0101n1Luong : mulMoney(item.ccvc0101n1Luong, this.maDviTien),
-        ccvc0101n1Pcap : mulMoney(item.ccvc0101n1Pcap, this.maDviTien),
-        ccvc0101n1Ckdg : mulMoney(item.ccvc0101n1Ckdg, this.maDviTien),
-        quyLuongTangThemDoNangBacLuongCcvc0101n1 : mulMoney(item.quyLuongTangThemDoNangBacLuongCcvc0101n1, this.maDviTien),
-        bcheChuaSdungCong : mulMoney(item.bcheChuaSdungCong, this.maDviTien),
-        bcheChuaSdungLuongHeSo234 : mulMoney(item.bcheChuaSdungLuongHeSo234, this.maDviTien),
-        bcheChuaSdungCkdg : mulMoney(item.bcheChuaSdungCkdg, this.maDviTien),
-        quyLuongPcapCkdgTheoLuongHdld : mulMoney(item.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien),
+        ...e,
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld :tongQuyLuongPcapCkdgTheoLuongCcvcHdld ,
+        tongSo :tongSo ,
+        ccvc0101n1Cong :ccvc0101n1Cong ,
+        ccvc0101n1Luong :ccvc0101n1Luong ,
+        ccvc0101n1Pcap :ccvc0101n1Pcap ,
+        ccvc0101n1Ckdg :ccvc0101n1Ckdg ,
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 :quyLuongTangThemDoNangBacLuongCcvc0101n1 ,
+        bcheChuaSdungCong :bcheChuaSdungCong ,
+        bcheChuaSdungLuongHeSo234 :bcheChuaSdungLuongHeSo234 ,
+        bcheChuaSdungCkdg :bcheChuaSdungCkdg ,
+        quyLuongPcapCkdgTheoLuongHdld :quyLuongPcapCkdgTheoLuongHdld ,
       })
     })
-    let request = {
-      id: null,
-      listIdDeletes: null,
-      fileDinhKems: null,
-      listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: lstTemp,
-      maBcao: maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh + 1,
-      soVban: null,
-    };
 
-    //call service them moi
-    // this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-      async data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-          this.id = data.data.id;
-          await this.getDetailReport();
-          this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-quy-tien-luong-nam-n1/' + this.id);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
-    this.spinner.hide();
+    if(!checkMoneyRange == true){
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE)
+    }else {
+      let request = {
+        id: null,
+        listIdDeletes: null,
+        fileDinhKems: null,
+        listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+        lstCTietBCao: lstTemp,
+        maBcao: maBaoCao,
+        maDvi: this.maDonViTao,
+        maDviTien: this.maDviTien,
+        maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1,
+        namHienHanh: this.namBaoCaoHienHanh,
+        namBcao: this.namBaoCaoHienHanh + 1,
+        soVban: null,
+      };
+      //call service them moi
+      this.spinner.show();
+      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+        async data => {
+          if (data.statusCode == 0) {
+            const modalCopy = this.modal.create({
+              nzTitle: MESSAGE.ALERT,
+              nzContent: DialogCopyComponent,
+              nzMaskClosable: false,
+              nzClosable: false,
+              nzWidth: '900px',
+              nzFooter: null,
+              nzComponentParams: {
+                maBcao: maBaoCao
+              },
+            });
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    }
+  this.spinner.hide();
   }
 
   // action print

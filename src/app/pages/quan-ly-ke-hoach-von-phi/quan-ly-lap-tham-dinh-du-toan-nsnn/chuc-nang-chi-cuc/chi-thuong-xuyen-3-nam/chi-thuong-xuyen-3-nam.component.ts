@@ -152,7 +152,18 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
 	}
 
+	currentUrl: string;
+	previousUrl: string;
 	async ngOnInit() {
+		this.router.events
+			.pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
+			.subscribe((events: RoutesRecognized[]) => {
+				debugger
+				this.currentUrl = events[0].urlAfterRedirects;
+				this.previousUrl = events[1].urlAfterRedirects;
+				console.log('previous url', events[0].urlAfterRedirects);
+				console.log('current url', events[1].urlAfterRedirects);
+			});
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.maDonViTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		this.maLoaiBaoCao = this.routerActive.snapshot.paramMap.get('maLoaiBacao');
@@ -372,6 +383,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			let tranChiDuocTbN3 = mulMoney(element.tranChiDuocTbN3, this.maDviTien);
 			let ncauChiCuaDviN3 = mulMoney(element.ncauChiCuaDviN3, this.maDviTien);
 			let clechTranChiVsNcauN3 = mulMoney(element.clechTranChiVsNcauN3, this.maDviTien);
+			debugger
 			if (tranChiDuocTbN1 > MONEYLIMIT || ncauChiCuaDviN1 > MONEYLIMIT || clechTranChiVsNcauN1 > MONEYLIMIT ||
 				tranChiDuocTbN2 > MONEYLIMIT || ncauChiCuaDviN2 > MONEYLIMIT || clechTranChiVsNcauN2 > MONEYLIMIT ||
 				tranChiDuocTbN3 > MONEYLIMIT || ncauChiCuaDviN3 > MONEYLIMIT || clechTranChiVsNcauN3 > MONEYLIMIT) {
@@ -665,12 +677,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			this.indeterminate = true;
 		}
 	}
-	
+
 
 	redirectChiTieuKeHoachNam() {
 		// this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
 		this.location.back();
-		
+
 	}
 
 	// lay ten trang thai
@@ -826,7 +838,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			}
 			lstCTietBCaoTemp.push({
 				...element,
-				id:null,
 				tranChiDuocTbN1: tranChiDuocTbN1,
 				ncauChiCuaDviN1: ncauChiCuaDviN1,
 				clechTranChiVsNcauN1: clechTranChiVsNcauN1,
