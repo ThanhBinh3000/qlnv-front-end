@@ -8,7 +8,7 @@
 				</a>
 			</div>
 			<div class="canphai phai">
-				<button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden]="statusBtnSave">
+				<button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [hidden]="statusBtnSave">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
@@ -57,7 +57,7 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Điều chỉnh theo số kiểm tra</span>
 				</a>
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoaBaoCao()"
+				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="deleteReport()"
 					[hidden]="statusBtnDel">
 					<i nz-icon nzType="delete" nzTheme="outline"></i>
 					<span>Xóa</span>
