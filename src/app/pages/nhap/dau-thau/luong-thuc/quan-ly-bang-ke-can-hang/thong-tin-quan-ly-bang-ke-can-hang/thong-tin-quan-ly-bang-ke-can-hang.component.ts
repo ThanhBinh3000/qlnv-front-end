@@ -15,6 +15,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
+import { DialogPhieuNhapKhoComponent } from 'src/app/components/dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
 
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
@@ -40,6 +41,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
 
   options: any[] = [];
   optionsDonVi: any[] = [];
+
+  selectedPhieuNhap: any = null;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -75,6 +78,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   async loadChiTiet(id) {
     this.formData = this.fb.group({
       soBangKe: [null, [Validators.required]],
+      phieuNhapKho: [null, [Validators.required]],
       maDonVi: [null],
       tenDonVi: [null, [Validators.required]],
       donViId: [null],
@@ -240,6 +244,26 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         }
       },
     });
+  }
+
+  openDialogPhieuNhapKho() {
+    if (this.id == 0) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin phiếu nhập kho',
+        nzContent: DialogPhieuNhapKhoComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalQD.afterClose.subscribe((data) => {
+        if (data) {
+          this.formData.controls['phieuNhapKho'].setValue(data.soQuyetDinh);
+          this.selectedPhieuNhap = data;
+        }
+      });
+    }
   }
 
   async save(isOther: boolean) {
