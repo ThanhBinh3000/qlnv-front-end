@@ -69,7 +69,6 @@
                                    <th nzWidth="200px">Ngày lập</th>
                                    <th nzWidth="200px">Trạng thái</th>
                                    <th nzWidth="200px">Đơn vị lập</th>
-                                   <th nzWidth="50px"></th>
                               </tr>
                          </thead>
                          <tbody>
@@ -78,7 +77,7 @@
                                         {{ (i + 1) + (pages.page - 1)*pages.size }}
                                    </td>
                                    <td>
-                                        {{data.soVban}}
+                                        <a routerLink="../van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/{{data.id}}" style="color: #1890ff;">{{ data.soVban }}</a>
                                    </td>
                                    <td>
                                         {{data.ngayDuyetVban}}
@@ -96,9 +95,6 @@
                                                   {{item.tenDvi}}
                                              </div>
                                         </div>
-                                   </td>
-                                   <td>
-                                        <a routerLink="../van-ban-gui-tcdt-ve-nsnn-va-khtc-3-nam/{{data.id}}">Xem</a>
                                    </td>
                               </tr>
                          </tbody>

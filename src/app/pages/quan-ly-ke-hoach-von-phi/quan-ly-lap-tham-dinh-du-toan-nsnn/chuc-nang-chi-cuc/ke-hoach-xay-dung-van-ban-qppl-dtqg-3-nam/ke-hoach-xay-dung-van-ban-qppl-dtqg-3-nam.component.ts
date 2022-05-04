@@ -6,13 +6,15 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 
 export class ItemData {
@@ -125,6 +127,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		private notification: NzNotificationService,
 		private danhMucService: DanhMucHDVService,
 		private location: Location,
+		private modal: NzModalService,
 
 	) {
 		this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
@@ -296,7 +299,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 	}
 
 	// luu
-	async luu() {
+	async save() {
 		let checkSaveEdit;
 		if (!this.maDviTien || !this.namBaoCaoHienHanh) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -330,12 +333,30 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 			}
 		})
 
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let dtoanKphi= mulMoney(element.dtoanKphi, this.maDviTien);
+			if (dtoanKphi > MONEYLIMIT) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				dtoanKphi: dtoanKphi,
+			})
+		});
+		if (!checkMoneyRange == true) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
 		// gui du lieu trinh duyet len server
 		let request = {
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.mulMoneyTotal(0),
+			lstCTietBCao: lstCTietBCaoTemp,
 			listIdDeletes: this.listIdDelete,
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao = this.maDonViTao,
@@ -699,22 +720,6 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		})
 	}
 
-	mulMoneyTotal(id: number) {
-		let lstCTietBCaoTemp = [];
-		this.lstCTietBCao.forEach(element => {
-			lstCTietBCaoTemp.push({
-				...element,
-				dtoanKphi: mulMoney(element.dtoanKphi, this.maDviTien),
-			})
-		});
-		if (id == 1) {
-			lstCTietBCaoTemp.forEach(item => {
-				item.id = null;
-			})
-		}
-		return lstCTietBCaoTemp;
-	}
-
 	// action copy
 	async doCopy() {
 		this.spinner.show();
@@ -737,12 +742,32 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
+
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let dtoanKphi= mulMoney(element.dtoanKphi, this.maDviTien);
+			if (dtoanKphi > MONEYLIMIT) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				id: null,
+				dtoanKphi: dtoanKphi,
+			})
+		});
+		if (!checkMoneyRange == true) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.mulMoneyTotal(1),
+			lstCTietBCao: lstCTietBCaoTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -757,11 +782,17 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.id = data.data.id;
-					await this.getDetailReport();
-					this.getStatusButton();
-					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/' + this.id);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+							maBcao: maBaoCao
+						},
+					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
