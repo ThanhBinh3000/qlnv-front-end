@@ -8,51 +8,48 @@ import { OldResponseData } from 'src/app/interfaces/response';
 @Injectable({
   providedIn: 'root',
 })
-export class QlNguoiSuDungService extends BaseService {
+export class QlNhomNguoiSuDungService extends BaseService {
   gateway: string = '/qlnv-gateway/qlnv-system'
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'user');
   }
 
-  findList(body) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/findList`;
+  active(body) {
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/active`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   create(body) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/create`;
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/create`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  activequyen(body) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/active-quyen`;
-    return this.httpClient.post<any>(url, body).toPromise();
+  findAll() {
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/findAll`;
+    return this.httpClient.get<OldResponseData>(url).toPromise();
   }
 
   delete(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/delete`;
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/delete`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
 
   update(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/update`;
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/update`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
-  updateStatus(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/updateStatus`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
-
-
-  userInfo(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/userInfo`;
+  findId(body: any) {
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/find`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
 
-  xoaquyen(body: any) {
-    const url = `${environment.SERVICE_API}${this.gateway}/user/xoa-quyen`;
+  findList(body: any) {
+    const url = `${environment.SERVICE_API}${this.gateway}/nhom-nguoi-dung/findList`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+
 
 }

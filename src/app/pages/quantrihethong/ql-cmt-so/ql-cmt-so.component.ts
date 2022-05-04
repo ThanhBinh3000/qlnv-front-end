@@ -230,8 +230,8 @@ export class QlCMTSOComponent implements OnInit {
     if (!data) {
       let modal = this._modalService.create({
         nzTitle: data
-          ? 'Cập nhập tham số hệ thông'
-          : 'Thêm mới tham số hệ thông',
+          ? 'Cập nhập chứng thư số'
+          : 'Thêm mới chứng thư số',
         nzContent: ThemQlCMTSoComponent,
         nzClosable: true,
         nzFooter: null,
