@@ -6,13 +6,15 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 export class ItemData {
      id: any;
@@ -155,6 +157,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
           private location: Location,
+          private modal: NzModalService,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
      }
@@ -354,7 +357,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      }
 
      // luu
-     async luu() {
+     async save() {
           let checkSaveEdit;
           if (!this.maDviTien || !this.namBaoCaoHienHanh) {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -388,13 +391,54 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                }
           })
 
+          let lstCTietBCaoTemp = [];
+          let checkMoneyRange = true;
+          this.lstCTietBCao.filter(element => {
+               let dtoanN = mulMoney(element.dtoanN, this.maDviTien);
+               let uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               let tranChiN1 = mulMoney(element.tranChiN1, this.maDviTien);
+               let ncauChiN1 = mulMoney(element.ncauChiN1, this.maDviTien);
+               let clechTranChiVsNcauChiN1 = mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+               let tranChiN2 = mulMoney(element.tranChiN2, this.maDviTien);
+               let ncauChiN2 = mulMoney(element.ncauChiN2, this.maDviTien);
+               let clechTranChiVsNcauChiN2 = mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+               let tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
+               let ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
+               let clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+               if (dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT ||
+                    ncauChiN1 > MONEYLIMIT || clechTranChiVsNcauChiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
+                    ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT ||
+                    ncauChiN3 > MONEYLIMIT || clechTranChiVsNcauChiN3 > MONEYLIMIT) {
+                    checkMoneyRange = false;
+                    return;
+               }
+               lstCTietBCaoTemp.push({
+                    ...element,
+                    dtoanN: dtoanN,
+                    uocThienN: uocThienN,
+                    tranChiN1: tranChiN1,
+                    ncauChiN1: ncauChiN1,
+                    clechTranChiVsNcauChiN1: clechTranChiVsNcauChiN1,
+                    tranChiN2: tranChiN2,
+                    ncauChiN2: ncauChiN2,
+                    clechTranChiVsNcauChiN2: clechTranChiVsNcauChiN2,
+                    tranChiN3: tranChiN3,
+                    ncauChiN3: ncauChiN3,
+                    clechTranChiVsNcauChiN3: clechTranChiVsNcauChiN3,
+               })
+          });
+          if (!checkMoneyRange == true) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+               return;
+          }
+
           // gui du lieu trinh duyet len server
           let request = {
                id: this.id,
                fileDinhKems: listFile,
                listIdDeletes: this.listIdDelete,
                listIdDeleteFiles: this.listIdDeleteFiles,
-               lstCTietBCao: this.mulMoneyTotal(0),
+               lstCTietBCao: lstCTietBCaoTemp,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,
@@ -826,32 +870,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                element.clechTranChiVsNcauChiN3 = divMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
           });
      }
- 
-     mulMoneyTotal(id: number) {
-          let lstCTietBCaoTemp = [];
-          this.lstCTietBCao.forEach(element => {
-               lstCTietBCaoTemp.push({
-                    ...element,
-                    dtoanN: mulMoney(element.dtoanN, this.maDviTien),
-                    uocThienN: mulMoney(element.uocThienN, this.maDviTien),
-                    tranChiN1: mulMoney(element.tranChiN1, this.maDviTien),
-                    ncauChiN1: mulMoney(element.ncauChiN1, this.maDviTien),
-                    clechTranChiVsNcauChiN1: mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien),
-                    tranChiN2: mulMoney(element.tranChiN2, this.maDviTien),
-                    ncauChiN2: mulMoney(element.ncauChiN2, this.maDviTien),
-                    clechTranChiVsNcauChiN2: mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien),
-                    tranChiN3: mulMoney(element.tranChiN3, this.maDviTien),
-                    ncauChiN3: mulMoney(element.ncauChiN3, this.maDviTien),
-                    clechTranChiVsNcauChiN3: mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien),
-               })
-          });
-          if (id == 1) {
-               lstCTietBCaoTemp.forEach(item => {
-                    item.id = null;
-               })
-          }
-          return lstCTietBCaoTemp;
-     }
+
 
      // action copy
      async doCopy() {
@@ -876,12 +895,55 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           if (!maBaoCao) {
                return;
           }
+
+          let lstCTietBCaoTemp = [];
+          let checkMoneyRange = true;
+          this.lstCTietBCao.filter(element => {
+               let dtoanN = mulMoney(element.dtoanN, this.maDviTien);
+               let uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               let tranChiN1 = mulMoney(element.tranChiN1, this.maDviTien);
+               let ncauChiN1 = mulMoney(element.ncauChiN1, this.maDviTien);
+               let clechTranChiVsNcauChiN1 = mulMoney(element.clechTranChiVsNcauChiN1, this.maDviTien);
+               let tranChiN2 = mulMoney(element.tranChiN2, this.maDviTien);
+               let ncauChiN2 = mulMoney(element.ncauChiN2, this.maDviTien);
+               let clechTranChiVsNcauChiN2 = mulMoney(element.clechTranChiVsNcauChiN2, this.maDviTien);
+               let tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
+               let ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
+               let clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
+               if (dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT ||
+                    ncauChiN1 > MONEYLIMIT || clechTranChiVsNcauChiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
+                    ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT ||
+                    ncauChiN3 > MONEYLIMIT || clechTranChiVsNcauChiN3 > MONEYLIMIT) {
+                    checkMoneyRange = false;
+                    return;
+               }
+               lstCTietBCaoTemp.push({
+                    ...element,
+                    id: null,
+                    dtoanN: dtoanN,
+                    uocThienN: uocThienN,
+                    tranChiN1: tranChiN1,
+                    ncauChiN1: ncauChiN1,
+                    clechTranChiVsNcauChiN1: clechTranChiVsNcauChiN1,
+                    tranChiN2: tranChiN2,
+                    ncauChiN2: ncauChiN2,
+                    clechTranChiVsNcauChiN2: clechTranChiVsNcauChiN2,
+                    tranChiN3: tranChiN3,
+                    ncauChiN3: ncauChiN3,
+                    clechTranChiVsNcauChiN3: clechTranChiVsNcauChiN3,
+               })
+          });
+          if (!checkMoneyRange == true) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+               return;
+          }
+
           let request = {
                id: null,
                listIdDeletes: null,
                fileDinhKems: null,
                listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-               lstCTietBCao: this.mulMoneyTotal(1),
+               lstCTietBCao: lstCTietBCaoTemp,
                maBcao: maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,
@@ -896,11 +958,17 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
           this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
                async data => {
                     if (data.statusCode == 0) {
-                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-                         this.id = data.data.id;
-                         await this.getDetailReport();
-                         this.getStatusButton();
-                         this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-ngan-sach-nha-nuoc-3-nam/' + this.id);
+                         const modalCopy = this.modal.create({
+                              nzTitle: MESSAGE.ALERT,
+                              nzContent: DialogCopyComponent,
+                              nzMaskClosable: false,
+                              nzClosable: false,
+                              nzWidth: '900px',
+                              nzFooter: null,
+                              nzComponentParams: {
+                                   maBcao: maBaoCao
+                              },
+                         });
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
