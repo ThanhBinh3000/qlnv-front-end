@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -14,6 +14,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 export class ItemData {
 	id: any;
@@ -96,6 +98,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 	capDv: any;
 	checkDv: boolean;
 	currentday: Date = new Date();
+	checkMoneyRange: boolean;
 
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -129,6 +132,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		private notification: NzNotificationService,
 		private danhMucService: DanhMucHDVService,
 		private location: Location,
+		private modal: NzModalService,
 	) {
 		this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
 	}
@@ -281,7 +285,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 	}
 
 	// luu
-	async luu() {
+	async save() {
 		let checkSaveEdit;
 		if (!this.maDviTien || !this.namBaoCaoHienHanh) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -314,13 +318,35 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 				item.id = null;
 			}
 		})
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let n1 = mulMoney(element.n1, this.maDviTien);
+			let n2 = mulMoney(element.n2, this.maDviTien);
+			let n3 = mulMoney(element.n3, this.maDviTien);
+			if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				n1: n1,
+				n2: n2, 
+				n3: n3,
+			})
+		});
+
+		if (!checkMoneyRange){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
 		// gui du lieu trinh duyet len server
 		let request = {
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDelete,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.mulMoneyTotal(0),
+			lstCTietBCao: lstCTietBCaoTemp,
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -724,7 +750,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 				n3: mulMoney(element.n3, this.maDviTien),
 			})
 		});
-		if (id == 1){
+		if (id == 1) {
 			lstCTietBCaoTemp.forEach(item => {
 				item.id = null;
 			})
@@ -754,13 +780,37 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
-		
+
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let n1 = mulMoney(element.n1, this.maDviTien);
+			let n2 = mulMoney(element.n2, this.maDviTien);
+			let n3 = mulMoney(element.n3, this.maDviTien);
+			if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				id: null,
+				n1: n1,
+				n2: n2, 
+				n3: n3,
+			})
+		});
+
+		if (!checkMoneyRange){
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.mulMoneyTotal(1),
+			lstCTietBCao: lstCTietBCaoTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -775,11 +825,17 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.id = data.data.id;
-					await this.getDetailReport();
-					this.getStatusButton();
-					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/' + this.id);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+							maBcao: maBaoCao
+						},
+					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -814,7 +870,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/' + id
 		]);
-	  }
+	}
 
 
 }

@@ -14,6 +14,8 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DONVITIEN, mulMoney, QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU, Utils } from "../../../../../Utility/utils";
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 
 
@@ -132,6 +134,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
               private notification : NzNotificationService,
               private location : Location,
               private fb:FormBuilder,
+              private modal: NzModalService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
@@ -799,33 +802,29 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     };
 
     //call service them moi
-    this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-      async data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-          this.id = data.data.id;
-          await this.getDetailReport();
-          this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-nhu-cau-nhap-xuat-hang-nam/' + this.id);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-
-      },
-    );
-
-    this.lstCTiet.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
+			this.spinner.show();
+			this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+				async data => {
+					if (data.statusCode == 0) {
+						const modalCopy = this.modal.create({
+							nzTitle: MESSAGE.ALERT,
+							nzContent: DialogCopyComponent,
+							nzMaskClosable: false,
+							nzClosable: false,
+							nzWidth: '900px',
+							nzFooter: null,
+							nzComponentParams: {
+								maBcao: maBaoCao
+							},
+						});
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				},
+				err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
     this.spinner.hide();
   }
 

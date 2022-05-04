@@ -8,7 +8,7 @@
 				</a>
 			</div>
 			<div class="canphai phai">
-				<button class="btn btn-main btn-sm waves-effect waves-light" (click)="luu()" [hidden]="statusBtnSave">
+				<button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [hidden]="statusBtnSave">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
@@ -45,7 +45,7 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Lãnh đạo duyệt</span>
 				</a>
-				<button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')"
+				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('7')"
 					[hidden]="statusBtnGuiDVCT">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Gửi duyệt</span>
@@ -59,7 +59,7 @@
 					[hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>ĐV cấp trên duyệt</span>
-				</a>
+				</a> -->
 				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('10')"
 					[hidden]="statusBtnLDDC">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>

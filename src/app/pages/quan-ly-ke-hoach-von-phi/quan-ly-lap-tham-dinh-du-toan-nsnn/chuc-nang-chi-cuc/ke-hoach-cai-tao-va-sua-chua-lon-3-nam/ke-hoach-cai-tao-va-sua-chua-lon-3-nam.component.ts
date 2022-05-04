@@ -6,13 +6,15 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 export class ItemData {
      id!: any;
@@ -168,6 +170,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           private notification: NzNotificationService,
           private danhMucService: DanhMucHDVService,
           private location: Location,
+          private modal: NzModalService,
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
      }
@@ -348,7 +351,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      }
 
      // luu
-     async luu() {
+     async save() {
           let checkSaveEdit;
           if (!this.maDviTien || !this.namBaoCaoHienHanh) {
                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -381,6 +384,52 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                     item.id = null;
                }
           })
+          let lstCTietBCaoTemp = [];
+          let checkMoneyRange = true;
+          this.lstCTietBCao.filter(element => {
+               let tongGtri = mulMoney(element.tongGtri, this.maDviTien);
+               let dtoanKphi3006n = mulMoney(element.dtoanKphi3006n, this.maDviTien);
+               let uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               let daTtoan3006n = mulMoney(element.daTtoan3006n, this.maDviTien);
+               let uocTtoanN = mulMoney(element.uocTtoanN, this.maDviTien);
+               let ttoanN1 = mulMoney(element.ttoanN1, this.maDviTien);
+               let phatSinhN1 = mulMoney(element.phatSinhN1, this.maDviTien);
+               let tsoN1 = mulMoney(element.tsoN1, this.maDviTien);
+               let ttoanN2 = mulMoney(element.ttoanN2, this.maDviTien);
+               let phatSinhN2 = mulMoney(element.phatSinhN2, this.maDviTien);
+               let tsoN2 = mulMoney(element.tsoN2, this.maDviTien);
+               let ttoanN3 = mulMoney(element.ttoanN3, this.maDviTien);
+               let phatSinhN3 = mulMoney(element.phatSinhN3, this.maDviTien);
+               let tsoN3 = mulMoney(element.tsoN3, this.maDviTien);
+               debugger
+               if (tongGtri > MONEYLIMIT || dtoanKphi3006n > MONEYLIMIT || uocThienN > MONEYLIMIT || daTtoan3006n > MONEYLIMIT ||
+                    uocTtoanN > MONEYLIMIT || ttoanN1 > MONEYLIMIT || phatSinhN1 > MONEYLIMIT || tsoN1 > MONEYLIMIT || tsoN3 > MONEYLIMIT ||
+                    ttoanN2 > MONEYLIMIT || phatSinhN2 > MONEYLIMIT || tsoN2 > MONEYLIMIT || ttoanN3 > MONEYLIMIT || phatSinhN3 > MONEYLIMIT) {
+                    checkMoneyRange = false;
+                    return;
+               }
+               lstCTietBCaoTemp.push({
+                    ...element,
+                    tongGtri: tongGtri,
+                    dtoanKphi3006n: dtoanKphi3006n,
+                    uocThienN: uocThienN,
+                    daTtoan3006n: daTtoan3006n,
+                    uocTtoanN: uocTtoanN,
+                    ttoanN1: ttoanN1,
+                    phatSinhN1: phatSinhN1,
+                    tsoN1: tsoN1,
+                    ttoanN2: ttoanN2,
+                    phatSinhN2: phatSinhN2,
+                    tsoN2: tsoN2,
+                    ttoanN3: ttoanN3,
+                    phatSinhN3: phatSinhN3,
+                    tsoN3: tsoN3,
+               })
+          });
+          if (!checkMoneyRange == true) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+               return;
+          }
 
           // gui du lieu trinh duyet len server
           let request = {
@@ -388,7 +437,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                fileDinhKems: listFile,
                listIdDeleteFiles: this.listIdDeleteFiles,
                listIdDeletes: this.listIdDelete,                    // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-               lstCTietBCao: this.mulMoneyTotal(0),
+               lstCTietBCao: lstCTietBCaoTemp,
                maBcao: this.maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,
@@ -815,35 +864,6 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           });
      }
 
-     mulMoneyTotal(id: number) {
-          let lstCTietBCaoTemp = [];
-          this.lstCTietBCao.forEach(element => {
-               lstCTietBCaoTemp.push({
-                    ...element,
-                    tongGtri: mulMoney(element.tongGtri, this.maDviTien),
-                    dtoanKphi3006n: mulMoney(element.dtoanKphi3006n, this.maDviTien),
-                    uocThienN: mulMoney(element.uocThienN, this.maDviTien),
-                    daTtoan3006n: mulMoney(element.daTtoan3006n, this.maDviTien),
-                    uocTtoanN: mulMoney(element.uocTtoanN, this.maDviTien),
-                    ttoanN1: mulMoney(element.ttoanN1, this.maDviTien),
-                    phatSinhN1: mulMoney(element.phatSinhN1, this.maDviTien),
-                    tsoN1: mulMoney(element.tsoN1, this.maDviTien),
-                    ttoanN2: mulMoney(element.ttoanN2, this.maDviTien),
-                    phatSinhN2: mulMoney(element.phatSinhN2, this.maDviTien),
-                    tsoN2: mulMoney(element.tsoN2, this.maDviTien),
-                    ttoanN3: mulMoney(element.ttoanN3, this.maDviTien),
-                    phatSinhN3: mulMoney(element.phatSinhN3, this.maDviTien),
-                    tsoN3: mulMoney(element.tsoN3, this.maDviTien),
-               })
-          });
-          if (id == 1) {
-               lstCTietBCaoTemp.forEach(item => {
-                    item.id = null;
-               })
-          }
-          return lstCTietBCaoTemp;
-     }
-
      // action copy
      async doCopy() {
           this.spinner.show();
@@ -866,12 +886,59 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           if (!maBaoCao) {
                return;
           }
+          let lstCTietBCaoTemp = [];
+          let checkMoneyRange = true;
+          this.lstCTietBCao.filter(element => {
+               let tongGtri = mulMoney(element.tongGtri, this.maDviTien);
+               let dtoanKphi3006n = mulMoney(element.dtoanKphi3006n, this.maDviTien);
+               let uocThienN = mulMoney(element.uocThienN, this.maDviTien);
+               let daTtoan3006n = mulMoney(element.daTtoan3006n, this.maDviTien);
+               let uocTtoanN = mulMoney(element.uocTtoanN, this.maDviTien);
+               let ttoanN1 = mulMoney(element.ttoanN1, this.maDviTien);
+               let phatSinhN1 = mulMoney(element.phatSinhN1, this.maDviTien);
+               let tsoN1 = mulMoney(element.tsoN1, this.maDviTien);
+               let ttoanN2 = mulMoney(element.ttoanN2, this.maDviTien);
+               let phatSinhN2 = mulMoney(element.phatSinhN2, this.maDviTien);
+               let tsoN2 = mulMoney(element.tsoN2, this.maDviTien);
+               let ttoanN3 = mulMoney(element.ttoanN3, this.maDviTien);
+               let phatSinhN3 = mulMoney(element.phatSinhN3, this.maDviTien);
+               let tsoN3 = mulMoney(element.tsoN3, this.maDviTien);
+               debugger
+               if (tongGtri > MONEYLIMIT || dtoanKphi3006n > MONEYLIMIT || uocThienN > MONEYLIMIT || daTtoan3006n > MONEYLIMIT ||
+                    uocTtoanN > MONEYLIMIT || ttoanN1 > MONEYLIMIT || phatSinhN1 > MONEYLIMIT || tsoN1 > MONEYLIMIT || tsoN3 > MONEYLIMIT ||
+                    ttoanN2 > MONEYLIMIT || phatSinhN2 > MONEYLIMIT || tsoN2 > MONEYLIMIT || ttoanN3 > MONEYLIMIT || phatSinhN3 > MONEYLIMIT) {
+                    checkMoneyRange = false;
+                    return;
+               }
+               lstCTietBCaoTemp.push({
+                    ...element,
+                    id: null,
+                    tongGtri: tongGtri,
+                    dtoanKphi3006n: dtoanKphi3006n,
+                    uocThienN: uocThienN,
+                    daTtoan3006n: daTtoan3006n,
+                    uocTtoanN: uocTtoanN,
+                    ttoanN1: ttoanN1,
+                    phatSinhN1: phatSinhN1,
+                    tsoN1: tsoN1,
+                    ttoanN2: ttoanN2,
+                    phatSinhN2: phatSinhN2,
+                    tsoN2: tsoN2,
+                    ttoanN3: ttoanN3,
+                    phatSinhN3: phatSinhN3,
+                    tsoN3: tsoN3,
+               })
+          });
+          if (!checkMoneyRange == true) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+               return;
+          }
           let request = {
                id: null,
                listIdDeletes: null,
                fileDinhKems: null,
                listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-               lstCTietBCao: this.mulMoneyTotal(1),
+               lstCTietBCao: lstCTietBCaoTemp,
                maBcao: maBaoCao,
                maDvi: this.maDonViTao,
                maDviTien: this.maDviTien,
@@ -886,11 +953,17 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
           this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
                async data => {
                     if (data.statusCode == 0) {
-                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-                         this.id = data.data.id;
-                         await this.getDetailReport();
-                         this.getStatusButton();
-                         this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/ke-hoach-cai-tao-va-sua-chua-lon-3-nam/' + this.id);
+                         const modalCopy = this.modal.create({
+                              nzTitle: MESSAGE.ALERT,
+                              nzContent: DialogCopyComponent,
+                              nzMaskClosable: false,
+                              nzClosable: false,
+                              nzWidth: '900px',
+                              nzFooter: null,
+                              nzComponentParams: {
+                                   maBcao: maBaoCao
+                              },
+                         });
                     } else {
                          this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
