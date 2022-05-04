@@ -179,7 +179,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			this.maLoaiBaoCao != null &&
 			this.namBaoCaoHienHanh != null
 		) {
-			await this.calltonghop();
+			await this.callSynthetic();
 			this.nguoiNhap = this.userInfo?.username;
 			this.ngayNhap = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.maDonViTao = this.userInfo?.dvql;
@@ -333,15 +333,8 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		this.fileToUpload = files.item(0);
 	}
 
-	// xoa
-	xoa() {
-		this.lstCTietBCao = [];
-		this.lstFile = [];
-		this.listFile = []
-	}
-
 	// luu
-	async luu() {
+	async save() {
 		let checkSaveEdit;
 		if (!this.maDviTien || !this.namBaoCaoHienHanh) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -509,7 +502,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.tinhTong(-1, this.tong);
+					this.total(-1, this.tong);
 					this.lstCTietBCao = data.data.lstCTietBCao;
 					this.maDviTien = data.data.maDviTien;
 					this.divMoneyTotal();
@@ -535,7 +528,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 						this.status = true;
 					}
 					this.lstCTietBCao.forEach(item => {
-						this.tinhTong(1, item);
+						this.total(1, item);
 					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -602,7 +595,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 	// xoa dong
 	deleteById(id: any): void {
 		var index: number = this.lstCTietBCao.findIndex(e => e.id == id);
-		this.tinhTong(-1, this.lstCTietBCao[index]);
+		this.total(-1, this.lstCTietBCao[index]);
 		this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
 		if (typeof id == "number") {
 			this.listIdDelete += id + ",";
@@ -614,7 +607,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		// add list delete id
 		this.lstCTietBCao.filter(item => {
 			if (item.checked) {
-				this.tinhTong(-1, item);
+				this.total(-1, item);
 			}
 			if (item.checked == true && typeof item.id == "number") {
 				this.listIdDelete += item.id + ","
@@ -724,10 +717,10 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		} else {
 			this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
 			const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-			this.tinhTong(-1, this.lstCTietBCao[index]);
+			this.total(-1, this.lstCTietBCao[index]);
 			Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
 			this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-			this.tinhTong(1, this.lstCTietBCao[index]);
+			this.total(1, this.lstCTietBCao[index]);
 		}
 	}
 
@@ -748,7 +741,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		this.editCache[id].data.clechTranChiVsNcauN3 = Number(this.editCache[id].data.ncauChiCuaDviN3) - Number(this.editCache[id].data.tranChiDuocTbN3);
 	}
 
-	tinhTong(heSo: number, item: ItemData) {
+	total(heSo: number, item: ItemData) {
 		this.tong.namHhanhN += heSo * item.namHhanhN;
 		this.tong.tranChiDuocTbN1 += heSo * item.tranChiDuocTbN1;
 		this.tong.ncauChiCuaDviN1 += heSo * item.ncauChiCuaDviN1;
@@ -761,7 +754,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		this.tong.clechTranChiVsNcauN3 += heSo * item.clechTranChiVsNcauN3;
 	}
 
-	async calltonghop() {
+	async callSynthetic() {
 		this.spinner.show();
 		this.maDviTien = "1";
 		let objtonghop = {
@@ -785,7 +778,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	xoaBaoCao() {
+	deleteReport() {
 		if (this.id) {
 			this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
 				if (res.statusCode == 0) {
@@ -805,7 +798,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 	// action copy
 	async doCopy() {
 		this.spinner.show();
-
 		let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
@@ -879,7 +871,6 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
-						this.id = data.data.id;
 						const modalCopy = this.modal.create({
 							nzTitle: MESSAGE.ALERT,
 							nzContent: DialogCopyComponent,
