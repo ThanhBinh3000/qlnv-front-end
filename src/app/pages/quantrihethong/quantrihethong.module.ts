@@ -17,6 +17,9 @@ import { ThemQlNhomQuyenComponent } from './ql-nhomquyen/them-ql-nhom-quyen/them
 import { NzTreeComponent, NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { ThemQlTSHethongComponent } from './ql-ts-hethong/them-ql-ts-hethong/them-ql-ts-hethong.component';
+import { QlKhoaMokhoaComponent } from './ql-khoa-mokhoa/ql-khoa-mokhoa.component';
+import { ThemQlCMTSoComponent } from './ql-cmt-so/them-ql-cmt-so/them-ql-cmt-so.component';
+import { QlCMTSOComponent } from './ql-cmt-so/ql-cmt-so.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { ThemQlTSHethongComponent } from './ql-ts-hethong/them-ql-ts-hethong/the
     ThemMoiNSDComponent,
     ThemQlQuyenComponent,
     ThemQlNhomQuyenComponent,
-    ThemQlTSHethongComponent
+    ThemQlTSHethongComponent,
+    QlKhoaMokhoaComponent,
+    ThemQlCMTSoComponent,
+    QlCMTSOComponent
   ],
   imports: [CommonModule, QuanTriHeThongRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 
