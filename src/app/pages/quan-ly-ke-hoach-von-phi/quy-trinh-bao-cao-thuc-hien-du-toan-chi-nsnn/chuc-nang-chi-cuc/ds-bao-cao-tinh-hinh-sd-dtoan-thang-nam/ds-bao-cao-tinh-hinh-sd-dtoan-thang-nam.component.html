@@ -102,17 +102,11 @@
               <td>{{item.ngayTraKq}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main">
-                  <span>Phê duyệt</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Nhập/Sửa dữ liệu</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Xem</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Xóa</span>
+                <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
+                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Xóa</span>
                 </button>
               </td>
             </tr>

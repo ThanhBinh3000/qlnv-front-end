@@ -392,7 +392,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			})
 		});
 		if (!checkMoneyRange == true) {
-			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 		} else {
 			// gui du lieu trinh duyet len server
 			let request = {
@@ -839,7 +839,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			})
 		});
 		if (!checkMoneyRange == true) {
-			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 		} else {
 			let request = {
 				listIdDeletes: null,
