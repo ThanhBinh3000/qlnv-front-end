@@ -6,13 +6,15 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 export class ItemData {
 	id!: any;
@@ -174,6 +176,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		private notification: NzNotificationService,
 		private danhMucService: DanhMucHDVService,
 		private location: Location,
+		private modal: NzModalService,
 	) {
 		this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
 	}
@@ -370,7 +373,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	}
 
 	// luu
-	async luu() {
+	async save() {
 		let checkSaveEdit;
 		if (!this.maDviTien || !this.namBaoCaoHienHanh) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -404,13 +407,52 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			}
 		})
 
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.maDviTien);
+			let cbDtuN = mulMoney(element.cbDtuN, this.maDviTien);
+			let thienNamTruoc = mulMoney(element.thienNamTruoc, this.maDviTien);
+			let thDtuN = mulMoney(element.thDtuN, this.maDviTien);
+			let cbDtuN1 = mulMoney(element.cbDtuN1, this.maDviTien);
+			let thDtuN1 = mulMoney(element.thDtuN1, this.maDviTien);
+			let cbDtuN2 = mulMoney(element.cbDtuN2, this.maDviTien);
+			let thDtuN2 = mulMoney(element.thDtuN2, this.maDviTien);
+			let cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
+			let thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
+			debugger
+			if (tongDtoanGtri > MONEYLIMIT || cbDtuN > MONEYLIMIT || thienNamTruoc > MONEYLIMIT ||
+				thDtuN > MONEYLIMIT || cbDtuN1 > MONEYLIMIT || thDtuN1 > MONEYLIMIT ||
+				cbDtuN2 > MONEYLIMIT || thDtuN2 > MONEYLIMIT || cbDtuN3 > MONEYLIMIT || thDtuN3 > MONEYLIMIT) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				tongDtoanGtri: tongDtoanGtri,
+				cbDtuN: cbDtuN,
+				thienNamTruoc: thienNamTruoc,
+				thDtuN: thDtuN,
+				cbDtuN1: cbDtuN1,
+				thDtuN1: thDtuN1,
+				cbDtuN2: cbDtuN2,
+				thDtuN2: thDtuN2,
+				cbDtuN3: cbDtuN3,
+				thDtuN3: thDtuN3,
+			})
+		});
+		if (!checkMoneyRange == true) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
 		// gui du lieu trinh duyet len server
 		let request = {
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeletes: this.listIdDelete,
 			listIdDeleteFiles: this.listIdDeleteFiles,
-			lstCTietBCao: this.mulMoneyTotal(0),
+			lstCTietBCao: lstCTietBCaoTemp,
 			maBcao: this.maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -818,31 +860,6 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		});
 	}
 
-	mulMoneyTotal(id: number) {
-		let lstCTietBCaoTemp = [];
-		this.lstCTietBCao.forEach(element => {
-			lstCTietBCaoTemp.push({
-				...element,
-				tongDtoanGtri: mulMoney(element.tongDtoanGtri, this.maDviTien),
-				cbDtuN: mulMoney(element.cbDtuN, this.maDviTien),
-				thienNamTruoc: mulMoney(element.thienNamTruoc, this.maDviTien),
-				thDtuN: mulMoney(element.thDtuN, this.maDviTien),
-				cbDtuN1: mulMoney(element.cbDtuN1, this.maDviTien),
-				thDtuN1: mulMoney(element.thDtuN1, this.maDviTien),
-				cbDtuN2: mulMoney(element.cbDtuN2, this.maDviTien),
-				thDtuN2: mulMoney(element.thDtuN2, this.maDviTien),
-				cbDtuN3: mulMoney(element.cbDtuN3, this.maDviTien),
-				thDtuN3: mulMoney(element.thDtuN3, this.maDviTien),
-			})
-		});
-		if (id == 1) {
-			lstCTietBCaoTemp.forEach(item => {
-				item.id = null;
-			})
-		}
-		return lstCTietBCaoTemp;
-	}
-
 	// action copy
 	async doCopy() {
 		this.spinner.show();
@@ -865,12 +882,53 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		if (!maBaoCao) {
 			return;
 		}
+
+		let lstCTietBCaoTemp = [];
+		let checkMoneyRange = true;
+		this.lstCTietBCao.filter(element => {
+			let tongDtoanGtri = mulMoney(element.tongDtoanGtri, this.maDviTien);
+			let cbDtuN = mulMoney(element.cbDtuN, this.maDviTien);
+			let thienNamTruoc = mulMoney(element.thienNamTruoc, this.maDviTien);
+			let thDtuN = mulMoney(element.thDtuN, this.maDviTien);
+			let cbDtuN1 = mulMoney(element.cbDtuN1, this.maDviTien);
+			let thDtuN1 = mulMoney(element.thDtuN1, this.maDviTien);
+			let cbDtuN2 = mulMoney(element.cbDtuN2, this.maDviTien);
+			let thDtuN2 = mulMoney(element.thDtuN2, this.maDviTien);
+			let cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
+			let thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
+			debugger
+			if (tongDtoanGtri > MONEYLIMIT || cbDtuN > MONEYLIMIT || thienNamTruoc > MONEYLIMIT ||
+				thDtuN > MONEYLIMIT || cbDtuN1 > MONEYLIMIT || thDtuN1 > MONEYLIMIT ||
+				cbDtuN2 > MONEYLIMIT || thDtuN2 > MONEYLIMIT || cbDtuN3 > MONEYLIMIT || thDtuN3 > MONEYLIMIT) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCTietBCaoTemp.push({
+				...element,
+				id: null,
+				tongDtoanGtri: tongDtoanGtri,
+				cbDtuN: cbDtuN,
+				thienNamTruoc: thienNamTruoc,
+				thDtuN: thDtuN,
+				cbDtuN1: cbDtuN1,
+				thDtuN1: thDtuN1,
+				cbDtuN2: cbDtuN2,
+				thDtuN2: thDtuN2,
+				cbDtuN3: cbDtuN3,
+				thDtuN3: thDtuN3,
+			})
+		});
+		if (!checkMoneyRange == true) {
+			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+
 		let request = {
 			id: null,
 			listIdDeletes: null,
 			fileDinhKems: null,
 			listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-			lstCTietBCao: this.mulMoneyTotal(1),
+			lstCTietBCao: lstCTietBCaoTemp,
 			maBcao: maBaoCao,
 			maDvi: this.maDonViTao,
 			maDviTien: this.maDviTien,
@@ -885,11 +943,17 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 		this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-					this.id = data.data.id;
-					await this.getDetailReport();
-					this.getStatusButton();
-					this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/du-toan-chi-ung-dung-cntt-3-nam/' + this.id);
+					const modalCopy = this.modal.create({
+						nzTitle: MESSAGE.ALERT,
+						nzContent: DialogCopyComponent,
+						nzMaskClosable: false,
+						nzClosable: false,
+						nzWidth: '900px',
+						nzFooter: null,
+						nzComponentParams: {
+							maBcao: maBaoCao
+						},
+					});
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

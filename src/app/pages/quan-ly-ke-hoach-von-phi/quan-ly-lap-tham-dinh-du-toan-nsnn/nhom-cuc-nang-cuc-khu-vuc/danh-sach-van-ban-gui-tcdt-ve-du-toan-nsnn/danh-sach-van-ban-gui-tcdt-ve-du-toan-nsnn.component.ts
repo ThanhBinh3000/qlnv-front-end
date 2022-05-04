@@ -30,7 +30,15 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           },
           {
                id: "7",
-               tenDm: "Đã gửi TCDT",
+               tenDm: 'Gửi ĐV cấp trên'
+          },
+          {
+               id: "8",
+               tenDm: 'ĐV cấp trên từ chối'
+          },
+          {
+               id: "9",
+               tenDm: 'Đv cấp trên duyệt'
           },
      ];
      cucKhuVucs: any = [];                          // danh muc cuc  khu vuc
@@ -83,7 +91,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                          this.donVis = data.data;
                          this.cucKhuVucs = this.donVis.filter(item => item.capDvi === "2");
                          this.donVis.forEach(item => {
-                              if (item.maDvi == this.userInfo?.dvql){
+                              if (item.maDvi == this.userInfo?.dvql) {
                                    this.capDvi = item.capDvi;
                               }
                          })
@@ -127,7 +135,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           this.spinner.show();
           let request = {
                maDonVi: this.searchFilter.maDvi,
-               ngayTaoTu:  this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+               ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
                ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
                paggingReq: {
                     limit: this.pages.size,
@@ -148,7 +156,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
                     }
                },
                (err) => {
-                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
                }
           );
           this.spinner.hide();
@@ -178,7 +186,7 @@ export class DanhSachVanBanGuiTcdtVeDuToanNsnnComponent implements OnInit {
           this.pages.size = size;
           this.getDetailReport();
      }
-     dong(){
-       this.location.back()
+     dong() {
+          this.location.back()
      }
 }
