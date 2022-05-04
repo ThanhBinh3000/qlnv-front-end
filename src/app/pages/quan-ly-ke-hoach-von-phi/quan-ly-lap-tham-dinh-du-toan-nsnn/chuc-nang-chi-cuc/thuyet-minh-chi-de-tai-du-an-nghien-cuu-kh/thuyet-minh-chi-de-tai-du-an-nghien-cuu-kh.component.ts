@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -14,6 +14,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../../constants/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 export class ItemData {
   tenDtaiDan!: String;
@@ -129,6 +131,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
               private location : Location,
               private notification: NzNotificationService,
               private fb:FormBuilder,
+              private modal: NzModalService,
               ) {
                 this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR,)
               }
@@ -749,63 +752,82 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     let lstTemp = [];
+    let checkMoneyRange = true
     this.lstCTietBCao.filter(item => {
-      lstTemp.push({
+      let kphiDaDuocBoTriDenNamN = mulMoney(item.kphiDaDuocBoTriDenNamN, this.maDviTien)
+      let kphiDuKienBtriN1 = mulMoney(item.kphiDuKienBtriN1, this.maDviTien)
+      let kphiDuKienBtriN2 = mulMoney(item.kphiDuKienBtriN2, this.maDviTien)
+      let kphiDuKienBtriN3 = mulMoney(item.kphiDuKienBtriN3, this.maDviTien)
+      let kphiDuocThienDenThoiDiemBcao = mulMoney(item.kphiDuocThienDenThoiDiemBcao, this.maDviTien)
+      let kphiTongPhiDuocDuyet = mulMoney(item.kphiTongPhiDuocDuyet, this.maDviTien)
+      let kphiThuhoi = mulMoney(item.kphiThuhoi, this.maDviTien)
+      if(
+        kphiDaDuocBoTriDenNamN > MONEYLIMIT ||
+        kphiDuKienBtriN1 > MONEYLIMIT ||
+        kphiDuKienBtriN2 > MONEYLIMIT ||
+        kphiDuKienBtriN3 > MONEYLIMIT ||
+        kphiDuocThienDenThoiDiemBcao > MONEYLIMIT ||
+        kphiTongPhiDuocDuyet > MONEYLIMIT ||
+        kphiThuhoi > MONEYLIMIT
+        ){
+          checkMoneyRange = false;
+          return
+        }
+        lstTemp.push({
         ...item,
         id: null,
-        kphiDaDuocBoTriDenNamN : mulMoney(item.kphiDaDuocBoTriDenNamN, this.maDviTien),
-        kphiDuKienBtriN1 : mulMoney(item.kphiDuKienBtriN1, this.maDviTien),
-        kphiDuKienBtriN2 : mulMoney(item.kphiDuKienBtriN2, this.maDviTien),
-        kphiDuKienBtriN3 : mulMoney(item.kphiDuKienBtriN3, this.maDviTien),
-        kphiDuocThienDenThoiDiemBcao : mulMoney(item.kphiDuocThienDenThoiDiemBcao, this.maDviTien),
-        kphiTongPhiDuocDuyet : mulMoney(item.kphiTongPhiDuocDuyet, this.maDviTien),
-        kphiThuhoi : mulMoney(item.kphiThuhoi, this.maDviTien),
+        kphiDaDuocBoTriDenNamN : kphiDaDuocBoTriDenNamN,
+        kphiDuKienBtriN1 : kphiDuKienBtriN1,
+        kphiDuKienBtriN2 : kphiDuKienBtriN2,
+        kphiDuKienBtriN3 : kphiDuKienBtriN3,
+        kphiDuocThienDenThoiDiemBcao : kphiDuocThienDenThoiDiemBcao,
+        kphiTongPhiDuocDuyet : kphiTongPhiDuocDuyet,
+        kphiThuhoi : kphiThuhoi
       })
     })
-    let request = {
-      id: null,
-      listIdDeletes: null,
-      fileDinhKems: null,
-      listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: lstTemp,
-      maBcao: maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh + 1,
-      soVban: null,
-    };
-
-    //call service them moi
-    this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-      async data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
-          this.id = data.data.id;
-          await this.getDetailReport();
-          this.getStatusButton();
-          this.router.navigateByUrl('/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh/' + this.id);
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-
-      },
-    );
-
-    this.lstCTietBCao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4();
-      }
-    });
-
-    this.updateEditCache();
-    this.spinner.hide();
+    if (!checkMoneyRange == true) {
+			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+		}else{
+      let request = {
+        id: null,
+        listIdDeletes: null,
+        fileDinhKems: null,
+        listIdDeleteFiles: null,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+        lstCTietBCao: lstTemp,
+        maBcao: maBaoCao,
+        maDvi: this.maDonViTao,
+        maDviTien: this.maDviTien,
+        maLoaiBcao: this.maLoaiBaoCao = QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N,
+        namHienHanh: this.namBaoCaoHienHanh,
+        namBcao: this.namBaoCaoHienHanh + 1,
+        soVban: null,
+      };
+      //call service them moi
+			this.spinner.show();
+			this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+				async data => {
+					if (data.statusCode == 0) {
+						const modalCopy = this.modal.create({
+							nzTitle: MESSAGE.ALERT,
+							nzContent: DialogCopyComponent,
+							nzMaskClosable: false,
+							nzClosable: false,
+							nzWidth: '900px',
+							nzFooter: null,
+							nzComponentParams: {
+								maBcao: maBaoCao
+							},
+						});
+					} else {
+						this.notification.error(MESSAGE.ERROR, data?.msg);
+					}
+				},
+				err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
+		}
+		this.spinner.hide();
   }
 
   // action print
