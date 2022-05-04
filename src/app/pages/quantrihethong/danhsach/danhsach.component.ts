@@ -71,7 +71,6 @@ export class DanhSachComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      debugger
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -130,6 +129,8 @@ export class DanhSachComponent implements OnInit {
         nzComponentParams: { data },
       });
       modal.afterClose.subscribe((b) => {
+        debugger
+
         if (b) {
         }
       });

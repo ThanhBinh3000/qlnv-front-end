@@ -18,5 +18,10 @@ export class QlNguoiSuDungService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  create(body) {
+    const url = `${environment.SERVICE_API}${this.gateway}/user/create`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
 
 }

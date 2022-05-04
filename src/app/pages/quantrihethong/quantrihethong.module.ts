@@ -12,6 +12,11 @@ import { QlNhomQuyenComponent } from './ql-nhomquyen/ql-nhomquyen.component';
 import { QlLsTruyCapComponent } from './ql-ls-truycap/ql-ls-truycap.component';
 import { QlThamSoHeThongComponent } from './ql-ts-hethong/ql-ts-hethong.component';
 import { ThemMoiNSDComponent } from './danhsach/them-ql-nguoisudung/tm-nguoisudung.component';
+import { ThemQlQuyenComponent } from './ql-quyen/them-ql-quyen/them-ql-quyen.component';
+import { ThemQlNhomQuyenComponent } from './ql-nhomquyen/them-ql-nhom-quyen/them-ql-nhom-quyen.component';
+import { NzTreeComponent, NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { ThemQlTSHethongComponent } from './ql-ts-hethong/them-ql-ts-hethong/them-ql-ts-hethong.component';
 
 @NgModule({
   declarations: [
@@ -21,9 +26,12 @@ import { ThemMoiNSDComponent } from './danhsach/them-ql-nguoisudung/tm-nguoisudu
     QlNhomQuyenComponent,
     QlLsTruyCapComponent,
     QlThamSoHeThongComponent,
-    ThemMoiNSDComponent
+    ThemMoiNSDComponent,
+    ThemQlQuyenComponent,
+    ThemQlNhomQuyenComponent,
+    ThemQlTSHethongComponent
   ],
-  imports: [CommonModule, QuanTriHeThongRoutingModule, ComponentsModule, MainModule],
+  imports: [CommonModule, QuanTriHeThongRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 
 })
 export class QuanTriHeThongModule { }

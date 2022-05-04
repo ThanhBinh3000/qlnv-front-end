@@ -160,3 +160,8 @@ export const LOAI_HANG_DTQG = {
   THOC: '01',
   MUOI: '02'
 }
+
+export const STATUS_USER = {
+  HOAT_DONG: '01',
+  KHOA: '00',
+}

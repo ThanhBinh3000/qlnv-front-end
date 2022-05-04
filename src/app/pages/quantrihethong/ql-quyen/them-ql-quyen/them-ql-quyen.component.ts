@@ -14,11 +14,11 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 
 @Component({
-  selector: 'app-tm-nguoisudung',
-  templateUrl: './tm-nguoisudung.component.html',
-  styleUrls: ['./tm-nguoisudung.component.scss'],
+  selector: 'app-them-ql-quyen',
+  templateUrl: './them-ql-quyen.component.html',
+  styleUrls: ['./them-ql-quyen.component.scss'],
 })
-export class ThemMoiNSDComponent implements OnInit {
+export class ThemQlQuyenComponent implements OnInit {
   public formGroup: FormGroup;
   statusValue = "A"
   data: any;
