@@ -333,70 +333,94 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
     })
 
     let lstCTietBCaoTemp = [];
+    let checkMoneyRange = true;
     this.lstCTietBCao.filter(e => {
+      let kphiDaDuocBoTriDenNamN = mulMoney(e.kphiDaDuocBoTriDenNamN, this.maDviTien)
+      let kphiDuKienBtriN1 = mulMoney(e.kphiDuKienBtriN1, this.maDviTien)
+      let kphiDuKienBtriN2 = mulMoney(e.kphiDuKienBtriN2, this.maDviTien)
+      let kphiDuKienBtriN3 = mulMoney(e.kphiDuKienBtriN3, this.maDviTien)
+      let kphiDuocThienDenThoiDiemBcao = mulMoney(e.kphiDuocThienDenThoiDiemBcao, this.maDviTien)
+      let kphiTongPhiDuocDuyet = mulMoney(e.kphiTongPhiDuocDuyet, this.maDviTien)
+      let kphiThuhoi = mulMoney(e.kphiThuhoi, this.maDviTien)
+      if(
+        kphiDaDuocBoTriDenNamN > MONEYLIMIT ||
+        kphiDuKienBtriN1 > MONEYLIMIT ||
+        kphiDuKienBtriN2 > MONEYLIMIT ||
+        kphiDuKienBtriN3 > MONEYLIMIT ||
+        kphiDuocThienDenThoiDiemBcao > MONEYLIMIT ||
+        kphiTongPhiDuocDuyet > MONEYLIMIT ||
+        kphiThuhoi > MONEYLIMIT
+      ){
+        checkMoneyRange = false;
+				return;
+      }
+
       lstCTietBCaoTemp.push({
         ...e,
-        kphiDaDuocBoTriDenNamN : mulMoney(e.kphiDaDuocBoTriDenNamN, this.maDviTien),
-        kphiDuKienBtriN1 : mulMoney(e.kphiDuKienBtriN1, this.maDviTien),
-        kphiDuKienBtriN2 : mulMoney(e.kphiDuKienBtriN2, this.maDviTien),
-        kphiDuKienBtriN3 : mulMoney(e.kphiDuKienBtriN3, this.maDviTien),
-        kphiDuocThienDenThoiDiemBcao : mulMoney(e.kphiDuocThienDenThoiDiemBcao, this.maDviTien),
-        kphiTongPhiDuocDuyet : mulMoney(e.kphiTongPhiDuocDuyet, this.maDviTien),
-        kphiThuhoi : mulMoney(e.kphiThuhoi, this.maDviTien),
+        kphiDaDuocBoTriDenNamN : kphiDaDuocBoTriDenNamN,
+        kphiDuKienBtriN1 : kphiDuKienBtriN1,
+        kphiDuKienBtriN2 : kphiDuKienBtriN2,
+        kphiDuKienBtriN3 : kphiDuKienBtriN3,
+        kphiDuocThienDenThoiDiemBcao : kphiDuocThienDenThoiDiemBcao,
+        kphiTongPhiDuocDuyet : kphiTongPhiDuocDuyet,
+        kphiThuhoi : kphiThuhoi
       })
     });
+    if (!checkMoneyRange == true) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+		} else {
+      // gui du lieu trinh duyet len server
+      let request = {
+        id: this.id,
+        fileDinhKems: listFile,
+        listIdDeletes: this.listIdDelete,
+        listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+        lstCTietBCao: lstCTietBCaoTemp,
+        maBcao: this.maBaoCao,
+        maDvi: this.maDonViTao,
+        maDviTien: this.maDviTien,
+        maLoaiBcao: QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N,
+        namHienHanh: this.namBaoCaoHienHanh,
+        namBcao: this.namBaoCaoHienHanh,
+        soVban:this.soVban,
+      };
 
-    // gui du lieu trinh duyet len server
-    let request = {
-      id: this.id,
-      fileDinhKems: listFile,
-      listIdDeletes: this.listIdDelete,
-      listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: lstCTietBCaoTemp,
-      maBcao: this.maBaoCao,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maLoaiBcao: QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N,
-      namHienHanh: this.namBaoCaoHienHanh,
-      namBcao: this.namBaoCaoHienHanh,
-      soVban:this.soVban,
-    };
+      //call service them moi
+      this.spinner.show();
+      if (this.id == null) {
+        this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+          async data => {
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.id = data.data.id;
+              await this.getDetailReport();
+              this.getStatusButton();
+            } else {
 
-    //call service them moi
-    this.spinner.show();
-    if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
-        async data => {
-          if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.id = data.data.id;
-            await this.getDetailReport();
-            this.getStatusButton();
-          } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+          },
+          err => {
 
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        },
-        err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
+      } else {
+        this.quanLyVonPhiService.updatelist(request).toPromise().then(
+          async data => {
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              await this.getDetailReport();
+              this.getStatusButton();
+            } else {
+
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        },err =>{
 
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        },
-      );
-    } else {
-      this.quanLyVonPhiService.updatelist(request).toPromise().then(
-        async data => {
-          if (data.statusCode == 0) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            await this.getDetailReport();
-            this.getStatusButton();
-          } else {
-
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-      },err =>{
-
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      })
+        })
+      }
     }
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
@@ -786,7 +810,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       })
     })
     if (!checkMoneyRange == true) {
-			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 		}else{
       let request = {
         id: null,
