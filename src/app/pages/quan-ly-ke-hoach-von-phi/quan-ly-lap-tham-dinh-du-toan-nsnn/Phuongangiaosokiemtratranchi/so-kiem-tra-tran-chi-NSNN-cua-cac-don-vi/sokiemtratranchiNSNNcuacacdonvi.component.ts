@@ -33,6 +33,8 @@ export class chitietpagiao {
   tenNoiDung: string;
   tenTrangThai: string;
   trangThai: string;
+  soCv:string;
+  soQd:string;
 }
 
 @Component({

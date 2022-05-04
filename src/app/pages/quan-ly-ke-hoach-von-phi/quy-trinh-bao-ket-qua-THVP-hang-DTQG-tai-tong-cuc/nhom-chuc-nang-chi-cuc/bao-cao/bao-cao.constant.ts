@@ -45,12 +45,12 @@ export const TAB_SELECTED = {
         tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG đợt ',
         status: false,
     },
-    {
-        maPhuLuc:10,
-        tenPhuLuc: '01/BCNXBQ',
-        tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG đợt ',
-        status: false,
-    },
+    // {
+    //     maPhuLuc:10,
+    //     tenPhuLuc: '01/BCNXBQ',
+    //     tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG đợt ',
+    //     status: false,
+    // },
   ]
 
   export const LISTBIEUMAUNAM = [
@@ -90,12 +90,12 @@ export const TAB_SELECTED = {
         tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG năm ',
         status: false,
     },
-    {
-        maPhuLuc:10,
-        tenPhuLuc: '01/BCNXBQ',
-        tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG năm ',
-        status: false,
-    },
+    // {
+    //     maPhuLuc:10,
+    //     tenPhuLuc: '01/BCNXBQ',
+    //     tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG năm ',
+    //     status: false,
+    // },
   ]
 
   export const BAO_CAO_NHAP_HANG_DTQG:number = 4; //02
@@ -158,5 +158,139 @@ export const TAB_SELECTED = {
     {
       kyTu: 'I',
       gTri: 1,
+    },
+  ];
+
+  export const KHOAN_MUC: any[] = [
+    {
+      id: 10000,
+      tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
+      idCha: 0,
+    },
+    {
+      id: 11000,
+      tenDm: "Kinh phí thực hiện tự chủ",
+      idCha: 10000,
+    },
+    {
+      id: 12000,
+      tenDm: "Kinh phí không thực hiện tự chủ",
+      idCha: 10000,
+    },
+    {
+      id: 12100,
+      tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+      idCha: 12000,
+    },
+    {
+      id: 12110,
+      tenDm: "Mua sắm, sửa chữa tài sản",
+      idCha: 12100,
+    },
+    {
+      id: 12111,
+      tenDm: "Chi sửa chữa kho tàng và các công trình phụ trợ",
+      idCha: 12110,
+    },
+    {
+      id: 12120,
+      tenDm: "Nghiệp vụ chuyên môn đặc thù",
+      idCha: 12100,
+    },
+    {
+      id: 12121,
+      tenDm: "Phí bảo quản hàng dự trữ, phí nhập xuất hàng, phí xuất hàng cứu trợ, viện trợ, hỗ trợ chính sách",
+      idCha: 12120,
+    },
+    {
+      id: 12130,
+      tenDm: "Chi khác",
+      idCha: 12100,
+    },
+  
+    {
+      id: 20000,
+      tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
+      idCha: 0,
+    },
+    {
+      id: 21000,
+      tenDm: "Kinh phí thực hiện tự chủ",
+      idCha: 20000,
+    },
+    {
+      id: 21100,
+      tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+      idCha: 21000,
+    },
+    {
+      id: 21110,
+      tenDm: "Thanh toán cá nhân và quản lý hành chính",
+      idCha: 21100,
+    },
+    {
+      id: 21111,
+      tenDm: "Quỹ lương",
+      idCha: 21110,
+    },
+    {
+      id: 21112,
+      tenDm: "Chi quản lý hành chính theo định mức",
+      idCha: 21110,
+    },
+    {
+      id: 21113,
+      tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
+      idCha: 21110,
+    },
+    {
+      id: 21114,
+      tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
+      idCha: 21110,
+    },
+    {
+      id: 22000,
+      tenDm: "Kinh phí không thực hiện tự chủ",
+      idCha: 20000,
+    },
+    {
+      id: 30000,
+      tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
+      idCha: 0,
+    },
+    {
+      id: 31000,
+      tenDm: "Kinh phí thực hiện tự chủ",
+      idCha: 30000,
+    },
+    {
+      id: 32000,
+      tenDm: "Kinh phí không thực hiện tự chủ",
+      idCha: 30000,
+    },
+    {
+      id: 32100,
+      tenDm: "Giao đơn vị thực hiện nhiệm vụ",
+      idCha: 32000,
+    },
+    {
+      id: 32110,
+      tenDm: "Chỉ đào tạo, bồi dưỡng cán bộ, công chức trong nước",
+      idCha: 32100,
+    },
+    {
+      id: 40000,
+      tenDm: "HOẠT ĐỘNG ĐẢM BẢO XÃ HỘI (Khoản 331)",
+      idCha: 0,
+    },
+    {
+      id: 41000,
+      tenDm: "Kinh phí thực hiện tự chủ",
+      idCha: 40000,
+    },
+    {
+      id: 42000,
+      tenDm: "Kinh phí không thực hiện tự chủ",
+      idCha: 40000,
     },
   ];
