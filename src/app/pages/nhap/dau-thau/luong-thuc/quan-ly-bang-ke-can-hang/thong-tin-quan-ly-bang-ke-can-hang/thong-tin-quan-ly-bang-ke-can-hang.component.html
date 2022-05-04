@@ -86,7 +86,12 @@
                   <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true"> Phiếu nhập kho tương ứng
                   </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="phieuNhapError">
-                    <input nz-input />
+                    <nz-input-group nzAddOnAfterIcon="folder-open" *ngIf="!(id == 0)">
+                      <input nz-input [readonly]="true" formControlName="phieuNhapKho" />
+                    </nz-input-group>
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhieuNhapKho()" *ngIf="(id == 0)">
+                      <input nz-input [readonly]="true" formControlName="phieuNhapKho" />
+                    </nz-input-group>
                     <ng-template #phieuNhapError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                     </ng-template>

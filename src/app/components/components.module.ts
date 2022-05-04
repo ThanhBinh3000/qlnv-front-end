@@ -92,6 +92,7 @@ import { DialogThongTinLenhNhapKhoComponent } from './dialog/dialog-thong-tin-le
 import { DialogThongTinKeLotBaoQuanBanDauComponent } from './dialog/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau/dialog-them-thong-tin-ke-lot-bao-quan-ban-dau.component';
 import { DialogBaoCaoBienBanNghiemThuKeLotComponent } from './dialog/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot/dialog-bao-cao-bien-ban-nghiem-thu-ke-lot.component';
 import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
+import { DialogPhieuNhapKhoComponent } from './dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
     DialogThongTinLenhNhapKhoComponent,
     DialogThongTinKeLotBaoQuanBanDauComponent,
     DialogBaoCaoBienBanNghiemThuKeLotComponent,
+    DialogPhieuNhapKhoComponent,
     //pipes
     FilterPipe,
   ],
