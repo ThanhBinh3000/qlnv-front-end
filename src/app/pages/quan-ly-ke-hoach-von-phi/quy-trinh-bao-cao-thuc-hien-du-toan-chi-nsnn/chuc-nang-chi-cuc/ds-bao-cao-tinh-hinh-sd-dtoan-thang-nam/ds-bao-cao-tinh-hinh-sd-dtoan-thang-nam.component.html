@@ -29,7 +29,7 @@
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
             <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao"
-              [class]="searchFilter.namBcao ?'' : 'input-error-validate' ">
+              [class]="searchFilter.namBcao && searchFilter.namBcao < 3000 && searchFilter.namBcao > 999 ?'' : 'input-error-validate' ">
             </nz-input-number>
           </div>
           <div nz-col nzSpan="3">
