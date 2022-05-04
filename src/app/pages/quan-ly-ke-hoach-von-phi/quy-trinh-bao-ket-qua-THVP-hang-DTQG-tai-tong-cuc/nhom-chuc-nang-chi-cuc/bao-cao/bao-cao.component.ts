@@ -7,7 +7,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { BAOCAODOT, BAOCAONAM, NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
-import { BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, TAB_SELECTED,SOLAMA, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG } from './bao-cao.constant';
+import { BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, TAB_SELECTED,SOLAMA, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO } from './bao-cao.constant';
 import * as uuid from 'uuid';
 import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -482,10 +482,17 @@ export class BaoCaoComponent implements OnInit {
 
   changeTab(maPhuLuc){
     this.tabSelected = Number(maPhuLuc);
+    this.listColTemp = [];
+    this.cols = 3;
     this.lstCTietBaoCaoTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
-    if(this.id==null){
-      
-      }
+    if(this.tabSelected ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+      this.listColTemp = this.listColTrongDot4ax;
+      this.cols = this.cols + this.listColTrongDot4ax.length;
+    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+      this.listColTemp = this.listColTrongDot4an;
+      this.cols = this.cols + this.listColTrongDot4an.length;
+    }
+  
   }
 
   updateSingleChecked(){
@@ -1089,12 +1096,18 @@ export class BaoCaoComponent implements OnInit {
 
   addCol(){
     var listVtu: vatTu[]=[];
-    var loai:number =0;
     var colname;
+    this.listColTemp =[];
     if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
       if (this.idVatTu == undefined ) {
         return;
       }else{
+        var checkVtu = this.listColTrongDot4ax.findIndex(item => item.maVtu ==this.idVatTu);
+        if(checkVtu!=-1){
+            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+            this.listColTemp = this.listColTrongDot4ax;
+            return;
+        }
         colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
         let objTrongdot = {
           id: uuid.v4(),
@@ -1139,7 +1152,72 @@ export class BaoCaoComponent implements OnInit {
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
-        loai=6;
+        this.lstCTietBaoCaoTemp.forEach( e =>{
+          if(e.listCtiet.length==0){
+            e.listCtiet=listVtu;
+          }else{
+            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
+            if(idx==-1){
+              e.listCtiet.push(objTrongD);
+              e.listCtiet.push(objLke);
+            }
+          }
+          
+        })        
+      }
+    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+      if (this.idVatTu == undefined ) {
+        return;
+      }else{
+        var checkVtu = this.listColTrongDot4an.findIndex(item => item.maVtu ==this.idVatTu);
+        if(checkVtu!=-1){
+            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+            return;
+        }
+        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        let objTrongdot = {
+          id: uuid.v4(),
+          maVtu: this.idVatTu,
+          loaiMatHang: '0',
+          colName: colname,
+          sl: 0,
+          col:this.sinhMa(),
+        };
+    
+        this.listColTrongDot4an.push(objTrongdot);
+        this.cols4an=0;
+        this.cols4an++;
+        this.listColTemp = this.listColTrongDot4an;
+        this.cols = this.cols + this.cols4an;
+
+        let objTrongD = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '0',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
+        let objLke = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '1',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
+        this.listColTemp.forEach((e) => {
+            objTrongD.id = e.id;
+            objTrongD.maVtu= e.maVtu;
+            objTrongD.col=e.col;
+          
+       
+            objLke.id= e.id,
+            objLke.maVtu= e.maVtu;
+            objLke.col=e.col;
+          listVtu.push(objTrongD);
+          listVtu.push(objLke);
+        });
         this.lstCTietBaoCaoTemp.forEach( e =>{
           if(e.listCtiet.length==0){
             e.listCtiet=listVtu;
@@ -1154,9 +1232,71 @@ export class BaoCaoComponent implements OnInit {
             }
           }
           
-        })
-        console.log(this.lstCTietBaoCaoTemp);
-        
+        })        
+      }
+    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
+      if (this.idVatTu == undefined ) {
+        return;
+      }else{
+        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        let objTrongdot = {
+          id: uuid.v4(),
+          maVtu: this.idVatTu,
+          loaiMatHang: '0',
+          colName: colname,
+          sl: 0,
+          col:this.sinhMa(),
+        };
+    
+        this.listColTrongDot4bx.push(objTrongdot);
+        this.cols4bx=0;
+        this.cols4bx++;
+        this.listColTemp = this.listColTrongDot4bx;
+        this.cols = this.cols + this.cols4bx;
+
+        let objTrongD = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '0',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
+        let objLke = {
+          id: null,
+          maVtu: null,
+          loaiMatHang: '1',
+          colName: null,
+          sl: 0,
+          col:null,
+        };
+        this.listColTemp.forEach((e) => {
+            objTrongD.id = e.id;
+            objTrongD.maVtu= e.maVtu;
+            objTrongD.col=e.col;
+          
+       
+            objLke.id= e.id,
+            objLke.maVtu= e.maVtu;
+            objLke.col=e.col;
+          listVtu.push(objTrongD);
+          listVtu.push(objLke);
+        });
+        this.lstCTietBaoCaoTemp.forEach( e =>{
+          if(e.listCtiet.length==0){
+            e.listCtiet=listVtu;
+          }else{
+            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
+            if(idx==-1){
+              e.listCtiet.push(objTrongD);
+              e.listCtiet.push(objLke);
+            }else{
+              this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+              return;
+            }
+          }
+          
+        })        
       }
     }
     
@@ -1164,6 +1304,14 @@ export class BaoCaoComponent implements OnInit {
     this.updateEditCache();
   }
 
+  tinhTong(id:any){
+    let tonglstChitietVtuTrongDot=0;
+    if(this.editCache[id].data.listCtiet.length!=0){
+      this.editCache[id].data.listCtiet.forEach(e => {
+        tonglstChitietVtuTrongDot +=e.sl;
+      })
+    }
+  }
 
   getChiMuc(str: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
