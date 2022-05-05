@@ -767,7 +767,6 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       let req = {
         lstQlnvKhvonphiDsachGiaoSo: this.lstQlnvKhvonphiDsachGiaoSo,
       };
-      console.log(req);
       this.quanLyVonPhiService.giaoSoTranChi(req).subscribe((res) => {
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_SUCCESS);

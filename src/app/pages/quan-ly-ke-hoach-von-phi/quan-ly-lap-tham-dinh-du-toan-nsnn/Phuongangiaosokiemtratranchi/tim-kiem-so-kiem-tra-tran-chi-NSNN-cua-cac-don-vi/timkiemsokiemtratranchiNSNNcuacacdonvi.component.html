@@ -75,6 +75,8 @@
             <tr>
               <th>STT</th>
               <th>Mã phương án</th>
+              <th>Số QĐ</th>
+              <th>Số CV</th>
               <th>Mã giao</th>
               <th>Ngày giao</th>
               <th>Năm giao</th>
@@ -88,6 +90,8 @@
             <tr *ngFor="let item of listSogiaoTranChi; let i = index">
               <td>{{(i + 1) + (pages.page - 1)*pages.size}}</td>
               <td>{{item.maPa}}</td>
+              <td>{{item.soQd}}</td>
+              <td>{{item.soCv}}</td>
               <td>{{item.maGiao}}</td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namGiao}}</td>
