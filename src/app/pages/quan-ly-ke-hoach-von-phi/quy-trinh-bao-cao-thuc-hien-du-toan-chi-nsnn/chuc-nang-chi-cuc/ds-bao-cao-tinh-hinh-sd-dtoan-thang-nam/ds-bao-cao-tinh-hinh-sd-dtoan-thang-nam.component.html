@@ -5,7 +5,7 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;onSubmit()">
+        <button nz-button class="search__button--search" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -61,11 +61,6 @@
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
-
-          <!-- <div nz-col nzSpan="6">
-            <label class="search__label">Đợt báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
-          </div> -->
         </div>
       </nz-card>
       <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm" [nzExtra]="tableCard1"
@@ -91,7 +86,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
@@ -100,14 +95,21 @@
               <td>{{item.ngayDuyet}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>{{item.ngayTraKq}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{item.tenTrangThai}} 
+                <ng-template [ngIf]="item.lyDoTuChoi"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
                 <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
                   <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
                   <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Xóa</span>
+                  
                 </button>
+                <button type="button" class="btn btn-main" (click)="deleteReport(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                  <span>Xóa</span>
+                </button>
+                
               </td>
             </tr>
           </tbody>
@@ -119,8 +121,8 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
                 (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
