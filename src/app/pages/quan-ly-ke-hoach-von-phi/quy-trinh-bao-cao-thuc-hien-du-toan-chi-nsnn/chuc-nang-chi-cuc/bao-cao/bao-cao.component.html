@@ -14,7 +14,7 @@
               <th width="175px">Công văn</th>
               <th width="175px">Ngày trình duyệt</th>
               <th width="175px">Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
-              <th width="175px">Ngày phê duyệt<br>(Lãnh đạo chi cục phê duyệt) cũng là ngày gửi đơn vị cấp trên</th>
+              <th width="175px">Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên</th>
               <th width="175px">Ngày đơn vị cấp trên trả kết quả</th>
               <th width>Trạng thái</th>
             </tr>
@@ -35,6 +35,7 @@
           </tbody>
         </nz-table>
       </nz-card>
+
       <!-- Action thông tin chung báo cáo -->
       <ng-template #tableCard0>
         <button class="btn btn-main" (click)="luu()" [hidden]="statusBtnSave">
@@ -44,10 +45,6 @@
         <button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusBtnApprove">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
-        </button>
-        <button class="btn btn-main">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Copy</span>
         </button>
         <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
@@ -65,11 +62,6 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Lãnh đạo duyệt</span>
         </a>
-        <!-- <button class="btn btn-main" (click)="onSubmit('7',null)"
-          [hidden]="statusBtnGuiDVCT">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Gửi duyệt</span>
-        </button> -->
         <button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Từ chối</span>
@@ -78,15 +70,26 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Cục khu vực chấp nhận</span>
         </a>
-        <a class="btn btn-main" (click)="xoa()" [hidden]="statusBtnDel">
+        <a class="btn btn-main" (click)="deleteReport()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a>
-        <button class="btn btn-main" (click)="close()">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Đóng</span>
-        </button>
+        <a class="btn btn-main" (click)="doCopy()"
+					[hidden]="statusBtnCopy">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Copy</span>
+				</a>
+				<a class="btn btn-main" (click)="doPrint()"
+					[hidden]="statusBtnPrint">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</a>
+				<a class="btn btn-main" (click)="close()"  [hidden]="statusBtnClose">
+					<i nz-icon nzType="stop" nzTheme="outline"></i>
+					<span>Đóng</span>
+				</a>
       </ng-template>
+
       <!-- Table danh sách phụ lục -->
       <nz-card nzTitle="DANH SÁCH PHỤ LỤC" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap">
@@ -97,7 +100,7 @@
               <th>Tiêu đề</th>
               <th nzWidth="100px">Trạng thái</th>
               <th nzWidth="350px">Hành động</th>
-              <th nzWidth="50px">
+              <th nzWidth="50px" [hidden]="status">
                 <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                   [nzIndeterminate]="indeterminate">
                 </label>
@@ -117,7 +120,7 @@
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="!status">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" [hidden]="status">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
               </td>
@@ -139,6 +142,7 @@
           </div>
         </div>
       </nz-card>
+
       <!-- Action Table danh sách phụ lục -->
       <ng-template #tableCard1>
         <button type="button" class="btn btn-main" (click)="addPhuLuc()" [hidden]="status">
@@ -635,6 +639,7 @@
           </tbody>
         </nz-table>
       </nz-card>
+
       <!-- Action Table chi tiết phụ lục I -->
       <ng-template #tableCard3>
         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
@@ -650,10 +655,10 @@
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Import</span>
         </button>
-        <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+        <!-- <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
-        </button>
+        </button> -->
         <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
           <span>OK</span>
         </button>
@@ -661,6 +666,7 @@
           <span>Not OK</span>
         </button>
       </ng-template>
+
       <!-- Table phụ lục II -->
       <nz-card nzTitle="Phụ lục II: - Báo cáo công tác giải ngân ứng dụng CNTT" [nzExtra]="tableCard2"
         class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc2">
@@ -972,6 +978,7 @@
           </tbody>
         </nz-table>
       </nz-card>
+
       <!-- Table phụ lục III -->
       <nz-card nzTitle="Phụ lục III: - Báo cáo công tác giải ngân vốn đầu tư xây dựng và sửa chữa lớn"
         [nzExtra]="tableCard2" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc3">
@@ -1580,6 +1587,7 @@
           </tbody>
         </nz-table>
       </nz-card>
+
       <!-- Action Table chi tiết phụ lục II, III-->
       <ng-template #tableCard2>
         <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
@@ -1595,10 +1603,10 @@
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Import</span>
         </button>
-        <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
+        <!-- <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Lưu</span>
-        </button>
+        </button> -->
         <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
           <span>OK</span>
         </button>
@@ -1606,6 +1614,7 @@
           <span>Not OK</span>
         </button>
       </ng-template>
+
       <!-- Table danh sách văn bản đính k -->
       <nz-card nzTitle="DANH SÁCH VĂN BẢN ĐÍNH KÈM" class="mt16 flex-card p-lr16">
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

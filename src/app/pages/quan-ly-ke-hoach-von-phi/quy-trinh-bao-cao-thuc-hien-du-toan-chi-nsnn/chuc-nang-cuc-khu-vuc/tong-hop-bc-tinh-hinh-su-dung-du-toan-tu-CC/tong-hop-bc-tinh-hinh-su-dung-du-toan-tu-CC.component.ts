@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -64,7 +65,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     private datePipe: DatePipe,
     private notification:NzNotificationService,
     private location: Location,
-
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -90,15 +91,14 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  timkiem(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notification.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
+  async onSubmit(){
+    this.spinner.show();
+    await this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
-        this.notification.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
+        this.listBcaoKqua.forEach(e => {
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+        })
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
       }else{
@@ -108,6 +108,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     },err =>{
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
   themMoi(){
     if(this.searchFilter.maLoaiBcao==''){

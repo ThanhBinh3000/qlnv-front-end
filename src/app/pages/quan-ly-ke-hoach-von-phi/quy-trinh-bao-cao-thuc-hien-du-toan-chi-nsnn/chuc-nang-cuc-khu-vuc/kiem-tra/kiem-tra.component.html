@@ -1,7 +1,7 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/ năm từ các chi cục"
+      <nz-card nzTitle="Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/ năm từ các đơn vị cấp dưới"
         class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="3">
@@ -27,7 +27,7 @@
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ chi cục" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ đơn vị cấp dưới" class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
         </div>
         <nz-table nzBordered #basicTable [nzData]="listBcaoKqua" class="nowrap">
@@ -47,7 +47,7 @@
           <tbody>
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ i + 1 }}</td>
-              <td>mã đơn vị nè</td>
+              <td>{{getUnitName(item.maDvi)}}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
@@ -56,7 +56,7 @@
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
                 <button type="button" class="btn btn-main">
-                  <span>Thông báo đến chi cục</span>
+                  <span>Thông báo đến đơn vị cấp dưới</span>
                 </button>
                 <button type="button" class="btn btn-main">
                   <span>Phê duyệt</span>
@@ -88,7 +88,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;timkiem()">
+        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>

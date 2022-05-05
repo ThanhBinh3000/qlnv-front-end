@@ -404,7 +404,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			})
 		});
 		if (!checkMoneyRange == true) {
-			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 		} else {
 			// gui du lieu trinh duyet len server
 			let request = {
@@ -768,6 +768,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 				this.lstCTietBCao.forEach(e => {
 					e.id = uuid.v4();
 				})
+				this.lstCTietBCao.forEach(item => {
+					this.total(1, item);
+				})
 			} else {
 				this.notification.error(MESSAGE.ERROR, res?.msg);
 			}
@@ -780,7 +783,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 
 	deleteReport() {
 		if (this.id) {
-			this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+			this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(this.id).toPromise().then(async res => {
 				if (res.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.location.back();
@@ -850,7 +853,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			})
 		});
 		if (!checkMoneyRange == true) {
-			this.notification.error(MESSAGE.ERROR, MESSAGEVALIDATE.MONEYRANGE);
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
 		} else {
 			let request = {
 				listIdDeletes: null,

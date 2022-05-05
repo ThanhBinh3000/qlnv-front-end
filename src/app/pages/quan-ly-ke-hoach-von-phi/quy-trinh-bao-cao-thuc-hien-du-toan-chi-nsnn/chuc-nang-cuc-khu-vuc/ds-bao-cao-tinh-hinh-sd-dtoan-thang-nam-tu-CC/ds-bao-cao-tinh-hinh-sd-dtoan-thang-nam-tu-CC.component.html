@@ -1,36 +1,7 @@
-<!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
-      <div class="trai">
-      </div>
-      <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-        <button nz-button class="search__button--search" routerLink="../">
-          <i nz-icon nzType="stop"></i>
-          Đóng
-        </button>
-      </div>
-    </div>
-  </div>
-</nz-affix> -->
-<!-- <ng-template #tableCard1>
-  <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-    <i nz-icon nzType="search"></i>
-    Tìm kiếm
-  </button>
-  <button nz-button class="search__button--search" routerLink="../">
-    <i nz-icon nzType="stop"></i>
-    Đóng
-  </button>
-</ng-template> -->
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm từ chi cục"
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm từ đơn vị cấp dưới"
         class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
@@ -74,14 +45,9 @@
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
-
-          <!-- <div nz-col nzSpan="6">
-            <label class="search__label">Đợt báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
-          </div> -->
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ chi cục" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ đơn vị cấp dưới" class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
           
         </div>
@@ -112,7 +78,7 @@
               <td>{{item.ngayDuyet}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
                   <span>Phê duyệt</span>
                 </button>
               </td>
@@ -139,7 +105,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;timKiem()">
+        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Tìm kiếm</span>
         </button>
@@ -148,16 +114,6 @@
           <span>Đóng</span>
         </button>
       </ng-template>
-      <!-- <ng-template #tableCard2>
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-        <button nz-button class="search__button--search" routerLink="../">
-          <i nz-icon nzType="stop"></i>
-          Đóng
-        </button>
-      </ng-template> -->
     </div>
   </div>
 </div>
