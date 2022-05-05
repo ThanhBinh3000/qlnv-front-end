@@ -20,8 +20,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -48,20 +47,20 @@
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>Ngày cục khu vực kiểm tra báo cáo</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main">
+                <!-- <button type="button" class="btn btn-main">
                   <span>Thông báo đến đơn vị cấp dưới</span>
-                </button>
-                <button type="button" class="btn btn-main">
+                </button> -->
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span>Xem</span>
                 </button>
               </td>

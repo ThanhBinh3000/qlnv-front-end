@@ -57,7 +57,7 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)" [class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
+              [class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -87,7 +87,7 @@
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayTao}}</td>
@@ -99,7 +99,7 @@
                 <ng-template [ngIf]="item.lyDoTuChoi"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
                   <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
                   <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>

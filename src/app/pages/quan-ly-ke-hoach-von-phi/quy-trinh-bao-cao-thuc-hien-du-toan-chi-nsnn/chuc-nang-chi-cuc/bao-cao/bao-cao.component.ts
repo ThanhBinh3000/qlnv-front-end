@@ -515,7 +515,11 @@ export class BaoCaoComponent implements OnInit {
         if (data.statusCode == 0) {
           await this.getDetailReport();
           this.getStatusButton();
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+          if(mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5|| mcn == Utils.TT_BC_3){
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+					}else{
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+					}
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -722,11 +726,68 @@ export class BaoCaoComponent implements OnInit {
       item = {
         id: uuid.v4(),
         dtoanSdungNamTcong : 0,
+        dtoanSdungNamNguonNsnn : 0,
+        dtoanSdungNamNguonSn : 0,
+        dtoanSdungNamNguonQuy : 0,
+        giaiNganThangTcong : 0,
+        giaiNganThangTcongTle : 0,
+        giaiNganThangNguonNsnn : 0,
+        giaiNganThangNguonNsnnTl : 0,
+        giaiNganThangNguonSn : 0,
+        giaiNganThangNguonSnTle : 0,
+        giaiNganThangNguonQuy : 0,
+        giaiNganThangNguonQuyTle : 0,
+        luyKeGiaiNganTcong : 0,
+        luyKeGiaiNganTcongTle : 0,
+        luyKeGiaiNganNguonNsnn : 0,
+        luyKeGiaiNganNguonNsnnTl: 0,
+        luyKeGiaiNganNguonSn : 0,
+        luyKeGiaiNganNguonSnTle : 0, 
+        luyKeGiaiNganNguonQuy : 0,
+        luyKeGiaiNganNguonQuyTle: 0,
         checked: false,
       }
     } else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
       item = {
         id: uuid.v4(),
+        luyKeVonTso : 0,
+        luyKeVonNsnn : 0,
+        luyKeVonDt : 0,
+        luyKeVonThue : 0,
+        luyKeVonScl : 0,
+        luyKeGiaiNganHetNamTso : 0,
+        luyKeGiaiNganHetNamNsnnTso : 0,
+        luyKeGiaiNganHetNamNsnnKhNamTruoc : 0,
+        khoachVonNamTruocKeoDaiTso : 0,
+        khoachVonNamTruocKeoDaiDtpt : 0,
+        khoachVonNamTruocKeoDaiVonKhac : 0,
+        khoachNamVonTso: 0,
+        khoachNamVonNsnn : 0,
+        khoachNamVonDt : 0,
+        khoachNamVonThue : 0,
+        khoachNamVonScl : 0,
+        kluongThienTso : 0,
+        kluongThienThangBcao : 0,
+        giaiNganTso : 0,
+        giaiNganTsoTle : 0,
+        giaiNganNsnn : 0,
+        giaiNganNsnnVonDt : 0,
+        giaiNganNsnnVonThue : 0,
+        giaiNganNsnnVonScl : 0,
+        giaiNganNsnnTle : 0,
+        giaiNganNsnnTleVonDt : 0,
+        giaiNganNsnnTleVonThue : 0,
+        giaiNganNsnnTleVonScl : 0,
+        luyKeGiaiNganDauNamTso : 0,
+        luyKeGiaiNganDauNamTsoTle : 0,
+        luyKeGiaiNganDauNamNsnn : 0,
+        luyKeGiaiNganDauNamNsnnVonDt : 0,
+        luyKeGiaiNganDauNamNsnnVonThue : 0,
+        luyKeGiaiNganDauNamNsnnVonScl : 0,
+        luyKeGiaiNganDauNamNsnnTle : 0,
+        luyKeGiaiNganDauNamNsnnTleVonDt : 0, 
+        luyKeGiaiNganDauNamNsnnTleVonThu : 0,
+        luyKeGiaiNganDauNamNsnnTleVonScl : 0,
         checked: false,
       }
     }
@@ -1628,7 +1689,11 @@ export class BaoCaoComponent implements OnInit {
     this.spinner.show();
     await this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).toPromise().then(async res => {
       if (res.statusCode == 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        if(trangThai == NOTOK){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+        }else{
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }
         this.trangThaiChiTiet = trangThai;
         await this.getDetailReport();
       } else {
