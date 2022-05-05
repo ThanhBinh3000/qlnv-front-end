@@ -53,7 +53,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of basicTable.data; let i = index">
-              <td>{{ i + 1 }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
               <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
@@ -76,8 +76,8 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
                 (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
@@ -89,7 +89,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
+        <button type="button" class="btn btn-main" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>
