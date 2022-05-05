@@ -37,15 +37,20 @@
           <tbody>
             <tr>
               <td></td>
-              <td><input nz-input [(ngModel)]="itemRow.maKho" /></td>
-              <td><input nz-input [(ngModel)]="itemRow.tenKho" /></td>
+              <td><input nz-input [(ngModel)]="itemRow.maKhoNganLo" [readonly]="true" /></td>
+              <td>
+                <nz-select (ngModelChange)="selectNganLo($event, itemRow)" [(ngModel)]="itemRow.maKhoNganLo">
+                  <nz-option *ngFor="let nganLo of listNganLo" [nzValue]="nganLo.maNganlo" [nzLabel]="nganLo.tenNganlo">
+                  </nz-option>
+                </nz-select>
+              </td>
               <td>
                 <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="itemRow.soLuong" [nzMin]="0">
                 </nz-input-number>
               </td>
-              <td><input nz-input [(ngModel)]="itemRow.thuKho" /></td>
+              <td><input nz-input [(ngModel)]="itemRow.thuKhoPhuTrach" /></td>
               <td>
-                <a (click)="addRow()" [class.disabled]="!itemRow.maKho">
+                <a (click)="addRow()" [class.disabled]="!itemRow.maKhoNganLo">
                   <i class="fa fa-plus"></i>
                 </a>
                 <a (click)="clearItemRow()">
@@ -56,10 +61,10 @@
             <tr *ngFor="let data of basicTable.data; let i = index">
               <ng-container *ngIf="!editCache[data.id]?.edit; else editTemplate">
                 <td class="text-center">{{i+1}}</td>
-                <td>{{ data.maKho }}</td>
-                <td>{{ data.tenKho }}</td>
+                <td>{{ data.maKhoNganLo }}</td>
+                <td>{{ data.tenKhoNganLo }}</td>
                 <td>{{ data.soLuong | number: '1.0-1' }}</td>
-                <td>{{ data.thuKho }}</td>
+                <td>{{ data.thuKhoPhuTrach }}</td>
                 <td>
                   <a (click)="editRow(data.id)">
                     <i class="fa fa-pencil"></i>
@@ -71,16 +76,24 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td></td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.maKho" /></td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.tenKho" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.maKhoNganLo" [readonly]="true" />
+                </td>
+                <td>
+                  <nz-select (ngModelChange)="selectNganLo($event, editCache[data.id]?.data)"
+                    [(ngModel)]="editCache[data.id]?.data.maKhoNganLo">
+                    <nz-option *ngFor="let nganLo of listNganLo" [nzValue]="nganLo.maNganlo"
+                      [nzLabel]="nganLo.tenNganlo">
+                    </nz-option>
+                  </nz-select>
+                </td>
                 <td>
                   <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="editCache[data.id]?.data.soLuong"
                     [nzMin]="0">
                   </nz-input-number>
                 </td>
-                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.thuKho" /></td>
+                <td><input type="text" nz-input [(ngModel)]="editCache[data.id]?.data.thuKhoPhuTrach" /></td>
                 <td>
-                  <a (click)="saveEdit(data.id)" class="save" [class.disabled]="!editCache[data.id]?.data.maKho">
+                  <a (click)="saveEdit(data.id)" class="save" [class.disabled]="!editCache[data.id]?.data.maKhoNganLo">
                     <i class="fa fa-save"></i>
                   </a>
                   <a (click)="cancelEdit(data.id)">

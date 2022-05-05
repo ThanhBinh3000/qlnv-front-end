@@ -11,6 +11,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { ThemQlTSHethongComponent } from './them-ql-ts-hethong/them-ql-ts-hethong.component';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class QlThamSoHeThongComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
+    private _modalService: NzModalService
   ) { }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
@@ -108,12 +110,7 @@ export class QlThamSoHeThongComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id: number) {
-    this.router.navigate([
-      '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      id,
-    ]);
-  }
+
 
   clearFilter() {
     this.searchFilter = {
@@ -228,4 +225,33 @@ export class QlThamSoHeThongComponent implements OnInit {
       },
     });
   }
+
+  redirectToChiTiet(data?: number) {
+    if (!data) {
+      let modal = this._modalService.create({
+        nzTitle: data
+          ? 'Cập nhập tham số hệ thông'
+          : 'Thêm mới tham số hệ thông',
+        nzContent: ThemQlTSHethongComponent,
+        nzClosable: true,
+        nzFooter: null,
+        nzStyle: { top: '50px' },
+        nzWidth: 600,
+        nzComponentParams: { data },
+      });
+      modal.afterClose.subscribe((b) => {
+        debugger
+
+        if (b) {
+        }
+      });
+    } else {
+      this.router.navigate([
+        '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+        data,
+      ]);
+    }
+
+  }
+
 }

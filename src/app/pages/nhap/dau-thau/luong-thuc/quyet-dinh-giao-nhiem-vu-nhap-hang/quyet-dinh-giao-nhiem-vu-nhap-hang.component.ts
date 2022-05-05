@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -124,7 +125,6 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
 
   async search() {
     let maDonVi = null;
-    this.dataTable = [];
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(
         (x) => x.labelDonVi == this.inputDonVi,
@@ -136,7 +136,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     let body = {
       "loaiQd": this.loaiQd,
       "maDvi": maDonVi,
-      "maVthh": this.loaiVTHH ?? "00",
+      "maVthh": this.loaiVTHH,
       "ngayQd": this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
@@ -151,12 +151,17 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
       "str": null,
       "trangThai": null
     };
-    this.totalRecord = 10;
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+        for (let i = 0; i < this.dataTable.length; i++) {
+          let item = this.dataTable[i];
+          if (item && item.children && item.children.length > 0) {
+            this.dataTable[i].tenHangDTQG = item.children[0].tenVthh;
+          }
+        }
       }
       this.totalRecord = data.totalElements;
     } else {
@@ -230,6 +235,81 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
   }
 
   export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let maDonVi = null;
+        if (this.inputDonVi && this.inputDonVi.length > 0) {
+          let getDonVi = this.optionsDonVi.filter(
+            (x) => x.labelDonVi == this.inputDonVi,
+          );
+          if (getDonVi && getDonVi.length > 0) {
+            maDonVi = getDonVi[0].maDvi;
+          }
+        }
+        let body = {
+          "loaiQd": this.loaiQd,
+          "maDvi": maDonVi,
+          "maVthh": this.loaiVTHH,
+          "ngayQd": this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soHd": this.soHd,
+          "soQd": this.soQD,
+          "str": null,
+          "trangThai": null
+        };
+        this.quyetDinhGiaoNhapHangService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-giao-nhiem-vu-nhap-hang.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 
+  duyet(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id,
+            lyDoTuChoi: null,
+            trangThai: '02',
+          };
+          let res = await this.quyetDinhGiaoNhapHangService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.search();
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }

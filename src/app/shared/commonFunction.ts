@@ -20,6 +20,14 @@ export function convertTrangThai(status: string): string {
   }
 }
 
+export function convertTrangThaiUser(status: string): string {
+  if (status == '00') {
+    return 'Khóa';
+  } else if (status == '01') {
+    return 'Mở khóa';
+  }
+}
+
 // public static final String TAO_MOI = "00";
 // 	public static final String CHO_DUYET = "01";
 // 	public static final String DUYET = "02";

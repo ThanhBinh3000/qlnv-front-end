@@ -11,6 +11,8 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
+import { ThemMoiNSDComponent } from './them-ql-nguoisudung/tm-nguoisudung.component';
 
 
 @Component({
@@ -22,8 +24,12 @@ export class DanhSachComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
-    soDxuat: '',
-    trichYeu: '',
+    PVBC: '',
+    donvi: '',
+    loaiNSD: '',
+    maND: '',
+    nhomND: '',
+    status: '',
   };
   inputDonVi: string = '';
   options: any[] = [];
@@ -39,11 +45,12 @@ export class DanhSachComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private qlNSDService: QlNguoiSuDungService,
     private notification: NzNotificationService,
     private router: Router,
-    private modal: NzModalService,
-  ) {}
+    private _modalService: NzModalService,
+
+  ) { }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
@@ -108,18 +115,36 @@ export class DanhSachComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id: number) {
-    this.router.navigate([
-      '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      id,
-    ]);
+  redirectToChiTiet(data?: number) {
+    if (!data) {
+      let modal = this._modalService.create({
+        nzTitle: data
+          ? 'Cập nhập người sử dụng'
+          : 'Thêm mới người sử dụng',
+        nzContent: ThemMoiNSDComponent,
+        nzClosable: true,
+        nzFooter: null,
+        nzStyle: { top: '50px' },
+        nzWidth: 900,
+        nzComponentParams: { data },
+      });
+      modal.afterClose.subscribe((b) => {
+        debugger
+
+        if (b) {
+        }
+      });
+    } else {
+      this.router.navigate([
+        '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+        data,
+      ]);
+    }
+
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soDxuat: '',
-      trichYeu: '',
-    };
+
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
@@ -137,24 +162,18 @@ export class DanhSachComponent implements OnInit {
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
+      "dvql": maDonVi,
+      "fullName": "",
+      "paggingReq": {
         limit: this.pageSize,
         page: this.page,
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "status": "",
+      "sysType": "",
+      "username": ""
+
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this.qlNSDService.findList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -195,7 +214,7 @@ export class DanhSachComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-    this.modal.confirm({
+    this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn xóa?',
@@ -206,20 +225,20 @@ export class DanhSachComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.danhSachDauThauService
-            .deleteKeHoachLCNT({ id: item.id })
-            .then((res) => {
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.DELETE_SUCCESS,
-                );
-                this.search();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-              this.spinner.hide();
-            });
+          // this.danhSachDauThauService
+          //   .deleteKeHoachLCNT({ id: item.id })
+          //   .then((res) => {
+          //     if (res.msg == MESSAGE.SUCCESS) {
+          //       this.notification.success(
+          //         MESSAGE.SUCCESS,
+          //         MESSAGE.DELETE_SUCCESS,
+          //       );
+          //       this.search();
+          //     } else {
+          //       this.notification.error(MESSAGE.ERROR, res.msg);
+          //     }
+          //     this.spinner.hide();
+          //   });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
