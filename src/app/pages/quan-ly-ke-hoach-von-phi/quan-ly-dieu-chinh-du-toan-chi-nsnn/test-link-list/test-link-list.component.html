@@ -33,7 +33,7 @@
                             <tbody>
                                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                                     <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                        <td [nzIndentSize]="data.level * 8">
+                                        <td [nzIndentSize]="data.lstKm[0].level * 8">
                                             {{ getChiMuc(data.stt)  }}
                                         </td>
                                         <td>
@@ -53,11 +53,11 @@
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="data.level == 4; else them">
-                                                <i class="fa fa-plus" (click)="addSame(data.id)"></i>
+                                            <ng-container *ngIf="!data.status; else them">
+                                                <i class="fa fa-plus" (click)="addSame(data.id, initItem)"></i>
                                             </ng-container>
                                             <ng-template #them>
-                                                <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp" (nzOnConfirm)="addSame(data.id)" nzCancelText="Dưới cấp" (nzOnCancel)="addLow(data.id)">
+                                                <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp" (nzOnConfirm)="addSame(data.id, initItem)" nzCancelText="Dưới cấp" (nzOnCancel)="addLow(data.id, initItem)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </ng-template>
@@ -68,7 +68,7 @@
                                         </td>
                                     </ng-container>
                                     <ng-template #editTemplate>
-                                        <td [nzIndentSize]="data.level * 8">
+                                        <td [nzIndentSize]="data.lstKm[0].level * 8">
                                             {{ getChiMuc(editCache[data.id].data.stt) }}
                                         </td>
                                         <td>
@@ -85,11 +85,10 @@
                                         </td>
                                         <td>
                                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                         </td>
                                         <td>
-                                            <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp" (nzOnConfirm)="addSame(data.id)" nzCancelText="Dưới cấp" (nzOnCancel)="addLow(data.id)">
-                                                <i class="fa fa-plus"></i>
+                                            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                                Hủy
                                             </a>
                                         </td>
                                         <td>
@@ -108,7 +107,7 @@
                         <span>Xóa</span>
                     </button>
                     <ng-container *ngIf="lstCTietBCao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addFirst()">
+                        <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
