@@ -195,6 +195,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   urlDetail:string ='qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
 
   loaiBaoCaoParam:any;
+  namBaoCaoParam:any;
+  dotBaoCaoParam:any;
   trangThaiChiTiet:any;
   nho: boolean;
   tab =TAB_SELECTED;
@@ -336,8 +338,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.dotBcao = this.router.snapshot.paramMap.get('dotBcao');
     this.trThai = this.router.snapshot.paramMap.get('trangThai');
     this.loaiBaoCaoTongHop = this.router.snapshot.paramMap.get('maLoaiBcao');
-    //-----
+    //-----tạo báo cáo mới
     this.loaiBaoCaoParam = this.router.snapshot.paramMap.get('loai');
+    this.namBaoCaoParam = this.router.snapshot.paramMap.get('namBaoCao');
+    this.dotBaoCaoParam = this.router.snapshot.paramMap.get('dotBaoCao');
     //xem chi tiet xuất file exel;
     this.checkxemkhaithac = this.router.snapshot.paramMap.get('status');
 
@@ -381,7 +385,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-      this.baoCao.namBcao = this.currentday.getFullYear();
+      this.baoCao.namBcao = this.namBaoCaoParam;
       this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.nam = this.currentday.getFullYear();
       //khởi tạo trạng thái tạo mới

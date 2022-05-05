@@ -53,7 +53,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     trangThai: "",
     maLoaiBcao: "",
     dotBcao: "",
-    namBcao: "",
+    namBcao: null,
     ngayTaoDen: "",
     ngayTaoTu: "",
     maPhanBcao:1,
@@ -104,6 +104,9 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   this.validateForm = this.fb.group({
     loaiBaocao: [null, [Validators.required]],
+    namBaoCao:[null,[Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
+    dotBaoCao:[null,[Validators.required]],
+    temp:[null]
   });
 
     let userName = this.nguoiDungSerivce.getUserName();
@@ -206,23 +209,24 @@ async getUserInfo(username: string) {
   //set url khi
   setUrl(lbaocao:any) {
     // console.log(lbaocao);
-      
       switch (lbaocao) {
         case 1:
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
+          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao
           break;
         case 2:
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao
+          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao
           break;
         default:
           this.url = null;
           break;
       }
+    
   }
 
   themMoi(){
    
     if(!this.validateForm.valid){
+      this.notifi.error(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
     else{
