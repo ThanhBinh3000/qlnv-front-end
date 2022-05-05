@@ -51,11 +51,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     maPhanBcao:'0'
   };
 
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
   donViTaos: any = [];
   baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
   constructor(
@@ -110,19 +105,16 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     this.spinner.hide();
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    this.url = '/bao-cao/'
-  }
-
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
   }
 
   close() {

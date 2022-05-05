@@ -53,11 +53,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     str: "",
   };
 
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
   donViTaos: any = [];
   baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
   constructor(
@@ -142,22 +137,36 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0') + '/' + this.searchFilter.namBcao])
   }
 
-  //set url khi
-  setUrl(lbaocao: any) {
-    this.url = '/bao-cao/';
-  }
-
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
   }
 
   close() {
     this.location.back();
   }
+
+  deleteReport(id) {
+		if (id) {
+			this.quanLyVonPhiService.xoaBaoCao(id).toPromise().then(async res => {
+				if (res.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.onSubmit();
+        } else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
+		} else {
+			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+		}
+	}
 }

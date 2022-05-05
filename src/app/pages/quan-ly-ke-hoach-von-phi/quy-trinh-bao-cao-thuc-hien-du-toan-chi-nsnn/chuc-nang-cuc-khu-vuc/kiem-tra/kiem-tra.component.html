@@ -20,8 +20,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -46,22 +45,22 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of basicTable.data; let i = index">
-              <td>{{ i + 1 }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>Ngày cục khu vực kiểm tra báo cáo</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main">
+                <!-- <button type="button" class="btn btn-main">
                   <span>Thông báo đến đơn vị cấp dưới</span>
-                </button>
-                <button type="button" class="btn btn-main">
+                </button> -->
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span>Xem</span>
                 </button>
               </td>
@@ -75,8 +74,8 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
                 (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
@@ -88,7 +87,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
+        <button type="button" class="btn btn-main" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Kiểm tra</span>
         </button>

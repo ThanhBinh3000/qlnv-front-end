@@ -41,5 +41,6 @@ export const MESSAGE = {
   MESSAGE_DELETE_WARNING:'Cần lưu trước khi thực hiện thao tác',
   ERROR_ADD_MAT_HANG: 'Không được chọn trùng mặt hàng ',
   COPY_SUCCESS_HDV: 'Sao chép thành công dữ liệu sang mã báo cáo ',
-  ALERT:'Thông báo'
+  ALERT:'Thông báo',
+  REJECT_SUCCESS:'Từ chối thành công',
 };

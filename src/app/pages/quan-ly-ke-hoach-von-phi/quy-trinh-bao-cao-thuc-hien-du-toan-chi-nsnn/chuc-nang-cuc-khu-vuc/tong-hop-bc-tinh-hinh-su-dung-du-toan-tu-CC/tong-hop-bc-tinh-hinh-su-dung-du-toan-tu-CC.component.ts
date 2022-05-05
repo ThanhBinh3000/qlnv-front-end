@@ -118,19 +118,16 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    // this.url = '/tong-hop/'
-  }
-
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
   }
 
   // tong hop bao cao tu cap duoi
