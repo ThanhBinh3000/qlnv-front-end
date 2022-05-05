@@ -3,16 +3,37 @@
     <div class="navbar-mobile">
       <app-main-router></app-main-router>
     </div>
-    <ul class="nav nav-tabs" #myTab id="myTab" role="tablist" nz-menu [nzMode]="'horizontal'">
+    <ul
+      class="nav nav-tabs"
+      #myTab
+      id="myTab"
+      role="tablist"
+      nz-menu
+      [nzMode]="'horizontal'"
+    >
       <li nz-submenu class="nav-item next" (click)="startSlide()">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
-      <li class="nav-item" data-toggle="collapse" data-target="#collapsnav" *ngFor="let route of routes, let i = index">
-        <span class="nav-link" [ngClass]="route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''" nz-popover
-          title [nzPopoverContent]="contentTemplate" nzPopoverPlacement="leftBottom"
-          [nzPopoverOverlayClassName]="'dau-thau-tab'" (mouseenter)="updateCssOverlay()">
+      <li
+        class="nav-item"
+        data-toggle="collapse"
+        data-target="#collapsnav"
+        *ngFor="let route of routes; let i = index"
+      >
+        <span
+          class="nav-link"
+          [ngClass]="
+            route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''
+          "
+          nz-popover
+          title
+          [nzPopoverContent]="contentTemplate"
+          nzPopoverPlacement="leftBottom"
+          [nzPopoverOverlayClassName]="'dau-thau-tab'"
+          (mouseenter)="updateCssOverlay()"
+        >
           <i class="icon" [ngClass]="route.icon"></i>
-          <span class="text"> {{route.title}} </span>
+          <span class="text"> {{ route.title }} </span>
         </span>
         <ng-template #contentTemplate>
           <div *ngIf="route.hasTab">
@@ -20,21 +41,40 @@
               <div class="contentDetail">
                 <div class="main-content-dau-thau">
                   <nz-tabset nzType="card">
-                    <nz-tab *ngFor="let tab of route.children" [nzTitle]="tab.title">
+                    <nz-tab
+                      *ngFor="let tab of route.children"
+                      [nzTitle]="tab.title"
+                    >
                       <div nz-row [nzGutter]="24" class="vat-tu">
-                        <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let item of tab.children">
-                          <nz-card class="card-tree"
-                            [ngClass]="item.url && routerUrl.indexOf(item.url) != -1 ? 'active-tab' : ''">
+                        <div
+                          nz-col
+                          nzXs="24"
+                          nzSm="12"
+                          nzMd="12"
+                          nzLg="6"
+                          *ngFor="let item of tab.children"
+                        >
+                          <nz-card
+                            class="card-tree"
+                            [ngClass]="
+                              item.url && routerUrl.indexOf(item.url) != -1
+                                ? 'active-tab'
+                                : ''
+                            "
+                            (click)="redirect(item.url)"
+                          >
                             <div class="content-item">
                               <span class="icon" [ngClass]="item.icon"></span>
-                              <div class="content-item-title">{{item.title}}</div>
-                              <div class="item-url-menu row">
+                              <div class="content-item-title">
+                                {{ item.title }}
+                              </div>
+                              <!-- <div class="item-url-menu row">
                                 <a [href]="item.urlTongCuc" class="col-md-4 text-center item-url-click-left">Tổng
                                   cục</a>
                                 <a [href]="item.urlCuc" class="col-md-4 text-center item-url-click-center">Cục</a>
                                 <a [href]="item.urlChiCuc" class="col-md-4 text-center item-url-click-right">Chi
                                   cục</a>
-                              </div>
+                              </div> -->
                             </div>
                           </nz-card>
                         </div>
@@ -45,18 +85,38 @@
               </div>
             </div>
           </div>
-          <div class="content-child-menu" *ngIf="!route.hasTab" nz-row [nzGutter]="24">
-            <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let menu of route.children">
-              <nz-card class="card-tree" [ngClass]="menu.url && routerUrl.indexOf(menu.url) != -1 ? 'active-tab' : ''">
+          <div
+            class="content-child-menu"
+            *ngIf="!route.hasTab"
+            nz-row
+            [nzGutter]="24"
+          >
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="12"
+              nzLg="6"
+              *ngFor="let menu of route.children"
+            >
+              <nz-card
+                class="card-tree"
+                [ngClass]="
+                  menu.url && routerUrl.indexOf(menu.url) != -1
+                    ? 'active-tab'
+                    : ''
+                "
+                (click)="redirect(menu.url)"
+              >
                 <div class="content-item">
                   <span class="icon" [ngClass]="menu.icon"></span>
-                  <div class="content-item-title">{{menu.title}}</div>
-                  <div class="item-url-menu row">
+                  <div class="content-item-title">{{ menu.title }}</div>
+                  <!-- <div class="item-url-menu row">
                     <a [href]="menu.urlTongCuc" class="col-md-4 text-center item-url-click-left">Tổng cục</a>
                     <a [href]="menu.urlCuc" class="col-md-4 text-center item-url-click-center">Cục</a>
                     <a [href]="menu.urlChiCuc" class="col-md-4 text-center item-url-click-right">Chi
                       cục</a>
-                  </div>
+                  </div> -->
                 </div>
               </nz-card>
             </div>

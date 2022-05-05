@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -33,6 +35,11 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
+  dataTable: any[] = [];
+  editCache: { [key: string]: { edit: boolean; data: any } } = {};
+  itemRow: any = {};
+  tableExist: boolean = false;
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -42,6 +49,7 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
     private modal: NzModalService,
     private fb: FormBuilder,
     private routerActive: ActivatedRoute,
+    private helperService: HelperService,
   ) { }
 
   async ngOnInit() {
@@ -61,6 +69,73 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  ngAfterViewChecked(): void {
+    const table = document.getElementsByTagName('table');
+    this.tableExist = table && table.length > 0 ? true : false;
+  }
+
+  updateEditCache(): void {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(item => {
+        this.editCache[item.stt] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
+  }
+
+  cancelEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.editCache[stt] = {
+      data: { ...this.dataTable[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.editCache[stt].data.thanhTien = (this.editCache[stt].data.soLuong ?? 0) * (this.editCache[stt].data.donGia ?? 0);
+    Object.assign(this.dataTable[index], this.editCache[stt].data);
+    this.editCache[stt].edit = false;
+  }
+
+  addRow() {
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    this.sortTableId();
+    let item = cloneDeep(this.itemRow);
+    item.stt = this.dataTable.length + 1;
+    item.thanhTien = (item.soLuong ?? 0) * (item.donGia ?? 0);
+    this.dataTable = [
+      ...this.dataTable,
+      item,
+    ]
+    this.updateEditCache();
+    this.clearItemRow();
+  }
+
+  clearItemRow() {
+    this.itemRow = {};
+  }
+
+  deleteRow(data: any) {
+    this.dataTable = this.dataTable.filter(x => x.stt != data.stt);
+    this.sortTableId();
+    this.updateEditCache();
+  }
+
+  editRow(stt: number) {
+    this.editCache[stt].edit = true;
+  }
+
+  sortTableId() {
+    this.dataTable.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
   }
 
   async loadChiTiet(id) {
@@ -170,5 +245,42 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
 
   back() {
     this.router.navigate(['nhap/dau-thau/quan-ly-phieu-nhap-day-kho']);
+  }
+
+  themBienBanDayKho() {
+
+  }
+
+
+
+  deleteBienBanNhapDayKho(data?: any) {
+
+  }
+
+  reduceRowData(
+    indexTable: number,
+    indexCell: number,
+    indexRow: number,
+    stringReplace: string,
+    idTable: string,
+  ): number {
+    let sumVal = 0;
+    const listTable = document
+      .getElementById(idTable)
+      ?.getElementsByTagName('table');
+    if (listTable && listTable.length >= indexTable) {
+      const table = listTable[indexTable];
+      for (let i = indexRow; i < table.rows.length - 1; i++) {
+        if (
+          table.rows[i]?.cells[indexCell]?.innerHTML &&
+          table.rows[i]?.cells[indexCell]?.innerHTML != ''
+        ) {
+          sumVal =
+            sumVal +
+            parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
+        }
+      }
+    }
+    return sumVal;
   }
 }

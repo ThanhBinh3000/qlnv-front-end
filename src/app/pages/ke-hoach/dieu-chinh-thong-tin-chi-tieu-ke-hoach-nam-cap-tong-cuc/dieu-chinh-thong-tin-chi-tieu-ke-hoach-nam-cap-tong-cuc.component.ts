@@ -29,6 +29,7 @@ import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 interface DataItem {
   name: string;
   age: number;
@@ -85,15 +86,23 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   fileList: any[] = [];
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
 
-  dataTag: any[] = [
-    {
-      id: 1,
-      text: '489/Về việc absgdh'
-    },
-  ];
+  dataTag: any[] = [];
+
+  dataGiaoChiTieu: any[] = [];
 
   dataVatTuCha: any[] = [];
   dataVatTuCon: any[] = [];
+
+  lastBreadcrumb: string;
+  trangThai: string = 'Dự thảo';
+
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
+
+  dataLuongThuc: any[] = [];
+  dataMuoi: any[] = [];
+  dataVatTu: any[] = [];
 
   selectDataMultipleTag(data: any) {
 
@@ -120,6 +129,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -457,6 +473,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.show();
           this.formData.controls['canCu'].setValue(data.soQuyetDinh);
           this.selectedCanCu = data;
+          this.dataGiaoChiTieu = [];
+          let item = {
+            id: data.id,
+            text: data.soQuyetDinh
+          }
+          this.dataGiaoChiTieu.push(item);
           this.chiTieuKeHoachNamCapTongCucService
             .loadThongTinChiTieuKeHoachNam(this.selectedCanCu.id)
             .then((res) => {
@@ -524,6 +546,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.dieuChinhThongTinChiTieuKHNam.qd.trichYeu = tempData.trichYeu;
 
                 this.dieuChinhThongTinChiTieuKHNam.qd.khVatTu = this.updateDataListVatTu(this.dieuChinhThongTinChiTieuKHNam.qd.khVatTu);
+
+                this.loadData();
               }
             });
           this.spinner.hide();
@@ -1101,5 +1125,35 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   xoaFile(data) {
     this.fileList = this.fileList.filter(x => x.uid != data.uid);
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    this.loadData();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    this.loadData();
+  }
+
+  loadData() {
+    if (this.tabSelected == this.tab.luongThuc) {
+      this.dataLuongThuc = this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
+      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.length;
+    }
+    else if (this.tabSelected == this.tab.muoi) {
+      this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
+      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.length;
+    }
+    else if (this.tabSelected == this.tab.vatTu) {
+      this.dataVatTu = this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
+      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.length;
+    }
+  }
+
+  selectTabData(tabName: string) {
+    this.tabSelected = tabName;
+    this.loadData();
   }
 }

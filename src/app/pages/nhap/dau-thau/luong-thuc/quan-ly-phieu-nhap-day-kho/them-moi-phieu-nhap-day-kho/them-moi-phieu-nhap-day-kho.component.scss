@@ -5,4 +5,22 @@
       padding-left: 0px !important;
     }
   }
+  .tab__luong-thuc {
+    position: relative;
+    .btn-them {
+      position: absolute;
+      top: 4px;
+      right: 12px;
+    }
+    .btn-export {
+      position: absolute;
+      top: 0;
+      right: 60px;
+    }
+    .btn-in {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
 }

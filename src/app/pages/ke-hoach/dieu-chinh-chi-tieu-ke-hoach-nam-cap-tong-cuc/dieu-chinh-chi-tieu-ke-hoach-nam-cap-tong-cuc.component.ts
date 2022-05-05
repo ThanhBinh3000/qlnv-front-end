@@ -6,8 +6,9 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 
@@ -18,18 +19,29 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 })
 export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
-  searchFilter = {
-    soQD: null,
-    namKeHoach: null,
-    trichYeu: null,
-  };
-  listNam: any[] = [];
+
+  namKeHoach: number = null;
+  soQDGiao: string = null;
+  trichYeuGiao: string = null;
+  soQDDieuChinh: string = null;
+  trichYeuDieuChinh: string = null;
   startValue: Date | null = null;
   endValue: Date | null = null;
+  startValueDc: Date | null = null;
+  endValueDc: Date | null = null;
+
+  listNam: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+
+  optionsDonVi: any[] = [];
+  inputDonVi: string = '';
+  optionsDonViShow: any[] = [];
+  selectedDonVi: any = {};
+
+  lastBreadcrumb: string;
 
   constructor(
     private router: Router,
@@ -37,19 +49,31 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private donViService: DonviService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       let dayNow = dayjs().get('year');
+      this.namKeHoach = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayNow - i,
           text: dayNow - i,
         });
       }
-      await this.search();
+      await Promise.all([
+        this.loadDonVi(),
+        this.search(),
+      ]);
       this.spinner.hide();
     }
     catch (e) {
@@ -57,6 +81,38 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async loadDonVi() {
+    const res = await this.donViService.layTatCaDonVi();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  onInputDonVi(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.optionsDonViShow = [];
+    } else {
+      this.optionsDonViShow = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  async selectDonVi(donVi) {
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
   }
 
   disabledStartDate = (startValue: Date): boolean => {
@@ -71,6 +127,20 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       return false;
     }
     return endValue.getTime() <= this.startValue.getTime();
+  };
+
+  disabledStartDateDc = (startValue: Date): boolean => {
+    if (!startValue || !this.endValueDc) {
+      return false;
+    }
+    return startValue.getTime() > this.endValueDc.getTime();
+  };
+
+  disabledEndDateDc = (endValue: Date): boolean => {
+    if (!endValue || !this.startValueDc) {
+      return false;
+    }
+    return endValue.getTime() <= this.startValueDc.getTime();
   };
 
   handleStartOpenChange(open: boolean): void {
@@ -91,22 +161,26 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soQD: null,
-      namKeHoach: null,
-      trichYeu: null,
-    };
+    this.namKeHoach = dayjs().get('year');
+    this.soQDGiao = null;
+    this.trichYeuGiao = null;
+    this.soQDDieuChinh = null;
+    this.trichYeuDieuChinh = null;
     this.startValue = null;
     this.endValue = null;
+    this.startValueDc = null;
+    this.endValueDc = null;
+    this.inputDonVi = '';
+    this.selectedDonVi = {};
   }
 
   async search() {
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
-      soQD: this.searchFilter.soQD,
-      namKeHoach: this.searchFilter.namKeHoach,
-      trichYeu: this.searchFilter.trichYeu,
+      soQD: this.soQDGiao,
+      namKeHoach: this.namKeHoach,
+      trichYeu: this.trichYeuGiao,
       ngayKyDenNgay: this.endValue
         ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
@@ -189,9 +263,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         let body = {
           pageSize: null,
           pageNumber: null,
-          soQD: this.searchFilter.soQD,
-          namKeHoach: this.searchFilter.namKeHoach,
-          trichYeu: this.searchFilter.trichYeu,
+          soQD: this.soQDGiao,
+          namKeHoach: this.namKeHoach,
+          trichYeu: this.trichYeuGiao,
           ngayKyDenNgay: this.endValue
             ? dayjs(this.endValue).format('YYYY-MM-DD')
             : null,

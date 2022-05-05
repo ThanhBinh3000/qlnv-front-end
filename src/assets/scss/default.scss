@@ -1754,3 +1754,18 @@ td.action.ant-table-cell {
   margin-bottom: 16px;
   margin-top: 8px;
 }
+::ng-deep {
+  .main-ke-hoach {
+    .flex-card.ant-card {
+      .ant-card-head {
+        padding: 0px 90px !important;
+        border-bottom: none !important;
+      }
+      .ant-card-head-title {
+        color: #444444;
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+  }
+}

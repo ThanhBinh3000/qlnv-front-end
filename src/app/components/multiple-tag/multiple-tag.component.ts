@@ -9,6 +9,7 @@ import VNnum2words from 'vn-num2words';
 export class MultipleTagComponent implements OnInit {
   @Input() buttonName: string;
   @Input() icon: string;
+  @Input() placeHolder: string;
   @Input() data: any[] = [];
 
   @Output()

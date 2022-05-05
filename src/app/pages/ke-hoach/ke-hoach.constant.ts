@@ -12,9 +12,9 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_chitieukehoachnam',
-        title: 'Giao chỉ tiêu kế hoạch đầu năm',
+        title: 'Giao chỉ tiêu kế hoạch đầu năm Cấp tổng cục',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-cuc`,
         urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-chi-cuc`,
@@ -31,9 +31,9 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm',
+        title: 'Điều chỉnh kế hoạch năm Cấp tổng cục',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc`,
         urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc`,

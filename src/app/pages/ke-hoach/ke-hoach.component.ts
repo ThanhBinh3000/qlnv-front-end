@@ -89,6 +89,7 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   }
 
   redirect(url: string) {
-    this.router.navigate([this.defaultUrl + url]);
+    this.routerUrl = url;
+    this.router.navigate([url]);
   }
 }

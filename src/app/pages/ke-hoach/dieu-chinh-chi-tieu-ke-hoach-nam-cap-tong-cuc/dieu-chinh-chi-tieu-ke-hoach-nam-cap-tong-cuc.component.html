@@ -1,23 +1,42 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2 mg-l-40">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Kế hoạch DTNN</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Điều chỉnh kế hoạch năm</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{lastBreadcrumb}}</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+    </div>
+  </div>
+</nz-affix>
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
-            <label class="search__label">Số QĐ</label>
-            <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
-              <nz-input-number [(ngModel)]="searchFilter.soQD" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
-              </nz-input-number>
-            </nz-input-group>
-          </div>
-          <div nz-col nzSpan="6">
             <label class="search__label">Năm kế hoạch</label>
-            <nz-select [(ngModel)]="searchFilter.namKeHoach">
+            <nz-select [(ngModel)]="namKeHoach">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
+          <div nz-col nzSpan="18"></div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Số QĐ giao chỉ tiêu kế hoạch năm</label>
+            <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
+          </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Từ ngày</label>
+            <label class="search__label">Ngày ký từ ngày</label>
             <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
               [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
             </nz-date-picker>
@@ -29,8 +48,45 @@
             </nz-date-picker>
           </div>
           <div nz-col nzSpan="24">
-            <label class="search__label">Trích yếu</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+            <label class="search__label">Trích yếu QĐ giao chỉ tiêu kế hoạch năm</label>
+            <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
+          </div>
+
+          <div nz-col nzSpan="12">
+            <label class="search__label">Số QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
+            <input class="search__input" nz-input [(ngModel)]="soQDDieuChinh" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày ký từ ngày</label>
+            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDateDc" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="startValueDc" nzPlaceHolder="Ngày ký từ ngày">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDateDc" nzFormat="yyyy-MM-dd"
+              [(ngModel)]="endValueDc" nzPlaceHolder="Đến ngày">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="24">
+            <label class="search__label">Trích yếu QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
+            <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
+          </div>
+          <div nz-col nzSpan="24">
+            <label class="search__label">Đơn vị</label>
+            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
+                [nzAutocomplete]="auto" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+              <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+                (click)="selectDonVi(option)">
+                {{ option.labelDonVi }}
+              </nz-auto-option>
+            </nz-autocomplete>
           </div>
         </div>
         <div class="cangiua group-button-search">
@@ -64,7 +120,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
-              <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+              <td class="text-center">{{ (page - 1) * pageSize + i + 1 }}</td>
               <th width="45px">
                 <label nz-checkbox></label>
               </th>
@@ -86,9 +142,7 @@
         </nz-table>
         <div class="tab-content tab-menu" id="myTabContent">
           <div class="tab-pane fade show active justify-content-between">
-            <div class="trai">
-
-            </div>
+            <div class="trai"></div>
             <div class="canphai">
               <!-- begin phân trang  -->
               <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger

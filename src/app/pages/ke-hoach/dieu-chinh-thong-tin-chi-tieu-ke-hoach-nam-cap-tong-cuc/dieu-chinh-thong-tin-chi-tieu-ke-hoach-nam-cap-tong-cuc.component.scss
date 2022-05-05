@@ -7,6 +7,7 @@
       margin-bottom: 0px !important;
       margin-top: 11px !important;
       border-radius: 6px;
+      padding-top: 20px;
     }
     .table__body {
       margin: 12px 0px 0px 0px !important;
@@ -65,7 +66,7 @@
     position: absolute;
     top: 4px;
     height: 15px;
-    left: 695px;
+    left: 720px;
     color: #2196f3;
     width: 200px;
     white-space: nowrap;
@@ -110,5 +111,25 @@
   }
   .hide-row {
     display: none;
+  }
+  .trai {
+    display: flex;
+    align-items: center;
+  }
+  .last-breadcrumb {
+    color: #19797b !important;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .label-input-kh {
+    margin-top: 6px;
+    width: 100%;
+  }
+  .label-color-kh {
+    label {
+      color: #828282;
+      font-weight: 400;
+      font-size: 12px;
+    }
   }
 }
