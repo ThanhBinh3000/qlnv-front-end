@@ -118,11 +118,6 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    // this.url = '/tong-hop/'
-  }
-
   //doi so trang
   onPageIndexChange(page) {
     this.searchFilter.paggingReq.page = page;

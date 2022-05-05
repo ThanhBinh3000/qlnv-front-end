@@ -478,7 +478,12 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 				if (data.statusCode == 0) {
 					await this.getDetailReport();
 					this.getStatusButton();
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+					if(mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5|| mcn == Utils.TT_BC_3){
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+					}else{
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+					}
+					
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

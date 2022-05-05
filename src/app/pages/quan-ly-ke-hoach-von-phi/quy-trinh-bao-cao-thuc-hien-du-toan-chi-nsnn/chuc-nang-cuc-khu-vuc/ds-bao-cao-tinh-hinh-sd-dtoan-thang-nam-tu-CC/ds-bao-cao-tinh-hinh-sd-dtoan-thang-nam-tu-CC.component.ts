@@ -105,11 +105,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     this.spinner.hide();
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    this.url = '/bao-cao/'
-  }
-
   //doi so trang
   onPageIndexChange(page) {
     this.searchFilter.paggingReq.page = page;
