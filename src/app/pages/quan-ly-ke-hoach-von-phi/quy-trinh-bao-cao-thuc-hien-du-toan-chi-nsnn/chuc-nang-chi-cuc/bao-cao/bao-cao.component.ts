@@ -311,7 +311,7 @@ export class BaoCaoComponent implements OnInit {
           tieuDe: item.tieuDe,
           maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
-          trangThai: null,
+          trangThai: '2',
           lstCTietBCao: []
         });
       })
@@ -689,7 +689,9 @@ export class BaoCaoComponent implements OnInit {
 
   }
   changeModelPL2(id) {
-
+    this.editCache[id].data.dtoanSdungNamTcong = this.editCache[id].data.dtoanSdungNamNguonNsnn + this.editCache[id].data.dtoanSdungNamNguonSn;
+    this.editCache[id].data.giaiNganThangTcong = this.editCache[id].data.giaiNganThangNguonNsnn + this.editCache[id].data.giaiNganThangNguonSn + this.editCache[id].data.giaiNganThangNguonQuy ;
+    this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganNguonNsnn + this.editCache[id].data.luyKeGiaiNganNguonSn + this.editCache[id].data.luyKeGiaiNganNguonQuy ;
   }
   changeModelPL3(id) {
 
@@ -719,6 +721,7 @@ export class BaoCaoComponent implements OnInit {
     } else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
       item = {
         id: uuid.v4(),
+        dtoanSdungNamTcong : 0,
         checked: false,
       }
     } else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
@@ -809,7 +812,7 @@ export class BaoCaoComponent implements OnInit {
               tieuDe: item.tieuDe,
               maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
-              trangThai: null,
+              trangThai: '2',
               lstCTietBCao: []
             });
           }
@@ -940,8 +943,8 @@ export class BaoCaoComponent implements OnInit {
         },
       );
     } else {
-      this.baoCao.maDviTien = '01';
-      this.quanLyVonPhiService.updatelist(this.baoCao).toPromise().then(async res => {
+
+      this.quanLyVonPhiService.updateBaoCaoThucHienDTC(this.baoCao).toPromise().then(async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           this.id = res.data.id
