@@ -162,7 +162,7 @@ export class DanhSachComponent implements OnInit {
       }
     }
     let body = {
-      "dvql": maDonVi,
+      "dvql": maDonVi ?? "",
       "fullName": "",
       "paggingReq": {
         limit: this.pageSize,

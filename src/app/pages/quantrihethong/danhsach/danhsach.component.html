@@ -4,12 +4,6 @@
       <div class="main-content">
         <nz-card nzTitle="Điều kiện Tìm kiếm" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Phạm vi báo cáo</label>
-              <nz-select [(ngModel)]="searchFilter.PVBC">
-                <nz-option></nz-option>
-              </nz-select>
-            </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Đơn vị</label>
               <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
@@ -42,8 +36,9 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Trạng thái</label>
-              <nz-select [(ngModel)]="searchFilter.status">
-                <nz-option></nz-option>
+              <nz-select nzAllowClear [(ngModel)]="searchFilter.status">
+                <nz-option nzLabel="Mở khóa" nzValue="01"></nz-option>
+                <nz-option nzLabel="Khóa" nzValue="00"></nz-option>
               </nz-select>
             </div>
           </div>
