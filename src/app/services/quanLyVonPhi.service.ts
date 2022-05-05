@@ -454,7 +454,7 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xóa báo cáo nút xóa Báo cáo
-  xoaBaoCao(id: any): Observable<any> {
+  xoaBaoCaoLapThamDinh(id: any): Observable<any> {
     return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/xoa/' + id);
   }
 
@@ -505,6 +505,11 @@ export class QuanLyVonPhiService extends BaseService {
   //sinh ma bao cao (3.2.9)
   taoMaBaoCao():Observable<any>{
     return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma-bcao');
+  }
+
+  //xóa báo cáo nút xóa Báo cáo
+  xoaBaoCao(id: any): Observable<any> {
+    return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa/' + id);
   }
 
 }
