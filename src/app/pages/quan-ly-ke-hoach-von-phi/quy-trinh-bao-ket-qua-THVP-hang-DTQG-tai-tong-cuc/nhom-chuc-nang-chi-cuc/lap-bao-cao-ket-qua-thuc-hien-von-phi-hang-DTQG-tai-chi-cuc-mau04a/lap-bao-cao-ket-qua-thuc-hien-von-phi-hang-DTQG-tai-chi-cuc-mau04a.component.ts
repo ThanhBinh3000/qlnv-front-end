@@ -184,6 +184,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
   statusBtnOk:boolean; //trang thai nut ok - not ok
+  statusBtnCopy:boolean;
+  statusBtnPrint:boolean;
   statusBtnDuyetBieuMau:boolean = true;
   //-------------
   id: any;
@@ -507,7 +509,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
     this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
     this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfor?.roles[0]?.id);
+    this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
     
     //check chi cục
     // debugger
@@ -820,11 +825,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => item.maLoai== maPhuLuc)?.lstCTietBCao;
         this.updateLstCTietBCao(4);
       }
-      this.trangThaiChiTiet = trangThaiChiTiet;
-      this.getStatusButtonOk();
+      
     }
     
-   
+   this.trangThaiChiTiet = trangThaiChiTiet;
    this.updateEditCache02();
    this.updateEditCache03();
    this.updateEditCache();
@@ -898,7 +902,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
-    
     let a = this.userInfor?.roles[0]?.id;
     if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfor?.roles[0]?.id == '3' && checkParent && this.trangThaiChiTiet == 2){
       this.statusBtnOk = false;
@@ -909,6 +912,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     }else{
       this.statusBtnOk = true;
     }
+  
+    
   }
 
   async luu() {
@@ -1413,7 +1418,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-     this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
+      await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           // set thong tin chung bao cao
@@ -1430,6 +1435,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao.trangThai = data.data.trangThai;
           this.donvitien = data.data.maDviTien;
           this.maLoaiBaocao = data.data.maLoaiBcao;
+          this.maDonViTao = data.data.maDvi;
           this.lstFile = data.data.lstFile;
           this.trangThaiBanGhi = data.data.trangThai;
           if(this.maLoaiBaocao=='1'){
@@ -1599,18 +1605,16 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           }
           
           if (
-            this.baoCao.trangThai == '1' ||
-            this.baoCao.trangThai == '3' ||
-            this.baoCao.trangThai == '5' ||
-            this.baoCao.trangThai == '8'
+            this.baoCao.trangThai == Utils.TT_BC_1 ||
+            this.baoCao.trangThai == Utils.TT_BC_3 ||
+            this.baoCao.trangThai == Utils.TT_BC_5 ||
+            this.baoCao.trangThai == Utils.TT_BC_8
           ) {
             this.status = false;
           } else {
             this.status = true;
           }
-          
 
-          
           // set list id file ban dau
           this.listFile =[];
           this.getStatusButton();
@@ -1621,9 +1625,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.updateLstCTietBCao(2);
           this.updateLstCTietBCao(3);
           this.updateLstCTietBCao(4);
-          
-          
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -1692,12 +1694,20 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
 
   resetList(){
-    
+    this.cols4ax = 3;
+    this.cols4an = 3;
+    this.cols4bx = 3;
+    this.cols05  = 3;
+
     this.lstCTietBCao1 =[];
     this.lstCTietBCao2 =[];
     this.lstCTietBCao031 =[];
     this.lstCTietBCao032 =[];
     this.lstCTietBCao033 =[];
+    this.listColTrongDot4ax =[];
+    this.listColTrongDot4an =[];
+    this.listColTrongDot4bx =[];
+    this.listColTrongDot5 =[];
     this.updateEditCache02();
     this.updateAllChecked03();
     this.updateEditCache();

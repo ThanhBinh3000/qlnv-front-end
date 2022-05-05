@@ -23,7 +23,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   detailDonVi: FormGroup;
   danhSachBaoCao: any = [];
   errorMessage = "";
-  url: string ='';
+  url: string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/';
   urlChiTiet:string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
   // phan cu cua teca
   visible = false;
@@ -104,8 +104,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
   this.validateForm = this.fb.group({
     loaiBaocao: [null, [Validators.required]],
-    namBaoCao:[null,[Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-    dotBaoCao:[null,[Validators.required]],
+    namBaoCao:[null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
     temp:[null]
   });
 
@@ -206,31 +205,15 @@ async getUserInfo(username: string) {
   }
 
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    // console.log(lbaocao);
-      switch (lbaocao) {
-        case 1:
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao
-          break;
-        case 2:
-          this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/'+lbaocao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao
-          break;
-        default:
-          this.url = null;
-          break;
-      }
-    
-  }
 
   themMoi(){
-   
+   console.log(this.url)
     if(!this.validateForm.valid){
       this.notifi.error(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS)
       return;
     }
     else{
-      this.router.navigate(['qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn'+this.url]);
+      this.router.navigate(['qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn'+this.url + this.searchFilter.maLoaiBcao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao]);
     }
   }
 

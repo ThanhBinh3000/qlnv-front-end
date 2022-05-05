@@ -47,7 +47,7 @@
             <label class="search__label">Đợt báo cáo</label>
             <nz-form-item>
               <nz-form-control nzErrorTip="">
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" formControlName="dotBaoCao" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" formControlName="temp" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -88,7 +88,7 @@
               <label class="search__label">Loại báo cáo</label>
               <nz-form-item>
               <nz-form-control nzErrorTip="">
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao" [(ngModel)]="searchFilter.maLoaiBcao" (ngModelChange)="setUrl($event)">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao" [(ngModel)]="searchFilter.maLoaiBcao" >
                 <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
               </nz-select>
               </nz-form-control>
