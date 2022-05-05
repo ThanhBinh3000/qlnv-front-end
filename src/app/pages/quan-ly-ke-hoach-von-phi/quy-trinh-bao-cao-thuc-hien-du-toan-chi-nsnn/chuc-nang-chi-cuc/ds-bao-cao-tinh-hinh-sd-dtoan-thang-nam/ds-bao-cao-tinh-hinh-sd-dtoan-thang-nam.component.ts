@@ -1,4 +1,4 @@
-import { DatePipe,Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI } from 'src/app/Utility/utils';
 import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
@@ -66,7 +67,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     private datePipe: DatePipe,
     private notification: NzNotificationService,
     private location: Location,
-
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -106,38 +107,39 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
 
-  timkiem() {
-    if (this.searchFilter.maLoaiBcao == '') {
-      this.notification.error('Tìm kiếm', 'Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+  async onSubmit() {
+    this.spinner.show();
+    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if (res.statusCode == 0) {
-
-        this.notification.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
-        if (this.listBcaoKqua.length != 0) {
-          this.lenght = this.listBcaoKqua.length;
-        }
+        this.listBcaoKqua.forEach(e => {
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+        })
+        this.totalElements = res.data.totalElements;
+        this.totalPages = res.data.totalPages;
       } else {
-        this.notification.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-      console.log(res);
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
   themMoi() {
-    if(!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBCao && this.searchFilter.maLoaiBcao == '526')){
+    if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBCao && this.searchFilter.maLoaiBcao == '526')) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000){
+    if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
 
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url +'/' + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0')+'/'+this.searchFilter.namBcao])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0') + '/' + this.searchFilter.namBcao])
   }
 
   //set url khi

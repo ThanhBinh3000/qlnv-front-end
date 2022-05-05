@@ -716,7 +716,7 @@ saveEdit(id: string): void {
 
   xoaBaoCao() {
     if (this.id) {
-      this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+      this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(this.id).toPromise().then(async res => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.location.back();

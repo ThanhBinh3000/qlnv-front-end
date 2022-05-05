@@ -5,7 +5,7 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
+        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -83,7 +83,7 @@
               <th nzWidth="175px">Ngày lập</th>
               <th nzWidth="175px">Ngày trình duyệt</th>
               <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày trưởng bộ phận kế toán duyệt)</span></th>
-              <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo chi cục phê duyệt)</span></th>
+              <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo đơn vị cấp dưới phê duyệt)</span></th>
               <th nzWidth="175px">Ngày cấp trên trả kết quả</th>
               <th nzWidth="100px" class="text-center">Trạng thái</th>
               <th>Hành động</th>
@@ -102,17 +102,11 @@
               <td>{{item.ngayTraKq}}</td>
               <td class="text-center">{{item.tenTrangThai}}</td>
               <td>
-                <button type="button" class="btn btn-main">
-                  <span>Phê duyệt</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Nhập/Sửa dữ liệu</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Xem</span>
-                </button>
-                <button type="button" class="btn btn-main">
-                  <span>Xóa</span>
+                <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
+                  <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Xóa</span>
                 </button>
               </td>
             </tr>

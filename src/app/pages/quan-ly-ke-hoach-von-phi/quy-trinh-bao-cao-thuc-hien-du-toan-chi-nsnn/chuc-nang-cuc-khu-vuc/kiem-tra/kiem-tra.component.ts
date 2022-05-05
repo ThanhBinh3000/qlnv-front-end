@@ -8,6 +8,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class KiemTraComponent implements OnInit {
     },
     str: '',
     donVi:'',
+    maPhanBcao:'0'
   };
 
 
@@ -61,8 +63,9 @@ export class KiemTraComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notification:NzNotificationService,
     private location: Location,
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -73,11 +76,11 @@ export class KiemTraComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
         } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
     this.listBcaoKqua = []
@@ -103,28 +106,27 @@ export class KiemTraComponent implements OnInit {
   }
 
 
-  timkiem(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.quanLyVonPhiService.timBaoCao(this.searchFilter).subscribe(res => {
+  async onSubmit(){
+    this.spinner.show();
+    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
         this.listBcaoKqua = res.data.content;
+        this.listBcaoKqua.forEach(e => {
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+        })
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
       }else{
-        this.notifi.error(MESSAGE.ERROR, res?.msg);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-      console.log(res);
     },err =>{
-      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
   themMoi(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])

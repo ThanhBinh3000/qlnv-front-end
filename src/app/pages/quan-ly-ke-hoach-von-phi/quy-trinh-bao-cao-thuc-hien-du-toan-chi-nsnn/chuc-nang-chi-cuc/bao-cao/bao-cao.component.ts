@@ -217,6 +217,7 @@ export class BaoCaoComponent implements OnInit {
   statusBtnCopy: boolean;                      // trang thai copy
   statusBtnPrint: boolean;                     // trang thai print
   statusBtnOk: boolean;                        // trang thai ok/ not ok
+  statusBtnClose: boolean = false;                        // trang thai ok/ not ok
 
   listIdFiles: string;                        // id file luc call chi tiet
 
@@ -253,6 +254,8 @@ export class BaoCaoComponent implements OnInit {
     await this.getUserInfo(userName); //get user info
     if (this.idDialog) {
       this.id = this.idDialog;
+      this.statusBtnClose = true;
+      this.statusBtnSave = true;
     }
     if (this.id) {
       await this.getDetailReport();
@@ -386,7 +389,6 @@ export class BaoCaoComponent implements OnInit {
   }
 
   getStatusButton() {
-
     let checkParent = false;
     let checkChirld = false;
     let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
@@ -404,12 +406,9 @@ export class BaoCaoComponent implements OnInit {
     this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
     this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfo?.roles[0]?.id);
-    // this.statusBtnLDDC = utils.getRoleLDDC(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
     this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
     this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfo?.roles[0]?.id);
-    
   }
-
 
   // lay ten don vi tao
   getUnitName(dvitao: any) {
@@ -449,13 +448,6 @@ export class BaoCaoComponent implements OnInit {
           this.listFile = [];
           this.maDonViTao = data.data.maDvi;
           this.maDviTien = data.data.maDviTien;
-          // set thong tin chung bao cao
-          // this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-          // this.nguoiNhap = data.data.nguoiTao;
-          // this.maBaoCao = data.data.maBcao;
-          // this.namBaoCaoHienHanh = data.data.namHienHanh;
-          // this.trangThaiBanGhi = data.data.trangThai;
-          // this.soVban = data.data.soVban;
 
           if (this.baoCao.trangThai == Utils.TT_BC_1 ||
             this.baoCao.trangThai == Utils.TT_BC_3 ||
@@ -509,7 +501,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // chuc nang check role
-  onSubmit(mcn: String, lyDoTuChoi: string) {
+  async onSubmit(mcn: String, lyDoTuChoi: string) {
     if (this.id) {
       const requestGroupButtons = {
         id: this.id,
@@ -517,7 +509,7 @@ export class BaoCaoComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           await this.getDetailReport();
           this.getStatusButton();
@@ -868,9 +860,22 @@ export class BaoCaoComponent implements OnInit {
     return false;
   };
 
-  xoa() {
-
-  }
+  deleteReport() {
+		if (this.id) {
+			this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
+				if (res.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.location.back();
+				} else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
+		} else {
+			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+		}
+	}
 
   // luu
   async luu() {
@@ -1251,7 +1256,6 @@ export class BaoCaoComponent implements OnInit {
   //khoi tao
   duyet(data: linkList, str: string, index: number, parent: number, le: number) {
     
-    debugger
     if (index != 0) {
       let mm = {
         id: data.id,
@@ -1616,11 +1620,11 @@ export class BaoCaoComponent implements OnInit {
       lyDoTuChoi: lyDo,
     };
     this.spinner.show();
-    await this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).toPromise().then(res => {
+    await this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).toPromise().then(async res => {
       if (res.statusCode == 0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
         this.trangThaiChiTiet = trangThai;
-        this.getDetailReport();
+        await this.getDetailReport();
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
@@ -1726,7 +1730,7 @@ export class BaoCaoComponent implements OnInit {
           this.updateEditCache();
           this.updateEditCachePL1();
           this.listFile = [];
-
+          this.baoCao.trangThai = "1";
           if (this.baoCao.trangThai == Utils.TT_BC_1 ||
             this.baoCao.trangThai == Utils.TT_BC_3 ||
             this.baoCao.trangThai == Utils.TT_BC_5 ||
@@ -1746,5 +1750,13 @@ export class BaoCaoComponent implements OnInit {
       }
     );
     this.spinner.hide();
+  }
+
+  doPrint(){
+
+  }
+
+  doCopy(){
+
   }
 }
