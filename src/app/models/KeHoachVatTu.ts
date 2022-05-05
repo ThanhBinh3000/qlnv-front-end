@@ -1,3 +1,4 @@
+import { ItemDetail } from './ItemDetail';
 export class KeHoachVatTu {
   id: number;
   donViId: number;
@@ -7,6 +8,15 @@ export class KeHoachVatTu {
   stt: number;
   vatTuThietBi: Array<VatTuThietBi>;
   listDisplay: Array<any>;
+  maHang: string;
+  kyHieu: string;
+  tenHang: string;
+  chungLoaiHang: string;
+  tongChiTieuNhapTrongNam: number;
+  tongChiTieuCacnamTruoc: number;
+  chiTieuNhapCacNamTruoc: Array<ItemDetail>;
+  keHoachNamHienTai: number;
+  isEdit: boolean;
 }
 
 export class NhomVatTuThietBi {
