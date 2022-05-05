@@ -43,25 +43,30 @@
                   <label nz-checkbox></label>
                 </th>
                 <th width="130px">Tên quyền</th>
-                <th width="175px">Đường dẫn URL</th>
+                <th width="">Đường dẫn URL</th>
                 <th width="175px">Quyền</th>
-                <th width="">Thứ tự sắp xếp</th>
+                <th width="175px">Thứ tự sắp xếp</th>
                 <th width="175px">Trạng thái</th>
                 <th width="130px"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of basicTable.data; let i = index">
+              <tr *ngFor="let data of datas; let i = index">
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <td>{{ data.soDxuat }}</td>
-                <td>{{ data.ngayKy }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.url }}</td>
                 <td>{{ data.tenDvi }}</td>
-                <td>{{ data.trichYeu }}</td>
+                <td>{{ data.thuTu }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
+
+                  <a (click)="redirectToChiTiet(data.id)">
+                    <i class="fa fa-lock"></i>
+                  </a>
+
                   <a (click)="redirectToChiTiet(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>

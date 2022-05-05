@@ -10,8 +10,9 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlQuyenComponent } from './them-ql-quyen/them-ql-quyen.component';
+import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class QlQuyenComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  datas: any;
   isVisibleChangeTab$ = new Subject();
   constructor(
     private spinner: NgxSpinnerService,
@@ -44,7 +46,8 @@ export class QlQuyenComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private _modalService: NzModalService
+    private _modalService: NzModalService,
+    private _qlQuyenService: QlQuyenNSDService
   ) { }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
@@ -133,29 +136,13 @@ export class QlQuyenComponent implements OnInit {
         maDonVi = getDonVi[0].maDvi;
       }
     }
-    let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
-      },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
-    };
-    let res = await this.danhSachDauThauService.timKiem(body);
+
+    let res = await this._qlQuyenService.dsquyen();
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
+      this.datas = res.data;
+      debugger
+
+      // this.totalRecord = this.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -188,7 +175,7 @@ export class QlQuyenComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    return convertTrangThaiUser(status);
   }
 
   xoaItem(item: any) {
