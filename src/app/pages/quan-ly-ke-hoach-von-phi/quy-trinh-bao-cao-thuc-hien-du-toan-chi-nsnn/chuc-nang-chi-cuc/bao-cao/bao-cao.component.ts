@@ -979,6 +979,7 @@ export class BaoCaoComponent implements OnInit {
       }
     })
     this.baoCao?.lstBCao.filter(item => {
+      item.trangThai = '2';
       if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
         item.lstCTietBCao = this.lstCTietBCaoPL1;
       }
@@ -1784,6 +1785,7 @@ export class BaoCaoComponent implements OnInit {
               item.tieuDe = PHULUCLIST[index].tieuDe;
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
               item.checked = false;
+              item.trangThai = '2'; 
             }
           })
           this.baoCao?.lstBCao?.forEach((item, index) => {
