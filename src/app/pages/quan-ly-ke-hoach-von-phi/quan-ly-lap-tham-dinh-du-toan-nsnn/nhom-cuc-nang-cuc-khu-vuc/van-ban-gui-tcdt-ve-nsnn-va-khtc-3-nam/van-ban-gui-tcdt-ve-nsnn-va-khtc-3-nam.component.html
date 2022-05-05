@@ -19,13 +19,29 @@
                          <i class="icon htvbdh_tcdt_guiduyet"></i>
                          <span>Gửi đơn vị cấp trên</span>
                     </button>
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
+                    <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="xoa()"
                          [hidden]="statusBtnDel">
                          <i class="icon htvbdh_tcdt_delete"></i>
                          <span>Xóa</span>
+                    </a> -->
+                    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('8')"
+                         [hidden]="statusBtnDVCT">
+                         <i class="icon htvbdh_tcdt_pheduyet"></i>
+                         <span>ĐV cấp trên trả lại</span>
+                    </button>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('9')"
+                         [hidden]="statusBtnDVCT">
+                         <i class="icon htvbdh_tcdt_tuchoi"></i>
+                         <span>ĐV cấp trên duyệt</span>
                     </a>
-
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="dong()">
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()"
+                         [hidden]="statusBtnPrint">
+                         <i nz-icon nzType="printer" nzTheme="outline"></i>
+                         <span>In</span>
+                    </a>
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                         (click)="redirectChiTieuKeHoachNam()">
+                         <i class="icon htvbdh_dong"></i>
                          <span>Đóng</span>
                     </a>
                </div>
@@ -74,7 +90,7 @@
                                              <th nzWidth="500px">Loại báo cáo</th>
                                              <th [hidden]="status"></th>
                                              <th [hidden]="status"></th>
-                                             <th>
+                                             <th [hidden]="status">
                                                   <label nz-checkbox [(ngModel)]="allChecked"
                                                        (ngModelChange)="updateAllChecked()"
                                                        [nzIndeterminate]="indeterminate">
@@ -103,7 +119,7 @@
                                                   <td [hidden]="status">
                                                        <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="status"> 
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                             (ngModelChange)="updateSingleChecked()"></label>
                                                   </td>
@@ -137,11 +153,54 @@
                                                             nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                                   </td>
-                                                  <td>
+                                                  <td [hidden]="status">
                                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                             (ngModelChange)="updateSingleChecked()"></label>
                                                   </td>
                                              </ng-template>
+                                        </tr>
+                                   </tbody>
+                              </nz-table>
+
+                              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                                   <div nz-col class="gutter-row" [nzSpan]="3">
+                                        Danh sách văn bản đính kèm
+                                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload"
+                                             [hidden]="status">
+                                             <button nz-button>
+                                                  <i nz-icon nzType="upload"></i>
+                                                  Select File
+                                             </button>
+                                        </nz-upload>
+                                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                                             [hidden]="status" [disabled]="fileList.length === 0"
+                                             style="margin-top: 16px">
+                                             Thêm vào danh sách
+                                        </button>
+                                   </div>
+                              </div>
+
+                              <nz-table [nzData]="lstCTietBCao" nzBordered class="table__body" style="width: 600px">
+                                   <thead>
+                                        <tr>
+                                             <th nzWidth="50">STT</th>
+                                             <th nzWidth="170px">Tên file</th>
+                                             <th nzWidth="150px"></th>
+                                             <th nzWidth="150px"></th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        <tr *ngFor="let data of lstFile; let i = index">
+                                             <td>{{ i + 1 }}</td>
+                                             <td>{{ data.fileName }}</td>
+                                             <td>
+                                                  <button class="btn btn-function"
+                                                       (click)="downloadFile(data.id)">Xem</button>
+                                             </td>
+                                             <td [hidden]="status">
+                                                  <button class="btn btn-function"
+                                                       (click)="deleteFile(data.id)">Xóa</button>
+                                             </td>
                                         </tr>
                                    </tbody>
                               </nz-table>
@@ -156,10 +215,10 @@
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Thêm</span>
                          </button>
-                         <button type="button" class="btn btn-sub">
+                         <!-- <button type="button" class="btn btn-sub">
                               <i class="icon htvbdh_tcdt_import"></i>
                               <span>Import</span>
-                         </button>
+                         </button> -->
                     </div>
                </div>
                <div class="ghi-chu">
