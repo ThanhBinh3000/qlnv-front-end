@@ -1417,6 +1417,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   // call chi tiet bao cao
   async getDetailReport() {
+    debugger
     this.spinner.show();
       await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
       async (data) => {
@@ -1628,10 +1629,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.spinner.hide();
         }
       },
       (err) => {
         this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
+        this.spinner.hide();
       },
     );
     this.spinner.hide();
@@ -1704,6 +1707,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.lstCTietBCao031 =[];
     this.lstCTietBCao032 =[];
     this.lstCTietBCao033 =[];
+    this.lstCTietBCao04ax =[];
+    this.lstCTietBCao04an =[];
+    this.lstCTietBCao04bx =[];
+    this.lstCTietBCao05 =[];
     this.listColTrongDot4ax =[];
     this.listColTrongDot4an =[];
     this.listColTrongDot4bx =[];
