@@ -96,12 +96,12 @@
               <td>{{item.ngayPheDuyet}}</td>
               <td>{{item.ngayTraKq}}</td>
               <td class="text-center">{{item.tenTrangThai}} 
-                <ng-template [ngIf]="item.lyDoTuChoi"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
                 <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
                   <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
                   
                 </button>

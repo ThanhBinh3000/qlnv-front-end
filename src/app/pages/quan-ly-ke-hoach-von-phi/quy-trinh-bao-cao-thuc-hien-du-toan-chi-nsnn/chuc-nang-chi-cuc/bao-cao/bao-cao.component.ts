@@ -1850,12 +1850,14 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
 
-    // replace nhung ban ghi dc them moi id thanh null
-    let baoCaoTemp = [];
-    baoCaoTemp.push(this.baoCao);
-    baoCaoTemp[0].id = null;
-    baoCaoTemp[0].maBcao = maBaoCao;
-    baoCaoTemp[0]?.lstBCao?.filter(item => {
+    let baoCaoTemp = Object.assign({}, this.baoCao);
+        
+    console.log(baoCaoTemp);
+    console.log(this.baoCao);
+    
+    baoCaoTemp.id = null;
+    baoCaoTemp.maBcao = maBaoCao;
+    baoCaoTemp?.lstBCao?.filter(item => {
       item.id = null;
       item?.lstCTietBCao.filter(data => {
         data.id = null;
@@ -1863,16 +1865,16 @@ export class BaoCaoComponent implements OnInit {
     })
 
     // replace nhung ban ghi dc them moi id thanh null
-    baoCaoTemp[0].tongHopTu = '';
-    baoCaoTemp[0]?.lstBCaoDviTrucThuoc?.filter(item => {
-      baoCaoTemp[0].tongHopTu += item.id + ',';
+    baoCaoTemp.tongHopTu = '';
+    baoCaoTemp?.lstBCaoDviTrucThuoc?.filter(item => {
+      baoCaoTemp.tongHopTu += item.id + ',';
     })
 
-    baoCaoTemp[0].fileDinhKems = [];
-    baoCaoTemp[0].listIdFiles = this.listIdFiles;
-    baoCaoTemp[0].trangThai = "1";
-    baoCaoTemp[0].maDvi = this.maDonViTao;
-    baoCaoTemp[0].maPhanBcao = '0';
+    baoCaoTemp.fileDinhKems = [];
+    baoCaoTemp.listIdFiles = this.listIdFiles;
+    baoCaoTemp.trangThai = "1";
+    baoCaoTemp.maDvi = this.maDonViTao;
+    baoCaoTemp.maPhanBcao = '0';
     let lstCTietBCaoPL1Temp = [];
     this.lstCTietBCaoPL1.filter(item => {
       lstCTietBCaoPL1Temp.push({
@@ -1880,15 +1882,19 @@ export class BaoCaoComponent implements OnInit {
         id: null,
       })
     })
-    baoCaoTemp[0]?.lstBCao.filter(item => {
+    baoCaoTemp?.lstBCao.filter(item => {
       if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
         item.lstCTietBCao = lstCTietBCaoPL1Temp;
       }
     })
+
+            
+    console.log(baoCaoTemp);
+    console.log(this.baoCao);
     //call service them moi
     this.spinner.show();
 
-    this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp[0]).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           const modalCopy = this.modal.create({
