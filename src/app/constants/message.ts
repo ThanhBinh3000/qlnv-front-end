@@ -43,4 +43,5 @@ export const MESSAGE = {
   COPY_SUCCESS_HDV: 'Sao chép thành công dữ liệu sang mã báo cáo ',
   ALERT:'Thông báo',
   REJECT_SUCCESS:'Từ chối thành công',
+  NO_REPORT:''
 };
