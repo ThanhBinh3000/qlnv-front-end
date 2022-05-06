@@ -23,8 +23,8 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string='/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/';
-
+  url: string='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/';
+  urlTongHop:string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/';
   userInfor:any;
   maDonVi:any;
   listDonViTao:any []=[];
@@ -181,6 +181,10 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
       this.notifi.error('Kiểm tra','Bạn chưa nhập năm báo cáo!');
       return;
     }
+    if(this.searchFilter.maLoaiBcao==null){
+      this.notifi.error('Kiểm tra','Bạn chưa chọn loại báo cáo!');
+      return;
+    }
     if(this.searchFilter.maLoaiBcao==0){
       this.searchFilter.maLoaiBcao =1;
     }
@@ -194,10 +198,11 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
             e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
             e.ngayDuyet = this.datePipe.transform(e.ngayDuyet,Utils.FORMAT_DATE_STR);
           })
-        if(this.listBcaoKqua){
-          this.statusBtnTongHop = false;
+          if(this.listBcaoKqua){
+            this.statusBtnTongHop = false;
+          }
         }
-        }
+        this.tongHop();
       }else{
         this.notifi.error(MESSAGE.ERROR, res?.msg);
       }
@@ -206,13 +211,12 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
     })
   }
   tongHop(){
-    debugger
       if(this.searchFilter.maLoaiBcao == 1){
-        this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao+"/"+this.searchFilter.dotBcao]);
+        this.urlTongHop = this.urlTongHop+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao+"/"+this.searchFilter.dotBcao;
       }else{
-        this.router.navigate([this.url+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao]);
+        this.urlTongHop = this.urlTongHop+ this.searchFilter.namBcao+"/"+this.searchFilter.maLoaiBcao;
       }
-    console.log(this.url);
+    console.log(this.urlTongHop);
     
   }
 
