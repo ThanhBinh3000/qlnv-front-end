@@ -18,8 +18,8 @@ export class QuanLyVonPhiService extends BaseService {
   urlDefault = environment.SERVICE_API;
   //search list bao cao
   timBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
-    // return this.httpClient.post('http://192.168.1.111:8094/bao-cao/danh-sach', request)
+    // return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach', request)
+    return this.httpClient.post('http://192.168.1.120:8094/bao-cao/danh-sach', request)
   }
 
   //search list bao cao
