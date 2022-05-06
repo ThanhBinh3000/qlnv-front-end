@@ -92,14 +92,20 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Từ chối</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('9',null)" >
+        <a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet" ></i>
-          <span>Cục khu vực chấp thuận</span>
+          <span>Đơn vị cấp trên chấp thuận</span>
         </a>
-        <button class="btn btn-main">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Copy</span>
-        </button>
+        <a class="btn btn-main" 
+					[hidden]="statusBtnCopy">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Copy</span>
+				</a>
+        <a class="btn btn-main" 
+					[hidden]="statusBtnPrint">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</a>
         <a class="btn btn-main" (click)="xoa()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
@@ -139,9 +145,9 @@
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="!status">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="statusBtnTBP">
+                <!-- <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="statusBtnTBP">
                   <span>KIểm tra</span>
-                </button>
+                </button> -->
                 <button type="button" class="btn btn-main" [hidden]="status">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
@@ -528,10 +534,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',4);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',4);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -948,10 +954,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -1217,10 +1223,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',6);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',6);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -1485,10 +1491,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',7);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',7);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -1752,10 +1758,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',8);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',8);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -2017,10 +2023,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',9);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',9);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>

@@ -169,6 +169,7 @@ export class BaoCaoComponent implements OnInit {
   status:boolean = false;
   beforeUpload:any;
   fileList:any;
+  lstDeleteCTietBCao: any = [];
 
   //nhóm biến router
   id:any; // id của bản ghi
@@ -199,7 +200,7 @@ export class BaoCaoComponent implements OnInit {
   editCache1: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
   editCache2: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
   lstIdDeleteMau02:string ='';
-  lstDeleteCTietBCao: any = [];
+
 
   //nhóm biến biểu mẫu 03----------
   allChecked03:any;
@@ -239,6 +240,12 @@ export class BaoCaoComponent implements OnInit {
   cols:number=0;
   lstIdDeleteCols:string ='';
   listKhoanMuc:any [] = KHOAN_MUC;
+  lstIdDeleteMau04ax:string ='';
+  lstIdDeleteMau04an:string ='';
+  lstIdDeleteMau04bx:string ='';
+  lstIdDeleteMau05:string ='';
+
+
   async ngOnInit() {
     this.cols = 3;
 
@@ -436,7 +443,7 @@ export class BaoCaoComponent implements OnInit {
     this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
-          // this.getDetailReport();
+          this.getDetailReport();
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -551,7 +558,7 @@ export class BaoCaoComponent implements OnInit {
       this.quanLyVonPhiService.updateBaoCaoThucHienDTC(request).toPromise().then(async (res) => {
         if (res.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          // this.getDetailReport();
+          this.getDetailReport();
           this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -565,7 +572,7 @@ export class BaoCaoComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
-            // this.getDetailReport();
+            this.getDetailReport();
             this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -588,7 +595,6 @@ export class BaoCaoComponent implements OnInit {
 
     this.spinner.show();
     this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(data => {
-      console.log(data);
       if(data.statusCode==0){
         this.baoCao.lstBCao = data.data.lstBCao;
           this.baoCao.dotBcao = data.data.dotBcao;
@@ -624,6 +630,7 @@ export class BaoCaoComponent implements OnInit {
               }
             })
           }
+          this.resetList();
           //set data cho cac bieu mau
           this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
           this.lstCTietBCao02.forEach(e => {
@@ -756,6 +763,21 @@ export class BaoCaoComponent implements OnInit {
     
     this.spinner.hide();
   }
+  resetList(){
+    
+    this.lstCTietBCao1 =[];
+    this.lstCTietBCao2 =[];
+    this.lstCTietBCao031 =[];
+    this.lstCTietBCao032 =[];
+    this.lstCTietBCao033 =[];
+    this.listColTrongDot4ax =[];
+    this.listColTrongDot4an =[];
+    this.listColTrongDot4bx =[];
+    this.listColTrongDot05 =[];
+    this.updateEditCache02();
+    this.updateAllChecked03();
+    this.updateEditCache();
+  }
   //upload file
   async uploadFile(file: File) {
     // day file len server
@@ -844,7 +866,7 @@ export class BaoCaoComponent implements OnInit {
     this.updateEditCache02();
     this.updateEditCache03();
     this.updateEditCache();
-    console.log(this.cols);
+    
     
   }
 
@@ -1451,7 +1473,6 @@ export class BaoCaoComponent implements OnInit {
     var listVtu: vatTu[]=[];
     var colname;
     this.listColTemp =[];
-    console.log(this.cols);
     //loại 6
     if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
       if (this.idVatTu == undefined ) {
@@ -2168,6 +2189,68 @@ export class BaoCaoComponent implements OnInit {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.id === id); // vi tri hien tai
     var nho: string = this.lstCTietBaoCaoTemp[index].stt;
     var head: string = this.getHead(this.lstCTietBaoCaoTemp[index].stt); // lay phan dau cua so tt
+    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+        
+         this.lstCTietBaoCaoTemp.forEach(e => {
+           if(e.stt.startsWith(nho)){
+              if(typeof id == 'number'){
+                this.lstIdDeleteMau04ax +=e.id+',';
+              }
+           }
+         })
+        let objectDele ={
+          maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG.toString(),
+          lstIdDelete:this.lstIdDeleteMau04ax
+        }
+       
+        this.lstDeleteCTietBCao.push(objectDele);
+    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+        
+          this.lstCTietBaoCaoTemp.forEach(e => {
+            if(e.stt.startsWith(nho)){
+              if(typeof id == 'number'){
+                this.lstIdDeleteMau04an +=e.id+',';
+              }
+            }
+          })
+          let objectDele ={
+          maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG.toString(),
+          lstIdDelete:this.lstIdDeleteMau04an
+        }
+        
+        this.lstDeleteCTietBCao.push(objectDele);
+    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
+        
+          this.lstCTietBaoCaoTemp.forEach(e => {
+            if(e.stt.startsWith(nho)){
+              if(typeof id == 'number'){
+                this.lstIdDeleteMau04bx +=e.id+',';
+              }
+            }
+          })
+          let objectDele ={
+            maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO.toString(),
+            lstIdDelete:this.lstIdDeleteMau04bx
+          }
+        
+          this.lstDeleteCTietBCao.push(objectDele);
+    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
+        
+          this.lstCTietBaoCaoTemp.forEach(e => {
+            if(e.stt.startsWith(nho)){
+              if(typeof id == 'number'){
+                this.lstIdDeleteMau05 +=e.id+',';
+              }
+            }
+          })
+          let objectDele ={
+            maLoai:KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG.toString(),
+            lstIdDelete:this.lstIdDeleteMau05
+          }
+        
+          this.lstDeleteCTietBCao.push(objectDele);
+    }
+    
     //xóa phần tử và con của nó
     this.lstCTietBaoCaoTemp = this.lstCTietBaoCaoTemp.filter(e => !e.stt.startsWith(nho));
     //update lại số thức tự cho các phần tử cần thiết
@@ -2177,9 +2260,14 @@ export class BaoCaoComponent implements OnInit {
             lstIndex.push(i);
         }
     }
-
+    
     this.replaceIndex(lstIndex, -1);
-
+    //save list lại cho bao cao
+    this.baoCao?.lstBCao.forEach(item => {
+      if(Number(item.maLoai) == this.tabSelected){
+        item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+      }
+    });
     this.updateEditCache();
   }
 
@@ -2205,6 +2293,7 @@ export class BaoCaoComponent implements OnInit {
       const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id); // lay vi tri hang minh sua
       Object.assign(this.lstCTietBaoCaoTemp[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
       this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+      this.updateEditCache();
   }
 
   updateChecked(id: any){
