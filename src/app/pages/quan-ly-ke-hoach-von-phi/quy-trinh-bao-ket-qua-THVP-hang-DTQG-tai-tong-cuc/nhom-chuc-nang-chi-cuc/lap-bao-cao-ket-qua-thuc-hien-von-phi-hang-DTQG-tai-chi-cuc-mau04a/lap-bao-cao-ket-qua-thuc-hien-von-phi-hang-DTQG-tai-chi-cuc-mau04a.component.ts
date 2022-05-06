@@ -1417,7 +1417,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   // call chi tiet bao cao
   async getDetailReport() {
-    debugger
     this.spinner.show();
       await this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(
       async (data) => {
@@ -1463,60 +1462,73 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         
           //set data cho cac bieu mau
           this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
-          this.lstCTietBCao02.forEach(e => {
-            if(e.maVtuHeader =='1'){
-              this.lstCTietBCao1.push(e);
-            }else{
-              this.lstCTietBCao2.push(e);
-            }
-          })
+          if(this.lstCTietBCao02){
+            this.lstCTietBCao02.forEach(e => {
+              if(e.maVtuHeader =='1'){
+                this.lstCTietBCao1.push(e);
+              }else{
+                this.lstCTietBCao2.push(e);
+              }
+            })
+          }
+          
           this.lstCTietBCao03 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_XUAT_HANG_DTQG)?.lstCTietBCao; // xuất hàng
-          this.lstCTietBCao03.forEach(e => {
-            if(e.maVtuHeader=='1'){
-              this.lstCTietBCao031.push(e);
-            }else if(e.maVtuHeader=='2'){
-              this.lstCTietBCao032.push(e);
-            }else{
-              this.lstCTietBCao033.push(e);
-            }
-          })
+          if(this.lstCTietBCao03){
+            this.lstCTietBCao03.forEach(e => {
+              if(e.maVtuHeader=='1'){
+                this.lstCTietBCao031.push(e);
+              }else if(e.maVtuHeader=='2'){
+                this.lstCTietBCao032.push(e);
+              }else{
+                this.lstCTietBCao033.push(e);
+              }
+            })
+          }
           //------ mẫu 04a xuất
           this.lstCTietBCao04ax = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG)?.lstCTietBCao;
-          this.lstCTietBCao04ax.forEach(item => {
-            item.level = item.stt.split('.').length -1;
-          })
-          this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
-          this.stt = 0;
-          this.updateSTT(this.chiTietBcao4ax);
+          if(this.lstCTietBCao04ax){
+            this.lstCTietBCao04ax.forEach(item => {
+              item.level = item.stt.split('.').length -1;
+            })
+            this.getLinkList(this.chiTietBcao4ax,'',0,this.lstCTietBCao04ax);
+            this.stt = 0;
+            this.updateSTT(this.chiTietBcao4ax);
+          }
           
           //-----mẫu 04a nhập
           this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
-          this.lstCTietBCao04an.forEach(item => {
-            item.level = item.stt.split('.').length -1;
-          })
-          this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
-          this.stt = 0;
-          this.updateSTT(this.chiTietBcao4an);
+          if(this.lstCTietBCao04an){
+            this.lstCTietBCao04an.forEach(item => {
+              item.level = item.stt.split('.').length -1;
+            })
+            this.getLinkList(this.chiTietBcao4an,'',0,this.lstCTietBCao04an);
+            this.stt = 0;
+            this.updateSTT(this.chiTietBcao4an);
+          }
           //-- mẫu 04b xuất
           this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
-          this.lstCTietBCao04bx.forEach(item => {
-            item.level = item.stt.split('.').length -1;
-          })
-          this.getLinkList(this.chiTietBcao4bx,'',0,this.lstCTietBCao04bx);
-          this.stt = 0;
-          this.updateSTT(this.chiTietBcao4bx);
+          if(this.lstCTietBCao04bx){
+            this.lstCTietBCao04bx.forEach(item => {
+              item.level = item.stt.split('.').length -1;
+            })
+            this.getLinkList(this.chiTietBcao4bx,'',0,this.lstCTietBCao04bx);
+            this.stt = 0;
+            this.updateSTT(this.chiTietBcao4bx);
+          }
           //-- mẫu 05
           this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCTietBCao;
-          this.lstCTietBCao05.forEach(item => {
-            item.level = item.stt.split('.').length -1;
-          })
-          this.getLinkList(this.chiTietBcao5,'',0,this.lstCTietBCao05);
-          this.stt = 0;
-          this.updateSTT(this.chiTietBcao5);
+          if(this.lstCTietBCao05){
+            this.lstCTietBCao05.forEach(item => {
+              item.level = item.stt.split('.').length -1;
+            })
+            this.getLinkList(this.chiTietBcao5,'',0,this.lstCTietBCao05);
+            this.stt = 0;
+            this.updateSTT(this.chiTietBcao5);
+          }
 
 
           //lấy tên cột 
-          if(this.lstCTietBCao04ax.length!=0){
+          if(this.lstCTietBCao04ax && this.lstCTietBCao04ax.length!=0){
             let e = this.lstCTietBCao04ax[0];
             e.listCtiet.forEach((el) => {
               if (el.loaiMatHang == 0) {
@@ -1539,7 +1551,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           }
           
           //-------
-          if(this.lstCTietBCao04an.length!=0){
+          if(this.lstCTietBCao04an && this.lstCTietBCao04an.length!=0){
             let e1 = this.lstCTietBCao04an[0];
             e1.listCtiet.forEach((el) => {
               if (el.loaiMatHang == 0) {
@@ -1561,7 +1573,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.cols4an = this.cols4an + this.listColTrongDot4an.length;
           }
           //-------
-          if(this.lstCTietBCao04bx.length!=0){
+          if(this.lstCTietBCao04bx && this.lstCTietBCao04bx.length!=0){
             let e2 = this.lstCTietBCao04bx[0];
             e2.listCtiet.forEach((el) => {
               if (el.loaiMatHang == 0) {
@@ -1583,7 +1595,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             this.cols4bx = this.cols4bx + this.listColTrongDot4bx.length;
           }
           //-------
-          if(this.lstCTietBCao05.length!=0){
+          if(this.lstCTietBCao05 && this.lstCTietBCao05.length!=0){
             let e3 = this.lstCTietBCao05[0];
           e3.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
@@ -2093,30 +2105,39 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
         };
       });
     }else {
-      this.lstCTietBCao04ax.forEach((item) => {
-        this.editCache04ax[item.id] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-      this.lstCTietBCao04an.forEach((item) => {
-        this.editCache04an[item.id] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-      this.lstCTietBCao04bx.forEach((item) => {
-        this.editCache04bx[item.id] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
-      this.lstCTietBCao05.forEach((item) => {
-        this.editCache05[item.id] = {
-          edit: false,
-          data: { ...item },
-        };
-      });
+      if(this.lstIdDeleteMau04ax){
+        this.lstCTietBCao04ax.forEach((item) => {
+          this.editCache04ax[item.id] = {
+            edit: false,
+            data: { ...item },
+          };
+        });
+      }
+      if(this.lstCTietBCao04an){
+        this.lstCTietBCao04an.forEach((item) => {
+          this.editCache04an[item.id] = {
+            edit: false,
+            data: { ...item },
+          };
+        });
+      }
+      if(this.lstCTietBCao04bx){
+        this.lstCTietBCao04bx.forEach((item) => {
+          this.editCache04bx[item.id] = {
+            edit: false,
+            data: { ...item },
+          };
+        });
+      }
+      if(this.lstCTietBCao05){
+        this.lstCTietBCao05.forEach((item) => {
+          this.editCache05[item.id] = {
+            edit: false,
+            data: { ...item },
+          };
+        });
+      }
+      
     }
     
   }
