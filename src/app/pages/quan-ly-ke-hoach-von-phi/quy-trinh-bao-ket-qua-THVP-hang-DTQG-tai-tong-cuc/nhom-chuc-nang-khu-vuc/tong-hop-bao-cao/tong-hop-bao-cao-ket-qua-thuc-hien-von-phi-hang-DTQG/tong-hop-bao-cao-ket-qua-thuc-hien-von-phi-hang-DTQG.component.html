@@ -82,14 +82,14 @@
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../{{url}}/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
               <td class="text-center">{{getStatusName(item.trangThai)}}</td>
               <td>
-                <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" routerLink="../{{url}}/{{ item.id }}">
                   <span>Xem</span>
                 </button>
               </td>
@@ -127,7 +127,7 @@
         </button>
       </ng-template>
       <ng-template #tableCard2>
-        <button type="button" class="btn btn-main" (click)="tongHop();" [hidden]="statusBtnTongHop">
+        <button type="button" class="btn btn-main" routerLink="../{{urlTongHop}}"  [hidden]="statusBtnTongHop">
           <i nz-icon ></i>
           <span>Tổng hợp</span>
         </button>

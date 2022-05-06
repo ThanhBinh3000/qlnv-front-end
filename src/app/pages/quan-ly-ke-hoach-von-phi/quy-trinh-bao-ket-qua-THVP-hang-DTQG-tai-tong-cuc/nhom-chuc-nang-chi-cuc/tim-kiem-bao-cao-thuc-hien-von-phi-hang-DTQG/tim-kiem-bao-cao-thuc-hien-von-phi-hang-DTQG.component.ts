@@ -207,7 +207,6 @@ async getUserInfo(username: string) {
 
 
   themMoi(){
-   console.log(this.url)
     if(!this.validateForm.valid){
       this.notifi.error(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS)
       return;
