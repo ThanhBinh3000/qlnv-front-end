@@ -97,7 +97,7 @@
           <span>Đơn vị cấp trên chấp thuận</span>
         </a>
         <a class="btn btn-main" 
-					[hidden]="statusBtnCopy" (click)="doCopy()">
+					[hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
@@ -252,38 +252,6 @@
       <!-- Table mẫu báo cáo 02 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo nhập mua hàng dự trữ quốc gia"
         [nzExtra]="tableCard3" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao1">
-        <div nz-row [nzGutter]="{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 10px">
-          <nz-descriptions-item nzTitle="Ngày quyết định">
-            <nz-date-picker class="search__input" [(ngModel)]="" nzFormat="dd/MM/yyyy"></nz-date-picker>
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Ngày quyết định">
-            <nz-date-picker class="search__input" [(ngModel)]="" nzFormat="dd/MM/yyyy"></nz-date-picker>
-          </nz-descriptions-item>
-          
-          <div nz-col nzSpan="6">
-            <ng-container *ngIf="status;else templateName"  nzSpan="6" style="padding-top: 23px !important; ">
-                <div nz-col class="gutter-row" >
-                  Đơn vị:
-                  <div *ngFor="let item of listDonViTien">
-                    <div *ngIf="item.id == donvitien">
-                      {{item.tenDm}}
-                    </div>
-                  </div>
-                </div>
-            </ng-container>
-            <ng-template #templateName nzSpan="6" style="padding-top: 23px !important; ">
-                <div nz-col class="gutter-row" >
-                  <div class="inner-box">Đơn vị:
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tiền"
-                    [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
-                    <nz-option *ngFor="let item of listDonViTien" [nzValue]="item.id"
-                      [nzLabel]="item.tenDm"></nz-option>
-                  </nz-select>
-                  </div>
-              </div>
-            </ng-template>
-          </div>
-        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -398,7 +366,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" type="text"  nz-input [(ngModel)]="editCache1[item.id].data.soQd" /> 
+                      <nz-input-number class="search__input"  nzSize="small" [(ngModel)]="editCache1[item.id].data.soQd" > </nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache1[item.id].data.khSoLuong" (change)="changeModel02(item.id,'1')" ></nz-input-number>
@@ -509,7 +477,7 @@
                       </nz-select>
                     </td>
                     <td>
-                      <input class="search__input" nz-input type="text" [(ngModel)]="editCache2[item.id].data.soQd" />
+                      <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache2[item.id].data.soQd" ></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache2[item.id].data.khSoLuong" (change)="changeModel02(item.id,'2')"></nz-input-number>
