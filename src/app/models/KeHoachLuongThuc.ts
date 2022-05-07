@@ -28,4 +28,8 @@ export class KeHoachLuongThuc {
   khGaoId: number;
   khThocId: number;
   isEdit: boolean;
+  ntnGaoDc: number;
+  ntnThocDc: number;
+  xtnThocDc: Array<ItemDetail>;
+  xtnGaoDc: Array<ItemDetail>;
 }
