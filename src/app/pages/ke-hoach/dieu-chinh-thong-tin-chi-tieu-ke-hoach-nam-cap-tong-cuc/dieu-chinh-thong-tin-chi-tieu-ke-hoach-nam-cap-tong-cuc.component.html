@@ -49,19 +49,19 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body dieu-chinh__body">
   <div class="contentDetail">
-    <form nz-form [formGroup]="formData" class="mt-16">
-      <div class="main-content main-ke-hoach">
-        <div class="status-ke-hoach">{{trangThai}}</div>
+    <div class="main-content main-ke-hoach">
+      <div class="status-ke-hoach">{{trangThai}}</div>
+      <form nz-form [formGroup]="formData">
         <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16">
           <div nz-row [nzGutter]="[16, 12]">
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
             </div>
-            <div nz-col [nzSpan]="20">
+            <div nz-col [nzSpan]="22">
               <div nz-row [nzGutter]="[12, 0]">
                 <div nz-col [nzSpan]="4" class="mg-t-10">
                   <nz-input-group [nzAddOnAfter]="qdTCDT">
-                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD" [nzMin]="0"
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
                       [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
                     </nz-input-number>
                   </nz-input-group>
@@ -98,26 +98,26 @@
                 </div>
               </div>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
             </div>
-            <div nz-col [nzSpan]="20" class="mg-t-10">
+            <div nz-col [nzSpan]="22" class="mg-t-10">
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
                 [readonly]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0)" />
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ </nz-form-label>
             </div>
-            <div nz-col [nzSpan]="20" class="mg-t-10">
+            <div nz-col [nzSpan]="22" class="mg-t-10">
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
                 icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
                 (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)">
               </multiple-tag>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
             </div>
-            <div nz-col [nzSpan]="20" class="mg-t-10">
+            <div nz-col [nzSpan]="22" class="mg-t-10">
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="htvbdh_tcdt_tep"
                 [data]="dataTag" (selectDataEvent)="selectDataMultipleTag($event)"
                 (removeDataEvent)="deleteDataMultipleTag($event)">
@@ -150,301 +150,826 @@
             </div> -->
           </div>
         </nz-card>
-        <div class="tab__container" *ngIf="selectedCanCu && yearNow > 0">
-          <nz-tabset nzType="card" class="tab__container">
-            <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
-            </nz-tab>
-            <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"></nz-tab>
-            <nz-tab [nzTitle]="'Điều chỉnh nhập vật tư, thiết bị'" class="vat-tu__container"
-              (nzClick)="selectTabData(tab.vatTu)"></nz-tab>
-          </nz-tabset>
-          <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-            <div id="table-luong-thuc-tong-hop">
-              <nz-table #groupingTableThocSau [nzData]="dataLuongThuc" nzBordered [nzFrontPagination]="false"
-                [nzShowPagination]="false" class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="4">STT</th>
-                    <th rowspan="4">CỤC DTNN KHU VỰC</th>
-                    <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                    <th colspan="3">Nhập trong năm (2)</th>
-                    <th colspan="8">Xuất trong năm (3)</th>
-                    <th colspan="3">Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/{{yearNow}})
-                    </th>
-                    <th rowspan="4">Trạng thái</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                    <th rowspan="3">
-                      Tổng số
-                      <br />
-                      (quy thóc)
-                    </th>
-                    <th colspan="7">Trong đó</th>
-                    <th rowspan="3">Tổng số
-                      <br>
-                      (quy thóc)
-                    </th>
-                    <th colspan="2">Trong đó</th>
-                  </tr>
-                  <tr>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                    <th colspan="4">Thóc</th>
-                    <th colspan="3">Gạo</th>
-                    <th rowspan="2">Thóc</th>
-                    <th rowspan="2">Gạo</th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Nhập <br> {{yearNow - 3}}</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> {{yearNow - 3}}</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                    <th>Tổng</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of groupingTableThocSau.data">
-                    <td>{{data.stt}}</td>
-                    <td>{{data.tenDonvi}}</td>
-                    <td>{{data.tkdnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td>{{data.tkdnTongThoc | number: '1.0-1'}}
+      </form>
+      <div class="tab__container" *ngIf="selectedCanCu && yearNow > 0">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
+          </nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"></nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh nhập vật tư, thiết bị'" class="vat-tu__container"
+            (nzClick)="selectTabData(tab.vatTu)"></nz-tab>
+        </nz-tabset>
+        <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <div id="table-luong-thuc-tong-hop">
+            <nz-table #groupingTableThocSau [nzData]="dataLuongThuc" nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false" class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="4">STT</th>
+                  <th rowspan="4" width="300px">CỤC DTNN KHU VỰC</th>
+                  <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                  <th colspan="8">Nhập trong năm (2)</th>
+                  <th colspan="21">Xuất trong năm (3)</th>
+                  <th colspan="3">Tồn kho cuối năm (4)
+                    <br>
+                    ( 31/12/{{yearNow}})
+                  </th>
+                  <th rowspan="4">Hành động</th>
+                </tr>
+                <tr>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="7">Trong đó</th>
+
+                  <th colspan="3">Trước điều chỉnh</th>
+                  <th colspan="2">
+                    Điều chỉnh tăng/giảm
+                  </th>
+                  <th colspan="3">Sau điều chỉnh</th>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="7">Trước điều chỉnh</th>
+                  <th colspan="5">
+                    Điều chỉnh tăng/giảm
+                  </th>
+                  <th rowspan="3">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="7">Sau điều chỉnh</th>
+                  <th rowspan="3">Tổng số
+                    <br>
+                    (quy thóc)
+                  </th>
+                  <th colspan="2">Trong đó</th>
+                </tr>
+                <tr>
+                  <th colspan="4">Thóc (Tấn)</th>
+                  <th colspan="3">Gạo (Tấn)</th>
+                  <th rowspan="2">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="2">Trong đó</th>
+                  <th rowspan="2">Thóc (Tấn)</th>
+                  <th rowspan="2">Gạo (Tấn)</th>
+                  <th rowspan="2">
+                    Tổng số
+                    <br />
+                    (quy thóc)
+                  </th>
+                  <th colspan="2">Trong đó</th>
+                  <th colspan="4">Thóc (Tấn)</th>
+                  <th colspan="3">Gạo (Tấn)</th>
+                  <th colspan="3">Thóc (Tấn)</th>
+                  <th colspan="2">Gạo (Tấn)</th>
+                  <th colspan="4">Thóc (Tấn)</th>
+                  <th colspan="3">Gạo (Tấn)</th>
+                  <th rowspan="2">Thóc (Tấn)</th>
+                  <th rowspan="2">Gạo (Tấn)</th>
+                </tr>
+                <tr>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Thóc (Tấn)</th>
+                  <th>Gạo (Tấn)</th>
+                  <th>Thóc (Tấn)</th>
+                  <th>Gạo (Tấn)</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  [ngClass]="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03' ? '' : 'row-disabled'">
+                  <td></td>
+                  <td>
+                    <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                      class="search__input autocomplete__input donvi__input">
+                      <input placeholder="Đơn vị" nz-input (input)="onInput($event,'luong-thuc')"
+                        [nzAutocomplete]="auto" class="w-300" [(ngModel)]="keHoachLuongThucCreate.tenDonvi" />
+                    </nz-input-group>
+                    <ng-template #suffixIcon>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                    <nz-autocomplete #auto>
+                      <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                        (click)="selectDonViKHLT(option)">
+                        {{ option.labelDonVi }}
+                      </nz-auto-option>
+                    </nz-autocomplete>
+                  </td>
+                  <td>{{keHoachLuongThucCreate?.tkdnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachLuongThucCreate?.tkdnTongThoc ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachLuongThucCreate.tkdnThoc.length == 0">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.tkdnThoc.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.tkdnThoc">{{item?.soLuong ?? 0 | number: '1.0-1'}}
                     </td>
+                  </ng-container>
+                  <td>{{keHoachLuongThucCreate?.tkdnTongGao ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachLuongThucCreate.tkdnGao.length == 0">
+                    <td> 0 </td>
+                    <td> 0 </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.tkdnGao.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.tkdnGao"> {{item?.soLuong ?? 0 | number: '1.0-1'}}
+                    </td>
+                  </ng-container>
+                  <td class="tong-so-quy-thoc"> {{keHoachLuongThucCreate?.ntnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachLuongThucCreate?.ntnThoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachLuongThucCreate?.ntnGao ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                      [nzSize]="'small'" [(ngModel)]="keHoachLuongThucCreate.ntnThocDc">
+                    </nz-input-number>
+                  </td>
+                  <td>
+                    <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                      [nzSize]="'small'" [(ngModel)]="keHoachLuongThucCreate.ntnGaoDc">
+                    </nz-input-number>
+                  </td>
+                  <td>{{(((keHoachLuongThucCreate?.ntnThoc ?? 0) + (keHoachLuongThucCreate?.ntnThocDc ?? 0)) +
+                    ((keHoachLuongThucCreate?.ntnGao ?? 0) + (keHoachLuongThucCreate?.ntnGaoDc ?? 0)) * 2) | number:
+                    '1.0-1'}}</td>
+                  <td>{{((keHoachLuongThucCreate?.ntnThoc ?? 0) + (keHoachLuongThucCreate?.ntnThocDc ?? 0)) | number:
+                    '1.0-1'}}</td>
+                  <td>{{((keHoachLuongThucCreate?.ntnGao ?? 0) + (keHoachLuongThucCreate?.ntnGaoDc ?? 0)) | number:
+                    '1.0-1'}}</td>
+                  <td>{{keHoachLuongThucCreate?.xtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachLuongThucCreate?.xtnTongThoc ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnThoc.length == 0">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnThoc.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.xtnThoc">{{item.soLuong ?? 0 | number: '1.0-1'}}</td>
+                  </ng-container>
+                  <td>{{keHoachLuongThucCreate?.xtnTongGao ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnGao.length == 0">
+                    <td> 0 </td>
+                    <td> 0 </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnGao.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.xtnGao"> {{item.soLuong ?? 0 | number: '1.0-1'}}
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnThocDc.length == 0">
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnThocDc.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.xtnThocDc">
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnGaoDc.length == 0">
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachLuongThucCreate.xtnGaoDc.length > 0">
+                    <td *ngFor="let item of keHoachLuongThucCreate.xtnGaoDc">
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>{{(keHoachLuongThucCreate?.xtnThoc[0]?.soLuong + keHoachLuongThucCreate?.xtnThocDc[0]?.soLuong)
+                    | number: '1.0-1'}}</td>
+                  <td>{{(keHoachLuongThucCreate?.xtnThoc[1]?.soLuong + keHoachLuongThucCreate?.xtnThocDc[1]?.soLuong)
+                    | number: '1.0-1'}}</td>
+                  <td>{{(keHoachLuongThucCreate?.xtnThoc[2]?.soLuong + keHoachLuongThucCreate?.xtnThocDc[2]?.soLuong)
+                    | number: '1.0-1'}}</td>
+                  <td>0</td>
+                  <td>{{(keHoachLuongThucCreate?.xtnGao[0]?.soLuong + keHoachLuongThucCreate?.xtnGaoDc[0]?.soLuong) |
+                    number: '1.0-1'}}</td>
+                  <td>{{(keHoachLuongThucCreate?.xtnGao[0]?.soLuong + keHoachLuongThucCreate?.xtnGaoDc[0]?.soLuong) |
+                    number: '1.0-1'}}</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td class="background-last-row"
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                    <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a (click)="loadDefaultLuongThucNew()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngFor="let data of groupingTableThocSau.data;let i = index">
+                  <ng-container *ngIf="!editLuongThucCache[data.donViId]?.edit; else editLuongThucTemplate">
+                    <td>{{ (page - 1) * pageSize + i + 1 }}</td>
+                    <td>{{data.tenDonvi}}</td>
+                    <td>{{data.tkdnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.tkdnTongThoc ?? 0 | number: '1.0-1'}}</td>
                     <ng-container *ngIf="data.tkdnThoc.length > 0">
-                      <td *ngFor="let item of data.tkdnThoc">
-                        {{item.soLuong | number: '1.0-1'}}</td>
+                      <td *ngFor="let item of data.tkdnThoc">{{item.soLuong ?? 0 | number: '1.0-1'}}</td>
                     </ng-container>
                     <ng-container *ngIf="data.tkdnThoc.length == 0">
                       <td>0</td>
                       <td>0</td>
                       <td>0</td>
                     </ng-container>
-                    <td> {{data.tkdnTongGao | number: '1.0-1'}} </td>
+                    <td> {{data.tkdnTongGao ?? 0 | number: '1.0-1'}} </td>
                     <ng-container *ngIf="data.tkdnGao.length > 0">
-                      <td *ngFor="let item of data.tkdnGao"> {{item.soLuong | number: '1.0-1'}} </td>
+                      <td *ngFor="let item of data.tkdnGao"> {{item.soLuong ?? 0 | number: '1.0-1'}} </td>
                     </ng-container>
                     <ng-container *ngIf="data.tkdnGao.length == 0">
                       <td> 0 </td>
                       <td> 0 </td>
                     </ng-container>
-                    <td class="tong-so-quy-thoc"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
-                    <td>{{data.ntnThoc | number: '1.0-1'}}</td>
-                    <td>{{data.ntnGao | number: '1.0-1'}}</td>
-                    <td>{{data.xtnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td>{{data.xtnTongThoc | number: '1.0-1'}}
+                    <td class="tong-so-quy-thoc"> {{data.ntnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.ntnThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.ntnGao ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.xtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.xtnTongThoc ?? 0 | number: '1.0-1'}}
                     </td>
                     <ng-container *ngIf="data.xtnThoc.length > 0">
                       <td *ngFor="let item of data.xtnThoc">
-                        {{item.soLuong | number: '1.0-1'}}</td>
+                        {{item.soLuong ?? 0 | number: '1.0-1'}}</td>
                     </ng-container>
                     <ng-container *ngIf="data.xtnThoc.length == 0">
                       <td>0 </td>
                       <td>0</td>
                       <td>0</td>
                     </ng-container>
-                    <td>{{data.xtnTongGao | number: '1.0-1'}}
+                    <td>{{data.xtnTongGao ?? 0 | number: '1.0-1'}}
                     </td>
                     <ng-container *ngIf="data.xtnGao.length > 0">
                       <td *ngFor="let item of data.xtnGao">
-                        {{item.soLuong | number: '1.0-1'}}</td>
+                        {{item.soLuong ?? 0 | number: '1.0-1'}}</td>
                     </ng-container>
                     <ng-container *ngIf="data.xtnGao.length == 0">
                       <td>0 </td>
                       <td>0</td>
                       <td>0</td>
                     </ng-container>
-                    <td>{{data.tkcnTongSoQuyThoc | number:
-                      '1.0-1'}}</td>
-                    <td>{{data.tkcnTongThoc | number: '1.0-1'}}
+                    <td>{{data.tkcnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{data.tkcnTongThoc ?? 0 | number: '1.0-1'}}
                     </td>
-                    <td>{{data.tkcnTongGao | number: '1.0-1'}}
+                    <td>{{data.tkcnTongGao ?? 0 | number: '1.0-1'}}
                     </td>
-                    <td>Đã duyệt</td>
-                  </tr>
-                  <tr *ngIf="groupingTableThocSau?.data?.length > 0">
-                    <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai === '00' || id===0 ">
+                      <a (click)="editRowLuongThuc(data.donViId)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteRowLuongThuc(data)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
                     </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 12, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 13, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 14, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 15, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 16, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 17, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 18, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 20, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 21, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 22, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 23, 4,
-                      ',','table-luong-thuc-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-              <div class="tab-content tab-menu">
-                <div class="tab-pane fade show active justify-content-between">
-                  <div class="trai">
-                  </div>
-                  <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
-                      <ng-template #rangeTemplate let-range="range" let-total>
-                        {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                  </ng-container>
+                  <ng-template #editLuongThucTemplate>
+                    <td></td>
+                    <td>
+                      <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                        class="search__input autocomplete__input donvi__input">
+                        <input placeholder="Đơn vị" nz-input (input)="onInput($event,'luong-thuc')"
+                          [nzAutocomplete]="auto" class="w-300"
+                          [(ngModel)]="editLuongThucCache[data.donViId].data.tenDonvi" />
+                      </nz-input-group>
+                      <ng-template #suffixIcon>
+                        <i nz-icon nzType="search"></i>
                       </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang  -->
-                  </div>
+                      <nz-autocomplete #auto>
+                        <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                          (click)="selectDonViKHLT(option)">
+                          {{ option.labelDonVi }}
+                        </nz-auto-option>
+                      </nz-autocomplete>
+                    </td>
+                    <td>{{editLuongThucCache[data.donViId].data?.tkdnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{editLuongThucCache[data.donViId].data?.tkdnTongThoc ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.tkdnThoc.length == 0">
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.tkdnThoc.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.tkdnThoc">{{item?.soLuong ?? 0 |
+                        number: '1.0-1'}}
+                      </td>
+                    </ng-container>
+                    <td>{{editLuongThucCache[data.donViId].data?.tkdnTongGao ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.tkdnGao.length == 0">
+                      <td> 0 </td>
+                      <td> 0 </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.tkdnGao.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.tkdnGao"> {{item?.soLuong ?? 0 |
+                        number: '1.0-1'}}
+                      </td>
+                    </ng-container>
+                    <td class="tong-so-quy-thoc"> {{editLuongThucCache[data.donViId].data?.ntnTongSoQuyThoc ?? 0 |
+                      number: '1.0-1'}}
+                    </td>
+                    <td>{{editLuongThucCache[data.donViId].data?.ntnThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{editLuongThucCache[data.donViId].data?.ntnGao ?? 0 | number: '1.0-1'}}</td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="editLuongThucCache[data.donViId].data.ntnThocDc">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="editLuongThucCache[data.donViId].data.ntnGaoDc">
+                      </nz-input-number>
+                    </td>
+                    <td>{{(((editLuongThucCache[data.donViId].data?.ntnThoc ?? 0) +
+                      (editLuongThucCache[data.donViId].data?.ntnThocDc ?? 0)) +
+                      ((editLuongThucCache[data.donViId].data?.ntnGao ?? 0) +
+                      (editLuongThucCache[data.donViId].data?.ntnGaoDc ?? 0)) * 2) | number:
+                      '1.0-1'}}</td>
+                    <td>{{((editLuongThucCache[data.donViId].data?.ntnThoc ?? 0) +
+                      (editLuongThucCache[data.donViId].data?.ntnThocDc ?? 0)) | number:
+                      '1.0-1'}}</td>
+                    <td>{{((editLuongThucCache[data.donViId].data?.ntnGao ?? 0) +
+                      (editLuongThucCache[data.donViId].data?.ntnGaoDc ?? 0)) | number:
+                      '1.0-1'}}</td>
+                    <td>{{editLuongThucCache[data.donViId].data?.xtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td>{{editLuongThucCache[data.donViId].data?.xtnTongThoc ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnThoc.length == 0">
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnThoc.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.xtnThoc">{{item.soLuong ?? 0 |
+                        number: '1.0-1'}}
+                      </td>
+                    </ng-container>
+                    <td>{{editLuongThucCache[data.donViId].data?.xtnTongGao ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnGao.length == 0">
+                      <td> 0 </td>
+                      <td> 0 </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnGao.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.xtnGao"> {{item.soLuong ?? 0 |
+                        number: '1.0-1'}}
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnThocDc.length == 0">
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnThocDc.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.xtnThocDc">
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnGaoDc.length == 0">
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editLuongThucCache[data.donViId].data.xtnGaoDc.length > 0">
+                      <td *ngFor="let item of editLuongThucCache[data.donViId].data.xtnGaoDc">
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>{{(editLuongThucCache[data.donViId].data?.xtnThoc[0]?.soLuong +
+                      editLuongThucCache[data.donViId].data?.xtnThocDc[0]?.soLuong)
+                      | number: '1.0-1'}}</td>
+                    <td>{{(editLuongThucCache[data.donViId].data?.xtnThoc[1]?.soLuong +
+                      editLuongThucCache[data.donViId].data?.xtnThocDc[1]?.soLuong)
+                      | number: '1.0-1'}}</td>
+                    <td>{{(editLuongThucCache[data.donViId].data?.xtnThoc[2]?.soLuong +
+                      editLuongThucCache[data.donViId].data?.xtnThocDc[2]?.soLuong)
+                      | number: '1.0-1'}}</td>
+                    <td>0</td>
+                    <td>{{(editLuongThucCache[data.donViId].data?.xtnGao[0]?.soLuong +
+                      editLuongThucCache[data.donViId].data?.xtnGaoDc[0]?.soLuong) |
+                      number: '1.0-1'}}</td>
+                    <td>{{(editLuongThucCache[data.donViId].data?.xtnGao[0]?.soLuong +
+                      editLuongThucCache[data.donViId].data?.xtnGaoDc[0]?.soLuong) |
+                      number: '1.0-1'}}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>
+                      <a (click)="saveEditLuongThuc(data.donViId)" class="save">
+                        <i class="fa fa-save"></i>
+                      </a>
+                      <a (click)="cancelEditLuongThuc(data.donViId)">
+                        <i class="fa fa-times do"></i>
+                      </a>
+                    </td>
+                  </ng-template>
+                </tr>
+                <tr *ngIf="groupingTableThocSau?.data?.length > 0">
+                  <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 12, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 13, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 14, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 15, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 16, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 17, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 18, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 20, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 21, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 22, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 23, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 24, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 25, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 26, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 27, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 28, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 29, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 30, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 31, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 32, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 33, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 34, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 35, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 36, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 37, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 38, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 39, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 40, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 41, 5,
+                    ',','table-luong-thuc-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row"></td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <div class="tab-content tab-menu">
+              <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+                </div>
+                <div class="canphai">
+                  <!-- begin phân trang  -->
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
+                    <ng-template #rangeTemplate let-range="range" let-total>
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                    </ng-template>
+                  </nz-pagination>
+                  <!-- end phân trang  -->
                 </div>
               </div>
             </div>
           </div>
-          <div [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-            <div id="table-muoi-tong-hop">
-              <nz-table #groupingTableMuoiSau [nzData]="dataMuoi" nzBordered [nzFrontPagination]="false"
-                [nzShowPagination]="false" class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="3">STT</th>
-                    <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                    <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                    <th>Nhập trong năm (2)</th>
-                    <th colspan="4 ">Xuât trong năm (3)</th>
-                    <th>Tồn kho cuối năm (4)
-                      <br>
-                      ( 31/12/{{yearNow}})
-                    </th>
-                    <th rowspan="3">Trạng thái</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="3">Trong đó</th>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Nhập <br> {{yearNow - 3}}</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                    <th>Nhập <br> {{yearNow - 3}}</th>
-                    <th>Nhập <br> {{yearNow - 2}}</th>
-                    <th>Nhập <br> {{yearNow - 1}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let dataMuoi of groupingTableMuoiSau.data">
-                    <td>{{dataMuoi.stt}}</td>
+        </div>
+        <div [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <div id="table-muoi-tong-hop">
+            <nz-table #groupingTableMuoiSau [nzData]="dataMuoi" nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false" class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="4">STT</th>
+                  <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                  <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                  <th colspan="3">Nhập trong năm (2)</th>
+                  <th colspan="11">Xuất trong năm (3)</th>
+                  <th class="text-center">Tồn kho cuối năm (4)
+                    <br>
+                    ( 31/12/{{yearNow}})
+                  </th>
+                  <th rowspan="4">Hành động</th>
+                </tr>
+                <tr>
+                  <th rowspan="3">
+                    Tổng số
+                  </th>
+                  <th colspan="3">Trong đó</th>
+                  <th rowspan="3">
+                    Trước điều chỉnh
+                  </th>
+                  <th rowspan="3">
+                    Điều chỉnh tăng giảm
+                  </th>
+                  <th rowspan="3">
+                    Sau điều chỉnh
+                  </th>
+                  <th colspan="4">
+                    Trước điều chỉnh
+                  </th>
+                  <th colspan="3">
+                    Điều chỉnh tăng giảm
+                  </th>
+                  <th colspan="4">
+                    Sau điều chỉnh
+                  </th>
+                  <th rowspan="3" class="text-center">
+                    Tổng số
+                  </th>
+                </tr>
+                <tr>
+                  <th rowspan="2">Nhập <br> {{yearNow - 3}}</th>
+                  <th rowspan="2">Nhập <br> {{yearNow - 2}}</th>
+                  <th rowspan="2">Nhập <br> {{yearNow - 1}}</th>
+                  <th colspan="4">Trong đó</th>
+                  <th colspan="3">Trong đó</th>
+                  <th colspan="4">Trong đó</th>
+                </tr>
+                <tr>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                  <th>Tổng</th>
+                  <th>Nhập <br> {{yearNow - 3}}</th>
+                  <th>Nhập <br> {{yearNow - 2}}</th>
+                  <th>Nhập <br> {{yearNow - 1}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  [ngClass]="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03' ? '' : 'row-disabled'">
+                  <td></td>
+                  <td>
+                    <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                      class="search__input autocomplete__input donvi__input">
+                      <input placeholder="Đơn vị" nz-input (input)="onInput($event,'muoi')" [nzAutocomplete]="auto"
+                        class="w-300" [(ngModel)]="keHoachMuoiCreate.tenDonvi" />
+                    </nz-input-group>
+                    <ng-template #suffixIcon>
+                      <i nz-icon nzType="search"></i>
+                    </ng-template>
+                    <nz-autocomplete #auto>
+                      <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                        (click)="selectDonViKHMuoi(option)">
+                        {{ option.labelDonVi }}
+                      </nz-auto-option>
+                    </nz-autocomplete>
+                  </td>
+                  <td>{{keHoachMuoiCreate?.tkdnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachMuoiCreate.tkdnMuoi.length > 0">
+                    <td *ngFor="let itemMuoi of keHoachMuoiCreate.tkdnMuoi">{{itemMuoi.soLuong | number: '1.0-1'}} </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachMuoiCreate.tkdnMuoi.length == 0">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </ng-container>
+                  <td>{{keHoachMuoiCreate.ntnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                      [nzSize]="'small'" [(ngModel)]="keHoachMuoiCreate.ntnTongSoMuoiDc">
+                    </nz-input-number>
+                  </td>
+                  <td>{{((keHoachMuoiCreate?.ntnTongSoMuoi ?? 0) + (keHoachMuoiCreate?.ntnTongSoMuoiDc ?? 0)) | number:
+                    '1.0-1'}}</td>
+                  <td>{{keHoachMuoiCreate.xtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                  <ng-container *ngIf="keHoachMuoiCreate.xtnMuoi.length > 0">
+                    <td *ngFor="let itemMuoi of keHoachMuoiCreate.xtnMuoi">{{itemMuoi.soLuong ?? 0 | number: '1.0-1'}}
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachMuoiCreate.xtnMuoi.length == 0">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachMuoiCreate.xtnMuoiDc.length == 0">
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" (ngModel)="0">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="keHoachMuoiCreate.xtnMuoiDc.length > 0">
+                    <td *ngFor="let item of keHoachMuoiCreate.xtnMuoiDc">
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                      </nz-input-number>
+                    </td>
+                  </ng-container>
+                  <td>0</td>
+                  <td>{{(keHoachMuoiCreate?.xtnMuoi[0]?.soLuong + keHoachMuoiCreate?.xtnMuoiDc[0]?.soLuong) | number:
+                    '1.0-1'}}</td>
+                  <td>{{(keHoachMuoiCreate?.xtnMuoi[1]?.soLuong + keHoachMuoiCreate?.xtnMuoiDc[1]?.soLuong) | number:
+                    '1.0-1'}}</td>
+                  <td>{{(keHoachMuoiCreate?.xtnMuoi[2]?.soLuong + keHoachMuoiCreate?.xtnMuoiDc[2]?.soLuong) | number:
+                    '1.0-1'}}</td>
+                  <td>0</td>
+                  <td class="background-last-row"
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                    <a class="save" (click)="themMoiKHMuoi()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a (click)="loadDefaultMuoiNew()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngFor="let dataMuoi of groupingTableMuoiSau.data;let i = index">
+                  <ng-container *ngIf="!editMuoiCache[dataMuoi.donViId]?.edit; else editMuoiTemplate">
+                    <td>{{ (page - 1) * pageSize + i + 1 }}</td>
                     <td>{{dataMuoi.tenDonVi}}</td>
                     <td>{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>
                     <ng-container *ngIf="dataMuoi.tkdnMuoi.length > 0">
@@ -466,235 +991,345 @@
                       <td>0</td>
                     </ng-container>
                     <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
-                    <td>Đã duyệt</td>
-                  </tr>
-                  <tr *ngIf="groupingTableMuoiSau?.data?.length > 0">
-                    <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai === '00' || id===0 ">
+                      <a (click)="editRowMuoi(dataMuoi.donViId)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteRowMuoi(dataMuoi)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
                     </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 3, ',', 'table-muoi-tong-hop')
-                      :
-                      0
-                      |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 3, ',',
-                      'table-muoi-tong-hop')
-                      :
-                      0 |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 3, ',',
-                      'table-muoi-tong-hop')
-                      :
-                      0 |
-                      number:
-                      '1.0-1'}}
-                    </td>
-                    <td class="background-last-row"></td>
-                  </tr>
-                </tbody>
-              </nz-table>
-              <div class="tab-content tab-menu">
-                <div class="tab-pane fade show active justify-content-between">
-                  <div class="trai">
-                  </div>
-                  <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
-                      <ng-template #rangeTemplate let-range="range" let-total>
-                        {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                      </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang  -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-            <div id="table-vat-tu-tong-hop">
-              <nz-table #groupingTableVatTuSau [nzData]="dataVatTu" nzBordered [nzFrontPagination]="false"
-                [nzShowPagination]="false" class="table__body">
-                <thead>
-                  <tr>
-                    <th rowspan="3">STT</th>
-                    <th rowspan="3">CỤC DTNN KHU VỰC</th>
-                    <th rowspan="3">MẶT HÀNG</th>
-                    <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                    <th colspan="6">CHỈ TIÊU NHẬP NĂM {{yearNow}}</th>
-                  </tr>
-                  <tr>
-                    <th rowspan="2">
-                      Tổng số
-                    </th>
-                    <th colspan="4">Chỉ tiêu các năm khác chuyển sang</th>
-                    <th rowspan="2">
-                      Kế hoạch {{yearNow}}
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Tổng</th>
-                    <th>Kế hoạch <br> {{yearNow - 3}}</th>
-                    <th>Kế hoạch <br> {{yearNow - 2}}</th>
-                    <th>Kế hoạch <br> {{yearNow - 1}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngFor="let itemVatTu of groupingTableVatTuSau.data">
-                    <tr>
-                      <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
-                      <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
-                    </tr>
-                    <ng-container *ngFor="let item of itemVatTu.listDisplay">
-                      <tr
-                        [ngClass]="item.level == 0 ? 'table__header-vat-tu' : ((item.level > 0 && item.display) ? 'show-row' : 'hide-row')">
-                        <td [nzIndentSize]="item.level * 20">
-                          <a (click)="displayChildTong(item, itemVatTu, true)"
-                            *ngIf="item.level > 0 && item.hasChild && !item.expand">+</a>
-                          <a (click)="displayChildTong(item, itemVatTu, false)"
-                            *ngIf="item.level > 0 && item.hasChild && item.expand">-</a>
-                          {{item.tenVatTu}}
-                        </td>
-                        <td>{{item.donViTinh}}</td>
-                        <td>{{item.tongNhap}}</td>
-                        <td>{{item.tongCacNamTruoc}}</td>
-                        <td>{{item.cacNamTruoc[0].soLuong}}</td>
-                        <td>{{item.cacNamTruoc[1].soLuong}}</td>
-                        <td>{{item.cacNamTruoc[2].soLuong}}</td>
-                        <td>{{item.nhapTrongNam}}</td>
-                      </tr>
-                    </ng-container>
                   </ng-container>
-                  <tr *ngIf="groupingTableVatTuSau?.data?.length > 0">
-                    <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
-                    <td class="background-last-row">
-                    </td>
-                    <td class="background-last-row">
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 2, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 3, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 4, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 5, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 6, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                    <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 7, 3,
-                      ',','table-vat-tu-tong-hop') : 0 |
-                      number: '1.0-1'}}
-                    </td>
-                  </tr>
-                </tbody>
-              </nz-table>
-              <div class="tab-content tab-menu">
-                <div class="tab-pane fade show active justify-content-between">
-                  <div class="trai">
-                  </div>
-                  <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
-                      <ng-template #rangeTemplate let-range="range" let-total>
-                        {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                  <ng-template #editMuoiTemplate>
+                    <td></td>
+                    <td>
+                      <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                        class="search__input autocomplete__input donvi__input">
+                        <input placeholder="Đơn vị" nz-input (input)="onInput($event,'muoi')" [nzAutocomplete]="auto"
+                          class="w-300" [(ngModel)]="editMuoiCache[dataMuoi.donViId].data.tenDonvi" />
+                      </nz-input-group>
+                      <ng-template #suffixIcon>
+                        <i nz-icon nzType="search"></i>
                       </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang  -->
-                  </div>
+                      <nz-autocomplete #auto>
+                        <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                          (click)="selectDonViKHMuoi(option)">
+                          {{ option.labelDonVi }}
+                        </nz-auto-option>
+                      </nz-autocomplete>
+                    </td>
+                    <td>{{editMuoiCache[dataMuoi.donViId].data?.tkdnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.tkdnMuoi.length > 0">
+                      <td *ngFor="let itemMuoi of editMuoiCache[dataMuoi.donViId].data.tkdnMuoi">{{itemMuoi.soLuong |
+                        number: '1.0-1'}} </td>
+                    </ng-container>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.tkdnMuoi.length == 0">
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </ng-container>
+                    <td>{{editMuoiCache[dataMuoi.donViId].data.ntnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                    <td>
+                      <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                        [nzSize]="'small'" [(ngModel)]="editMuoiCache[dataMuoi.donViId].data.ntnTongSoMuoiDc">
+                      </nz-input-number>
+                    </td>
+                    <td>{{((editMuoiCache[dataMuoi.donViId].data?.ntnTongSoMuoi ?? 0) +
+                      (editMuoiCache[dataMuoi.donViId].data?.ntnTongSoMuoiDc ?? 0)) | number:
+                      '1.0-1'}}</td>
+                    <td>{{editMuoiCache[dataMuoi.donViId].data.xtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.xtnMuoi.length > 0">
+                      <td *ngFor="let itemMuoi of editMuoiCache[dataMuoi.donViId].data.xtnMuoi">{{itemMuoi.soLuong ?? 0
+                        | number: '1.0-1'}}
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.xtnMuoi.length == 0">
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </ng-container>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.xtnMuoiDc.length == 0">
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                      <td>
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" (ngModel)="0">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="editMuoiCache[dataMuoi.donViId].data.xtnMuoiDc.length > 0">
+                      <td *ngFor="let item of editMuoiCache[dataMuoi.donViId].data.xtnMuoiDc">
+                        <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                          [nzSize]="'small'" [(ngModel)]="item.soLuong">
+                        </nz-input-number>
+                      </td>
+                    </ng-container>
+                    <td>0</td>
+                    <td>{{(editMuoiCache[dataMuoi.donViId].data?.xtnMuoi[0]?.soLuong +
+                      editMuoiCache[dataMuoi.donViId].data?.xtnMuoiDc[0]?.soLuong) | number:
+                      '1.0-1'}}</td>
+                    <td>{{(editMuoiCache[dataMuoi.donViId].data?.xtnMuoi[1]?.soLuong +
+                      editMuoiCache[dataMuoi.donViId].data?.xtnMuoiDc[1]?.soLuong) | number:
+                      '1.0-1'}}</td>
+                    <td>{{(editMuoiCache[dataMuoi.donViId].data?.xtnMuoi[2]?.soLuong +
+                      editMuoiCache[dataMuoi.donViId].data?.xtnMuoiDc[2]?.soLuong) | number:
+                      '1.0-1'}}</td>
+                    <td>0</td>
+                    <td>
+                      <a (click)="saveEditMuoi(dataMuoi.donViId)" class="save">
+                        <i class="fa fa-save"></i>
+                      </a>
+                      <a (click)="cancelEditMuoi(dataMuoi.donViId)">
+                        <i class="fa fa-times do"></i>
+                      </a>
+                    </td>
+                  </ng-template>
+                </tr>
+                <tr *ngIf="groupingTableMuoiSau?.data?.length > 0">
+                  <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 2, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 3, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 4, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 5, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 6, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 7, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 8, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 9, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 10, 5, ',', 'table-muoi-tong-hop')
+                    : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 11, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 12, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 13, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 14, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 15, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 16, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 17, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 18, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowData(0, 20, 5, ',', 'table-muoi-tong-hop') :
+                    0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row"></td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <div class="tab-content tab-menu">
+              <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+                </div>
+                <div class="canphai">
+                  <!-- begin phân trang  -->
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
+                    <ng-template #rangeTemplate let-range="range" let-total>
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                    </ng-template>
+                  </nz-pagination>
+                  <!-- end phân trang  -->
                 </div>
               </div>
             </div>
-          </div>
-          <div class="tep" (click)="downloadTemplate()">
-            <i class="icon htvbdh_tcdt_tep"></i>
-            <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
-          </div>
-          <div class="action">
-            <button type="button" class="btn btn-main" (click)="themMoi()"
-              *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
-            </button>
-            <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
-              *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
-              <i class="icon htvbdh_tcdt_import"></i>
-              <span>Import</span>
-            </button>
-            <input type="file" id="file-import-data" class="file-not-show" (change)="importFileData($event)" />
-            <button type="button" class="btn btn-sub" (click)="exportData()">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
-            </button>
-            <button type="button" class="btn btn-sub" (click)="printTable()">
-              <i class="icon htvbdh_tcdt_print"></i>
-              <span>In</span>
-            </button>
           </div>
         </div>
+        <div [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
+          <div id="table-vat-tu-tong-hop">
+            <nz-table #groupingTableVatTuSau [nzData]="dataVatTu" nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false" class="table__body">
+              <thead>
+                <tr>
+                  <th rowspan="3">STT</th>
+                  <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                  <th rowspan="3">MÃ HÀNG</th>
+                  <th rowspan="3">KÝ HIỆU</th>
+                  <th rowspan="3">TÊN HÀNG</th>
+                  <th rowspan="3">CHỦNG LOẠI HÀNG</th>
+                  <th rowspan="3">ĐƠN VỊ TÍNH</th>
+                  <th colspan="6">CHỈ TIÊU NHẬP NĂM TRƯỚC ĐIỀU CHỈNH</th>
+                  <th rowspan="3">Điều chỉnh tăng giảm</th>
+                  <th colspan="6">CHỈ TIÊU NHẬP SAU ĐIỀU CHỈNH</th>
+                  <th rowspan="3">HÀNH ĐỘNG</th>
+                </tr>
+                <tr>
+                  <th rowspan="2">Tổng số</th>
+                  <th colspan="5">Các năm trước chuyển sang</th>
+                  <th rowspan="2">Tổng số</th>
+                  <th colspan="4">Các năm trước chuyển sang</th>
+                  <th rowspan="2">Kế hoạch năm</th>
+                </tr>
+                <tr>
+                  <th>Tổng</th>
+                  <th>Kế hoạch <br> năm 1</th>
+                  <th>Kế hoạch <br> năm 2</th>
+                  <th>Kế hoạch <br> năm 3</th>
+                  <th>Kế hoạch năm hiện tại</th>
+                  <th>Tổng</th>
+                  <th>Kế hoạch <br> năm 1</th>
+                  <th>Kế hoạch <br> năm 2</th>
+                  <th>Kế hoạch <br> năm 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+
+                </tr>
+                <ng-container *ngFor="let itemVatTu of groupingTableVatTuSau.data">
+                  <tr>
+                    <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
+                    <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
+                  </tr>
+                  <ng-container *ngFor="let item of itemVatTu.listDisplay">
+                    <tr
+                      [ngClass]="item.level == 0 ? 'table__header-vat-tu' : ((item.level > 0 && item.display) ? 'show-row' : 'hide-row')">
+                      <td [nzIndentSize]="item.level * 20">
+                        <a (click)="displayChildTong(item, itemVatTu, true)"
+                          *ngIf="item.level > 0 && item.hasChild && !item.expand">+</a>
+                        <a (click)="displayChildTong(item, itemVatTu, false)"
+                          *ngIf="item.level > 0 && item.hasChild && item.expand">-</a>
+                        {{item.tenVatTu}}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{item.donViTinh}}</td>
+                      <td>{{item.tongNhap}}</td>
+                      <td>{{item.tongCacNamTruoc}}</td>
+                      <td>{{item.cacNamTruoc[0].soLuong}}</td>
+                      <td>{{item.cacNamTruoc[1].soLuong}}</td>
+                      <td>{{item.cacNamTruoc[2].soLuong}}</td>
+                      <td>{{item.nhapTrongNam}}</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td></td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+                <tr *ngIf="groupingTableVatTuSau?.data?.length > 0">
+                  <td colspan="7" class="first-last-row-table background-last-row">Cộng</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 7, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 8, 4,
+                    ',','table-vat-tu-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 9, 4,
+                    ',','table-vat-tu-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 10, 4,
+                    ',','table-vat-tu-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 11, 4,
+                    ',','table-vat-tu-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 12, 4,
+                    ',','table-vat-tu-tong-hop') : 0 |
+                    number: '1.0-1'}}
+                  </td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 13, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 14, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 15, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 16, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 17, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 18, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row">{{ tableExist ? reduceRowDataVatTu(0, 19, 4,
+                    ',','table-vat-tu-tong-hop') : 0 | number: '1.0-1'}}</td>
+                  <td class="background-last-row"></td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <div class="tab-content tab-menu">
+              <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+                </div>
+                <div class="canphai">
+                  <!-- begin phân trang  -->
+                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                    (nzPageSizeChange)="changePageSize($event)">
+                    <ng-template #rangeTemplate let-range="range" let-total>
+                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                    </ng-template>
+                  </nz-pagination>
+                  <!-- end phân trang  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tep" (click)="downloadTemplate()">
+          <i class="icon htvbdh_tcdt_tep"></i>
+          <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
+        </div>
+        <div class="action">
+          <button type="button" class="btn btn-main" (click)="themMoi()"
+            *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
+            *ngIf="(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Import</span>
+          </button>
+          <input type="file" id="file-import-data" class="file-not-show" (change)="importFileData($event)" />
+          <button type="button" class="btn btn-sub" (click)="exportData()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="printTable()">
+            <i class="icon htvbdh_tcdt_print"></i>
+            <span>In</span>
+          </button>
+        </div>
+      </div>
+      <form nz-form [formGroup]="formData">
         <div class="ghi-chu">
           <nz-form-item>
             <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true" class="label-color-kh"> Ghi chú
@@ -708,7 +1343,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>

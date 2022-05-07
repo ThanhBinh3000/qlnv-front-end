@@ -30,16 +30,10 @@ import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-interface DataItem {
-  name: string;
-  age: number;
-  street: string;
-  building: string;
-  number: number;
-  companyAddress: string;
-  companyName: string;
-  gender: string;
-}
+import { ItemDetail } from 'src/app/models/ItemDetail';
+import { Globals } from './../../../shared/globals';
+import { DonviService } from 'src/app/services/donvi.service';
+
 @Component({
   selector: 'app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl:
@@ -59,7 +53,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     thongTinVatTuTrongNam: false,
     thongTinMuoi: false,
   };
-  xuongCaoTocCacLoais = new Array(4);
   id: number;
   tabSelected: string = TAB_SELECTED.luongThuc;
   detail = {
@@ -104,13 +97,24 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataMuoi: any[] = [];
   dataVatTu: any[] = [];
 
-  selectDataMultipleTag(data: any) {
+  keHoachLuongThucCreate: KeHoachLuongThuc;
+  isAddLuongThuc: boolean = false;
 
-  }
+  keHoachMuoiCreate: KeHoachMuoi;
+  isAddMuoi: boolean = false;
 
-  deleteDataMultipleTag(data: any) {
-    this.dataTag = this.dataTag.filter(x => x.id != data.id);
-  }
+  keHoachVatTuCreate: KeHoachVatTu;
+  isAddVatTu: boolean = false;
+
+  options: any[] = [];
+  optionsDonVi: any[] = [];
+
+  thocIdDefault: number = 2;
+  gaoIdDefault: number = 6;
+  muoiIdDefault: number = 78;
+
+  editLuongThucCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editMuoiCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
     private router: Router,
@@ -124,6 +128,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private danhMucService: DanhMucService,
     private helperService: HelperService,
     private cdr: ChangeDetectorRef,
+    public globals: Globals,
+    private donViService: DonviService,
   ) { }
 
   async ngOnInit() {
@@ -146,12 +152,403 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
       await this.loadDanhMucHang();
+      this.loadDefaultLuongThucNew();
+      this.loadDefaultMuoiNew();
+      this.loadDonVi();
       this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  updateEditMuoiCache(): void {
+    if (this.dataMuoi && this.dataMuoi.length > 0) {
+      this.dataMuoi.forEach(item => {
+        this.editMuoiCache[item.donViId] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
+  }
+
+  cancelEditMuoi(donViId: number): void {
+    const index = this.dataMuoi.findIndex(item => item.donViId === donViId);
+    this.editMuoiCache[donViId] = {
+      data: { ...this.dataMuoi[index] },
+      edit: false
+    };
+  }
+
+  saveEditMuoi(donViId: number): void {
+    const index = this.dataMuoi.findIndex(item => item.donViId === donViId);
+    this.editMuoiCache[donViId].data.thanhTien = (this.editMuoiCache[donViId].data.soLuong ?? 0) * (this.editMuoiCache[donViId].data.donGia ?? 0);
+    Object.assign(this.dataMuoi[index], this.editMuoiCache[donViId].data);
+    this.editMuoiCache[donViId].edit = false;
+  }
+
+  deleteRowMuoi(data: any) {
+    this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi = this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.filter(x => x.donViId != data.donViId);
+    this.loadData();
+  }
+
+  editRowMuoi(donViId: number) {
+    this.editMuoiCache[donViId].edit = true;
+  }
+
+  themMoiKHMuoi() {
+    if (!this.dataMuoi) {
+      this.dataMuoi = [];
+    }
+    this.checkDataExistMuoi(this.keHoachMuoiCreate);
+    this.loadDefaultMuoiNew();
+  }
+
+  loadDefaultMuoiNew() {
+    this.keHoachMuoiCreate = new KeHoachMuoi();
+    let tkdnMuoi: Array<ItemDetail> = [
+      {
+        nam: this.yearNow - 1,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      }, {
+        nam: this.yearNow - 2,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      }, {
+        nam: this.yearNow - 3,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      },
+    ]
+    this.keHoachMuoiCreate.tkdnMuoi = cloneDeep(tkdnMuoi);
+    this.keHoachMuoiCreate.xtnMuoi = cloneDeep(tkdnMuoi);
+    this.keHoachMuoiCreate.xtnMuoiDc = cloneDeep(tkdnMuoi);
+  }
+
+  updateEditLuongThucCache(): void {
+    if (this.dataLuongThuc && this.dataLuongThuc.length > 0) {
+      this.dataLuongThuc.forEach(item => {
+        this.editLuongThucCache[item.donViId] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+    }
+  }
+
+  cancelEditLuongThuc(donViId: number): void {
+    const index = this.dataLuongThuc.findIndex(item => item.donViId === donViId);
+    this.editLuongThucCache[donViId] = {
+      data: { ...this.dataLuongThuc[index] },
+      edit: false
+    };
+  }
+
+  saveEditLuongThuc(donViId: number): void {
+    const index = this.dataLuongThuc.findIndex(item => item.donViId === donViId);
+    this.editLuongThucCache[donViId].data.thanhTien = (this.editLuongThucCache[donViId].data.soLuong ?? 0) * (this.editLuongThucCache[donViId].data.donGia ?? 0);
+    Object.assign(this.dataLuongThuc[index], this.editLuongThucCache[donViId].data);
+    this.editLuongThucCache[donViId].edit = false;
+  }
+
+  deleteRowLuongThuc(data: any) {
+    this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc = this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.filter(x => x.donViId != data.donViId);
+    this.loadData();
+  }
+
+  editRowLuongThuc(donViId: number) {
+    this.editLuongThucCache[donViId].edit = true;
+  }
+
+  themMoiKHLT() {
+    if (!this.dataLuongThuc) {
+      this.dataLuongThuc = [];
+    }
+    this.checkDataExistLuongThuc(this.keHoachLuongThucCreate);
+    this.loadDefaultLuongThucNew();
+  }
+
+  loadDefaultLuongThucNew() {
+    this.keHoachLuongThucCreate = new KeHoachLuongThuc();
+    let tkdnThoc: Array<ItemDetail> = [
+      {
+        nam: this.yearNow - 1,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      }, {
+        nam: this.yearNow - 2,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      }, {
+        nam: this.yearNow - 3,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      },
+    ]
+    let tkdnGao: Array<ItemDetail> = [
+      {
+        nam: this.yearNow - 1,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      }, {
+        nam: this.yearNow - 2,
+        soLuong: 0,
+        vatTuId: this.thocIdDefault,
+        id: 0
+      },
+    ]
+    this.keHoachLuongThucCreate.tkdnThoc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.tkdnGao = cloneDeep(tkdnGao);
+    this.keHoachLuongThucCreate.xtnThoc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.xtnGao = cloneDeep(tkdnGao);
+    this.keHoachLuongThucCreate.xtnThocDc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.xtnGaoDc = cloneDeep(tkdnGao);
+  }
+
+  selectDataMultipleTag(data: any) {
+
+  }
+
+  deleteDataMultipleTag(data: any) {
+    this.dataTag = this.dataTag.filter(x => x.id != data.id);
+  }
+
+  caculatorXuatThocSauDc() {
+
+  }
+
+  caculatorXuatGaoSauDc() {
+
+  }
+
+  caculatorXuatTongQuyThocSauDc() {
+
+  }
+
+  async selectDonViKHLT(donVi) {
+    this.spinner.show();
+    try {
+      this.isAddLuongThuc = true;
+      this.keHoachLuongThucCreate.maDonVi = donVi.maDvi;
+      this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
+      this.keHoachLuongThucCreate.donViId = donVi.id;
+
+      let body = {
+        "donViId": this.keHoachLuongThucCreate.donViId,
+        "ctkhnId": this.selectedCanCu.id,
+        "vatTuIds": [this.thocIdDefault, this.gaoIdDefault]
+      }
+
+      let data = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(body);
+      if (data && data.msg == MESSAGE.SUCCESS) {
+        if (data.data && data.data.tonKhoDauNam && data.data.tonKhoDauNam.length > 0) {
+          data.data.tonKhoDauNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.thocIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 3):
+                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            } else if (tonKho.vatTuId == this.gaoIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        }
+        if (data.data && data.data.nhapTrongNam && data.data.nhapTrongNam.length > 0) {
+          data.data.nhapTrongNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.thocIdDefault) {
+              this.keHoachLuongThucCreate.ntnThoc = tonKho.soLuong;
+            } else if (tonKho.vatTuId == this.gaoIdDefault) {
+              this.keHoachLuongThucCreate.ntnGao = tonKho.soLuong;
+            }
+          });
+        }
+        if (data.data && data.data.xuatTrongNam && data.data.xuatTrongNam.length > 0) {
+          data.data.xuatTrongNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.thocIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachLuongThucCreate.xtnThoc[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachLuongThucCreate.xtnThoc[1].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 3):
+                  this.keHoachLuongThucCreate.xtnThoc[2].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            } else if (tonKho.vatTuId == this.gaoIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachLuongThucCreate.xtnGao[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachLuongThucCreate.xtnGao[1].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        }
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, data.msg);
+      } this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async selectDonViKHMuoi(donVi) {
+    this.spinner.show();
+    try {
+      this.isAddLuongThuc = true;
+      this.keHoachMuoiCreate.maDonVi = donVi.maDvi;
+      this.keHoachMuoiCreate.tenDonvi = donVi.tenDvi;
+      this.keHoachMuoiCreate.donViId = donVi.id;
+
+      let body = {
+        "donViId": this.keHoachMuoiCreate.donViId,
+        "ctkhnId": this.selectedCanCu.id,
+        "vatTuIds": [this.muoiIdDefault]
+      }
+
+      let data = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(body);
+      if (data && data.msg == MESSAGE.SUCCESS) {
+        if (data.data && data.data.tonKhoDauNam && data.data.tonKhoDauNam.length > 0) {
+          data.data.tonKhoDauNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.muoiIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachMuoiCreate.tkdnMuoi[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachMuoiCreate.tkdnMuoi[1].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 3):
+                  this.keHoachMuoiCreate.tkdnMuoi[2].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        }
+        if (data.data && data.data.nhapTrongNam && data.data.nhapTrongNam.length > 0) {
+          data.data.nhapTrongNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.muoiIdDefault) {
+              this.keHoachMuoiCreate.ntnTongSoMuoi = tonKho.soLuong;
+            }
+          });
+        }
+        if (data.data && data.data.xuatTrongNam && data.data.xuatTrongNam.length > 0) {
+          data.data.xuatTrongNam.forEach((tonKho) => {
+            if (tonKho.vatTuId == this.muoiIdDefault) {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1):
+                  this.keHoachMuoiCreate.xtnMuoi[0].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 2):
+                  this.keHoachMuoiCreate.xtnMuoi[1].soLuong = tonKho.soLuong;
+                  break;
+                case (this.yearNow - 3):
+                  this.keHoachMuoiCreate.xtnMuoi[2].soLuong = tonKho.soLuong;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        }
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, data.msg);
+      } this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  onInput(e: Event, data: string): void {
+    switch (data) {
+      case 'luong-thuc':
+        this.isAddLuongThuc = false;
+        break;
+      case 'muoi':
+        this.isAddMuoi = false;
+        break;
+      case 'vat-tu':
+        this.isAddVatTu = false;
+        break;
+      default:
+        break;
+    }
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.options = cloneDeep(this.optionsDonVi);
+    } else {
+      this.options = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  async loadDonVi() {
+    try {
+      const res = await this.donViService.layTatCaDonVi();
+      this.optionsDonVi = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        for (let i = 0; i < res.data.length; i++) {
+          const item = {
+            ...res.data[i],
+            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+          };
+          this.optionsDonVi.push(item);
+        }
+        this.options = cloneDeep(this.optionsDonVi);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (error) {
+      this.spinner.hide();
     }
   }
 
@@ -785,6 +1182,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.forEach((lt, i) => {
       lt.stt = i + 1;
     });
+    this.loadData();
   }
 
   checkDataExistMuoi(data: any) {
@@ -805,6 +1203,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.forEach((lt, i) => {
       lt.stt = i + 1;
     });
+    this.loadData();
   }
 
   checkDataExistVatTu(data: any) {
@@ -846,6 +1245,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.forEach((lt, i) => {
       lt.stt = i + 1;
     });
+    this.loadData();
   }
 
   printTable() {
@@ -1141,10 +1541,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (this.tabSelected == this.tab.luongThuc) {
       this.dataLuongThuc = this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
       this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.qdDc.khLuongThuc.length;
+      this.updateDataLuongThuc();
+      this.updateEditLuongThucCache();
     }
     else if (this.tabSelected == this.tab.muoi) {
       this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
       this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.qdDc.khMuoi.length;
+      this.updateDataMuoi();
+      this.updateEditMuoiCache();
     }
     else if (this.tabSelected == this.tab.vatTu) {
       this.dataVatTu = this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
@@ -1155,5 +1559,99 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectTabData(tabName: string) {
     this.tabSelected = tabName;
     this.loadData();
+  }
+
+  updateDataLuongThuc() {
+    if (this.dataLuongThuc && this.dataLuongThuc.length > 0) {
+      let tkdnThoc: Array<ItemDetail> = [
+        {
+          nam: this.yearNow - 1,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        }, {
+          nam: this.yearNow - 2,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        }, {
+          nam: this.yearNow - 3,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        },
+      ]
+      let tkdnGao: Array<ItemDetail> = [
+        {
+          nam: this.yearNow - 1,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        }, {
+          nam: this.yearNow - 2,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        },
+      ]
+      this.dataLuongThuc.forEach(element => {
+        if (element) {
+          if (!element.tkdnThoc) {
+            element.tkdnThoc = cloneDeep(tkdnThoc);
+          }
+          if (!element.tkdnGao) {
+            element.tkdnGao = cloneDeep(tkdnGao);
+          }
+          if (!element.xtnThoc) {
+            element.xtnThoc = cloneDeep(tkdnThoc);
+          }
+          if (!element.xtnGao) {
+            element.xtnGao = cloneDeep(tkdnGao);
+          }
+          if (!element.xtnThocDc) {
+            element.xtnThocDc = cloneDeep(tkdnThoc);
+          }
+          if (!element.xtnGaoDc) {
+            element.xtnGaoDc = cloneDeep(tkdnGao);
+          }
+        }
+      });
+    }
+  }
+
+  updateDataMuoi() {
+    if (this.dataMuoi && this.dataMuoi.length > 0) {
+      let tkdnMuoi: Array<ItemDetail> = [
+        {
+          nam: this.yearNow - 1,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        }, {
+          nam: this.yearNow - 2,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        }, {
+          nam: this.yearNow - 3,
+          soLuong: 0,
+          vatTuId: this.thocIdDefault,
+          id: 0
+        },
+      ]
+      this.dataMuoi.forEach(element => {
+        if (element) {
+          if (!element.tkdnMuoi) {
+            element.tkdnMuoi = cloneDeep(tkdnMuoi);
+          }
+          if (!element.xtnMuoi) {
+            element.xtnMuoi = cloneDeep(tkdnMuoi);
+          }
+          if (!element.xtnMuoiDc) {
+            element.xtnMuoiDc = cloneDeep(tkdnMuoi);
+          }
+        }
+      });
+    }
   }
 }

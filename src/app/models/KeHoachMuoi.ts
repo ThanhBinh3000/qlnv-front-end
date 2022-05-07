@@ -4,6 +4,7 @@ export class KeHoachMuoi {
   stt: number;
   cucId: number;
   cucDTNNKhuVuc: string;
+  tenDonvi: string;
   tkdnTongSoMuoi: number;
   tkdnMuoi: Array<ItemDetail>;
   ntnTongSoMuoi: number;
@@ -18,4 +19,6 @@ export class KeHoachMuoi {
   id: number;
   nhapTrongNam: string;
   isEdit: boolean;
+  ntnTongSoMuoiDc: number;
+  xtnMuoiDc: Array<ItemDetail>;
 }
