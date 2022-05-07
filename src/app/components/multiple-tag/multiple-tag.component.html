@@ -10,6 +10,7 @@
     </div>
     <div class="select-tag" (click)="selectData()" nz-col [nzSpan]="2">
         <i class="icon" [ngClass]="icon"></i>
+        <input type="file" name="abc" class="multi-file-tag" *ngIf="type == 'file'" (change)="getNameFile($event)">
         {{buttonName}}
     </div>
 </div>

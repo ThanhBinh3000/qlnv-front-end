@@ -37,6 +37,7 @@
         color: #19797b;
         font-size: 13px;
         padding-top: 3px;
+        cursor: pointer;
       }
     }
   }
@@ -51,10 +52,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
+    cursor: pointer;
     .icon {
       margin-right: 10%;
       font-size: 14px;
     }
+  }
+  input[type='file']::-webkit-file-upload-button {
+    cursor: pointer;
+  }
+  .multi-file-tag {
+    position: absolute;
+    height: 24px;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
   }
 }

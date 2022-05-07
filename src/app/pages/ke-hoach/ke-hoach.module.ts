@@ -1,3 +1,4 @@
+import { ThongTinChiTieuKeHoachNamComponent } from './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +17,7 @@ import { MultipleTagComponent } from 'src/app/components/multiple-tag/multiple-t
     DieuChinhThongTinChiTieuKeHoachNamComponent,
     DieuChinhChiTieuKeHoachNamComponent,
     MultipleTagComponent,
+    ThongTinChiTieuKeHoachNamComponent,
   ],
   imports: [
     CommonModule,
@@ -25,4 +27,4 @@ import { MultipleTagComponent } from 'src/app/components/multiple-tag/multiple-t
     NzAffixModule,
   ],
 })
-export class KeHoachModule { }
+export class KeHoachModule {}

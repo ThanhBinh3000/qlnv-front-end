@@ -1,4 +1,4 @@
-@import "../../assets/scss/default.scss";
+@import '../../assets/scss/default.scss';
 $font-size: $font-size13;
 $f14: $font-size14;
 
@@ -73,7 +73,7 @@ $f14: $font-size14;
 }
 
 .color-dot:before {
-  content: "";
+  content: '';
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -482,8 +482,9 @@ button.btn.btn-primary.collapsnav {
 
 .ant-input-group-addon .anticon {
   margin-left: -3px;
+  margin-right: 5px;
   padding: 0;
-  display: block;
+  // display: block;
   text-align: center;
   margin-top: -2px;
 }
@@ -642,11 +643,12 @@ app-header {
         word-wrap: break-word;
         background-color: $bg-header2;
         color: $color-menu;
-        box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+        box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%),
+          0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
 
         &:before,
         &:after {
-          content: "";
+          content: '';
           position: absolute;
           display: block;
           overflow: hidden;
@@ -969,7 +971,8 @@ app-header {
   background-clip: padding-box;
   border-radius: 2px;
   outline: 0;
-  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
+    0 9px 28px 8px rgb(0 0 0 / 5%);
 
   .dropdown-menu-right {
     box-shadow: unset !important;
@@ -1012,7 +1015,8 @@ input.form-control {
   border-radius: 3px;
 }
 
-.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select-show-search.ant-select:not(.ant-select-customize-input)
+  .ant-select-selector,
 .ant-form-item-control-input-content {
   min-height: 23px;
   // overflow: hidden;
@@ -1022,7 +1026,8 @@ input.form-control {
   height: 23px;
 }
 
-.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.ant-select-show-search.ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   height: 24px;
 }
 
@@ -1172,11 +1177,15 @@ $cxl-h: 31px;
   margin-right: 10px;
 }
 
-.ant-pagination .ant-select-single.ant-select-show-arrow .ant-select-selection-item {
+.ant-pagination
+  .ant-select-single.ant-select-show-arrow
+  .ant-select-selection-item {
   align-items: center;
 }
 
-.ant-pagination .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.ant-pagination
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   background: $color-f2;
   border: solid 1px $color-f2;
   height: 26px;
@@ -1240,8 +1249,8 @@ $cxl-h: 31px;
 .ant-table-column-has-sorters {
   .ant-table-column-sorter-up {
     &:before {
-      content: "\f07d";
-      font-family: "FontAwesome";
+      content: '\f07d';
+      font-family: 'FontAwesome';
       display: block;
       line-height: 0.5;
     }
@@ -1252,13 +1261,13 @@ $cxl-h: 31px;
 
     .ant-table-column-sorter-up {
       &:before {
-        content: "\f175";
+        content: '\f175';
         color: $maincolor;
       }
 
       &.active {
         &:before {
-          content: "\f176";
+          content: '\f176';
           color: $maincolor;
         }
       }
@@ -1443,7 +1452,8 @@ span.ant-descriptions-item-content {
 }
 
 .ant-modal-content {
-  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 30%), 0 6px 16px 0 rgb(0 0 0 / 20%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 30%), 0 6px 16px 0 rgb(0 0 0 / 20%),
+    0 9px 28px 8px rgb(0 0 0 / 5%);
 }
 
 .modal-confirm {
@@ -1728,7 +1738,7 @@ table tr {
 }
 
 .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active:before {
-  content: "";
+  content: '';
   position: absolute;
   height: 2px;
   left: 0;
@@ -1770,7 +1780,9 @@ table tr {
   margin-top: 12px $i;
 }
 
-.ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header {
+.ant-collapse
+  > .ant-collapse-item.ant-collapse-no-arrow
+  > .ant-collapse-header {
   background: $color-fb;
   border-bottom: none $i;
   align-items: center;
@@ -1783,13 +1795,19 @@ table tr {
   border-top-right-radius: 4px;
 }
 
-.ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header[aria-expanded="false"] {
+.ant-collapse
+  > .ant-collapse-item.ant-collapse-no-arrow
+  > .ant-collapse-header[aria-expanded='false'] {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom: solid 1px $border-bnt $i;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-extra button {
+.ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-extra
+  button {
   background: transparent; //$bg-nhat2
   padding: 0 10px;
   border-radius: 3px;
@@ -1843,7 +1861,11 @@ table tr {
   display: none;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-extra button:hover {
+.ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header
+  .ant-collapse-extra
+  button:hover {
   color: $maincolor;
   background: #fff;
   border-color: $border-nhat2 $i;

@@ -125,6 +125,11 @@
     pointer-events: none;
     opacity: 0.5;
   }
+  .thong-tin-chi-tieu {
+    .ant-form-item-label > label {
+      height: 24px !important;
+    }
+  }
 }
 .thong-tin-chi-tieu {
   border: 1px solid #e0e0e0;
