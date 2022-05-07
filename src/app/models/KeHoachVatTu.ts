@@ -17,6 +17,7 @@ export class KeHoachVatTu {
   chiTieuNhapCacNamTruoc: Array<ItemDetail>;
   keHoachNamHienTai: number;
   isEdit: boolean;
+  keHoachNamHienTaiDc: number;
 }
 
 export class NhomVatTuThietBi {
