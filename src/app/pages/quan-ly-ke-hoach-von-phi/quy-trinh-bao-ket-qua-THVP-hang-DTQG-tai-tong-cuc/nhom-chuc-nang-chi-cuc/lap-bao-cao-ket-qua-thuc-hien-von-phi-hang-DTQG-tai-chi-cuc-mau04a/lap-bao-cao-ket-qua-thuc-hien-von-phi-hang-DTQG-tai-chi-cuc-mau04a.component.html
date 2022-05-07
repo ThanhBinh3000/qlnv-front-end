@@ -25,20 +25,21 @@
               <td>{{baoCao.dotBcao}}</td>
               <ng-container>
                 <td>
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <input type="file" class="search__input">
+                <!-- <nz-upload [(nzFileList)]="fileListBieuSo" [nzBeforeUpload]="beforeUploadBieuSo" [hidden]="status" >
                   <button nz-button style="margin-top:15px">
                     <i nz-icon nzType="upload"></i>
                     Upload File
                   </button>
                 </nz-upload>
-                <!-- <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="fileListBieuSo.length === 0"
                   [hidden]="status" style="margin-top: 16px">
                   Thêm vào danh sách
-                </button> -->
+                </button>
                 <button nz-button style="margin-top:15px" (click)="downloadFile('1')">
                   <i nz-icon nzType="download"></i>
                   Download
-                </button>
+                </button> -->
               </td>
               </ng-container>
               <ng-template>
@@ -97,7 +98,7 @@
           <span>Đơn vị cấp trên chấp thuận</span>
         </a>
         <a class="btn btn-main" 
-					[hidden]="statusBtnCopy">
+					[hidden]="statusBtnCopy" (click)="doCopy()">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
@@ -252,6 +253,41 @@
       <!-- Table mẫu báo cáo 02 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo nhập mua hàng dự trữ quốc gia"
         [nzExtra]="tableCard3" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao1">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="4">
+            Ngày lập:
+            <nz-date-picker class="search__input" [(ngModel)]="ngayLap02"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            Đến ngày:
+            <nz-date-picker class="search__input" [(ngModel)]="denNgay02"></nz-date-picker>
+          </div>
+          
+          <div nz-col nzSpan="8">
+             Thuyết minh:
+             <br>
+             <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+          </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -544,6 +580,40 @@
       <!--Table mẫu báo cáo 03 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo xuất hàng dự trữ quốc gia"
         [nzExtra]="tableCard4" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao2">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="4">
+            Ngày lập:
+            <nz-date-picker class="search__input" [(ngModel)]="ngayLap03"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            Đến ngày:
+            <nz-date-picker class="search__input" [(ngModel)]="denNgay03"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -965,6 +1035,32 @@
       <!--Table mẫu báo cáo 04a-x -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG"
         [nzExtra]="tableCard5" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao3">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1233,6 +1329,32 @@
       <!--Table mẫu báo cáo 04a-n -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí nhập mua hàng DTQG"
         [nzExtra]="tableCard6" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao4">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1501,6 +1623,32 @@
       <!--Table mẫu báo cáo 04bx -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ"
         [nzExtra]="tableCard7" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao5">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1768,6 +1916,32 @@
       <!--Table mẫu báo cáo 05 -->
       <nz-card nzTitle="Báo Cáo: - Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG"
         [nzExtra]="tableCard8" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao6">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donvitien">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donvitien" [class]="donvitien ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>

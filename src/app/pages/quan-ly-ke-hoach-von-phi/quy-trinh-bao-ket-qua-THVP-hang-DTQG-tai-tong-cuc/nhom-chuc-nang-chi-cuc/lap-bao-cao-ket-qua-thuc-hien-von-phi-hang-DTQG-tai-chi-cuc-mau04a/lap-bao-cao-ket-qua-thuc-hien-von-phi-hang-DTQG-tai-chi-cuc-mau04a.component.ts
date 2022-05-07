@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
+import { DONVITIEN, NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { DatePipe, Location } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -18,6 +18,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { throwIfEmpty } from 'rxjs/operators';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 
 export class ItemDanhSach {
@@ -190,6 +191,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   //-------------
   id: any;
   fileList: NzUploadFile[] = [];
+  fileListBieuSo: NzUploadFile[] = [];
   lstFile: any[] = [];
   listFile: File[] = [];
   fileToUpload!: File;
@@ -203,7 +205,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   nho: boolean;
   tab =TAB_SELECTED;
   tabSelected: number;
-
+  listDonViTien:any []=DONVITIEN;
 
   totalElements = 0;
   totalPages = 0;
@@ -253,7 +255,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   stt: number;
   kt: boolean;
   
-  
+  fileBieuSo:File;
   listIdFiles: string;
   statusButton: boolean = false;
   maDvi:any;
@@ -267,6 +269,10 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   //khai thac bao cao
   checkxemkhaithac:any;
   
+  ngayLap02:Date;
+  denNgay02:Date;
+  ngayLap03:Date;
+  denNgay03:Date;
 
   lstDeleteCTietBCao: any = [];
   lstIdDeleteMau02:string= '';
@@ -374,11 +380,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     }
      else {
       //tạo mã báo cáo
-      this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
+     await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {            
-            this.baoCao.maBcao = res.data.data;
-            // this.notification.success(MESSAGE.SUCCESS, res?.msg);
+            this.baoCao.maBcao = res.data;
+            console.log(this.baoCao);
+            
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -918,7 +925,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   async luu() {
     this.baoCao.lstBCao.forEach((e) => {
-      
       if (typeof e.id != 'number') {
         e.id = null;
       }
@@ -949,11 +955,19 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
-
+    //fake dữ liệu test biểu mẫu
+    let objCongVan ={
+     
+        fileName: 'hiuhiu',
+        fileSize: 1505,
+        fileUrl: 'PLinh/170198/',
+      
+    }
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
       fileDinhKems: listFile,
+      congVan:objCongVan,
       lstDeleteCTietBCao: this.lstDeleteCTietBCao,
       listColDeleteVtus:this.lstIdDeleteCols,
       listIdDeleteFiles: this.baoCao.listIdDeleteFiles,
@@ -1873,7 +1887,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             }
           });
           this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
-          console.log(this.lstCTietBCao04ax);
           var listCols =[];
           for(var i =0; i< this.lstCTietBCao04ax.length; i++){
           
@@ -1905,7 +1918,6 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
             listCols.forEach( el =>{
               var idx = this.lstCTietBCao04ax[i].listCtiet.findIndex(item => item.maVtu == el);
               var u = this.lstCTietBCao04ax[i-1]?.listCtiet.find(item => item.maVtu ==el);
-              console.log(u);
               
               if(idx==-1){
                 obJChiTiet1.maVtu=el;
@@ -2296,16 +2308,18 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.fileList = this.fileList.concat(file);
     return false;
   };
-
+  
+  
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
       this.lstFile.push({ id: id, fileName: file?.name });
       this.listFile.push(file);
     });
-    this.fileList = [];
+    this.fileList = [];    
   }
 
+  
   //event ng dung thay doi file
   selectFile(files: FileList): void {
     this.fileToUpload = files.item(0);
@@ -2369,6 +2383,99 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     this.pages.size = size;
   }
 
+
+  async doCopy(){
+    this.spinner.show();
+    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          return data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          return null;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        return null;
+      }
+    );
+    if (!maBaoCao) {
+      return;
+    }
+
+    this.baoCao.lstBCao.forEach((e) => {
+      if (typeof e.id != 'number') {
+        e.id = null;
+      }
+
+      e.lstCTietBCao.forEach(el => {
+        if (typeof el.id != 'number') {
+          el.id = null;
+        }
+        if(el.maLoai=='6' || el.maLoai=='7' ||el.maLoai=='8' || el.maLoai=='9'){
+          el.listCtiet.forEach(element=>{
+            if (typeof element.id != 'number') {
+              element.id = null;
+            }
+          })
+        }
+      })
+    });
+
+    if (this.donvitien == undefined) {
+      this.donvitien = '01';
+    }
+    let listFile: any = [];
+    for (const iterator of this.listFile) {
+      listFile.push(await this.uploadFile(iterator));
+    }
+    let baoCaoTemp:ItemDanhSach;
+    baoCaoTemp = Object.assign({}, this.baoCao);
+        
+    let request = {
+      id: null,
+      fileDinhKems:listFile,
+      lstDeleteCTietBCao: null,
+      listColDeleteVtus:null,
+      listIdDeleteFiles: null,
+      lstBCao: baoCaoTemp.lstBCao,
+      maBcao:maBaoCao,
+      maDvi:this.maDonViTao,
+      maDviTien: this.donvitien,
+      maLoaiBcao: this.maLoaiBaocao,
+      maPhanBcao:this.maPhanBcao,
+      namBcao:this.baoCao.namBcao,
+      namHienHanh: this.nam,
+      dotBcao:this.baoCao.dotBcao,
+    };
+
+    this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          const modalCopy = this.modal.create({
+            nzTitle: MESSAGE.ALERT,
+            nzContent: DialogCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              maBcao: maBaoCao
+            },
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+          this.spinner.hide();
+        }
+      },
+      err => {
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    this.spinner.hide();
+  }
   //thao tác bảng mau 04a -5
 
   //khoi tao
