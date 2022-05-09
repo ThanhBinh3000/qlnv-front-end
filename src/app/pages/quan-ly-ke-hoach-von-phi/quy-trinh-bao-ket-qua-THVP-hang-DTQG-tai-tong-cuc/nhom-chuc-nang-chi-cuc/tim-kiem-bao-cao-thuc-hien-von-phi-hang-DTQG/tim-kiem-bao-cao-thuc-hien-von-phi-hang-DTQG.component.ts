@@ -212,7 +212,7 @@ async getUserInfo(username: string) {
       return;
     }
     else{
-      this.router.navigate(['qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn'+this.url + this.searchFilter.maLoaiBcao+"/"+this.searchFilter.namBcao+"/"+this.searchFilter.dotBcao]);
+      this.router.navigate(['qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn'+this.url + this.searchFilter.maLoaiBcao+"/"+this.searchFilter.namBcao]);
     }
   }
 

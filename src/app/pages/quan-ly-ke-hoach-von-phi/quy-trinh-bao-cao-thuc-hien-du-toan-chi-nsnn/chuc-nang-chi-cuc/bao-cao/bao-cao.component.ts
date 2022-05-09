@@ -23,6 +23,7 @@ import { PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
   id!: any;
   maLoai!: number;
+  maDviTien!: any;
   lstCTietBCao!: any;
   trangThai!: string;
   checked!: boolean;
@@ -38,7 +39,6 @@ export class ItemDanhSach {
   trangThai!: string;
   ngayTao!: string;
   nguoiTao!: string;
-  maDviTien!: string;
   maDvi: number;
   congVan!: string;
   ngayTrinh!: string;
@@ -198,7 +198,7 @@ export class BaoCaoComponent implements OnInit {
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
 
-  maDviTien: string = "01";                   // ma don vi tien
+  maDviTien: string = "1";                   // ma don vi tien
   newDate = new Date();                       //
   fileToUpload!: File;                        // file tai o input
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -268,7 +268,7 @@ export class BaoCaoComponent implements OnInit {
       this.quanLyVonPhiService.taoMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
-            this.baoCao.maBcao = data.data.data;
+            this.baoCao.maBcao = data.data;
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -289,7 +289,7 @@ export class BaoCaoComponent implements OnInit {
       this.quanLyVonPhiService.taoMaBaoCao().subscribe(
         (data) => {
           if (data.statusCode == 0) {
-            this.baoCao.maBcao = data.data.data;
+            this.baoCao.maBcao = data.data;
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -312,7 +312,8 @@ export class BaoCaoComponent implements OnInit {
           maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
           trangThai: '2',
-          lstCTietBCao: []
+          lstCTietBCao: [],
+          maDviTien: '1'
         });
       })
     }
@@ -449,8 +450,6 @@ export class BaoCaoComponent implements OnInit {
           this.lstFile = data.data.lstFile;
           this.listFile = [];
           this.maDonViTao = data.data.maDvi;
-          this.maDviTien = data.data.maDviTien;
-
           if (this.baoCao.trangThai == Utils.TT_BC_1 ||
             this.baoCao.trangThai == Utils.TT_BC_3 ||
             this.baoCao.trangThai == Utils.TT_BC_5 ||
@@ -648,7 +647,6 @@ export class BaoCaoComponent implements OnInit {
       element.value = null;
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -657,7 +655,9 @@ export class BaoCaoComponent implements OnInit {
   // doi tab
   changeTab(maPhuLuc, trangThaiChiTiet) {
     this.tabSelected = maPhuLuc;
-    this.danhSachChiTietPhuLucTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
+    let lstBCaoTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc);
+    this.danhSachChiTietPhuLucTemp = lstBCaoTemp?.lstCTietBCao;
+    this.maDviTien = lstBCaoTemp?.maDviTien;
     this.trangThaiChiTiet = trangThaiChiTiet
     this.getStatusButtonOk();
   }
@@ -874,7 +874,8 @@ export class BaoCaoComponent implements OnInit {
               maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
               trangThai: '2',
-              lstCTietBCao: []
+              lstCTietBCao: [],
+              maDviTien: '1'
             });
           }
         })
@@ -926,25 +927,8 @@ export class BaoCaoComponent implements OnInit {
     return false;
   };
 
-  // deleteReport() {
-  // 	if (this.id) {
-  // 		this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
-  // 			if (res.statusCode == 0) {
-  // 				this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-  // 				this.location.back();
-  // 			} else {
-  // 				this.notification.error(MESSAGE.ERROR, res?.msg);
-  // 			}
-  // 		}, err => {
-  // 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  // 		})
-  // 	} else {
-  // 		this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-  // 	}
-  // }
-
   // luu
-  async luu() {
+  async save() {
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -1276,9 +1260,7 @@ export class BaoCaoComponent implements OnInit {
     }
     this.stt = 0;
     this.updateSTT(this.chiTietBcaosPL1);
-    console.log(this.chiTietBcaosPL1);
     this.updateLstCTietBCaoPL1();
-    console.log(this.lstCTietBCaoPL1);
     this.disable = false;
   }
 
@@ -1538,7 +1520,6 @@ export class BaoCaoComponent implements OnInit {
     }
     this.stt = 0;
     this.updateSTT(this.chiTietBcaosPL1);
-    console.log(this.chiTietBcaosPL1);
     this.updateLstCTietBCaoPL1();
     this.disable = false;
   }
@@ -1831,7 +1812,7 @@ export class BaoCaoComponent implements OnInit {
 
   async doCopy() {
     this.spinner.show();
-    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+    let maBaoCao = await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           return data.data;
@@ -1851,10 +1832,6 @@ export class BaoCaoComponent implements OnInit {
     }
 
     let baoCaoTemp = Object.assign({}, this.baoCao);
-        
-    console.log(baoCaoTemp);
-    console.log(this.baoCao);
-    
     baoCaoTemp.id = null;
     baoCaoTemp.maBcao = maBaoCao;
     baoCaoTemp?.lstBCao?.filter(item => {
@@ -1888,12 +1865,8 @@ export class BaoCaoComponent implements OnInit {
       }
     })
 
-            
-    console.log(baoCaoTemp);
-    console.log(this.baoCao);
     //call service them moi
     this.spinner.show();
-
     this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
       async data => {
         if (data.statusCode == 0) {

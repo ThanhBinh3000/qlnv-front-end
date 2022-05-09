@@ -395,9 +395,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
      await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (res) => {
           if (res.statusCode == 0) {            
-            this.baoCao.maBcao = res.data;
-            console.log(this.baoCao);
-            
+            this.baoCao.maBcao = res.data;            
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -969,9 +967,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     }
    
     let objCongVan ={
-          fileName: this.congVan.filename,
-          fileSize: this.congVan.size,
-          fileUrl: this.congVan.url,
+          fileName: this.congVan?.filename,
+          fileSize: this.congVan?.size,
+          fileUrl: this.congVan?.url,
     }
    
     // gui du lieu trinh duyet len server
@@ -2408,7 +2406,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   async doCopy(){
     this.spinner.show();
-    let maBaoCao = await this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+    let maBaoCao = await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           return data.data;
@@ -2448,16 +2446,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     // if (this.donvitien == undefined) {
     //   this.donvitien = '01';
     // }
-    let listFile: any = [];
-    for (const iterator of this.listFile) {
-      listFile.push(await this.uploadFile(iterator));
-    }
+
     let baoCaoTemp:ItemDanhSach;
     baoCaoTemp = Object.assign({}, this.baoCao);
         
     let request = {
       id: null,
-      fileDinhKems:listFile,
+      fileDinhKems:null,
       lstDeleteCTietBCao: null,
       listColDeleteVtus:null,
       listIdDeleteFiles: null,
