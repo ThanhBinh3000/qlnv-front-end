@@ -17,6 +17,7 @@ export class KeHoachVatTu {
   chiTieuNhapCacNamTruoc: Array<ItemDetail>;
   keHoachNamHienTai: number;
   isEdit: boolean;
+  keHoachNamHienTaiDc: number;
   maDonVi: string;
   constructor(vatTuThietBi: Array<VatTuThietBi> = []) {
     this.vatTuThietBi = vatTuThietBi;

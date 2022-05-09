@@ -118,36 +118,11 @@
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
-              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="htvbdh_tcdt_tep"
-                [data]="dataTag" (selectDataEvent)="selectDataMultipleTag($event)"
-                (removeDataEvent)="deleteDataMultipleTag($event)">
+              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
+                (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
               </multiple-tag>
             </div>
-            <!-- <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
-              <nz-upload nzAction="{{urlUploadFile}}" [nzFileList]="fileList" [nzMultiple]="true" [nzSize]="1024"
-                (nzChange)="handleChange($event)" [nzFileListRender]="fileListTpl"
-                nzAccept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                <button class="btn btn-tep btn-sm waves-effect waves-light"
-                  [disabled]="!(dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.qdDc.trangThai == '03')">
-                  <i class="icon htvbdh_tcdt_tep"></i>
-                  <span>File đính kèm</span>
-                </button>
-                <ng-template #fileListTpl let-list>
-                  <nz-list>
-                    <nz-list-item *ngFor="let item of list">
-                      <div class="trai">
-                        {{ item.name }}
-                      </div>
-                      <div class="phai">
-                        <a (click)="xoaFile(item)">
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </div>
-                    </nz-list-item>
-                  </nz-list>
-                </ng-template>
-              </nz-upload>
-            </div> -->
           </div>
         </nz-card>
       </form>
@@ -957,12 +932,12 @@
                   <td>{{(keHoachMuoiCreate?.xtnMuoi[2]?.soLuong + keHoachMuoiCreate?.xtnMuoiDc[2]?.soLuong) | number:
                     '1.0-1'}}</td>
                   <td>0</td>
-                  <td class="background-last-row"
+                  <td
                     *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
-                    <a class="save" (click)="themMoiKHMuoi()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                    <a class="save" (click)="themMoiKHMuoi()" [ngClass]="{'isDisabled': !isAddMuoi}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
-                    <a (click)="loadDefaultMuoiNew()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
+                    <a (click)="loadDefaultMuoiNew()" [ngClass]="{'isDisabled': !isAddMuoi}">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -1204,11 +1179,99 @@
               </thead>
               <tbody>
                 <tr>
-
+                  <td></td>
+                  <td>
+                    <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+                      <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                        class="search__input autocomplete__input donvi__input w-300">
+                        <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input
+                          (input)="onInput($event,'vat-tu')" [nzAutocomplete]="autoDonViVatTu" class=""
+                          [(ngModel)]="keHoachVatTuCreate.tenDonVi" />
+                      </nz-input-group>
+                      <ng-template #suffixIcon>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                      <nz-autocomplete #autoDonViVatTu>
+                        <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                          (click)="selectDonViVatTu(option)">
+                          {{ option.labelDonVi }}
+                        </nz-auto-option>
+                      </nz-autocomplete>
+                    </nz-form-control>
+                  </td>
+                  <td>{{vatTuThietBiCreate.maVatTuCha}}</td>
+                  <td>{{keHoachVatTuCreate.kyHieu}}</td>
+                  <td>
+                    <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+                      <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                        class="search__input autocomplete__input donvi__input w-300">
+                        <input placeholder="Chọn tên" nz-input (input)="onInputTenHang($event)"
+                          [nzAutocomplete]="autoVatTu" class="" [(ngModel)]="keHoachVatTuCreate.tenHang"
+                          [title]="keHoachVatTuCreate.tenHang ? keHoachVatTuCreate.tenHang : ''" />
+                      </nz-input-group>
+                      <ng-template #suffixIcon>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                      <nz-autocomplete #autoVatTu>
+                        <nz-auto-option *ngFor="let vatTuCha of dataVatTuChaShow" [nzValue]="vatTuCha.ten"
+                          (click)="selectTenHang(vatTuCha)">
+                          {{ vatTuCha.ten }}
+                        </nz-auto-option>
+                      </nz-autocomplete>
+                    </nz-form-control>
+                  </td>
+                  <td>
+                    <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+                      <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                        class="search__input autocomplete__input donvi__input w-300">
+                        <input placeholder="Chọn chủng loại hàng" nz-input (input)="onInputChungLoaiHang($event)"
+                          [nzAutocomplete]="autoChungLoaiHang" class="" [(ngModel)]="keHoachVatTuCreate.chungLoaiHang"
+                          [title]="keHoachVatTuCreate.chungLoaiHang ? keHoachVatTuCreate.chungLoaiHang : ''" />
+                      </nz-input-group>
+                      <ng-template #suffixIcon>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                      <nz-autocomplete #autoChungLoaiHang>
+                        <nz-auto-option *ngFor="let vatTuCon of dataVatTuConShow" [nzValue]="vatTuCon.ten"
+                          (click)="selectChungLoaiHang(vatTuCon)">
+                          {{ vatTuCon.ten }}
+                        </nz-auto-option>
+                      </nz-autocomplete>
+                    </nz-form-control>
+                  </td>
+                  <td>{{keHoachVatTuCreate.donViTinh}}</td>
+                  <td>{{keHoachVatTuCreate.tongChiTieuNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.tongChiTieuCacnamTruoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[0].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[1].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[2].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.keHoachNamHienTai ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <nz-input-number [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input class="w-120"
+                      [nzSize]="'small'" [(ngModel)]="keHoachVatTuCreate.keHoachNamHienTaiDc">
+                    </nz-input-number>
+                  </td>
+                  <td>{{(keHoachVatTuCreate.tongChiTieuNhapTrongNam ?? 0) + (keHoachVatTuCreate.keHoachNamHienTaiDc ??
+                    0) | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.tongChiTieuCacnamTruoc ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[0].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[1].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{keHoachVatTuCreate.chiTieuNhapCacNamTruoc[2].soLuong ?? 0 | number: '1.0-1'}}</td>
+                  <td>{{(keHoachVatTuCreate.keHoachNamHienTai ?? 0) + (keHoachVatTuCreate.keHoachNamHienTaiDc ?? 0) |
+                    number: '1.0-1'}}</td>
+                  <td
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                    <a class="save" (click)="themMoiKHVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a (click)="loadDefaultVatTuNew()" [ngClass]="{'isDisabled': !isAddVatTu}">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
                 </tr>
-                <ng-container *ngFor="let itemVatTu of groupingTableVatTuSau.data">
+                <ng-container *ngFor="let itemVatTu of groupingTableVatTuSau.data;let i = index">
                   <tr>
-                    <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.stt}}</td>
+                    <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{ (page - 1) * pageSize + i + 1 }}</td>
                     <td [attr.rowspan]="rowSpanVatTu(itemVatTu)">{{itemVatTu.tenDonVi}}</td>
                   </tr>
                   <ng-container *ngFor="let item of itemVatTu.listDisplay">
@@ -1219,11 +1282,11 @@
                           *ngIf="item.level > 0 && item.hasChild && !item.expand">+</a>
                         <a (click)="displayChildTong(item, itemVatTu, false)"
                           *ngIf="item.level > 0 && item.hasChild && item.expand">-</a>
-                        {{item.tenVatTu}}
+                        {{item.maVatTuCha}}
                       </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{{item.kyHieu}}</td>
+                      <td>{{item.tenHang}}</td>
+                      <td>{{item.chungLoaiHang}}</td>
                       <td>{{item.donViTinh}}</td>
                       <td>{{item.tongNhap}}</td>
                       <td>{{item.tongCacNamTruoc}}</td>
