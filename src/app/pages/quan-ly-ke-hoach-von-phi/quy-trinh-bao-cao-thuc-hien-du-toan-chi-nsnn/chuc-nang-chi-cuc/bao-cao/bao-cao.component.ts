@@ -927,27 +927,8 @@ export class BaoCaoComponent implements OnInit {
     return false;
   };
 
-  // deleteReport() {
-  // 	if (this.id) {
-  // 		this.quanLyVonPhiService.xoaBaoCao(this.id).toPromise().then(async res => {
-  // 			if (res.statusCode == 0) {
-  // 				this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-  // 				this.location.back();
-  // 			} else {
-  // 				this.notification.error(MESSAGE.ERROR, res?.msg);
-  // 			}
-  // 		}, err => {
-  // 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  // 		})
-  // 	} else {
-  // 		this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-  // 	}
-  // }
-
   // luu
   async save() {
-
-    
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
