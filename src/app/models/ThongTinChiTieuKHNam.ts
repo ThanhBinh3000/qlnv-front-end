@@ -1,6 +1,7 @@
 import { KeHoachVatTu } from './KeHoachVatTu';
 import { KeHoachMuoi } from './KeHoachMuoi';
 import { KeHoachLuongThuc } from './KeHoachLuongThuc';
+import { FileDinhKem } from './FileDinhKem';
 export class ThongTinChiTieuKeHoachNam {
   id: number;
   namKeHoach: number;
@@ -16,6 +17,10 @@ export class ThongTinChiTieuKeHoachNam {
   ghiChu: string;
   khMuoi: Array<KeHoachMuoi> = [];
   canCu: string;
+  fileDinhKemReqs: Array<FileDinhKem>;
+  constructor(fileDinhKemReqs: Array<FileDinhKem> = []) {
+    this.fileDinhKemReqs = fileDinhKemReqs;
+  }
 }
 export class TonKhoDauNamLuongThuc {
   maDonVi: string;

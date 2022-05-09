@@ -1457,7 +1457,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu) {
       let indexExist =
         this.dieuChinhThongTinChiTieuKHNam.qdDc.khVatTu.findIndex(
-          (x) => x.maDonVi == data.maDonVi,
+          (x) => x.maDvi == data.maDonVi,
         );
       if (indexExist != -1) {
         let nhomVatTuTemp = [];
