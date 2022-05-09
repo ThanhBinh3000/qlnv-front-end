@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
@@ -17,7 +17,6 @@ import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { throwIfEmpty } from 'rxjs/operators';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 
 
@@ -206,7 +205,8 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   tab =TAB_SELECTED;
   tabSelected: number;
   listDonViTien:any []=DONVITIEN;
-
+  congVan:any;
+  checkCongVan:boolean = true;
   totalElements = 0;
   totalPages = 0;
   pages = {
@@ -244,7 +244,19 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
 
   maBcao:any;
   maDonViTao:any;
-  donvitien: any;
+  donViTien02: string='';
+  donViTien03:string='';
+  donViTien04ax:string='';
+  donViTien04an:string='';
+  donViTien04bx:string='';
+  donViTien05:string='';
+  thuyetMinh02:string='';
+  thuyetMinh03:string='';
+  thuyetMinh04ax:string='';
+  thuyetMinh04an:string='';
+  thuyetMinh04bx:string='';
+  thuyetMinh05:string='';
+  
   trangThaiBanGhi:any;
   
   listVattu: any[] = [];
@@ -944,9 +956,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     });
     
     // donvi tien
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+    // if (this.donvitien == undefined) {
+    //   this.donvitien = '01';
+    // }
 
     
 
@@ -955,14 +967,13 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
-    //fake dữ liệu test biểu mẫu
+   
     let objCongVan ={
-     
-        fileName: 'hiuhiu',
-        fileSize: 1505,
-        fileUrl: 'PLinh/170198/',
-      
+          fileName: this.congVan.filename,
+          fileSize: this.congVan.size,
+          fileUrl: this.congVan.url,
     }
+   
     // gui du lieu trinh duyet len server
     let request = {
       id: this.id,
@@ -974,7 +985,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       lstBCao: this.baoCao.lstBCao,
       maBcao:this.baoCao.maBcao,
       maDvi:this.maDonViTao,
-      maDviTien: this.donvitien,
+      // maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBaocao,
       maPhanBcao:this.maPhanBcao,
       namBcao:this.baoCao.namBcao,
@@ -1447,10 +1458,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
           this.baoCao.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh,Utils.FORMAT_DATE_STR);
           this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR)
           this.baoCao.trangThai = data.data.trangThai;
-          this.donvitien = data.data.maDviTien;
+          // this.donvitien = data.data.maDviTien;
           this.maLoaiBaocao = data.data.maLoaiBcao;
           this.maDonViTao = data.data.maDvi;
           this.lstFile = data.data.lstFile;
+          this.baoCao.congVan = data.data.congVan;
+          if(this.baoCao.congVan){
+            this.checkCongVan = false;
+          }
           this.trangThaiBanGhi = data.data.trangThai;
           if(this.maLoaiBaocao=='1'){
             this.baoCao?.lstBCao?.forEach(item => {
@@ -2373,7 +2388,14 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       );
     return temp;
   }
-
+  handleChange(info: NzUploadChangeParam): void {
+    if (info.file.status === 'done') {
+      this.congVan = info.file.response;
+    } else if (info.file.status === 'error') {
+      info.fileList =[];
+    }
+  }
+  
   onPageIndexChange(page) {
     this.pages.page = page;
   }
@@ -2423,9 +2445,9 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       })
     });
 
-    if (this.donvitien == undefined) {
-      this.donvitien = '01';
-    }
+    // if (this.donvitien == undefined) {
+    //   this.donvitien = '01';
+    // }
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
@@ -2442,7 +2464,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       lstBCao: baoCaoTemp.lstBCao,
       maBcao:maBaoCao,
       maDvi:this.maDonViTao,
-      maDviTien: this.donvitien,
+      // maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBaocao,
       maPhanBcao:this.maPhanBcao,
       namBcao:this.baoCao.namBcao,
