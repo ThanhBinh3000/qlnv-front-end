@@ -26,6 +26,7 @@ export function convertTrangThaiUser(status: string): string {
   } else if (status == '01') {
     return 'Mở khóa';
   }
+  return '';
 }
 
 // public static final String TAO_MOI = "00";

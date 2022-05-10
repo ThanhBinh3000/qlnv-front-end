@@ -11,6 +11,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LoaiDanhMuc } from 'src/app/constants/status';
 
 
 @Component({
@@ -22,9 +24,12 @@ export class ThemMoiNSDComponent implements OnInit {
   public formGroup: FormGroup;
   statusValue = "A"
   data: any;
+  detail: any;
   comfirmPass: any;
   options: any[] = [];
   optionsDonVi: any[] = [];
+  LoaiNSD: any;
+  inputDonVi: string = '';
   constructor(
     private fb: FormBuilder,
     private helperService: HelperService,
@@ -35,18 +40,33 @@ export class ThemMoiNSDComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalRef,
+    private _danhmucService: DanhMucService
   ) {
-
-
+    this._danhmucService.danhMucChungGetAll(LoaiDanhMuc.VAI_TRO).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.LoaiNSD = res.data
+      }
+    });
 
 
   }
 
   ngOnInit(): void {
-    // console.log(this.userInfo)
-
     this.initForm()
     this.laytatcadonvi()
+    if (this.data) {
+      this.qlNSDService.userInfo({ "str": this.data }).then(res => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.data = res.data;
+          this.initForm()
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        this.spinner.hide();
+      })
+    }
+
+
 
   }
 
@@ -63,7 +83,16 @@ export class ThemMoiNSDComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
+          // nếu dữ liệu detail có 
+          if (this.data) {
+            if (res.data[i].maDvi == this.data.dvql) {
+              this.data.dvql = res.data[i].maDvi + ' - ' + res.data[i].tenDvi
+              debugger
+              this.initForm()
+            }
+          }
         }
+
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -90,18 +119,18 @@ export class ThemMoiNSDComponent implements OnInit {
     this.formGroup = this.fb.group({
       "chucvuId": [this.data?.chucvuId ?? 0],
       "dvql": [this.data?.dvql ?? "", Validators.required],
-      "email": [this.data?.email ?? ""],
-      "fullName": [this.data?.fullName ?? ""],
+      "email": [this.data?.email ?? "", Validators.required],
+      "fullName": [this.data?.fullName ?? "", Validators.required],
       "groupId": [this.data?.groupId ?? 0, Validators.required],
-      "groupsArr": [this.data?.groupsArr ?? ""],
+      "groupsArr": [this.data?.groupsArr ?? "string"],
       "password": [this.data?.password ?? "", Validators.required],
       "cfpassword": ["", Validators.required],
-      "phoneNo": [this.data?.phoneNo ?? ""],
-      "status": [this.data?.status ?? ""],
-      "str": [this.data?.str ?? ""],
+      "phoneNo": [this.data?.phoneNo ?? null],
+      "status": [this.data?.status ?? STATUS_USER.HOAT_DONG],
+      "str": [this.data?.str ?? null],
       "sysType": [this.data?.sysType ?? "AD", Validators.required],
-      "token": [this.data?.token ?? ""],
-      "trangThai": [this.data?.trangThai ?? STATUS_USER.HOAT_DONG],
+      "token": [this.data?.token ?? null],
+      "trangThai": [this.data?.trangThai ?? null],
       "username": [this.data?.username ?? "", Validators.required],
     });
   }
@@ -112,17 +141,20 @@ export class ThemMoiNSDComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    let maDonVi = this.formGroup.value.dvql.split('-')[0];
+
     let body = this.formGroup.value
-    body.paggingReq = {
-      "limit": 20,
-      "page": 1
-    },
-      delete body.cfpassword
-    debugger
+
+    body.dvql = maDonVi;
+    delete body.cfpassword
+    if (this.data) {
+      body.id = this.data.id
+    };
+
     let res = await this.qlNSDService.create(body);
-    debugger
     if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      this.notification.success(MESSAGE.SUCCESS, this.data ? MESSAGE.UPDATE_SUCCESS : MESSAGE.ADD_SUCCESS);
+      this.modal.close(true);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
