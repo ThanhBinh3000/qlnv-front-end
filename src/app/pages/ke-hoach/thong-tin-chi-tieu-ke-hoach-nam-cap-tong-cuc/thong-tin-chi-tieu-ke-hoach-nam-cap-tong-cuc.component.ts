@@ -1,3 +1,4 @@
+import { PAGE_SIZE_DEFAULT } from './../../../constants/config';
 import { FileDinhKem } from './../../../models/FileDinhKem';
 import { UploadFileService } from './../../../services/uploaFile.service';
 import { DialogVanBanSanSangBanHanhComponent } from './../../../components/dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
@@ -97,7 +98,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   lastBreadcrumb: string;
   canCuList: any[] = [];
   taiLieuDinhKemList: any[] = [];
-
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
+  keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
+  keHoachMuoiShow: Array<KeHoachMuoi> = [];
+  keHoachVatTuShow: Array<KeHoachVatTu> = [];
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -187,9 +193,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     ];
     this.keHoachVatTuCreate.vatTuThietBi[0].tongCacNamTruoc = 0;
     this.keHoachVatTuCreate.vatTuThietBi[0].tongNhap = 0;
-    this.dataVatTuChaShow = [];
-    this.dataVatTuConShow = [];
-    this.options = [];
   }
   updateDataListVatTu(data: any) {
     for (let j = 0; j < data.length; j++) {
@@ -665,16 +668,27 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.dsKeHoachLuongThucClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khLuongThuc,
           );
+          this.keHoachLuongThucShow = cloneDeep(
+            this.thongTinChiTieuKeHoachNam.khLuongThuc,
+          );
           this.dsMuoiClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
+          this.keHoachMuoiShow = cloneDeep(
+            this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+          );
+
           this.convertKhVatTuList(this.thongTinChiTieuKeHoachNam.khVatTu);
           this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+          this.keHoachVatTuShow = cloneDeep(
+            this.thongTinChiTieuKeHoachNam.khVatTu,
+          );
           // this.thongTinChiTieuKeHoachNam.khVatTu = this.updateDataListVatTu(
           //   this.thongTinChiTieuKeHoachNam.khVatTu,
           // );
           this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           this.initForm();
+          this.loadData();
           this.formData.patchValue({
             soQD: this.formData.get('soQD').value.split('/')[0],
           });
@@ -729,11 +743,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           table.rows[i]?.cells[indexCell]?.innerHTML &&
           table.rows[i]?.cells[indexCell]?.innerHTML != ''
         ) {
-          console.log(
-            'table.rows[i]?.cells[indexCell]?.innerHTML:   ',
-            table.rows[i]?.cells[indexCell]?.innerHTML,
-          );
-
           sumVal =
             sumVal +
             parseFloat(
@@ -746,8 +755,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-    console.log('sumVal:', sumVal);
-
     return sumVal ? Intl.NumberFormat('en-US').format(sumVal) : '0';
   }
 
@@ -849,6 +856,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lt.stt = i + 1;
           }
         });
+        this.dsMuoiClone = cloneDeep(
+          this.thongTinChiTieuKeHoachNam.khLuongThuc,
+        );
+        this.loadData();
       },
     });
   }
@@ -872,6 +883,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lt.stt = i + 1;
           }
         });
+        this.dsMuoiClone = cloneDeep(
+          this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+        );
+        this.loadData();
       },
     });
   }
@@ -894,6 +909,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lt.stt = i + 1;
           }
         });
+        this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+        this.loadData();
       },
     });
   }
@@ -1848,6 +1865,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dsKeHoachLuongThucClone = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
+    this.loadData();
   }
   changeDonViMuoi() {
     this.isAddMuoi = false;
@@ -1916,6 +1934,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.isAddMuoi = false;
     this.newObjectMuoi();
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
+    this.loadData();
   }
   clearMuoiDuTru() {
     this.isAddMuoi = false;
@@ -2083,32 +2102,30 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       : '0';
   }
   openDialogQuyetDinhGiaoChiTieu() {
-    if (this.id == 0) {
-      const modalQD = this.modal.create({
-        nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
-        nzContent: DialogQuyetDinhGiaoChiTieuComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {},
-      });
-      modalQD.afterClose.subscribe((data) => {
-        if (data) {
-          this.thongTinChiTieuKeHoachNam.canCu = data.soQuyetDinh;
-          let item = {
-            id: data.id,
-            text: data.soQuyetDinh,
-          };
-          if (!this.canCuList.find((x) => x.id === item.id)) {
-            this.canCuList.push(item);
-          }
-          this.formData.patchValue({
-            canCu: data.soQuyetDinh,
-          });
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.thongTinChiTieuKeHoachNam.canCu = data.soQuyetDinh;
+        let item = {
+          id: data.id,
+          text: data.soQuyetDinh,
+        };
+        if (!this.canCuList.find((x) => x.id === item.id)) {
+          this.canCuList.push(item);
         }
-      });
-    }
+        this.formData.patchValue({
+          canCu: data.soQuyetDinh,
+        });
+      }
+    });
   }
   themMoiVatTu() {
     if (!this.isAddVatTu) {
@@ -2150,6 +2167,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.checkDataExistVatTu(this.keHoachVatTuDialog);
 
     this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+    this.loadData();
   }
   clearVatTu() {
     this.isAddVatTu = false;
@@ -2295,5 +2313,48 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
     }
+  }
+  async changePageIndex(event) {
+    this.page = event;
+    this.loadData();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    this.loadData();
+  }
+  loadData() {
+    if (this.tabSelected == this.tab.luongThuc) {
+      console.log('luong thuc: ', this.thongTinChiTieuKeHoachNam);
+
+      this.dsKeHoachLuongThucClone =
+        this.thongTinChiTieuKeHoachNam.khLuongThuc.slice(
+          this.pageSize * (this.page - 1),
+          this.pageSize * this.page,
+        );
+      this.totalRecord = this.thongTinChiTieuKeHoachNam.khLuongThuc?.length;
+    } else if (this.tabSelected == this.tab.muoi) {
+      console.log('muoi: ', this.thongTinChiTieuKeHoachNam);
+
+      this.dsMuoiClone = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.slice(
+        this.pageSize * (this.page - 1),
+        this.pageSize * this.page,
+      );
+      this.totalRecord = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length;
+    } else if (this.tabSelected == this.tab.vatTu) {
+      console.log('vatTu: ', this.thongTinChiTieuKeHoachNam);
+
+      this.dsVatTuClone = this.thongTinChiTieuKeHoachNam.khVatTu?.slice(
+        this.pageSize * (this.page - 1),
+        this.pageSize * this.page,
+      );
+      console.log('vtu show: ', this.keHoachVatTuShow);
+
+      this.totalRecord = this.thongTinChiTieuKeHoachNam.khVatTu?.length;
+    }
+  }
+  selectTabData(tabName: string) {
+    this.tabSelected = tabName;
+    this.loadData();
   }
 }

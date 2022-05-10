@@ -36,7 +36,7 @@ export const TYPE_MODAL = {
 };
 
 export const EMPTY_ID = '00000000-0000-0000-0000-000000000000';
-export const PAGE_SIZE_DEFAULT = 10;
+export const PAGE_SIZE_DEFAULT = 2;
 export const MAXIMUM_FILE_UPLOAD = 20480000;
 
 export const TABLE_LOG = {
@@ -158,13 +158,13 @@ export const LOAI_QUYET_DINH = {
 export const LOAI_HANG_DTQG = {
   GAO: '00',
   THOC: '01',
-  MUOI: '02'
-}
+  MUOI: '02',
+};
 
 export const STATUS_USER = {
   HOAT_DONG: '01',
   KHOA: '00',
-}
+};
 export const LEVEL = {
   TONG_CUC: 'tong-cuc',
   CUC: 'cuc',
