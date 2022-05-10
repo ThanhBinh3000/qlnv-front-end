@@ -33,6 +33,7 @@ import { ThemBienBanGuiHangComponent } from './bien-ban-gui-hang/them-bien-ban-g
 import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
 import { ThemBienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau/them-bien-ban-ban-giao-mau.component';
 import { BienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/bien-ban-ban-giao-mau.component';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,6 @@ import { BienBanBanGiaoMauComponent } from './bien-ban-ban-giao-mau/bien-ban-ban
     ThemBienBanBanGiaoMauComponent,
     BienBanBanGiaoMauComponent,
   ],
-  imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule],
+  imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule, DirectivesModule],
 })
 export class VatTuModule {}

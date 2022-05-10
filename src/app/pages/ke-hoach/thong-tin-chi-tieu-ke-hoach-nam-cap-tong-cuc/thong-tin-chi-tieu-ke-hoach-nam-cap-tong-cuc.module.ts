@@ -6,13 +6,11 @@ import { ThongTinChiTieuKeHoachNamComponent } from './thong-tin-chi-tieu-ke-hoac
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
-  declarations: [
-    ThongTinChiTieuKeHoachNamComponent,
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     ThongTinChiTieuKeHoachNamRoutingModule,
     ComponentsModule,
   ],
 })
-export class ThongTinChiTieuKeHoachNamModule { }
+export class ThongTinChiTieuKeHoachNamModule {}

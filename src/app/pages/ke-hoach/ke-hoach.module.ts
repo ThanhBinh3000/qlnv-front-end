@@ -1,3 +1,4 @@
+import { ThongTinChiTieuKeHoachNamComponent } from './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,14 +9,13 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { MultipleTagComponent } from 'src/app/components/multiple-tag/multiple-tag.component';
 
 @NgModule({
   declarations: [
     KeHoachComponent,
     DieuChinhThongTinChiTieuKeHoachNamComponent,
     DieuChinhChiTieuKeHoachNamComponent,
-    MultipleTagComponent,
+    ThongTinChiTieuKeHoachNamComponent,
   ],
   imports: [
     CommonModule,
@@ -25,4 +25,4 @@ import { MultipleTagComponent } from 'src/app/components/multiple-tag/multiple-t
     NzAffixModule,
   ],
 })
-export class KeHoachModule { }
+export class KeHoachModule {}

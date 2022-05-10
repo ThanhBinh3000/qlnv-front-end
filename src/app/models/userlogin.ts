@@ -1,19 +1,8 @@
 export class UserLogin {
-  roleId: string;
-  roleName: string;
-  deptId: string;
-  deptName: string;
-  deptType: number;
-  userId: string;
-  displayName: string;
-  userName: string;
-  roleCode: string;
-  deptCode: string;
-  unitName: string;
-  unitId: string;
-  isLeader: boolean;
-  isSigner: boolean;
-  positionName: String;
+  sub: string;
+  MA_QD: string;
+  roles: any;
+  MA_DVI: string;
 
   constructor(initObj: any) {
     if (initObj) {

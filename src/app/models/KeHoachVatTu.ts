@@ -2,7 +2,7 @@ import { ItemDetail } from './ItemDetail';
 export class KeHoachVatTu {
   id: number;
   donViId: number;
-  maDonVi: string;
+  maDvi: string;
   tenDonVi: string;
   donViTinh: string;
   stt: number;
@@ -17,6 +17,12 @@ export class KeHoachVatTu {
   chiTieuNhapCacNamTruoc: Array<ItemDetail>;
   keHoachNamHienTai: number;
   isEdit: boolean;
+  keHoachNamHienTaiDc: number;
+  maDonVi: string;
+  constructor(vatTuThietBi: Array<VatTuThietBi> = []) {
+    this.vatTuThietBi = vatTuThietBi;
+    this.vatTuThietBi[0] = new VatTuThietBi();
+  }
 }
 
 export class NhomVatTuThietBi {
@@ -52,4 +58,9 @@ export class VatTuThietBi {
   vatTuId: number;
   cacNamTruoc: Array<CacNamTruoc>;
   id: number;
+  kyHieu: string;
+  constructor(cacNamTruoc: Array<CacNamTruoc> = []) {
+    this.cacNamTruoc = cacNamTruoc;
+    this.cacNamTruoc[0] = new CacNamTruoc();
+  }
 }

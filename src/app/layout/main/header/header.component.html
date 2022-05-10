@@ -61,8 +61,7 @@
       <a nz-dropdown [nzDropdownMenu]="avatar" class="user" [nzOverlayStyle]="{width: 300}" [nzVisible]="true">
         <i nz-icon nzType="user" nzTheme="outline"></i>
         <span class="tenvachucvu">
-          <span>{{ userInfo?.displayName }} - {{ userInfo?.roleName }}</span>
-          <span>{{ userInfo?.deptName }}</span>
+          <span>{{ userInfo?.sub }}</span>
         </span>
       </a>
       <nz-dropdown-menu #avatar="nzDropdownMenu">

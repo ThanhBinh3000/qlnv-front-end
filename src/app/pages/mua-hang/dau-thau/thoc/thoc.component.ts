@@ -9,7 +9,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ThocComponent implements OnInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   constructor(
     private userService: UserService

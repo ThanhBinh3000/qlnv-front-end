@@ -9,7 +9,9 @@
         </div>
     </div>
     <div class="select-tag" (click)="selectData()" nz-col [nzSpan]="2">
-        <i class="icon" [ngClass]="icon"></i>
+        <i class="icon" [ngClass]="icon" *ngIf="trangThai !== '02'"></i>
+        <input type="file" name="abc" class="multi-file-tag" *ngIf="type == 'file'" (change)="getNameFile($event)"
+            [readonly]="trangThai === '02'">
         {{buttonName}}
     </div>
 </div>

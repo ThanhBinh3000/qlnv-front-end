@@ -39,6 +39,8 @@ import { QuanLyPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-ph
 import { ThemMoPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 import { QuanLyPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
 import { ThemMoiPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
+import { DirectivesModule } from 'src/app/directives/directives.module';
+import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import { ThemMoiPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap
     ThemMoPhieuKiemNghiemChatLuongComponent,
     QuanLyPhieuNhapDayKhoComponent,
     ThemMoiPhieuNhapDayKhoComponent,
+    ThemmoiQdinhNhapXuatHangComponent,
   ],
-  imports: [CommonModule, DauThauRoutingModule, ComponentsModule],
+  imports: [CommonModule, DauThauRoutingModule, ComponentsModule, DirectivesModule],
 })
 export class DauThauModule {}
