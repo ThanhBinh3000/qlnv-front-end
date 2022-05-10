@@ -1,12 +1,15 @@
 export function convertTrangThai(status: string): string {
   if (status == '00') {
-    return 'Mới tạo';
+    // return 'Mới tạo';
+    return 'Dự thảo';
   } else if (status == '01') {
-    return 'Chờ duyệt';
+    // return 'Chờ duyệt';
+    return 'Lãnh Đạo Duyệt';
   } else if (status == '02') {
-    return 'Đã duyệt';
+    // return 'Đã duyệt';
+    return 'Ban Hành';
   } else if (status == '03') {
-    return 'Từ chối';
+    return 'Từ Chối';
   } else if (status == '04') {
     return 'Hủy';
   } else if (status == '05') {
