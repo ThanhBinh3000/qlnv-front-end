@@ -395,7 +395,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
             id:data.data.lstCtiet[0].maNdung,
           };
 
-          this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD1(requestReport).toPromise().then(
+          this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD1().toPromise().then(
             (data) => {
               if (data.statusCode == 0) {
                 var tempArr = data.data;
@@ -658,7 +658,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
               let requestReport = {
                 id: this.lstCTietBCao[0].maNdung,
               };
-              this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
+              this.quanLyVonPhiService.timDanhSachBCGiaoBTCPD().toPromise().then(
                 (data) => {
                   if (data.statusCode == 0) {
                     var tempArr = data.data;

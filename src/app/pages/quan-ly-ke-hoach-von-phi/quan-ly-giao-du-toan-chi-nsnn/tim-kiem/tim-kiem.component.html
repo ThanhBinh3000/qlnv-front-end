@@ -61,7 +61,7 @@
               <td>{{ item.soQd }}</td>
               <td>{{item.ngayQd}}</td>
               <td>{{item.noiQd}}</td>
-              <td class="text-center">{{item.vanBan}}</td>
+              <td class="text-center">{{item.veViec}}</td>
               <td class="text-center">
                 <a routerLink="../{{url}}/{{ item.id }}">
                   xem
@@ -70,7 +70,7 @@
               <td class="text-center" (click)="redirectSuaThongTinTimKiem(item.id)">
                 sửa
               </td>
-              <td class="text-center" (click)="redirectThongTinTimKiem()">
+              <td class="text-center" (click)="xoaBanGhiGiao(item.id)">
                 Xóa
               </td>
             </tr>

@@ -273,7 +273,6 @@ export class Utils {
         let statusName = TRANGTHAIPHULUC.find(item => item.id == id)
         return statusName?.ten;
     }
-    
 }
 
 // loai bao cao quan ly von phi

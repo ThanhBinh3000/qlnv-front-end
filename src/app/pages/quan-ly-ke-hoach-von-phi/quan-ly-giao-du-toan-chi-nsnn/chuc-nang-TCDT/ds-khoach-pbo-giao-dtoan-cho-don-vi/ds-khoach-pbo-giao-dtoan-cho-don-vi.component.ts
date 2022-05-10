@@ -22,7 +22,7 @@ export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string = "nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd/";
+  url: string = "lap-du-toan-chi-ngan-sach-cho-don-vi/";
   lyDoTuChoi!: any;
   allChecked = false;                         // check all checkbox
   indeterminate = true;
@@ -127,7 +127,7 @@ export class DsKhoachPboGiaoDtoanChoDonViComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timDanhSachPhanBo1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
