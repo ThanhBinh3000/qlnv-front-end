@@ -16,14 +16,12 @@ import { ROUTE_LIST_DANH_MUC } from './danh-muc.constant';
 })
 export class DanhMucComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_DANH_MUC;
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
   }
 
   ngAfterViewInit() {

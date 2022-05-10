@@ -29,7 +29,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Nhập',
-    route: `${MAIN_ROUTES.nhap}/dau-thau/danh-sach-dau-thau`,
+    route: `${MAIN_ROUTES.nhap}/dau-thau/danh-sach-dau-thau/thoc`,
   },
   {
     title: 'Lưu kho',

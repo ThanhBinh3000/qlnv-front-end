@@ -1,17 +1,18 @@
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'danh-sach-dau-thau',
@@ -22,45 +23,37 @@ export class DanhSachDauThauComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
-    soDxuat: '',
-    trichYeu: '',
+    soQdinh: '',
+    nDung: '',
+    ngayQdinh: '',
+    namNhap: ''
   };
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
   errorMessage: string = '';
-  startValue: Date | null = null;
-  endValue: Date | null = null;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
   isVisibleChangeTab$ = new Subject();
+  datePickerConfig = DATEPICKER_CONFIG;
+  type: string = '';
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
     private router: Router,
+    private route: ActivatedRoute,
     private modal: NzModalService,
+    private helperService: HelperService
   ) {}
 
   async ngOnInit() {
+    this.type = this.route.snapshot.paramMap.get('type');
     this.spinner.show();
     try {
-      let res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          var item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -70,86 +63,39 @@ export class DanhSachDauThauComponent implements OnInit {
     }
   }
 
-  onInput(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
-    } else {
-      this.options = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endValue) {
-      return false;
-    }
-    return startValue.getTime() > this.endValue.getTime();
-  };
-
-  disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startValue) {
-      return false;
-    }
-    return endValue.getTime() <= this.startValue.getTime();
-  };
-
-  handleStartOpenChange(open: boolean): void {
-    if (!open) {
-      this.endDatePicker.open();
-    }
-  }
-
-  handleEndOpenChange(open: boolean): void {
-    console.log('handleEndOpenChange', open);
-  }
-
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
+      `/nhap/dau-thau/them-moi-quyet-dinh-nhap-xuat-hang/${this.type}`,
       id,
     ]);
   }
 
+  dateChange() {
+    this.helperService.formatDate()
+  }
+
   clearFilter() {
     this.searchFilter = {
-      soDxuat: '',
-      trichYeu: '',
+      soQdinh: '',
+      nDung: '',
+      ngayQdinh: '',
+      namNhap: ''
     };
-    this.startValue = null;
-    this.endValue = null;
-    this.inputDonVi = '';
     this.search();
   }
 
   async search() {
-    let maDonVi = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-      }
-    }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      ngayQdinh: this.searchFilter.ngayQdinh
+        ? dayjs(this.searchFilter.ngayQdinh).format('YYYY-MM-DD')
         : null,
       id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
       paggingReq: {
         limit: this.pageSize,
         page: this.page,
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      soQdinh: this.searchFilter.soQdinh,
+      nDung: this.searchFilter.nDung,
     };
     let res = await this.danhSachDauThauService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -225,6 +171,7 @@ export class DanhSachDauThauComponent implements OnInit {
       },
     });
   }
+
   export() {
     let maDonVi = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
@@ -236,18 +183,12 @@ export class DanhSachDauThauComponent implements OnInit {
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
       id: 0,
       maDvi: maDonVi,
       paggingReq: null,
-      soDxuat: this.searchFilter.soDxuat,
+      soQdinh: this.searchFilter.soQdinh,
       str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      nDung: this.searchFilter.nDung,
     };
     this.danhSachDauThauService.export(body).subscribe((blob) => {
       saveAs(blob, 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu.xlsx');

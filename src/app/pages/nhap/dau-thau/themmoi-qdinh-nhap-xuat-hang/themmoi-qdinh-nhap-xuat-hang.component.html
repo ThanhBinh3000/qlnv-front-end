@@ -1,0 +1,247 @@
+<div>
+  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="contentBor chi-tieu__body">
+      <div class="contentDetail">
+        <div class="main-content thong-tin-de-xuat-khlcnt">
+          <div class="tab-content tab-menu" id="myTabContent">
+            <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+              aria-labelledby="banhanh-tab">
+              <div class="trai">
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectToDanhSachDauThau()">
+                  <i class="fa fa-arrow-circle-left"></i>
+                </a>
+              </div>
+              <div class="canphai phai">
+                <button class="btn btn-main btn-sm waves-effect waves-light" [disabled]="!formData.valid">
+                  <i class="icon htvbdh_tcdt_save"></i>
+                  <span>Lưu</span>
+                </button>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [disabled]="!formData.valid">
+                  <i class="icon htvbdh_tcdt_guiduyet"></i>
+                  <span>Gửi duyệt</span>
+                </button>
+                <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  <span>Phê duyệt</span>
+                </button>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_tuchoi"></i>
+                  <span>Từ chối</span>
+                </a>
+                <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+                  <i class="icon htvbdh_tcdt_delete"></i>
+                  <span>Hủy bỏ</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-affix>
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content thong-tin-de-xuat-khlcnt">
+        <nz-card nzTitle="THÔNG TIN QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP XUẤT HÀNG" class="mt16 flex-card p-lr16 mb16">
+          <form nz-form [formGroup]="formData" class="mt-16">
+            <div nz-row [nzGutter]="24">
+              <div nz-col [nzSpan]="12">
+                <nz-form-item class="display-block">
+                  <nz-form-label nzRequired>Số Quyết định </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
+                    <input class="search__input" nz-input formControlName="soQdinh" />
+                    <ng-template #soDeXuatError let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="12">
+                <nz-form-item class="display-block">
+                  <nz-form-label nzRequired>Ngày Quyết định </nz-form-label>
+                  <nz-form-control [nzErrorTip]="errorTpl">
+                    <div class="date-picker-custom">
+                      <input class="input-date" appDatepicker autocomplete="off" name="ngayQdinh"
+                        formControlName="ngayQdinh" theme="dp-material" [dpDayPicker]="datePickerConfig" />
+                    </div>
+                    <ng-template #errorTpl let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+                      </ng-container>
+                      <ng-container *ngIf="control.hasError('invalid')">
+                        Sai định dạng ngày!
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="12">
+                <nz-form-item class="display-block">
+                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ trên hợp đồng </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
+                      <input class="search__input" [readonly]="true" nz-input formControlName="canCu" readonly />
+                    </nz-input-group>
+                    <ng-template #soQDError let-control>
+                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="12">
+                <nz-form-item class="display-block">
+                  <nz-form-label>Đơn vị ra QĐ</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <input class="search__input" nz-input formControlName="donvi" readonly />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+
+            <div nz-row [nzGutter]="[16, 12]">
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"> Về việc </nz-form-label>
+                  <textarea nz-input [rows]="3" formControlName="veViec" name="veViec"
+                    [readonly]="chiTietQDGiaoNhapXuatHang.trangThai === '02' || chiTietQDGiaoNhapXuatHang.trangThai === '01'"
+                    [ngClass]="chiTietQDGiaoNhapXuatHang.trangThai === '02' || chiTietQDGiaoNhapXuatHang.trangThai === '01' ? 'disable' : ''"></textarea>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="3">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" class="text-left"> Tài liệu đính kèm </nz-form-label>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="21">
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                  [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
+                  (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                </multiple-tag>
+              </div>
+            </div>
+          </form>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+  <div id="table-muoi">
+    <nz-table #bangQDNhapXuat [nzData]="dataQDNhapXuat" nzBordered class="table__body" [nzFrontPagination]="false"
+      [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>CHI CỤC DỰ TRỮ NN KHU VỰC</th>
+          <th>MÃ HÀNG HÓA</th>
+          <th>TÊN HÀNG HÓA</th>
+          <th>ĐVT</th>
+          <th>SỐ LƯỢNG</th>
+          <th>THỜI HẠN NHẬP KHO MUỘN NHẤT</th>
+          <th>HÀNH ĐỘNG</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td>
+            <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                class="search__input autocomplete__input donvi__input w-300">
+                <input placeholder="Chọn chi cục DTNN" nz-input (input)="onInput($event)" [nzAutocomplete]="autoDonvi"
+                  class="" [(ngModel)]="newQDNhapXuat.tenDonVi" (input)="changeDonVi()" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #autoDonvi>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                  (click)="selectDonVi(option)">
+                  {{ option.labelDonVi }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </nz-form-control>
+          </td>
+
+          <td>
+            <nz-form-control nzErrorTip="Vui lòng nhập mã hàng hóa">
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                class="search__input autocomplete__input donvi__input w-300">
+                <input placeholder="Chọn mã hàng hóa" nz-input (input)="onInputHangHoa($event)"
+                  [nzAutocomplete]="autoHangHoa" class="" [(ngModel)]="newQDNhapXuat.maHangHoa"
+                  (input)="changeMaHangHoa()" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #autoHangHoa>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelHangHoa"
+                  (click)="selectHangHoa(option)">
+                  {{ option.labelHangHoa }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </nz-form-control>
+          </td>
+
+          <td>{{tenHangHoa()}}</td>
+
+          <td>
+            <nz-form-control nzErrorTip="Vui lòng nhập đơn vị tính">
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                class="search__input autocomplete__input donvi__input w-300">
+                <input placeholder="Chọn danh mục" nz-input (input)="onInputDonViTinh($event)"
+                  [nzAutocomplete]="autoDonViTinh" class="" [(ngModel)]="newQDNhapXuat.donViTinh"
+                  (input)="changeDonViTinh()" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #autoDonViTinh>
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonViTInh"
+                  (click)="selectDonViTinh(option)">
+                  {{ option.labelDonViTInh }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </nz-form-control>
+          </td>
+
+          <td>
+            <nz-input-number type="text" nz-input name="soLuong" class="w-120" [nzMin]="0"
+              [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'" [(ngModel)]="newQDNhapXuat.soLuong">
+            </nz-input-number>
+          </td>
+          <td>
+            <div class="date-picker-custom">
+              <input class="input-date" appDatepicker autocomplete="off" name="thoiHan"
+                [(ngModel)]="newQDNhapXuat.thoiHan" theme="dp-material" [dpDayPicker]="datePickerConfig" />
+            </div>
+          </td>
+          <td>
+            <a class="save" (click)="themmoi()">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="clearNew()">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngFor="let dataMuoi of bangQDNhapXuat.data, let i = index">
+          <ng-container>
+            <td>{{dataMuoi.stt}}</td>
+            <td>{{dataMuoi.tenDonVi}}</td>
+            <td>{{dataMuoi.maHangHoa}}</td>
+            <td>{{dataMuoi.tenHangHoa}}</td>
+            <td>{{dataMuoi.tenDonViTinh}}</td>
+            <!-- <td>{{dataMuoi.tenDonVi}}</td> -->
+            <td>
+              <a (click)="startEdit(i)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteData(dataMuoi.stt)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

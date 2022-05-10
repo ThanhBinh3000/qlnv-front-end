@@ -22,7 +22,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baothoc',
             title: 'Thóc',
-            url: '',
+            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/thoc`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -30,7 +30,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baogao',
             title: 'Gạo',
-            url: '',
+            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/gao`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -38,7 +38,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_muoi',
             title: 'Muối',
-            url: '',
+            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/muoi`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -46,7 +46,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_ngan-kho',
             title: 'Vật tư',
-            url: '',
+            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/vat-tu`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',

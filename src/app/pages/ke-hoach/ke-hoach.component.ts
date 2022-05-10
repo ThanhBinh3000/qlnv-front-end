@@ -17,7 +17,6 @@ import { ROUTE_LIST_KE_HOACH } from './ke-hoach.constant';
 })
 export class KeHoachComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
   routerUrl: string = "";
@@ -31,7 +30,6 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }

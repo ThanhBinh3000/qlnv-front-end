@@ -138,6 +138,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     DialogPhieuNhapKhoComponent,
     DialogGuiDuyetComponent,
     DialogVanBanSanSangBanHanhComponent,
+    MultipleTagComponent,
     //pipes
     FilterPipe,
   ],
@@ -249,6 +250,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     TecaTreeSelectModule,
     FilterPipe,
     NzAlertModule,
+    MultipleTagComponent,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

@@ -77,4 +77,9 @@ export class NhapComponent implements OnInit, AfterViewInit {
         'nav nav-tabs expand-sidebar next-an';
     }
   }
+
+  redirect(url: string) {
+    this.routerUrl = url;
+    this.router.navigate([url]);
+  }
 }

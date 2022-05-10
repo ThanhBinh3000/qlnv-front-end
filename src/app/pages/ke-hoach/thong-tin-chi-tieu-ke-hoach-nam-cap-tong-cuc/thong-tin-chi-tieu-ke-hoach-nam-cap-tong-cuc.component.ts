@@ -82,7 +82,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dsVatTuClone: Array<KeHoachVatTu> = [];
   keHoachLuongThuc: KeHoachLuongThuc = new KeHoachLuongThuc();
   keHoachLuongThucCreate: KeHoachLuongThuc;
-  isAddLuongThuc: boolean = false;
+  isAddLuongThuc: boolean = true;
   keHoachMuoiCreate: KeHoachMuoi;
   isAddMuoi: boolean = false;
   keHoachVatTuCreate: KeHoachVatTu;
