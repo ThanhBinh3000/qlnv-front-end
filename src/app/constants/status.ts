@@ -24,3 +24,7 @@ export enum LoaiTaiLieu {
   VanBanNoiBo = 5,
   VanBanTraLoi = 6,
 }
+
+export enum LoaiDanhMuc {
+  VAI_TRO = "VAI_TRO"
+}
