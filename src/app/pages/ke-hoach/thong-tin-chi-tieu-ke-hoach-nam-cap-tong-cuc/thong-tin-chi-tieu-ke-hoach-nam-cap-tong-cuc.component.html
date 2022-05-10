@@ -8,7 +8,7 @@
         </a>
         <nz-breadcrumb>
           <nz-breadcrumb-item>
-            <a [routerLink]="">Giao chỉ tiêu kế hoạch đầu năm</a>
+            <a routerLink="kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc">Giao chỉ tiêu kế hoạch đầu năm</a>
           </nz-breadcrumb-item>
           <nz-breadcrumb-item [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' ? '' : 'last-breadcrumb'">
             {{lastBreadcrumb}}</nz-breadcrumb-item>
@@ -190,17 +190,17 @@
       <!-- </nz-card> -->
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container">
-          <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="tabSelected = tab.luongThuc">
+          <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
           </nz-tab>
-          <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="tabSelected = tab.muoi">
+          <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)">
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị'" class="vat-tu__container"
-            (nzClick)="tabSelected = tab.vatTu">
+            (nzClick)="selectTabData(tab.vatTu)">
           </nz-tab>
         </nz-tabset>
         <div id="table-luong-thuc"
           [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTable [nzData]="thongTinChiTieuKeHoachNam.khLuongThuc" nzBordered class="table__body"
+          <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered class="table__body"
             [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
@@ -586,11 +586,26 @@
               </tr>
             </tbody>
           </nz-table>
+          <div class="tab-content tab-menu">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                  </ng-template>
+                </nz-pagination>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="table-muoi"
           [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTableMuoi [nzData]="thongTinChiTieuKeHoachNam.khMuoiDuTru" nzBordered class="table__body"
-            [nzFrontPagination]="false" [nzShowPagination]="false">
+          <nz-table #groupingTableMuoi [nzData]="dsMuoiClone" nzBordered class="table__body" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
             <thead>
               <tr>
                 <th rowspan="3">STT</th>
@@ -828,10 +843,25 @@
               </tr>
             </tbody>
           </nz-table>
+          <div class="tab-content tab-menu">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                  </ng-template>
+                </nz-pagination>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="table-vat-tu"
           [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
-          <nz-table #groupingTableVatTu [nzData]="thongTinChiTieuKeHoachNam.khVatTu" nzBordered class="table__body"
+          <nz-table #groupingTableVatTu [nzData]="dsVatTuClone" nzBordered class="table__body"
             [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
@@ -1046,6 +1076,21 @@
               </tr>
             </tbody>
           </nz-table>
+          <div class="tab-content tab-menu">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+              </div>
+              <div class="canphai">
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
+                  <ng-template #rangeTemplate let-range="range" let-total>
+                    {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                  </ng-template>
+                </nz-pagination>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="tep" (click)="downloadTemplate()"
           *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai === '03'">
