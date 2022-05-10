@@ -10,8 +10,10 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlNhomQuyenComponent } from './them-ql-nhom-quyen/them-ql-nhom-quyen.component';
+import { QlNhomNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNhomNguoiSuDung.service';
+import { ActionItem } from 'src/app/constants/form-schema';
 
 
 @Component({
@@ -21,6 +23,7 @@ import { ThemQlNhomQuyenComponent } from './them-ql-nhom-quyen/them-ql-nhom-quye
 })
 export class QlNhomQuyenComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  [x: string]: any;
   searchValue = '';
   searchFilter = {
     soDxuat: '',
@@ -37,6 +40,8 @@ export class QlNhomQuyenComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   isVisibleChangeTab$ = new Subject();
+  datas: any;
+  listAction: ActionItem[];
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -44,35 +49,18 @@ export class QlNhomQuyenComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private _modalService: NzModalService
-  ) { }
+    private _modalService: NzModalService,
+    private qlNhomQuyen: QlNhomNguoiSuDungService
+  ) { this.initAction(); }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
 
   async ngOnInit() {
     this.spinner.show();
-    try {
-      let res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          var item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+    await this.search();
+    this.spinner.hide();
+
   }
 
   onInput(e: Event): void {
@@ -122,40 +110,57 @@ export class QlNhomQuyenComponent implements OnInit {
     this.inputDonVi = '';
     this.search();
   }
+  initAction() {
+    this.listAction = [
 
+      new ActionItem({
+        class: 'fa fa-pencil-square-o sua',
+        name: 'Sửa',
+        code: 'sua',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+
+      new ActionItem({
+        class: 'icon htvbdh_xoa xoa',
+        name: 'Xóa',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.xoaItem(data.username)
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+    ]
+
+    // this.route.url.subscribe(() => {
+    //   this.checkActiveRouter(this.route.snapshot.routeConfig.path);
+    // });
+  }
   async search() {
-    let maDonVi = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-      }
-    }
+
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
-      },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "code": null,
+      "limit": 10,
+      "name": null,
+      "page": 1
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this.qlNhomQuyen.findList(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
+      this.datas = res.data;
+      this.dataTable = res.data.content;
+      this.totalRecord = res.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -188,7 +193,7 @@ export class QlNhomQuyenComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    return convertTrangThaiUser(status);
   }
 
   xoaItem(item: any) {
@@ -203,8 +208,8 @@ export class QlNhomQuyenComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.danhSachDauThauService
-            .deleteKeHoachLCNT({ id: item.id })
+          this.qlNhomQuyen
+            .delete({ id: item.id })
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(

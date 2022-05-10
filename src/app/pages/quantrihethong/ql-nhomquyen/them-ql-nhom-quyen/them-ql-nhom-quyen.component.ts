@@ -15,6 +15,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
+import { QlVaiTroService } from 'src/app/services/quantri-nguoidung/qlVaiTro.service';
 
 interface TreeNode {
   name: string;
@@ -72,12 +73,15 @@ export class ThemQlNhomQuyenComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalRef,
+    private qlVaiTroService: QlVaiTroService
 
   ) {
 
 
     this.dataSource.setData(TREE_DATA);
-
+    this.qlVaiTroService.findAll().then(res => {
+      debugger
+    })
   }
 
 
