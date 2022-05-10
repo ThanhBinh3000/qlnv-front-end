@@ -18,10 +18,10 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     let tempUrl = "";
     if (param && param.pageSize) {
-      tempUrl = tempUrl + "pageSize=" + param.pageSize + "&";
+      tempUrl = tempUrl + "paggingReq.limit=" + param.pageSize + "&";
     }
     if (param && param.pageNumber) {
-      tempUrl = tempUrl + "pageNumber=" + param.pageNumber + "&";
+      tempUrl = tempUrl + "paggingReq.page=" + (param.pageNumber - 1) + "&";
     }
     if (param && param.soQD) {
       tempUrl = tempUrl + "soQD=" + param.soQD + "&";
