@@ -1,4 +1,4 @@
-import { PAGE_SIZE_DEFAULT } from './../../../constants/config';
+import { LEVEL_USER, PAGE_SIZE_DEFAULT } from './../../../constants/config';
 import { FileDinhKem } from './../../../models/FileDinhKem';
 import { UploadFileService } from './../../../services/uploaFile.service';
 import { DialogVanBanSanSangBanHanhComponent } from './../../../components/dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
@@ -37,6 +37,8 @@ import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import { cloneDeep } from 'lodash';
 import * as dayjs from 'dayjs';
 import { ItemDetail } from 'src/app/models/ItemDetail';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -104,6 +106,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
   keHoachMuoiShow: Array<KeHoachMuoi> = [];
   keHoachVatTuShow: Array<KeHoachVatTu> = [];
+  userInfo: UserLogin;
+  levelCuc: any = LEVEL_USER;
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -118,9 +122,25 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private uploadFileService: UploadFileService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
+    this.userInfo = this.userService.getUserLogin();
+    if (this.userInfo.sub == LEVEL_USER.CUC) {
+      this.donViService
+        .getDonVi(this.userInfo.MA_DVI)
+        .then((rs) => {
+          console.log('rs:  ', rs);
+          this.keHoachLuongThucCreate.tenDonvi = 'don vi cuc';
+          this.keHoachMuoiCreate.tenDonVi = 'don vi cuc';
+          this.keHoachVatTuCreate.tenDonVi = 'don vi cuc';
+        })
+        .catch((err) => {
+          this.notification.error(MESSAGE.ERROR, err.msg);
+          this.spinner.hide();
+        });
+    }
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -941,11 +961,17 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               for (let i = 0; i < temptData.khluongthuc.length; i++) {
                 this.checkDataExistLuongThuc(temptData.khluongthuc[i]);
               }
+              this.dsKeHoachLuongThucClone = cloneDeep(
+                this.thongTinChiTieuKeHoachNam.khLuongThuc,
+              );
             }
             if (temptData.khMuoi && temptData.khMuoi.length > 0) {
               for (let i = 0; i < temptData.khMuoi.length; i++) {
                 this.checkDataExistMuoi(temptData.khMuoi[i]);
               }
+              this.dsMuoiClone = cloneDeep(
+                this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+              );
             }
             if (temptData.khVatTu && temptData.khVatTu.length > 0) {
               for (let i = 0; i < temptData.khVatTu.length; i++) {
@@ -959,6 +985,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               //   this.thongTinChiTieuKeHoachNam.khVatTu,
               // );
             }
+            this.loadData();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1030,6 +1057,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       ...this.thongTinChiTieuKeHoachNam.khVatTu,
       data,
     ];
+    const khVatTuList = new Array<KeHoachVatTu>();
+    let khVatTu = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+    for (let i = 0; i < khVatTu.length; i++) {
+      khVatTuList.push(khVatTu[i]);
+      for (let j = i + 1; j <= khVatTu.length - 1; j++) {
+        if (khVatTu[i].donViId === khVatTu[j].donViId) {
+          khVatTuList.push(khVatTu[j]);
+          khVatTu.splice(j, 1);
+        }
+      }
+    }
+    this.thongTinChiTieuKeHoachNam.khVatTu = khVatTuList;
+
     this.thongTinChiTieuKeHoachNam.khVatTu.forEach((lt, i) => {
       lt.stt = i + 1;
     });
@@ -1129,15 +1169,26 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
-    const modalIn = this.modal.create({
+    const modalGuiDuyet = this.modal.create({
       nzTitle: '',
-      nzContent: DialogVanBanSanSangBanHanhComponent,
+      nzContent: DialogGuiDuyetComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '428px',
       nzFooter: null,
       nzClassName: 'open-dialog-gui-duyet',
       nzComponentParams: {},
+    });
+    modalGuiDuyet.afterClose.subscribe(async (text) => {
+      this.spinner.show();
+      try {
+        this.save(true);
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     });
     // this.modal.confirm({
     //   nzClosable: false,
@@ -1162,6 +1213,29 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   pheDuyet() {
+    const modalPheDuyet = this.modal.create({
+      nzTitle: '',
+      nzContent: DialogVanBanSanSangBanHanhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '428px',
+      nzFooter: null,
+      nzClassName: 'open-dialog-gui-duyet',
+      nzComponentParams: {},
+    });
+
+    modalPheDuyet.afterClose.subscribe(async (text) => {
+      this.spinner.show();
+      try {
+        this.save(true);
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    });
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -2325,8 +2399,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
   loadData() {
     if (this.tabSelected == this.tab.luongThuc) {
-      console.log('luong thuc: ', this.thongTinChiTieuKeHoachNam);
-
       this.dsKeHoachLuongThucClone =
         this.thongTinChiTieuKeHoachNam.khLuongThuc.slice(
           this.pageSize * (this.page - 1),
@@ -2334,22 +2406,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         );
       this.totalRecord = this.thongTinChiTieuKeHoachNam.khLuongThuc?.length;
     } else if (this.tabSelected == this.tab.muoi) {
-      console.log('muoi: ', this.thongTinChiTieuKeHoachNam);
-
       this.dsMuoiClone = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.slice(
         this.pageSize * (this.page - 1),
         this.pageSize * this.page,
       );
       this.totalRecord = this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length;
     } else if (this.tabSelected == this.tab.vatTu) {
-      console.log('vatTu: ', this.thongTinChiTieuKeHoachNam);
-
       this.dsVatTuClone = this.thongTinChiTieuKeHoachNam.khVatTu?.slice(
         this.pageSize * (this.page - 1),
         this.pageSize * this.page,
       );
-      console.log('vtu show: ', this.keHoachVatTuShow);
-
       this.totalRecord = this.thongTinChiTieuKeHoachNam.khVatTu?.length;
     }
   }

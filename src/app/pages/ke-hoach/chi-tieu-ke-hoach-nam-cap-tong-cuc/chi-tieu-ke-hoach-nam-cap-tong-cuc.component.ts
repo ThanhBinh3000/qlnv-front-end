@@ -1,4 +1,7 @@
-import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { UserService } from './../../../services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { cloneDeep } from 'lodash';
+import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -11,6 +14,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -37,6 +41,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   dataTable: any[] = [];
   listNam: any[] = [];
   lastBreadcrumb: string;
+  userInfo: UserLogin;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -44,9 +49,24 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private donViService: DonviService,
     private modal: NzModalService,
+    private userService: UserService,
+    public globals: Globals,
   ) {}
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
+    if (this.userInfo.sub == LEVEL_USER.CUC) {
+      this.donViService
+        .getDonVi(this.userInfo.MA_DVI)
+        .then((rs) => {
+          console.log('rs:  ', rs);
+          this.inputDonVi = 'Don vi cuc';
+        })
+        .catch((err) => {
+          this.notification.error(MESSAGE.ERROR, err.msg);
+          this.spinner.hide();
+        });
+    }
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -74,6 +94,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           };
           this.optionsDonVi.push(item);
         }
+        this.options = cloneDeep(this.optionsDonVi);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -103,7 +124,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
+      // this.options = [];
     } else {
       this.options = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,

@@ -49,14 +49,16 @@
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                [nzAutocomplete]="auto" />
+                [nzAutocomplete]="auto" [readonly]="userInfo.sub === globals.prop.CUC" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
             </ng-template>
             <nz-autocomplete #auto>
-              <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-              </nz-auto-option>
+              <ng-container *ngIf="userInfo.sub !== globals.prop.CUC">
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+                </nz-auto-option>
+              </ng-container>
             </nz-autocomplete>
           </div>
         </div>
