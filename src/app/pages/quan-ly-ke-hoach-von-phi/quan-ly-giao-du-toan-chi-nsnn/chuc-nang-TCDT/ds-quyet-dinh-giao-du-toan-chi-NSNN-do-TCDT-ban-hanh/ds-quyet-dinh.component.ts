@@ -1,3 +1,5 @@
+import { MESSAGE } from './../../../../../constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -56,6 +58,7 @@ export class DsQuyetDinhComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -91,12 +94,23 @@ export class DsQuyetDinhComponent implements OnInit {
     );
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
-      0,
-    ]);
+  xoaBanGhiGiao(id: any) {
+    if (id) {
+      this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(async res => {
+        if (res.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.onSubmit()
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
   }
+
+}
 
   redirectSuaThongTinTimKiem(id) {
     this.router.navigate([
