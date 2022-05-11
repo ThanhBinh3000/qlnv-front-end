@@ -9,6 +9,7 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
+import { DeXuatDieuChinhComponent } from './de-xuat-dieu-chinh/de-xuat-dieu-chinh.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-ho
     DieuChinhThongTinChiTieuKeHoachNamComponent,
     DieuChinhChiTieuKeHoachNamComponent,
     ThongTinChiTieuKeHoachNamComponent,
+    DeXuatDieuChinhComponent,
   ],
   imports: [
     CommonModule,
@@ -25,4 +27,4 @@ import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-ho
     NzAffixModule,
   ],
 })
-export class KeHoachModule {}
+export class KeHoachModule { }
