@@ -49,16 +49,27 @@ export class VatTuThietBi {
   maVatTu: string;
   maVatTuCha: string;
   nhapTrongNam: number;
+  sdcNhapTrongNam: number;
+  tdcNhapTrongNam: number;
+  dcNhapTrongNam: number;
   stt: number;
   tenVatTu: string;
   tenVatTuCha: string;
   tongCacNamTruoc: number;
+  sdcTongCacNamTruoc: number;
+  tdcTongCacNamTruoc: number;
   tongNhap: number;
+  sdcTongNhap: number;
+  tdcTongNhap: number;
   vatTuChaId: number;
   vatTuId: number;
   cacNamTruoc: Array<CacNamTruoc>;
+  sdcCacNamTruoc: Array<CacNamTruoc>;
+  tdcCacNamTruoc: Array<CacNamTruoc>;
   id: number;
   kyHieu: string;
+  tenHang: string;
+  chungLoaiHang: string;
   constructor(cacNamTruoc: Array<CacNamTruoc> = []) {
     this.cacNamTruoc = cacNamTruoc;
     this.cacNamTruoc[0] = new CacNamTruoc();
