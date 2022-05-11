@@ -168,6 +168,52 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  caculatorDieuChinhLT(item: any) {
+    item.sdcNtnThoc = (!isNaN(item.tdcNtnThoc) ? item.tdcNtnThoc : 0) + (!isNaN(item.dcNtnThoc) ? item.dcNtnThoc : 0);
+    item.sdcNtnGao = (!isNaN(item.tdcNtnGao) ? item.tdcNtnGao : 0) + (!isNaN(item.dcNtnGao) ? item.dcNtnGao : 0);
+    item.sdcNtnTongSoQuyThoc = (item.sdcNtnThoc ?? 0) + (item.sdcNtnGao ?? 0) * 2;
+
+    if (item.tdcXtnThoc && item.tdcXtnThoc.length > 0 && item.dcXtnThoc && item.dcXtnThoc.length > 0
+      && item.sdcXtnThoc && item.sdcXtnThoc.length > 0) {
+      item.sdcXtnThoc[0].soLuong = (item.tdcXtnThoc[0].soLuong ?? 0) + (item.dcXtnThoc[0].soLuong ?? 0);
+      item.sdcXtnThoc[1].soLuong = (item.tdcXtnThoc[1].soLuong ?? 0) + (item.dcXtnThoc[1].soLuong ?? 0);
+      item.sdcXtnThoc[2].soLuong = (item.tdcXtnThoc[2].soLuong ?? 0) + (item.dcXtnThoc[2].soLuong ?? 0);
+
+      item.sdcXtnTongThoc = item.sdcXtnThoc[0].soLuong + item.sdcXtnThoc[1].soLuong + item.sdcXtnThoc[2].soLuong;
+    }
+
+    if (item.tdcXtnGao && item.tdcXtnGao.length > 0 && item.dcXtnGao && item.dcXtnGao.length > 0
+      && item.sdcXtnGao && item.sdcXtnGao.length > 0) {
+      item.sdcXtnGao[0].soLuong = (item.tdcXtnGao[0].soLuong ?? 0) + (item.dcXtnGao[0].soLuong ?? 0);
+      item.sdcXtnGao[1].soLuong = (item.tdcXtnGao[1].soLuong ?? 0) + (item.dcXtnGao[1].soLuong ?? 0);
+
+      item.sdcXtnTongGao = item.sdcXtnGao[0].soLuong + item.sdcXtnGao[1].soLuong;
+    }
+
+    item.sdcXtnTongSoQuyThoc = (item.sdcXtnTongThoc ?? 0) + (item.sdcXtnTongGao ?? 0) * 2;
+
+    item.tkcnTongThoc = (item.tkdnTongThoc ?? 0) + (item.sdcNtnThoc ?? 0) - (item.sdcXtnTongThoc ?? 0);
+    item.tkcnTongGao = (item.tkdnTongGao ?? 0) + (item.sdcNtnGao ?? 0) - (item.sdcXtnTongGao ?? 0);
+    item.tkcnTongSoQuyThoc = (item.tkcnTongThoc ?? 0) + (item.tkcnTongGao ?? 0) * 2;
+  }
+
+  caculatorDieuChinhMuoi(item: any) {
+    item.sdcNtnTongSoMuoi = (!isNaN(item.tdcNtnTongSoMuoi) ? item.tdcNtnTongSoMuoi : 0) + (!isNaN(item.dcNtnTongSoMuoi) ? item.dcNtnTongSoMuoi : 0);
+
+    if (item.tdcXtnMuoi && item.tdcXtnMuoi.length > 0 && item.dcXtnMuoi && item.dcXtnMuoi.length > 0
+      && item.sdcXtnMuoi && item.sdcXtnMuoi.length > 0) {
+      item.sdcXtnMuoi[0].soLuong = (item.tdcXtnMuoi[0].soLuong ?? 0) + (item.dcXtnMuoi[0].soLuong ?? 0);
+      item.sdcXtnMuoi[1].soLuong = (item.tdcXtnMuoi[1].soLuong ?? 0) + (item.dcXtnMuoi[1].soLuong ?? 0);
+      item.sdcXtnMuoi[2].soLuong = (item.tdcXtnMuoi[2].soLuong ?? 0) + (item.dcXtnMuoi[2].soLuong ?? 0);
+
+      item.sdcXtnTongSoMuoi = item.sdcXtnThoc[0].soLuong + item.sdcXtnThoc[1].soLuong + item.sdcXtnThoc[2].soLuong;
+    }
+
+    item.tkcnTongThoc = (item.tkdnTongThoc ?? 0) + (item.sdcNtnThoc ?? 0) - (item.sdcXtnTongThoc ?? 0);
+    item.tkcnTongGao = (item.tkdnTongGao ?? 0) + (item.sdcNtnGao ?? 0) - (item.sdcXtnTongGao ?? 0);
+    item.tkcnTongSoQuyThoc = (item.tkcnTongThoc ?? 0) + (item.tkcnTongGao ?? 0) * 2;
+  }
+
   themMoiKHVatTu() {
     if (!this.dataVatTu) {
       this.dataVatTu = [];
@@ -267,7 +313,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     ];
     this.keHoachMuoiCreate.tkdnMuoi = cloneDeep(tkdnMuoi);
     this.keHoachMuoiCreate.xtnMuoi = cloneDeep(tkdnMuoi);
-    this.keHoachMuoiCreate.xtnMuoiDc = cloneDeep(tkdnMuoi);
+    this.keHoachMuoiCreate.tdcXtnMuoi = cloneDeep(tkdnMuoi);
+    this.keHoachMuoiCreate.dcXtnMuoi = cloneDeep(tkdnMuoi);
+    this.keHoachMuoiCreate.sdcXtnMuoi = cloneDeep(tkdnMuoi);
   }
 
   updateEditLuongThucCache(): void {
@@ -363,10 +411,18 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     ];
     this.keHoachLuongThucCreate.tkdnThoc = cloneDeep(tkdnThoc);
     this.keHoachLuongThucCreate.tkdnGao = cloneDeep(tkdnGao);
+
+    this.keHoachLuongThucCreate.tdcXtnThoc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.tdcXtnGao = cloneDeep(tkdnGao);
+
     this.keHoachLuongThucCreate.xtnThoc = cloneDeep(tkdnThoc);
     this.keHoachLuongThucCreate.xtnGao = cloneDeep(tkdnGao);
-    this.keHoachLuongThucCreate.xtnThocDc = cloneDeep(tkdnThoc);
-    this.keHoachLuongThucCreate.xtnGaoDc = cloneDeep(tkdnGao);
+
+    this.keHoachLuongThucCreate.dcXtnThoc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.dcXtnGao = cloneDeep(tkdnGao);
+
+    this.keHoachLuongThucCreate.sdcXtnThoc = cloneDeep(tkdnThoc);
+    this.keHoachLuongThucCreate.sdcXtnGao = cloneDeep(tkdnGao);
   }
 
   selectDataMultipleTag(data: any) { }
@@ -1329,14 +1385,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           table.rows[i]?.cells[indexCell]?.innerHTML != ''
         ) {
           sumVal =
-            sumVal +
-            parseFloat(
-              this.helperService.replaceAll(
-                table.rows[i].cells[indexCell].innerHTML,
-                stringReplace,
-                '',
-              ),
-            );
+            sumVal + (!isNaN(parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, '',),))
+              ? parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, '',),) : 0);
         }
       }
     }
@@ -1878,11 +1928,20 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.updateDataLuongThuc();
       this.updateEditLuongThucCache();
     } else if (this.tabSelected == this.tab.muoi) {
-      this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(
-        this.pageSize * (this.page - 1),
-        this.pageSize * this.page,
-      );
-      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
+      if (this.dieuChinhThongTinChiTieuKHNam.khMuoi) {
+        this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(
+          this.pageSize * (this.page - 1),
+          this.pageSize * this.page,
+        );
+        this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
+      }
+      else if (this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru) {
+        this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru.slice(
+          this.pageSize * (this.page - 1),
+          this.pageSize * this.page,
+        );
+        this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru.length;
+      }
       this.updateDataMuoi();
       this.updateEditMuoiCache();
     } else if (this.tabSelected == this.tab.vatTu) {

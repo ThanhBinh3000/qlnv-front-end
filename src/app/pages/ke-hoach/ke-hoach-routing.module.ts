@@ -60,7 +60,7 @@ const routes: Routes = [
         component: DieuChinhThongTinChiTieuKeHoachNamComponent
       },
       {
-        path: 'de-xuat-dieu-chinh-cap-tong-cuc',
+        path: 'de-xuat-dieu-chinh-cap-cuc',
         component: DeXuatDieuChinhComponent
       },
     ],

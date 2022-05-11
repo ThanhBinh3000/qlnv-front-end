@@ -31,9 +31,9 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-        title: 'Đề xuất điều chỉnh Cấp tổng cục',
+        title: 'Đề xuất điều chỉnh Cấp cục',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
         urlCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-cuc`,
         urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-chi-cuc`,

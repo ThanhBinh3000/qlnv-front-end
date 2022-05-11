@@ -36,7 +36,7 @@ export const TYPE_MODAL = {
 };
 
 export const EMPTY_ID = '00000000-0000-0000-0000-000000000000';
-export const PAGE_SIZE_DEFAULT = 2;
+export const PAGE_SIZE_DEFAULT = 10;
 export const MAXIMUM_FILE_UPLOAD = 20480000;
 
 export const TABLE_LOG = {
