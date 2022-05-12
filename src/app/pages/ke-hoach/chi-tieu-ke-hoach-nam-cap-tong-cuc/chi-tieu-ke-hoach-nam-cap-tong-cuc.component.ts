@@ -55,18 +55,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if (this.userInfo.sub == LEVEL_USER.CUC) {
-      this.donViService
-        .getDonVi(this.userInfo.MA_DVI)
-        .then((rs) => {
-          console.log('rs:  ', rs);
-          this.inputDonVi = 'Don vi cuc';
-        })
-        .catch((err) => {
-          this.notification.error(MESSAGE.ERROR, err.msg);
-          this.spinner.hide();
-        });
-    }
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -95,6 +83,14 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           this.optionsDonVi.push(item);
         }
         this.options = cloneDeep(this.optionsDonVi);
+        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+              this.inputDonVi = res.data[i].tenDvi;
+              break;
+            }
+          }
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

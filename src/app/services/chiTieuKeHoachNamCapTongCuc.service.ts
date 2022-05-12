@@ -10,7 +10,7 @@ import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
   providedIn: 'root',
 })
 export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+  GATEWAY = '/qlnv-gateway/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'ChiTieuKeHoachNamCapTongCuc');

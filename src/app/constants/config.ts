@@ -174,8 +174,8 @@ export const LEVEL = {
   CHI_CUC_SHOW: 'Chi cục',
 };
 export const LEVEL_USER = {
-  ADMIN: 'admin',
-  CAN_BO_TONG_CUC: 'cbtongcuc',
-  CUC: 'cuc',
-  CHI_CUC: 'chicuc',
+  ADMIN: '1',
+  CAN_BO_TONG_CUC: '1',
+  CUC: '2',
+  CHI_CUC: '3',
 };

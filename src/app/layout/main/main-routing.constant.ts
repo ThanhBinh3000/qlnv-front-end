@@ -75,4 +75,8 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quản trị hệ thống',
     route: MAIN_ROUTES.quantrihethong,
   },
+  {
+    title: 'Quản trị danh mục',
+    route: MAIN_ROUTES.danhMuc,
+  }
 ];

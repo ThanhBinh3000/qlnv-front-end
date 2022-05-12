@@ -10,41 +10,44 @@
           <nz-breadcrumb-item>
             <a routerLink="kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc">Giao chỉ tiêu kế hoạch đầu năm</a>
           </nz-breadcrumb-item>
-          <nz-breadcrumb-item [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' ? '' : 'last-breadcrumb'">
+          <nz-breadcrumb-item
+            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH ? '' : 'last-breadcrumb'">
             {{lastBreadcrumb}}</nz-breadcrumb-item>
           <nz-breadcrumb-item
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'"
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '01' ? 'last-breadcrumb' : ''">Dự thảo
+            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET"
+            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET ? 'last-breadcrumb' : ''">Dự
+            thảo
           </nz-breadcrumb-item>
-          <nz-breadcrumb-item [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' ? 'last-breadcrumb' : ''"
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === '02'">Ban hành
+          <nz-breadcrumb-item
+            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH ? 'last-breadcrumb' : ''"
+            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH">Ban hành
           </nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
       <div class="canphai phai">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [disabled]="!formData.valid"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai == '03'">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == '00' || id == 0 || thongTinChiTieuKeHoachNam.trangThai == '03'"
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO || id == 0 || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI"
           [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == '01'">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.LANH_DAO_DUYET">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == '01'">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.LANH_DAO_DUYET">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai == '03'">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Hủy bỏ</span>
         </a>
@@ -77,7 +80,7 @@
                       <nz-input-group nzAddOnAfter="/{{userInfo.MA_QD}}">
                         <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                           [nzStep]="1" [nzSize]="'small'"
-                          [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
+                          [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                         </nz-input-number>
                       </nz-input-group>
                       <ng-template #soQDError let-control>
@@ -93,7 +96,7 @@
                     <nz-form-control nz-col [nzSpan]="18" [nzErrorTip]="ngayKyError">
                       <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
                         formControlName="ngayKy" nzPlaceHolder="Ngày ký"
-                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
+                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                       </nz-date-picker>
                       <ng-template #ngayKyError let-control>
                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -108,7 +111,7 @@
                     <nz-form-control nz-col [nzSpan]="18" [nzErrorTip]="ngayHieuLucError">
                       <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                         formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
-                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
+                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                       </nz-date-picker>
                       <ng-template #ngayHieuLucError let-control>
                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -122,7 +125,7 @@
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="18" [nzErrorTip]="namKeHoachError">
                       <nz-select formControlName="namKeHoach" (input)="selectNam()"
-                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
+                        [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                       </nz-select>
                       <ng-template #namKeHoachError let-control>
@@ -144,11 +147,11 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="namKeHoachError">
                   <input formControlName="trichYeu" class="search__input" nz-input nzSize="small"
-                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'" />
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET" />
                 </nz-form-control>
                 <!-- <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input
-                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'"
-                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' ? 'disable' : ''"></textarea> -->
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET"
+                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET ? 'disable' : ''"></textarea> -->
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="2">
@@ -178,7 +181,7 @@
 
             <!-- <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
               <button class="btn btn-tep btn-sm waves-effect waves-light" (click)="selectFile('file-dinh-kem')"
-                [disabled]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'">
+                [disabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                 <i class="icon htvbdh_tcdt_tep"></i>
                 <span>Tài liệu đính kèm</span>
               </button>
@@ -214,8 +217,8 @@
                   ( 31/12/2021)
                 </th>
                 <!-- <th rowspan="4">Trạng thái</th> -->
-                <th rowspan="4" *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'">Hành động</th>
+                <th rowspan="4" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Hành động</th>
               </tr>
               <tr>
                 <th rowspan="3">
@@ -270,8 +273,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai==='03' ? '' : 'row-disabled'">
+              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -348,8 +351,8 @@
                 <td>{{calculatortkcnTongThocCreate()}}</td>
                 <td>{{calculatortkcnTongGaoCreate()}}</td>
                 <!-- <td class="background-last-row"></td> -->
-                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'">
+                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                   <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -416,7 +419,7 @@
                   <td>{{data.tkcnTongGao | number: '1.0-1'}}
                   </td>
                   <!-- <td>{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 ">
+                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 ">
                     <a (click)="startEdit(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -586,8 +589,8 @@
                   number: '1.0-1'}}
                 </td>
                 <!-- <td class="background-last-row"></td> -->
-                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'"></td>
+                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td>
               </tr>
             </tbody>
           </nz-table>
@@ -623,8 +626,8 @@
                   ( 31/12/2021)
                 </th>
                 <th rowspan="3">Trạng thái</th>
-                <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'">Hành động</th>
+                <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Hành động</th>
               </tr>
               <tr>
                 <th rowspan="2">
@@ -652,8 +655,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai==='03' ? '' : 'row-disabled'">
+              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -707,8 +710,8 @@
                 </td>
                 <td>{{calculatortkcnTongMuoiCreate()}}</td>
                 <td></td>
-                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'">
+                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                   <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -742,8 +745,8 @@
                   </ng-container>
                   <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
                   <td *ngIf="dataMuoi.stt">{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td>
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                  thongTinChiTieuKeHoachNam.trangThai==='03'">
+                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                     <a (click)="startEditMuoi(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -790,8 +793,8 @@
                   </td>
                   <td>{{calculatortkcnTongSoMuoi(i)}}</td>
                   <td></td>
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                  thongTinChiTieuKeHoachNam.trangThai==='03'">
+                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                     <a (click)="saveEditMuoi(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -847,8 +850,8 @@
                   '1.0-1'}}
                 </td>
                 <td class="background-last-row"></td>
-                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'"></td>
+                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td>
               </tr>
             </tbody>
           </nz-table>
@@ -901,8 +904,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai==='03' ? '' : 'row-disabled'">
+              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -991,8 +994,8 @@
                     [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam" (input)="calculatorTongChiTieuNtn()">
                   </nz-input-number>
                 </td>
-                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai==='00' || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai==='03'">
+                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                   <a class="save" (click)="themMoiVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -1106,18 +1109,18 @@
           </div>
         </div>
         <div class="tep" (click)="downloadTemplate()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai === '03'">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai === globals.prop.TU_CHOI">
           <i class="icon htvbdh_tcdt_tep"></i>
           <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
         </div>
         <div class="action">
           <!-- <button type="button" class="btn btn-main" (click)="themMoi()"
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00'  || id===0 || thongTinChiTieuKeHoachNam.trangThai === '03'">
+            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO  || id===0 || thongTinChiTieuKeHoachNam.trangThai === globals.prop.TU_CHOI">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button> -->
           <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === '00' || id===0 || thongTinChiTieuKeHoachNam.trangThai === '03'">
+            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai === globals.prop.TU_CHOI">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>
           </button>
@@ -1142,10 +1145,10 @@
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
                   <input nz-input nzSize="large" formControlName="ghiChu" style="height: 40px !important;"
-                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'" />
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET" />
                   <!-- <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
-                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01'"
-                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === '02' || thongTinChiTieuKeHoachNam.trangThai === '01' ? 'disable' : ''"></textarea> -->
+                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET"
+                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET ? 'disable' : ''"></textarea> -->
                   <ng-template #soQDError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{control.hasError('required')}}
                       {{errorInputRequired}}

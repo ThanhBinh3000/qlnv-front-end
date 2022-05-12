@@ -87,7 +87,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dsVatTuClone: Array<KeHoachVatTu> = [];
   keHoachLuongThuc: KeHoachLuongThuc = new KeHoachLuongThuc();
   keHoachLuongThucCreate: KeHoachLuongThuc;
-  isAddLuongThuc: boolean = true;
+  isAddLuongThuc: boolean = false;
   keHoachMuoiCreate: KeHoachMuoi;
   isAddMuoi: boolean = false;
   keHoachVatTuCreate: KeHoachVatTu;
@@ -108,6 +108,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   keHoachVatTuShow: Array<KeHoachVatTu> = [];
   userInfo: UserLogin;
   levelCuc: any = LEVEL_USER;
+  tenDonViCuc: string;
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -127,20 +128,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
-    if (this.userInfo.sub == LEVEL_USER.CUC) {
-      this.donViService
-        .getDonVi(this.userInfo.MA_DVI)
-        .then((rs) => {
-          console.log('rs:  ', rs);
-          this.keHoachLuongThucCreate.tenDonvi = 'don vi cuc';
-          this.keHoachMuoiCreate.tenDonVi = 'don vi cuc';
-          this.keHoachVatTuCreate.tenDonVi = 'don vi cuc';
-        })
-        .catch((err) => {
-          this.notification.error(MESSAGE.ERROR, err.msg);
-          this.spinner.hide();
-        });
-    }
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -1250,7 +1237,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: this.globals.prop.BAN_HANH,
           };
           const res = await this.chiTieuKeHoachNamService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -1286,7 +1273,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: this.globals.prop.TU_CHOI,
           };
           const res = await this.chiTieuKeHoachNamService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -1383,7 +1370,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDoTuChoi: null,
-                trangThai: '01',
+                trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
               };
               this.chiTieuKeHoachNamService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -1422,7 +1409,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               let body = {
                 id: res.data.id,
                 lyDoTuChoi: null,
-                trangThai: '01',
+                trangThai: this.globals.prop.LANH_DAO_DUYET,
               };
               this.chiTieuKeHoachNamService.updateStatus(body);
               if (res.msg == MESSAGE.SUCCESS) {
@@ -1498,13 +1485,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
   convertTrangThai(status: string) {
-    if (status == '00') {
+    if (status == this.globals.prop.DU_THAO) {
       return 'Dự thảo';
-    } else if (status == '01') {
+    } else if (status == this.globals.prop.LANH_DAO_DUYET) {
       return 'Chờ duyệt';
-    } else if (status == '02') {
+    } else if (status == this.globals.prop.BAN_HANH) {
       return 'Đã duyệt';
-    } else if (status == '03') {
+    } else if (status == this.globals.prop.TU_CHOI) {
       return 'Từ chối';
     }
   }
@@ -1705,6 +1692,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     try {
       const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
+      let donViCuc = {};
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           const item = {
@@ -1712,6 +1700,22 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
+          if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+            // this.isAddLuongThuc = true;
+            // this.isAddMuoi = true;
+            for (let i = 0; i < res.data.length; i++) {
+              if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+                donViCuc = res.data[i];
+                this.tenDonViCuc = res.data[i].tenDvi;
+                break;
+              }
+            }
+          }
+        }
+        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+          this.selectDonViMuoi(donViCuc);
+          this.selectDonViKHLT(donViCuc);
+          this.selectDonViVatTu(donViCuc);
         }
         this.options = cloneDeep(this.optionsDonVi);
       } else {
@@ -1935,6 +1939,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.checkDataExistLuongThuc(this.keHoachLuongThucDialog);
     this.isAddLuongThuc = false;
     this.newObjectLuongThuc();
+    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+      this.keHoachLuongThucCreate.tenDonvi = this.tenDonViCuc;
+      // this.isAddLuongThuc = true;
+    }
+    this.keHoachLuongThucCreate;
     this.dsKeHoachLuongThucClone = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
@@ -2006,6 +2015,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.checkDataExistMuoi(this.keHoachMuoiDialog);
     this.isAddMuoi = false;
     this.newObjectMuoi();
+    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+      this.keHoachMuoiCreate.tenDonVi = this.tenDonViCuc;
+      // this.isAddLuongThuc = true;
+    }
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.loadData();
   }
@@ -2019,12 +2032,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachMuoiCreate.tenDonVi = muoi.tenDvi;
     this.keHoachMuoiCreate.donViId = muoi.id;
     this.chiTieuKeHoachNamService
-      .tonKhoDauNam({ maDvi: muoi.maDvi, maVthhList: ['04'] })
+      .tonKhoDauNam({
+        maDvi: muoi.maDvi,
+        maVthhList: [this.globals.prop.MA_VTHH],
+      })
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
             res.data.forEach((tonKho) => {
-              if (tonKho.maVthh == '04') {
+              if (tonKho.maVthh == this.globals.prop.MA_VTHH) {
                 switch (tonKho.nam) {
                   case (this.yearNow - 1).toString():
                     this.keHoachMuoiCreate.tkdnMuoi[0].soLuong =
@@ -2237,6 +2253,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachVatTuDialog.vatTuThietBi.push(vatTuTemp);
     this.isAddVatTu = false;
     this.newObjectVatTu();
+    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+      this.keHoachVatTuCreate.tenDonVi = this.tenDonViCuc;
+      // this.isAddLuongThuc = true;
+    }
     this.checkDataExistVatTu(this.keHoachVatTuDialog);
 
     this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
@@ -2297,7 +2317,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.chiTieuKeHoachNamService
       .tonKhoDauNam({
         maDvi: this.keHoachVatTuCreate.maDvi,
-        maVthhList: [this.keHoachVatTuCreate.maHang],
+        maVthhList: [this.keHoachVatTuCreate.vatTuThietBi[0].maVatTuCha],
       })
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -2381,9 +2401,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
   thongTinTrangThai(trangThai: string): string {
-    if (trangThai === '00' || trangThai === '01' || trangThai === '03') {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
       return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
       return 'da-ban-hanh';
     }
   }
