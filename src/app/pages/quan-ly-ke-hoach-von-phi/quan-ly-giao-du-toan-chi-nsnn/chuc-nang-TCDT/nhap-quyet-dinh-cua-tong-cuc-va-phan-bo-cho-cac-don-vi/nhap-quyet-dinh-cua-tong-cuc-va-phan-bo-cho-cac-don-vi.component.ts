@@ -446,15 +446,27 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
           // set thong tin chung bao cao
           this.ngayQd = data.data?.ngayQD;
           this.maNguoiKyTC = data.data?.maNguoiKy;
+          this.nguoiKyBTC = data.data?.qdCha.maNguoiKy;
           this.maDonViTao = data.data?.maDvi;
           this.maBaoCao = data.data?.maBcao;
           this.soQd = data.data?.soQd;
-          this.soQd = this.soQd.replace('/QĐ-BTC', '')
+          this.soQd = this.soQd.replace('/QĐ-TC', '')
           this.trangThaiBanGhi = data.data?.trangThai;
           this.ghiChu = data.data?.ghiChu;
           this.veViec = data.data?.veViec;
           this.maDviTien = data.data?.maDviTien
-
+          this.soQdCha = data.data?.qdCha.soQd
+          this.soQdCha = this.soQdCha.replace('/QĐ-BTC', '')
+          this.namQdCha = data.data?.qdCha.nam
+          this.nam = data.data.nam
+          this.ngayQdCha = this.datePipe.transform(data.data?.qdCha.ngayQd, Utils.FORMAT_DATE_STR)
+          this.changeNguoiKy();
+            this.maCucDtnnKvucs.forEach(e => {
+              if (this.maDonViTao == e.maDvi) {
+                this.maNganSach = e.maNsnn;
+                this.maSoKBNN = e.maKbnn;
+              }
+            });
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -609,7 +621,8 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
     modalIn.afterClose.subscribe((res) => {
         this.maQdCha = res.maQdCha
         this.maDonViTao = res.maDvi
-        this.soQdCha = res.soQdCha.replace()
+        this.soQdCha = res.soQdCha
+        this.soQdCha = this.soQdCha.replace('/QĐ-BTC', '')
         this.ngayQdCha = res.ngayQdCha
         this.namQdCha = res.namQdCha
         this.nguoiKyBTC = res.nguoiKyBTC
@@ -640,8 +653,6 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
               this.lstCTietBCao = res.danhSachKhoanMuc
               this.sortByIndex()
               this.tinhTong1()
-              console.log(this.lstCTietBCao);
-
               this.updateEditCache();
          }
     });
@@ -665,7 +676,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
       }
     })
   }
-    changeNguoiKy(){
+  changeNguoiKy(){
     this.nguoiKys.forEach(e => {
       if(this.maNguoiKyBTC == e.maNguoiKy){
         this.nguoiKyBTC = e.tenNguoiKy

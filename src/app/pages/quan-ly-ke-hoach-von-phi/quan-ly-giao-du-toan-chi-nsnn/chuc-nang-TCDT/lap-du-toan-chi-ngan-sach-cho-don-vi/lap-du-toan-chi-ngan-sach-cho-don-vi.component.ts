@@ -54,7 +54,9 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   userName: any;                              // ten nguoi dang nhap
   ngayNhap!: any;                             // ngay nhap
   nguoiNhap!: string;                         // nguoi nhap
-  maDonViTao!: any;                           // ma don vi tao
+  // maDonViTao!: any;                           // ma don vi tao
+  maDviLap!: any                              // ma don vi lap
+  maDviThien!: any
   maBaoCao!: string;                          // ma bao cao
   trangThaiBanGhi: string = "1";              // trang thai cua ban ghi
   maDviTien: string;                   // ma don vi tien
@@ -202,7 +204,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     } else {
       this.trangThaiBanGhi = "1";
       this.nguoiNhap = userInfo?.username;
-      this.maDonViTao = userInfo?.dvql;
+      this.maDviLap = userInfo?.dvql;
       this.spinner.show();
       this.maBaoCao = '';
       // this.nam = new Date().getFullYear();
@@ -216,7 +218,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          var Dvi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+          var Dvi = this.donVis.find(e => e.maDvi == this.maDviLap);
           this.capDv = Dvi.capDvi;
 
           this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2');
@@ -297,7 +299,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   getStatusButton() {
     let checkParent = false;
     let checkChirld = false;
-    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    let dVi = this.donVis.find(e => e.maDvi == this.maDviLap);
     if (dVi && dVi.maDvi == this.userInfo.dvql) {
       checkChirld = true;
     }
@@ -372,15 +374,13 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
       lstCtiet: this.lstCTietBCao,
       loaiQd: this.loaiQd = "2",
       lyDoTuChoi: this.lyDoTuChoi,
-      maDvi: this.maDonViTao,
+      maDvi: this.maDviThien,
       maDviTien: this.maDviTien,
       maNguoiKy: this.nguoiKy,
       maQdCha: this.maQdCha,
       nam: this.nam,
       ngayQD: this.ngayQd,
-      // noiDung: "1",
       noiQd: this.noiQd,
-      // soQd: this.soQd + "/QĐ-BTC",
       tenDvi: this.tenDvi,
       trangThai: "1",
       vanBan: this.vanBan,
@@ -469,7 +469,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           // set thong tin chung bao cao
           this.ngayNhap = data.data.ngayTao;
           this.nguoiNhap = data.data.nguoiTao;
-          this.maDonViTao = data.data.maDvi;
+          this.maDviThien = data.data.maDvi;
           this.maBaoCao = data.data.maBcao;
           this.nam = data.data.nam;
           this.trangThaiBanGhi = data.data.trangThai;
@@ -482,7 +482,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           this.maDviTien = data.data?.maDviTien
           this.ngayQd = data?.data?.qdCha.ngayQd;
           this.noiDung = data.data?.noiDung
-          this.maQdCha = data.data.qdCha.id
+          this.maQdCha = data.data.maQdCha
           // set list id file ban dau
           this.lstFile.filter(item => {
             this.listIdFiles += item.id + ",";
@@ -495,6 +495,12 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
           }
           this.tinhTong1()
 
+          // this.maCucDtnnKvucs.forEach(e => {
+          //   if (this.maDviThien == e.maDvi) {
+          //     this.maNganSach = e.maNsnn;
+          //     this.maSoKBNN = e.maKbnn;
+          //   }
+          // });
           this.lstCTietBCao.forEach(e => {
             e.dtoanGiao = e.dtoanDaPbo + e.pboChoCacDvi
           })
@@ -515,7 +521,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', 'QD_GIAO_PHAN_BO_NSNN' + '/' + this.maDonViTao);
+    upfile.append('folder', 'QD_GIAO_PHAN_BO_NSNN' + '/' + this.maDviLap);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -611,7 +617,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
 
   // lay ten don vi tao
   getUnitName() {
-    return this.donVis.find(item => item.maDvi == this.maDonViTao)?.tenDvi;
+    return this.donVis.find(item => item.maDvi == this.maDviLap)?.tenDvi;
   }
 
   redirectQLGiaoDTChi() {
@@ -926,7 +932,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   }
 
   sortByIndex() {
-    debugger
     this.lstCTietBCao.forEach(item => {
       this.setDetail(item.id);
     })

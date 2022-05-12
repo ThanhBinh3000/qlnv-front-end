@@ -87,7 +87,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
         page: this.pages.page
       },
     };
-     this.QuanLyVonPhiService.timDanhSachPhanBo(requestReport).toPromise().then(
+     this.QuanLyVonPhiService.timDanhSachPhanBo1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
@@ -106,14 +106,14 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   }
 
   async handleOk() {
-    await this.QuanLyVonPhiService.QDGiaoChiTiet(this.radioValue).toPromise().then(
+    await this.QuanLyVonPhiService.QDGiaoChiTiet1(this.radioValue).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
           this.maQdCha = data.data.qdCha.id
           this.soQdCha = data.data.qdCha.soQd
           this.ngayQdCha =this.datePipe.transform( data.data.qdCha.ngayQd , Utils.FORMAT_DATE_STR,)
-          this.namQdCha = data.data.qdCha.nam
+          this.namQdCha = data.data.nam
           this.ngayQd = data.data.ngayQd
           this.nam = data.data.nam
           this.maNguoiKyBTC = data.data.qdCha.maNguoiKy

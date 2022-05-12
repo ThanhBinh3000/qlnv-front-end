@@ -82,7 +82,7 @@ export class QuanLyVonPhiService extends BaseService {
       // 'http://192.168.1.110:8094/lap-tham-dinh-du-toan/chuc-nang',
       // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
       // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang',
-      "http://localhost:8094/qd-giao-phan-bo-dtoan/chuc-nang",
+      "http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chuc-nang",
       request,
     );
   }
