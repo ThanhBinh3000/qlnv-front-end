@@ -12,7 +12,7 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
               <!--có Search: https://ng.ant.design/components/tree-view/en -->
-              <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+              <nz-tree [nzExpandAll]="true" #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
                 (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
                 (nzExpandChange)="nzCheck($event)">
               </nz-tree>

@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlQuyenComponent } from './them-ql-quyen/them-ql-quyen.component';
 import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD.service';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
 
 
 @Component({
@@ -23,6 +23,7 @@ import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 })
 export class QlQuyenComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
   searchValue = '';
   searchFilter = {
     soDxuat: '',
@@ -41,6 +42,8 @@ export class QlQuyenComponent implements OnInit {
   datas: any;
   isVisibleChangeTab$ = new Subject();
   nodes: any;
+  nodeSelected: any;
+  selectedKeys: any;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -50,7 +53,9 @@ export class QlQuyenComponent implements OnInit {
     private modal: NzModalService,
     private _modalService: NzModalService,
     private _qlQuyenService: QlQuyenNSDService
-  ) { }
+  ) {
+
+  }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
@@ -121,9 +126,10 @@ export class QlQuyenComponent implements OnInit {
     */
   parentNodeSelected: any = [];
   nzClickNodeTree(event: any): void {
+    debugger
     if (event.keys.length > 0) {
-      // this.nodeSelected = event.keys[0];
-      // this.selectedKeys = event.node.origin.data;
+      this.nodeSelected = event.keys[0];
+      this.selectedKeys = event.node.origin.data;
       this.parentNodeSelected = event?.parentNode?.origin
       // this.showDetailDonVi(event.keys[0])
     }
@@ -165,13 +171,30 @@ export class QlQuyenComponent implements OnInit {
     let res = await this._qlQuyenService.dsquyen();
     if (res.msg == MESSAGE.SUCCESS) {
       this.datas = res.data;
-      this.nodes = res.data
-      debugger
+      this.nodes = this.addFiledTree(this.datas)
 
       // this.totalRecord = this.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  datadequy: any
+  addFiledTree(datas) {
+    let data = [];
+    datas.forEach(element => {
+      element.expanded = true
+      if (element.children.length > 0) {
+        this.addFiledTree(element.children)
+      } else {
+        element.isLeaf = true
+
+      }
+
+
+    });
+    console.log(this.datas)
+    return this.datas
   }
 
   async changePageIndex(event) {
