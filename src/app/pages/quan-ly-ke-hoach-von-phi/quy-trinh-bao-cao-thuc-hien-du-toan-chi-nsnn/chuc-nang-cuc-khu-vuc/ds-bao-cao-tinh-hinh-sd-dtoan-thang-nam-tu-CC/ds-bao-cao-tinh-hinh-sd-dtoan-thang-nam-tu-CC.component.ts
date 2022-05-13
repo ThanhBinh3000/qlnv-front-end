@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 
@@ -32,11 +32,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   lenght:any=0;
 
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
-
+  trangThai!:string;
   searchFilter = {
     ngayTaoTu:'',
     ngayTaoDen:'',
-    trangThai:'',
+    trangThais:[],
     maBcao:'',
     maLoaiBcao:'',
     namBcao:'',
@@ -48,7 +48,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     },
     str: '',
     donVi:'',
-    maPhanBcao:'0'
+    maPhanBcao:'0',
+    loaiTimKiem:'1',
   };
 
   donViTaos: any = [];
@@ -87,15 +88,21 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   async onSubmit(){
     this.spinner.show();
-    await this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).toPromise().then(res => {
+    this.searchFilter.trangThais= [];
+    if(this.trangThai){
+      this.searchFilter.trangThais.push(this.trangThai)
+    }else{
+      this.searchFilter.trangThais = [Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    }
+    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
-        this.listBcaoKqua = res.data.content;
+        this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
           e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
           e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
         })
-        this.totalElements = res.data.totalElements;
-        this.totalPages = res.data.totalPages;
+        this.totalElements = res.data?.totalElements;
+        this.totalPages = res.data?.totalPages;
       }else{
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
@@ -119,5 +126,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   close() {
     this.location.back();
+  }
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
   }
 }

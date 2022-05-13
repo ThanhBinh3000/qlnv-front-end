@@ -321,7 +321,7 @@ export class BaoCaoComponent implements OnInit {
         LISTBIEUMAUDOT.forEach(e => {
           this.baoCao.lstBCao.push(
             {
-              id:uuid.v4(),
+              id:uuid.v4()+'FE',
               checked:false,
               tieuDe: e.tieuDe+this.baoCao.dotBcao,
               maLoai:e.maPhuLuc.toString(),
@@ -336,7 +336,7 @@ export class BaoCaoComponent implements OnInit {
         LISTBIEUMAUNAM.forEach(e => {
           this.baoCao.lstBCao.push(
             {
-              id:uuid.v4(),
+              id:uuid.v4()+'FE',
               checked:false,
               tieuDe: e.tieuDe+this.baoCao.namBcao,
               maLoai:e.maPhuLuc.toString(),
@@ -392,12 +392,12 @@ export class BaoCaoComponent implements OnInit {
     }
     
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, checkParent, this.userInfor?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, checkParent, this.userInfor?.roles[0]?.code);
     
   }
 
@@ -927,7 +927,7 @@ export class BaoCaoComponent implements OnInit {
         res.forEach(item => {
           if(item.status){
             this.baoCao.lstBCao.push({
-              id: uuid.v4(),
+              id: uuid.v4()+'FE',
               checked:false,
               tieuDe: item.tieuDe,
               maLoai:item.maPhuLuc.toString(),
@@ -990,7 +990,7 @@ export class BaoCaoComponent implements OnInit {
       parentID=2;
     }
     let item: ItemDataMau02 = {
-      id: uuid.v4(),
+      id: uuid.v4()+'FE',
       stt: 0,
       index:0,
       maVtu: '',
@@ -1027,7 +1027,7 @@ export class BaoCaoComponent implements OnInit {
   deleteById02(id: any,loaiList:any): void {
     if(loaiList=='1'){
       this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item?.id != id);
-      if (typeof id == 'number') {
+      if (id?.length == 36) {
         this.lstIdDeleteMau02 += id + ',';
         let objecDele ={
           maLoai:BAO_CAO_NHAP_HANG_DTQG.toString(),
@@ -1037,7 +1037,7 @@ export class BaoCaoComponent implements OnInit {
       }
     }else{
       this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item?.id != id);
-      if (typeof id == 'number') {
+      if (id?.length == 36) {
         this.lstIdDeleteMau02 += id + ',';
         let objecDele ={
           maLoai:BAO_CAO_NHAP_HANG_DTQG.toString(),
@@ -1230,7 +1230,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     let item: ItemDataMau03 = {
-      id: uuid.v4(),
+      id: uuid.v4()+'FE',
       stt: 0,
       maVtu: 0,
       maDviTinh: 0,
@@ -1272,7 +1272,7 @@ export class BaoCaoComponent implements OnInit {
   deleteById03(id: any,loaiList:any): void {
     if(loaiList=='1'){
       this.lstCTietBCao031 = this.lstCTietBCao031.filter((item) => item.id != id);
-      if (typeof id == 'number') {
+      if (id?.length == 36) {
         this.lstIdDeleteMau03 += id + ',';
         let objecDele = {
           maLoai:BAO_CAO_XUAT_HANG_DTQG.toString(),
@@ -1282,7 +1282,7 @@ export class BaoCaoComponent implements OnInit {
       }
     }else if(loaiList=='2'){
       this.lstCTietBCao032 = this.lstCTietBCao032.filter((item) => item.id != id);
-      if (typeof id == 'number') {
+      if (id?.length == 36) {
         this.lstIdDeleteMau03 += id + ',';
         let objecDele = {
           maLoai:BAO_CAO_XUAT_HANG_DTQG.toString(),
@@ -1505,7 +1505,7 @@ export class BaoCaoComponent implements OnInit {
         }
         colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
@@ -1536,11 +1536,11 @@ export class BaoCaoComponent implements OnInit {
           col:null,
         };
         this.listColTemp.forEach((e) => {
-            objTrongD.id = uuid.v4();
+            objTrongD.id = uuid.v4()+'FE';
             objTrongD.maVtu= e.maVtu;
             objTrongD.col=e.col;
           
-            objLke.id= uuid.v4(),
+            objLke.id= uuid.v4()+'FE',
             objLke.maVtu= e.maVtu;
             objLke.col=e.col;
           listVtu.push(objTrongD);
@@ -1572,7 +1572,7 @@ export class BaoCaoComponent implements OnInit {
         }
         colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
@@ -1642,7 +1642,7 @@ export class BaoCaoComponent implements OnInit {
         }
         colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
@@ -1712,7 +1712,7 @@ export class BaoCaoComponent implements OnInit {
         }
         colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
@@ -1726,16 +1726,16 @@ export class BaoCaoComponent implements OnInit {
         this.listColTemp = this.listColTrongDot05;
         this.cols = this.cols + this.cols05;
 
-        let objTrongD = {
-          id: uuid.v4(),
+        let objTrongD:any = {
+          id: uuid.v4()+'FE',
           maVtu: null,
           loaiMatHang: '0',
           colName: null,
           sl: 0,
           col:null,
         };
-        let objLke = {
-          id: uuid.v4(),
+        let objLke:any = {
+          id: uuid.v4()+'FE',
           maVtu: null,
           loaiMatHang: '1',
           colName: null,
@@ -1779,7 +1779,7 @@ export class BaoCaoComponent implements OnInit {
   deleteCol(col: any){
     if(this.tabSelected ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
       var itemCol= this.listColTrongDot4ax.find((item) => item.col==col);
-      if(typeof itemCol.id=="number"){
+      if(itemCol?.id?.length == 36){
         this.lstIdDeleteCols += itemCol.col + ',';
         }
       this.listColTrongDot4ax =  this.listColTrongDot4ax.filter(item => item.col!=col);
@@ -1792,7 +1792,7 @@ export class BaoCaoComponent implements OnInit {
       
     }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
       var itemCol= this.listColTrongDot4an.find((item) => item.col==col);
-      if(typeof itemCol.id=="number"){
+      if(itemCol?.id?.length == 36){
         this.lstIdDeleteCols += itemCol.col + ',';
         }
       this.listColTrongDot4an =  this.listColTrongDot4an.filter(item => item.col!=col);
@@ -1804,7 +1804,7 @@ export class BaoCaoComponent implements OnInit {
       this.cols = this.cols - 1;
     }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
       var itemCol= this.listColTrongDot4bx.find((item) => item.col==col);
-      if(typeof itemCol.id=="number"){
+      if(itemCol?.id?.length == 36){
         this.lstIdDeleteCols += itemCol.col + ',';
         }
       this.listColTrongDot4bx =  this.listColTrongDot4bx.filter(item => item.col!=col);
@@ -1816,7 +1816,7 @@ export class BaoCaoComponent implements OnInit {
       this.cols = this.cols - 1;
     }else if(this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
       var itemCol= this.listColTrongDot05.find((item) => item.col==col);
-      if(typeof itemCol.id=="number"){
+      if(itemCol?.id?.length == 36){
         this.lstIdDeleteCols += itemCol.col + ',';
         }
       this.listColTrongDot05 =  this.listColTrongDot05.filter(item => item.col!=col);
@@ -2051,7 +2051,7 @@ export class BaoCaoComponent implements OnInit {
   } else {
       let item: ItemDataMau04a1 = {
           ...initItem,
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           stt: head + "." + (tail + 1).toString(),
           listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
           listCtiet: listVtu,
@@ -2064,7 +2064,7 @@ export class BaoCaoComponent implements OnInit {
       };
   }
     // let item: ItemDataMau04a1 = {
-    //     id: uuid.v4(),
+    //     id: uuid.v4()+'FE',
     //     stt: head + "." + (tail + 1).toString(),
     //     listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
     //     maNdungChi: '',
@@ -2218,7 +2218,7 @@ export class BaoCaoComponent implements OnInit {
   } else {
       let item: ItemDataMau04a1 = {
           ...initItem,
-          id: uuid.v4(),
+          id: uuid.v4()+'FE',
           listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
           stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
           listCtiet:listVtu,
@@ -2232,7 +2232,7 @@ export class BaoCaoComponent implements OnInit {
       };
   }
   //   let item: ItemDataMau04a1 = {
-  //     id: uuid.v4(),
+  //     id: uuid.v4()+'FE',
   //     stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
   //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
   //     maNdungChi:'',
@@ -2266,7 +2266,7 @@ export class BaoCaoComponent implements OnInit {
         
          this.lstCTietBaoCaoTemp.forEach(e => {
            if(e.stt.startsWith(nho)){
-              if(typeof id == 'number'){
+              if(id?.length == 36){
                 this.lstIdDeleteMau04ax +=e.id+',';
               }
            }
@@ -2281,7 +2281,7 @@ export class BaoCaoComponent implements OnInit {
         
           this.lstCTietBaoCaoTemp.forEach(e => {
             if(e.stt.startsWith(nho)){
-              if(typeof id == 'number'){
+              if(id?.length == 36){
                 this.lstIdDeleteMau04an +=e.id+',';
               }
             }
@@ -2296,7 +2296,7 @@ export class BaoCaoComponent implements OnInit {
         
           this.lstCTietBaoCaoTemp.forEach(e => {
             if(e.stt.startsWith(nho)){
-              if(typeof id == 'number'){
+              if(id?.length == 36){
                 this.lstIdDeleteMau04bx +=e.id+',';
               }
             }
@@ -2311,7 +2311,7 @@ export class BaoCaoComponent implements OnInit {
         
           this.lstCTietBaoCaoTemp.forEach(e => {
             if(e.stt.startsWith(nho)){
-              if(typeof id == 'number'){
+              if(id?.length == 36){
                 this.lstIdDeleteMau05 +=e.id+',';
               }
             }
@@ -2541,7 +2541,7 @@ export class BaoCaoComponent implements OnInit {
       };
     } else {
         let item: ItemDataMau04a1 = {
-              id: uuid.v4(),
+              id: uuid.v4()+'FE',
               stt: "0.1",
               listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha==0),
               maNdungChi:'',
@@ -2567,7 +2567,7 @@ export class BaoCaoComponent implements OnInit {
         };
     }
     // let item: ItemDataMau04a1 = {
-    //     id: uuid.v4(),
+    //     id: uuid.v4()+'FE',
     //     stt: "0.1",
     //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha==0),
     //     maNdungChi:'',

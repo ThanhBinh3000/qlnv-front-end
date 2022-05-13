@@ -49,7 +49,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a status" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a status" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
           </div>
@@ -95,7 +95,7 @@
               <td>{{item.ngayDuyet}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>{{item.ngayTraKq}}</td>
-              <td class="text-center">{{item.tenTrangThai}} 
+              <td class="text-center">{{getStatusName(item.trangThai)}} 
                 <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>

@@ -14,7 +14,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
@@ -52,7 +52,8 @@
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>Ngày cục khu vực kiểm tra báo cáo</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+              </td>
               <td>
                 <!-- <button type="button" class="btn btn-main">
                   <span>Thông báo đến đơn vị cấp dưới</span>

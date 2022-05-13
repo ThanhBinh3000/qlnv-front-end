@@ -191,13 +191,13 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
           }
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
      }
 
      //get user info
@@ -248,7 +248,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
 
           // replace nhung ban ghi dc them moi id thanh null
           this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
+               if (item.id?.length == 38) {
                     item.id = null;
                }
           })
@@ -307,7 +307,7 @@ export class LapBaoCaoDieuChinhKiemTraComponent implements OnInit {
 
           this.lstCTietBCao.filter(item => {
                if (!item.id) {
-                    item.id = uuid.v4();
+                    item.id = uuid.v4()+'FE';
                }
           });
           this.updateEditCache();

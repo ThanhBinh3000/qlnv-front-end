@@ -23,6 +23,7 @@ export class Utils {
     public static BCAO_03 = "03";
 
     // Trang thái báo cáo
+    public static TT_BC_KT = "-1"; // kiem tra
     public static TT_BC_0 = "0"; // Đã xóa
     public static TT_BC_1 = "1"; // Đang soạn,
     public static TT_BC_2 = "2"; // Trình duyệt,
@@ -36,9 +37,9 @@ export class Utils {
     public static TT_BC_10 = "10"; // Lãnh đạo điều chỉnh,
     public static TT_BC_11 = "11"; //Trạng thái của Phương án giao số trần chi (đã giao);
     // Danh sach quyen
-    public static LANH_DAO = 1;// "Lãnh Đạo";
-    public static TRUONG_BO_PHAN = 2;// "Trưởng Bộ Phận";
-    public static NHAN_VIEN = 3;// "Nhân Viên";
+    public static LANH_DAO = '1';// "Lãnh Đạo";
+    public static TRUONG_BO_PHAN = '2';// "Trưởng Bộ Phận";
+    public static NHAN_VIEN = '3';// "Nhân Viên";
 
     // Cap don vi
     public static CHI_CUC = "3";
@@ -49,77 +50,77 @@ export class Utils {
     public static btnRoleDel = {
         "status": ['1', '3', '5', '8','10'],
         "unit": [1, 2],
-        "role": [3],
+        "role": ['3'],
     }
 
     //role luu
     public static btnRoleSave = {
         "status": ['1', '3', '5', '8','10'],
         "unit": [1, 2],
-        "role": [3],
+        "role": ['3'],
     }
 
     //role trinh duyet
     public static btnRoleApprove = {
         "status": ['1'],
         "unit": [1, 2],
-        "role": [3],
+        "role": ['3'],
     }
 
     //role truong bo phan
     public static btnRoleTBP = {
         "status": ['2'],
         "unit": [1, 2],
-        "role": [2],
+        "role": ['2'],
     }
 
     //role lanh dao
     public static btnRoleLD = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": [1],
+        "role": ['1'],
     }
 
     //role gui don vi cap tren
     public static btnRoleGuiDVCT = {
         "status": ['6'],
         "unit": [1, 2],
-        "role": [1],
+        "role": ['1'],
     }
 
     //role don vi cap tren
     public static btnRoleDVCT = {
         "status": ['7'],
         "unit": [1, 2],
-        "role": [3],
+        "role": ['3'],
     }
 
     //role lanh dao dieu chinh
     public static btnRoleLDDC = {
         "status": ['4'],
         "unit": [1, 2],
-        "role": [1],
+        "role": ['1'],
     }
 
     //role copy
     public static btnRoleCOPY = {
-        "status": ['2','3','4','5','6','7','8','9','10','11'],
+        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
         "unit": [1, 2],
-        "role": [3],
+        "role": ['3'],
     }
 
     //role in
     public static btnRolePRINT = {
         "status": ['2','3','4','5','6','7','8','9','10','11'],
         "unit": [1, 2],
-        "role": [1,2,3],
+        "role": ['1','2','3'],
     }
 
     //role copy
     public static btnRoleOK = {
         "statusBaoCao": ['2','4','7'],
         "statusChiTiet": ['2'],
-        "unit": [1]
+        "unit": ['1']
     }
 
     //get role xoa
@@ -639,16 +640,36 @@ export const LOAIBAOCAO =[
     // loai trang thai gui don vi cap tren
     export const TRANGTHAIGUIDVCT =[
         {
-            id:9,
+            id:'9',
             ten:'Chấp nhận'
         },
         {
-            id:8,
+            id:'8',
             ten:'Không chấp nhận'
         },
         {
-            id:7,
+            id:'7',
             ten:'Chưa đánh giá (để trống)'
+        },
+    ]
+
+    // loai trang thai kiem tra
+    export const TRANGTHAIKIEMTRABAOCAO =[
+        {
+            id:'9',
+            ten:'Chấp nhận'
+        },
+        {
+            id:'8',
+            ten:'Không chấp nhận'
+        },
+        {
+            id:'7',
+            ten:'Chưa đánh giá (để trống)'
+        },
+        {
+            id:'-1',
+            ten:'Chưa gửi đơn vị cấp trên'
         },
     ]
 

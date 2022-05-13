@@ -19,7 +19,7 @@
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" nzDisabled>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" ngModel="9" nzDisabled>
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>

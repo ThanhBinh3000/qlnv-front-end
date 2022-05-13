@@ -7,11 +7,11 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI } from 'src/app/Utility/utils';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI, Utils } from 'src/app/Utility/utils';
 import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { ComponentsModule } from 'src/app/components/components.module';
 @Component({
   selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
   templateUrl: './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam.component.html',
@@ -30,7 +30,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   url: any = '/bao-cao/';
 
   trangThais: any = TRANGTHAITIMKIEM;
-
+  trangThai!:string;
   listBcaoKqua: any[] = [];
   lenght: any = 0;
 
@@ -40,7 +40,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     maDvi: '',
     ngayTaoTu: '',
     ngayTaoDen: '',
-    trangThai: '',
+    trangThais: [],
     maBcao: '',
     maLoaiBcao: '',
     namBcao: null,
@@ -51,6 +51,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       page: 1
     },
     str: "",
+    loaiTimKiem:'0',
   };
 
   donViTaos: any = [];
@@ -104,6 +105,12 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
+    this.searchFilter.trangThais= [];
+    if(this.trangThai){
+      this.searchFilter.trangThais.push(this.trangThai)
+    }else{
+      this.searchFilter.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    }
     await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data.content;
@@ -169,4 +176,10 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
 		}
 	}
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
+  }
 }

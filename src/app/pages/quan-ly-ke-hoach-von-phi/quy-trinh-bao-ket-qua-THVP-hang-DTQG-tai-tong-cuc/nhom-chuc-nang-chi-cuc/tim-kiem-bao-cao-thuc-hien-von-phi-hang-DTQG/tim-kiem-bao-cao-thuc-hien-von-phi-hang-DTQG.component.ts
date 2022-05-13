@@ -111,7 +111,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     let userName = this.nguoiDungSerivce.getUserName();
     let userInfor: any = await this.getUserInfo(userName); //get user info
     const utils = new Utils();
-    var role = utils.getRole(Number(userInfor.roles[0]?.id));
+    var role = utils.getRole(Number(userInfor.roles[0]?.code));
     if(role=='TRUONG_BO_PHAN'){
       this.btnPheDuyet = false;
     }else if(role =='LANH_DAO'){
