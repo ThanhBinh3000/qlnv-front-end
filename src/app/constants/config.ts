@@ -158,13 +158,13 @@ export const LOAI_QUYET_DINH = {
 export const LOAI_HANG_DTQG = {
   GAO: '00',
   THOC: '01',
-  MUOI: '02'
-}
+  MUOI: '02',
+};
 
 export const STATUS_USER = {
   HOAT_DONG: '01',
   KHOA: '00',
-}
+};
 export const LEVEL = {
   TONG_CUC: 'tong-cuc',
   CUC: 'cuc',
@@ -172,4 +172,10 @@ export const LEVEL = {
   TONG_CUC_SHOW: 'Tổng cục',
   CUC_SHOW: 'Cục',
   CHI_CUC_SHOW: 'Chi cục',
+};
+export const LEVEL_USER = {
+  ADMIN: '1',
+  CAN_BO_TONG_CUC: '1',
+  CUC: '2',
+  CHI_CUC: '3',
 };

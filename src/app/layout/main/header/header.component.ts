@@ -23,10 +23,12 @@ export class HeaderComponent implements OnInit {
     private notification: NzNotificationService,
     private _modalService: NzModalService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
+    console.log('this.userInfo: ', this.userInfo);
+
     this.timTheoDieuKien();
     this.thongBaoMoi();
   }
@@ -106,7 +108,7 @@ export class HeaderComponent implements OnInit {
       nzStyle: { top: '50px' },
       nzWidth: 600,
     });
-    modal.afterClose.subscribe((b) => { });
+    modal.afterClose.subscribe((b) => {});
   }
 
   showModalThongTinCaNhan() {
@@ -119,7 +121,7 @@ export class HeaderComponent implements OnInit {
       nzStyle: { top: '50px' },
       nzWidth: 800,
     });
-    modal.afterClose.subscribe((b) => { });
+    modal.afterClose.subscribe((b) => {});
   }
 
   logOut() {

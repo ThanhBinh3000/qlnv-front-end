@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DanhMucDonViComponent } from './danh-muc-don-vi/danh-muc-don-vi.component';
 import { DanhMucComponent } from './danh-muc.component';
 
 const routes: Routes = [
@@ -9,15 +10,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'nguoi-dung',
+        redirectTo: 'danh-muc-don-vi',
         pathMatch: 'full',
       },
       {
         path: 'danh-muc-don-vi',
-        loadChildren: () =>
-          import(
-            '../danh-muc/danh-muc-don-vi/danh-muc-don-vi.module'
-          ).then((m) => m.DanhMucDonViModule),
+        component: DanhMucDonViComponent,
       },
     ],
   },

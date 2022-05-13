@@ -49,14 +49,16 @@
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                [nzAutocomplete]="auto" />
+                [nzAutocomplete]="auto" [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
             </ng-template>
             <nz-autocomplete #auto>
-              <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-              </nz-auto-option>
+              <ng-container *ngIf="userInfo.CAP_DVI !== globals.prop.CUC">
+                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+                </nz-auto-option>
+              </ng-container>
             </nz-autocomplete>
           </div>
         </div>
@@ -99,7 +101,7 @@
               <td>{{ data.ngayKy }}</td>
               <td>{{ data.namKeHoach }}</td>
               <td class="text-center">{{ data.trichYeu }}</td>
-              <td class="text-center">{{ convertTrangThai(data.trangThai) }}</td>
+              <td class="text-center">{{ data.trangThaiDuyet }}</td>
               <td class="text-center">
                 <a (click)="redirectSuaThongTinChiTieuKeHoachNam(data.id)">
                   <i class="fa fa-pencil"></i>

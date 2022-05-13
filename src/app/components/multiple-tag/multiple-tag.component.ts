@@ -29,6 +29,9 @@ export class MultipleTagComponent implements OnInit {
   }
 
   selectData() {
+    console.log(this.type);
+    console.log(this.trangThai);
+
     if (this.type == 'file' || this.trangThai === '02') {
       return;
     }

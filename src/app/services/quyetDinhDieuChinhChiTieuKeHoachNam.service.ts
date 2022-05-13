@@ -16,30 +16,30 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
 
   timKiem(param: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
-    let tempUrl = "";
+    let tempUrl = '';
     if (param && param.pageSize) {
-      tempUrl = tempUrl + "pageSize=" + param.pageSize + "&";
+      tempUrl = tempUrl + 'paggingReq.limit=' + param.pageSize + '&';
     }
     if (param && param.pageNumber) {
-      tempUrl = tempUrl + "pageNumber=" + param.pageNumber + "&";
+      tempUrl = tempUrl + 'paggingReq.page=' + (param.pageNumber - 1) + '&';
     }
     if (param && param.soQD) {
-      tempUrl = tempUrl + "soQD=" + param.soQD + "&";
+      tempUrl = tempUrl + 'soQD=' + param.soQD + '&';
     }
     if (param && param.namKeHoach) {
-      tempUrl = tempUrl + "namKeHoach=" + param.namKeHoach + "&";
+      tempUrl = tempUrl + 'namKeHoach=' + param.namKeHoach + '&';
     }
     if (param && param.trichYeu) {
-      tempUrl = tempUrl + "trichYeu=" + param.trichYeu + "&";
+      tempUrl = tempUrl + 'trichYeu=' + param.trichYeu + '&';
     }
     if (param && param.ngayKyDenNgay) {
-      tempUrl = tempUrl + "ngayKyDenNgay=" + param.ngayKyDenNgay + "&";
+      tempUrl = tempUrl + 'ngayKyDenNgay=' + param.ngayKyDenNgay + '&';
     }
     if (param && param.ngayKyTuNgay) {
-      tempUrl = tempUrl + "ngayKyTuNgay=" + param.ngayKyTuNgay + "&";
+      tempUrl = tempUrl + 'ngayKyTuNgay=' + param.ngayKyTuNgay + '&';
     }
-    if (tempUrl && tempUrl != "") {
-      url = url + "?" + tempUrl.substring(0, tempUrl.length - 1);
+    if (tempUrl && tempUrl != '') {
+      url = url + '?' + tempUrl.substring(0, tempUrl.length - 1);
     }
     return this.httpClient.get<any>(url).toPromise();
   }
@@ -52,22 +52,22 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   importFile(body: any): Promise<any> {
     const formData = new FormData();
     formData.append('file', body, body.name);
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/import`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/import`;
     return this.httpClient.post(url, formData).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/export/list`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteData(id: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/${id}`;
     return this.httpClient.delete(url).toPromise();
   }
 
   soLuongTruocDieuChinh(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/so-luong-truoc-dieu-chinh`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/so-luong-truoc-dieu-chinh`;
     return this.httpClient.post(url, body).toPromise();
   }
 
@@ -77,12 +77,12 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     return this.httpClient.post(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     return this.httpClient.put(url, body).toPromise();
   }
 }

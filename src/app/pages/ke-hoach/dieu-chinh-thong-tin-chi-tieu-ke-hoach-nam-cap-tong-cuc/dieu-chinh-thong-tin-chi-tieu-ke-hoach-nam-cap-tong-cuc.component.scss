@@ -136,4 +136,41 @@
     pointer-events: none;
     opacity: 0.5;
   }
+  .thong-tin-chi-tieu {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 16px;
+    .title-chi-tieu {
+      display: flex;
+      align-items: center;
+      .du-thao-va-lanh-dao-duyet {
+        color: #ff4d4f;
+        font-weight: 500;
+        font-size: 13px;
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #eaeaea;
+        text-transform: uppercase;
+        margin-right: 8px;
+      }
+      .da-ban-hanh {
+        color: #24e837;
+        font-weight: 500;
+        font-size: 13px;
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #24e837;
+        text-transform: uppercase;
+        margin-right: 8px;
+        background: #efffec;
+      }
+      & > span:nth-child(2) {
+        text-transform: uppercase;
+        color: #444444;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 4px;
+      }
+    }
+  }
 }
