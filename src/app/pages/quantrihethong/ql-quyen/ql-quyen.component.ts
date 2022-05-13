@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlQuyenComponent } from './them-ql-quyen/them-ql-quyen.component';
 import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD.service';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class QlQuyenComponent implements OnInit {
   dataTable: any[] = [];
   datas: any;
   isVisibleChangeTab$ = new Subject();
+  nodes: any;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -113,7 +115,30 @@ export class QlQuyenComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
+  /**
+    * Xử lý tree
+    *
+    */
+  parentNodeSelected: any = [];
+  nzClickNodeTree(event: any): void {
+    if (event.keys.length > 0) {
+      // this.nodeSelected = event.keys[0];
+      // this.selectedKeys = event.node.origin.data;
+      this.parentNodeSelected = event?.parentNode?.origin
+      // this.showDetailDonVi(event.keys[0])
+    }
 
+  }
+
+  nzCheck(event: NzFormatEmitEvent): void {
+    // this.nodeSelected = event.keys[0];
+    // this.selectedKeys = event.node.origin.data;
+    // this.showDetailDonVi()
+  }
+  /**
+     * end Xử lý tree
+     *
+     */
 
   clearFilter() {
     this.searchFilter = {
@@ -140,6 +165,7 @@ export class QlQuyenComponent implements OnInit {
     let res = await this._qlQuyenService.dsquyen();
     if (res.msg == MESSAGE.SUCCESS) {
       this.datas = res.data;
+      this.nodes = res.data
       debugger
 
       // this.totalRecord = this.data.totalElements;

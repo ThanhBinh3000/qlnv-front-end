@@ -2,110 +2,197 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="Điều kiện tìm kiếm" class="mt16 flex-card p-lr16">
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Tên quyền</label>
-              <input class="search__input" placeholder="Tên quyền" nz-input [(ngModel)]="searchFilter.soDxuat" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đường dẫn URL</label>
-              <input class="search__input" placeholder="Đường dẫn URL" nz-input [(ngModel)]="searchFilter.soDxuat" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Tên quyền cha</label>
-              <input class="search__input" placeholder="Tên quyền cha" nz-input [(ngModel)]="searchFilter.soDxuat" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Trạng thái</label>
-              <nz-select [(ngModel)]="searchFilter.soDxuat">
-                <nz-option nzLabel="Mở khóa" nzValue="01"></nz-option>
-                <nz-option nzLabel="khóa" nzValue="00"></nz-option>
-              </nz-select>
-            </div>
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+            <nz-card nzTitle="Đơn vị" class="card-tree">
+              <nz-input-group [nzSuffix]="suffixIcon">
+                <input type="text" nz-input placeholder="Search" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <!--có Search: https://ng.ant.design/components/tree-view/en -->
+              <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+                (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
+                (nzExpandChange)="nzCheck($event)">
+              </nz-tree>
+            </nz-card>
           </div>
-          <div class="cangiua group-button-search">
-            <button nz-button class="search__button--search" (click)="search()">
-              <i nz-icon nzType="search"></i>
-              Tìm kiếm
-            </button>
-            <button nz-button class="search__button--clear" (click)="clearFilter()">
-              <i nz-icon nzType="close"></i>
-              Xóa điều kiện
-            </button>
-          </div>
+          <!-- Thông tin đơn vị  -->
+          <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+            <!-- <nz-collapse >
+              <nz-collapse-panel [nzHeader]="'Thông tin đơn vị'" [nzActive]="true" [nzShowArrow]="false"
+              [nzExtra]="edit">
+                <form nz-form [formGroup]="detailDonVi"  [nzLayout]="'vertical'">
+                  <div nz-row [nzGutter]="24">
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
+                        <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+                          <input nz-input formControlName="name" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Tên Ngắn</nz-form-label>
+                        <input nz-input formControlName="nameShort" />
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Mã định danh</nz-form-label>
+                        <nz-form-control nzErrorTip="Mã định danh là bắt buộc!">
+                          <input nz-input formControlName="code" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label>Tên tiếng anh</nz-form-label>
+                        <nz-form-control nzErrorTip="Tên Tiếng anh là bắt buộc!">
+                          <input nz-input formControlName="nameEng" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Mã số thuế</nz-form-label>
+                        <nz-form-control nzErrorTip="Mã số thuế là bắt buộc!">
+                          <input nz-input formControlName="taxCode" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Email</nz-form-label>
+                        <input nz-input formControlName="email" />
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                      <nz-form-item>
+                        <nz-form-label>Địa chỉ</nz-form-label>
+                        <input nz-input formControlName="address" />
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Số điện thoại</nz-form-label>
+                        <input nz-input formControlName="phoneNumber" />
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Fax</nz-form-label>
+                        <input nz-input formControlName="fax" />
+                      </nz-form-item>
+                    </div>
+                  </div>
+                  <div nz-row [nzGutter]="24">
+                    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngIf="nodeDetail?.parentId">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Chọn đơn vị cha</nz-form-label>
+                        <nz-tree-select [nzNodes]="nodes" [nzDefaultExpandAll]="true" [nzDropdownMatchSelectWidth]="true"
+                          nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="parentId">
+                        </nz-tree-select>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Hình thức đơn vị</nz-form-label>
+                        <nz-form-control nzErrorTip="Hình thức đơn vị là bắt buộc!">
+                          <nz-select nzShowSearch formControlName="deptType">
+                            <nz-option *ngFor="let o of listHTDV" [nzLabel]="o.name" [nzValue]="o.id">
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Kiểu phòng ban</nz-form-label>
+                        <nz-form-control nzErrorTip="Kiểu phòng ban là bắt buộc!">
+                          <nz-select nzShowSearch formControlName="type">
+                            <nz-option *ngFor="let o of listKPB" [nzLabel]="o.name" [nzValue]="o.id">
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Thứ tự </nz-form-label>
+                        <nz-form-control>
+                          <input nz-input type="number" formControlName="index" />
+                        </nz-form-control>
+  
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                      <nz-form-item>
+                        <nz-form-label>Trạng thái</nz-form-label>
+                        <label nz-checkbox formControlName="isActive">hoạt động/không hoạt động</label>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </form>
+              </nz-collapse-panel>
+            </nz-collapse> -->
 
-        </nz-card>
-        <nz-card nzTitle="DANH SÁCH Quyền" [nzExtra]="tableCard1" class="mt-16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-            [nzShowPagination]="false">
-            <thead>
-              <tr>
-                <th class="text-center" width="60px">STT</th>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
-                <th width="130px">Tên quyền</th>
-                <th width="">Đường dẫn URL</th>
-                <th width="175px">Quyền</th>
-                <th width="175px">Thứ tự sắp xếp</th>
-                <th width="175px">Trạng thái</th>
-                <th width="130px"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of datas; let i = index">
-                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
-                <td>{{ data.name }}</td>
-                <td>{{ data.url }}</td>
-                <td>{{ data.tenDvi }}</td>
-                <td>{{ data.thuTu }}</td>
-                <td>{{ convertTrangThai(data.trangThai) }}</td>
-                <td class="text-center">
-
-                  <a (click)="redirectToChiTiet(data.id)">
-                    <i class="fa fa-lock"></i>
-                  </a>
-
-                  <a (click)="redirectToChiTiet(data.id)">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <a (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
-          <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between">
-              <div class="trai">
-
-              </div>
-              <div class="canphai">
+            <nz-collapse>
+              <nz-collapse-panel [nzHeader]="'Danh sách người dùng'" [nzActive]="true" [nzShowArrow]="false">
+                <nz-table #basicTable [nzData]="datas" class="nowrap">
+                  <thead>
+                    <tr>
+                      <th>Tên đăng nhập</th>
+                      <th>Họ và tên</th>
+                      <th>Chức vụ</th>
+                      <th>Số điện thoại</th>
+                      <th>Thư điện tử</th>
+                      <th width="140px" class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr *ngFor="let data of datasNguoiDung, let i = index">
+                      <td>{{ data?.userName }}</td>
+                      <td>{{ data?.fullName }}</td>
+                      <td>{{ data?.positionName }}</td>
+                      <td>{{data?.phoneNumber}}</td>
+                      <td>{{data?.email}}</td>
+                      <td class="text-center">
+                        <div *ngIf="data?.isActive == true" class="secondary hoatdong text-sm">
+                          Hoạt động
+                        </div>
+                        <div *ngIf="data?.isActive == false" class="secondary khonghoatdong text-sm">
+                          Không hoạt động
+                        </div>
+                      </td>
+                    </tr> -->
+                  </tbody>
+                </nz-table>
                 <!-- begin phân trang  -->
-                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                  (nzPageSizeChange)="changePageSize($event)">
+                <!-- <nz-pagination [nzPageIndex]="pageNguoiDung" [nzTotal]="totalRecordNguoiDung" nzShowSizeChanger
+                  [nzPageSize]="pageSizeNguoiDung" [nzShowTotal]="rangeTemplate"
+                  (nzPageIndexChange)="changePageIndexNguoiDung($event)" (nzPageSizeChange)="changePageSizeNguoiDung($event)">
                   <ng-template #rangeTemplate let-range="range" let-total>
                     {{ range[0] }}-{{ range[1] }} of {{ total }} items
                   </ng-template>
-                </nz-pagination>
+                </nz-pagination> -->
                 <!-- end phân trang  -->
-              </div>
-            </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+            <!-- <ng-template #edit>
+              <button nz-button class="btn btn-create" (click)="sua()">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                Sửa
+              </button>
+              <button nz-button class="btn btn-create" (click)="xoa()">
+                <i class="icon htvbdh_xoa"></i>
+                Xóa
+              </button>
+            </ng-template> -->
           </div>
-        </nz-card>
-        <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-
-        </ng-template>
+        </div>
       </div>
     </div>
   </div>
