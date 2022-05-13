@@ -143,9 +143,9 @@ export class GhiNhanVonBanHangComponent implements OnInit {
           }
 
           const utils = new Utils();
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
-          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.code);
+          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.code);
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
 
 
@@ -241,7 +241,7 @@ export class GhiNhanVonBanHangComponent implements OnInit {
 
           // // replace nhung ban ghi dc them moi id thanh null
           // this.lstCTietBCao.filter(item => {
-          //      if (typeof item.id != "number") {
+          //      if (item.id?.length == 38) {
           //           item.id = null;
           //      }
           // })
@@ -289,7 +289,7 @@ export class GhiNhanVonBanHangComponent implements OnInit {
           // }
           // this.lstCTietBCao.filter(item => {
           //      if (!item.id) {
-          //           item.id = uuid.v4();
+          //           item.id = uuid.v4()+'FE';
           //      }
           // });
           // this.updateEditCache();
@@ -388,7 +388,7 @@ export class GhiNhanVonBanHangComponent implements OnInit {
                ngayGhiNhan: "",
                ghiChu: "",
                stt: "",
-               id: uuid.v4(),
+               id: uuid.v4()+'FE',
                checked: false,
           }
 
@@ -402,7 +402,7 @@ export class GhiNhanVonBanHangComponent implements OnInit {
      // xoa dong
      deleteById(id: any): void {
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-          if (typeof id == "number") {
+          if (id?.length == 36) {
                this.listIdDelete += id + ",";
           }
      }
@@ -411,7 +411,7 @@ export class GhiNhanVonBanHangComponent implements OnInit {
      deleteSelected() {
           // add list delete id
           this.lstCTietBCao.filter(item => {
-               if (item.checked == true && typeof item.id == "number") {
+               if (item.checked == true && item?.id?.length == 36) {
                     this.listIdDelete += item.id + ","
                }
           })

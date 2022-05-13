@@ -253,7 +253,7 @@ export class TestLinkListComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+'FE',
                 stt: head + "." + (tail + 1).toString(),
                 lstKm: this.lstCTietBCao[index].lstKm,
             }
@@ -299,7 +299,7 @@ export class TestLinkListComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+'FE',
                 lstKm: this.lstKhoanMuc.filter(e => e.idCha == this.lstCTietBCao[index].maKhoanMuc),
                 stt: this.lstCTietBCao[index].stt + ".1",
             }
@@ -431,7 +431,7 @@ export class TestLinkListComponent implements OnInit {
             };
         } else {
             let item: ItemData = {
-                id: uuid.v4(),
+                id: uuid.v4()+'FE',
                 maKhoanMuc: 0,
                 lstKm: this.lstKhoanMuc.filter(e => e.idCha == 0),
                 status: false,

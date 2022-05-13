@@ -33,7 +33,7 @@
           <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
@@ -75,7 +75,9 @@
               <td>Công văn nè</td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
                 <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span>Phê duyệt</span>

@@ -32,11 +32,10 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
   listBcaoKqua:any []=[];
 
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
-
   searchFilter = {
     ngayTaoTu:'',
     ngayTaoDen:'',
-    trangThai:9,
+    trangThais:['9'],
     maBcao:'',
     maLoaiBcao:'',
     namBcao:null,
@@ -48,7 +47,8 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     },
     str: '',
     donVi:'',
-    maPhanBcao:'0'
+    maPhanBcao:'0',
+    loaiTimKiem:'1',
   };
 
 
@@ -93,7 +93,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   async onSubmit(){
     this.spinner.show();
-    await this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).toPromise().then(res => {
+    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {

@@ -81,7 +81,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		kphiBquanCoDmucGaoLd: 0,
 		listCtiet: [],
 		stt: "",
-		id: uuid.v4(),
+		id: uuid.v4()+'FE',
 		checked: false,
 	};
 	chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -270,16 +270,16 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		}
 
 		const utils = new Utils();
-		this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
-		this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+		this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
+		this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
 	}
 
 	//get user info
@@ -345,13 +345,13 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		}
 		//gan lai id bang null
 		this.lstVtu.forEach(item => {
-			if (typeof item.id != 'number') {
+			if (item.id?.length == 38) {
 				item.id = null;
 			}
 		})
 
 		this.lstCTietBCao.forEach(item => {
-			if (typeof item.id != 'number') {
+			if (item.id?.length == 38) {
 				item.id = null;
 			}
 			item.listCtiet.forEach(e => {
@@ -412,17 +412,17 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
 		this.lstCTietBCao.filter(item => {
 			if (!item.id) {
-				item.id = uuid.v4();
+				item.id = uuid.v4()+'FE';
 			}
 			item.listCtiet.forEach(e => {
 				if (!e.id) {
-					e.id = uuid.v4();
+					e.id = uuid.v4()+'FE';
 				}
 			})
 		});
 		this.lstVtu.forEach(item => {
 			if (!item.id) {
-				item.id = uuid.v4();
+				item.id = uuid.v4()+'FE';
 			}
 		})
 		this.updateEditCache();
@@ -615,7 +615,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
 		this.lstVtu.forEach(item => {
 			var mini: superMiniData = {
-				id: uuid.v4(),
+				id: uuid.v4()+'FE',
 				maVtuTbi: item.maVtuTbi,
 				sl: 0,
 				col: item.col,
@@ -638,7 +638,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 			kphiBquanCoDmucGaoTx: 0,
 			listCtiet: data,
 			stt: "",
-			id: uuid.v4(),
+			id: uuid.v4()+'FE',
 			checked: false,
 		}
 
@@ -667,7 +667,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		this.tongCong(-1, this.lstCTietBCao[index]);
 		this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
 
-		if (typeof id == "number") {
+		if (id?.length == 36) {
 			this.listIdDelete += id + ",";
 		}
 
@@ -687,7 +687,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 			if (item.checked == true) {
 				this.tongCong(-1, item);
 			}
-			if (item.checked == true && typeof item.id == "number") {
+			if (item.checked == true && item?.id?.length == 36) {
 				this.listIdDelete += item.id + ","
 			}
 		})
@@ -793,7 +793,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 			var mm: superMiniData[] = [];
 			data.listCtiet.forEach(item => {
 				var ss: superMiniData = {
-					id: uuid.v4(),
+					id: uuid.v4()+'FE',
 					maVtuTbi: item.maVtuTbi,
 					sl: item.sl,
 					col: item.col,
@@ -841,7 +841,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		let item: miniData = {
 			maVtuTbi: "",
 			stt: "",
-			id: uuid.v4(),
+			id: uuid.v4()+'FE',
 			checked: false,
 			col: this.sinhMa(),
 			loaiDmuc: 1,
@@ -854,7 +854,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		}
 		this.lstCTietBCao.forEach(data => {
 			var mm: superMiniData = {
-				id: uuid.v4(),
+				id: uuid.v4()+'FE',
 				maVtuTbi: item.maVtuTbi,
 				col: item.col,
 				sl: 0,
@@ -883,7 +883,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 			item.listCtiet = item.listCtiet.filter(e => e.col != ll.col);
 		})
 
-		if (typeof id == 'number')
+		if (id?.length == 36)
 			this.listIdDeleteVtus += ll.col + ",";
 		this.lstVtu = this.lstVtu.filter(item => item.col != ll.col);
 
@@ -901,7 +901,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 					data.listCtiet = data.listCtiet.filter(e => e.col != item.col);
 				})
 			}
-			if (item.checked == true && typeof item.id == "number") {
+			if (item.checked == true && item?.id?.length == 36) {
 				this.listIdDeleteVtus += item.col + ",";
 			}
 		})
@@ -1042,7 +1042,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		let item: miniData = {
 			maVtuTbi: "",
 			stt: "",
-			id: uuid.v4(),
+			id: uuid.v4()+'FE',
 			checked: false,
 			col: this.sinhMa(),
 			loaiDmuc: 0,
@@ -1055,7 +1055,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 		}
 		this.lstCTietBCao.forEach(data => {
 			var mm: superMiniData = {
-				id: uuid.v4(),
+				id: uuid.v4()+'FE',
 				maVtuTbi: item.maVtuTbi,
 				col: item.col,
 				sl: 0,
@@ -1294,7 +1294,7 @@ export class KeHoachBaoQuanHangNamComponent implements OnInit {
 
 		this.lstCTietBCao.filter(item => {
 			if (!item.id) {
-				item.id = uuid.v4();
+				item.id = uuid.v4()+'FE';
 			}
 		});
 

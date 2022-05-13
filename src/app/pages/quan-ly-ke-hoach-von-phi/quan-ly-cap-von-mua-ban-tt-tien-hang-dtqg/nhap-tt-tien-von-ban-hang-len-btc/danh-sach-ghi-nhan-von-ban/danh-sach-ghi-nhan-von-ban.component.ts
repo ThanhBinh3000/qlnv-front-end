@@ -60,8 +60,8 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
           let userInfo: any = await this.getUserInfo(userName); //get user info
 
           const utils = new Utils();
-          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
-          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
+          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.code);
+          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.code);
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
           this.statusBtnTaoMoi = !(this.statusBtnTuChoi);
 
@@ -153,7 +153,7 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
      // xoa dong
      deleteById(id: any): void {
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-          if (typeof id == "number") {
+          if (id?.length == 36) {
                this.listIdDelete += id + ",";
           }
      }
