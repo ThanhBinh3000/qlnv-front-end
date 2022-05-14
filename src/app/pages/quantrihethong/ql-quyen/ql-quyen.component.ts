@@ -7,13 +7,15 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT, STATUS_USER } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlQuyenComponent } from './them-ql-quyen/them-ql-quyen.component';
 import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD.service';
 import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HelperService } from 'src/app/services/helper.service';
 
 
 @Component({
@@ -44,6 +46,9 @@ export class QlQuyenComponent implements OnInit {
   nodes: any;
   nodeSelected: any;
   selectedKeys: any;
+  detailQuyen: FormGroup;
+  nodeDetail: any;
+  nodesNotExpand: any;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -52,7 +57,9 @@ export class QlQuyenComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private _modalService: NzModalService,
-    private _qlQuyenService: QlQuyenNSDService
+    private _qlQuyenService: QlQuyenNSDService,
+    private fb: FormBuilder,
+    private helperService: HelperService
   ) {
 
   }
@@ -60,7 +67,21 @@ export class QlQuyenComponent implements OnInit {
   //   throw new Error('Method not implemented.');
   // }
 
+
+  initForm() {
+    this.detailQuyen = this.fb.group({
+      name: ['', Validators.required],
+      parentId: [, Validators.required],
+      url: ['0', Validators.required],
+      trangThai: [true],
+      thuTu: [''],
+      icon: [null],
+      menu: [null],
+      code: [null],
+    })
+  }
   async ngOnInit() {
+    this.initForm()
     this.spinner.show();
     try {
       let res = await this.donViService.layTatCaDonVi();
@@ -126,14 +147,41 @@ export class QlQuyenComponent implements OnInit {
     */
   parentNodeSelected: any = [];
   nzClickNodeTree(event: any): void {
-    debugger
     if (event.keys.length > 0) {
       this.nodeSelected = event.keys[0];
-      this.selectedKeys = event.node.origin.data;
-      this.parentNodeSelected = event?.parentNode?.origin
-      // this.showDetailDonVi(event.keys[0])
+      this.selectedKeys = event.node.parentNode.key;
+
+      this.parentNodeSelected = event?.parentNode?._title
+      debugger
+      this.showDetailDonVi(event.keys[0])
     }
 
+  }
+  showDetailDonVi(id?: any) {
+    if (id) {
+      // this.danhSachNguoiDung(id)
+
+      this._qlQuyenService.find({ id: id }).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.nodeDetail = res.data;
+          // if (res.data.parentId == "00000000-0000-0000-0000-000000000000") {
+          //   this.nodeDetail.parentId = null;
+          // }
+          // gán giá trị vào form
+          this.detailQuyen.patchValue({
+            name: res.data?.name,
+            parentId: this.selectedKeys,
+            thuTu: res.data?.thuTu ?? "",
+            url: res.data?.url ?? "",
+            trangThai: res.data.trangThai == STATUS_USER.HOAT_DONG ? true : false,
+          })
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
+        }
+      })
+
+    }
   }
 
   nzCheck(event: NzFormatEmitEvent): void {
@@ -172,7 +220,6 @@ export class QlQuyenComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.datas = res.data;
       this.nodes = this.addFiledTree(this.datas)
-
       // this.totalRecord = this.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -289,6 +336,36 @@ export class QlQuyenComponent implements OnInit {
       ]);
     }
 
+  }
+
+  themoi() {
+    this.helperService.markFormGroupTouched(this.detailQuyen);
+    if (this.detailQuyen.invalid) {
+      return;
+    }
+    let body: any = this.detailQuyen.value;
+    debugger
+    this.spinner.show();
+    try {
+      this._qlQuyenService
+        .create(body)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.DELETE_SUCCESS,
+            );
+            this.search();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        });
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
 }
