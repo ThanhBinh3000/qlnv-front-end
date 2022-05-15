@@ -22,6 +22,10 @@ export class DonviService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/dvi-cha`;
     return this.httpClient.get<any>(url).toPromise();
   }
+  layDonViCon(): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dmuc-donvi/ds-donvi-child`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
   getDonVi(id: string): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/chi-tiet/${id}`;
     return this.httpClient.get<any>(url).toPromise();

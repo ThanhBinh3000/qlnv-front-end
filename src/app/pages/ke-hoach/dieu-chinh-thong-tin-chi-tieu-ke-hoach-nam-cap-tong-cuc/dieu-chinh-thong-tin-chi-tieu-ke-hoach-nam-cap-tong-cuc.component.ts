@@ -220,6 +220,15 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     item.tkcnTongThoc = (item.tkdnTongThoc ?? 0) + (item.sdcNtnThoc ?? 0) - (item.sdcXtnTongThoc ?? 0);
     item.tkcnTongGao = (item.tkdnTongGao ?? 0) + (item.sdcNtnGao ?? 0) - (item.sdcXtnTongGao ?? 0);
     item.tkcnTongSoQuyThoc = (item.tkcnTongThoc ?? 0) + (item.tkcnTongGao ?? 0) * 2;
+
+    item.ntnThoc = item.sdcNtnThoc;
+    item.ntnGao = item.sdcNtnGao;
+    item.ntnTongSoQuyThoc = item.sdcNtnTongSoQuyThoc;
+    item.xtnThoc = item.sdcXtnThoc;
+    item.xtnTongThoc = item.sdcXtnTongThoc;
+    item.xtnGao = item.sdcXtnGao;
+    item.xtnTongGao = item.sdcXtnTongGao;
+    item.xtnTongSoQuyThoc = item.sdcXtnTongSoQuyThoc;
   }
 
   caculatorDieuChinhMuoi(item: any) {
@@ -237,10 +246,15 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     item.tkcnTongThoc = (item.tkdnTongThoc ?? 0) + (item.sdcNtnThoc ?? 0) - (item.sdcXtnTongThoc ?? 0);
     item.tkcnTongGao = (item.tkdnTongGao ?? 0) + (item.sdcNtnGao ?? 0) - (item.sdcXtnTongGao ?? 0);
     item.tkcnTongSoQuyThoc = (item.tkcnTongThoc ?? 0) + (item.tkcnTongGao ?? 0) * 2;
+
+    item.nhapTrongNam = item.sdcNtnTongSoMuoi;
+    item.xuatTrongNam = item.sdcXtnMuoi;
+
   }
 
   caculatorDieuChinhVatTu(item: any) {
     item.vatTuThietBi[0].sdcNhapTrongNam = (!isNaN(item.vatTuThietBi[0].tdcNhapTrongNam) ? item.vatTuThietBi[0].tdcNhapTrongNam : 0) + (!isNaN(item.vatTuThietBi[0].dcNhapTrongNam) ? item.vatTuThietBi[0].dcNhapTrongNam : 0);
+    item.vatTuThietBi[0].nhapTrongNam = item.vatTuThietBi[0].sdcNhapTrongNam;
   }
 
   updateEditVatTuCache(): void {
@@ -816,7 +830,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   async loadDonVi() {
     try {
-      const res = await this.donViService.layTatCaDonVi();
+      const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {

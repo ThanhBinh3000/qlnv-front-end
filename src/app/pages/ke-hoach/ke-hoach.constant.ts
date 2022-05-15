@@ -50,7 +50,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm Cấp tổng cục',
+        title: 'Điều chỉnh kế hoạch năm Cấp tổng cục giao',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,

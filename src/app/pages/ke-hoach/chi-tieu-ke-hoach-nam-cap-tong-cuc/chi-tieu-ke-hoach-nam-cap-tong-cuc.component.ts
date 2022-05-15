@@ -51,7 +51,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
@@ -72,7 +72,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      const res = await this.donViService.layTatCaDonVi();
+      const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
@@ -304,5 +304,5 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  onCurrentPageDataChange() {}
+  onCurrentPageDataChange() { }
 }

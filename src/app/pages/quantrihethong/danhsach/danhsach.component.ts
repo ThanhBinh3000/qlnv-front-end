@@ -91,6 +91,7 @@ export class DanhSachComponent implements OnInit {
         onClick: (e, data) => {
           e.preventDefault();
           e.stopPropagation();
+          this.redirectToThemSua(data.username);
         },
         visible: false,
         onVisible: (data) => {
