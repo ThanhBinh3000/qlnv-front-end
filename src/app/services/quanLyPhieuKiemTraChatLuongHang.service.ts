@@ -13,7 +13,7 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang');
+    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang','');
   }
 
   timKiem(body: any): Promise<any> {

@@ -11,7 +11,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 export class QlNhomNguoiSuDungService extends BaseService {
   gateway: string = '/qlnv-gateway/qlnv-system'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'user');
+    super(httpClient, 'user','');
   }
 
   active(body) {

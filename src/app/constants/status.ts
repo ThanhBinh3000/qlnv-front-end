@@ -28,3 +28,8 @@ export enum LoaiTaiLieu {
 export enum LoaiDanhMuc {
   VAI_TRO = "VAI_TRO"
 }
+
+export enum TrangThaiHoatDong{
+  HOAT_DONG = "01",
+  KHONG_HOAT_DONG = "00"
+}

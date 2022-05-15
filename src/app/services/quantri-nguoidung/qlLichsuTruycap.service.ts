@@ -11,7 +11,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 export class QlLichSuTruyCapService extends BaseService {
   gateway: string = '/qlnv-gateway/qlnv-system'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'user');
+    super(httpClient, 'user','');
   }
 
   findList(body) {

@@ -11,7 +11,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam');
+    super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam','');
   }
 
   timKiem(param: any): Promise<any> {

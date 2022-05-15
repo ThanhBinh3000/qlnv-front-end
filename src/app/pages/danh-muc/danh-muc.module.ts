@@ -8,12 +8,14 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { DanhMucDonViComponent } from './danh-muc-don-vi/danh-muc-don-vi.component';
+import { NewDonViComponent } from './danh-muc-don-vi/new-don-vi/new-don-vi.component';
 
 
 @NgModule({
   declarations: [
     DanhMucComponent,
-    DanhMucDonViComponent
+    DanhMucDonViComponent,
+    NewDonViComponent
   ],
   imports: [
     CommonModule,

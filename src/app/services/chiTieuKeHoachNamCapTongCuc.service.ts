@@ -13,7 +13,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc');
+    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc','');
   }
 
   timKiem(body: any): Promise<any> {

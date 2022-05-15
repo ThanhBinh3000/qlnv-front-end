@@ -10,7 +10,7 @@ import { BaseService } from './base.service';
 })
 export class UploadFileService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'UploadFile');
+    super(httpClient, 'UploadFile','');
   }
 
   uploadFile(file: File, title?: string): Promise<any> {

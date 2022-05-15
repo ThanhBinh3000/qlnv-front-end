@@ -15,7 +15,7 @@ import { BaseService } from './base.service';
 export class DanhSachDauThauService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DanhSachDauThau');
+    super(httpClient, 'DanhSachDauThau','');
   }
 
   timKiem(body: any): Promise<any> {
