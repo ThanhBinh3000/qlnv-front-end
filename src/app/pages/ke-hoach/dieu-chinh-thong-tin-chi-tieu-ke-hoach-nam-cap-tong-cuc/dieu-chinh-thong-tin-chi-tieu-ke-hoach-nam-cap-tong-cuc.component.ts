@@ -29,7 +29,7 @@ import { environment } from 'src/environments/environment';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { ItemDetail } from 'src/app/models/ItemDetail';
 import { Globals } from './../../../shared/globals';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -240,12 +240,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       item.sdcXtnMuoi[1].soLuong = (item.tdcXtnMuoi[1].soLuong ?? 0) + (item.dcXtnMuoi[1].soLuong ?? 0);
       item.sdcXtnMuoi[2].soLuong = (item.tdcXtnMuoi[2].soLuong ?? 0) + (item.dcXtnMuoi[2].soLuong ?? 0);
 
-      item.sdcXtnTongSoMuoi = item.sdcXtnThoc[0].soLuong + item.sdcXtnThoc[1].soLuong + item.sdcXtnThoc[2].soLuong;
+      item.sdcXtnTongSoMuoi = item.sdcXtnMuoi[0].soLuong + item.sdcXtnMuoi[1].soLuong + item.sdcXtnMuoi[2].soLuong;
     }
 
-    item.tkcnTongThoc = (item.tkdnTongThoc ?? 0) + (item.sdcNtnThoc ?? 0) - (item.sdcXtnTongThoc ?? 0);
-    item.tkcnTongGao = (item.tkdnTongGao ?? 0) + (item.sdcNtnGao ?? 0) - (item.sdcXtnTongGao ?? 0);
-    item.tkcnTongSoQuyThoc = (item.tkcnTongThoc ?? 0) + (item.tkcnTongGao ?? 0) * 2;
+    item.tkcnTongSoMuoi = (item.tkdnTongSoMuoi ?? 0) + (item.sdcNtnTongSoMuoi ?? 0) - (item.sdcXtnTongSoMuoi ?? 0);
 
     item.nhapTrongNam = item.sdcNtnTongSoMuoi;
     item.xuatTrongNam = item.sdcXtnMuoi;
@@ -260,7 +258,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   updateEditVatTuCache(): void {
     if (this.dataVatTu && this.dataVatTu.length > 0) {
       this.dataVatTu.forEach((item) => {
-        this.editVatTuCache[item.donViId + '-' + item.vatTuThietBi[0].vatTuId] = {
+        this.editVatTuCache[item.donViId + '-' + item.vatTuThietBi[0].vatTuChaId + '-' + item.vatTuThietBi[0].vatTuId] = {
           edit: false,
           data: { ...item },
         };
@@ -268,32 +266,38 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  cancelEditVatTu(donViId: number, vatTuId: number): void {
-    const index = this.dataVatTu.findIndex((item) => item.donViId === donViId && item.vatTuThietBi[0].vatTuId == vatTuId);
-    this.editVatTuCache[donViId + '-' + vatTuId] = {
+  cancelEditVatTu(donViId: number, vatTuChaId: number = 0, vatTuId: number = 0): void {
+    const index = this.dataVatTu.findIndex((item) => item.donViId === donViId && (item.vatTuThietBi[0].vatTuId == vatTuId || vatTuId == 0) && (item.vatTuThietBi[0].vatTuChaId == vatTuChaId || vatTuChaId == 0));
+    this.editVatTuCache[donViId + '-' + vatTuChaId + '-' + vatTuId] = {
       data: { ...this.dataVatTu[index] },
       edit: false,
     };
   }
 
-  saveEditVatTu(donViId: number, vatTuId: number): void {
-    const index = this.dataVatTu.findIndex((item) => item.donViId === donViId && item.vatTuThietBi[0].vatTuId == vatTuId);
-    Object.assign(this.dataVatTu[index], this.editVatTuCache[donViId + '-' + vatTuId].data);
-    this.editVatTuCache[donViId + '-' + vatTuId].edit = false;
+  saveEditVatTu(donViId: number, vatTuChaId: number = 0, vatTuId: number = 0): void {
+    this.editVatTuCache[donViId + '-' + vatTuChaId + '-' + vatTuId].edit = false;
+    this.checkDataExistVatTu(this.editVatTuCache[donViId + '-' + vatTuChaId + '-' + vatTuId].data);
     this.updateDataVatTu();
     this.loadData();
   }
 
   deleteRowVatTu(data: any) {
-    this.dieuChinhThongTinChiTieuKHNam.khVatTu =
-      this.dieuChinhThongTinChiTieuKHNam.khVatTu.filter(
-        (x) => x.donViId != data.donViId && x.vatTuThietBi[0].vatTuId != data.vatTuThietBi[0].vatTuId,
-      );
+    let temp = [];
+    if (this.dieuChinhThongTinChiTieuKHNam.khVatTu && this.dieuChinhThongTinChiTieuKHNam.khVatTu.length > 0) {
+      this.dieuChinhThongTinChiTieuKHNam.khVatTu.forEach(element => {
+        if (element.donViId == data.donViId && (element.vatTuThietBi[0].vatTuId == data.vatTuThietBi[0].vatTuId || data.vatTuThietBi[0].vatTuId == 0)
+          && (element.vatTuThietBi[0].vatTuChaId == data.vatTuThietBi[0].vatTuChaId || data.vatTuThietBi[0].vatTuChaId == 0)) { }
+        else {
+          temp.push(element);
+        }
+      });
+    }
+    this.dieuChinhThongTinChiTieuKHNam.khVatTu = temp;
     this.loadData();
   }
 
-  editRowVatTu(donViId: number, vatTuId: number) {
-    this.editVatTuCache[donViId + '-' + vatTuId].edit = true;
+  editRowVatTu(donViId: number, vatTuChaId: number = 0, vatTuId: number = 0) {
+    this.editVatTuCache[donViId + '-' + vatTuChaId + '-' + vatTuId].edit = true;
   }
 
   themMoiKHVatTu() {
@@ -340,12 +344,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   saveEditMuoi(donViId: number): void {
-    const index = this.dataMuoi.findIndex((item) => item.donViId === donViId);
-    this.editMuoiCache[donViId].data.thanhTien =
-      (this.editMuoiCache[donViId].data.soLuong ?? 0) *
-      (this.editMuoiCache[donViId].data.donGia ?? 0);
-    Object.assign(this.dataMuoi[index], this.editMuoiCache[donViId].data);
     this.editMuoiCache[donViId].edit = false;
+    this.checkDataExistMuoi(this.editMuoiCache[donViId].data);
+    this.loadData();
   }
 
   deleteRowMuoi(data: any) {
@@ -365,6 +366,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataMuoi = [];
     }
     this.checkDataExistMuoi(this.keHoachMuoiCreate);
+    this.loadData();
     this.loadDefaultMuoiNew();
   }
 
@@ -419,17 +421,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   saveEditLuongThuc(donViId: number): void {
-    const index = this.dataLuongThuc.findIndex(
-      (item) => item.donViId === donViId,
-    );
-    this.editLuongThucCache[donViId].data.thanhTien =
-      (this.editLuongThucCache[donViId].data.soLuong ?? 0) *
-      (this.editLuongThucCache[donViId].data.donGia ?? 0);
-    Object.assign(
-      this.dataLuongThuc[index],
-      this.editLuongThucCache[donViId].data,
-    );
     this.editLuongThucCache[donViId].edit = false;
+    this.checkDataExistLuongThuc(this.editLuongThucCache[donViId].data);
+    this.loadData();
   }
 
   deleteRowLuongThuc(data: any) {
@@ -449,6 +443,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataLuongThuc = [];
     }
     this.checkDataExistLuongThuc(this.keHoachLuongThucCreate);
+    this.loadData();
     this.loadDefaultLuongThucNew();
   }
 
@@ -510,22 +505,17 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dataTag = this.dataTag.filter((x) => x.id != data.id);
   }
 
-  caculatorXuatThocSauDc() { }
-
-  caculatorXuatGaoSauDc() { }
-
-  caculatorXuatTongQuyThocSauDc() { }
-
-  async selectDonViKHLT(donVi) {
+  async selectDonViKHLT(donVi, isAdd, item) {
     this.spinner.show();
     try {
-      this.isAddLuongThuc = true;
-      this.keHoachLuongThucCreate.maDonVi = donVi.maDvi;
-      this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
-      this.keHoachLuongThucCreate.donViId = donVi.id;
+      this.isAddLuongThuc = isAdd;
+
+      item.maDonVi = donVi.maDvi;
+      item.tenDonvi = donVi.tenDvi;
+      item.donViId = donVi.id;
 
       let body = {
-        donViId: this.keHoachLuongThucCreate.donViId,
+        donViId: item.donViId,
         ctkhnId: this.selectedCanCu.id,
         vatTuIds: [this.thocIdDefault, this.gaoIdDefault],
       };
@@ -544,16 +534,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.vatTuId == this.thocIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
-                    tonKho.soLuong;
+                  item.tkdnThoc[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong =
-                    tonKho.soLuong;
+                  item.tkdnThoc[1].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 3:
-                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
-                    tonKho.soLuong;
+                  item.tkdnThoc[2].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -561,12 +548,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             } else if (tonKho.vatTuId == this.gaoIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
-                    tonKho.soLuong;
+                  item.tkdnGao[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
-                    tonKho.soLuong;
+                  item.tkdnGao[1].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -581,9 +566,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         ) {
           data.data.nhapTrongNam.forEach((tonKho) => {
             if (tonKho.vatTuId == this.thocIdDefault) {
-              this.keHoachLuongThucCreate.ntnThoc = tonKho.soLuong;
+              item.ntnThoc = tonKho.soLuong;
             } else if (tonKho.vatTuId == this.gaoIdDefault) {
-              this.keHoachLuongThucCreate.ntnGao = tonKho.soLuong;
+              item.ntnGao = tonKho.soLuong;
             }
           });
         }
@@ -596,16 +581,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.vatTuId == this.thocIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachLuongThucCreate.xtnThoc[0].soLuong =
-                    tonKho.soLuong;
+                  item.xtnThoc[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachLuongThucCreate.xtnThoc[1].soLuong =
-                    tonKho.soLuong;
+                  item.xtnThoc[1].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 3:
-                  this.keHoachLuongThucCreate.xtnThoc[2].soLuong =
-                    tonKho.soLuong;
+                  item.xtnThoc[2].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -613,12 +595,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             } else if (tonKho.vatTuId == this.gaoIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachLuongThucCreate.xtnGao[0].soLuong =
-                    tonKho.soLuong;
+                  item.xtnGao[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachLuongThucCreate.xtnGao[1].soLuong =
-                    tonKho.soLuong;
+                  item.xtnGao[1].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -637,16 +617,17 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  async selectDonViKHMuoi(donVi) {
+  async selectDonViKHMuoi(donVi, isAdd, item) {
     this.spinner.show();
     try {
-      this.isAddLuongThuc = true;
-      this.keHoachMuoiCreate.maDonVi = donVi.maDvi;
-      this.keHoachMuoiCreate.tenDonvi = donVi.tenDvi;
-      this.keHoachMuoiCreate.donViId = donVi.id;
+      this.isAddMuoi = isAdd;
+      item.maDonVi = donVi.maDvi;
+      item.tenDonvi = donVi.tenDvi;
+      item.tenDonVi = donVi.tenDvi;
+      item.donViId = donVi.id;
 
       let body = {
-        donViId: this.keHoachMuoiCreate.donViId,
+        donViId: item.donViId,
         ctkhnId: this.selectedCanCu.id,
         vatTuIds: [this.muoiIdDefault],
       };
@@ -665,13 +646,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.vatTuId == this.muoiIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachMuoiCreate.tkdnMuoi[0].soLuong = tonKho.soLuong;
+                  item.tkdnMuoi[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachMuoiCreate.tkdnMuoi[1].soLuong = tonKho.soLuong;
+                  item.tkdnMuoi[1].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 3:
-                  this.keHoachMuoiCreate.tkdnMuoi[2].soLuong = tonKho.soLuong;
+                  item.tkdnMuoi[2].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -686,7 +667,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         ) {
           data.data.nhapTrongNam.forEach((tonKho) => {
             if (tonKho.vatTuId == this.muoiIdDefault) {
-              this.keHoachMuoiCreate.ntnTongSoMuoi = tonKho.soLuong;
+              item.ntnTongSoMuoi = tonKho.soLuong;
             }
           });
         }
@@ -699,13 +680,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.vatTuId == this.muoiIdDefault) {
               switch (tonKho.nam) {
                 case this.yearNow - 1:
-                  this.keHoachMuoiCreate.xtnMuoi[0].soLuong = tonKho.soLuong;
+                  item.xtnMuoi[0].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 2:
-                  this.keHoachMuoiCreate.xtnMuoi[1].soLuong = tonKho.soLuong;
+                  item.xtnMuoi[1].soLuong = tonKho.soLuong;
                   break;
                 case this.yearNow - 3:
-                  this.keHoachMuoiCreate.xtnMuoi[2].soLuong = tonKho.soLuong;
+                  item.xtnMuoi[2].soLuong = tonKho.soLuong;
                   break;
                 default:
                   break;
@@ -724,8 +705,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  async selectDonViVatTu(donVi) {
-
+  async selectDonViVatTu(donVi, isAdd, item) {
+    item.maDonVi = donVi.maDvi;
+    item.tenDonvi = donVi.tenDvi;
+    item.tenDonVi = donVi.tenDvi;
+    item.donViId = donVi.id;
+    await this.loadTonKhoVatTu(isAdd, item);
   }
 
   onInput(e: Event, data: string): void {
@@ -758,9 +743,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!value || value.indexOf('@') >= 0) {
       this.dataVatTuChaShow = cloneDeep(this.dataVatTuCha);
       this.keHoachVatTuCreate.maHang = '';
-      this.keHoachVatTuCreate.kyHieu = '';
-      this.keHoachVatTuCreate.chungLoaiHang = '';
       this.keHoachVatTuCreate.donViTinh = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].kyHieu = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].chungLoaiHang = '';
       this.dataVatTuConClone = cloneDeep(this.dataVatTuCon);
       this.dataVatTuConShow = cloneDeep(this.dataVatTuCon);
     } else {
@@ -783,70 +768,148 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  selectTenHang(vatTu) {
-    if (this.keHoachVatTuCreate.maDonVi) {
-      this.isAddVatTu = true;
-    }
+  async selectTenHang(vatTu, isAdd, item) {
     this.dataVatTuConClone = vatTu.child;
     this.dataVatTuConShow = cloneDeep(this.dataVatTuConClone);
 
-    this.keHoachVatTuCreate.kyHieu = vatTu.kyHieu;
-    this.keHoachVatTuCreate.donViTinh = vatTu.donViTinh;
-    this.keHoachVatTuCreate.vatTuThietBi[0].maVatTuCha = vatTu.maHang;
-    this.keHoachVatTuCreate.vatTuThietBi[0].vatTuChaId = vatTu.id;
-
-    this.keHoachVatTuCreate.vatTuThietBi[0].donViTinh = vatTu.donViTinh;
-    this.keHoachVatTuCreate.vatTuThietBi[0].maVatTu = '';
-    this.keHoachVatTuCreate.vatTuThietBi[0].vatTuId = 0;
-    this.keHoachVatTuCreate.chungLoaiHang = '';
-
-    if (this.keHoachVatTuCreate.maDonVi) {
-
+    item.donViTinh = vatTu.donViTinh;
+    item.vatTuThietBi[0].kyHieu = vatTu.kyHieu;
+    item.vatTuThietBi[0].maVatTuCha = vatTu.maHang;
+    item.vatTuThietBi[0].vatTuChaId = vatTu.id;
+    item.vatTuThietBi[0].donViTinh = vatTu.donViTinh;
+    if (vatTu.child && vatTu.child.length > 0) {
+      item.vatTuThietBi[0].maVatTu = '';
+      item.vatTuThietBi[0].vatTuId = 0;
+      item.vatTuThietBi[0].tenVatTu = '';
+      item.chungLoaiHang = '';
+    }
+    else {
+      item.vatTuThietBi[0].maVatTu = vatTu.maHang;
+      item.vatTuThietBi[0].vatTuId = vatTu.id;
+      item.vatTuThietBi[0].tenVatTu = '';
+      item.chungLoaiHang = '';
+      await this.loadTonKhoVatTu(isAdd, item);
     }
   }
 
-  selectChungLoaiHang(chungLoaiHang) {
-    if (this.keHoachVatTuCreate.maDonVi) {
-      this.isAddVatTu = true;
-    }
-    this.keHoachVatTuCreate.vatTuThietBi[0].donViTinh = chungLoaiHang.donViTinh;
-    this.keHoachVatTuCreate.vatTuThietBi[0].maVatTu = chungLoaiHang.maHang;
-    this.keHoachVatTuCreate.vatTuThietBi[0].vatTuId = chungLoaiHang.id;
+  async selectChungLoaiHang(chungLoaiHang, isAdd, item) {
+    item.vatTuThietBi[0].donViTinh = chungLoaiHang.donViTinh;
+    item.vatTuThietBi[0].maVatTu = chungLoaiHang.maHang;
+    item.vatTuThietBi[0].vatTuId = chungLoaiHang.id;
     const vatTuChaFilter = this.dataVatTuCha.find(
       (vaTuCha) => vaTuCha.id === chungLoaiHang.idParent,
     );
     if (vatTuChaFilter) {
-      this.keHoachVatTuCreate.kyHieu = vatTuChaFilter.kyHieu;
-      this.keHoachVatTuCreate.donViTinh = vatTuChaFilter.donViTinh;
-      this.keHoachVatTuCreate.vatTuThietBi[0].maVatTuCha = vatTuChaFilter.maHang;
-      this.keHoachVatTuCreate.tenHang = vatTuChaFilter.ten;
+      item.kyHieu = vatTuChaFilter.kyHieu;
+      item.donViTinh = vatTuChaFilter.donViTinh;
+      item.vatTuThietBi[0].maVatTuCha = vatTuChaFilter.maHang;
+      item.tenHang = vatTuChaFilter.ten;
     } else {
-      this.keHoachVatTuCreate.kyHieu = chungLoaiHang.kyHieu;
-      this.keHoachVatTuCreate.donViTinh = chungLoaiHang.donViTinh;
-      this.keHoachVatTuCreate.vatTuThietBi[0].maVatTuCha = chungLoaiHang.maHang;
-      this.keHoachVatTuCreate.tenHang = '';
+      item.kyHieu = chungLoaiHang.kyHieu;
+      item.donViTinh = chungLoaiHang.donViTinh;
+      item.vatTuThietBi[0].maVatTuCha = chungLoaiHang.maHang;
+      item.tenHang = '';
+    }
+    await this.loadTonKhoVatTu(isAdd, item);
+  }
+
+  async loadTonKhoVatTu(isAdd, item) {
+    this.spinner.show();
+    try {
+      if (isAdd && item.vatTuThietBi && item.vatTuThietBi.length > 0 && item.vatTuThietBi[0].vatTuId && item.vatTuThietBi[0].vatTuId > 0) {
+        this.isAddVatTu = isAdd;
+        let body = {
+          donViId: item.donViId,
+          ctkhnId: this.selectedCanCu.id,
+          vatTuIds: [item.vatTuThietBi[0].vatTuId],
+        };
+
+        let data =
+          await this.quyetDinhDieuChinhChiTieuKeHoachNamService.soLuongTruocDieuChinh(
+            body,
+          );
+        if (data && data.msg == MESSAGE.SUCCESS) {
+          if (
+            data.data &&
+            data.data.keHoachVatTuNamTruoc &&
+            data.data.keHoachVatTuNamTruoc.length > 0
+          ) {
+            data.data.keHoachVatTuNamTruoc.forEach((tonKho) => {
+              if (tonKho.vatTuId == item.vatTuThietBi[0].vatTuId) {
+                switch (tonKho.nam) {
+                  case this.yearNow - 1:
+                    item.tdcCacNamTruoc[0].soLuong = tonKho.soLuong;
+                    break;
+                  case this.yearNow - 2:
+                    item.tdcCacNamTruoc[1].soLuong = tonKho.soLuong;
+                    break;
+                  case this.yearNow - 3:
+                    item.tdcCacNamTruoc[2].soLuong = tonKho.soLuong;
+                    break;
+                  default:
+                    break;
+                }
+              }
+            });
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, data.msg);
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
   async loadDonVi() {
     try {
-      const res = await this.donViService.layDonViCon();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
+      if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+        const res = await this.donViService.layTatCaDonVi();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+
+              await this.selectDonViKHLT(res.data[i], true, this.keHoachLuongThucCreate);
+              this.keHoachLuongThucCreate.tenDonvi = res.data[i].tenDvi;
+
+              await this.selectDonViKHMuoi(res.data[i], true, this.keHoachMuoiCreate);
+              this.keHoachMuoiCreate.tenDonVi = res.data[i].tenDvi;
+
+              await this.selectDonViVatTu(res.data[i], true, this.keHoachVatTuCreate);
+              this.keHoachVatTuCreate.tenDonVi = res.data[i].tenDvi;
+
+              break;
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
-        this.options = cloneDeep(this.optionsDonVi);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      else {
+        const res = await this.donViService.layDonViCon();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsDonVi.push(item);
+          }
+          this.options = cloneDeep(this.optionsDonVi);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       }
       this.spinner.hide();
-    } catch (error) {
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
@@ -1075,12 +1138,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = [];
     this.dieuChinhThongTinChiTieuKHNam.khMuoi = [];
     this.dieuChinhThongTinChiTieuKHNam.khVatTu = [];
+    this.dieuChinhThongTinChiTieuKHNam.trangThai = '00';
     this.formData = this.fb.group({
       canCu: [null],
-      soQD: [null, [Validators.required]],
-      ngayKy: [null, [Validators.required]],
-      ngayHieuLuc: [null, [Validators.required]],
-      namKeHoach: [this.yearNow, [Validators.required]],
+      soQD: [null],
+      ngayKy: [null],
+      ngayHieuLuc: [null],
+      namKeHoach: [this.yearNow],
       trichYeu: [null],
       ghiChu: [null, [Validators.required]],
     });
@@ -1123,6 +1187,83 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.controls['ghiChu'].setValue(
             this.dieuChinhThongTinChiTieuKHNam.ghiChu,
           );
+
+          if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length > 0) {
+            for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length; i++
+            ) {
+              if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc.length > 0) { }
+              else {
+                let tkdnThoc: Array<ItemDetail> = [
+                  {
+                    nam: this.yearNow - 1,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                  {
+                    nam: this.yearNow - 2,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                  {
+                    nam: this.yearNow - 3,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                ];
+                this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc = tkdnThoc;
+              }
+              if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao.length > 0) { }
+              else {
+                let tkdnGao: Array<ItemDetail> = [
+                  {
+                    nam: this.yearNow - 1,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                  {
+                    nam: this.yearNow - 2,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                ];
+                this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao = tkdnGao;
+              }
+            }
+          }
+
+          if (this.dieuChinhThongTinChiTieuKHNam.khMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi.length > 0) {
+            for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khMuoi.length; i++) {
+              if (this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi.length > 0) { }
+              else {
+                let tkdnMuoi: Array<ItemDetail> = [
+                  {
+                    nam: this.yearNow - 1,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                  {
+                    nam: this.yearNow - 2,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                  {
+                    nam: this.yearNow - 3,
+                    soLuong: 0,
+                    vatTuId: this.thocIdDefault,
+                    id: 0,
+                  },
+                ];
+                this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi = tkdnMuoi;
+              }
+            }
+          }
 
           this.updateDataVatTu();
           this.loadData();
@@ -1275,58 +1416,63 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = cloneDeep(
                   tempData.khLuongThuc,
                 );
-                if (
-                  this.dieuChinhThongTinChiTieuKHNam.khLuongThuc &&
-                  this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length > 0
-                ) {
-                  for (
-                    let i = 0;
-                    i <
-                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
-                    i++
-                  ) {
-                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].id =
-                      null;
-                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
-                      i
-                    ].khGaoId = null;
-                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
-                      i
-                    ].khThocId = null;
-                    if (
-                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                        .xtnGao &&
-                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                        .xtnGao.length > 0
-                    ) {
-                      for (
-                        let j = 0;
-                        j <
-                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                          .xtnGao.length;
-                        j++
-                      ) {
-                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
-                          i
-                        ].xtnGao[j].id = null;
+                if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length > 0) {
+                  for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length; i++) {
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].id = null;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].khGaoId = null;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].khThocId = null;
+                    if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao[j].id = null;
                       }
                     }
-                    if (
-                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                        .xtnThoc &&
-                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                        .xtnThoc.length > 0
-                    ) {
-                      for (
-                        let j = 0;
-                        j <
-                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
-                          .xtnThoc.length;
-                        j++
-                      ) {
-                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
-                          i
-                        ].xtnThoc[j].id = null;
+
+                    if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc.length > 0) { }
+                    else {
+                      let tkdnThoc: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 3,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnThoc = tkdnThoc;
+                    }
+                    if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao.length > 0) { }
+                    else {
+                      let tkdnGao: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao = tkdnGao;
+                    }
+
+                    if (this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc && this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc[j].id = null;
                       }
                     }
                   }
@@ -1335,33 +1481,38 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.dieuChinhThongTinChiTieuKHNam.khMuoi = cloneDeep(
                   tempData.khMuoiDuTru,
                 );
-                if (
-                  this.dieuChinhThongTinChiTieuKHNam.khMuoi &&
-                  this.dieuChinhThongTinChiTieuKHNam.khMuoi.length > 0
-                ) {
-                  for (
-                    let i = 0;
-                    i < this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
-                    i++
-                  ) {
+                if (this.dieuChinhThongTinChiTieuKHNam.khMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi.length > 0) {
+                  for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khMuoi.length; i++) {
                     this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].id = null;
-                    if (
-                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i]
-                        .xtnMuoi &&
-                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi
-                        .length > 0
-                    ) {
-                      for (
-                        let j = 0;
-                        j <
-                        this.dieuChinhThongTinChiTieuKHNam.khMuoi[i]
-                          .xtnMuoi.length;
-                        j++
-                      ) {
-                        this.dieuChinhThongTinChiTieuKHNam.khMuoi[
-                          i
-                        ].xtnMuoi[j].id = null;
+                    if (this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi[j].id = null;
                       }
+                    }
+
+                    if (this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi.length > 0) { }
+                    else {
+                      let tkdnMuoi: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 3,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi = tkdnMuoi;
                     }
                   }
                 }
@@ -1369,33 +1520,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 this.dieuChinhThongTinChiTieuKHNam.khVatTu = cloneDeep(
                   tempData.khVatTu,
                 );
-                if (
-                  this.dieuChinhThongTinChiTieuKHNam.khVatTu &&
-                  this.dieuChinhThongTinChiTieuKHNam.khVatTu.length > 0
-                ) {
-                  for (
-                    let i = 0;
-                    i < this.dieuChinhThongTinChiTieuKHNam.khVatTu.length;
-                    i++
-                  ) {
-                    this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].id =
-                      null;
-                    if (
-                      this.dieuChinhThongTinChiTieuKHNam.khVatTu[i]
-                        .vatTuThietBi &&
-                      this.dieuChinhThongTinChiTieuKHNam.khVatTu[i]
-                        .vatTuThietBi.length > 0
-                    ) {
-                      for (
-                        let j = 0;
-                        j <
-                        this.dieuChinhThongTinChiTieuKHNam.khVatTu[i]
-                          .vatTuThietBi.length;
-                        j++
-                      ) {
-                        this.dieuChinhThongTinChiTieuKHNam.khVatTu[
-                          i
-                        ].vatTuThietBi[j].id = null;
+                if (this.dieuChinhThongTinChiTieuKHNam.khVatTu && this.dieuChinhThongTinChiTieuKHNam.khVatTu.length > 0) {
+                  for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khVatTu.length; i++) {
+                    this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].id = null;
+                    if (this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].vatTuThietBi && this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].vatTuThietBi.length > 0) {
+                      for (let j = 0; j < this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].vatTuThietBi.length; j++) {
+                        this.dieuChinhThongTinChiTieuKHNam.khVatTu[i].vatTuThietBi[j].id = null;
                       }
                     }
                   }
@@ -1659,7 +1789,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   checkDataExistVatTu(data: any) {
     if (this.dieuChinhThongTinChiTieuKHNam.khVatTu) {
       let indexExist = this.dieuChinhThongTinChiTieuKHNam.khVatTu.findIndex(
-        (x) => x.maDonVi == data.maDonVi && x.vatTuThietBi[0].vatTuId == data.vatTuThietBi[0].vatTuId,
+        (x) => x.maDonVi == data.maDonVi && (x.vatTuThietBi[0].vatTuId == data.vatTuThietBi[0].vatTuId || data.vatTuThietBi[0].vatTuId == 0)
+          && (x.vatTuThietBi[0].vatTuChaId == data.vatTuThietBi[0].vatTuChaId || data.vatTuThietBi[0].vatTuChaId == 0),
       );
       if (indexExist != -1) {
         this.dieuChinhThongTinChiTieuKHNam.khVatTu.splice(indexExist, 1);
@@ -1861,7 +1992,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       try {
         this.dieuChinhThongTinChiTieuKHNam.id = this.id;
         this.dieuChinhThongTinChiTieuKHNam.soQuyetDinh =
-          this.formData.get('soQD').value + this.qdTCDT;
+          this.formData.get('soQD').value + "/" + this.qdTCDT;
         this.dieuChinhThongTinChiTieuKHNam.ngayKy =
           this.formData.get('ngayKy').value;
         this.dieuChinhThongTinChiTieuKHNam.ngayHieuLuc =
@@ -1873,7 +2004,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dieuChinhThongTinChiTieuKHNam.ghiChu =
           this.formData.get('ghiChu').value;
         let body = {
-          qdDc: this.dieuChinhThongTinChiTieuKHNam.qdDc,
+          qdDc: this.dieuChinhThongTinChiTieuKHNam,
           qdGocId: this.dieuChinhThongTinChiTieuKHNam.qdGocId,
         };
         if (this.id > 0) {
@@ -1930,6 +2061,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   loadData() {
+    this.updateDataLuongThuc();
+    this.updateEditLuongThucCache();
     if (this.tabSelected == this.tab.luongThuc) {
       this.dataLuongThuc =
         this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.slice(
@@ -1938,8 +2071,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         );
       this.totalRecord =
         this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
-      this.updateDataLuongThuc();
-      this.updateEditLuongThucCache();
     } else if (this.tabSelected == this.tab.muoi) {
       if (this.dieuChinhThongTinChiTieuKHNam.khMuoi) {
         this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(

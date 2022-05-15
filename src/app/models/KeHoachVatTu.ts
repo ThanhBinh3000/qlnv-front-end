@@ -19,9 +19,12 @@ export class KeHoachVatTu {
   isEdit: boolean;
   keHoachNamHienTaiDc: number;
   maDonVi: string;
-  constructor(vatTuThietBi: Array<VatTuThietBi> = []) {
+
+  constructor(vatTuThietBi: Array<VatTuThietBi> = [], detail: Array<ItemDetail> = []) {
     this.vatTuThietBi = vatTuThietBi;
     this.vatTuThietBi[0] = new VatTuThietBi();
+
+    this.chiTieuNhapCacNamTruoc = detail;
   }
 }
 
@@ -44,6 +47,7 @@ export class CacNamTruoc {
   soLuong: number;
   vatTuId: number;
 }
+
 export class VatTuThietBi {
   donViTinh: string;
   maVatTu: string;
@@ -70,8 +74,15 @@ export class VatTuThietBi {
   kyHieu: string;
   tenHang: string;
   chungLoaiHang: string;
+
   constructor(cacNamTruoc: Array<CacNamTruoc> = []) {
     this.cacNamTruoc = cacNamTruoc;
     this.cacNamTruoc[0] = new CacNamTruoc();
+
+    this.sdcCacNamTruoc = cacNamTruoc;
+    this.sdcCacNamTruoc[0] = new CacNamTruoc();
+
+    this.tdcCacNamTruoc = cacNamTruoc;
+    this.tdcCacNamTruoc[0] = new CacNamTruoc();
   }
 }

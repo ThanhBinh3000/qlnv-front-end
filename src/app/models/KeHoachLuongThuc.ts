@@ -52,4 +52,17 @@ export class KeHoachLuongThuc {
   sdcXtnTongGao: number;
   sdcXtnThoc: Array<ItemDetail>;
   sdcXtnGao: Array<ItemDetail>;
+
+  constructor(detail: Array<ItemDetail> = []) {
+    this.tkdnThoc = detail;
+    this.tkdnGao = detail;
+    this.tdcXtnThoc = detail;
+    this.tdcXtnGao = detail;
+    this.xtnThoc = detail;
+    this.xtnGao = detail;
+    this.dcXtnThoc = detail;
+    this.dcXtnGao = detail;
+    this.sdcXtnThoc = detail;
+    this.sdcXtnGao = detail;
+  }
 }
