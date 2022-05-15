@@ -22,16 +22,14 @@ export class MultipleTagComponent implements OnInit {
   nameFile: string;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   removeData(item: any) {
     this.removeDataEvent.emit(item);
   }
 
   selectData() {
-    console.log(this.type);
-    console.log(this.trangThai);
-
     if (this.type == 'file' || this.trangThai === '02') {
       return;
     }

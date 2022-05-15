@@ -13,7 +13,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc','');
+    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc', '');
   }
 
   timKiem(body: any): Promise<any> {
@@ -27,10 +27,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ +=
         'ngayKyDenNgay=' + encodeURIComponent('' + body.ngayKyDenNgay) + '&';
     if (body.soQD) url_ += 'soQD=' + encodeURIComponent('' + body.soQD) + '&';
-    if (body.tenDonVi)
-      url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDonVi) + '&';
+    if (body.tenDvi)
+      url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDvi) + '&';
     if (body.trichYeu)
       url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
+    if (body.namKeHoach)
+      url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ +=
         'paggingReq.page=' +
