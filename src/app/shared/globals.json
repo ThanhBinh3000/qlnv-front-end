@@ -9,5 +9,6 @@
     "BAN_HANH": "02",
     "TU_CHOI": "03",
     "DU_THAO_TRINH_DUYET": "04",
-    "MA_VTHH": "04"
+    "MA_VTHH": "04",
+    "KEY_ENTER": 13
 }

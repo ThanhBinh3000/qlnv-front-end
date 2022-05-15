@@ -25,8 +25,10 @@
         </nz-breadcrumb>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" [disabled]="!formData.valid"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+          [disabled]="!formData.valid || canCuList.length === 0" *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 
+          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI
+          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -41,13 +43,19 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.LANH_DAO_DUYET">
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.LANH_DAO_DUYET || thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()" *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 
+          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI 
+          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Hủy bỏ</span>
         </a>
@@ -61,7 +69,10 @@
       <!-- <nz-card nzTitle="Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao" class="mt16 flex-card p-lr16"> -->
       <div class="thong-tin-chi-tieu">
         <div class="title-chi-tieu">
-          <span
+          <span *ngIf="id === 0" class="du-thao-va-lanh-dao-duyet">
+            Dự Thảo
+          </span>
+          <span *ngIf="id > 0"
             [ngClass]="thongTinTrangThai(thongTinChiTieuKeHoachNam.trangThai)">{{thongTinChiTieuKeHoachNam.tenTrangThai}}</span>
           <span>Thông tin chỉ tiêu kế hoạch năm Tổng Cục giao</span>
         </div>
@@ -74,12 +85,12 @@
             </div>
             <div nz-col nzSpan="22">
               <div nz-row [nzGutter]="[16, 12]">
-                <div nz-col nzSpan="3">
+                <div nz-col nzSpan="4">
                   <nz-form-item>
                     <nz-form-control [nzErrorTip]="soQDError">
                       <nz-input-group nzAddOnAfter="/{{userInfo.MA_QD}}">
                         <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                          [nzStep]="1" [nzSize]="'small'"
+                          nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
                           [nzDisabled]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET">
                         </nz-input-number>
                       </nz-input-group>
@@ -89,7 +100,7 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col nzSpan="7">
+                <div nz-col nzSpan="6">
                   <nz-form-item>
                     <nz-form-label [nzSpan]="6" nzRequired [nzNoColon]="true" class="text-left"> Ngày ký
                     </nz-form-label>
@@ -134,19 +145,19 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-
               </div>
             </div>
 
             <div nz-col nzSpan="2">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="text-left"> Trích yếu </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu </nz-form-label>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="22">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="namKeHoachError">
                   <input formControlName="trichYeu" class="search__input" nz-input nzSize="small"
+                    placeholder="Nhập chỉ tiêu"
                     [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET" />
                 </nz-form-control>
                 <!-- <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input
@@ -156,14 +167,14 @@
             </div>
             <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="text-left"> Căn cứ </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ </nz-form-label>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="22">
-              <!-- <input nz-input [readonly]="true" formControlName="canCu" /> -->
-              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
-                [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai"
-                (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)">
+              <!-- <input nz-input formControlName="canCu" placeHolder="Chọn căn cứ" /> -->
+              <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
+                [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
+                (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="2">
@@ -217,8 +228,7 @@
                   ( 31/12/2021)
                 </th>
                 <!-- <th rowspan="4">Trạng thái</th> -->
-                <th rowspan="4" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Hành động</th>
+                <th rowspan="4" *ngIf="disableBanHanh()">Hành động</th>
               </tr>
               <tr>
                 <th rowspan="3">
@@ -273,8 +283,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
+              <tr [ngClass]="disableBanHanh() ? '' : 'row-disabled'">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -288,14 +297,13 @@
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
-                    <nz-autocomplete #auto>
+                    <nz-autocomplete #auto (keydown)="selectDonViKeyDown($event)">
                       <ng-container *ngIf="userInfo.CAP_DVI !== globals.prop.CUC">
                         <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
                           (click)="selectDonViKHLT(option)">
                           {{ option.labelDonVi }}
                         </nz-auto-option>
                       </ng-container>
-
                     </nz-autocomplete>
                   </nz-form-control>
                 </td>
@@ -351,8 +359,7 @@
                 <td>{{calculatortkcnTongThocCreate()}}</td>
                 <td>{{calculatortkcnTongGaoCreate()}}</td>
                 <!-- <td class="background-last-row"></td> -->
-                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
+                <td class="background-last-row" *ngIf="disableBanHanh()">
                   <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -625,7 +632,8 @@
                   <br>
                   ( 31/12/2021)
                 </th>
-                <th rowspan="3">Trạng thái</th>
+                <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Trạng thái</th>
                 <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Hành động</th>
               </tr>
@@ -709,7 +717,8 @@
                   </nz-input-number>
                 </td>
                 <td>{{calculatortkcnTongMuoiCreate()}}</td>
-                <td></td>
+                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td>
                 <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
                   <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}">
@@ -744,9 +753,9 @@
                     <td>0</td>
                   </ng-container>
                   <td>{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
-                  <td *ngIf="dataMuoi.stt">{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td>
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
+                  <td *ngIf="disableBanHanh()">{{
+                    convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td>
+                  <td *ngIf="disableBanHanh()">
                     <a (click)="startEditMuoi(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -792,9 +801,8 @@
                     </nz-input-number>
                   </td>
                   <td>{{calculatortkcnTongSoMuoi(i)}}</td>
-                  <td></td>
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                  thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
+                  <td *ngIf="disableBanHanh()"></td>
+                  <td *ngIf="disableBanHanh()">
                     <a (click)="saveEditMuoi(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -802,8 +810,6 @@
                       <i class="fa fa-times do"></i>
                     </a>
                   </td>
-                  <td *ngIf="dataMuoi.stt == null" class="background-last-row"></td>
-                  <td *ngIf="dataMuoi.stt ==  null" class="background-last-row"></td>
                 </ng-template>
               </tr>
 
@@ -849,9 +855,8 @@
                   number:
                   '1.0-1'}}
                 </td>
-                <td class="background-last-row"></td>
-                <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td>
+                <td class="background-last-row" *ngIf="disableBanHanh()"></td>
+                <td class="background-last-row" *ngIf="disableBanHanh()"></td>
               </tr>
             </tbody>
           </nz-table>
@@ -885,7 +890,7 @@
                 <th rowspan="3">Chủng loại hàng</th>
                 <th rowspan="3">ĐƠN VỊ TÍNH</th>
                 <th colspan="6">CHỈ TIÊU NHẬP TRONG NĂM KẾ HOẠCH NĂM</th>
-                <th rowspan="3">HÀNH ĐỘNG</th>
+                <th rowspan="3" *ngIf="disableBanHanh()">HÀNH ĐỘNG</th>
               </tr>
               <tr>
                 <th rowspan="2">
@@ -904,8 +909,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-              thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
+              <tr [ngClass]="disableBanHanh() ? '' : 'row-disabled'">
                 <td></td>
                 <td>
                   <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -994,8 +998,7 @@
                     [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam" (input)="calculatorTongChiTieuNtn()">
                   </nz-input-number>
                 </td>
-                <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
+                <td *ngIf="disableBanHanh()">
                   <a class="save" (click)="themMoiVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -1019,7 +1022,7 @@
                   <td>{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[1]?.soLuong | number: '1.0-1'}}</td>
                   <td>{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[2]?.soLuong | number: '1.0-1'}}</td>
                   <td>{{dataVatTu.vatTuThietBi[0]?.nhapTrongNam | number: '1.0-1'}}</td>
-                  <td>
+                  <td *ngIf="disableBanHanh()">
                     <a (click)="startEditVatTu(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -1047,7 +1050,7 @@
                       [(ngModel)]="dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam">
                     </nz-input-number>
                   </td>
-                  <td>
+                  <td *ngIf="disableBanHanh()">
                     <a (click)="saveEditVatTu(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -1087,7 +1090,7 @@
                 <td class="background-last-row">{{ tableExist ? reduceRowData(0, 12, 4, ',','table-vat-tu') : 0 |
                   number: '1.0-1'}}
                 </td>
-                <td class="background-last-row">
+                <td class="background-last-row" *ngIf="disableBanHanh()">
                 </td>
               </tr>
             </tbody>
@@ -1140,7 +1143,7 @@
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="24">
               <nz-form-item class="form-item-ghi-chu">
-                <nz-form-label nzRequired [nzNoColon]="true">
+                <nz-form-label [nzNoColon]="true">
                   Ghi chú
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">

@@ -18,8 +18,13 @@ export class ThongTinChiTieuKeHoachNam {
   khMuoi: Array<KeHoachMuoi> = [];
   canCu: string;
   fileDinhKemReqs: Array<FileDinhKem>;
-  constructor(fileDinhKemReqs: Array<FileDinhKem> = []) {
+  canCus: Array<FileDinhKem>;
+  constructor(
+    fileDinhKemReqs: Array<FileDinhKem> = [],
+    canCus: Array<FileDinhKem> = [],
+  ) {
     this.fileDinhKemReqs = fileDinhKemReqs;
+    this.canCus = canCus;
   }
 }
 export class TonKhoDauNamLuongThuc {

@@ -124,7 +124,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private danhMucService: DanhMucService,
     private uploadFileService: UploadFileService,
     private userService: UserService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
@@ -338,12 +338,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.trichYeu
           : null,
+        [Validators.required],
       ],
       ghiChu: [
         this.thongTinChiTieuKeHoachNam
           ? this.thongTinChiTieuKeHoachNam.ghiChu
           : null,
-        [Validators.required],
       ],
       canCu: [
         this.thongTinChiTieuKeHoachNam
@@ -665,12 +665,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               this.taiLieuDinhKemList.push(item);
             });
           }
-          if (this.thongTinChiTieuKeHoachNam?.canCu) {
-            const itemCanCu = {
-              id: new Date().getTime(),
-              text: this.thongTinChiTieuKeHoachNam.canCu,
-            };
-            this.canCuList.push(itemCanCu);
+          if (this.thongTinChiTieuKeHoachNam?.canCus?.length > 0) {
+            this.thongTinChiTieuKeHoachNam.canCus.forEach((file) => {
+              const item = {
+                id: file.id,
+                text: file.fileName,
+              };
+              this.canCuList.push(item);
+            });
           }
           this.dsKeHoachLuongThucClone = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khLuongThuc,
@@ -1156,72 +1158,72 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
-    const modalGuiDuyet = this.modal.create({
-      nzTitle: '',
-      nzContent: DialogGuiDuyetComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '428px',
-      nzFooter: null,
-      nzClassName: 'open-dialog-gui-duyet',
-      nzComponentParams: {},
-    });
-    modalGuiDuyet.afterClose.subscribe(async (text) => {
-      this.spinner.show();
-      try {
-        this.save(true);
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    });
-    // this.modal.confirm({
+    // const modalGuiDuyet = this.modal.create({
+    //   nzTitle: '',
+    //   nzContent: DialogGuiDuyetComponent,
+    //   nzMaskClosable: false,
     //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 310,
-    //   nzOnOk: async () => {
-    //     this.spinner.show();
-    //     try {
-    //       this.save(true);
-    //       this.spinner.hide();
-    //     } catch (e) {
-    //       console.log('error: ', e);
-    //       this.spinner.hide();
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   },
+    //   nzWidth: '428px',
+    //   nzFooter: null,
+    //   nzClassName: 'open-dialog-gui-duyet',
+    //   nzComponentParams: {},
     // });
+    // modalGuiDuyet.afterClose.subscribe(async (text) => {
+    //   this.spinner.show();
+    //   try {
+    //     this.save(true);
+    //     this.spinner.hide();
+    //   } catch (e) {
+    //     console.log('error: ', e);
+    //     this.spinner.hide();
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // });
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          this.save(true);
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   pheDuyet() {
-    const modalPheDuyet = this.modal.create({
-      nzTitle: '',
-      nzContent: DialogVanBanSanSangBanHanhComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '428px',
-      nzFooter: null,
-      nzClassName: 'open-dialog-gui-duyet',
-      nzComponentParams: {},
-    });
+    // const modalPheDuyet = this.modal.create({
+    //   nzTitle: '',
+    //   nzContent: DialogVanBanSanSangBanHanhComponent,
+    //   nzMaskClosable: false,
+    //   nzClosable: false,
+    //   nzWidth: '428px',
+    //   nzFooter: null,
+    //   nzClassName: 'open-dialog-gui-duyet',
+    //   nzComponentParams: {},
+    // });
 
-    modalPheDuyet.afterClose.subscribe(async (text) => {
-      this.spinner.show();
-      try {
-        this.save(true);
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    });
+    // modalPheDuyet.afterClose.subscribe(async (text) => {
+    //   this.spinner.show();
+    //   try {
+    //     this.save(true);
+    //     this.spinner.hide();
+    //   } catch (e) {
+    //     console.log('error: ', e);
+    //     this.spinner.hide();
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // });
 
     this.modal.confirm({
       nzClosable: false,
@@ -1307,8 +1309,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save(isGuiDuyet?: boolean) {
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
-      }${this.qdTCDT}`;
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
+      this.formData.get('soQD').value
+    }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1318,8 +1321,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.get('trichYeu').value;
     this.thongTinChiTieuKeHoachNam.ghiChu = this.formData
       .get('ghiChu')
-      .value.trim();
-
+      .value?.trim();
+    this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
     );
@@ -1534,8 +1537,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
       ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
-      )
+          this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
+        )
       : '0';
   }
   calculatortkcnTongGao(i: number): string {
@@ -1546,8 +1549,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
       ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
-      )
+          this.dsKeHoachLuongThucClone[i].tkcnTongGao,
+        )
       : '0';
   }
   calculatorxtnTongSoQuyThoc(i: number): string {
@@ -1556,8 +1559,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
-      )
+          this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
+        )
       : '0';
   }
   calculatortkcnTongSoQuyThoc(i: number): string {
@@ -1566,8 +1569,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
-      )
+          this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
+        )
       : '0';
   }
   calculatorntnTongSoQuyThoc(i: number): string {
@@ -1576,8 +1579,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
-      )
+          this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
+        )
       : '0';
   }
   onInput(e: Event, data: string): void {
@@ -1607,13 +1610,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.isAddVatTu = false;
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      // this.dataVatTuChaShow = [];
-      this.keHoachVatTuCreate.maHang = '';
-      this.keHoachVatTuCreate.kyHieu = '';
-      this.keHoachVatTuCreate.chungLoaiHang = '';
-      this.keHoachVatTuCreate.donViTinh = '';
-      this.dataVatTuConClone = this.dataVatTuCon;
-      // this.dataVatTuConShow = [];
+      this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTuCha = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].maVatTuCha = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].kyHieu = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTu = '';
+      this.keHoachVatTuCreate.vatTuThietBi[0].donViTinh = '';
+      this.dataVatTuConShow = this.dataVatTuCon;
+      this.dataVatTuChaShow = this.dataVatTuCha;
     } else {
       this.dataVatTuChaShow = this.dataVatTuCha.filter(
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -1624,7 +1627,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.isAddVatTu = false;
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      // this.dataVatTuConShow = [];
       this.keHoachVatTuCreate.donViTinh = '';
     } else {
       this.dataVatTuConShow = this.dataVatTuConClone.filter(
@@ -1732,8 +1734,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnGao * 2;
     return this.keHoachLuongThucCreate.ntnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
-      )
+          this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
+        )
       : '0';
   }
   calculatorxtnTongThocCreate(): string {
@@ -1745,8 +1747,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         );
       return this.keHoachLuongThucCreate.xtnTongThoc
         ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.xtnTongThoc,
-        )
+            this.keHoachLuongThucCreate.xtnTongThoc,
+          )
         : '0';
     }
   }
@@ -1756,8 +1758,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
         ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.xtnTongGao,
-        )
+            this.keHoachLuongThucCreate.xtnTongGao,
+          )
         : '0';
     }
   }
@@ -1767,8 +1769,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
-      )
+          this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
+        )
       : '0';
   }
   calculatortkdnTongQuyThocCreate(): string {
@@ -1777,8 +1779,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
-      )
+          this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
+        )
       : '0';
   }
   calculatortkdnTongThocCreate(): string {
@@ -1786,8 +1788,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongThoc,
-      )
+          this.keHoachLuongThucCreate.tkdnTongThoc,
+        )
       : '0';
   }
   calculatortkdnTongGaoCreate(): string {
@@ -1795,8 +1797,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongGao,
-      )
+          this.keHoachLuongThucCreate.tkdnTongGao,
+        )
       : '0';
   }
   calculatortkcnTongThocCreate(): string {
@@ -1806,8 +1808,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongThoc,
-      )
+          this.keHoachLuongThucCreate.tkcnTongThoc,
+        )
       : '0';
   }
   calculatortkcnTongGaoCreate(): string {
@@ -1817,8 +1819,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongGao,
-      )
+          this.keHoachLuongThucCreate.tkcnTongGao,
+        )
       : '0';
   }
   calculatortkcnTongSoQuyThocCreate(): string {
@@ -1827,8 +1829,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
-      )
+          this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
+        )
       : '0';
   }
   themMoiKHLT() {
@@ -2085,6 +2087,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
     this.dataVatTuConClone = vatTu.child;
     this.dataVatTuConShow = this.dataVatTuConClone;
+    this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTu = '';
     this.keHoachVatTuCreate.vatTuThietBi[0].kyHieu = vatTu.kyHieu;
     this.keHoachVatTuCreate.donViTinh = vatTu.donViTinh;
     this.keHoachVatTuCreate.vatTuThietBi[0].donViTinh = vatTu.donViTinh;
@@ -2190,32 +2193,32 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
       : '0';
   }
-  openDialogQuyetDinhGiaoChiTieu() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
-      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.thongTinChiTieuKeHoachNam.canCu = data.soQuyetDinh;
-        let item = {
-          id: data.id,
-          text: data.soQuyetDinh,
-        };
-        if (!this.canCuList.find((x) => x.id === item.id)) {
-          this.canCuList.push(item);
-        }
-        this.formData.patchValue({
-          canCu: data.soQuyetDinh,
-        });
-      }
-    });
-  }
+  // openDialogQuyetDinhGiaoChiTieu() {
+  //   const modalQD = this.modal.create({
+  //     nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+  //     nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+  //     nzMaskClosable: false,
+  //     nzClosable: false,
+  //     nzWidth: '900px',
+  //     nzFooter: null,
+  //     nzComponentParams: {},
+  //   });
+  //   modalQD.afterClose.subscribe((data) => {
+  //     if (data) {
+  //       this.thongTinChiTieuKeHoachNam.canCu = data.soQuyetDinh;
+  //       let item = {
+  //         id: data.id,
+  //         text: data.soQuyetDinh,
+  //       };
+  //       if (!this.canCuList.find((x) => x.id === item.id)) {
+  //         this.canCuList.push(item);
+  //       }
+  //       this.formData.patchValue({
+  //         canCu: data.soQuyetDinh,
+  //       });
+  //     }
+  //   });
+  // }
   themMoiVatTu() {
     if (!this.isAddVatTu) {
       return;
@@ -2248,7 +2251,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachVatTuCreate.vatTuThietBi[0].cacNamTruoc[2].soLuong;
     vatTuTemp.tongNhap = this.keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam
       ? this.keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam +
-      this.keHoachVatTuCreate.vatTuThietBi[0].tongCacNamTruoc
+        this.keHoachVatTuCreate.vatTuThietBi[0].tongCacNamTruoc
       : 0;
     this.keHoachVatTuDialog.vatTuThietBi.push(vatTuTemp);
     this.isAddVatTu = false;
@@ -2359,8 +2362,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam;
     return this.dsVatTuClone[i].vatTuThietBi[0].tongNhap
       ? Intl.NumberFormat('en-US').format(
-        this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
-      )
+          this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
+        )
       : '0';
   }
   calculatorTongChiTieuCacNamTruoc(i: number): string {
@@ -2370,17 +2373,18 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[2].soLuong;
     return this.dsVatTuClone[i].tongChiTieuCacnamTruoc
       ? Intl.NumberFormat('en-US').format(
-        this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
-      )
+          this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
+        )
       : '0';
   }
-  deleteDataMultipleTag(data: any) {
-    this.canCuList = this.canCuList.filter((x) => x.id !== data.id);
-  }
+
   deleteTaiLieuDinhKemTag(data: any) {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
       (x) => x.id !== data.id,
     );
+  }
+  deleteCanCuTag(data: any) {
+    this.canCuList = this.canCuList.filter((x) => x.id !== data.id);
   }
   openFile(event) {
     let item = {
@@ -2397,6 +2401,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           fileDinhKem.fileUrl = resUpload.url;
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.push(fileDinhKem);
           this.taiLieuDinhKemList.push(item);
+        });
+    }
+  }
+  openFileCanCu(event) {
+    let item = {
+      id: new Date().getTime(),
+      text: event.name,
+    };
+    if (!this.canCuList.find((x) => x.text === item.text)) {
+      this.uploadFileService
+        .uploadFile(event.file, event.name)
+        .then((resUpload) => {
+          const fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          this.thongTinChiTieuKeHoachNam.canCus.push(fileDinhKem);
+          this.canCuList.push(item);
         });
     }
   }
@@ -2442,9 +2464,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       );
       this.totalRecord = this.thongTinChiTieuKeHoachNam.khVatTu?.length;
     }
+    this.cdr.detectChanges();
   }
   selectTabData(tabName: string) {
     this.tabSelected = tabName;
     this.loadData();
+  }
+  disableBanHanh(): boolean {
+    return (
+      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
+      this.id === 0 ||
+      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.TU_CHOI
+    );
+  }
+  selectDonViKeyDown(event) {
+    if (event.keyCode === this.globals.prop.KEY_ENTER) {
+      console.log('37373737');
+
+      // this.selectDonViKHLT(donVi);
+    }
   }
 }
