@@ -31,4 +31,13 @@ export class KeHoachMuoi {
   sdcXtnTongSoMuoi: number;
 
   tkcnTongSoMuoi: number;
+
+  constructor(detail: Array<ItemDetail> = []) {
+    this.tkdnMuoi = detail;
+    this.xtnMuoi = detail;
+    this.xuatTrongNam = detail;
+    this.tdcXtnMuoi = detail;
+    this.dcXtnMuoi = detail;
+    this.sdcXtnMuoi = detail;
+  }
 }

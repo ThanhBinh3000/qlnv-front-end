@@ -76,7 +76,7 @@
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-                [nzAutocomplete]="auto" />
+                [nzAutocomplete]="auto" [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
@@ -110,10 +110,12 @@
               <th width="45px">
                 <label nz-checkbox></label>
               </th>
-              <th width="130px">Số quyết định</th>
+              <th width="130px">Số QĐ điều chỉnh</th>
               <th width="175px">Ngày ký</th>
+              <th width="175px">Số QĐ giao chỉ tiêu KH năm</th>
               <th width="175px">Năm kế hoạch</th>
               <th width="" class="text-center">Trích yếu</th>
+              <th width="175px" class="text-center">Lý do từ chối</th>
               <th width="175px" class="text-center">Trạng thái</th>
               <th width="130px" class="text-center"></th>
             </tr>
@@ -126,9 +128,11 @@
               </th>
               <td>{{ data.soQuyetDinh }}</td>
               <td>{{ data.ngayKy }}</td>
+              <td>{{ data.soQdGoc }}</td>
               <td>{{ data.namKeHoach }}</td>
               <td>{{ data.trichYeu }}</td>
-              <td>{{ convertTrangThai(data.trangThai) }}</td>
+              <td></td>
+              <td>{{ data.trangThaiDuyet }}</td>
               <td class="text-center">
                 <a (click)="redirectToChiTiet(data.id)">
                   <i class="fa fa-pencil"></i>

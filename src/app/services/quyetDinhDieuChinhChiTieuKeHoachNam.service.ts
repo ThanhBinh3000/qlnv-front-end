@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+  GATEWAY = '/qlnv-gateway/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam','');
+    super(httpClient, 'QuyetDinhDieuChinhChiTieuKeHoachNam', '');
   }
 
   timKiem(param: any): Promise<any> {
@@ -37,6 +37,15 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
     }
     if (param && param.ngayKyTuNgay) {
       tempUrl = tempUrl + 'ngayKyTuNgay=' + param.ngayKyTuNgay + '&';
+    }
+    if (param && param.trichYeuCT) {
+      tempUrl = tempUrl + 'trichYeuCT=' + param.trichYeuCT + '&';
+    }
+    if (param && param.ngayKyDenNgayCT) {
+      tempUrl = tempUrl + 'ngayKyDenNgayCT=' + param.ngayKyDenNgayCT + '&';
+    }
+    if (param && param.ngayKyTuNgayCT) {
+      tempUrl = tempUrl + 'ngayKyTuNgayCT=' + param.ngayKyTuNgayCT + '&';
     }
     if (tempUrl && tempUrl != '') {
       url = url + '?' + tempUrl.substring(0, tempUrl.length - 1);
