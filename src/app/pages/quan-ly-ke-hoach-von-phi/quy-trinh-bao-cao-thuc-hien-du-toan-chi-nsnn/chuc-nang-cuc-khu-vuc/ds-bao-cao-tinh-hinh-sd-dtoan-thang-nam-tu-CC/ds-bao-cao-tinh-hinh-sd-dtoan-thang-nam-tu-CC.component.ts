@@ -1,4 +1,4 @@
-import { DatePipe,Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as fileSaver from 'file-saver';
 
 
 @Component({
@@ -28,28 +29,28 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   errorMessage = "";
   url!: string;
 
-  listBcaoKqua:any []=[];
-  lenght:any=0;
+  listBcaoKqua: any[] = [];
+  lenght: any = 0;
 
   trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
-  trangThai!:string;
+  trangThai!: string;
   searchFilter = {
-    ngayTaoTu:'',
-    ngayTaoDen:'',
-    trangThais:[],
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
-    thangBCao: '',
-    dotBcao:'',
+    ngayTaoTu: '',
+    ngayTaoDen: '',
+    trangThais: [],
+    maBcao: '',
+    maLoaiBcao: '',
+    namBcao: '',
+    thangBcao: '',
+    dotBcao: '',
     paggingReq: {
       limit: 10,
       page: 1
     },
     str: '',
-    donVi:'',
-    maPhanBcao:'0',
-    loaiTimKiem:'1',
+    donVi: '',
+    maPhanBcao: '0',
+    loaiTimKiem: '1',
   };
 
   donViTaos: any = [];
@@ -59,8 +60,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notification:NzNotificationService,
-    private location:Location,
+    private notification: NzNotificationService,
+    private location: Location,
     private spinner: NgxSpinnerService,
   ) {
   }
@@ -82,31 +83,34 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   }
 
   // lay ten don vi tao
-  getUnitName(dvitao:any){
+  getUnitName(dvitao: any) {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  async onSubmit(){
+  async onSubmit() {
     this.spinner.show();
-    this.searchFilter.trangThais= [];
-    if(this.trangThai){
+    this.searchFilter.trangThais = [];
+    if (this.trangThai) {
       this.searchFilter.trangThais.push(this.trangThai)
-    }else{
-      this.searchFilter.trangThais = [Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    } else {
+      this.searchFilter.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
     await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
-      if(res.statusCode==0){
+      if (res.statusCode == 0) {
         this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
+          e.congVan = JSON.parse(e.congVan);
+          console.log(e.congVan);
+          
           e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
           e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
         })
         this.totalElements = res.data?.totalElements;
         this.totalPages = res.data?.totalPages;
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-    },err =>{
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
@@ -132,5 +136,18 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   getStatusName(id) {
     const utils = new Utils();
     return utils.getStatusName(id);
+  }
+
+  //download file về máy tính
+  async downloadFileCv(fileUrl, fileName) {
+    debugger
+    await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
+      (data) => {
+        fileSaver.saveAs(data,fileName);
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
   }
 }

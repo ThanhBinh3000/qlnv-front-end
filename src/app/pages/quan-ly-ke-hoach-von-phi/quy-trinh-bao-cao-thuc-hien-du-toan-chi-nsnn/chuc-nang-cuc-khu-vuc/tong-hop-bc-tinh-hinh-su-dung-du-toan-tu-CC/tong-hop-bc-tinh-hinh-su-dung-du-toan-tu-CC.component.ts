@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -39,7 +39,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     maBcao:'',
     maLoaiBcao:'',
     namBcao:null,
-    thangBCao: null,
+    thangBcao: null,
     dotBcao:'',
     paggingReq: {
       limit: 10,
@@ -137,10 +137,10 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
       maLoaiBcao: this.searchFilter.maLoaiBcao,
       maPhanBCao: '0',
       namBcao: this.searchFilter.namBcao,
-      thangBcao: this.searchFilter.thangBCao
+      thangBcao: this.searchFilter.thangBcao
     }
 
-      if(!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBCao && this.searchFilter.maLoaiBcao == '526')){
+      if(!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBcao && this.searchFilter.maLoaiBcao == '526')){
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
         return;
       }
@@ -149,7 +149,13 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
         return;
       }
   
-      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0')+'/'+this.searchFilter.namBcao])
+      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBcao ? this.searchFilter.thangBcao : '0')+'/'+this.searchFilter.namBcao])
+  }
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
   }
 
   close() {
