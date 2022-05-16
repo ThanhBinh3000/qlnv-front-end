@@ -30,12 +30,17 @@
           <span>Gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04'">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01'">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Ban hành</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '02'">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>

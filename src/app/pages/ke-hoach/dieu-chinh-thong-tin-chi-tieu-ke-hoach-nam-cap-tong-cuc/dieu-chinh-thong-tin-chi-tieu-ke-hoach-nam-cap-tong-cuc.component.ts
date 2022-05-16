@@ -365,6 +365,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!this.dataMuoi) {
       this.dataMuoi = [];
     }
+    this.keHoachMuoiCreate.donViTinh = 'Tấn';
     this.checkDataExistMuoi(this.keHoachMuoiCreate);
     this.loadData();
     this.loadDefaultMuoiNew();
@@ -442,6 +443,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (!this.dataLuongThuc) {
       this.dataLuongThuc = [];
     }
+    this.keHoachLuongThucCreate.donViTinh = 'Tấn';
     this.checkDataExistLuongThuc(this.keHoachLuongThucCreate);
     this.loadData();
     this.loadDefaultLuongThucNew();
@@ -838,13 +840,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               if (tonKho.vatTuId == item.vatTuThietBi[0].vatTuId) {
                 switch (tonKho.nam) {
                   case this.yearNow - 1:
-                    item.tdcCacNamTruoc[0].soLuong = tonKho.soLuong;
+                    item.vatTuThietBi[0].tdcCacNamTruoc[0].soLuong = tonKho.soLuong;
                     break;
                   case this.yearNow - 2:
-                    item.tdcCacNamTruoc[1].soLuong = tonKho.soLuong;
+                    item.vatTuThietBi[0].tdcCacNamTruoc[1].soLuong = tonKho.soLuong;
                     break;
                   case this.yearNow - 3:
-                    item.tdcCacNamTruoc[2].soLuong = tonKho.soLuong;
+                    item.vatTuThietBi[0].tdcCacNamTruoc[2].soLuong = tonKho.soLuong;
                     break;
                   default:
                     break;
@@ -1236,6 +1238,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             }
           }
 
+          if (this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru && this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru.length > 0) {
+            this.dieuChinhThongTinChiTieuKHNam.khMuoi = cloneDeep(this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru);
+          }
+
           if (this.dieuChinhThongTinChiTieuKHNam.khMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi.length > 0) {
             for (let i = 0; i < this.dieuChinhThongTinChiTieuKHNam.khMuoi.length; i++) {
               if (this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi && this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi.length > 0) { }
@@ -1262,6 +1268,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 ];
                 this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi = tkdnMuoi;
               }
+              this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].nhapTrongNam = this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].sdcNtnTongSoMuoi;
+              this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xuatTrongNam = this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].sdcXtnMuoi;
             }
           }
 
@@ -1871,7 +1879,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -1898,6 +1906,43 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: '01',
+          };
+          let res =
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -2064,28 +2109,18 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.updateDataLuongThuc();
     this.updateEditLuongThucCache();
     if (this.tabSelected == this.tab.luongThuc) {
-      this.dataLuongThuc =
-        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.slice(
-          this.pageSize * (this.page - 1),
-          this.pageSize * this.page,
-        );
+      this.dataLuongThuc = this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.slice(
+        this.pageSize * (this.page - 1),
+        this.pageSize * this.page,
+      );
       this.totalRecord =
         this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
     } else if (this.tabSelected == this.tab.muoi) {
-      if (this.dieuChinhThongTinChiTieuKHNam.khMuoi) {
-        this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(
-          this.pageSize * (this.page - 1),
-          this.pageSize * this.page,
-        );
-        this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
-      }
-      else if (this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru) {
-        this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru.slice(
-          this.pageSize * (this.page - 1),
-          this.pageSize * this.page,
-        );
-        this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru.length;
-      }
+      this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(
+        this.pageSize * (this.page - 1),
+        this.pageSize * this.page,
+      );
+      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
       this.updateDataMuoi();
       this.updateEditMuoiCache();
     } else if (this.tabSelected == this.tab.vatTu) {
@@ -2243,7 +2278,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (trangThai === '00' || trangThai === '01' || trangThai === '03') {
+    if (trangThai === '00' || trangThai === '01' || trangThai === '04' || trangThai === '03') {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === '02') {
       return 'da-ban-hanh';
