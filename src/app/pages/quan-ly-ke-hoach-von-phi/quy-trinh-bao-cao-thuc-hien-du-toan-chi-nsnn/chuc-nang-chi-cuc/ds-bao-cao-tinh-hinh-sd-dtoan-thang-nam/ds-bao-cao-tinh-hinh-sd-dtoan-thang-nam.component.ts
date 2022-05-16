@@ -44,7 +44,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     maBcao: '',
     maLoaiBcao: '',
     namBcao: null,
-    thangBCao: null,
+    thangBcao: null,
     dotBcao: '',
     paggingReq: {
       limit: 10,
@@ -132,7 +132,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     this.spinner.hide();
   }
   themMoi() {
-    if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBCao && this.searchFilter.maLoaiBcao == '526')) {
+    if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBcao && this.searchFilter.maLoaiBcao == '526')) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
@@ -141,7 +141,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.thangBCao ? this.searchFilter.thangBCao : '0') + '/' + this.searchFilter.namBcao])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.thangBcao ? this.searchFilter.thangBcao : '0') + '/' + this.searchFilter.namBcao])
   }
 
   //doi so trang

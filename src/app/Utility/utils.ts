@@ -48,14 +48,14 @@ export class Utils {
 
     //role xoa
     public static btnRoleDel = {
-        "status": ['1', '3', '5', '8','10'],
+        "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
         "role": ['3'],
     }
 
     //role luu
     public static btnRoleSave = {
-        "status": ['1', '3', '5', '8','10'],
+        "status": ['1', '3', '5', '8', '10'],
         "unit": [1, 2],
         "role": ['3'],
     }
@@ -104,21 +104,21 @@ export class Utils {
 
     //role copy
     public static btnRoleCOPY = {
-        "status": ['1','2','3','4','5','6','7','8','9','10','11'],
+        "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
         "role": ['3'],
     }
 
     //role in
     public static btnRolePRINT = {
-        "status": ['2','3','4','5','6','7','8','9','10','11'],
+        "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         "unit": [1, 2],
-        "role": ['1','2','3'],
+        "role": ['1', '2', '3'],
     }
 
     //role copy
     public static btnRoleOK = {
-        "statusBaoCao": ['2','4','7'],
+        "statusBaoCao": ['2', '4', '7'],
         "statusChiTiet": ['2'],
         "unit": ['1']
     }
@@ -262,6 +262,9 @@ export class Utils {
             case Utils.TT_BC_11:
                 statusName = "Đã giao"
                 break;
+            case Utils.TT_BC_KT:
+                statusName = "Chưa có"
+                break;
             default:
                 statusName = id;
                 break;
@@ -274,560 +277,560 @@ export class Utils {
         let statusName = TRANGTHAIPHULUC.find(item => item.id == id)
         return statusName?.ten;
     }
-    
+
 }
 
 // loai bao cao quan ly von phi
-export const LOAIBAOCAO =[
+export const LOAIBAOCAO = [
     {
-        id:'12',
-        tenDm:'Xây dựng Chi thường xuyên giai đoạn 03 năm'
+        id: '12',
+        tenDm: 'Xây dựng Chi thường xuyên giai đoạn 03 năm'
     },
     {
-        id:'01',
-        tenDm:'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
+        id: '01',
+        tenDm: 'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
     },
     {
-        id:'02',
-        tenDm:'Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm'
+        id: '02',
+        tenDm: 'Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm'
     },
     {
-        id:'03',
-        tenDm:'Xây dựng Kế hoạch bảo quản hàng năm'
+        id: '03',
+        tenDm: 'Xây dựng Kế hoạch bảo quản hàng năm'
     },
     {
-        id:'04',
-        tenDm:'Xây dựng Nhu cầu xuất hàng DTQG viện trợ cứu trợ hàng năm'
+        id: '04',
+        tenDm: 'Xây dựng Nhu cầu xuất hàng DTQG viện trợ cứu trợ hàng năm'
     },
     {
-        id:'05',
-        tenDm:'Xây dựng Kế hoạch quỹ tiền lương giai đoạn 03 năm'
+        id: '05',
+        tenDm: 'Xây dựng Kế hoạch quỹ tiền lương giai đoạn 03 năm'
     },
     {
-        id:'06',
-        tenDm:'Xây dựng Kế hoạch quỹ tiền lương hàng năm'
+        id: '06',
+        tenDm: 'Xây dựng Kế hoạch quỹ tiền lương hàng năm'
     },
     {
-        id:'07',
-        tenDm:'Xây dựng Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
+        id: '07',
+        tenDm: 'Xây dựng Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
     },
     {
-        id:'08',
-        tenDm:'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
+        id: '08',
+        tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
     },
     {
-        id:'09',
-        tenDm:'Kế hoạch Xây dựng dự toán chi ứng dụng CNTT giai đoạn 03 năm'
+        id: '09',
+        tenDm: 'Kế hoạch Xây dựng dự toán chi ứng dụng CNTT giai đoạn 03 năm'
     },
     {
-        id:'10',
-        tenDm:'Xây dựng Dự toán chi mua sắm máy móc, thiết bị chuyên dùng 03 năm'
+        id: '10',
+        tenDm: 'Xây dựng Dự toán chi mua sắm máy móc, thiết bị chuyên dùng 03 năm'
     },
     {
-        id:'11',
-        tenDm:'Xây dựng Nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
+        id: '11',
+        tenDm: 'Xây dựng Nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
     },
     {
-        id:'13',
-        tenDm:'Xây dựng Nhu cầu phí nhập, xuất theo các năm của giai đoạn 03 năm'
+        id: '13',
+        tenDm: 'Xây dựng Nhu cầu phí nhập, xuất theo các năm của giai đoạn 03 năm'
     },
     {
-        id:'14',
-        tenDm:'Xây dựng Kế hoạch cải tạo và sửa chữa lớn 03 năm'
+        id: '14',
+        tenDm: 'Xây dựng Kế hoạch cải tạo và sửa chữa lớn 03 năm'
     },
     {
-        id:'15',
-        tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'
+        id: '15',
+        tenDm: 'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'
     },
     {
-        id:'32',
-        tenDm:'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
+        id: '32',
+        tenDm: 'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
     },
     {
-      id:'16',
-      tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
+        id: '16',
+        tenDm: 'Nhu cầu kế hoạch ĐTXD 03 năm'
     },
     {
-        id:'17',
-        tenDm:'Tổng hợp dự toán chi thường xuyên hàng năm'
+        id: '17',
+        tenDm: 'Tổng hợp dự toán chi thường xuyên hàng năm'
     },
     {
-        id:'18',
-        tenDm:'Dự toán phí nhập xuất hàng DTQG hàng năm'
+        id: '18',
+        tenDm: 'Dự toán phí nhập xuất hàng DTQG hàng năm'
     },
     {
-        id:'19',
-        tenDm:'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
+        id: '19',
+        tenDm: 'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
     },
     {
-        id:'20',
-        tenDm:'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
+        id: '20',
+        tenDm: 'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
     },
     {
-        id:'21',
-        tenDm:'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
+        id: '21',
+        tenDm: 'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
     },
     {
-        id:'22',
-        tenDm:'Kế hoạch quỹ tiền lương năm N+1'
+        id: '22',
+        tenDm: 'Kế hoạch quỹ tiền lương năm N+1'
     },
     {
-        id:'23',
-        tenDm:'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
+        id: '23',
+        tenDm: 'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
     },
     {
-        id:'24',
-        tenDm:'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
+        id: '24',
+        tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
     },
     {
-        id:'25',
-        tenDm:'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
+        id: '25',
+        tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
     },
     {
-        id:'26',
-        tenDm:'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
+        id: '26',
+        tenDm: 'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
     },
     {
-        id:'27',
-        tenDm:'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
+        id: '27',
+        tenDm: 'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
     },
     {
-        id:'28',
-        tenDm:'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
+        id: '28',
+        tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
     },
     {
-        id:'29',
-        tenDm:'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
+        id: '29',
+        tenDm: 'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
     },
     {
-        id:'30',
-        tenDm:'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
+        id: '30',
+        tenDm: 'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
     },
     {
-        id:'31',
-        tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
+        id: '31',
+        tenDm: 'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
     },
-    ]
-    // Loai bao cao
-	// 3.2.4.3.1
-    export	const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N:string = "01";
+]
+// Loai bao cao
+// 3.2.4.3.1
+export const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N: string = "01";
 
-	// 3.2.4.3.2
-    export	const QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU:string = "02";
+// 3.2.4.3.2
+export const QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU: string = "02";
 
-	// 3.2.4.3.3
-    export	const QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG:string = "03";
+// 3.2.4.3.3
+export const QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG: string = "03";
 
-	// 3.2.4.3.4
-    export	const QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM:string = "04";
+// 3.2.4.3.4
+export const QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM: string = "04";
 
-	// 3.2.4.3.5
-    export	const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N:string = "05";
+// 3.2.4.3.5
+export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N: string = "05";
 
-	// 3.2.4.3.6
-    export	const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM:string = "06";
+// 3.2.4.3.6
+export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM: string = "06";
 
-	// 3.2.4.3.7
-    export	const QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N:string = "07";
+// 3.2.4.3.7
+export const QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N: string = "07";
 
-	// 3.2.4.3.8
-    export	const QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N:string = "08";
+// 3.2.4.3.8
+export const QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N: string = "08";
 
-	// 3.2.4.3.9
-    export	const QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N:string = "09";
+// 3.2.4.3.9
+export const QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N: string = "09";
 
-	// 3.2.4.3.10
-    export	const QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N:string = "10";
+// 3.2.4.3.10
+export const QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N: string = "10";
 
-	// 3.2.4.3.11
-    export	const QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N:string = "11";
+// 3.2.4.3.11
+export const QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N: string = "11";
 
-	// 3.2.4.3.12
-    export	const QLNV_KHVONPHI_CHI_TX_GD3N:string = "12";
+// 3.2.4.3.12
+export const QLNV_KHVONPHI_CHI_TX_GD3N: string = "12";
 
-	// 3.2.4.3.13
-    export	const QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N:string = "13";
+// 3.2.4.3.13
+export const QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N: string = "13";
 
-	// 3.2.4.3.14
-    export	const QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N:string = "14";
+// 3.2.4.3.14
+export const QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N: string = "14";
 
-	// 3.2.4.3.15
-    export	const QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N:string = "15";
+// 3.2.4.3.15
+export const QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N: string = "15";
 
-	// Loai bao cao Tổng cục
-    export	const QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N:string = "16";
-    export	const QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM:string = "17";
-    export	const QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM:string = "18";
-    export	const QLNV_KHVONPHI_TC_KHOACH_BQUAN_THOC_GAO_HNAM:string = "19";
-    export	const QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM:string = "20";
-    export	const QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N:string = "21";
-    export	const QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1:string = "22";
-    export	const QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N:string = "23";
-    export	const QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N:string = "24";
-    export	const QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N:string = "25";
-    export	const QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N:string = "26";
-    export	const QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N:string = "27";
-    export	const QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N:string = "28";
-    export	const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N:string = "29";
-    export	const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N:string = "30";
-    export	const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N:string = "31";
-    export	const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N:string = "32";
+// Loai bao cao Tổng cục
+export const QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N: string = "16";
+export const QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM: string = "17";
+export const QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM: string = "18";
+export const QLNV_KHVONPHI_TC_KHOACH_BQUAN_THOC_GAO_HNAM: string = "19";
+export const QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM: string = "20";
+export const QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N: string = "21";
+export const QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1: string = "22";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N: string = "23";
+export const QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N: string = "24";
+export const QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N: string = "25";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N: string = "26";
+export const QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N: string = "27";
+export const QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N: string = "28";
+export const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N: string = "29";
+export const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N: string = "30";
+export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N: string = "31";
+export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N: string = "32";
 
-    // loai bao cao quy trinh thuc hien du toan chi
-    export const LBCQUYTRINHTHUCHIENDUTOANCHI =[
-        {
-            id:526,
-            tenDm:'Báo cáo giải ngân định kỳ tháng'
-        },
-        {
-            id:527,
-            tenDm:'Báo cáo giải ngân cả năm'
-        },
-    ]
+// loai bao cao quy trinh thuc hien du toan chi
+export const LBCQUYTRINHTHUCHIENDUTOANCHI = [
+    {
+        id: 526,
+        tenDm: 'Báo cáo giải ngân định kỳ tháng'
+    },
+    {
+        id: 527,
+        tenDm: 'Báo cáo giải ngân cả năm'
+    },
+]
 
-    // loai bao cao ket qua thuc hien hang du tru quoc gia
-    export const LBCKETQUATHUCHIENHANGDTQG =[
-        {
-            id:1,
-            tenDm:'Đợt'
-        },
-        {
-            id:2,
-            tenDm:'Năm'
-        },
-    ]
-    export	const BAOCAODOT = "1";
-    export	const BAOCAONAM = "2";
-    // trang thai ban ghi cua anh Ninh
-    export const TRANGTHAIBANGHI =[
-        {
-            id:'1',
-            tenDm:'Đang soạn'
-        },
-        {
-            id:'2',
-            tenDm:'Trình duyệt'
-        },
-        {
-            id:'3',
-            tenDm:'Từ chối'
-        },
-        {
-            id:'4',
-            tenDm:'Duyệt'
-        },
-        {
-            id:'5',
-            tenDm:'Từ chối'
-        },
-        {
-            id:'6',
-            tenDm:'Phê duyệt'
-        },
-        {
-            id:'7',
-            tenDm:'Chờ ghi nhận'
-        },
-        {
-            id:'8',
-            tenDm:'Từ chối ghi nhận'
-        },
-        {
-            id:'9',
-            tenDm:'Ghi nhận'
-        },
-    ]
+// loai bao cao ket qua thuc hien hang du tru quoc gia
+export const LBCKETQUATHUCHIENHANGDTQG = [
+    {
+        id: 1,
+        tenDm: 'Đợt'
+    },
+    {
+        id: 2,
+        tenDm: 'Năm'
+    },
+]
+export const BAOCAODOT = "1";
+export const BAOCAONAM = "2";
+// trang thai ban ghi cua anh Ninh
+export const TRANGTHAIBANGHI = [
+    {
+        id: '1',
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: '2',
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: '3',
+        tenDm: 'Từ chối'
+    },
+    {
+        id: '4',
+        tenDm: 'Duyệt'
+    },
+    {
+        id: '5',
+        tenDm: 'Từ chối'
+    },
+    {
+        id: '6',
+        tenDm: 'Phê duyệt'
+    },
+    {
+        id: '7',
+        tenDm: 'Chờ ghi nhận'
+    },
+    {
+        id: '8',
+        tenDm: 'Từ chối ghi nhận'
+    },
+    {
+        id: '9',
+        tenDm: 'Ghi nhận'
+    },
+]
 
 
 
-    // trang thai ban ghi
-    export const TRANGTHAI =[
-        {
-            id:1,
-            tenDm:'Đang soạn'
-        },
-        {
-            id:2,
-            tenDm:'Trình duyệt'
-        },
-        {
-            id:3,
-            tenDm:'Trưởng BP từ chối'
-        },
-        {
-            id:4,
-            tenDm:'Trưởng BP duyệt'
-        },
-        {
-            id:5,
-            tenDm:'Lãnh đạo từ chối'
-        },
-        {
-            id:6,
-            tenDm:'Lãnh đạo duyệt'
-        },
-        {
-            id:7,
-            tenDm:'Gửi ĐV cấp trên'
-        },
-        {
-            id:8,
-            tenDm:'ĐV cấp trên từ chối'
-        },
-        {
-            id:9,
-            tenDm:'Đv cấp trên duyệt'
-        },
-        {
-            id:10,
-            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
-        },
-        {
-            id:11,
-            tenDm:'Chưa đánh giá'
-        },
-    ]
+// trang thai ban ghi
+export const TRANGTHAI = [
+    {
+        id: 1,
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: 2,
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: 3,
+        tenDm: 'Trưởng BP từ chối'
+    },
+    {
+        id: 4,
+        tenDm: 'Trưởng BP duyệt'
+    },
+    {
+        id: 5,
+        tenDm: 'Lãnh đạo từ chối'
+    },
+    {
+        id: 6,
+        tenDm: 'Lãnh đạo duyệt'
+    },
+    {
+        id: 7,
+        tenDm: 'Gửi ĐV cấp trên'
+    },
+    {
+        id: 8,
+        tenDm: 'ĐV cấp trên từ chối'
+    },
+    {
+        id: 9,
+        tenDm: 'Đv cấp trên duyệt'
+    },
+    {
+        id: 10,
+        tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    },
+    {
+        id: 11,
+        tenDm: 'Chưa đánh giá'
+    },
+]
 
-    // trang thai ban ghi
-    export const TRANGTHAITIMKIEM =[
-        {
-            id:"1",
-            tenDm:'Đang soạn'
-        },
-        {
-            id:"2",
-            tenDm:'Trình duyệt'
-        },
-        {
-            id:"3",
-            tenDm:'Trưởng BP từ chối'
-        },
-        {
-            id:"4",
-            tenDm:'Trưởng BP duyệt'
-        },
-        {
-            id:"5",
-            tenDm:'Lãnh đạo từ chối'
-        },
-        {
-            id:"6",
-            tenDm:'Lãnh đạo duyệt'
-        },
-        {
-            id:"7",
-            tenDm:'Gửi ĐV cấp trên'
-        },
-        {
-            id:"8",
-            tenDm:'ĐV cấp trên từ chối'
-        },
-        {
-            id:"9",
-            tenDm:'Đv cấp trên duyệt'
-        },
-        {
-            id:"10",
-            tenDm:'Lãnh đạo yêu cầu điều chỉnh'
-        },
-    ]
+// trang thai ban ghi
+export const TRANGTHAITIMKIEM = [
+    {
+        id: "1",
+        tenDm: 'Đang soạn'
+    },
+    {
+        id: "2",
+        tenDm: 'Trình duyệt'
+    },
+    {
+        id: "3",
+        tenDm: 'Trưởng BP từ chối'
+    },
+    {
+        id: "4",
+        tenDm: 'Trưởng BP duyệt'
+    },
+    {
+        id: "5",
+        tenDm: 'Lãnh đạo từ chối'
+    },
+    {
+        id: "6",
+        tenDm: 'Lãnh đạo duyệt'
+    },
+    {
+        id: "7",
+        tenDm: 'Gửi ĐV cấp trên'
+    },
+    {
+        id: "8",
+        tenDm: 'ĐV cấp trên từ chối'
+    },
+    {
+        id: "9",
+        tenDm: 'Đv cấp trên duyệt'
+    },
+    {
+        id: "10",
+        tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    },
+]
 
-    // trang thai chi tiet bao cao
-    export	const OK = "1";
-    export	const NOTOK = "0";
-    export	const CHUADANHGIA = "2";
+// trang thai chi tiet bao cao
+export const OK = "1";
+export const NOTOK = "0";
+export const CHUADANHGIA = "2";
 
-    // loai trang thai gui don vi cap tren
-    export const TRANGTHAIGUIDVCT =[
-        {
-            id:'9',
-            ten:'Chấp nhận'
-        },
-        {
-            id:'8',
-            ten:'Không chấp nhận'
-        },
-        {
-            id:'7',
-            ten:'Chưa đánh giá (để trống)'
-        },
-    ]
+// loai trang thai gui don vi cap tren
+export const TRANGTHAIGUIDVCT = [
+    {
+        id: '9',
+        ten: 'Chấp nhận'
+    },
+    {
+        id: '8',
+        ten: 'Không chấp nhận'
+    },
+    {
+        id: '7',
+        ten: 'Chưa đánh giá (để trống)'
+    },
+]
 
-    // loai trang thai kiem tra
-    export const TRANGTHAIKIEMTRABAOCAO =[
-        {
-            id:'9',
-            ten:'Chấp nhận'
-        },
-        {
-            id:'8',
-            ten:'Không chấp nhận'
-        },
-        {
-            id:'7',
-            ten:'Chưa đánh giá (để trống)'
-        },
-        {
-            id:'-1',
-            ten:'Chưa gửi đơn vị cấp trên'
-        },
-    ]
+// loai trang thai kiem tra
+export const TRANGTHAIKIEMTRABAOCAO = [
+    {
+        id: '9',
+        ten: 'Chấp nhận'
+    },
+    {
+        id: '8',
+        ten: 'Không chấp nhận'
+    },
+    {
+        id: '7',
+        ten: 'Chưa đánh giá (để trống)'
+    },
+    {
+        id: '-1',
+        ten: 'Chưa gửi đơn vị cấp trên'
+    },
+]
 
-    export const TRANGTHAIPHULUC =[
-        {
-            id:0,
-            ten:'NOT OK'
-        },
-        {
-            id:1,
-            ten:'OK'
-        },
-        {
-            id:2,
-            ten:'Chưa đánh giá (để trống)'
-        }
-    ]
+export const TRANGTHAIPHULUC = [
+    {
+        id: 0,
+        ten: 'NOT OK'
+    },
+    {
+        id: 1,
+        ten: 'OK'
+    },
+    {
+        id: 2,
+        ten: 'Chưa đánh giá (để trống)'
+    }
+]
 
-    export const LISTBAOCAOTONGHOP =[
-        {
-            id:'01',
-            tenDm:'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
-        },
-        {
-            id:'16',
-            tenDm:'Nhu cầu kế hoạch ĐTXD 03 năm'
-        },
-        {
-            id:'17',
-            tenDm:'Tổng hợp dự toán chi thường xuyên hàng năm'
-        },
-        {
-            id:'18',
-            tenDm:'Dự toán phí nhập xuất hàng DTQG hàng năm'
-        },
-        {
-            id:'19',
-            tenDm:'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
-        },
-        {
-            id:'20',
-            tenDm:'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
-        },
-        {
-            id:'21',
-            tenDm:'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
-        },
-        {
-            id:'22',
-            tenDm:'Kế hoạch quỹ tiền lương năm N+1'
-        },
-        {
-            id:'23',
-            tenDm:'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
-        },
-        {
-            id:'24',
-            tenDm:'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
-        },
-        {
-            id:'25',
-            tenDm:'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
-        },
-        {
-            id:'26',
-            tenDm:'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
-        },
-        {
-            id:'27',
-            tenDm:'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
-        },
-        {
-            id:'28',
-            tenDm:'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
-        },
-        {
-            id:'29',
-            tenDm:'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
-        },
-        {
-            id:'30',
-            tenDm:'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
-        },
-        {
-            id:'31',
-            tenDm:'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
-        },
-    ]
+export const LISTBAOCAOTONGHOP = [
+    {
+        id: '01',
+        tenDm: 'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
+    },
+    {
+        id: '16',
+        tenDm: 'Nhu cầu kế hoạch ĐTXD 03 năm'
+    },
+    {
+        id: '17',
+        tenDm: 'Tổng hợp dự toán chi thường xuyên hàng năm'
+    },
+    {
+        id: '18',
+        tenDm: 'Dự toán phí nhập xuất hàng DTQG hàng năm'
+    },
+    {
+        id: '19',
+        tenDm: 'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
+    },
+    {
+        id: '20',
+        tenDm: 'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
+    },
+    {
+        id: '21',
+        tenDm: 'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
+    },
+    {
+        id: '22',
+        tenDm: 'Kế hoạch quỹ tiền lương năm N+1'
+    },
+    {
+        id: '23',
+        tenDm: 'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
+    },
+    {
+        id: '24',
+        tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
+    },
+    {
+        id: '25',
+        tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
+    },
+    {
+        id: '26',
+        tenDm: 'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
+    },
+    {
+        id: '27',
+        tenDm: 'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
+    },
+    {
+        id: '28',
+        tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
+    },
+    {
+        id: '29',
+        tenDm: 'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
+    },
+    {
+        id: '30',
+        tenDm: 'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
+    },
+    {
+        id: '31',
+        tenDm: 'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
+    },
+]
 
-    // loai bao cao quy trinh thuc hien du toan chi
-    export const DONVITIEN =[
-        {
-            id:'1',
-            tenDm:'Đồng',
-            giaTri:1
-        },
-        {
-            id:'2',
-            tenDm:'Nghìn đồng',
-            giaTri:1000
-        },
-        {
-            id:'3',
-            tenDm:'Triệu đồng',
-            giaTri:1000000
-        },
-        {
-            id:'4',
-            tenDm:'Tỷ đồng',
-            giaTri:1000000000
-        },
-    ]
+// loai bao cao quy trinh thuc hien du toan chi
+export const DONVITIEN = [
+    {
+        id: '1',
+        tenDm: 'Đồng',
+        giaTri: 1
+    },
+    {
+        id: '2',
+        tenDm: 'Nghìn đồng',
+        giaTri: 1000
+    },
+    {
+        id: '3',
+        tenDm: 'Triệu đồng',
+        giaTri: 1000000
+    },
+    {
+        id: '4',
+        tenDm: 'Tỷ đồng',
+        giaTri: 1000000000
+    },
+]
 
-    export function divMoney(value,maDonViTien){
-        let donVi = DONVITIEN.find(item => item.id == maDonViTien);
-        if(!value && value!=0){
-            return null;
-        }
-
-        if(donVi){
-            return Number((value/donVi.giaTri).toFixed(Utils.ROUND));
-        }else{
-            return null;
-        }
+export function divMoney(value, maDonViTien) {
+    let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+    if (!value && value != 0) {
+        return null;
     }
 
-    export function mulMoney(value,maDonViTien){
+    if (donVi) {
+        return Number((value / donVi.giaTri).toFixed(Utils.ROUND));
+    } else {
+        return null;
+    }
+}
 
-        let donVi = DONVITIEN.find(item => item.id == maDonViTien);
-        if(!value && value!=0){
-            return null;
-        }
+export function mulMoney(value, maDonViTien) {
 
-        if(donVi){
-            return Number((value*donVi.giaTri).toFixed(Utils.ROUND));
-        }else{
-            return null;
-        }
+    let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+    if (!value && value != 0) {
+        return null;
     }
 
+    if (donVi) {
+        return Number((value * donVi.giaTri).toFixed(Utils.ROUND));
+    } else {
+        return null;
+    }
+}
 
-    // trang thai phan bo du toan chi nsnn
-    export const TRANGTHAIPHANBO =[
-      {
-          id:'1',
-          ten:'Chưa ghi nhận',
-      },
-      {
-          id:'2',
-          ten:'Chờ ghi nhận',
-      },
-      {
-          id:'3',
-          ten:'Đã ghi nhận',
-      },
-      {
-          id:'4',
-          ten:'Chờ tiếp nhận',
-      },
-    ]
-    export const MONEYLIMIT = 9000000000000000000;
+
+// trang thai phan bo du toan chi nsnn
+export const TRANGTHAIPHANBO = [
+    {
+        id: '1',
+        ten: 'Chưa ghi nhận',
+    },
+    {
+        id: '2',
+        ten: 'Chờ ghi nhận',
+    },
+    {
+        id: '3',
+        ten: 'Đã ghi nhận',
+    },
+    {
+        id: '4',
+        ten: 'Chờ tiếp nhận',
+    },
+]
+export const MONEYLIMIT = 9000000000000000000;

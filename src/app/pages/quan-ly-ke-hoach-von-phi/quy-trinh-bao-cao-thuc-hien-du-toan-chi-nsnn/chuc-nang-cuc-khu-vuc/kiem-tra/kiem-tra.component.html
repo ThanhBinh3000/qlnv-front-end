@@ -10,7 +10,7 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBcao" ></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
@@ -51,13 +51,14 @@
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
               <td>{{item.ngayPheDuyet}}</td>
-              <td>Ngày cục khu vực kiểm tra báo cáo</td>
-              <td class="text-center">{{getStatusName(item.trangThai)}}
+              <td>{{item.ngayTraKq}}</td>
+              <td class="text-center">
+                {{getStatusName(item.trangThai)}}
               </td>
               <td>
-                <!-- <button type="button" class="btn btn-main">
+                <button type="button" class="btn btn-main" *ngIf="item.trangThai == '-1'">
                   <span>Thông báo đến đơn vị cấp dưới</span>
-                </button> -->
+                </button>
                 <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
                   <span>Phê duyệt</span>
                 </button>
