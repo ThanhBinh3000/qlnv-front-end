@@ -155,7 +155,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   redirectToChiTiet(id) {
     this.router.navigate([
-      '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      '/kehoach/de-xuat-dieu-chinh-cap-cuc/thong-tin-de-xuat-dieu-chinh-cap-cuc',
       id,
     ]);
   }

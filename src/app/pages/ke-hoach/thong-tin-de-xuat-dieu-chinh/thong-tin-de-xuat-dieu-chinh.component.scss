@@ -1,0 +1,177 @@
+::ng-deep {
+    .chi-tieu__body {
+        .flex-card.ant-card {
+            border: 1px solid #ececec !important;
+            background: transparent;
+            box-shadow: unset;
+            margin-bottom: 0px !important;
+            margin-top: 11px !important;
+            border-radius: 6px;
+            padding-top: 20px;
+        }
+        .table__body {
+            margin: 12px 0px 0px 0px !important;
+            overflow: scroll;
+        }
+        .tab__container {
+            margin-top: 12px;
+            position: relative;
+        }
+        .ghi-chu {
+            .ant-form-item-no-colon {
+                margin-bottom: 0px !important;
+            }
+            ul {
+                padding-left: 25px !important;
+            }
+            .ghi-chu__item {
+                font-style: italic;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 200%;
+            }
+        }
+        tr.table__header-vat-tu.ant-table-row > td {
+            background: #f1f1f1;
+        }
+        .action {
+            position: absolute;
+            right: 25px;
+            top: 0;
+        }
+    }
+    .star {
+        color: #ff4d4f;
+    }
+    .input-so-qd {
+        width: calc(100% - 70px);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .code-so-qd {
+        width: 70px;
+        background: #f8f9fa;
+        border: 1px solid #c4c9cc;
+        border-left: none;
+        font-size: 12px;
+        height: 24px;
+        float: right;
+        line-height: 24px;
+        text-align: center;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+    .tep_dieu_chinh {
+        cursor: pointer;
+        position: absolute;
+        top: 4px;
+        height: 15px;
+        left: 720px;
+        color: #2196f3;
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        span {
+            margin-left: 5px;
+        }
+    }
+    .show-table {
+        display: block;
+    }
+    .hide-table {
+        display: none;
+    }
+    .table-out-tab {
+        margin-top: 0px !important;
+        padding: 10px;
+        border: solid 1px #f0f0f0;
+        border-top: 0;
+        background: #fff;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+    .ant-tabs-content-holder {
+        border-bottom: 0;
+    }
+    .file-not-show {
+        display: none !important;
+    }
+    .dieu-chinh__body {
+        .table-dieu-chinh .ant-table-content .ant-table-thead > tr > th {
+            background: #e3f9f9;
+            border: 0.5px solid #b8f0f1 !important;
+        }
+    }
+    .tai-lieu-dinh-kem {
+        padding: 16px 8px !important;
+    }
+    .show-row {
+        display: table-row;
+    }
+    .hide-row {
+        display: none;
+    }
+    .trai {
+        display: flex;
+        align-items: center;
+    }
+    .last-breadcrumb {
+        color: #19797b !important;
+        font-weight: 400;
+        font-size: 12px;
+    }
+    .label-input-kh {
+        margin-top: 6px;
+        width: 100%;
+    }
+    .label-color-kh {
+        label {
+            color: #828282;
+            font-weight: 400;
+            font-size: 12px;
+        }
+    }
+    .row-disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    .thong-tin-chi-tieu {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 16px;
+        .title-chi-tieu {
+            display: flex;
+            align-items: center;
+            .du-thao-va-lanh-dao-duyet {
+                color: #ff4d4f;
+                font-weight: 500;
+                font-size: 13px;
+                padding: 4px;
+                border-radius: 5px;
+                border: 1px solid #eaeaea;
+                text-transform: uppercase;
+                margin-right: 8px;
+                background: #fff;
+            }
+            .da-ban-hanh {
+                color: #24e837;
+                font-weight: 500;
+                font-size: 13px;
+                padding: 4px;
+                border-radius: 5px;
+                border: 1px solid #24e837;
+                text-transform: uppercase;
+                margin-right: 8px;
+                background: #efffec;
+            }
+            & > span:nth-child(2) {
+                text-transform: uppercase;
+                color: #444444;
+                font-weight: 500;
+                font-size: 16px;
+                padding: 4px;
+            }
+        }
+    }
+}

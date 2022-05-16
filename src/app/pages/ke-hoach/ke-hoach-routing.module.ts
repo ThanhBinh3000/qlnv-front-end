@@ -4,6 +4,7 @@ import { DeXuatDieuChinhComponent } from './de-xuat-dieu-chinh/de-xuat-dieu-chin
 import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { KeHoachComponent } from './ke-hoach.component';
+import { ThongTinDeXuatDieuChinhComponent } from './thong-tin-de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,10 @@ const routes: Routes = [
       {
         path: 'de-xuat-dieu-chinh-cap-cuc',
         component: DeXuatDieuChinhComponent
+      },
+      {
+        path: 'de-xuat-dieu-chinh-cap-cuc/thong-tin-de-xuat-dieu-chinh-cap-cuc/:id',
+        component: ThongTinDeXuatDieuChinhComponent
       },
     ],
   },

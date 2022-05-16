@@ -1,0 +1,363 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mg-l-40" (click)="back()">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Kế hoạch DTNN</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Điều chỉnh kế hoạch năm</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>{{lastBreadcrumb}}</nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{trangThai}}</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+          *ngIf="deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03'">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
+          *ngIf="deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03'">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Gửi duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+          *ngIf="deXuatDieuChinh.trangThai == '04'">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Phê duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
+          *ngIf="deXuatDieuChinh.trangThai == '01'">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Ban hành</span>
+        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="deXuatDieuChinh.trangThai == '02'">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()">
+          <i class="icon htvbdh_tcdt_delete"></i>
+          <span>Hủy bỏ</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="contentBor chi-tieu__body dieu-chinh__body">
+  <div class="contentDetail">
+    <div class="main-content main-ke-hoach">
+      <div class="thong-tin-chi-tieu">
+        <div class="title-chi-tieu">
+          <span [ngClass]="thongTinTrangThai(deXuatDieuChinh.trangThai)">{{trangThai}}</span>
+          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm Tổng Cục giao</span>
+        </div>
+        <form nz-form [formGroup]="formData">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22">
+              <div nz-row [nzGutter]="[12, 0]">
+                <div nz-col [nzSpan]="4" class="mg-t-10">
+                  <nz-input-group [nzAddOnAfter]="qdTCDT">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
+                      [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                    </nz-input-number>
+                  </nz-input-group>
+                </div>
+                <div nz-col [nzSpan]="2">
+                  <nz-form-label [nzNoColon]="true" class="text-right label-input-kh label-color-kh"> Ngày ký
+                  </nz-form-label>
+                </div>
+                <div nz-col [nzSpan]="5" class="mg-t-10">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayKy" nzPlaceHolder="Ngày ký"
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                  </nz-date-picker>
+                </div>
+                <div nz-col [nzSpan]="2">
+                  <nz-form-label [nzNoColon]="true" class="text-right label-input-kh label-color-kh"> Ngày hiệu lực
+                  </nz-form-label>
+                </div>
+                <div nz-col [nzSpan]="5" class="mg-t-10">
+                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                    formControlName="ngayKy" nzPlaceHolder="Ngày hiệu lực"
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                  </nz-date-picker>
+                </div>
+                <div nz-col [nzSpan]="2">
+                  <nz-form-label [nzNoColon]="true" class="text-right label-input-kh label-color-kh"> Năm kế hoạch
+                  </nz-form-label>
+                </div>
+                <div nz-col [nzSpan]="4" class="mg-t-10">
+                  <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22" class="mg-t-10">
+              <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)" />
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22" class="mg-t-10">
+              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
+                (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)">
+              </multiple-tag>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nguyên nhân điều chỉnh </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22" class="mg-t-10">
+              <textarea formControlName="nguyeNhan" rows="1" nz-input placeholder="Nhập nội dung"
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)"></textarea>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nội dung đề xuất điều chỉnh </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22" class="mg-t-10">
+              <textarea formControlName="noiDung" rows="1" nz-input placeholder="Nhập nội dung"
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)"></textarea>
+            </div>
+            <div nz-col [nzSpan]="2">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+            </div>
+            <div nz-col [nzSpan]="22" class="mg-t-10">
+              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
+                (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+              </multiple-tag>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="tab__luong-thuc mt-16">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" class="tt-chung__container"
+            (nzClick)="tabSelected = 'luongThuc'">
+            <nz-table #luongThucTable nzBordered [nzData]="deXuatDieuChinh?.khLuongThuc" [nzFrontPagination]="false"
+              [nzShowPagination]="false" id="table-luong-thuc">
+              <thead>
+                <tr>
+                  <th [width]="35" rowspan="2">STT</th>
+                  <th rowspan="2">Chỉ tiêu</th>
+                  <th colspan="3">Tổng số quy thóc</th>
+                  <th colspan="6">Trong đó</th>
+                  <th [width]="90" rowspan="2">Hành động</th>
+                </tr>
+                <tr>
+                  <th>Trước điều chỉnh</th>
+                  <th>Tăng/giảm</th>
+                  <th>Sau điều chỉnh</th>
+                  <th>Trước điều chỉnh</th>
+                  <th>Tăng giảm</th>
+                  <th>Sau điều chỉnh</th>
+                  <th>Trước điều chỉnh</th>
+                  <th>Tăng/giảm</th>
+                  <th>Sau điều chỉnh</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>Xuất trong năm</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a class="save">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngFor="let data of luongThucTable.data, let i = index" class="editable-row">
+                  <td>{{i+1}}</td>
+                  <td>Nhập trong năm</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a (click)="editRowLT(i)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRowLT(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" class="ds-goi-thau__container"
+            (nzClick)="tabSelected = 'muoi'">
+            <nz-table #muoiTable nzBordered [nzData]="deXuatDieuChinh?.khMuoi" [nzFrontPagination]="false"
+              [nzShowPagination]="false" id="table-muoi">
+              <thead>
+                <tr>
+                  <th [width]="35" rowspan="2">STT</th>
+                  <th rowspan="2">Chỉ tiêu</th>
+                  <th colspan="3">Muối</th>
+                  <th [width]="90" rowspan="2">Hành động</th>
+                </tr>
+                <tr>
+                  <th>Trước điều chỉnh</th>
+                  <th>Tăng/giảm</th>
+                  <th>Sau điều chỉnh</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>Xuất trong năm</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a class="save">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngFor="let data of muoiTable.data, let i = index" class="editable-row">
+                  <td>{{i+1}}</td>
+                  <td>Nhập trong năm</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a (click)="editRowMuoi(i)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRowMuoi(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container"
+            (nzClick)="tabSelected = 'vatTu'">
+            <nz-table #vatTuTable nzBordered [nzData]="deXuatDieuChinh?.khVatTu" [nzFrontPagination]="false"
+              [nzShowPagination]="false" id="table-vat-tu">
+              <thead>
+                <tr>
+                  <th [width]="35" rowspan="2">STT</th>
+                  <th rowspan="2">Mã hàng</th>
+                  <th rowspan="2">Ký hiệu</th>
+                  <th rowspan="2">Tên hàng</th>
+                  <th rowspan="2">Chủng loại hàng</th>
+                  <th rowspan="2">Đơn vị tính</th>
+                  <th colspan="3">Chỉ tiêu nhập năm trước điều chỉnh</th>
+                  <th rowspan="2">Tăng giảm</th>
+                  <th colspan="3">Chỉ tiêu nhập năm sau điều chỉnh</th>
+                  <th [width]="90" rowspan="2">Hành động</th>
+                </tr>
+                <tr>
+                  <th>Tổng số</th>
+                  <th>Các năm trước chuyển sang</th>
+                  <th>Kế hoạch năm</th>
+                  <th>Tổng số</th>
+                  <th>Các năm trước chuyển sang</th>
+                  <th>Kế hoạch năm</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>Xuồng</td>
+                  <td>DT1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a class="save">
+                      <i class="icon htvbdh_dau-cong"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngFor="let data of vatTuTable.data, let i = index" class="editable-row">
+                  <td>{{i+1}}</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>Xuồng</td>
+                  <td>DT1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+                    <a (click)="editRowVatTu(i)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRowVatTu(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+        </nz-tabset>
+        <div class="action">
+          <button type="button" class="btn btn-main btn-export" (click)="import()">
+            <i class="icon htvbdh_tcdt_import"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub btn-export" (click)="export()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
