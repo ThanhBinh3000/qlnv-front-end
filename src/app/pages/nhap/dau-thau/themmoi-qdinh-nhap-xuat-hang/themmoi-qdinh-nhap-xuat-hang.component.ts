@@ -154,7 +154,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       const body = {
         maDvi: this.userInfo.MA_DVI
       }
-      const res = await this.donViService.layDonViCon(body);
+      const res = await this.donViService.layDonViCon();
       this.optionsFullDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
