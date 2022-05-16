@@ -97,8 +97,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      console.log('search oninit');
-
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -168,14 +166,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     };
-    console.log('body: ', body);
-
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log('datatable: ', this.dataTable);
-
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
