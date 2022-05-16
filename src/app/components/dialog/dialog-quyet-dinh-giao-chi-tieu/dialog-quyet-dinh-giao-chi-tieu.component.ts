@@ -19,14 +19,14 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  text: string = "";
+  text: string = '';
 
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -34,7 +34,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -68,18 +68,18 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       soQD: this.text,
       trichYeu: null,
       ngayKyTuNgay: null,
-      trangThai: '02'
+      trangThai: '02',
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   let data = res.data;
+    //   if (data && data.content && data.content.length > 0) {
+    //     this.dataTable = data.content;
+    //   }
+    //   this.totalRecord = data.totalElements;
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
   }
 
   async changePageIndex(event) {
@@ -88,9 +88,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -102,9 +101,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }

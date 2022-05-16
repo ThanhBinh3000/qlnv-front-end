@@ -45,14 +45,16 @@ export class DsThongTinMuaTrucTiepTCComponent implements OnInit {
     private donViService: DonviService,
     private helperService: HelperService,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
     try {
       if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-tc') != -1) {
         this.type = 1;
-      } else if (this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-cuc') != -1) {
+      } else if (
+        this.router.url.indexOf('ds-thong-tin-mua-truc-tiep-cuc') != -1
+      ) {
         this.type = 2;
       }
       const res = await this.donViService.layTatCaDonVi();

@@ -2477,11 +2477,25 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.TU_CHOI
     );
   }
-  selectDonViKeyDown(event) {
-    if (event.keyCode === this.globals.prop.KEY_ENTER) {
-      console.log('37373737');
-
-      // this.selectDonViKHLT(donVi);
+  selectDonViKeyDown(event, type) {
+    const donVi = this.optionsDonVi.find(
+      (donVi) => donVi.tenDvi === event.nzValue.trim(),
+    );
+    if (donVi) {
+      switch (type) {
+        case 'khlt':
+          this.selectDonViKHLT(donVi);
+          break;
+        case 'kh-muoi':
+          this.selectDonViMuoi(donVi);
+          break;
+        case 'kh-vat-tu':
+          this.selectDonViVatTu(donVi);
+          break;
+        default:
+          break;
+      }
     }
   }
+  duyet() {}
 }
