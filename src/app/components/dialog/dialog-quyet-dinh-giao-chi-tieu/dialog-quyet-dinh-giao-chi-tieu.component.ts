@@ -26,7 +26,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -71,15 +71,15 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       trangThai: '02',
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   if (data && data.content && data.content.length > 0) {
-    //     this.dataTable = data.content;
-    //   }
-    //   this.totalRecord = data.totalElements;
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
+      }
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async changePageIndex(event) {
