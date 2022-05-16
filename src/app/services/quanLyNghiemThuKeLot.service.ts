@@ -11,7 +11,7 @@ export class QuanLyNghiemThuKeLotService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyNghiemThuKeLot');
+    super(httpClient, 'QuanLyNghiemThuKeLot','');
   }
 
   timKiem(body: any): Promise<any> {

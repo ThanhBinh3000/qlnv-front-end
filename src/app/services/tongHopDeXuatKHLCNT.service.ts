@@ -15,7 +15,7 @@ import { BaseService } from './base.service';
 export class TongHopDeXuatKHLCNTService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'TongHopDeXuatKHLCNT');
+    super(httpClient, 'TongHopDeXuatKHLCNT','');
   }
 
   timKiem(body: any): Promise<any> {

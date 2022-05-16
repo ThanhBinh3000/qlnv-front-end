@@ -4,7 +4,9 @@ export interface OldResponseData {
   error?: string;
   data?: any;
   message?: string;
+  msg?: string;
   totalRecord?: number;
+  statusCode? : number;
 }
 export type ResponseData<T> = {
   included?: boolean;

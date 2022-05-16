@@ -7,12 +7,15 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT, STATUS_USER } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { ThemQlQuyenComponent } from './them-ql-quyen/them-ql-quyen.component';
 import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD.service';
+import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HelperService } from 'src/app/services/helper.service';
 
 
 @Component({
@@ -22,6 +25,7 @@ import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyenNSD
 })
 export class QlQuyenComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
   searchValue = '';
   searchFilter = {
     soDxuat: '',
@@ -39,6 +43,12 @@ export class QlQuyenComponent implements OnInit {
   dataTable: any[] = [];
   datas: any;
   isVisibleChangeTab$ = new Subject();
+  nodes: any;
+  nodeSelected: any;
+  selectedKeys: any;
+  detailQuyen: FormGroup;
+  nodeDetail: any;
+  nodesNotExpand: any;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -47,13 +57,31 @@ export class QlQuyenComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private _modalService: NzModalService,
-    private _qlQuyenService: QlQuyenNSDService
-  ) { }
+    private _qlQuyenService: QlQuyenNSDService,
+    private fb: FormBuilder,
+    private helperService: HelperService
+  ) {
+
+  }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
 
+
+  initForm() {
+    this.detailQuyen = this.fb.group({
+      name: ['', Validators.required],
+      parentId: [, Validators.required],
+      url: ['0', Validators.required],
+      trangThai: [true],
+      thuTu: [''],
+      icon: [null],
+      menu: [null],
+      code: [null],
+    })
+  }
   async ngOnInit() {
+    this.initForm()
     this.spinner.show();
     try {
       let res = await this.donViService.layTatCaDonVi();
@@ -113,7 +141,58 @@ export class QlQuyenComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
+  /**
+    * Xử lý tree
+    *
+    */
+  parentNodeSelected: any = [];
+  nzClickNodeTree(event: any): void {
+    if (event.keys.length > 0) {
+      this.nodeSelected = event.keys[0];
+      this.selectedKeys = event.node.parentNode.key;
 
+      this.parentNodeSelected = event?.parentNode?._title
+      debugger
+      this.showDetailDonVi(event.keys[0])
+    }
+
+  }
+  showDetailDonVi(id?: any) {
+    if (id) {
+      // this.danhSachNguoiDung(id)
+
+      this._qlQuyenService.find({ id: id }).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.nodeDetail = res.data;
+          // if (res.data.parentId == "00000000-0000-0000-0000-000000000000") {
+          //   this.nodeDetail.parentId = null;
+          // }
+          // gán giá trị vào form
+          this.detailQuyen.patchValue({
+            name: res.data?.name,
+            parentId: this.selectedKeys,
+            thuTu: res.data?.thuTu ?? "",
+            url: res.data?.url ?? "",
+            trangThai: res.data.trangThai == STATUS_USER.HOAT_DONG ? true : false,
+          })
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
+        }
+      })
+
+    }
+  }
+
+  nzCheck(event: NzFormatEmitEvent): void {
+    // this.nodeSelected = event.keys[0];
+    // this.selectedKeys = event.node.origin.data;
+    // this.showDetailDonVi()
+  }
+  /**
+     * end Xử lý tree
+     *
+     */
 
   clearFilter() {
     this.searchFilter = {
@@ -140,12 +219,29 @@ export class QlQuyenComponent implements OnInit {
     let res = await this._qlQuyenService.dsquyen();
     if (res.msg == MESSAGE.SUCCESS) {
       this.datas = res.data;
-      debugger
-
+      this.nodes = this.addFiledTree(this.datas)
       // this.totalRecord = this.data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  datadequy: any
+  addFiledTree(datas) {
+    let data = [];
+    datas.forEach(element => {
+      element.expanded = true
+      if (element.children.length > 0) {
+        this.addFiledTree(element.children)
+      } else {
+        element.isLeaf = true
+
+      }
+
+
+    });
+    console.log(this.datas)
+    return this.datas
   }
 
   async changePageIndex(event) {
@@ -240,6 +336,36 @@ export class QlQuyenComponent implements OnInit {
       ]);
     }
 
+  }
+
+  themoi() {
+    this.helperService.markFormGroupTouched(this.detailQuyen);
+    if (this.detailQuyen.invalid) {
+      return;
+    }
+    let body: any = this.detailQuyen.value;
+    debugger
+    this.spinner.show();
+    try {
+      this._qlQuyenService
+        .create(body)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.DELETE_SUCCESS,
+            );
+            this.search();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        });
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
 }

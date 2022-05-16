@@ -11,7 +11,7 @@ export class QuanLyBangKeCanHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyBangKeCanHang');
+    super(httpClient, 'QuanLyBangKeCanHang','');
   }
 
   timKiem(body: any): Promise<any> {

@@ -11,7 +11,7 @@
             <a [routerLink]="">Kế hoạch DTNN</a>
           </nz-breadcrumb-item>
           <nz-breadcrumb-item>
-            <a [routerLink]="">Điều chỉnh kế hoạch năm</a>
+            <a [routerLink]="">Đề xuất điều chỉnh kế hoạch năm</a>
           </nz-breadcrumb-item>
           <nz-breadcrumb-item class="last-breadcrumb">{{lastBreadcrumb}}</nz-breadcrumb-item>
         </nz-breadcrumb>
@@ -72,22 +72,6 @@
             <label class="search__label">Trích yếu QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
           </div>
-          <div nz-col nzSpan="24">
-            <label class="search__label">Đơn vị</label>
-            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-                [nzAutocomplete]="auto" [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
-            </nz-input-group>
-            <ng-template #suffixIcon>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-            <nz-autocomplete #auto>
-              <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
-                (click)="selectDonVi(option)">
-                {{ option.labelDonVi }}
-              </nz-auto-option>
-            </nz-autocomplete>
-          </div>
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--search" (click)="search()">
@@ -100,39 +84,61 @@
           </button>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao" [nzExtra]="tableCard1"
-        class="mt16 flex-card p-lr16">
-        <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+      <nz-card nzTitle="Danh sách đề xuất điều chỉnh" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" nzBordered
           [nzShowPagination]="false">
           <thead>
             <tr>
-              <th width="60px">STT</th>
-              <th width="45px">
-                <label nz-checkbox></label>
-              </th>
-              <th width="130px">Số QĐ điều chỉnh</th>
-              <th width="175px">Ngày ký</th>
-              <th width="175px">Số QĐ giao chỉ tiêu KH năm</th>
-              <th width="175px">Năm kế hoạch</th>
-              <th width="" class="text-center">Trích yếu</th>
-              <th width="175px" class="text-center">Lý do từ chối</th>
-              <th width="175px" class="text-center">Trạng thái</th>
-              <th width="130px" class="text-center"></th>
+              <th rowspan="3" class="text-center">STT</th>
+              <th rowspan="3" class="text-center">Số văn <br />bản đề xuất</th>
+              <th rowspan="3" class="text-center">Ngày đề xuất</th>
+              <th rowspan="3" class="text-center">Số QĐ giao chỉ <br />tiêu kế hoạch <br />năm</th>
+              <th rowspan="3" class="text-center">Năm kế hoạch</th>
+              <th colSpan="13" class="text-center">khối lượng đề xuất điều chỉnh</th>
+              <th rowspan="3" width="130px" class="text-center">Hành động</th>
+            </tr>
+            <tr>
+              <th colSpan="2">Gạo (tấn)</th>
+              <th colSpan="2">Thóc (tấn)</th>
+              <th colSpan="2">Muối (tấn)</th>
+              <th colSpan="7">Nhập vật tư, thiết bị</th>
+            </tr>
+            <tr>
+              <th>Nhập</th>
+              <th>Xuất</th>
+              <th>Nhập</th>
+              <th>Xuất</th>
+              <th>Nhập</th>
+              <th>Xuất</th>
+              <th>Mã hàng</th>
+              <th>Ký hiệu</th>
+              <th>Tên hàng</th>
+              <th>Chủng loại</th>
+              <th>Đơn vị tính</th>
+              <th>Nhập</th>
+              <th>Xuất</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
               <td class="text-center">{{ (page - 1) * pageSize + i + 1 }}</td>
-              <th width="45px">
-                <label nz-checkbox></label>
-              </th>
-              <td>{{ data.soQuyetDinh }}</td>
-              <td>{{ data.ngayKy }}</td>
-              <td>{{ data.soQdGoc }}</td>
-              <td>{{ data.namKeHoach }}</td>
-              <td>{{ data.trichYeu }}</td>
-              <td>{{ data.lyDoTuChoi }}</td>
-              <td>{{ data.trangThaiDuyet }}</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
               <td class="text-center">
                 <a (click)="redirectToChiTiet(data.id)">
                   <i class="fa fa-pencil"></i>

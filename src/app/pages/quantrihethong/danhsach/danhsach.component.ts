@@ -10,9 +10,12 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
 import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
 import { ThemMoiNSDComponent } from './them-ql-nguoisudung/tm-nguoisudung.component';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LoaiDanhMuc } from 'src/app/constants/status';
+import { ActionItem } from 'src/app/constants/form-schema';
 
 
 @Component({
@@ -21,16 +24,18 @@ import { ThemMoiNSDComponent } from './them-ql-nguoisudung/tm-nguoisudung.compon
   styleUrls: ['./danhsach.component.scss'],
 })
 export class DanhSachComponent implements OnInit {
+  [x: string]: any;
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
     PVBC: '',
     donvi: '',
-    loaiNSD: '',
+
     maND: '',
     nhomND: '',
     status: '',
   };
+  loaiNSD: any;
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -49,11 +54,72 @@ export class DanhSachComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private _modalService: NzModalService,
+    private _danhmucService: DanhMucService
 
-  ) { }
+  ) {
+    this._danhmucService.danhMucChungGetAll(LoaiDanhMuc.VAI_TRO).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.LoaiNSD = res.data
+      }
+    });
+    this.initAction();
+  }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
+
+  initAction() {
+    this.listAction = [
+      new ActionItem({
+        class: 'icon htvbdh_capso',
+        name: 'Khóa/Mở khóa',
+        code: 'capso',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+      new ActionItem({
+        class: 'fa fa-pencil-square-o sua',
+        name: 'Sửa',
+        code: 'sua',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.redirectToThemSua(data.username);
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+
+      new ActionItem({
+        class: 'icon htvbdh_xoa xoa',
+        name: 'Xóa',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.xoaItem(data.username)
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+    ]
+
+    // this.route.url.subscribe(() => {
+    //   this.checkActiveRouter(this.route.snapshot.routeConfig.path);
+    // });
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -115,31 +181,41 @@ export class DanhSachComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(data?: number) {
-    if (!data) {
-      let modal = this._modalService.create({
-        nzTitle: data
-          ? 'Cập nhập người sử dụng'
-          : 'Thêm mới người sử dụng',
-        nzContent: ThemMoiNSDComponent,
-        nzClosable: true,
-        nzFooter: null,
-        nzStyle: { top: '50px' },
-        nzWidth: 900,
-        nzComponentParams: { data },
-      });
-      modal.afterClose.subscribe((b) => {
-        debugger
+  redirectToChiTiet(data?, detail?) {
+    let modal = this._modalService.create({
+      nzTitle: 'Chi tiết người sử dụng',
+      nzContent: ThemMoiNSDComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { data, detail },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+        this.search()
+      }
+    });
 
-        if (b) {
-        }
-      });
-    } else {
-      this.router.navigate([
-        '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-        data,
-      ]);
-    }
+  }
+
+  redirectToThemSua(data?) {
+    let modal = this._modalService.create({
+      nzTitle: data
+        ? 'Cập nhập người sử dụng'
+        : 'Thêm mới người sử dụng',
+      nzContent: ThemMoiNSDComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { data },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+        this.search()
+      }
+    });
 
   }
 
@@ -162,7 +238,7 @@ export class DanhSachComponent implements OnInit {
       }
     }
     let body = {
-      "dvql": maDonVi,
+      "dvql": maDonVi ?? "",
       "fullName": "",
       "paggingReq": {
         limit: this.pageSize,
@@ -210,7 +286,7 @@ export class DanhSachComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    return convertTrangThaiUser(status);
   }
 
   xoaItem(item: any) {
@@ -225,20 +301,20 @@ export class DanhSachComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          // this.danhSachDauThauService
-          //   .deleteKeHoachLCNT({ id: item.id })
-          //   .then((res) => {
-          //     if (res.msg == MESSAGE.SUCCESS) {
-          //       this.notification.success(
-          //         MESSAGE.SUCCESS,
-          //         MESSAGE.DELETE_SUCCESS,
-          //       );
-          //       this.search();
-          //     } else {
-          //       this.notification.error(MESSAGE.ERROR, res.msg);
-          //     }
-          //     this.spinner.hide();
-          //   });
+          this.
+            qlNSDService.delete({ str: item })
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+                this.search();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();

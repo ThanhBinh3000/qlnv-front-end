@@ -1,4 +1,7 @@
-import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { UserService } from './../../../services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { cloneDeep } from 'lodash';
+import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -7,10 +10,10 @@ import { Router } from '@angular/router';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
-import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -37,6 +40,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   dataTable: any[] = [];
   listNam: any[] = [];
   lastBreadcrumb: string;
+  userInfo: UserLogin;
+  donViIdSearch: number;
+  maDonViSearch: string;
+  labelDonViSearch: string;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -44,9 +51,12 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private donViService: DonviService,
     private modal: NzModalService,
+    private userService: UserService,
+    public globals: Globals,
   ) {}
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
     } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -64,7 +74,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      const res = await this.donViService.layTatCaDonVi();
+      const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
@@ -73,6 +83,15 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
+        }
+        this.options = cloneDeep(this.optionsDonVi);
+        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+              this.inputDonVi = res.data[i].tenDvi;
+              break;
+            }
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -101,9 +120,13 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   onInput(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
+    const value = (e.target as HTMLInputElement).value.trim();
+    if (value !== this.labelDonViSearch) {
+      this.donViIdSearch = -1;
+    }
     if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
+      this.options = this.optionsDonVi;
+      this.donViIdSearch = null;
     } else {
       this.options = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -117,9 +140,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     let donviId = null;
     if (this.inputDonVi && this.inputDonVi.length > 0) {
       let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
+        (x) => x.labelDonVi == this.inputDonVi.trim(),
       );
       if (getDonVi && getDonVi.length > 0) {
+        this.labelDonViSearch = this.inputDonVi;
         maDonVi = getDonVi[0].maDvi;
         tenDvi = getDonVi[0].tenDvi;
         donviId = getDonVi[0].id;
@@ -130,12 +154,13 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
       id: 0,
-      donViId: donviId,
+      donViId: donviId ?? this.donViIdSearch,
       tenDvi: tenDvi,
       pageNumber: this.page,
       pageSize: this.pageSize,
       soQD: this.searchFilter.soQD,
       trichYeu: this.searchFilter.trichYeu,
+      namKeHoach: this.searchFilter.namKeHoach,
       ngayKyTuNgay: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
@@ -287,5 +312,13 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  onCurrentPageDataChange() {}
+  keyDownFunction(event) {
+    if (event.keyCode === this.globals.prop.KEY_ENTER) {
+      this.search();
+    }
+  }
+  selectDonVi(donVi) {
+    this.maDonViSearch = donVi.maDvi;
+    this.labelDonViSearch = donVi.labelDonVi;
+  }
 }

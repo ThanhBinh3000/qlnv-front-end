@@ -15,6 +15,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
+import { QlVaiTroService } from 'src/app/services/quantri-nguoidung/qlVaiTro.service';
 
 interface TreeNode {
   name: string;
@@ -26,21 +27,9 @@ const TREE_DATA: TreeNode[] = [
   {
     name: 'Quản trị',
     disabled: false,
-    children: [{ name: '0-0-0' }, { name: '0-0-1' }, { name: '0-0-2' }]
+    children: []
   },
-  {
-    name: 'Danh mục',
-    children: [
-      {
-        name: '0-1-0',
-        children: [{ name: '0-1-0-0' }, { name: '0-1-0-1' }]
-      },
-      {
-        name: '0-1-1',
-        children: [{ name: '0-1-1-0' }, { name: '0-1-1-1' }]
-      }
-    ]
-  }
+
 ];
 
 interface FlatNode {
@@ -72,12 +61,19 @@ export class ThemQlNhomQuyenComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalRef,
+    private qlVaiTroService: QlVaiTroService
 
   ) {
 
 
-    this.dataSource.setData(TREE_DATA);
 
+    this.qlVaiTroService.findAll().then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        TREE_DATA["children"] = res.data;
+        debugger
+        this.dataSource.setData(TREE_DATA);
+      }
+    })
   }
 
 

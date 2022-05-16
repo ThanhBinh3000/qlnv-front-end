@@ -6,21 +6,18 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
-import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-de-xuat-dieu-chinh',
+  templateUrl: './de-xuat-dieu-chinh.component.html',
+  styleUrls: ['./de-xuat-dieu-chinh.component.scss'],
 })
-export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
+export class DeXuatDieuChinhComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
 
   namKeHoach: number = null;
@@ -45,7 +42,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   selectedDonVi: any = {};
 
   lastBreadcrumb: string;
-  userInfo: UserLogin;
 
   constructor(
     private router: Router,
@@ -54,14 +50,11 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
-    private userService: UserService,
-    public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.userInfo = this.userService.getUserLogin();
       if (this.router.url.includes(LEVEL.TONG_CUC)) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
       } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
@@ -91,35 +84,18 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async loadDonVi() {
-    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-      const res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-            this.inputDonVi = res.data[i].tenDvi;
-            this.selectedDonVi = res.data[i];
-            break;
-          }
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+    const res = await this.donViService.layTatCaDonVi();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
       }
-    }
-    else {
-      const res = await this.donViService.layDonViCon();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -202,21 +178,13 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
+      soQD: this.soQDGiao,
       namKeHoach: this.namKeHoach,
-      soQD: this.soQDDieuChinh,
-      trichYeu: this.trichYeuDieuChinh,
-      ngayKyDenNgay: this.endValueDc
-        ? dayjs(this.endValueDc).format('YYYY-MM-DD')
-        : null,
-      ngayKyTuNgay: this.startValueDc
-        ? dayjs(this.startValueDc).format('YYYY-MM-DD')
-        : null,
-      soCT: this.soQDGiao,
-      trichYeuCT: this.trichYeuGiao,
-      ngayKyDenNgayCT: this.endValue
+      trichYeu: this.trichYeuGiao,
+      ngayKyDenNgay: this.endValue
         ? dayjs(this.endValue).format('YYYY-MM-DD')
         : null,
-      ngayKyTuNgayCT: this.startValue
+      ngayKyTuNgay: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     }

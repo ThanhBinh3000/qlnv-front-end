@@ -10,7 +10,7 @@ import { OldResponseData } from '../interfaces/response';
 export class TinhTrangKhoHienThoiService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'TinhTrangKhoHienThoi');
+    super(httpClient, 'TinhTrangKhoHienThoi','');
   }
 
   timKiemNganLo(body: any): Promise<any> {

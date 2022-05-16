@@ -1,3 +1,14 @@
 {
-    "MAX_INPUT": 100000000000000000
+    "MAX_INPUT": 100000000000000000,
+    "ADMIN": "1",
+    "CBTONGCUC": "1",
+    "CUC": "2",
+    "CHICUC": "3",
+    "DU_THAO": "00",
+    "LANH_DAO_DUYET": "01",
+    "BAN_HANH": "02",
+    "TU_CHOI": "03",
+    "DU_THAO_TRINH_DUYET": "04",
+    "MA_VTHH": "04",
+    "KEY_ENTER": 13
 }

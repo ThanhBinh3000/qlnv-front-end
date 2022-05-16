@@ -5,22 +5,6 @@ export class KeHoachLuongThuc {
   stt: number;
   cucId: number;
   cucDTNNKhuVuc: string;
-  tkdnTongSoQuyThoc: number;
-  tkdnTongThoc: number;
-  tkdnTongGao: number;
-  tkdnThoc: Array<ItemDetail>;
-  tkdnGao: Array<ItemDetail>;
-  ntnTongSoQuyThoc: number;
-  ntnThoc: number;
-  ntnGao: number;
-  xtnTongSoQuyThoc: number;
-  xtnTongThoc: number;
-  xtnTongGao: number;
-  xtnThoc: Array<ItemDetail>;
-  xtnGao: Array<ItemDetail>;
-  tkcnTongSoQuyThoc: number;
-  tkcnTongThoc: number;
-  tkcnTongGao: number;
   tenDonvi: string;
   maDonVi: string;
   donViTinh: string;
@@ -28,8 +12,57 @@ export class KeHoachLuongThuc {
   khGaoId: number;
   khThocId: number;
   isEdit: boolean;
-  ntnGaoDc: number;
-  ntnThocDc: number;
-  xtnThocDc: Array<ItemDetail>;
-  xtnGaoDc: Array<ItemDetail>;
+
+  tkdnTongSoQuyThoc: number;
+  tkdnTongThoc: number;
+  tkdnTongGao: number;
+  tkdnThoc: Array<ItemDetail>;
+  tkdnGao: Array<ItemDetail>;
+
+  tkcnTongSoQuyThoc: number;
+  tkcnTongThoc: number;
+  tkcnTongGao: number;
+
+  tdcNtnTongSoQuyThoc: number;
+  tdcNtnThoc: number;
+  tdcNtnGao: number;
+  ntnTongSoQuyThoc: number;
+  ntnThoc: number;
+  ntnGao: number;
+  dcNtnGao: number;
+  dcNtnThoc: number;
+  sdcNtnTongSoQuyThoc: number;
+  sdcNtnThoc: number;
+  sdcNtnGao: number;
+
+  tdcXtnTongSoQuyThoc: number;
+  tdcXtnTongThoc: number;
+  tdcXtnTongGao: number;
+  tdcXtnThoc: Array<ItemDetail>;
+  tdcXtnGao: Array<ItemDetail>;
+  xtnTongSoQuyThoc: number;
+  xtnTongThoc: number;
+  xtnTongGao: number;
+  xtnThoc: Array<ItemDetail>;
+  xtnGao: Array<ItemDetail>;
+  dcXtnThoc: Array<ItemDetail>;
+  dcXtnGao: Array<ItemDetail>;
+  sdcXtnTongSoQuyThoc: number;
+  sdcXtnTongThoc: number;
+  sdcXtnTongGao: number;
+  sdcXtnThoc: Array<ItemDetail>;
+  sdcXtnGao: Array<ItemDetail>;
+
+  constructor(detail: Array<ItemDetail> = []) {
+    this.tkdnThoc = detail;
+    this.tkdnGao = detail;
+    this.tdcXtnThoc = detail;
+    this.tdcXtnGao = detail;
+    this.xtnThoc = detail;
+    this.xtnGao = detail;
+    this.dcXtnThoc = detail;
+    this.dcXtnGao = detail;
+    this.sdcXtnThoc = detail;
+    this.sdcXtnGao = detail;
+  }
 }

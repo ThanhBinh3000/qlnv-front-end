@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
 export class DanhMucService extends BaseService {
   gateway: string = '/qlnv-gateway/qlnv-category'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DanhMuc');
+    super(httpClient, 'DanhMuc','');
   }
 
   loadDanhMucHangHoa() {

@@ -5,20 +5,39 @@ export class KeHoachMuoi {
   cucId: number;
   cucDTNNKhuVuc: string;
   tenDonvi: string;
-  tkdnTongSoMuoi: number;
-  tkdnMuoi: Array<ItemDetail>;
-  ntnTongSoMuoi: number;
-  xtnTongSoMuoi: number;
-  xtnMuoi: Array<ItemDetail>;
-  xuatTrongNam: Array<ItemDetail>;
-  tkcnTongSoMuoi: number;
   tenDonVi: string;
   maDonVi: string;
   donViTinh: string;
   donViId: number;
   id: number;
-  nhapTrongNam: string;
   isEdit: boolean;
-  ntnTongSoMuoiDc: number;
-  xtnMuoiDc: Array<ItemDetail>;
+
+  tkdnTongSoMuoi: number;
+  tkdnMuoi: Array<ItemDetail>;
+
+  tdcNtnTongSoMuoi: number;
+  ntnTongSoMuoi: number;
+  dcNtnTongSoMuoi: number;
+  sdcNtnTongSoMuoi: number;
+  nhapTrongNam: string;
+
+  tdcXtnTongSoMuoi: number;
+  xtnTongSoMuoi: number;
+  xtnMuoi: Array<ItemDetail>;
+  xuatTrongNam: Array<ItemDetail>;
+  tdcXtnMuoi: Array<ItemDetail>;
+  dcXtnMuoi: Array<ItemDetail>;
+  sdcXtnMuoi: Array<ItemDetail>;
+  sdcXtnTongSoMuoi: number;
+
+  tkcnTongSoMuoi: number;
+
+  constructor(detail: Array<ItemDetail> = []) {
+    this.tkdnMuoi = detail;
+    this.xtnMuoi = detail;
+    this.xuatTrongNam = detail;
+    this.tdcXtnMuoi = detail;
+    this.dcXtnMuoi = detail;
+    this.sdcXtnMuoi = detail;
+  }
 }
