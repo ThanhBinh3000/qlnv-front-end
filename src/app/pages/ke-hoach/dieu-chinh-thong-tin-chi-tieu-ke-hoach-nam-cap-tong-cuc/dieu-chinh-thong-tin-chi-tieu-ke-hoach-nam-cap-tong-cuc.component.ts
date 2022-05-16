@@ -504,7 +504,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectDataMultipleTag(data: any) { }
 
   deleteDataMultipleTag(data: any) {
-    this.dataTag = this.dataTag.filter((x) => x.id != data.id);
+    this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
   }
 
   async selectDonViKHLT(donVi, isAdd, item) {
