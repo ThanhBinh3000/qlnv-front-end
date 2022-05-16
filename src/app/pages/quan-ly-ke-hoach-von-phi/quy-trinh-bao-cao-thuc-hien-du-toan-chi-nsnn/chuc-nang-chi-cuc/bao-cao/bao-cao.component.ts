@@ -2266,7 +2266,7 @@ export class BaoCaoComponent implements OnInit {
       baoCaoTemp?.lstBCaoDviTrucThuoc?.filter(item => {
         baoCaoTemp.tongHopTu += item.id + ',';
       })
-      baoCaoTemp.fileDinhKems = null;
+      baoCaoTemp.fileDinhKems = [];
       baoCaoTemp.listIdFiles = null;
       baoCaoTemp.trangThai = "1";
       baoCaoTemp.maDvi = this.maDonViTao;

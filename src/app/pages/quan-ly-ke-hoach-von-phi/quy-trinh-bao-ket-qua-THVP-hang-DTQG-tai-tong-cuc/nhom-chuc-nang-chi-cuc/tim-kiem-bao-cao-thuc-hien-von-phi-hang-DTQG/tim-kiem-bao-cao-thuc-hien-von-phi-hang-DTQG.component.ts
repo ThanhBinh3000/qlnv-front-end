@@ -60,8 +60,8 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
     paggingReq: {
       limit: 10,
       page: 1
-    }
-    
+    },
+    loaiTimKiem:'0',
   }
 
   validateForm!: FormGroup;
