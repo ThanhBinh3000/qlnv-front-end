@@ -1228,7 +1228,41 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: this.globals.prop.LANH_DAO_DUYET,
+          };
+          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -2477,11 +2511,33 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.TU_CHOI
     );
   }
-  selectDonViKeyDown(event) {
-    if (event.keyCode === this.globals.prop.KEY_ENTER) {
-      console.log('37373737');
-
-      // this.selectDonViKHLT(donVi);
+  selectDonViKeyDown(event, type) {
+    const donVi = this.optionsDonVi.find(
+      (donVi) => donVi.tenDvi === event.nzValue.trim(),
+    );
+    if (donVi) {
+      switch (type) {
+        case 'khlt':
+          this.selectDonViKHLT(donVi);
+          break;
+        case 'kh-muoi':
+          this.selectDonViMuoi(donVi);
+          break;
+        case 'kh-vat-tu':
+          this.selectDonViVatTu(donVi);
+          break;
+        default:
+          break;
+      }
     }
+  }
+  disableBanHanhLanhDaoDuyet(): boolean {
+    return (
+      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH ||
+      this.thongTinChiTieuKeHoachNam.trangThai ===
+        this.globals.prop.LANH_DAO_DUYET ||
+      this.thongTinChiTieuKeHoachNam.trangThai ===
+        this.globals.prop.DU_THAO_TRINH_DUYET
+    );
   }
 }
