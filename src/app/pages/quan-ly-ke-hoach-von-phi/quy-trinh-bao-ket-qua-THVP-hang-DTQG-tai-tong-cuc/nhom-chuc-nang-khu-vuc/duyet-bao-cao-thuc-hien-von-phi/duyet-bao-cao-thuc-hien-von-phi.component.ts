@@ -50,6 +50,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     str: '',
     thangBcao: '',
     trangThai:'',
+    loaiTimKiem:'1',
   };
 
 
