@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 
 @Component({
@@ -20,23 +21,31 @@ export class MultipleTagComponent implements OnInit {
   @Output()
   removeDataEvent = new EventEmitter<any>();
   nameFile: string;
-  constructor() {}
+  constructor(public globals: Globals) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   removeData(item: any) {
     this.removeDataEvent.emit(item);
   }
 
   selectData() {
-    if (this.type == 'file' || this.trangThai === '02') {
+    if (
+      this.type == 'file' ||
+      this.trangThai === this.globals.prop.BAN_HANH ||
+      this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
       return;
     }
     this.selectDataEvent.emit();
   }
   getNameFile(event?: any) {
-    if (this.trangThai === '02') {
+    if (
+      this.trangThai === this.globals.prop.BAN_HANH ||
+      this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
       return;
     }
     const element = event.currentTarget as HTMLInputElement;
