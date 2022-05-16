@@ -147,13 +147,13 @@
               <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                 class="search__input autocomplete__input donvi__input w-300">
                 <input placeholder="Chọn chi cục DTNN" nz-input (input)="onInput($event)" [nzAutocomplete]="autoDonvi"
-                  class="" [(ngModel)]="newQDNhapXuat.tenDonVi" (input)="changeDonVi()" />
+                  class="" [(ngModel)]="newQDNhapXuat.tenDonVi" />
               </nz-input-group>
               <ng-template #suffixIcon>
                 <i nz-icon nzType="search"></i>
               </ng-template>
               <nz-autocomplete #autoDonvi>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
+                <nz-auto-option *ngFor="let option of optionsDonVi" [nzValue]="option.tenDvi"
                   (click)="selectDonVi(option)">
                   {{ option.labelDonVi }}
                 </nz-auto-option>
@@ -173,9 +173,9 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
               <nz-autocomplete #autoHangHoa>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelHangHoa"
+                <nz-auto-option *ngFor="let option of optionsHangHoa" [nzValue]="option.ma"
                   (click)="selectHangHoa(option)">
-                  {{ option.labelHangHoa }}
+                  {{ option.ten }}
                 </nz-auto-option>
               </nz-autocomplete>
             </nz-form-control>
@@ -195,9 +195,9 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
               <nz-autocomplete #autoDonViTinh>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonViTInh"
+                <nz-auto-option *ngFor="let option of optionsDonVi" [nzValue]="option.labelDonViTInh"
                   (click)="selectDonViTinh(option)">
-                  {{ option.labelDonViTInh }}
+                  {{ option.labelDonViTinh }}
                 </nz-auto-option>
               </nz-autocomplete>
             </nz-form-control>
