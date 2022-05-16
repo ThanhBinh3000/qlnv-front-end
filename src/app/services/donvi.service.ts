@@ -20,4 +20,8 @@ export class DonviService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dmuc-dvi-tinh/danh-sach/tat-ca`;
     return this.httpClient.get<any>(url).toPromise();
   }
+  layDonViCon(body): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-category/dmuc-donvi/ds-donvi-child`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }

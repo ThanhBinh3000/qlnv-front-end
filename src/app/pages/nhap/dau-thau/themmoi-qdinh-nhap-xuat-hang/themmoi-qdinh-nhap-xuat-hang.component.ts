@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { Globals } from 'src/app/shared/globals';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
@@ -29,8 +30,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   type: string = '';
   newQDNhapXuat: QuyetDinhNhapXuat;
   dataQDNhapXuat;
-  options: any[] = [];
   optionsDonVi: any[] = [];
+  optionsFullDonVi: any[] = [];
+  optionsFullHangHoa: any[] = [];
+  optionsHangHoa: any[] = [];
   userInfo: UserLogin
   constructor(
     private router: Router,
@@ -41,7 +44,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     public globals: Globals,
-    private userService: UserService
+    private userService: UserService,
+    private danhMucService: DanhMucService
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +56,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.type = this.activatedRoute.snapshot.paramMap.get('type');
     this.initForm();
     this.newObjectQDNhapXuat();
+    this.loadDonVi();
+    this.loadDanhMucHang();
   }
 
   redirectToDanhSachDauThau() {
@@ -128,11 +134,12 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   onInput(e: Event): void {
+    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 132 ~ ThemmoiQdinhNhapXuatHangComponent ~ onInput ~ e", e)
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
+      this.optionsDonVi = [];
     } else {
-      this.options = this.optionsDonVi.filter(
+      this.optionsDonVi = this.optionsFullDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
@@ -142,22 +149,22 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 151 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectDonVi ~ option", option)
   }
 
-  changeDonVi() {
-
-  }
-
   async loadDonVi() {
     try {
-      const res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
+      const body = {
+        maDvi: this.userInfo.MA_DVI
+      }
+      const res = await this.donViService.layDonViCon(body);
+      this.optionsFullDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           const item = {
             ...res.data[i],
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
-          this.optionsDonVi.push(item);
+          this.optionsFullDonVi.push(item);
         }
+        this.optionsDonVi = this.optionsFullDonVi;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -167,23 +174,32 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
+  loadDanhMucHang() {
+    this.danhMucService.loadDanhMucHangHoa().subscribe((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.optionsFullHangHoa = res.data;
+        this.optionsHangHoa = this.optionsFullHangHoa;
+      }
+    });
+  }
+
   newObjectQDNhapXuat() {
     this.newQDNhapXuat = new QuyetDinhNhapXuat();
   }
 
   onInputHangHoa(e: Event): void {
-    // const value = (e.target as HTMLInputElement).value;
-    // if (!value || value.indexOf('@') >= 0) {
-    //   this.options = [];
-    // } else {
-    //   this.options = this.optionsDonVi.filter(
-    //     (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-    //   );
-    // }
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.optionsHangHoa = [];
+    } else {
+      this.optionsHangHoa = this.optionsFullHangHoa.filter(
+        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
   }
 
   selectHangHoa(option) {
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 151 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectDonVi ~ option", option)
+    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 203 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectHangHoa ~ this.newQDNhapXuat", this.newQDNhapXuat)
   }
 
   changeMaHangHoa() {
@@ -193,9 +209,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   onInputDonViTinh(e: Event): void {
     // const value = (e.target as HTMLInputElement).value;
     // if (!value || value.indexOf('@') >= 0) {
-    //   this.options = [];
+    //   this.optionsDonVi = [];
     // } else {
-    //   this.options = this.optionsDonVi.filter(
+    //   this.optionsDonVi = this.optionsFullDonVi.filter(
     //     (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
     //   );
     // }
@@ -210,7 +226,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   tenHangHoa() {
-    return 'Test 123'
+    const tenHangHoa = this.optionsFullHangHoa.find(e => e.ma === this.newQDNhapXuat.maHangHoa)
+    return tenHangHoa ? tenHangHoa.ten : null
   }
 
 }
