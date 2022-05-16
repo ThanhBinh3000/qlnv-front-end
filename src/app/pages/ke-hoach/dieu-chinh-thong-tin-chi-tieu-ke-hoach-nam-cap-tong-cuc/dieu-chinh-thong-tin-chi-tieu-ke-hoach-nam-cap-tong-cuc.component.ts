@@ -2106,15 +2106,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   loadData() {
-    this.updateDataLuongThuc();
-    this.updateEditLuongThucCache();
     if (this.tabSelected == this.tab.luongThuc) {
       this.dataLuongThuc = this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.slice(
         this.pageSize * (this.page - 1),
         this.pageSize * this.page,
       );
-      this.totalRecord =
-        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
+      this.totalRecord = this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
+      this.updateDataLuongThuc();
+      this.updateEditLuongThucCache();
     } else if (this.tabSelected == this.tab.muoi) {
       this.dataMuoi = this.dieuChinhThongTinChiTieuKHNam.khMuoi.slice(
         this.pageSize * (this.page - 1),
