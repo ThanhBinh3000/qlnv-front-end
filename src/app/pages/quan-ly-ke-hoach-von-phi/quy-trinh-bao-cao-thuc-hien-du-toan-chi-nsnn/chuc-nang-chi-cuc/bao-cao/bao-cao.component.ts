@@ -30,6 +30,7 @@ export class ItemData {
   tieuDe!: string;
   tenPhuLuc!: string;
   thuyetMinh!: string;
+  lyDoTuChoi!:string;
 }
 
 export class ItemDanhSach {
@@ -324,6 +325,7 @@ export class BaoCaoComponent implements OnInit {
           lstCTietBCao: [],
           maDviTien: '1',
           thuyetMinh: null,
+          lyDoTuChoi:null,
         });
       })
     }
@@ -1005,6 +1007,7 @@ export class BaoCaoComponent implements OnInit {
               lstCTietBCao: [],
               maDviTien: '1',
               thuyetMinh: null,
+              lyDoTuChoi:null,
             });
           }
         })

@@ -123,7 +123,9 @@
               <td>{{item.tenPhuLuc}}</td>
               <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/</ng-template>
                 {{baoCao.namBcao}}</td>
-              <td>{{getStatusAppendixName(item.trangThai)}}</td>
+              <td>{{getStatusAppendixName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '0'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)"
                   [hidden]="status">
