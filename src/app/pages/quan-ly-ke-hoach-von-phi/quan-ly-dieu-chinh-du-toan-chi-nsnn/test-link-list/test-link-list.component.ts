@@ -14,7 +14,6 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
-import { linkList } from '../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { KHOAN_MUC, LA_MA } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 

@@ -677,11 +677,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       lyDoTuChoi: lyDo,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
+    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(async res =>{
         if(res.statusCode==0){
           this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
           this.trangThaiChiTiet = trangThai;
-          this.getDetailReport();
+          await this.getDetailReport();
+          this.getStatusButtonOk();
         }else{
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
