@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -10,6 +10,8 @@ import * as dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: ' ',
@@ -37,17 +39,31 @@ export class LuongDauThauGaoComponent implements OnInit {
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'tong-hop';
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private modal: NzModalService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -174,10 +190,17 @@ export class LuongDauThauGaoComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    this.router.navigate([
-      '/nhap/dau-thau/luong-dau-thau-gao/thong-tin-luong-dau-thau-gao/',
-      id,
-    ]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        id,
+      ]);
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        id,
+      ]);
+    }
   }
 
   clearFilter() {

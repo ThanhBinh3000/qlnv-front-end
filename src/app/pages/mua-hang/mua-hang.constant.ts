@@ -21,15 +21,23 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                 children: [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
-                        title: 'Kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        title: 'Kế hoạch lựa chọn nhà thầu tổng cục',
+                        url: '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+                        urlTongCuc: '',
+                        urlCuc: '',
+                        urlChiCuc: '',
+                    },
+                    {
+                        icon: 'htvbdh_tcdt_nhomquyen',
+                        title: 'Kế hoạch lựa chọn nhà thầu cục',
+                        url: '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
                     },
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
-                        title: 'Tổ chức triển khai lựa chọn nhà thầu',
+                        title: 'Tổ chức triển khai lựa chọn nhà thầu cục',
                         url: '',
                         urlTongCuc: '',
                         urlCuc: '',

@@ -44,6 +44,9 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            .content-item-title {
+                padding-bottom: 16px;
+            }
             .htvbdh_tcdt_icon-common {
                 color: $maincolor;
                 font-size: $font-size42;

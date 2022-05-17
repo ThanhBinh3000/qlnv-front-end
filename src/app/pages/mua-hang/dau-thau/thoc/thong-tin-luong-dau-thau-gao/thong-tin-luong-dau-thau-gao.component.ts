@@ -13,7 +13,9 @@ import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatL
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 interface ItemData {
   id: string;
@@ -79,6 +81,11 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'tong-hop';
+
   constructor(
     private modal: NzModalService,
     private router: Router,
@@ -87,11 +94,20 @@ export class ThongTinLuongDauThauGaoComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
