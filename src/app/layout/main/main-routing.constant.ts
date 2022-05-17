@@ -25,7 +25,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Mua',
-    route: MAIN_ROUTES.muaHang,
+    route: `${MAIN_ROUTES.muaHang}/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc`,
   },
   {
     title: 'Nhập',
