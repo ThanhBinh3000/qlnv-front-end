@@ -48,8 +48,9 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       page: 1
     },
     str: '',
-    thangBCao: '',
+    thangBcao: '',
     trangThai:'',
+    loaiTimKiem:'1',
   };
 
 

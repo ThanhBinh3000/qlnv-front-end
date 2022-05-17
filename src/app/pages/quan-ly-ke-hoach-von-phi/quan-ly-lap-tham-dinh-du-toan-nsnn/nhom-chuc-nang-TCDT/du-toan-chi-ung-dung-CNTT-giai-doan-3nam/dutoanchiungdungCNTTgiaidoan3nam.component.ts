@@ -281,16 +281,16 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     }
     
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfor?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfor?.roles[0]?.code);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfor?.roles[0]?.code);
   }
   // call chi tiet bao cao
   async getDetailReport() {
@@ -389,7 +389,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   // xoa dong
   deleteById(id: any): void {
     this.lstCTietBCao = this.lstCTietBCao.filter((item) => item.id != id);
-    if (typeof id == 'number') {
+    if (id?.length == 36) {
       this.listIdDelete += id + ',';
     }
   }
@@ -402,7 +402,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   // them dong moi
   addLine(id: number): void {
     let item: ItemData = {
-      id!:uuid.v4(),
+      id!:uuid.v4()+'FE',
       stt!: 0,
       ndung!: '',
       maLoaiKhoach!: '',
@@ -556,7 +556,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       return;
     }
     this.lstCTietBCao.forEach(e => {
-      if(typeof e.id !="number"){
+      if(e?.id?.length == 38){
         e.id = null;
       }
     })
@@ -651,7 +651,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
     }
     this.lstCTietBCao.filter(item => {
 			if (!item.id) {
-				item.id = uuid.v4();
+				item.id = uuid.v4()+'FE';
 			}
 		});
     this.updateEditCache();
@@ -710,7 +710,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
                 this.lstCTietBCao =[];
             }else {
               this.lstCTietBCao.forEach( e => {
-                e.id = uuid.v4();
+                e.id = uuid.v4()+'FE';
               })
             }
             this.tinhTong();

@@ -1,4 +1,3 @@
-
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
@@ -14,7 +13,8 @@
               <th width="175px">Công văn</th>
               <th width="175px">Ngày trình duyệt</th>
               <th width="175px">Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
-              <th width="175px">Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên</th>
+              <th width="175px">Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên
+              </th>
               <th width="175px">Ngày đơn vị cấp trên trả kết quả</th>
               <th width>Trạng thái</th>
             </tr>
@@ -25,7 +25,19 @@
               <td>{{baoCao?.namBcao}}</td>
               <td>{{baoCao?.thangBcao}}</td>
               <td>{{baoCao?.ngayTao}}</td>
-              <td>{{baoCao?.congVan}}</td>
+              <td>
+                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                  <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Select File
+                  </button>
+                </nz-upload>
+                <div class="tep" (click)="downloadFileCv()">
+                  <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                  <span>{{baoCao?.congVan?.fileName}}</span>
+                </div>
+                
+              </td>
               <td>{{baoCao?.ngayTrinh}}</td>
               <td>{{baoCao?.ngayDuyet}}</td>
               <td>{{baoCao?.ngayPheDuyet}}</td>
@@ -74,20 +86,18 @@
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
         </a> -->
-        <a class="btn btn-main" (click)="doCopy()"
-					[hidden]="statusBtnCopy">
-					<i nz-icon nzType="copy" nzTheme="outline"></i>
-					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" (click)="doPrint()"
-					[hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</a>
-				<a class="btn btn-main" (click)="close()"  [hidden]="statusBtnClose">
-					<i nz-icon nzType="stop" nzTheme="outline"></i>
-					<span>Đóng</span>
-				</a>
+        <a class="btn btn-main" (click)="doCopy()" [hidden]="statusBtnCopy">
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+          <span>Copy</span>
+        </a>
+        <a class="btn btn-main" (click)="doPrint()" [hidden]="statusBtnPrint">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </a>
+        <a class="btn btn-main" (click)="close()" [hidden]="statusBtnClose">
+          <i nz-icon nzType="stop" nzTheme="outline"></i>
+          <span>Đóng</span>
+        </a>
       </ng-template>
 
       <!-- Table danh sách phụ lục -->
@@ -111,13 +121,18 @@
             <tr *ngFor="let item of baoCao?.lstBCao; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{item.tenPhuLuc}}</td>
-              <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/</ng-template>{{baoCao.namBcao}}</td>
-              <td>{{getStatusAppendixName(item.trangThai)}}</td>
+              <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/</ng-template>
+                {{baoCao.namBcao}}</td>
+              <td>{{getStatusAppendixName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '0'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="status">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)"
+                  [hidden]="status">
                   <span>Nhập dữ liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="!status">
+                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)"
+                  [hidden]="!status">
                   <span>Xem</span>
                 </button>
                 <button type="button" class="btn btn-main" [hidden]="status">
@@ -156,7 +171,8 @@
       </ng-template>
 
       <!-- Table danh sách các đơn vị phụ thuộc -->
-      <nz-card nzTitle="DANH SÁCH BÁO CÁO TỪ CÁC ĐƠN VỊ TRỰC THUỘC" class="mt16 flex-card p-lr16" [hidden]="baoCao?.lstBCaoDviTrucThuoc?.length > 0 ? false : true">
+      <nz-card nzTitle="DANH SÁCH BÁO CÁO TỪ CÁC ĐƠN VỊ TRỰC THUỘC" class="mt16 flex-card p-lr16"
+        [hidden]="baoCao?.lstBCaoDviTrucThuoc?.length > 0 ? false : true">
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
@@ -178,7 +194,7 @@
                 (Cục khu vực đánh giá)
               </th>
               <th>
-    
+
               </th>
             </tr>
           </thead>
@@ -200,16 +216,15 @@
             </tr>
           </tbody>
         </nz-table>
-        
       </nz-card>
 
       <!-- Table phụ lục I -->
-      <nz-card [nzTitle]="'Phụ lục I: - Báo cáo kết quả giải ngân dự toán chi NSNN'"
-        [nzExtra]="tableCard3" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc1">
+      <nz-card [nzTitle]="'Phụ lục I: - Báo cáo kết quả giải ngân dự toán chi NSNN'" [nzExtra]="tableCard3"
+        class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.phuLuc1">
         <ng-container *ngIf="status;else templateName">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
-              Đơn vị:
+              <label class="search__label">Đơn vị:</label>
               <div *ngFor="let item of donViTiens">
                 <div *ngIf="item.id == maDviTien">
                   {{item.tenDm}}
@@ -222,10 +237,9 @@
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
               <!-- <div class="inner-box">Đơn vị: -->
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
-                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-                  [nzLabel]="item.tenDm"></nz-option>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                [class]="maDviTien ?'' : 'input-error-validate' ">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
               </nz-select>
               <!-- </div> -->
             </div>
@@ -663,6 +677,17 @@
             </tr>
           </tbody>
         </nz-table>
+        <div nz-col nzSpan="12">
+          <label class="search__label">Thuyết minh</label>
+          <ng-container *ngIf="status;else templatePresent">
+            <br>{{thuyetMinh}}
+          </ng-container>
+          <ng-template #templatePresent>
+            <nz-textarea-count [nzMaxCharacterCount]="100">
+              <textarea rows="4" nz-input [(ngModel)]="thuyetMinh"></textarea>
+            </nz-textarea-count>
+          </ng-template>
+        </div>
       </nz-card>
 
       <!-- Action Table chi tiết phụ lục I -->
@@ -698,7 +723,7 @@
         <ng-container *ngIf="status;else templateName">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
-              Đơn vị:
+              <label class="search__label">Đơn vị:</label>
               <div *ngFor="let item of donViTiens">
                 <div *ngIf="item.id == maDviTien">
                   {{item.tenDm}}
@@ -711,10 +736,9 @@
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
               <!-- <div class="inner-box">Đơn vị: -->
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
-                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-                  [nzLabel]="item.tenDm"></nz-option>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                [class]="maDviTien ?'' : 'input-error-validate' ">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
               </nz-select>
               <!-- </div> -->
             </div>
@@ -1027,6 +1051,19 @@
             </tr>
           </tbody>
         </nz-table>
+        <div nz-col nzSpan="12">
+          <label class="search__label">Thuyết minh</label>
+          <ng-container *ngIf="status;else templatePresent">
+            <br>{{thuyetMinh}}
+
+          </ng-container>
+          <ng-template #templatePresent>
+            <nz-textarea-count [nzMaxCharacterCount]="100">
+              <textarea rows="4" nz-input [(ngModel)]="thuyetMinh"></textarea>
+            </nz-textarea-count>
+          </ng-template>
+        </div>
+
       </nz-card>
 
       <!-- Table phụ lục III -->
@@ -1035,7 +1072,7 @@
         <ng-container *ngIf="status;else templateName">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
-              Đơn vị:
+              <label class="search__label">Đơn vị:</label>
               <div *ngFor="let item of donViTiens">
                 <div *ngIf="item.id == maDviTien">
                   {{item.tenDm}}
@@ -1048,10 +1085,9 @@
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col class="gutter-row" [nzSpan]="3">
               <!-- <div class="inner-box">Đơn vị: -->
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                [(ngModel)]="maDviTien" [class]="maDviTien ?'' : 'input-error-validate' ">
-                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-                  [nzLabel]="item.tenDm"></nz-option>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                [class]="maDviTien ?'' : 'input-error-validate' ">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
               </nz-select>
               <!-- </div> -->
             </div>
@@ -1085,7 +1121,7 @@
             </tr>
             <tr class="text-title">
               <th style="width: 50px" rowspan="3">
-                Số quyết định - ngày, tháng năm ban hành
+                Số quyết định - ngày, tháng, năm ban hành
               </th>
               <th style="width: 50px" colspan="2">
                 TMDT
@@ -1480,7 +1516,7 @@
                   <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCache[data.id].data.luyKeVonNsnn"></nz-input-number>
                 </td>
-                
+
                 <td>
                   <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCache[data.id].data.luyKeVonDt"></nz-input-number>
@@ -1661,6 +1697,18 @@
             </tr>
           </tbody>
         </nz-table>
+        <div nz-col nzSpan="12">
+          <label class="search__label">Thuyết minh</label>
+          <ng-container *ngIf="status;else templatePresent">
+            <br>{{thuyetMinh}}
+
+          </ng-container>
+          <ng-template #templatePresent>
+            <nz-textarea-count [nzMaxCharacterCount]="100">
+              <textarea rows="4" nz-input [(ngModel)]="thuyetMinh"></textarea>
+            </nz-textarea-count>
+          </ng-template>
+        </div>
       </nz-card>
 
       <!-- Action Table chi tiết phụ lục II, III-->
@@ -1690,7 +1738,7 @@
         </button>
       </ng-template>
 
-      <!-- Table danh sách văn bản đính k -->
+      <!-- Table danh sách văn bản đính kem -->
       <nz-card nzTitle="DANH SÁCH VĂN BẢN ĐÍNH KÈM" class="mt16 flex-card p-lr16">
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
           <div nz-col class="gutter-row" [nzSpan]="3">

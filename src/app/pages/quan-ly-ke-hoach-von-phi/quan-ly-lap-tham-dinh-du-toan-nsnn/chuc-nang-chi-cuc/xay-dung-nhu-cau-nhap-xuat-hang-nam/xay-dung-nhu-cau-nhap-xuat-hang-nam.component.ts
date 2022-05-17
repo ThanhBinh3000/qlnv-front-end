@@ -266,16 +266,16 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     }
 
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
   }
 
   //get user info
@@ -362,7 +362,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     this.lstCTiet.filter(item => {
-      if (typeof item.id != "number") {
+      if (item.id?.length == 38) {
         item.id = null;
       }
     })
@@ -418,7 +418,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
     }
     this.lstCTiet.filter(item => {
       if (!item.id) {
-        item.id = uuid.v4();
+        item.id = uuid.v4()+'FE';
       }
     });
     this.updateEditCache();
@@ -541,7 +541,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       maTbi: "",
       slNhap: 0,
       stt: "",
-      id: uuid.v4(),
+      id: uuid.v4()+'FE',
       checked:false,
       maBcao: "",
     }
@@ -557,7 +557,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   deleteById(id: any): void {
     this.tong -= this.lstCTiet.find(e => e.id==id).slNhap;
     this.lstCTiet = this.lstCTiet.filter(item => item.id != id)
-    if (typeof id == "number") {
+    if (id?.length == 36) {
       this.listIdDelete += id + ","
     }
   }
@@ -569,7 +569,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
       if (item.checked){
         this.tong -= item.slNhap;
       }
-      if(item.checked == true && typeof item.id == "number"){
+      if(item.checked == true && item?.id?.length == 36){
         this.listIdDelete += item.id + ","
       }
     })
@@ -711,7 +711,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
               this.lstCTiet = chiTiet.lstCTiet;
               this.lstCTiet.forEach(e => {
                 this.tong += e.slNhap;
-                e.id = uuid.v4();
+                e.id = uuid.v4()+'FE';
               })
               this.namBcao= this.namBaoCaoHienHanh + 1
           }else{

@@ -521,19 +521,19 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
       checkParent = true;
     }
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfor?.roles[0]?.id);
-    this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
-    this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnSave = utils.getRoleSave(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnApprove = utils.getRoleApprove(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnTBP = utils.getRoleTBP(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnLD = utils.getRoleLD(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao?.trangThai, checkParent, this.userInfor?.roles[0]?.code);
+    this.statusBtnCopy = utils.getRoleCopy(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
+    this.statusBtnPrint = utils.getRolePrint(this.baoCao?.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
     
     //check chi cục
     // debugger
-    if(this.userInfor?.roles[0]?.id !='3' && dVi?.capDvi =='3'){
+    if(this.userInfor?.roles[0]?.code !='3' && dVi?.capDvi =='3'){
       this.statusBtnDuyetBieuMau= false;
     }else{
       this.statusBtnDuyetBieuMau= true;
@@ -919,12 +919,12 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
     if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
-    let a = this.userInfor?.roles[0]?.id;
-    if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfor?.roles[0]?.id == '3' && checkParent && this.trangThaiChiTiet == 2){
+    let a = this.userInfor?.roles[0]?.code;
+    if(this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfor?.roles[0]?.code == '3' && checkParent && this.trangThaiChiTiet == 2){
       this.statusBtnOk = false;
-    }else if(this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfor?.roles[0]?.id == '2' && checkChirld && this.trangThaiChiTiet == 2){
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfor?.roles[0]?.code == '2' && checkChirld && this.trangThaiChiTiet == 2){
       this.statusBtnOk = false;
-    }else if(this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfor?.roles[0]?.id == '1' && checkChirld && this.trangThaiChiTiet == 2){
+    }else if(this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfor?.roles[0]?.code == '1' && checkChirld && this.trangThaiChiTiet == 2){
       this.statusBtnOk = false;
     }else{
       this.statusBtnOk = true;

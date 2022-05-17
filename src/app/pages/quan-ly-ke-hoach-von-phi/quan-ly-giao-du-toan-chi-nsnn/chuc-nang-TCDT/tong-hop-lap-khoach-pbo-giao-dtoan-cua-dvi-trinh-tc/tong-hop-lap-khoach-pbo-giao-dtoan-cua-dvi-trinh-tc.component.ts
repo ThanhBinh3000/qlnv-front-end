@@ -202,13 +202,13 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
           }
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
 
           this.danhMucService.dMNoiDung().toPromise().then(
                (data) => {
@@ -322,7 +322,7 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
 
           // replace nhung ban ghi dc them moi id thanh null
           this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
+               if (item.id?.length == 38) {
                     item.id = null;
                }
           })
@@ -361,7 +361,7 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
 
           this.lstCTietBCao.filter(item => {
                if (!item.id) {
-                    item.id = uuid.v4();
+                    item.id = uuid.v4()+'FE';
                }
           });
           this.updateEditCache();
@@ -455,35 +455,10 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
           return temp;
      }
 
-    //  // them dong moi
-    //  addLine(id: number): void {
-    //       let item: ItemData = {
-    //            id: uuid.v4(),
-    //            stt: "",
-    //            ngayLap: this.ngayNhap,
-    //            maDvi: this.maDonViTao,
-    //            nam: this.namBcao,
-    //            maKhoanMuc: "",
-    //            noiDung: "",
-    //            maLoaiChi: "",
-    //            phanBo: 0,
-    //            ngayGhiNhan: "",
-    //            dieuChinh: "",
-    //            ghiChu: "",
-    //            checked: false,
-    //       }
-
-    //       this.lstCTietBCao.splice(id, 0, item);
-    //       this.editCache[item.id] = {
-    //            edit: true,
-    //            data: { ...item }
-    //       };
-    //  }
-
      // xoa dong
      deleteById(id: any): void {
           this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-          if (typeof id == "number") {
+          if (id?.length == 36) {
                this.listIdDelete += id + ",";
           }
      }
@@ -492,7 +467,7 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
      deleteSelected() {
           // add list delete id
           this.lstCTietBCao.filter(item => {
-               if (item.checked == true && typeof item.id == "number") {
+               if (item.checked == true && item?.id?.length == 36) {
                     this.listIdDelete += item.id + ","
                }
           })
@@ -747,7 +722,7 @@ addSame(id: any, initItem: ItemData) {
     } else {
         let item: ItemData = {
             ...initItem,
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             tenLoaiKhoan: head + "." + (tail + 1).toString(),
             lstKm: this.lstCTietBCao[index].lstKm,
         }
@@ -793,7 +768,7 @@ addLow(id: any, initItem: ItemData) {
     } else {
         let item: ItemData = {
             ...initItem,
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             lstKm: this.lstKhoanMuc.filter(e => e.idCha == this.lstCTietBCao[index].maKhoanMuc),
             tenLoaiKhoan: this.lstCTietBCao[index].tenLoaiKhoan + ".1",
         }
@@ -926,7 +901,7 @@ addFirst(initItem: ItemData) {
         };
     } else {
         let item: ItemData = {
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             maKhoanMuc: 0,
             lstKm: this.lstKhoanMuc.filter(e => e.idCha == 503),
             status: false,

@@ -282,16 +282,16 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     }
 
     const utils = new Utils();
-    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
-    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
+    this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
+    this.statusBtnLDDC = utils.getRoleLDDC(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
   }
 
   //get user info
@@ -357,7 +357,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
+      if (item.id?.length == 38) {
         item.id = null;
       }
     })
@@ -435,7 +435,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     }
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
-        item.id = uuid.v4();
+        item.id = uuid.v4()+'FE';
       }
     });
     this.updateEditCache();
@@ -556,7 +556,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       khoachChiNsnnN3: 0,
       maBcao: "",
       stt: "",
-      id: uuid.v4(),
+      id: uuid.v4()+'FE',
       checked:false,
     }
 
@@ -573,7 +573,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
     this.tongnam1 -= this.lstCTietBCao.find(e => e.id == id).khoachChiNsnnN1
     this.tongnam1 -= this.lstCTietBCao.find(e => e.id == id).khoachChiNsnnN1
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-    if (typeof id == "number") {
+    if (id?.length == 36) {
       this.listIdDelete += id + ",";
     }
   }
@@ -587,7 +587,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
         this.tongnam2 -= item.khoachChiNsnnN2
         this.tongnam3 -= item.khoachChiNsnnN3
       }
-      if(item.checked == true && typeof item.id == "number"){
+      if(item.checked == true && item?.id?.length == 36){
         this.listIdDelete += item.id + ","
       }
     })
@@ -734,7 +734,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
                 this.lstCTietBCao =[];
             }
             this.lstCTietBCao.forEach(e => {
-              e.id= uuid.v4();
+              e.id= uuid.v4()+'FE';
             })
             this.updateEditCache()
             this.tinhtong()

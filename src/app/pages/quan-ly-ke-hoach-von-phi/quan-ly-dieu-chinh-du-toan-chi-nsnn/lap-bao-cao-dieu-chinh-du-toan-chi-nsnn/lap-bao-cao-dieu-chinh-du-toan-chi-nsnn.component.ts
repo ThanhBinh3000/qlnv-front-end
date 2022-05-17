@@ -181,13 +181,13 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
           }
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.id);
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, this.userInfo?.roles[0]?.code);
      }
 
      //get user info
@@ -238,7 +238,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
 
           // replace nhung ban ghi dc them moi id thanh null
           this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
+               if (item.id?.length == 38) {
                     item.id = null;
                }
           })
@@ -297,7 +297,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
 
           this.lstCTietBCao.filter(item => {
                if (!item.id) {
-                    item.id = uuid.v4();
+                    item.id = uuid.v4()+'FE';
                }
           });
           this.updateEditCache();
@@ -341,7 +341,7 @@ export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
                     res.forEach(item => {
                          if (item.checked) {
                               this.lstCTietBCao.push({
-                                   id: uuid.v4(),
+                                   id: uuid.v4()+'FE',
                                    stt: "",
                                    loaiKhoan: item.tenLoaiKhoan,
                                    maNdung: item.maNdung,

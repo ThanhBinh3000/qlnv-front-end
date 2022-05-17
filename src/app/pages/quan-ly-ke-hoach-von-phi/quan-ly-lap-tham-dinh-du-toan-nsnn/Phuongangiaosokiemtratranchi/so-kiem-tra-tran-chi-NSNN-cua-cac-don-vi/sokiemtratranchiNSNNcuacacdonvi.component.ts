@@ -138,37 +138,37 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
     this.statusBtnDel = utils.getRoleDel(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnSave = utils.getRoleSave(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnApprove = utils.getRoleApprove(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnTBP = utils.getRoleTBP(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnLD = utils.getRoleLD(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
     this.statusBtnDVCT = utils.getRoleDVCT(
       this.trangThaiBanGhi,
       2,
-      userInfor?.roles[0]?.id,
+      userInfor?.roles[0]?.code,
     );
   }
 

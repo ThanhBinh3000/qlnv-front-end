@@ -196,7 +196,6 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
       this.spinner.show();
     }
 
-
     //get danh muc loại quyết định
     this.danhMucService.dMLoaiQDGiaoDT().toPromise().then(
       (data) => {
@@ -367,7 +366,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     this.lstCTietBCao.filter(item => {
-      if (typeof item.id != "number") {
+      if (item.id?.length == 38) {
         item.id = null;
       }
     })
@@ -430,7 +429,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 			}
     this.lstCTietBCao.filter(item => {
       if (!item.id) {
-        item.id = uuid.v4();
+        item.id = uuid.v4()+'FE';
       }
     });
     this.updateEditCache();
@@ -522,7 +521,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   // xoa dong
   deleteById(id: any): void {
     this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-    if (typeof id == "number") {
+    if (id?.length == 36) {
       this.listIdDelete += id + ",";
     }
   }
@@ -531,7 +530,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   deleteSelected() {
     // add list delete id
     this.lstCTietBCao.filter(item => {
-      if(item.checked == true && typeof item.id == "number"){
+      if(item.checked == true && item?.id?.length == 36){
         this.listIdDelete += item.id + ","
       }
     })
@@ -707,7 +706,7 @@ addSame(id: any, initItem: ItemData) {
     } else {
         let item: ItemData = {
             ...initItem,
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             stt: head + "." + (tail + 1).toString(),
             lstKm: this.lstCTietBCao[index].lstKm,
         }
@@ -753,7 +752,7 @@ addLow(id: any, initItem: ItemData) {
     } else {
         let item: ItemData = {
             ...initItem,
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             lstKm: this.lstKhoanMuc.filter(e => e.idCha == this.lstCTietBCao[index].maKhoanMuc),
             stt: this.lstCTietBCao[index].stt + ".1",
         }
@@ -886,7 +885,7 @@ addFirst(initItem: ItemData) {
         };
     } else {
         let item: ItemData = {
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             maKhoanMuc: 0,
             lstKm: this.lstKhoanMuc.filter(e => e.idCha == 503),
             status: false,
