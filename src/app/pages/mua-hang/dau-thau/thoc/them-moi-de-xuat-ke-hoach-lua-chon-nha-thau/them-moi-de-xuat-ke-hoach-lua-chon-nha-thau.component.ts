@@ -28,7 +28,9 @@ import {
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { Globals } from 'src/app/shared/globals';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 interface ItemData {
   id: string;
@@ -86,6 +88,12 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   muoiIdDefault: number = 78;
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
+
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'tong-hop';
+
   constructor(
     private modal: NzModalService,
     private routerActive: ActivatedRoute,
@@ -97,7 +105,8 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
     private notification: NzNotificationService,
     private fb: FormBuilder,
     public globals: Globals,
-  ) {}
+    private userService: UserService,
+  ) { }
 
   startEdit(index: number): void {
     this.dsGoiThauClone[index].isEdit = true;
@@ -811,6 +820,42 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
         );
       }
       XLSX.writeFile(workbook, 'can-cu-xac-dinh.xlsx');
+    }
+  }
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
     }
   }
 }

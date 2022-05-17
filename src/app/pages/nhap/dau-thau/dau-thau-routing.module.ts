@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DauThauComponent } from './dau-thau.component';
-import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
-import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
+// import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
+// import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 
 
 const routes: Routes = [
@@ -40,14 +40,14 @@ const routes: Routes = [
       //   path: 'danh-sach-dau-thau',
       //   component: DanhSachDauThauComponent,
       // },
-      {
-        path: 'danh-sach-dau-thau/:type',
-        component: DanhSachDauThauComponent,
-      },
-      {
-        path: 'them-moi-quyet-dinh-nhap-xuat-hang/:type/:id',
-        component: ThemmoiQdinhNhapXuatHangComponent,
-      },
+      // {
+      //   path: 'danh-sach-dau-thau/:type',
+      //   component: DanhSachDauThauComponent,
+      // },
+      // {
+      //   path: 'them-moi-quyet-dinh-nhap-xuat-hang/:type/:id',
+      //   component: ThemmoiQdinhNhapXuatHangComponent,
+      // },
       // {
       //   path: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
       //   component: QuyetDinhPheDuyetKetQuaLCNTComponent,

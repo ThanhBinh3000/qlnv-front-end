@@ -1,3 +1,53 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2 mg-l-40">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Mua</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Theo phương thức đấu thầu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Thóc</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Kế hoạch lựa chọn nhà thầu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">{{lastBreadcrumb}}</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">Tổng hợp kế hoạch lựa chọn nhà thầu</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="tab-menu row">
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('tong-hop')">
+    <div class="content-tab-item">
+      Tổng hợp kế hoạch lựa chọn nhà thầu
+    </div>
+  </div>
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'phuong-an' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phuong-an')">
+    <div class="content-tab-item">
+      Phương án kế hoạch lựa chọn nhà thầu
+    </div>
+  </div>
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'phe-duyet' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phe-duyet')">
+    <div class="content-tab-item">
+      Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+    </div>
+  </div>
+</div>
 <div class="luong-thuc__danh-sach">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">

@@ -8,11 +8,13 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { DATEPICKER_CONFIG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'danh-sach-dau-thau',
@@ -39,6 +41,12 @@ export class DanhSachDauThauComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   datePickerConfig = DATEPICKER_CONFIG;
   type: string = '';
+
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'tong-hop';
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -47,10 +55,19 @@ export class DanhSachDauThauComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modal: NzModalService,
-    private helperService: HelperService
-  ) {}
+    private helperService: HelperService,
+    private userService: UserService,
+  ) { }
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    }
     this.type = this.route.snapshot.paramMap.get('type');
     this.spinner.show();
     try {
@@ -65,7 +82,7 @@ export class DanhSachDauThauComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      `/nhap/dau-thau/them-moi-quyet-dinh-nhap-xuat-hang/${this.type}`,
+      `/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc`,
       id,
     ]);
   }
@@ -193,5 +210,42 @@ export class DanhSachDauThauComponent implements OnInit {
     this.danhSachDauThauService.export(body).subscribe((blob) => {
       saveAs(blob, 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu.xlsx');
     });
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    }
   }
 }
