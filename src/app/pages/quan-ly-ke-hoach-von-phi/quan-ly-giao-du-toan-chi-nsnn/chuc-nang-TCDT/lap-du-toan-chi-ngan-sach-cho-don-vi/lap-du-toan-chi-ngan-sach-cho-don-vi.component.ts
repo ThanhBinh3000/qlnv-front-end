@@ -494,13 +494,6 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
             this.status = true;
           }
           this.tinhTong1()
-
-          // this.maCucDtnnKvucs.forEach(e => {
-          //   if (this.maDviThien == e.maDvi) {
-          //     this.maNganSach = e.maNsnn;
-          //     this.maSoKBNN = e.maKbnn;
-          //   }
-          // });
           this.lstCTietBCao.forEach(e => {
             e.dtoanGiao = e.dtoanDaPbo + e.pboChoCacDvi
           })
