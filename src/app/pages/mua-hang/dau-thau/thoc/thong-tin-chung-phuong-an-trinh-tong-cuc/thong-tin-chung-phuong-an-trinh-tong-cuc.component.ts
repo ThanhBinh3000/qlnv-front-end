@@ -17,9 +17,11 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
 import { ChiTietDuAn } from 'src/app/models/ChiTietDuAn';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 interface ItemData {
   id: string;
@@ -76,6 +78,11 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   idHdr: number = 0;
   chiTietTongHop: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'phuong-an';
+
   constructor(
     private modal: NzModalService,
     private router: Router,
@@ -85,6 +92,7 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
     private danhMucService: DanhMucService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private phuongAnKeHoachLCNTService: PhuongAnKeHoachLCNTService,
+    private userService: UserService,
   ) {
     this.isFromTongHop = false;
     if (this.router.url.indexOf('luong-dau-thau-gao') != -1) {
@@ -98,6 +106,14 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -269,11 +285,20 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   back(id: number) {
-    if (this.isFromTongHop) {
-      this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-luong-dau-thau-gao/`, id]);
-    }
-    else {
-      this.router.navigate([`/nhap/dau-thau/phuong-an-trinh-tong-cuc`]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      if (this.isFromTongHop) {
+        this.router.navigate([`/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc`, id]);
+      }
+      else {
+        this.router.navigate([`/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc`]);
+      }
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      if (this.isFromTongHop) {
+        this.router.navigate([`/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc`, id]);
+      }
+      else {
+        this.router.navigate([`/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc`]);
+      }
     }
   }
 
@@ -324,5 +349,42 @@ export class ThongTinChungPhuongAnTrinhTongCucComponent implements OnInit {
       ...this.chiTiet.detail,
       data,
     ];
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    }
   }
 }

@@ -8,10 +8,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
@@ -47,6 +49,11 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   selectHang: any = { ten: "" };
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'phe-duyet';
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -54,11 +61,20 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
       });
@@ -441,6 +457,43 @@ export class QuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements OnInit {
         console.log('error: ', e)
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
       }
     }
   }

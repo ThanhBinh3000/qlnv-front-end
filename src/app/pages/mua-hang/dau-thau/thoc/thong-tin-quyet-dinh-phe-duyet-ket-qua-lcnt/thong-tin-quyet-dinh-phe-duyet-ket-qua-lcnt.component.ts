@@ -9,9 +9,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { DialogCanCuQDPheDuyetKHLCNTComponent } from 'src/app/components/dialog/dialog-can-cu-qd-phe-duyet-khlcnt/dialog-can-cu-qd-phe-duyet-khlcnt.component';
 import { DialogThongTinPhuLucKHLCNTChoCacCucDTNNKVComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv/dialog-thong-tin-phu-luc-khlcnt-cho-cac-cuc-dtnn-kv.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinhPheDuyetKHLCNT } from './../../../../../models/ThongTinQuyetDinhPheDuyetKHLCNT';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 // interface ItemData {
 //   id: string;
@@ -47,17 +49,30 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   // visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  chiTietThongTinQDPheDuyetKQLCNT: ThongTinQuyetDinhPheDuyetKHLCNT =
-    new ThongTinQuyetDinhPheDuyetKHLCNT();
+  chiTietThongTinQDPheDuyetKQLCNT: ThongTinQuyetDinhPheDuyetKHLCNT = new ThongTinQuyetDinhPheDuyetKHLCNT();
+
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'ket-qua';
   constructor(
     private modal: NzModalService,
     private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-  ) {}
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
+    this.userInfo = this.userService.getUserLogin();
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    }
     this.yearNow = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -87,7 +102,7 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate([`/nhap/dau-thau/quyet-dinh-phe-duyet-ket-qua-lcnt`]);
+    this.router.navigate([`/mua-hang/dau-thau/thoc/nhap-quyet-dinh-ket-qua-nha-thau-cuc`]);
   }
 
   openDialogThongTinPhuLucKLCNT(data: ChiTietDeXuatCuaCuc) {
@@ -143,5 +158,20 @@ export class ThongTinQuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
         console.log(this.chiTietThongTinQDPheDuyetKQLCNT);
       }
     });
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'thong-tin') {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/nhap-thong-tin-dau-thau-cuc',
+      ]);
+    } else if (tab == 'ket-qua') {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/nhap-quyet-dinh-ket-qua-nha-thau-cuc',
+      ]);
+    }
   }
 }

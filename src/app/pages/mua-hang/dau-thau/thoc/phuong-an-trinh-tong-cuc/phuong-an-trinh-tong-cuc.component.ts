@@ -6,9 +6,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'phuong-an-trinh-tong-cuc',
@@ -36,6 +38,11 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
 
   dataTable: any[] = [];
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'phuong-an';
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -43,11 +50,20 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
     private notification: NzNotificationService,
     private phuongAnKeHoachLCNTService: PhuongAnKeHoachLCNTService,
     private modal: NzModalService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.yearNow = dayjs().get('year');
       this.namKeHoach = this.yearNow;
       for (let i = -3; i < 23; i++) {
@@ -149,10 +165,17 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
   }
 
   redirectToChiTiet(id: number) {
-    this.router.navigate([
-      '/nhap/dau-thau/phuong-an-trinh-tong-cuc/thong-tin-chung-phuong-an-trinh-tong-cuc',
-      id,
-    ]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        id,
+      ]);
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        id,
+      ]);
+    }
   }
 
   convertTrangThai(status: string) {
@@ -192,5 +215,42 @@ export class PhuongAnTrinhTongCucComponent implements OnInit {
         }
       },
     });
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    }
   }
 }

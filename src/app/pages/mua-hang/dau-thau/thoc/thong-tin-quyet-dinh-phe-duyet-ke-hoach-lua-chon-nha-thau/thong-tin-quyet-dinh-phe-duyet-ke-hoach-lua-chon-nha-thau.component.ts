@@ -13,7 +13,7 @@ import { DialogPhuongAnTrinhTongCucComponent } from 'src/app/components/dialog/d
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinhPheDuyetKHLCNT } from 'src/app/models/ThongTinQuyetDinhPheDuyetKHLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -21,6 +21,8 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhP
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { environment } from 'src/environments/environment';
 import { ChiTietFile } from 'src/app/models/ChiTietFile';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'thong-tin-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau',
@@ -50,7 +52,12 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
   listLoaiHopDong: any[] = [];
   listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'phe-duyet';
 
   constructor(
     private router: Router,
@@ -60,11 +67,20 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.lastBreadcrumb = LEVEL.CUC_SHOW;
+      }
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
@@ -479,5 +495,42 @@ export class ThongTinQuyetDinhPheDuyetKeHoachLuaChonNhaThauComponent implements 
         }
       },
     });
+  }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'tong-hop') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phuong-an') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    } else if (tab == 'phe-duyet') {
+      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
+        ]);
+      } else if (this.router.url.includes(LEVEL.CUC)) {
+        this.router.navigate([
+          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
+        ]);
+      }
+    }
   }
 }

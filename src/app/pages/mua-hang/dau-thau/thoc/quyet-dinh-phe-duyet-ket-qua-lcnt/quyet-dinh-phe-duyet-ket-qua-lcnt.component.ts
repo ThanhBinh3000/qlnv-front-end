@@ -7,9 +7,11 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'quyet-dinh-phe-duyet-ket-qua-lcnt',
@@ -43,15 +45,29 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
 
+  lastBreadcrumb: string;
+  userInfo: UserLogin;
+
+  selectedTab: string = 'ket-qua';
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
     private notification: NzNotificationService,
     private router: Router,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.lastBreadcrumb = LEVEL.CUC_SHOW;
+    }
     this.spinner.show();
     this.yearNow = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
@@ -122,7 +138,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/quyet-dinh-phe-duyet-ket-qua-lcnt/thong-tin-quyet-dinh-phe-duyet-ket-qua-lcnt',
+      '/mua-hang/dau-thau/thoc/nhap-quyet-dinh-ket-qua-nha-thau-cuc/thong-tin-nhap-quyet-dinh-ket-qua-nha-thau-cuc',
       id,
     ]);
   }
@@ -212,4 +228,19 @@ export class QuyetDinhPheDuyetKetQuaLCNTComponent implements OnInit {
     }
   }
   selectNam() { }
+
+  selectTabMenu(tab) {
+    if (tab == this.selectedTab) {
+      return;
+    }
+    if (tab == 'thong-tin') {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/nhap-thong-tin-dau-thau-cuc',
+      ]);
+    } else if (tab == 'ket-qua') {
+      this.router.navigate([
+        '/mua-hang/dau-thau/thoc/nhap-quyet-dinh-ket-qua-nha-thau-cuc',
+      ]);
+    }
+  }
 }
