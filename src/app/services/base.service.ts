@@ -38,9 +38,9 @@ export abstract class BaseService {
     return this._httpClient.post<OldResponseData>(url, {}).toPromise();
   }
 
-  timTheoDieuKien(body) {
-    const url = `${environment.SERVICE_API}api/${this.table}/TimTheoDieuKien`;
-    return this._httpClient.delete<OldResponseData>(url, body).toPromise();
+  search(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   timTheoMa(ma): Promise<OldResponseData> {

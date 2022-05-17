@@ -8,6 +8,11 @@ const routes: Routes = [
         component: MuaHangComponent,
         children: [
             {
+                path: '',
+                redirectTo: 'dau-thau',
+                pathMatch: 'full',
+            },
+            {
                 path: 'dau-thau',
                 loadChildren: () =>
                     import('../mua-hang/dau-thau/dau-thau.module').then(

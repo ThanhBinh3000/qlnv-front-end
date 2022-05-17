@@ -60,6 +60,19 @@ export class UserService {
       return new UserLogin(decoded);
   }
 
+  isTongCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "1"
+  }
 
+  isCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "2"
+  }
+
+  isChiCuc(){
+    let user = this.getUserLogin();
+    return user.CAP_DVI == "3"
+  }
 
 }

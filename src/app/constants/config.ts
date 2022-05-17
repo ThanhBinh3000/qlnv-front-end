@@ -159,6 +159,14 @@ export const LOAI_HANG_DTQG = {
   GAO: '00',
   THOC: '01',
   MUOI: '02',
+  VAT_TU : '03',
+};
+
+export const TEN_HANG_DTQG = {
+  GAO: 'gao',
+  THOC: 'thoc',
+  MUOI: 'muoi',
+  VAT_TU : 'vat-tu'
 };
 
 export const STATUS_USER = {
@@ -179,3 +187,5 @@ export const LEVEL_USER = {
   CUC: '2',
   CHI_CUC: '3',
 };
+
+

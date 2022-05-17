@@ -15,37 +15,37 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/tra-cuu`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   chiTiet(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/chi-tiet/${id}`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/chi-tiet/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/phe-duyet`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/phe-duyet`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   update(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/cap-nhat`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/cap-nhat`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   create(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/them-moi`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/them-moi`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   xoa(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/xoa`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/xoa`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt-gao/ket-xuat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

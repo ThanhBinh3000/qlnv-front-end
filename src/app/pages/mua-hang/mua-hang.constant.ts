@@ -21,15 +21,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
                         title: 'Kế hoạch lựa chọn nhà thầu tổng cục',
-                        url: '/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-                        urlTongCuc: '',
-                        urlCuc: '',
-                        urlChiCuc: '',
-                    },
-                    {
-                        icon: 'htvbdh_tcdt_nhomquyen',
-                        title: 'Kế hoạch lựa chọn nhà thầu cục',
-                        url: '/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+                        url: '/dau-thau/kehoach-luachon-nhathau/thoc',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -64,7 +56,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
                         title: 'Kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/kehoach-luachon-nhathau/gao',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -99,7 +91,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
                         title: 'Kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/kehoach-luachon-nhathau/muoi',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -134,7 +126,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
                         title: 'Kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/kehoach-luachon-nhathau/vat-tu',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
