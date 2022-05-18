@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TestLinkListComponent } from './test-link-list.component';
+import { TongHopDieuChinhDuToanChiNSNNComponent } from './tong-hop-dieu-chinh-du-toan-chi-NSNN.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TestLinkListComponent,
+    component: TongHopDieuChinhDuToanChiNSNNComponent,
   },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TestLinkListRoutingModule {}
+export class TongHopDieuChinhDuToanChiNSNNRoutingModule {}

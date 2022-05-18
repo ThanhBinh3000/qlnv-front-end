@@ -4,7 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { KHOANMUCLIST } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { KHOANMUCLIST } from 'src/app/pages/quan-ly-ke-hoach-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn/lap-bao-cao-dieu-chinh-du-toan-chi-nsnn.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 export class ItemData {
@@ -22,7 +22,7 @@ export class ItemData {
 export class DialogChonThemKhoanMucComponent implements OnInit {
 	@Input() id: any;
 
-	khoanMucs: any[] = KHOANMUCLIST;
+	// khoanMucs: any[] = KHOANMUCLIST;
 	lstCTietBCao: ItemData[] = [];
 
 	constructor(
@@ -55,7 +55,7 @@ export class DialogChonThemKhoanMucComponent implements OnInit {
 	}
 
 	getKmName(maNdung: string){
-		return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
+		// return this.khoanMucs.find(e => e.id == maNdung)?.tenDm;
 	}
 
 	handleOk() {

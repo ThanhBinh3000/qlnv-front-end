@@ -4,8 +4,14 @@ export const QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN_LIST: QuanLyDieuChinhDuToanChiN
 	{
 		icon: 'htvbdh_tcdt_icon-common',
 		title: 'Tìm kiếm',
-		description: 'Danh sách đề xuất điều chỉnh dự toán chi ngân sách',
-		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/danh-sach-de-xuat-dieu-chinh-du-toan-chi-ngan-sach`,
+		description: 'Danh sách điều chỉnh dự toán chi NSNN',
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/tim-kiem-dieu-chinh-du-toan-chi-NSNN`,
+	},
+	{
+		icon: 'htvbdh_tcdt_icon-common',
+		title: 'Danh sách tổng hợp điều chỉnh dự toán',
+		description: 'Danh sách tổng hợp điều chỉnh dự toán chi NSNN',
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/ds-tong-hop-dieu-chinh-du-toan-chi`,
 	},
 ];
 
