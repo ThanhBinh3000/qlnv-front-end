@@ -28,18 +28,21 @@
     </div>
   </div>
 </nz-affix>
-<!-- <div class="tab-menu row">
-  <div class="tab-item col-4" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''">
+<div class="tab-menu row">
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('tong-hop')">
     <div class="content-tab-item">
       Tổng hợp kế hoạch lựa chọn nhà thầu
     </div>
   </div>
-  <div class="tab-item col-4" [ngClass]="selectedTab == 'phuong-an' ? 'active-tab' : ''">
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'phuong-an' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phuong-an')">
     <div class="content-tab-item">
       Phương án kế hoạch lựa chọn nhà thầu
     </div>
   </div>
-  <div class="tab-item col-4" [ngClass]="selectedTab == 'phe-duyet' ? 'active-tab' : ''">
+  <div class="tab-item col-4" [ngClass]="selectedTab == 'phe-duyet' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phe-duyet')">
     <div class="content-tab-item">
       Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
     </div>

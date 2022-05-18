@@ -70,7 +70,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
       }
       let dayNow = dayjs().get('year');
-      this.namKeHoach = dayjs().get('year');
+      // this.namKeHoach = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayNow - i,
@@ -185,7 +185,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   clearFilter() {
-    this.namKeHoach = dayjs().get('year');
+    this.namKeHoach = null;
     this.soQDGiao = null;
     this.trichYeuGiao = null;
     this.soQDDieuChinh = null;

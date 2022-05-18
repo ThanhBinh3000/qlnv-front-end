@@ -16,7 +16,7 @@ export class MuaHangComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
     routes = MUA_HANG_ROUTE_LIST;
     routerUrl: string = "";
-    defaultUrl: string = '/nhap/mua-hang/'
+    defaultUrl: string = '/mua-hang'
 
     constructor(
         private router: Router,

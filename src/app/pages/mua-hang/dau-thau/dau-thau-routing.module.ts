@@ -10,8 +10,23 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'danh-sach-dau-thau',
+        redirectTo: 'kehoach-luachon-nhathau',
         pathMatch: 'full',
+      },
+      {
+        path: 'kehoach-luachon-nhathau',
+        loadChildren: () =>
+          import('../dau-thau/kehoach-luachon-nhathau/kehoach-luachon-nhathau.module').then((m) => m.KehoachLuachonNhathauModule),
+      },
+      {
+        path: 'trienkhai-luachon-nhathau',
+        loadChildren: () =>
+          import('../dau-thau/trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module').then((m) => m.TrienkhaiLuachonNhathauModule),
+      },
+      {
+        path: 'dieuchinh-luachon-nhathau',
+        loadChildren: () =>
+          import('../dau-thau/dieuchinh-luachon-nhathau/dieuchinh-luachon-nhathau.module').then((m) => m.DieuchinhLuachonNhathauModule),
       },
       {
         path: 'gao',
