@@ -71,6 +71,13 @@ const routes: Routes = [
         './tong-hop-dieu-chinh-du-toan-chi-NSNN/tong-hop-dieu-chinh-du-toan-chi-NSNN.module'
       ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
   },
+  {
+    path: 'tong-hop-dieu-chinh-du-toan-chi-NSNN/:id',
+    loadChildren: () =>
+      import(
+        './tong-hop-dieu-chinh-du-toan-chi-NSNN/tong-hop-dieu-chinh-du-toan-chi-NSNN.module'
+      ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
+  },
 
 ];
 
