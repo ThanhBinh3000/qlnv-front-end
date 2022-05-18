@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -47,6 +48,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
+  titleCard: string = '';
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -64,10 +67,12 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       if (this.router.url.includes(LEVEL.TONG_CUC)) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+        this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
       } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
       } else if (this.router.url.includes(LEVEL.CUC)) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
+        this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
       }
       let dayNow = dayjs().get('year');
       // this.namKeHoach = dayjs().get('year');
@@ -91,22 +96,40 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async loadDonVi() {
-    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-      const res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-            this.inputDonVi = res.data[i].tenDvi;
-            this.selectedDonVi = res.data[i];
-            break;
+    if (this.lastBreadcrumb == LEVEL.TONG_CUC_SHOW) {
+      if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+        const res = await this.donViService.layTatCaDonVi();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+              this.inputDonVi = res.data[i].tenDvi;
+              this.selectedDonVi = res.data[i];
+              break;
+            }
           }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      else {
+        const res = await this.donViService.layDonViCon();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsDonVi.push(item);
+          }
+          this.optionsDonViShow = cloneDeep(this.optionsDonVi);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       }
     }
-    else {
+    else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
       const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -117,6 +140,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           };
           this.optionsDonVi.push(item);
         }
+        this.optionsDonViShow = cloneDeep(this.optionsDonVi);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -126,7 +150,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   onInputDonVi(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = [];
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -178,10 +202,17 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    this.router.navigate([
-      '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.router.navigate([
+        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        id,
+      ]);
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.router.navigate([
+        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-cuc',
+        id,
+      ]);
+    }
   }
 
   clearFilter() {

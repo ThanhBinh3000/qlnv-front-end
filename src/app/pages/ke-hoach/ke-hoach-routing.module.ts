@@ -49,16 +49,24 @@ const routes: Routes = [
         component: DieuChinhChiTieuKeHoachNamComponent
       },
       {
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        component: DieuChinhThongTinChiTieuKeHoachNamComponent
+      },
+      {
         path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
         component: DieuChinhChiTieuKeHoachNamComponent
       },
       {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-cuc/:id',
+        component: DieuChinhThongTinChiTieuKeHoachNamComponent
       },
       {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
-        component: DieuChinhThongTinChiTieuKeHoachNamComponent
+        path: 'de-xuat-dieu-chinh-cap-tong-cuc',
+        component: DeXuatDieuChinhComponent
+      },
+      {
+        path: 'de-xuat-dieu-chinh-cap-tong-cuc/thong-tin-de-xuat-dieu-chinh-cap-tong-cuc/:id',
+        component: ThongTinDeXuatDieuChinhComponent
       },
       {
         path: 'de-xuat-dieu-chinh-cap-cuc',

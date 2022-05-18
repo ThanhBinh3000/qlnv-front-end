@@ -76,7 +76,8 @@
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-                [nzAutocomplete]="auto" [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                [nzAutocomplete]="auto"
+                [readonly]="userInfo.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
@@ -100,8 +101,7 @@
           </button>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao" [nzExtra]="tableCard1"
-        class="mt16 flex-card p-lr16">
+      <nz-card [nzTitle]="titleCard" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
           [nzShowPagination]="false">
           <thead>

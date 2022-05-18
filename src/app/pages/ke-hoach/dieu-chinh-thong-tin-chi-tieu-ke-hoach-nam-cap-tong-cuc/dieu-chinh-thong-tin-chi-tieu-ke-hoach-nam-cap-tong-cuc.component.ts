@@ -124,6 +124,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   editMuoiCache: { [key: string]: { edit: boolean; data: any } } = {};
   editVatTuCache: { [key: string]: { edit: boolean; data: any } } = {};
 
+  titleTable: string = '';
+
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -151,10 +153,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       if (this.router.url.includes(LEVEL.TONG_CUC)) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
+        this.titleTable = 'CỤC DTNN KHU VỰC';
       } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
       } else if (this.router.url.includes(LEVEL.CUC)) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
+        this.titleTable = 'CHI Cục DTNN';
       }
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -871,30 +875,48 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   async loadDonVi() {
     try {
-      if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-        const res = await this.donViService.layTatCaDonVi();
-        this.optionsDonVi = [];
-        if (res.msg == MESSAGE.SUCCESS) {
-          for (let i = 0; i < res.data.length; i++) {
-            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+      if (this.lastBreadcrumb == LEVEL.TONG_CUC_SHOW) {
+        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+          const res = await this.donViService.layTatCaDonVi();
+          this.optionsDonVi = [];
+          if (res.msg == MESSAGE.SUCCESS) {
+            for (let i = 0; i < res.data.length; i++) {
+              if (this.userInfo.MA_DVI === res.data[i].maDvi) {
 
-              await this.selectDonViKHLT(res.data[i], true, this.keHoachLuongThucCreate);
-              this.keHoachLuongThucCreate.tenDonvi = res.data[i].tenDvi;
+                await this.selectDonViKHLT(res.data[i], true, this.keHoachLuongThucCreate);
+                this.keHoachLuongThucCreate.tenDonvi = res.data[i].tenDvi;
 
-              await this.selectDonViKHMuoi(res.data[i], true, this.keHoachMuoiCreate);
-              this.keHoachMuoiCreate.tenDonVi = res.data[i].tenDvi;
+                await this.selectDonViKHMuoi(res.data[i], true, this.keHoachMuoiCreate);
+                this.keHoachMuoiCreate.tenDonVi = res.data[i].tenDvi;
 
-              await this.selectDonViVatTu(res.data[i], true, this.keHoachVatTuCreate);
-              this.keHoachVatTuCreate.tenDonVi = res.data[i].tenDvi;
+                await this.selectDonViVatTu(res.data[i], true, this.keHoachVatTuCreate);
+                this.keHoachVatTuCreate.tenDonVi = res.data[i].tenDvi;
 
-              break;
+                break;
+              }
             }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        else {
+          const res = await this.donViService.layDonViCon();
+          this.optionsDonVi = [];
+          if (res.msg == MESSAGE.SUCCESS) {
+            for (let i = 0; i < res.data.length; i++) {
+              const item = {
+                ...res.data[i],
+                labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+              };
+              this.optionsDonVi.push(item);
+            }
+            this.options = cloneDeep(this.optionsDonVi);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         }
       }
-      else {
+      else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
         const res = await this.donViService.layDonViCon();
         this.optionsDonVi = [];
         if (res.msg == MESSAGE.SUCCESS) {
@@ -1373,9 +1395,15 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate([
-      '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-    ]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.router.navigate([
+        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      ]);
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.router.navigate([
+        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
+      ]);
+    }
   }
 
   disabledStartDate = (startValue: Date): boolean => {
@@ -2062,9 +2090,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.router.navigate([
-          '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-        ]);
+        this.redirectChiTieuKeHoachNam();
       },
     });
   }

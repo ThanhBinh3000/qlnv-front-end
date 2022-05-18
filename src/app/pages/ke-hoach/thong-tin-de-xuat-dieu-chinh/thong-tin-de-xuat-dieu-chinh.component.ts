@@ -10,9 +10,12 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { LEVEL } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { HelperService } from 'src/app/services/helper.service';
+import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { cloneDeep } from 'lodash';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -39,16 +42,25 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   selectedCanCu: any = {};
   taiLieuDinhKemList: any[] = [];
 
+  deXuatLT: any = {};
+  deXuatMuoi: any = {};
+  deXuatVatTu: any = {};
+
+  editLuongThucCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editMuoiCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editVatTuCache: { [key: string]: { edit: boolean; data: any } } = {};
+
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private helperService: HelperService,
+    private deXuatDieuChinhService: DeXuatDieuChinhService,
     public globals: Globals,
     private userService: UserService,
     private fb: FormBuilder,
+    private uploadFileService: UploadFileService,
   ) { }
 
   async ngOnInit() {
@@ -93,8 +105,59 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       nguyenNhan: [null],
       noiDung: [null],
     });
+    this.deXuatDieuChinh.trangThai = '00';
     if (id > 0) {
+      let res = await this.deXuatDieuChinhService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.deXuatDieuChinh = res.data;
 
+          this.selectedCanCu.id = this.deXuatDieuChinh?.qdGocId;
+          this.selectedCanCu.soQuyetDinh = this.deXuatDieuChinh?.soQuyetDinh;
+
+          this.formData.controls['canCu'].setValue(
+            this.selectedCanCu ? this.selectedCanCu.soQuyetDinh : '',
+          );
+          this.formData.controls['soQD'].setValue(
+            this.deXuatDieuChinh.soVanBan.split('/')[0],
+          );
+          this.formData.controls['ngayKy'].setValue(
+            this.deXuatDieuChinh.ngayKy,
+          );
+          this.formData.controls['ngayHieuLuc'].setValue(
+            this.deXuatDieuChinh.ngayHieuLuc,
+          );
+          this.formData.controls['namKeHoach'].setValue(
+            this.deXuatDieuChinh.namKeHoach,
+          );
+          this.formData.controls['trichYeu'].setValue(
+            this.deXuatDieuChinh.trichYeu,
+          );
+          this.formData.controls['nguyenNhan'].setValue(
+            this.deXuatDieuChinh.nguyenNhan,
+          );
+          this.formData.controls['noiDung'].setValue(
+            this.deXuatDieuChinh.noiDung,
+          );
+
+          if (this.deXuatDieuChinh.fileDinhKems && this.deXuatDieuChinh.fileDinhKems.length > 0) {
+            this.deXuatDieuChinh.fileDinhKemReqs = cloneDeep(this.deXuatDieuChinh.fileDinhKems);
+            this.deXuatDieuChinh.fileDinhKemReqs.forEach(element => {
+              element.idVirtual = element.id;
+              let item = {
+                id: element.idVirtual,
+                text: element.fileName,
+              };
+              if (!this.taiLieuDinhKemList) {
+                this.taiLieuDinhKemList = [];
+              }
+              this.taiLieuDinhKemList.push(item);
+            });
+          }
+
+          this.updateEditLuongThucCache();
+        }
+      }
     }
   }
 
@@ -135,15 +198,29 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
       (x) => x.id !== data.id,
     );
+    this.deXuatDieuChinh.fileDinhKemReqs = this.deXuatDieuChinh.fileDinhKemReqs.filter((x) => x.idVirtual !== data.id);
   }
 
   openFile(event) {
     let item = {
       id: new Date().getTime(),
-      text: event,
+      text: event.name,
     };
     if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-      this.taiLieuDinhKemList.push(item);
+      this.uploadFileService
+        .uploadFile(event.file, event.name)
+        .then((resUpload) => {
+          if (!this.deXuatDieuChinh.fileDinhKemReqs) {
+            this.deXuatDieuChinh.fileDinhKemReqs = [];
+          }
+          const fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          fileDinhKem.idVirtual = item.id;
+          this.deXuatDieuChinh.fileDinhKemReqs.push(fileDinhKem);
+          this.taiLieuDinhKemList.push(item);
+        });
     }
   }
 
@@ -171,7 +248,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/kehoach/de-xuat-dieu-chinh-cap-cuc',]);
+    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      this.router.navigate(['/kehoach/de-xuat-dieu-chinh-cap-tong-cuc',]);
+    } else if (this.router.url.includes(LEVEL.CUC)) {
+      this.router.navigate(['/kehoach/de-xuat-dieu-chinh-cap-cuc',]);
+    }
   }
 
   save(isAdd: boolean) {
@@ -324,12 +405,72 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   }
 
-  editRowLT(id) {
+  clearDataLT() {
+    this.deXuatLT = {};
+  }
 
+  themMoiLT() {
+    this.deXuatLT.maVatTuGao = '0102';
+    this.deXuatLT.maVatTuThoc = '0101';
+    this.checkDataExistLuongThuc(this.deXuatLT);
+    this.clearDataLT();
+  }
+
+  editRowLT(chiTieu) {
+    this.editLuongThucCache[chiTieu].edit = true;
   }
 
   deleteRowLT(data) {
+    this.deXuatDieuChinh.dxDcltList = this.deXuatDieuChinh?.dxDcltList.filter((x) => x.chiTieu != data.chiTieu,);
+  }
 
+  cancelEditLuongThuc(chiTieu: number): void {
+    const index = this.deXuatDieuChinh?.dxDcltList.findIndex(
+      (item) => item.chiTieu === chiTieu,
+    );
+    this.editLuongThucCache[chiTieu] = {
+      data: { ...this.deXuatDieuChinh?.dxDcltList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditLuongThuc(chiTieu: number): void {
+    this.editLuongThucCache[chiTieu].edit = false;
+    this.checkDataExistLuongThuc(this.editLuongThucCache[chiTieu].data);
+  }
+
+  updateEditLuongThucCache(): void {
+    if (this.deXuatDieuChinh?.dxDcltList && this.deXuatDieuChinh?.dxDcltList.length > 0) {
+      this.deXuatDieuChinh?.dxDcltList.forEach((item) => {
+        this.editLuongThucCache[item.chiTieu] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  caculatorDieuChinhLT(data: any) {
+    data.sdcThoc = (data?.tdcThoc ?? 0) + (data?.dcThoc ?? 0);
+    data.sdcGao = (data?.tdcGao ?? 0) + (data?.dcGao ?? 0);
+    data.sdcTongSoQuyThoc = (data?.sdcThoc ?? 0) + (data?.sdcGao ?? 0) * 2;
+  }
+
+  checkDataExistLuongThuc(data) {
+    if (this.deXuatDieuChinh?.dxDcltList && this.deXuatDieuChinh?.dxDcltList.length > 0) {
+      let index = this.deXuatDieuChinh?.dxDcltList.findIndex(x => x.chiTieu == data.chiTieu);
+      if (index != -1) {
+        this.deXuatDieuChinh.dxDcltList.splice(index, 1);
+      }
+    }
+    else {
+      this.deXuatDieuChinh.dxDcltList = [];
+    }
+    this.deXuatDieuChinh.dxDcltList = [
+      ...this.deXuatDieuChinh.dxDcltList,
+      data,
+    ];
+    this.updateEditLuongThucCache();
   }
 
   editRowMuoi(id) {

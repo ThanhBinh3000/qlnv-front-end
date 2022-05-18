@@ -60,7 +60,7 @@
           <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm Tổng Cục giao</span>
         </div>
         <form nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="[16, 12]">
+          <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
             <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
             </div>
@@ -117,7 +117,7 @@
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
-                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
+                icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu" [trangThai]="deXuatDieuChinh.trangThai"
                 (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()" (removeDataEvent)="deleteDataMultipleTag($event)">
               </multiple-tag>
             </div>
@@ -125,7 +125,7 @@
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nguyên nhân điều chỉnh </nz-form-label>
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
-              <textarea formControlName="nguyeNhan" rows="1" nz-input placeholder="Nhập nội dung"
+              <textarea formControlName="nguyenNhan" rows="1" nz-input placeholder="Nhập nội dung"
                 [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)"></textarea>
             </div>
             <div nz-col [nzSpan]="2">
@@ -141,7 +141,7 @@
             <div nz-col [nzSpan]="22" class="mg-t-10">
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
                 [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-                (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                [trangThai]="deXuatDieuChinh.trangThai" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
               </multiple-tag>
             </div>
           </div>
@@ -151,7 +151,7 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" class="tt-chung__container"
             (nzClick)="tabSelected = 'luongThuc'">
-            <nz-table #luongThucTable nzBordered [nzData]="deXuatDieuChinh?.khLuongThuc" [nzFrontPagination]="false"
+            <nz-table #luongThucTable nzBordered [nzData]="deXuatDieuChinh?.dxDcltList" [nzFrontPagination]="false"
               [nzShowPagination]="false" id="table-luong-thuc">
               <thead>
                 <tr>
@@ -176,52 +176,107 @@
               <tbody>
                 <tr>
                   <td></td>
-                  <td>Xuất trong năm</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
                   <td>
-                    <a class="save">
+                    <nz-select [(ngModel)]="deXuatLT.chiTieu">
+                      <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
+                      <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
+                    </nz-select>
+                  </td>
+                  <td>{{deXuatLT?.tdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{deXuatLT?.dcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{deXuatLT?.sdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{deXuatLT?.tdcThoc ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
+                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                      [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                    </nz-input-number>
+                  </td>
+                  <td>{{deXuatLT?.sdcThoc ?? 0}}</td>
+                  <td>{{deXuatLT?.tdcGao ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
+                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                      [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                    </nz-input-number>
+                  </td>
+                  <td>{{deXuatLT.sdcGao}}</td>
+                  <td>
+                    <a class="save" (click)="themMoiLT()"
+                      [ngClass]="{'isDisabled': (!deXuatLT.chiTieu || deXuatLT.chiTieu == '')}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
-                    <a>
+                    <a (click)="clearDataLT()">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
                 </tr>
                 <tr *ngFor="let data of luongThucTable.data, let i = index" class="editable-row">
-                  <td>{{i+1}}</td>
-                  <td>Nhập trong năm</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>
-                    <a (click)="editRowLT(i)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a (click)="deleteRowLT(data)">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
+                  <ng-container *ngIf="!editLuongThucCache[data.chiTieu]?.edit; else editLuongThucTemplate">
+                    <td>{{i+1}}</td>
+                    <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
+                    <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
+                    <td>{{data?.tdcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{data?.dcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{data?.sdcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{data?.tdcThoc ?? 0}}</td>
+                    <td>{{data?.dcThoc ?? 0}}</td>
+                    <td>{{data?.sdcThoc ?? 0}}</td>
+                    <td>{{data?.tdcGao ?? 0}}</td>
+                    <td>{{data?.dcGao ?? 0}}</td>
+                    <td>{{data?.sdcGao ?? 0}}</td>
+                    <td>
+                      <a (click)="editRowLT(data.chiTieu)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteRowLT(data)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <ng-template #editLuongThucTemplate>
+                    <td></td>
+                    <td>
+                      <nz-select [(ngModel)]="editLuongThucCache[data.chiTieu]?.data.chiTieu">
+                        <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
+                        <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.dcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcTongSoQuyThoc ?? 0}}</td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0}}</td>
+                    <td>
+                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                        [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcThoc"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)" [nzMin]="0"
+                        [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                    </td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcThoc ?? 0}}</td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0}}</td>
+                    <td>
+                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                        [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcGao"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)" [nzMin]="0"
+                        [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                    </td>
+                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcGao ?? 0}}</td>
+                    <td>
+                      <a (click)="saveEditLuongThuc(data.chiTieu)" class="save">
+                        <i class="fa fa-save"></i>
+                      </a>
+                      <a (click)="cancelEditLuongThuc(data.chiTieu)">
+                        <i class="fa fa-times do"></i>
+                      </a>
+                    </td>
+                  </ng-template>
                 </tr>
               </tbody>
             </nz-table>
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" class="ds-goi-thau__container"
             (nzClick)="tabSelected = 'muoi'">
-            <nz-table #muoiTable nzBordered [nzData]="deXuatDieuChinh?.khMuoi" [nzFrontPagination]="false"
+            <nz-table #muoiTable nzBordered [nzData]="deXuatDieuChinh?.dxDcMuoiList" [nzFrontPagination]="false"
               [nzShowPagination]="false" id="table-muoi">
               <thead>
                 <tr>
@@ -272,7 +327,7 @@
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container"
             (nzClick)="tabSelected = 'vatTu'">
-            <nz-table #vatTuTable nzBordered [nzData]="deXuatDieuChinh?.khVatTu" [nzFrontPagination]="false"
+            <nz-table #vatTuTable nzBordered [nzData]="deXuatDieuChinh?.dxDcVtList" [nzFrontPagination]="false"
               [nzShowPagination]="false" id="table-vat-tu">
               <thead>
                 <tr>
@@ -348,10 +403,10 @@
           </nz-tab>
         </nz-tabset>
         <div class="action">
-          <button type="button" class="btn btn-main btn-export" (click)="import()">
+          <!-- <button type="button" class="btn btn-main btn-export" (click)="import()">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Thêm</span>
-          </button>
+          </button> -->
           <button type="button" class="btn btn-sub btn-export" (click)="export()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>

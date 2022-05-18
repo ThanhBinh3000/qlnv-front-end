@@ -173,5 +173,15 @@
                 padding: 4px;
             }
         }
+        .form-data-detail {
+            .ant-form-item-label {
+                display: block;
+                white-space: unset;
+                text-align: left;
+            }
+        }
+        .tab__luong-thuc {
+            position: relative;
+        }
     }
 }
