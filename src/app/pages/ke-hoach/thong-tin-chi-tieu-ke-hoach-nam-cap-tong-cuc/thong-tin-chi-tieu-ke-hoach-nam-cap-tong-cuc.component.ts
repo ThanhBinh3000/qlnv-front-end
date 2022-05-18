@@ -39,6 +39,10 @@ import * as dayjs from 'dayjs';
 import { ItemDetail } from 'src/app/models/ItemDetail';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
+import {
+  CHI_TIEU_KE_HOACH_NAM,
+  MAIN_ROUTE_KE_HOACH,
+} from '../ke-hoach.constant';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -123,16 +127,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private uploadFileService: UploadFileService,
-    private userService: UserService,
+    public userService: UserService,
   ) {}
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+    if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+    } else if (this.userService.isChiCuc()) {
       this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CUC)) {
+    } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
     this.newObjectLuongThuc();
@@ -645,7 +649,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    this.router.navigate([`/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`]);
   }
 
   loadThongTinChiTieuKeHoachNam(id: number) {

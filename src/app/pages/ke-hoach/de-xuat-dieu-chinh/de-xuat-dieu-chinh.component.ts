@@ -1,3 +1,8 @@
+import {
+  DE_XUAT_DIEU_CHINH,
+  THONG_TIN_DE_XUAT_DIEU_CHINH,
+  MAIN_ROUTE_KE_HOACH,
+} from './../ke-hoach.constant';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -52,7 +57,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     private modal: NzModalService,
     private donViService: DonviService,
     public userService: UserService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -72,14 +77,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      await Promise.all([
-        this.loadDonVi(),
-        this.search(),
-      ]);
+      await Promise.all([this.loadDonVi(), this.search()]);
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -157,7 +158,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   redirectToChiTiet(id) {
     this.router.navigate([
-      '/kehoach/de-xuat-dieu-chinh-cap-cuc/thong-tin-de-xuat-dieu-chinh-cap-cuc',
+      `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}/${THONG_TIN_DE_XUAT_DIEU_CHINH}`,
       id,
     ]);
   }
@@ -189,8 +190,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
       ngayKyTuNgay: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-    }
-    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
+    };
+    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
+      param,
+    );
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -206,9 +209,8 @@ export class DeXuatDieuChinhComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -220,9 +222,8 @@ export class DeXuatDieuChinhComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -244,13 +245,14 @@ export class DeXuatDieuChinhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
+          this.quyetDinhDieuChinhChiTieuKeHoachNamService
+            .deleteData(item.id)
+            .then(async () => {
+              await this.search();
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -274,14 +276,15 @@ export class DeXuatDieuChinhComponent implements OnInit {
           ngayKyTuNgay: this.startValue
             ? dayjs(this.startValue).format('YYYY-MM-DD')
             : null,
-        }
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList(body).subscribe(
-          blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
-        );
+        };
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx'),
+          );
         this.spinner.hide();
-      }
-      catch (e) {
-        console.log('error: ', e)
+      } catch (e) {
+        console.log('error: ', e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }

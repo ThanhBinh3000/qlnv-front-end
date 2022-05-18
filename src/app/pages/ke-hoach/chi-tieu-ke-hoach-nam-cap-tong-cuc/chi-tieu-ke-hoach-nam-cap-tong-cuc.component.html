@@ -74,7 +74,7 @@
           </button>
         </div>
       </nz-card>
-      <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM TỔNG CỤC GIAO" [nzExtra]="tableCard1"
+      <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM {{lastBreadcrumb}} GIAO" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
           [nzShowPagination]="false">
@@ -104,7 +104,7 @@
               <td class="text-center">{{ data.trichYeu }}</td>
               <td class="text-center">{{ data.trangThaiDuyet }}</td>
               <td class="text-center">
-                <a (click)="redirectSuaThongTinChiTieuKeHoachNam(data.id)">
+                <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a (click)="xoaItem(data)">
@@ -134,7 +134,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam()">
+        <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

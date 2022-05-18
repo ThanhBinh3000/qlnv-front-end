@@ -15,6 +15,11 @@ import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quy
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {
+  DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
+  DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
+  MAIN_ROUTE_KE_HOACH,
+} from '../ke-hoach.constant';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -59,18 +64,20 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+
+      if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-        this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
-      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.titleCard =
+          'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
+      } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CUC)) {
+      } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
         this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
       }
@@ -82,14 +89,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      await Promise.all([
-        this.loadDonVi(),
-        this.search(),
-      ]);
+      await Promise.all([this.loadDonVi(), this.search()]);
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -111,8 +114,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      }
-      else {
+      } else {
         const res = await this.donViService.layDonViCon();
         this.optionsDonVi = [];
         if (res.msg == MESSAGE.SUCCESS) {
@@ -128,8 +130,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       }
-    }
-    else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
+    } else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
       const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -202,17 +203,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate([
-        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-        id,
-      ]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate([
-        '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-cuc',
-        id,
-      ]);
-    }
+    this.router.navigate([
+      `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}/${DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
+      id,
+    ]);
   }
 
   clearFilter() {
@@ -250,8 +244,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       ngayKyTuNgayCT: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-    }
-    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
+    };
+    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
+      param,
+    );
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -267,9 +263,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -281,9 +276,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -305,13 +299,14 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
+          this.quyetDinhDieuChinhChiTieuKeHoachNamService
+            .deleteData(item.id)
+            .then(async () => {
+              await this.search();
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -335,14 +330,15 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           ngayKyTuNgay: this.startValue
             ? dayjs(this.startValue).format('YYYY-MM-DD')
             : null,
-        }
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList(body).subscribe(
-          blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
-        );
+        };
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx'),
+          );
         this.spinner.hide();
-      }
-      catch (e) {
-        console.log('error: ', e)
+      } catch (e) {
+        console.log('error: ', e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
