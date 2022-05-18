@@ -188,16 +188,16 @@
                   <td>{{deXuatLT?.tdcThoc ?? 0}}</td>
                   <td>
                     <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
-                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                      [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcThoc ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
                     </nz-input-number>
                   </td>
                   <td>{{deXuatLT?.sdcThoc ?? 0}}</td>
                   <td>{{deXuatLT?.tdcGao ?? 0}}</td>
                   <td>
                     <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
-                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                      [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcGao ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
                     </nz-input-number>
                   </td>
                   <td>{{deXuatLT.sdcGao}}</td>
@@ -249,7 +249,8 @@
                     <td>
                       <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                         [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcThoc"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)" [nzMin]="0"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
+                        [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0)"
                         [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                     </td>
                     <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcThoc ?? 0}}</td>
@@ -257,7 +258,8 @@
                     <td>
                       <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                         [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcGao"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)" [nzMin]="0"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
+                        [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0)"
                         [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                     </td>
                     <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcGao ?? 0}}</td>

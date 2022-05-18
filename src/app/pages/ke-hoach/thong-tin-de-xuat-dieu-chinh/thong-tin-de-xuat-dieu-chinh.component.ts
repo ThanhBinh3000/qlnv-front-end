@@ -473,12 +473,69 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     this.updateEditLuongThucCache();
   }
 
-  editRowMuoi(id) {
+  clearDataMuoi() {
+    this.deXuatMuoi = {};
+  }
 
+  themMoiMuoi() {
+    this.deXuatMuoi.maVatTu = '04';
+    this.checkDataExistMuoi(this.deXuatMuoi);
+    this.clearDataMuoi();
+  }
+
+  editRowMuoi(chiTieu) {
+    this.editMuoiCache[chiTieu].edit = true;
   }
 
   deleteRowMuoi(data) {
+    this.deXuatDieuChinh.dxDcMuoiList = this.deXuatDieuChinh?.dxDcMuoiList.filter((x) => x.chiTieu != data.chiTieu,);
+  }
 
+  cancelEditMuoi(chiTieu: number): void {
+    const index = this.deXuatDieuChinh?.dxDcMuoiList.findIndex(
+      (item) => item.chiTieu === chiTieu,
+    );
+    this.editMuoiCache[chiTieu] = {
+      data: { ...this.deXuatDieuChinh?.dxDcMuoiList[index] },
+      edit: false,
+    };
+  }
+
+  saveEditMuoi(chiTieu: number): void {
+    this.editMuoiCache[chiTieu].edit = false;
+    this.checkDataExistMuoi(this.editMuoiCache[chiTieu].data);
+  }
+
+  updateEditMuoiCache(): void {
+    if (this.deXuatDieuChinh?.dxDcMuoiList && this.deXuatDieuChinh?.dxDcMuoiList.length > 0) {
+      this.deXuatDieuChinh?.dxDcMuoiList.forEach((item) => {
+        this.editLuongThucCache[item.chiTieu] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  caculatorDieuChinhMuoi(data: any) {
+    data.sdc = (data?.tdc ?? 0) + (data?.dc ?? 0);
+  }
+
+  checkDataExistMuoi(data) {
+    if (this.deXuatDieuChinh?.dxDcMuoiList && this.deXuatDieuChinh?.dxDcMuoiList.length > 0) {
+      let index = this.deXuatDieuChinh?.dxDcMuoiList.findIndex(x => x.chiTieu == data.chiTieu);
+      if (index != -1) {
+        this.deXuatDieuChinh.dxDcMuoiList.splice(index, 1);
+      }
+    }
+    else {
+      this.deXuatDieuChinh.dxDcMuoiList = [];
+    }
+    this.deXuatDieuChinh.dxDcMuoiList = [
+      ...this.deXuatDieuChinh.dxDcMuoiList,
+      data,
+    ];
+    this.updateEditMuoiCache();
   }
 
   editRowVatTu(id) {
