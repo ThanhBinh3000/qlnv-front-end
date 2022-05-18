@@ -15,5 +15,7 @@ export class ThocComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log("vào thóc");
+    
   }
 }

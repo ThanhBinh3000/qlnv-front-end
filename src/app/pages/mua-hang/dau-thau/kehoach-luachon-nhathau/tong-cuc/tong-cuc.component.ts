@@ -35,6 +35,8 @@ export class TongCucComponent implements OnInit {
   selectTabMenu(tab,title) {
     this.selectedTab = tab;
     this.title = title
+    // let link = '/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+tab;
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+ tab]);
   }
 
 }

@@ -1,24 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { HelperService } from 'src/app/services/helper.service';
+import { Subject } from 'rxjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import * as dayjs from 'dayjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { FormBuilder } from '@angular/forms';
+import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 
 @Component({
-  selector: 'app-dieuchinh-luachon-nhathau',
-  templateUrl: './dieuchinh-luachon-nhathau.component.html',
-  styleUrls: ['./dieuchinh-luachon-nhathau.component.scss']
+  selector: 'app-tong-hop-khlcnt',
+  templateUrl: './tong-hop-khlcnt.component.html',
+  styleUrls: ['./tong-hop-khlcnt.component.scss']
 })
-export class DieuchinhLuachonNhathauComponent implements OnInit {
+export class TongHopKhlcntComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -36,10 +40,11 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   })}
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
+  isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  loaiVthh : string = ''
+
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
@@ -74,7 +79,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      // await this.search();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -85,8 +90,8 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   getTitleVthh(){
-    this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
-    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
+    let loatVthh = this.router.url.split('/')[4]
+    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   async search() {
@@ -169,22 +174,13 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id) {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        id,
-      ]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        id,
-      ]);
-    }
+  themMoi() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/tong-hop/them-moi']);
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
+  redirectToChiTiet(id?){
+
   }
 
   clearFilter() {
@@ -231,41 +227,45 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     return '';
   }
 
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       // "denNgayTao": this.endValue
-    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //       // "loaiVthh": this.searchFilter.loaiVthh,
-    //       // "namKhoach": this.searchFilter.namKh,
-    //       // "paggingReq": null,
-    //       // "str": "",
-    //       // "trangThai": "",
-    //       // "tuNgayTao": this.startValue
-    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-    //       //   : null,
-    //     };
-    //     this.tongHopDeXuatKHLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          // "denNgayTao": this.endValue
+          //   ? dayjs(this.endValue).format('YYYY-MM-DD')
+          //   : null,
+          // "loaiVthh": this.searchFilter.loaiVthh,
+          // "namKhoach": this.searchFilter.namKh,
+          // "paggingReq": null,
+          // "str": "",
+          // "trangThai": "",
+          // "tuNgayTao": this.startValue
+          //   ? dayjs(this.startValue).format('YYYY-MM-DD')
+          //   : null,
+        };
+        this.tongHopDeXuatKHLCNTService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   dateChange() {
     this.helperService.formatDate()
   }
+
 }

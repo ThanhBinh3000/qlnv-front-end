@@ -1,28 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { saveAs } from 'file-saver';
-import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { ActivatedRoute, Router } from '@angular/router';
+import dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import * as dayjs from 'dayjs';
+import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { FormBuilder } from '@angular/forms';
-import { PhuongAnKeHoachLCNTService } from 'src/app/services/phuongAnKeHoachLCNT.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 
 @Component({
-  selector: 'app-tong-hop-khlcnt',
-  templateUrl: './tong-hop-khlcnt.component.html',
-  styleUrls: ['./tong-hop-khlcnt.component.scss']
+  selector: 'app-quyetdinh-ketqua-lcnt',
+  templateUrl: './quyetdinh-ketqua-lcnt.component.html',
+  styleUrls: ['./quyetdinh-ketqua-lcnt.component.scss']
 })
-export class TongHopKhlcntComponent implements OnInit {
+export class QuyetdinhKetquaLcntComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -40,7 +36,6 @@ export class TongHopKhlcntComponent implements OnInit {
   })}
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
@@ -79,7 +74,7 @@ export class TongHopKhlcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      await this.search();
+      // await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -236,37 +231,38 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   exportData() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        let body = {
-          // "denNgayTao": this.endValue
-          //   ? dayjs(this.endValue).format('YYYY-MM-DD')
-          //   : null,
-          // "loaiVthh": this.searchFilter.loaiVthh,
-          // "namKhoach": this.searchFilter.namKh,
-          // "paggingReq": null,
-          // "str": "",
-          // "trangThai": "",
-          // "tuNgayTao": this.startValue
-          //   ? dayjs(this.startValue).format('YYYY-MM-DD')
-          //   : null,
-        };
-        this.tongHopDeXuatKHLCNTService
-          .exportList(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
+    // if (this.totalRecord > 0) {
+    //   this.spinner.show();
+    //   try {
+    //     let body = {
+    //       // "denNgayTao": this.endValue
+    //       //   ? dayjs(this.endValue).format('YYYY-MM-DD')
+    //       //   : null,
+    //       // "loaiVthh": this.searchFilter.loaiVthh,
+    //       // "namKhoach": this.searchFilter.namKh,
+    //       // "paggingReq": null,
+    //       // "str": "",
+    //       // "trangThai": "",
+    //       // "tuNgayTao": this.startValue
+    //       //   ? dayjs(this.startValue).format('YYYY-MM-DD')
+    //       //   : null,
+    //     };
+    //     this.tongHopDeXuatKHLCNTService
+    //       .exportList(body)
+    //       .subscribe((blob) =>
+    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+    //       );
+    //     this.spinner.hide();
+    //   } catch (e) {
+    //     console.log('error: ', e);
+    //     this.spinner.hide();
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    // }
   }
+
 
   dateChange() {
     this.helperService.formatDate()

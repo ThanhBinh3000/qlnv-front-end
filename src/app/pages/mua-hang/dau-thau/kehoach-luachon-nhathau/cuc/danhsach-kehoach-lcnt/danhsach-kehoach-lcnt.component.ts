@@ -1,25 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 
 @Component({
-  selector: 'app-dieuchinh-luachon-nhathau',
-  templateUrl: './dieuchinh-luachon-nhathau.component.html',
-  styleUrls: ['./dieuchinh-luachon-nhathau.component.scss']
+  selector: 'app-danhsach-kehoach-lcnt',
+  templateUrl: './danhsach-kehoach-lcnt.component.html',
+  styleUrls: ['./danhsach-kehoach-lcnt.component.scss']
 })
-export class DieuchinhLuachonNhathauComponent implements OnInit {
-
+export class DanhsachKehoachLcntComponent implements OnInit {
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -33,13 +35,14 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   ) { 
     router.events.subscribe((val)=>{
       this.getTitleVthh();
-  })}
+    })
+  }
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  loaiVthh : string = ''
+  loaiVthh: string = ''
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
@@ -60,28 +63,26 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
 
-
-
   async ngOnInit() {
-    this.spinner.show();
-    try {
-      this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
-      this.yearNow = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
-        });
-      }
-      // await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+    // this.spinner.show();
+    // try {
+    //   this.userInfo = this.userService.getUserLogin();
+    //   this.getTitleVthh();
+    //   this.yearNow = dayjs().get('year');
+    //   for (let i = -3; i < 23; i++) {
+    //     this.listNam.push({
+    //       value: this.yearNow - i,
+    //       text: this.yearNow - i,
+    //     });
+    //   }
+    //   await this.search();
+    //   this.spinner.hide();
+    // }
+    // catch (e) {
+    //   console.log('error: ', e)
+    //   this.spinner.hide();
+    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    // }
   }
 
   getTitleVthh(){
@@ -183,8 +184,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
+  themMoi() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/them-moi']);
   }
 
   clearFilter() {
@@ -231,6 +233,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     return '';
   }
 
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
 
   exportData() {
     // if (this.totalRecord > 0) {
@@ -268,4 +273,6 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   dateChange() {
     this.helperService.formatDate()
   }
+
+
 }
