@@ -1,6 +1,5 @@
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DialogTuChoiComponent } from './../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,27 +9,21 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinDeXuatKeHoachLuaChonNhaThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
-import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { VatTu } from './../../../../../components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UploadComponent } from './../../../../../components/dialog/dialog-upload/upload.component';
-import {
-  CanCuXacDinh,
-  DanhSachGoiThau,
-  FileDinhKem,
-  ThongTinChung,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
-} from './../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { Globals } from 'src/app/shared/globals';
 import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 interface ItemData {
   id: string;
@@ -43,11 +36,11 @@ interface ItemData {
   bangChu: string;
 }
 @Component({
-  selector: 'them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-  templateUrl: './them-moi-de-xuat-ke-hoach-lua-chon-nha-thau.component.html',
-  styleUrls: ['./them-moi-de-xuat-ke-hoach-lua-chon-nha-thau.component.scss'],
+  selector: 'app-themmoi-kehoach-lcnt',
+  templateUrl: './themmoi-kehoach-lcnt.component.html',
+  styleUrls: ['./themmoi-kehoach-lcnt.component.scss']
 })
-export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
+export class ThemmoiKehoachLcntComponent implements OnInit {
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
@@ -73,7 +66,7 @@ export class ThemMoiDeXuatKeHoachLuaChonNhaThauComponent implements OnInit {
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   thongTinDXKHLCNTInput: ThongTinDeXuatKeHoachLuaChonNhaThauInput =
     new ThongTinDeXuatKeHoachLuaChonNhaThauInput();
-  errorGhiChu : boolean = false;
+
   editCache: {
     [key: string]: { edit: boolean; data: DanhSachGoiThau };
   } = {};

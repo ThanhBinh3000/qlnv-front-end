@@ -48,12 +48,4 @@
     </div>
   </div>
 </div>
-<div *ngIf="selectedTab == 'tong-hop'">
-  <app-tong-hop-khlcnt></app-tong-hop-khlcnt>
-</div>
-<div *ngIf="selectedTab == 'phuong-an'">
-  <app-phuong-an-khlcnt></app-phuong-an-khlcnt>
-</div>
-<div *ngIf="selectedTab == 'phe-duyet'">
-  <app-quyetdinh-pheduyet-khlcnt></app-quyetdinh-pheduyet-khlcnt>
-</div>
+<router-outlet></router-outlet>

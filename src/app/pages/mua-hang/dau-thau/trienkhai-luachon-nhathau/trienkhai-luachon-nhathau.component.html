@@ -1,1 +1,50 @@
-<p>trienkhai-luachon-nhathau works!</p>
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+        aria-labelledby="banhanh-tab">
+        <div class="trai">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2 mg-l-40">
+            <i class="fa fa-arrow-circle-left"></i>
+          </a>
+          <nz-breadcrumb>
+            <nz-breadcrumb-item>
+              <a [routerLink]="">Mua</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+              <a [routerLink]="">Theo phương thức đấu thầu</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+              <a [routerLink]="">{{loaiVthh}}</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+              <a [routerLink]="">Triển khai lựa chọn nhà thầu</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="">Cục</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item class="last-breadcrumb">{{title}}</nz-breadcrumb-item>
+          </nz-breadcrumb>
+        </div>
+      </div>
+    </div>
+</nz-affix>
+<div class="tab-menu row">
+    <div class="tab-item col-6" [ngClass]="selectedTab == 'thong-tin' ? 'active-tab-menu' : ''"
+        (click)="selectTabMenu('thong-tin','Nhập thông tin đấu thầu')">
+        <div class="content-tab-item">
+            Nhập thông tin đấu thầu
+        </div>
+    </div>
+    <div class="tab-item col-6" [ngClass]="selectedTab == 'ket-qua' ? 'active-tab-menu' : ''"
+        (click)="selectTabMenu('ket-qua','Nhập quyết định kết quả lựa chọn nhà thầu')">
+        <div class="content-tab-item">
+            Nhập quyết định kết quả lựa chọn nhà thầu
+        </div>
+    </div>
+</div>
+<div *ngIf="selectedTab == 'thong-tin'">
+    <app-quyetdinh-ketqua-lcnt></app-quyetdinh-ketqua-lcnt>
+</div>
+<div *ngIf="selectedTab == 'ket-qua'">
+    <app-thongtin-dauthau></app-thongtin-dauthau>
+</div>

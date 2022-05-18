@@ -11,14 +11,14 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTenVthh, convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 
 @Component({
-  selector: 'app-dieuchinh-luachon-nhathau',
-  templateUrl: './dieuchinh-luachon-nhathau.component.html',
-  styleUrls: ['./dieuchinh-luachon-nhathau.component.scss']
+  selector: 'app-phuong-an-khlcnt',
+  templateUrl: './phuong-an-khlcnt.component.html',
+  styleUrls: ['./phuong-an-khlcnt.component.scss']
 })
-export class DieuchinhLuachonNhathauComponent implements OnInit {
+export class PhuongAnKhlcntComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -39,7 +39,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  loaiVthh : string = ''
+
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
@@ -85,8 +85,8 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   }
 
   getTitleVthh(){
-    this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
-    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
+    let loatVthh = this.router.url.split('/')[4]
+    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   async search() {
@@ -183,10 +183,6 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
-
   clearFilter() {
     // this.namKeHoach = null;
     // this.loaiVthh = null;
@@ -231,6 +227,9 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     return '';
   }
 
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
 
   exportData() {
     // if (this.totalRecord > 0) {
@@ -268,4 +267,10 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   dateChange() {
     this.helperService.formatDate()
   }
+
+  themMoi() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/phuong-an/them-moi']);
+  }
+
 }
