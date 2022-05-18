@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./luong-dau-thau-gao.component.scss'],
 })
 export class LuongDauThauGaoComponent implements OnInit {
+  index = 1;
   searchValue = '';
   tabSelected: string = 'phuong-an-tong-hop';
   isVisibleChangeTab$ = new Subject();
@@ -282,5 +283,8 @@ export class LuongDauThauGaoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+  onIndexChange(event: number): void {
+    this.index = event;
   }
 }

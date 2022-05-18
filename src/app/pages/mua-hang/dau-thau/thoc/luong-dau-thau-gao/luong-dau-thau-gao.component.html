@@ -28,7 +28,7 @@
     </div>
   </div>
 </nz-affix>
-<div class="tab-menu row">
+<!-- <div class="tab-menu row">
   <div class="tab-item col-4" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''">
     <div class="content-tab-item">
       Tổng hợp kế hoạch lựa chọn nhà thầu
@@ -44,7 +44,19 @@
       Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
     </div>
   </div>
-</div>
+</div> -->
+<nz-steps nzType="navigation" nzSize="small" [nzCurrent]="index" (nzIndexChange)="onIndexChange($event)">
+  <nz-step nzTitle="Bước 1" nzSubtitle="Hoàn thành" nzStatus="finish"
+    nzDescription="Tổng hợp kế hoạch lựa chọn nhà thầu">
+  </nz-step>
+  <nz-step nzTitle="Bước 2" nzSubtitle="Đang thực hiện" nzStatus="process"
+    nzDescription="Phương án kế hoạch lựa chọn nhà thầu">
+  </nz-step>
+  <nz-step nzTitle="Bước 3" nzSubtitle="Chưa thực hiện" nzStatus="wait"
+    nzDescription="Quyết định phê duyệt kế hoạch lựa chọn nhà thầu">
+  </nz-step>
+</nz-steps>
+
 <div class="contentBor luong-dau-thau-gao__body">
   <div class="contentDetail">
     <div class="main-content">
