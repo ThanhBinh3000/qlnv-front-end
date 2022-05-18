@@ -7,3 +7,4 @@ export const MAIN_ROUTE_QUAN_LY_CAP_NGUON_VON_CHI_NSNN = 'quan-ly-cap-nguon-von-
 export const MAIN_ROUTE_QUAN_LY_GIAO_DU_TOAN_CHI_NSNN = 'quan-ly-giao-du-toan-chi-nsnn';
 export const MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG = 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg';
 export const MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN = 'quan-ly-thong-tin-quyet-toan';
+export const MAIN_ROUTE_QUAN_LY_DANH_MUC_VON_PHI = 'danh-muc-qlkh-von-phi'
