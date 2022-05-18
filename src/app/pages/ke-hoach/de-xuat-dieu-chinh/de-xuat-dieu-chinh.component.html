@@ -3,7 +3,7 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2 mg-l-40">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
@@ -168,7 +168,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

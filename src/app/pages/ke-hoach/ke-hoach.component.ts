@@ -7,6 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { LEVEL } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { ROUTE_LIST_KE_HOACH } from './ke-hoach.constant';
@@ -20,7 +21,7 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   userLogin: UserLogin;
   routes = ROUTE_LIST_KE_HOACH;
   routerUrl: string = "";
-  defaultUrl: string = '/ke-hoach/'
+  defaultUrl: string = '/ke-hoach/';
 
   constructor(
     private userService: UserService,
@@ -33,6 +34,13 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+  }
+
+  filterRole(url) {
+    if ((url.includes(LEVEL.TONG_CUC) && this.userService.isTongCuc()) || (url.includes(LEVEL.CHI_CUC)) || (url.includes(LEVEL.CUC) && this.userService.isCuc() && !url.includes(LEVEL.TONG_CUC))) {
+      return true;
+    }
+    return false;
   }
 
   ngAfterViewInit() {

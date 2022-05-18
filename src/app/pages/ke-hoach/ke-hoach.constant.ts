@@ -12,7 +12,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_chitieukehoachnam',
-        title: 'Giao chỉ tiêu kế hoạch đầu năm Cấp tổng cục',
+        title: 'Giao chỉ tiêu kế hoạch đầu năm',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
@@ -31,7 +31,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-        title: 'Đề xuất điều chỉnh Cấp tổng cục',
+        title: 'Đề xuất điều chỉnh',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
@@ -40,7 +40,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
       },
       {
         icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-        title: 'Đề xuất điều chỉnh Cấp cục',
+        title: 'Đề xuất điều chỉnh',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
@@ -59,7 +59,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     children: [
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm Cấp tổng cục giao',
+        title: 'Điều chỉnh kế hoạch năm',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
@@ -68,7 +68,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
       },
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm Cấp cục giao',
+        title: 'Điều chỉnh kế hoạch năm',
         hasChild: false,
         url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc`,
         urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,

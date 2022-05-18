@@ -180,8 +180,12 @@
                 text-align: left;
             }
         }
-        .tab__luong-thuc {
-            position: relative;
-        }
+    }
+    .tab__luong-thuc {
+        position: relative;
+    }
+    .isDisabled {
+        opacity: 0.5;
+        pointer-events: none;
     }
 }

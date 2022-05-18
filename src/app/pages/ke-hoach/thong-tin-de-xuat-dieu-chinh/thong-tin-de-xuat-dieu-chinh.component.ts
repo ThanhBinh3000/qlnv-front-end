@@ -156,6 +156,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           }
 
           this.updateEditLuongThucCache();
+          this.updateEditMuoiCache();
         }
       }
     }
@@ -509,7 +510,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   updateEditMuoiCache(): void {
     if (this.deXuatDieuChinh?.dxDcMuoiList && this.deXuatDieuChinh?.dxDcMuoiList.length > 0) {
       this.deXuatDieuChinh?.dxDcMuoiList.forEach((item) => {
-        this.editLuongThucCache[item.chiTieu] = {
+        this.editMuoiCache[item.chiTieu] = {
           edit: false,
           data: { ...item },
         };

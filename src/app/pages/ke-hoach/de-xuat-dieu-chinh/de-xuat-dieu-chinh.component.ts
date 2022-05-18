@@ -10,6 +10,7 @@ import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
@@ -50,6 +51,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {

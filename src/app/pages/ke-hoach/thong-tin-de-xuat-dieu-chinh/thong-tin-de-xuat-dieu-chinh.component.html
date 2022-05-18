@@ -3,7 +3,7 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mg-l-40" (click)="back()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
@@ -203,7 +203,7 @@
                   <td>{{deXuatLT.sdcGao}}</td>
                   <td>
                     <a class="save" (click)="themMoiLT()"
-                      [ngClass]="{'isDisabled': (!deXuatLT.chiTieu || deXuatLT.chiTieu == '')}">
+                      [ngClass]="{'isDisabled' : (!deXuatLT.chiTieu || deXuatLT.chiTieu == '')}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
                     <a (click)="clearDataLT()">
@@ -236,12 +236,8 @@
                   </ng-container>
                   <ng-template #editLuongThucTemplate>
                     <td></td>
-                    <td>
-                      <nz-select [(ngModel)]="editLuongThucCache[data.chiTieu]?.data.chiTieu">
-                        <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
-                        <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
-                      </nz-select>
-                    </td>
+                    <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '01'">Nhập trong năm</td>
+                    <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '00'">Xuất trong năm</td>
                     <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcTongSoQuyThoc ?? 0}}</td>
                     <td>{{editLuongThucCache[data.chiTieu]?.data?.dcTongSoQuyThoc ?? 0}}</td>
                     <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcTongSoQuyThoc ?? 0}}</td>
@@ -296,33 +292,70 @@
               <tbody>
                 <tr>
                   <td></td>
-                  <td>Xuất trong năm</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
                   <td>
-                    <a class="save">
+                    <nz-select [(ngModel)]="deXuatMuoi.chiTieu">
+                      <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
+                      <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
+                    </nz-select>
+                  </td>
+                  <td>{{deXuatMuoi?.tdc ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatMuoi.dc"
+                      (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">
+                    </nz-input-number>
+                  </td>
+                  <td>{{deXuatMuoi?.sdc ?? 0}}</td>
+                  <td>
+                    <a class="save" (click)="themMoiMuoi()"
+                      [ngClass]="{'isDisabled': (!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == '')}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
-                    <a>
+                    <a (click)="clearDataMuoi()">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
                 </tr>
                 <tr *ngFor="let data of muoiTable.data, let i = index" class="editable-row">
-                  <td>{{i+1}}</td>
-                  <td>Nhập trong năm</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>
-                    <a (click)="editRowMuoi(i)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a (click)="deleteRowMuoi(data)">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
+                  <ng-container *ngIf="!editMuoiCache[data.chiTieu]?.edit; else editMuoiTemplate">
+                    <td>{{i+1}}</td>
+                    <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
+                    <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
+                    <td>{{data?.tdc ?? 0}}</td>
+                    <td>{{data?.dc ?? 0}}</td>
+                    <td>{{data?.sdc ?? 0}}</td>
+                    <td>
+                      <a (click)="editRowMuoi(data.chiTieu)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteRowMuoi(data)">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <ng-template #editMuoiTemplate>
+                    <td></td>
+                    <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '01'">Nhập trong năm</td>
+                    <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '00'">Xuất trong năm</td>
+                    <td>{{editMuoiCache[data.chiTieu]?.data?.tdc ?? 0}}</td>
+                    <td>
+                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                        [(ngModel)]="editMuoiCache[data.chiTieu]?.data.dc"
+                        (input)="caculatorDieuChinhMuoi(editMuoiCache[data.chiTieu]?.data)"
+                        [nzMin]="0 - (editMuoiCache[data.chiTieu]?.data?.tdc ?? 0)" [nzMax]="globals.prop.MAX_INPUT"
+                        [nzDisabled]="!editMuoiCache[data.chiTieu]?.data.chiTieu || editMuoiCache[data.chiTieu]?.data.chiTieu == ''">
+                      </nz-input-number>
+                    </td>
+                    <td>{{editMuoiCache[data.chiTieu]?.data?.sdc ?? 0}}</td>
+                    <td>
+                      <a (click)="saveEditMuoi(data.chiTieu)" class="save">
+                        <i class="fa fa-save"></i>
+                      </a>
+                      <a (click)="cancelEditMuoi(data.chiTieu)">
+                        <i class="fa fa-times do"></i>
+                      </a>
+                    </td>
+                  </ng-template>
                 </tr>
               </tbody>
             </nz-table>
