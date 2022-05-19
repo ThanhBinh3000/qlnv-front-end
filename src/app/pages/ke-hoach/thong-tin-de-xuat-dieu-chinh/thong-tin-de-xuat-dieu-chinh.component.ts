@@ -66,7 +66,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     private notification: NzNotificationService,
     private deXuatDieuChinhService: DeXuatDieuChinhService,
     public globals: Globals,
-    private userService: UserService,
+    public userService: UserService,
     private fb: FormBuilder,
     private uploadFileService: UploadFileService,
     private danhMucService: DanhMucService,
@@ -79,11 +79,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CUC)) {
+      } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
       }
       this.yearNow = dayjs().get('year');
@@ -189,7 +189,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         nzClosable: false,
         nzWidth: '900px',
         nzFooter: null,
-        nzComponentParams: {},
+        nzComponentParams: {
+          isDexuat: true
+        },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
@@ -410,11 +412,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate(['/kehoach/de-xuat-dieu-chinh-cap-tong-cuc',]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate(['/kehoach/de-xuat-dieu-chinh-cap-cuc',]);
-    }
+    this.router.navigate(['/kehoach/de-xuat-dieu-chinh',]);
   }
 
   async save(isGuiDuyet: boolean) {
@@ -470,8 +468,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
-          this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
+        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
+          this.deXuatDieuChinh.dxDcVtList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
               "donViTinh": element.donViTinh,

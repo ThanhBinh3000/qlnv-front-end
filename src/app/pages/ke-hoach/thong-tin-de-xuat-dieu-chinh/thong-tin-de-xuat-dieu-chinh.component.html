@@ -17,7 +17,7 @@
           <nz-breadcrumb-item class="last-breadcrumb">{{trangThai}}</nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
-      <div class="canphai phai">
+      <div class="canphai phai" *ngIf="!userService.isTongCuc()">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
           *ngIf="deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03'">
           <i class="icon htvbdh_tcdt_save"></i>
@@ -69,7 +69,7 @@
                 <div nz-col [nzSpan]="4" class="mg-t-10">
                   <nz-input-group [nzAddOnAfter]="qdTCDT">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
-                      [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                      [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') || userService.isTongCuc()">
                     </nz-input-number>
                   </nz-input-group>
                 </div>
@@ -80,7 +80,7 @@
                 <div nz-col [nzSpan]="5" class="mg-t-10">
                   <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
                     formControlName="ngayKy" nzPlaceHolder="Ngày ký"
-                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') || userService.isTongCuc()">
                   </nz-date-picker>
                 </div>
                 <div nz-col [nzSpan]="2">
@@ -89,8 +89,8 @@
                 </div>
                 <div nz-col [nzSpan]="5" class="mg-t-10">
                   <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                    formControlName="ngayKy" nzPlaceHolder="Ngày hiệu lực"
-                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                    formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') || userService.isTongCuc()">
                   </nz-date-picker>
                 </div>
                 <div nz-col [nzSpan]="2">
@@ -99,7 +99,7 @@
                 </div>
                 <div nz-col [nzSpan]="4" class="mg-t-10">
                   <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
-                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03')">
+                    [nzDisabled]="!(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') || userService.isTongCuc()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </div>
@@ -110,7 +110,7 @@
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
-                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)" />
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc()" />
             </div>
             <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ </nz-form-label>
@@ -126,14 +126,14 @@
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
               <textarea formControlName="nguyenNhan" rows="1" nz-input placeholder="Nhập nội dung"
-                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)"></textarea>
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc()"></textarea>
             </div>
             <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nội dung đề xuất điều chỉnh </nz-form-label>
             </div>
             <div nz-col [nzSpan]="22" class="mg-t-10">
               <textarea formControlName="noiDung" rows="1" nz-input placeholder="Nhập nội dung"
-                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0)"></textarea>
+                [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc()"></textarea>
             </div>
             <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
@@ -172,7 +172,8 @@
                 <th rowspan="2">Chỉ tiêu</th>
                 <th colspan="3">Tổng số quy thóc</th>
                 <th colspan="6">Trong đó</th>
-                <th [width]="90" rowspan="2">Hành động</th>
+                <th [width]="90" rowspan="2"
+                  *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">Hành động</th>
               </tr>
               <tr>
                 <th>Trước điều chỉnh</th>
@@ -187,7 +188,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                 <td></td>
                 <td>
                   <nz-select [(ngModel)]="deXuatLT.chiTieu">
@@ -238,7 +239,7 @@
                   <td>{{data?.tdcGao ?? 0}}</td>
                   <td>{{data?.dcGao ?? 0}}</td>
                   <td>{{data?.sdcGao ?? 0}}</td>
-                  <td>
+                  <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                     <a (click)="editRowLT(data.chiTieu)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -294,7 +295,8 @@
                 <th [width]="35" rowspan="2">STT</th>
                 <th rowspan="2">Chỉ tiêu</th>
                 <th colspan="3">Muối</th>
-                <th [width]="90" rowspan="2">Hành động</th>
+                <th [width]="90" rowspan="2"
+                  *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">Hành động</th>
               </tr>
               <tr>
                 <th>Trước điều chỉnh</th>
@@ -303,7 +305,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                 <td></td>
                 <td>
                   <nz-select [(ngModel)]="deXuatMuoi.chiTieu">
@@ -337,7 +339,7 @@
                   <td>{{data?.tdc ?? 0}}</td>
                   <td>{{data?.dc ?? 0}}</td>
                   <td>{{data?.sdc ?? 0}}</td>
-                  <td>
+                  <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                     <a (click)="editRowMuoi(data.chiTieu)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -388,7 +390,8 @@
                 <th colspan="3">Chỉ tiêu nhập năm trước điều chỉnh</th>
                 <th rowspan="2">Tăng giảm</th>
                 <th colspan="3">Chỉ tiêu nhập năm sau điều chỉnh</th>
-                <th [width]="90" rowspan="2">Hành động</th>
+                <th [width]="90" rowspan="2"
+                  *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">Hành động</th>
               </tr>
               <tr>
                 <th>Tổng số</th>
@@ -400,7 +403,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                 <td></td>
                 <td>{{deXuatVatTu.maVatTuCha}}</td>
                 <td>{{deXuatVatTu.kyHieu}}</td>
@@ -475,7 +478,7 @@
                   <td>{{data?.sdcTongSo ?? 0}}</td>
                   <td>{{data?.sdcCacNamTruoc ?? 0}}</td>
                   <td>{{data?.sdcKeHoachNam ?? 0}}</td>
-                  <td>
+                  <td *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0) && !userService.isTongCuc()">
                     <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu)">
                       <i class="fa fa-pencil"></i>
                     </a>

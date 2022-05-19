@@ -1,8 +1,3 @@
-import {
-  DE_XUAT_DIEU_CHINH,
-  THONG_TIN_DE_XUAT_DIEU_CHINH,
-  MAIN_ROUTE_KE_HOACH,
-} from './../ke-hoach.constant';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -13,10 +8,13 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import {
+  DE_XUAT_DIEU_CHINH, MAIN_ROUTE_KE_HOACH, THONG_TIN_DE_XUAT_DIEU_CHINH
+} from './../ke-hoach.constant';
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',
@@ -35,6 +33,8 @@ export class DeXuatDieuChinhComponent implements OnInit {
   endValue: Date | null = null;
   startValueDc: Date | null = null;
   endValueDc: Date | null = null;
+  ngayKy: any;
+  ngayKyDC: any;
 
   listNam: any[] = [];
   page: number = 1;
@@ -52,32 +52,31 @@ export class DeXuatDieuChinhComponent implements OnInit {
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
-    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
+    private deXuatDieuChinhService: DeXuatDieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
     public userService: UserService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+      if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+      } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CUC)) {
+      } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
       }
       let dayNow = dayjs().get('year');
-      this.namKeHoach = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayNow - i,
           text: dayNow - i,
         });
       }
-      await Promise.all([this.loadDonVi(), this.search()]);
+      await Promise.all([this.search()]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -164,7 +163,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   }
 
   clearFilter() {
-    this.namKeHoach = dayjs().get('year');
+    this.namKeHoach = null;
     this.soQDGiao = null;
     this.trichYeuGiao = null;
     this.soQDDieuChinh = null;
@@ -173,6 +172,8 @@ export class DeXuatDieuChinhComponent implements OnInit {
     this.endValue = null;
     this.startValueDc = null;
     this.endValueDc = null;
+    this.ngayKy = null;
+    this.ngayKyDC = null;
     this.inputDonVi = '';
     this.selectedDonVi = {};
   }
@@ -181,17 +182,25 @@ export class DeXuatDieuChinhComponent implements OnInit {
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
-      soQD: this.soQDGiao,
       namKeHoach: this.namKeHoach,
-      trichYeu: this.trichYeuGiao,
-      ngayKyDenNgay: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      soVanBan: this.soQDDieuChinh,
+      trichYeuDx: this.trichYeuDieuChinh,
+      ngayKyDenNgayDx: this.ngayKyDC && this.ngayKyDC.length > 1
+        ? dayjs(this.ngayKyDC[1]).format('YYYY-MM-DD')
         : null,
-      ngayKyTuNgay: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+      ngayKyTuNgayDx: this.ngayKyDC && this.ngayKyDC.length > 0
+        ? dayjs(this.ngayKyDC[0]).format('YYYY-MM-DD')
+        : null,
+      soQuyetDinh: this.soQDGiao,
+      trichYeuQd: this.trichYeuGiao,
+      ngayKyDenNgayQd: this.ngayKy && this.ngayKy.length > 1
+        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      ngayKyTuNgayQd: this.ngayKy && this.ngayKy.length > 0
+        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
         : null,
     };
-    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
+    let res = await this.deXuatDieuChinhService.timKiem(
       param,
     );
     if (res.msg == MESSAGE.SUCCESS) {
@@ -245,7 +254,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhDieuChinhChiTieuKeHoachNamService
+          this.deXuatDieuChinhService
             .deleteData(item.id)
             .then(async () => {
               await this.search();
@@ -267,20 +276,28 @@ export class DeXuatDieuChinhComponent implements OnInit {
         let body = {
           pageSize: null,
           pageNumber: null,
-          soQD: this.soQDGiao,
           namKeHoach: this.namKeHoach,
-          trichYeu: this.trichYeuGiao,
-          ngayKyDenNgay: this.endValue
-            ? dayjs(this.endValue).format('YYYY-MM-DD')
+          soVanBan: this.soQDDieuChinh,
+          trichYeuDx: this.trichYeuDieuChinh,
+          ngayKyDenNgayDx: this.ngayKyDC && this.ngayKyDC.length > 1
+            ? dayjs(this.ngayKyDC[1]).format('YYYY-MM-DD')
             : null,
-          ngayKyTuNgay: this.startValue
-            ? dayjs(this.startValue).format('YYYY-MM-DD')
+          ngayKyTuNgayDx: this.ngayKyDC && this.ngayKyDC.length > 0
+            ? dayjs(this.ngayKyDC[0]).format('YYYY-MM-DD')
+            : null,
+          soQuyetDinh: this.soQDGiao,
+          trichYeuQd: this.trichYeuGiao,
+          ngayKyDenNgayQd: this.ngayKy && this.ngayKy.length > 1
+            ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          ngayKyTuNgayQd: this.ngayKy && this.ngayKy.length > 0
+            ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
             : null,
         };
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService
+        this.deXuatDieuChinhService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-dieu-chinh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

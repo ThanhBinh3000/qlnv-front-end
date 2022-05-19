@@ -15,21 +15,25 @@ export class DeXuatDieuChinhService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-nhap-kho-lt?`
-    if (body.denNgay)
-      url_ += 'denNgay=' + encodeURIComponent('' + body.denNgay) + '&';
-    if (body.maDonVi)
-      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.vatTuId)
-      url_ += 'vatTuId=' + encodeURIComponent('' + body.vatTuId) + '&';
-    if (body.soPhieu)
-      url_ += 'soPhieu=' + encodeURIComponent('' + body.soPhieu) + '&';
-    if (body.maKhoNgan)
-      url_ += 'maKhoNgan=' + encodeURIComponent('' + body.maKhoNgan) + '&';
-    if (body.tuNgay)
-      url_ += 'tuNgay=' + encodeURIComponent('' + body.tuNgay) + '&';
-    if (body.trangThai)
-      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam?`
+    if (body.namKeHoach)
+      url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
+    if (body.soVanBan)
+      url_ += 'soVanBan=' + encodeURIComponent('' + body.soVanBan) + '&';
+    if (body.trichYeuDx)
+      url_ += 'trichYeuDx=' + encodeURIComponent('' + body.trichYeuDx) + '&';
+    if (body.ngayKyDenNgayDx)
+      url_ += 'ngayKyDenNgayDx=' + encodeURIComponent('' + body.ngayKyDenNgayDx) + '&';
+    if (body.ngayKyTuNgayDx)
+      url_ += 'ngayKyTuNgayDx=' + encodeURIComponent('' + body.ngayKyTuNgayDx) + '&';
+    if (body.soQuyetDinh)
+      url_ += 'soQuyetDinh=' + encodeURIComponent('' + body.soQuyetDinh) + '&';
+    if (body.trichYeuQd)
+      url_ += 'trichYeuQd=' + encodeURIComponent('' + body.trichYeuQd) + '&';
+    if (body.ngayKyDenNgayQd)
+      url_ += 'ngayKyDenNgayQd=' + encodeURIComponent('' + body.ngayKyDenNgayQd) + '&';
+    if (body.ngayKyTuNgayQd)
+      url_ += 'ngayKyTuNgayQd=' + encodeURIComponent('' + body.ngayKyTuNgayQd) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
@@ -66,5 +70,10 @@ export class DeXuatDieuChinhService extends BaseService {
   soLuongTruocDieuChinh(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/so-luong-truoc-dieu-chinh/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }
