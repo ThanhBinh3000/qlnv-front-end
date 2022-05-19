@@ -147,296 +147,377 @@
           </div>
         </form>
       </div>
-      <div class="tab__luong-thuc mt-16">
+      <div class="tab__luong-thuc mt-16" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" class="tt-chung__container"
             (nzClick)="tabSelected = 'luongThuc'">
-            <nz-table #luongThucTable nzBordered [nzData]="deXuatDieuChinh?.dxDcltList" [nzFrontPagination]="false"
-              [nzShowPagination]="false" id="table-luong-thuc">
-              <thead>
-                <tr>
-                  <th [width]="35" rowspan="2">STT</th>
-                  <th rowspan="2">Chỉ tiêu</th>
-                  <th colspan="3">Tổng số quy thóc</th>
-                  <th colspan="6">Trong đó</th>
-                  <th [width]="90" rowspan="2">Hành động</th>
-                </tr>
-                <tr>
-                  <th>Trước điều chỉnh</th>
-                  <th>Tăng/giảm</th>
-                  <th>Sau điều chỉnh</th>
-                  <th>Trước điều chỉnh</th>
-                  <th>Tăng giảm</th>
-                  <th>Sau điều chỉnh</th>
-                  <th>Trước điều chỉnh</th>
-                  <th>Tăng/giảm</th>
-                  <th>Sau điều chỉnh</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td>
-                    <nz-select [(ngModel)]="deXuatLT.chiTieu">
-                      <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
-                      <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
-                    </nz-select>
-                  </td>
-                  <td>{{deXuatLT?.tdcTongSoQuyThoc ?? 0}}</td>
-                  <td>{{deXuatLT?.dcTongSoQuyThoc ?? 0}}</td>
-                  <td>{{deXuatLT?.sdcTongSoQuyThoc ?? 0}}</td>
-                  <td>{{deXuatLT?.tdcThoc ?? 0}}</td>
-                  <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
-                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcThoc ?? 0)"
-                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
-                    </nz-input-number>
-                  </td>
-                  <td>{{deXuatLT?.sdcThoc ?? 0}}</td>
-                  <td>{{deXuatLT?.tdcGao ?? 0}}</td>
-                  <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
-                      (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcGao ?? 0)"
-                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
-                    </nz-input-number>
-                  </td>
-                  <td>{{deXuatLT.sdcGao}}</td>
-                  <td>
-                    <a class="save" (click)="themMoiLT()"
-                      [ngClass]="{'isDisabled' : (!deXuatLT.chiTieu || deXuatLT.chiTieu == '')}">
-                      <i class="icon htvbdh_dau-cong"></i>
-                    </a>
-                    <a (click)="clearDataLT()">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr *ngFor="let data of luongThucTable.data, let i = index" class="editable-row">
-                  <ng-container *ngIf="!editLuongThucCache[data.chiTieu]?.edit; else editLuongThucTemplate">
-                    <td>{{i+1}}</td>
-                    <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
-                    <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
-                    <td>{{data?.tdcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{data?.dcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{data?.sdcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{data?.tdcThoc ?? 0}}</td>
-                    <td>{{data?.dcThoc ?? 0}}</td>
-                    <td>{{data?.sdcThoc ?? 0}}</td>
-                    <td>{{data?.tdcGao ?? 0}}</td>
-                    <td>{{data?.dcGao ?? 0}}</td>
-                    <td>{{data?.sdcGao ?? 0}}</td>
-                    <td>
-                      <a (click)="editRowLT(data.chiTieu)">
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a (click)="deleteRowLT(data)">
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                  </ng-container>
-                  <ng-template #editLuongThucTemplate>
-                    <td></td>
-                    <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '01'">Nhập trong năm</td>
-                    <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '00'">Xuất trong năm</td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.dcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcTongSoQuyThoc ?? 0}}</td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0}}</td>
-                    <td>
-                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
-                        [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcThoc"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
-                        [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0)"
-                        [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                    </td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcThoc ?? 0}}</td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0}}</td>
-                    <td>
-                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
-                        [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcGao"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
-                        [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0)"
-                        [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
-                    </td>
-                    <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcGao ?? 0}}</td>
-                    <td>
-                      <a (click)="saveEditLuongThuc(data.chiTieu)" class="save">
-                        <i class="fa fa-save"></i>
-                      </a>
-                      <a (click)="cancelEditLuongThuc(data.chiTieu)">
-                        <i class="fa fa-times do"></i>
-                      </a>
-                    </td>
-                  </ng-template>
-                </tr>
-              </tbody>
-            </nz-table>
+
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" class="ds-goi-thau__container"
             (nzClick)="tabSelected = 'muoi'">
-            <nz-table #muoiTable nzBordered [nzData]="deXuatDieuChinh?.dxDcMuoiList" [nzFrontPagination]="false"
-              [nzShowPagination]="false" id="table-muoi">
-              <thead>
-                <tr>
-                  <th [width]="35" rowspan="2">STT</th>
-                  <th rowspan="2">Chỉ tiêu</th>
-                  <th colspan="3">Muối</th>
-                  <th [width]="90" rowspan="2">Hành động</th>
-                </tr>
-                <tr>
-                  <th>Trước điều chỉnh</th>
-                  <th>Tăng/giảm</th>
-                  <th>Sau điều chỉnh</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td>
-                    <nz-select [(ngModel)]="deXuatMuoi.chiTieu">
-                      <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
-                      <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
-                    </nz-select>
-                  </td>
-                  <td>{{deXuatMuoi?.tdc ?? 0}}</td>
-                  <td>
-                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatMuoi.dc"
-                      (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
-                      [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">
-                    </nz-input-number>
-                  </td>
-                  <td>{{deXuatMuoi?.sdc ?? 0}}</td>
-                  <td>
-                    <a class="save" (click)="themMoiMuoi()"
-                      [ngClass]="{'isDisabled': (!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == '')}">
-                      <i class="icon htvbdh_dau-cong"></i>
-                    </a>
-                    <a (click)="clearDataMuoi()">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr *ngFor="let data of muoiTable.data, let i = index" class="editable-row">
-                  <ng-container *ngIf="!editMuoiCache[data.chiTieu]?.edit; else editMuoiTemplate">
-                    <td>{{i+1}}</td>
-                    <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
-                    <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
-                    <td>{{data?.tdc ?? 0}}</td>
-                    <td>{{data?.dc ?? 0}}</td>
-                    <td>{{data?.sdc ?? 0}}</td>
-                    <td>
-                      <a (click)="editRowMuoi(data.chiTieu)">
-                        <i class="fa fa-pencil"></i>
-                      </a>
-                      <a (click)="deleteRowMuoi(data)">
-                        <i class="fa fa-trash-o do"></i>
-                      </a>
-                    </td>
-                  </ng-container>
-                  <ng-template #editMuoiTemplate>
-                    <td></td>
-                    <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '01'">Nhập trong năm</td>
-                    <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '00'">Xuất trong năm</td>
-                    <td>{{editMuoiCache[data.chiTieu]?.data?.tdc ?? 0}}</td>
-                    <td>
-                      <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
-                        [(ngModel)]="editMuoiCache[data.chiTieu]?.data.dc"
-                        (input)="caculatorDieuChinhMuoi(editMuoiCache[data.chiTieu]?.data)"
-                        [nzMin]="0 - (editMuoiCache[data.chiTieu]?.data?.tdc ?? 0)" [nzMax]="globals.prop.MAX_INPUT"
-                        [nzDisabled]="!editMuoiCache[data.chiTieu]?.data.chiTieu || editMuoiCache[data.chiTieu]?.data.chiTieu == ''">
-                      </nz-input-number>
-                    </td>
-                    <td>{{editMuoiCache[data.chiTieu]?.data?.sdc ?? 0}}</td>
-                    <td>
-                      <a (click)="saveEditMuoi(data.chiTieu)" class="save">
-                        <i class="fa fa-save"></i>
-                      </a>
-                      <a (click)="cancelEditMuoi(data.chiTieu)">
-                        <i class="fa fa-times do"></i>
-                      </a>
-                    </td>
-                  </ng-template>
-                </tr>
-              </tbody>
-            </nz-table>
+
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị'" class="cc-xac-dinh__container"
             (nzClick)="tabSelected = 'vatTu'">
-            <nz-table #vatTuTable nzBordered [nzData]="deXuatDieuChinh?.dxDcVtList" [nzFrontPagination]="false"
-              [nzShowPagination]="false" id="table-vat-tu">
-              <thead>
-                <tr>
-                  <th [width]="35" rowspan="2">STT</th>
-                  <th rowspan="2">Mã hàng</th>
-                  <th rowspan="2">Ký hiệu</th>
-                  <th rowspan="2">Tên hàng</th>
-                  <th rowspan="2">Chủng loại hàng</th>
-                  <th rowspan="2">Đơn vị tính</th>
-                  <th colspan="3">Chỉ tiêu nhập năm trước điều chỉnh</th>
-                  <th rowspan="2">Tăng giảm</th>
-                  <th colspan="3">Chỉ tiêu nhập năm sau điều chỉnh</th>
-                  <th [width]="90" rowspan="2">Hành động</th>
-                </tr>
-                <tr>
-                  <th>Tổng số</th>
-                  <th>Các năm trước chuyển sang</th>
-                  <th>Kế hoạch năm</th>
-                  <th>Tổng số</th>
-                  <th>Các năm trước chuyển sang</th>
-                  <th>Kế hoạch năm</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>Xuồng</td>
-                  <td>DT1</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
+
+          </nz-tab>
+        </nz-tabset>
+        <div [ngClass]="tabSelected == 'luongThuc' ? 'show-table table-out-tab' : 'hide-table table-out-tab'"
+          id="table-luong-thuc-tong-hop">
+          <nz-table #luongThucTable nzBordered [nzData]="deXuatDieuChinh?.dxDcltList" [nzFrontPagination]="false"
+            [nzShowPagination]="false" id="table-luong-thuc">
+            <thead>
+              <tr>
+                <th [width]="35" rowspan="2">STT</th>
+                <th rowspan="2">Chỉ tiêu</th>
+                <th colspan="3">Tổng số quy thóc</th>
+                <th colspan="6">Trong đó</th>
+                <th [width]="90" rowspan="2">Hành động</th>
+              </tr>
+              <tr>
+                <th>Trước điều chỉnh</th>
+                <th>Tăng/giảm</th>
+                <th>Sau điều chỉnh</th>
+                <th>Trước điều chỉnh</th>
+                <th>Tăng giảm</th>
+                <th>Sau điều chỉnh</th>
+                <th>Trước điều chỉnh</th>
+                <th>Tăng/giảm</th>
+                <th>Sau điều chỉnh</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <nz-select [(ngModel)]="deXuatLT.chiTieu">
+                    <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
+                    <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
+                  </nz-select>
+                </td>
+                <td>{{deXuatLT?.tdcTongSoQuyThoc ?? 0}}</td>
+                <td>{{deXuatLT?.dcTongSoQuyThoc ?? 0}}</td>
+                <td>{{deXuatLT?.sdcTongSoQuyThoc ?? 0}}</td>
+                <td>{{deXuatLT?.tdcThoc ?? 0}}</td>
+                <td>
+                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcThoc"
+                    (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcThoc ?? 0)"
+                    [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                  </nz-input-number>
+                </td>
+                <td>{{deXuatLT?.sdcThoc ?? 0}}</td>
+                <td>{{deXuatLT?.tdcGao ?? 0}}</td>
+                <td>
+                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatLT.dcGao"
+                    (input)="caculatorDieuChinhLT(deXuatLT)" [nzMin]="0 - (deXuatLT?.tdcGao ?? 0)"
+                    [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatLT.chiTieu || deXuatLT.chiTieu == ''">
+                  </nz-input-number>
+                </td>
+                <td>{{deXuatLT.sdcGao}}</td>
+                <td>
+                  <a class="save" (click)="themMoiLT()"
+                    [ngClass]="{'isDisabled' : (!deXuatLT.chiTieu || deXuatLT.chiTieu == '')}">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                  <a (click)="clearDataLT()">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr *ngFor="let data of luongThucTable.data, let i = index" class="editable-row">
+                <ng-container *ngIf="!editLuongThucCache[data.chiTieu]?.edit; else editLuongThucTemplate">
+                  <td>{{i+1}}</td>
+                  <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
+                  <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
+                  <td>{{data?.tdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{data?.dcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{data?.sdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{data?.tdcThoc ?? 0}}</td>
+                  <td>{{data?.dcThoc ?? 0}}</td>
+                  <td>{{data?.sdcThoc ?? 0}}</td>
+                  <td>{{data?.tdcGao ?? 0}}</td>
+                  <td>{{data?.dcGao ?? 0}}</td>
+                  <td>{{data?.sdcGao ?? 0}}</td>
                   <td>
-                    <a class="save">
-                      <i class="icon htvbdh_dau-cong"></i>
+                    <a (click)="editRowLT(data.chiTieu)">
+                      <i class="fa fa-pencil"></i>
                     </a>
-                    <a>
+                    <a (click)="deleteRowLT(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
-                </tr>
-                <tr *ngFor="let data of vatTuTable.data, let i = index" class="editable-row">
-                  <td>{{i+1}}</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>Xuồng</td>
-                  <td>DT1</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
+                </ng-container>
+                <ng-template #editLuongThucTemplate>
+                  <td></td>
+                  <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '01'">Nhập trong năm</td>
+                  <td *ngIf="editLuongThucCache[data.chiTieu]?.data?.chiTieu == '00'">Xuất trong năm</td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.dcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcTongSoQuyThoc ?? 0}}</td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0}}</td>
                   <td>
-                    <a (click)="editRowVatTu(i)">
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                      [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcThoc"
+                      (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
+                      [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcThoc ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  </td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcThoc ?? 0}}</td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                      [(ngModel)]="editLuongThucCache[data.chiTieu].data.dcGao"
+                      (input)="caculatorDieuChinhLT(editLuongThucCache[data.chiTieu]?.data)"
+                      [nzMin]="0 - (editLuongThucCache[data.chiTieu]?.data?.tdcGao ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  </td>
+                  <td>{{editLuongThucCache[data.chiTieu]?.data?.sdcGao ?? 0}}</td>
+                  <td>
+                    <a (click)="saveEditLuongThuc(data.chiTieu)" class="save">
+                      <i class="fa fa-save"></i>
+                    </a>
+                    <a (click)="cancelEditLuongThuc(data.chiTieu)">
+                      <i class="fa fa-times do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <div [ngClass]="tabSelected == 'muoi' ? 'show-table table-out-tab' : 'hide-table table-out-tab'"
+          id="table-muoi-tong-hop">
+          <nz-table #muoiTable nzBordered [nzData]="deXuatDieuChinh?.dxDcMuoiList" [nzFrontPagination]="false"
+            [nzShowPagination]="false" id="table-muoi">
+            <thead>
+              <tr>
+                <th [width]="35" rowspan="2">STT</th>
+                <th rowspan="2">Chỉ tiêu</th>
+                <th colspan="3">Muối</th>
+                <th [width]="90" rowspan="2">Hành động</th>
+              </tr>
+              <tr>
+                <th>Trước điều chỉnh</th>
+                <th>Tăng/giảm</th>
+                <th>Sau điều chỉnh</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <nz-select [(ngModel)]="deXuatMuoi.chiTieu">
+                    <nz-option nzValue="00" nzLabel="Xuất trong năm"></nz-option>
+                    <nz-option nzValue="01" nzLabel="Nhập trong năm"></nz-option>
+                  </nz-select>
+                </td>
+                <td>{{deXuatMuoi?.tdc ?? 0}}</td>
+                <td>
+                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatMuoi.dc"
+                    (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
+                    [nzMax]="globals.prop.MAX_INPUT" [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">
+                  </nz-input-number>
+                </td>
+                <td>{{deXuatMuoi?.sdc ?? 0}}</td>
+                <td>
+                  <a class="save" (click)="themMoiMuoi()"
+                    [ngClass]="{'isDisabled': (!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == '')}">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                  <a (click)="clearDataMuoi()">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr *ngFor="let data of muoiTable.data, let i = index" class="editable-row">
+                <ng-container *ngIf="!editMuoiCache[data.chiTieu]?.edit; else editMuoiTemplate">
+                  <td>{{i+1}}</td>
+                  <td *ngIf="data.chiTieu == '01'">Nhập trong năm</td>
+                  <td *ngIf="data.chiTieu == '00'">Xuất trong năm</td>
+                  <td>{{data?.tdc ?? 0}}</td>
+                  <td>{{data?.dc ?? 0}}</td>
+                  <td>{{data?.sdc ?? 0}}</td>
+                  <td>
+                    <a (click)="editRowMuoi(data.chiTieu)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRowMuoi(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editMuoiTemplate>
+                  <td></td>
+                  <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '01'">Nhập trong năm</td>
+                  <td *ngIf="editMuoiCache[data.chiTieu]?.data.chiTieu == '00'">Xuất trong năm</td>
+                  <td>{{editMuoiCache[data.chiTieu]?.data?.tdc ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                      [(ngModel)]="editMuoiCache[data.chiTieu]?.data.dc"
+                      (input)="caculatorDieuChinhMuoi(editMuoiCache[data.chiTieu]?.data)"
+                      [nzMin]="0 - (editMuoiCache[data.chiTieu]?.data?.tdc ?? 0)" [nzMax]="globals.prop.MAX_INPUT"
+                      [nzDisabled]="!editMuoiCache[data.chiTieu]?.data.chiTieu || editMuoiCache[data.chiTieu]?.data.chiTieu == ''">
+                    </nz-input-number>
+                  </td>
+                  <td>{{editMuoiCache[data.chiTieu]?.data?.sdc ?? 0}}</td>
+                  <td>
+                    <a (click)="saveEditMuoi(data.chiTieu)" class="save">
+                      <i class="fa fa-save"></i>
+                    </a>
+                    <a (click)="cancelEditMuoi(data.chiTieu)">
+                      <i class="fa fa-times do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <div [ngClass]="tabSelected == 'vatTu' ? 'show-table table-out-tab' : 'hide-table table-out-tab'"
+          id="table-vat-tu-tong-hop">
+          <nz-table #vatTuTable nzBordered [nzData]="deXuatDieuChinh?.dxDcVtList" [nzFrontPagination]="false"
+            [nzShowPagination]="false" id="table-vat-tu">
+            <thead>
+              <tr>
+                <th [width]="35" rowspan="2">STT</th>
+                <th rowspan="2">Mã hàng</th>
+                <th rowspan="2">Ký hiệu</th>
+                <th rowspan="2">Tên hàng</th>
+                <th rowspan="2">Chủng loại hàng</th>
+                <th rowspan="2">Đơn vị tính</th>
+                <th colspan="3">Chỉ tiêu nhập năm trước điều chỉnh</th>
+                <th rowspan="2">Tăng giảm</th>
+                <th colspan="3">Chỉ tiêu nhập năm sau điều chỉnh</th>
+                <th [width]="90" rowspan="2">Hành động</th>
+              </tr>
+              <tr>
+                <th>Tổng số</th>
+                <th>Các năm trước chuyển sang</th>
+                <th>Kế hoạch năm</th>
+                <th>Tổng số</th>
+                <th>Các năm trước chuyển sang</th>
+                <th>Kế hoạch năm</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td>{{deXuatVatTu.maVatTuCha}}</td>
+                <td>{{deXuatVatTu.kyHieu}}</td>
+                <td>
+                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                    class="search__input autocomplete__input donvi__input w-300">
+                    <input placeholder="Chọn tên" nz-input (input)="onInputTenHang($event)" [nzAutocomplete]="autoVatTu"
+                      class="" [(ngModel)]="deXuatVatTu.tenVatTuCha"
+                      [title]="deXuatVatTu.tenVatTuCha ? deXuatVatTu.tenVatTuCha : ''" />
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <i nz-icon nzType="search"></i>
+                  </ng-template>
+                  <nz-autocomplete #autoVatTu>
+                    <nz-auto-option *ngFor="let vatTuCha of dataVatTuChaShow" [nzValue]="vatTuCha.ten"
+                      (click)="selectTenHang(vatTuCha, true, deXuatVatTu)">
+                      {{ vatTuCha.ten }}
+                    </nz-auto-option>
+                  </nz-autocomplete>
+                </td>
+                <td>
+                  <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                    class="search__input autocomplete__input donvi__input w-300">
+                    <input placeholder="Chọn chủng loại hàng" nz-input (input)="onInputChungLoaiHang($event)"
+                      [nzAutocomplete]="autoChungLoaiHang" class="" [(ngModel)]="deXuatVatTu.tenVatTu"
+                      [title]="deXuatVatTu.tenVatTu ? deXuatVatTu.tenVatTu : ''" />
+                  </nz-input-group>
+                  <ng-template #suffixIcon>
+                    <i nz-icon nzType="search"></i>
+                  </ng-template>
+                  <nz-autocomplete #autoChungLoaiHang>
+                    <nz-auto-option *ngFor="let vatTuCon of dataVatTuConShow" [nzValue]="vatTuCon.ten"
+                      (click)="selectChungLoaiHang(vatTuCon, true , deXuatVatTu)">
+                      {{ vatTuCon.ten }}
+                    </nz-auto-option>
+                  </nz-autocomplete>
+                </td>
+                <td>{{deXuatVatTu.donViTinh}}</td>
+                <td>{{deXuatVatTu?.tdcTongSo ?? 0}}</td>
+                <td>{{deXuatVatTu?.tdcCacNamTruoc ?? 0}}</td>
+                <td>{{deXuatVatTu?.tdcKeHoachNam ?? 0}}</td>
+                <td>
+                  <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'" [(ngModel)]="deXuatVatTu.dc"
+                    (input)="caculatorDieuChinhVatTu(deXuatVatTu)" [nzMin]="0 - (deXuatVatTu.tdcKeHoachNam ?? 0)"
+                    [nzMax]="globals.prop.MAX_INPUT">
+                  </nz-input-number>
+                </td>
+                <td>{{deXuatVatTu?.sdcTongSo ?? 0}}</td>
+                <td>{{deXuatVatTu?.sdcCacNamTruoc ?? 0}}</td>
+                <td>{{deXuatVatTu?.sdcKeHoachNam ?? 0}}</td>
+                <td>
+                  <a class="save" (click)="themMoiVatTu()">
+                    <i class="icon htvbdh_dau-cong"></i>
+                  </a>
+                  <a (click)="clearDataVatTu()">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr *ngFor="let data of vatTuTable.data, let i = index" class="editable-row">
+                <ng-container *ngIf="!editVatTuCache[data.maVatTuCha + data.maVatTu]?.edit; else editVatTuTemplate">
+                  <td>{{i+1}}</td>
+                  <td>{{data.maVatTuCha}}</td>
+                  <td>{{data.kyHieu}}</td>
+                  <td>{{data.tenVatTuCha}}</td>
+                  <td>{{data.tenVatTu}}</td>
+                  <td>{{data.donViTinh}}</td>
+                  <td>{{data?.tdcTongSo ?? 0}}</td>
+                  <td>{{data?.tdcCacNamTruoc ?? 0}}</td>
+                  <td>{{data?.tdcKeHoachNam ?? 0}}</td>
+                  <td>{{data?.dc ?? 0}}</td>
+                  <td>{{data?.sdcTongSo ?? 0}}</td>
+                  <td>{{data?.sdcCacNamTruoc ?? 0}}</td>
+                  <td>{{data?.sdcKeHoachNam ?? 0}}</td>
+                  <td>
+                    <a (click)="editRowVatTu(data.maVatTuCha, data.maVatTu)">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="deleteRowVatTu(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
-                </tr>
-              </tbody>
-            </nz-table>
-          </nz-tab>
-        </nz-tabset>
+                </ng-container>
+                <ng-template #editVatTuTemplate>
+                  <td></td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.maVatTuCha}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.kyHieu}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tenVatTuCha}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tenVatTu}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.donViTinh}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcTongSo ?? 0}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcCacNamTruoc ?? 0}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcKeHoachNam ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
+                      [(ngModel)]="editVatTuCache[data.maVatTuCha + data.maVatTu].data.dc"
+                      (input)="caculatorDieuChinhVatTu(editVatTuCache[data.maVatTuCha + data.maVatTu]?.data)"
+                      [nzMin]="0 - (editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.tdcKeHoachNam ?? 0)"
+                      [nzMax]="globals.prop.MAX_INPUT">
+                    </nz-input-number>
+                  </td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcTongSo ?? 0}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcCacNamTruoc ?? 0}}</td>
+                  <td>{{editVatTuCache[data.maVatTuCha + data.maVatTu]?.data?.sdcKeHoachNam ?? 0}}</td>
+                  <td>
+                    <a (click)="saveEditVatTu(data.maVatTuCha, data.maVatTu)" class="save">
+                      <i class="fa fa-save"></i>
+                    </a>
+                    <a (click)="cancelEditVatTu(data.maVatTuCha, data.maVatTu)">
+                      <i class="fa fa-times do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
         <div class="action">
           <!-- <button type="button" class="btn btn-main btn-export" (click)="import()">
             <i class="icon htvbdh_tcdt_import"></i>

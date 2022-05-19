@@ -62,4 +62,9 @@ export class DeXuatDieuChinhService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/status`;
     return this.httpClient.put(url, body).toPromise();
   }
+
+  soLuongTruocDieuChinh(id: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/so-luong-truoc-dieu-chinh/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
 }

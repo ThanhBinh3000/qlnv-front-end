@@ -146,7 +146,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private userService: UserService,
     private uploadFileService: UploadFileService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -316,14 +316,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   caculatorDieuChinhVatTu(item: any) {
-    item.vatTuThietBi[0].sdcNhapTrongNam =
-      (!isNaN(item.vatTuThietBi[0].tdcNhapTrongNam)
-        ? item.vatTuThietBi[0].tdcNhapTrongNam
-        : 0) +
-      (!isNaN(item.vatTuThietBi[0].dcNhapTrongNam)
-        ? item.vatTuThietBi[0].dcNhapTrongNam
-        : 0);
+    item.vatTuThietBi[0].sdcNhapTrongNam = (!isNaN(item.vatTuThietBi[0].tdcNhapTrongNam) ? item.vatTuThietBi[0].tdcNhapTrongNam : 0) + (!isNaN(item.vatTuThietBi[0].dcNhapTrongNam) ? item.vatTuThietBi[0].dcNhapTrongNam : 0);
     item.vatTuThietBi[0].nhapTrongNam = item.vatTuThietBi[0].sdcNhapTrongNam;
+    item.vatTuThietBi[0].sdcTongNhap = (!isNaN(item.vatTuThietBi[0].sdcNhapTrongNam) ? item.vatTuThietBi[0].sdcNhapTrongNam : 0) + (!isNaN(item.vatTuThietBi[0].tdcTongNhap) ? item.vatTuThietBi[0].tdcTongNhap : 0);
   }
 
   updateEditVatTuCache(): void {
@@ -331,10 +326,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataVatTu.forEach((item) => {
         this.editVatTuCache[
           item.donViId +
-            '-' +
-            item.vatTuThietBi[0].vatTuChaId +
-            '-' +
-            item.vatTuThietBi[0].vatTuId
+          '-' +
+          item.vatTuThietBi[0].vatTuChaId +
+          '-' +
+          item.vatTuThietBi[0].vatTuId
         ] = {
           edit: false,
           data: { ...item },
@@ -599,10 +594,24 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.sdcXtnGao = cloneDeep(tkdnGao);
   }
 
-  selectDataMultipleTag(data: any) {}
+  selectDataMultipleTag(data: any) { }
 
   deleteDataMultipleTag(data: any) {
-    this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
+    if (this.id == 0) {
+      this.dataGiaoChiTieu = this.dataGiaoChiTieu.filter((x) => x.id != data.id);
+      this.selectedCanCu = {};
+      this.dieuChinhThongTinChiTieuKHNam.qdGocId = 0;
+      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = [];
+      this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru = [];
+      this.dieuChinhThongTinChiTieuKHNam.khMuoi = [];
+      this.dieuChinhThongTinChiTieuKHNam.khVatTu = [];
+
+      this.dieuChinhThongTinChiTieuKHNam.namKeHoach = 0;
+      this.formData.controls['namKeHoach'].setValue(0);
+
+      this.updateDataVatTu();
+      this.loadData();
+    }
   }
 
   async selectDonViKHLT(donVi, isAdd, item) {
@@ -1408,7 +1417,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               if (
                 this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi &&
                 this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi.length >
-                  0
+                0
               ) {
               } else {
                 let tkdnMuoi: Array<ItemDetail> = [
@@ -1945,12 +1954,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               ),
             )
               ? parseFloat(
-                  this.helperService.replaceAll(
-                    table.rows[i].cells[indexCell].innerHTML,
-                    stringReplace,
-                    '',
-                  ),
-                )
+                this.helperService.replaceAll(
+                  table.rows[i].cells[indexCell].innerHTML,
+                  stringReplace,
+                  '',
+                ),
+              )
               : 0);
         }
       }
