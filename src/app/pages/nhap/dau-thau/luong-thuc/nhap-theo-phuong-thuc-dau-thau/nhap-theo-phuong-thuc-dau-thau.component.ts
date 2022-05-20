@@ -15,6 +15,12 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import {
+  NHAP_MAIN_ROUTE,
+  NHAP_THEO_KE_HOACH,
+  NHAP_THEO_PHUONG_THUC_DAU_THAU,
+  THOC,
+} from '../../../nhap.constant';
 
 @Component({
   selector: 'nhap-theo-phuong-thuc-dau-thau',
@@ -47,7 +53,14 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   soHd: string = null;
 
   selectedCanCu: any = null;
-
+  searchFilter = {
+    soQD: '',
+    donViId: '',
+    tenDonVi: '',
+    trichYeu: '',
+    namKeHoach: '',
+  };
+  listNam: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -60,6 +73,13 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      let dayNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: dayNow - i,
+          text: dayNow - i,
+        });
+      }
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -112,7 +132,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      '/nhap/dau-thau/quyet-dinh-giao-nhiem-vu-nhap-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang',
+      `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-hang`,
       id,
     ]);
   }

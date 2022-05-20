@@ -1,6 +1,13 @@
 import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 
 export const NHAP_MAIN_ROUTE = 'nhap';
+export const NHAP_THEO_KE_HOACH = 'nhap-theo-ke-hoach';
+export const NHAP_THEO_PHUONG_THUC_DAU_THAU = 'nhap-theo-phuong-thuc-dau-thau';
+export const THOC = 'thoc';
+export const GAO = 'gao';
+export const MUOI = 'muoi';
+export const VAT_TU = 'vat-tu';
+
 export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
@@ -22,7 +29,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baothoc',
             title: 'Thóc',
-            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc`,
+            url: `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -30,7 +37,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baogao',
             title: 'Gạo',
-            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/gao`,
+            url: `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -38,7 +45,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_muoi',
             title: 'Muối',
-            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/muoi`,
+            url: `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -46,7 +53,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_ngan-kho',
             title: 'Vật tư',
-            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/vat-tu`,
+            url: `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${VAT_TU}`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',

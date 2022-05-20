@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NHAP_THEO_PHUONG_THUC_DAU_THAU } from '../nhap.constant';
 import { DauThauComponent } from './dau-thau.component';
 // import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
 // import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
@@ -11,14 +12,14 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'nhap-theo-phuong-thuc-dau-thau',
+        redirectTo: `${NHAP_THEO_PHUONG_THUC_DAU_THAU}`,
         pathMatch: 'full',
       },
       {
-        path: 'nhap-theo-phuong-thuc-dau-thau',
+        path: `${NHAP_THEO_PHUONG_THUC_DAU_THAU}`,
         loadChildren: () =>
           import(
-            '../dau-thau/nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module'
+            './luong-thuc/nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module'
           ).then((m) => m.NhapTheoPhuongThucDauThauModule),
       },
       // {

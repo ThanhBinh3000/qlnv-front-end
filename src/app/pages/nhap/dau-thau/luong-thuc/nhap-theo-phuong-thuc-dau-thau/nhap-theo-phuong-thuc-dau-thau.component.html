@@ -4,49 +4,27 @@
       <div class="main-content">
         <nz-card nzTitle="THÔNG TIN CHUNG" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="8">
-              <label class="search__label">Số QĐ nhập / xuất</label>
-              <input class="search__input" placeholder="Số QĐ nhập / xuất" nz-input [(ngModel)]="soQD" />
+            <div nz-col nzSpan="12">
+              <label class="search__label">Số quyết định</label>
+              <input class="search__input" placeholder="Số quyết định" nz-input [(ngModel)]="soQD" />
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Ngày QĐ</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày quyết định</label>
               <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startValue"
                 nzPlaceHolder="Ngày QĐ">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Căn cứ trên hợp đồng</label>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
-                <input nz-input [readonly]="true" [(ngModel)]="soHd" />
-              </nz-input-group>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Đơn vị</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Mã hàng DTQG</label>
-              <nz-select nzPlaceHolder="Mã hàng DTQG" [(ngModel)]="loaiVTHH">
-                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
-                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Năm nhập</label>
+              <nz-select [(ngModel)]="searchFilter.namKeHoach">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Loại QĐ</label>
-              <nz-select nzPlaceHolder="Loại QĐ" [(ngModel)]="loaiQd">
-                <nz-option [nzValue]="nhapIdDefault" nzLabel="Nhập"></nz-option>
-                <nz-option [nzValue]="xuatIdDefault" nzLabel="Xuất"></nz-option>
-              </nz-select>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Nội dung công văn</label>
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input [(ngModel)]="soHd" placeholder="Nội dung công văn" />
+              </nz-input-group>
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -60,8 +38,8 @@
             </button>
           </div>
         </nz-card>
-        <nz-card nzTitle="THÔNG TIN QUYẾT ĐỊNH GIAO NHIỆM VỤ NHẬP /  XUẤT" [nzExtra]="tableCard1"
-          class="mt16 flex-card p-lr16">
+        <nz-card nzTitle="Danh sách quyết định giao nhiệm vụ nhập hàng" [nzExtra]="tableCard1"
+          class="mt-16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
@@ -71,12 +49,9 @@
                   <label nz-checkbox></label>
                 </th>
                 <th width="130px">Số QĐ</th>
-                <th width="175px">Ngày ký</th>
-                <th width="175px">Về việc</th>
-                <th width="">Căn cứ</th>
-                <th width="175px">Đơn vị ra quyết định</th>
-                <th width="175px">Loại QĐ</th>
-                <th width="175px">Tên hàng DTQG</th>
+                <th width="175px">Ngày QĐ</th>
+                <th width="175px">Năm nhập</th>
+                <th width="">Nội dung công văn</th>
                 <th width="175px">Trạng thái </th>
                 <th width="130px"></th>
               </tr>
@@ -89,11 +64,8 @@
                 </th>
                 <td>{{ data.soQd }}</td>
                 <td>{{ data.ngayKy }}</td>
-                <td>{{ data.veViec }}</td>
-                <td>{{ data.soHd }}</td>
-                <td>{{ data.tenDvi }}</td>
-                <td>{{ data.tenLoaiQd }}</td>
-                <td>{{ data.tenHangDTQG }}</td>
+                <td>{{ data.namNhap }}</td>
+                <td>{{ data.noiDungCongVan }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
@@ -134,8 +106,8 @@
             <span>Thêm</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="export()">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>Kết xuất</span>
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
           </button>
         </ng-template>
       </div>

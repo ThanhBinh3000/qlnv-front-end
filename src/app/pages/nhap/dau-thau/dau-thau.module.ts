@@ -22,9 +22,9 @@ import { QuanLyPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho
 import { ThemMoiPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
 import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
 import { ThongTinGiaoNhiemVuNhapXuatHangComponent } from './luong-thuc/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang.component';
-import { NhapTheoPhuongThucDauThauComponent } from './nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.component';
-import { NhapTheoPhuongThucDauThauModule } from './nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module';
-import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
+import { NhapTheoPhuongThucDauThauComponent } from './luong-thuc/nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.component';
+import { NhapTheoPhuongThucDauThauModule } from './luong-thuc/nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module';
+import { ThemmoiQdinhNhapXuatHangComponent } from './luong-thuc/nhap-theo-phuong-thuc-dau-thau/themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-quyet-dinh.component';
 import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
