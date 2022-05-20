@@ -20,6 +20,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   text: string = '';
+  isDexuat: boolean = false;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -69,6 +70,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       trichYeu: null,
       ngayKyTuNgay: null,
       trangThai: '02',
+      capDvi: this.isDexuat ? 1 : null,
     };
     let res = await this.chiTieuKeHoachNamService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {

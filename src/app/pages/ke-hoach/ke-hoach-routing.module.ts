@@ -13,61 +13,55 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        redirectTo: 'chi-tieu-ke-hoach-nam',
         pathMatch: 'full'
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        path: 'chi-tieu-ke-hoach-nam',
         loadChildren: () =>
           import(
             '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
           ).then((m) => m.ChiTieuKeHoachNamModule),
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-cuc',
-        loadChildren: () =>
-          import(
-            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
-      },
-      {
-        path: 'chi-tieu-ke-hoach-nam-cap-chi-cuc',
-        loadChildren: () =>
-          import(
-            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
-      },
-      {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        path: 'chi-tieu-ke-hoach-nam/thong-tin-chi-tieu-ke-hoach-nam/:id',
         loadChildren: () =>
           import(
             '../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
           ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
       },
       {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam',
         component: DieuChinhChiTieuKeHoachNamComponent
       },
       {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam/:id',
         component: DieuChinhThongTinChiTieuKeHoachNamComponent
       },
+      // {
+      //   path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
+      //   component: DieuChinhChiTieuKeHoachNamComponent
+      // },
+      // {
+      //   path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-cuc/:id',
+      //   component: DieuChinhThongTinChiTieuKeHoachNamComponent
+      // },
       {
-        path: 'de-xuat-dieu-chinh-cap-cuc',
+        path: 'de-xuat-dieu-chinh',
         component: DeXuatDieuChinhComponent
       },
       {
-        path: 'de-xuat-dieu-chinh-cap-cuc/thong-tin-de-xuat-dieu-chinh-cap-cuc/:id',
+        path: 'de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh/:id',
         component: ThongTinDeXuatDieuChinhComponent
       },
+      // {
+      //   path: 'de-xuat-dieu-chinh-cap-cuc',
+      //   component: DeXuatDieuChinhComponent
+      // },
+      // {
+      //   path: 'de-xuat-dieu-chinh-cap-cuc/thong-tin-de-xuat-dieu-chinh-cap-cuc/:id',
+      //   component: ThongTinDeXuatDieuChinhComponent
+      // },
     ],
   },
 ];

@@ -3,7 +3,7 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mg-l-40" (click)="redirectChiTieuKeHoachNam()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
@@ -58,10 +58,10 @@
       <div class="thong-tin-chi-tieu">
         <div class="title-chi-tieu">
           <span [ngClass]="thongTinTrangThai(dieuChinhThongTinChiTieuKHNam.trangThai)">{{trangThai}}</span>
-          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm Tổng Cục giao</span>
+          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm {{lastBreadcrumb}} giao</span>
         </div>
         <form nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="[16, 12]">
+          <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
             <div nz-col [nzSpan]="2">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ </nz-form-label>
             </div>
@@ -152,7 +152,7 @@
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
-                  <th rowspan="4" width="300px">CỤC DTNN KHU VỰC</th>
+                  <th rowspan="4" width="300px">{{titleTable}}</th>
                   <th colspan="8">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                   <th colspan="8">Nhập trong năm (2)</th>
                   <th colspan="21">Xuất trong năm (3)</th>
@@ -266,7 +266,7 @@
                       class="search__input autocomplete__input donvi__input">
                       <input placeholder="Đơn vị" nz-input (input)="onInput($event,'luong-thuc')"
                         [nzAutocomplete]="auto" class="w-300" [(ngModel)]="keHoachLuongThucCreate.tenDonvi"
-                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
@@ -812,7 +812,7 @@
               <thead>
                 <tr>
                   <th rowspan="4">STT</th>
-                  <th rowspan="4">CỤC DTNN KHU VỰC</th>
+                  <th rowspan="4">{{titleTable}}</th>
                   <th colspan="4">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
                   <th colspan="3">Nhập trong năm (2)</th>
                   <th colspan="11">Xuất trong năm (3)</th>
@@ -880,7 +880,7 @@
                       class="search__input autocomplete__input donvi__input">
                       <input placeholder="Đơn vị" nz-input (input)="onInput($event,'muoi')" [nzAutocomplete]="autoMuoi"
                         class="w-300" [(ngModel)]="keHoachMuoiCreate.tenDonvi"
-                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
@@ -1169,7 +1169,7 @@
               <thead>
                 <tr>
                   <th rowspan="3">STT</th>
-                  <th rowspan="3">CỤC DTNN KHU VỰC</th>
+                  <th rowspan="3">{{titleTable}}</th>
                   <th rowspan="3">MÃ HÀNG</th>
                   <th rowspan="3">KÝ HIỆU</th>
                   <th rowspan="3">TÊN HÀNG</th>
@@ -1212,7 +1212,7 @@
                         <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input
                           (input)="onInput($event,'vat-tu')" [nzAutocomplete]="autoDonViVatTu" class=""
                           [(ngModel)]="keHoachVatTuCreate.tenDonVi"
-                          [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                          [readonly]="userInfo.CAP_DVI === globals.prop.CUC && lastBreadcrumb === 'Tổng cục'" />
                       </nz-input-group>
                       <ng-template #suffixIcon>
                         <i nz-icon nzType="search"></i>
