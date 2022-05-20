@@ -20,15 +20,15 @@ import { QuanLyPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-
 import { ThemMoiPhieuNhapDayKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
 import { QuanLyPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
 import { ThemMoiPhieuNhapKhoComponent } from './luong-thuc/quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
-import { QuyetDinhGiaoNhiemVuNhapHangComponent } from './luong-thuc/quyet-dinh-giao-nhiem-vu-nhap-hang/quyet-dinh-giao-nhiem-vu-nhap-hang.component';
 import { ThongTinHopDongMuaComponent } from './luong-thuc/thong-tin-hop-dong-mua/thong-tin-hop-dong-mua.component';
 import { ThongTinGiaoNhiemVuNhapXuatHangComponent } from './luong-thuc/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang.component';
+import { NhapTheoPhuongThucDauThauComponent } from './nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.component';
+import { NhapTheoPhuongThucDauThauModule } from './nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module';
 import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 import { DuThaoQuyetDinhComponent } from './vat-tu/du-thao-quyet-dinh/du-thao-quyet-dinh.component';
 import { KeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { NhapQuyetDinhComponent } from './vat-tu/nhap-quyet-dinh/nhap-quyet-dinh.component';
 import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu/thong-tin-ke-hoach-lua-chon-nha-thau-vat-tu.component';
-
 
 @NgModule({
   declarations: [
@@ -39,7 +39,6 @@ import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-
     NhapQuyetDinhComponent,
     HopDongMuaComponent,
     ThongTinHopDongMuaComponent,
-    QuyetDinhGiaoNhiemVuNhapHangComponent,
     ThongTinGiaoNhiemVuNhapXuatHangComponent,
     ChiTietDonViThucHienQuyetDinhComponent,
     QuanLyPhieuNhapKhoComponent,
@@ -57,7 +56,13 @@ import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-
     QuanLyPhieuNhapDayKhoComponent,
     ThemMoiPhieuNhapDayKhoComponent,
     ThemmoiQdinhNhapXuatHangComponent,
+    NhapTheoPhuongThucDauThauComponent,
   ],
-  imports: [CommonModule, DauThauRoutingModule, ComponentsModule, DirectivesModule],
+  imports: [
+    CommonModule,
+    DauThauRoutingModule,
+    ComponentsModule,
+    DirectivesModule,
+  ],
 })
-export class DauThauModule { }
+export class DauThauModule {}

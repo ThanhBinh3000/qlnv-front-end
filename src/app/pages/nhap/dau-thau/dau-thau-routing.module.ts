@@ -4,7 +4,6 @@ import { DauThauComponent } from './dau-thau.component';
 // import { DanhSachDauThauComponent } from './luong-thuc/danh-sach-dau-thau/danh-sach-dau-thau.component';
 // import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -12,8 +11,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'danh-sach-dau-thau/thoc',
+        redirectTo: 'nhap-theo-phuong-thuc-dau-thau',
         pathMatch: 'full',
+      },
+      {
+        path: 'nhap-theo-phuong-thuc-dau-thau',
+        loadChildren: () =>
+          import(
+            '../dau-thau/nhap-theo-phuong-thuc-dau-thau/nhap-theo-phuong-thuc-dau-thau.module'
+          ).then((m) => m.NhapTheoPhuongThucDauThauModule),
       },
       // {
       //   path: 'vat-tu',
@@ -180,4 +186,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DauThauRoutingModule { }
+export class DauThauRoutingModule {}

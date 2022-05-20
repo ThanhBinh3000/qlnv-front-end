@@ -15,13 +15,13 @@ export const MAIN_ROUTES = {
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
-  quantrihethong: 'quan-tri-he-thong'
+  quantrihethong: 'quan-tri-he-thong',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Kế hoạch',
-    route: `${MAIN_ROUTES.kehoach}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
+    route: `${MAIN_ROUTES.kehoach}`,
   },
   {
     title: 'Mua',
@@ -29,7 +29,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Nhập',
-    route: `${MAIN_ROUTES.nhap}/dau-thau/danh-sach-dau-thau/thoc`,
+    route: `${MAIN_ROUTES.nhap}`,
   },
   {
     title: 'Lưu kho',
@@ -78,5 +78,5 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản trị danh mục',
     route: MAIN_ROUTES.danhMuc,
-  }
+  },
 ];

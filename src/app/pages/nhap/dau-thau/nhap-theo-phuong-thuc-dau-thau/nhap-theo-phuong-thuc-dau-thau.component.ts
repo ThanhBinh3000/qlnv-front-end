@@ -1,24 +1,27 @@
-import { saveAs } from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {
+  LOAI_HANG_DTQG,
+  LOAI_QUYET_DINH,
+  PAGE_SIZE_DEFAULT,
+} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
-  selector: 'quyet-dinh-giao-nhiem-vu-nhap-hang',
-  templateUrl: './quyet-dinh-giao-nhiem-vu-nhap-hang.component.html',
-  styleUrls: ['./quyet-dinh-giao-nhiem-vu-nhap-hang.component.scss'],
+  selector: 'nhap-theo-phuong-thuc-dau-thau',
+  templateUrl: './nhap-theo-phuong-thuc-dau-thau.component.html',
+  styleUrls: ['./nhap-theo-phuong-thuc-dau-thau.component.scss'],
 })
-export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
+export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -52,7 +55,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -134,22 +137,22 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
       }
     }
     let body = {
-      "loaiQd": this.loaiQd,
-      "maDvi": maDonVi,
-      "maVthh": this.loaiVTHH,
-      "ngayQd": this.startValue
+      loaiQd: this.loaiQd,
+      maDvi: maDonVi,
+      maVthh: this.loaiVTHH,
+      ngayQd: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-      "orderBy": null,
-      "orderDirection": null,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page
+      orderBy: null,
+      orderDirection: null,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page,
       },
-      "soHd": this.soHd,
-      "soQd": this.soQD,
-      "str": null,
-      "trangThai": null
+      soHd: this.soHd,
+      soQd: this.soQD,
+      str: null,
+      trangThai: null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -211,20 +214,18 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhGiaoNhapHangService
-            .xoa({ id: item.id })
-            .then((res) => {
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(
-                  MESSAGE.SUCCESS,
-                  MESSAGE.DELETE_SUCCESS,
-                );
-                this.search();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-              this.spinner.hide();
-            });
+          this.quyetDinhGiaoNhapHangService.xoa({ id: item.id }).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -248,19 +249,19 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
           }
         }
         let body = {
-          "loaiQd": this.loaiQd,
-          "maDvi": maDonVi,
-          "maVthh": this.loaiVTHH,
-          "ngayQd": this.startValue
+          loaiQd: this.loaiQd,
+          maDvi: maDonVi,
+          maVthh: this.loaiVTHH,
+          ngayQd: this.startValue
             ? dayjs(this.startValue).format('YYYY-MM-DD')
             : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soHd": this.soHd,
-          "soQd": this.soQD,
-          "str": null,
-          "trangThai": null
+          orderBy: null,
+          orderDirection: null,
+          paggingReq: null,
+          soHd: this.soHd,
+          soQd: this.soQD,
+          str: null,
+          trangThai: null,
         };
         this.quyetDinhGiaoNhapHangService
           .exportList(body)
@@ -299,8 +300,7 @@ export class QuyetDinhGiaoNhiemVuNhapHangComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.search();
-          }
-          else {
+          } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
           this.spinner.hide();

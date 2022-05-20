@@ -1,11 +1,11 @@
-import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 
 export const NHAP_MAIN_ROUTE = 'nhap';
 export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Nhập theo kế hoạch',
-    url: `/${NHAP_MAIN_ROUTE}/dau-thau`,
+    url: `/nhap-theo-ke-hoach`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: true,
@@ -22,7 +22,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baothoc',
             title: 'Thóc',
-            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/thoc`,
+            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -30,7 +30,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_baogao',
             title: 'Gạo',
-            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/gao`,
+            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/gao`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -38,7 +38,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_muoi',
             title: 'Muối',
-            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/muoi`,
+            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/muoi`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -46,7 +46,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           {
             icon: 'htvbdh_tcdt_ngan-kho',
             title: 'Vật tư',
-            url: `/${NHAP_MAIN_ROUTE}/dau-thau/danh-sach-dau-thau/vat-tu`,
+            url: `/${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/vat-tu`,
             urlTongCuc: '',
             urlCuc: '',
             urlChiCuc: '',
@@ -72,7 +72,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
           },
         ],
       },
-    ]
+    ],
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
@@ -123,7 +123,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
             urlCuc: '',
             urlChiCuc: '',
           },
-        ]
+        ],
       },
       {
         icon: 'htvbdh_tcdt_baothoc',
@@ -166,9 +166,9 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
             urlCuc: '',
             urlChiCuc: '',
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     icon: 'htvbdh_tcdt_baocao2',
