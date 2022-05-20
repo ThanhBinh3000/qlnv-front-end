@@ -36,6 +36,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       diaDiemNhap: [
         this.thongtinDauThau ? this.thongtinDauThau.diaDiemNhap : null,
       ],
+      maDvi: [
+        this.thongtinDauThau ? this.thongtinDauThau.maDvi : null,
+      ],
+      maDiemKho: [
+        this.thongtinDauThau ? this.thongtinDauThau.maDiemKho : null,
+      ],
       donGia: [this.thongtinDauThau ? this.thongtinDauThau.donGia : null],
       goiThau: [
         this.thongtinDauThau ? this.thongtinDauThau.goiThau : null,

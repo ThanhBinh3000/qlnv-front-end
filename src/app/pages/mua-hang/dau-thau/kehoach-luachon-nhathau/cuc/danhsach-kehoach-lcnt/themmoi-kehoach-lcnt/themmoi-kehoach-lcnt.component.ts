@@ -17,13 +17,14 @@ import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
 import { Globals } from 'src/app/shared/globals';
-import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { convertVthhToId } from 'src/app/shared/commonFunction';
 
 interface ItemData {
   id: string;
@@ -45,8 +46,15 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   searchFilter = {
     soDeXuat: '',
   };
+
+  editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
+
+  listOfData: DanhSachGoiThau[] = [];
+  cacheData : DanhSachGoiThau[] = [];
+
   id: number;
   formData: FormGroup;
+  formThongTinChung : FormGroup;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   i = 0;
@@ -54,22 +62,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   tabSelected: string = 'thongTinChung';
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
+  listNam: any[] = [];
+  listVthh: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
-  chiTietThongTinDXKHLCNT: ThongTinDeXuatKeHoachLuaChonNhaThau =
-    new ThongTinDeXuatKeHoachLuaChonNhaThau();
+  chiTietThongTinDXKHLCNT: ThongTinDeXuatKeHoachLuaChonNhaThau =  new ThongTinDeXuatKeHoachLuaChonNhaThau();
   thongTinChungDXKHLCNT: ThongTinChung = new ThongTinChung();
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   selectHang: any = { ten: '' };
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-  thongTinDXKHLCNTInput: ThongTinDeXuatKeHoachLuaChonNhaThauInput =
-    new ThongTinDeXuatKeHoachLuaChonNhaThauInput();
+  thongTinDXKHLCNTInput: ThongTinDeXuatKeHoachLuaChonNhaThauInput = new ThongTinDeXuatKeHoachLuaChonNhaThauInput();
 
-  editCache: {
-    [key: string]: { edit: boolean; data: DanhSachGoiThau };
-  } = {};
+  // editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau }; } = {};
 
   dsGoiThauClone: Array<DanhSachGoiThau>;
   baoGiaThiTruongList: Array<CanCuXacDinh> = [];
@@ -77,8 +83,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
+  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
+  vatTuIdDefault: string = LOAI_HANG_DTQG.VAT_TU;
 
-  muoiIdDefault: number = 78;
+
+  // muoiIdDefault: number = 78;
   tongGiaTriCacGoiThau: number = 0;
   tenTaiLieuDinhKem: string;
 
@@ -102,40 +111,49 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   ) { }
 
   startEdit(index: number): void {
-    this.dsGoiThauClone[index].isEdit = true;
+    this.editCache[index].edit = true;
   }
 
   cancelEdit(index: number): void {
-    this.dsGoiThauClone[index].isEdit = false;
+    this.editCache[index].edit = false;
   }
 
   saveEdit(index: number): void {
     Object.assign(
-      this.chiTietThongTinDXKHLCNT.children2[index],
-      this.dsGoiThauClone[index],
+      this.listOfData[index],
+      this.editCache[index].data,
     );
 
-    this.dsGoiThauClone[index].isEdit = false;
-    this.dsGoiThauClone?.forEach((goiThau) => {
-      goiThau.thanhTien = (goiThau.donGia * goiThau.soLuong * 1000).toString();
-      this.tongGiaTriCacGoiThau += +goiThau.thanhTien;
-    });
-    if (this.tongGiaTriCacGoiThau > 10000000000) {
-      this.thongTinChungDXKHLCNT.blanhDthau = '3%';
-    } else {
-      this.thongTinChungDXKHLCNT.blanhDthau = '1%';
-    }
+    this.editCache[index].edit = false;
+    // this.dsGoiThauClone?.forEach((goiThau) => {
+    //   goiThau.thanhTien = (goiThau.donGia * goiThau.soLuong * 1000).toString();
+    //   this.tongGiaTriCacGoiThau += +goiThau.thanhTien;
+    // });
+    // if (this.tongGiaTriCacGoiThau > 10000000000) {
+    //   this.thongTinChungDXKHLCNT.blanhDthau = '3%';
+    // } else {
+    //   this.thongTinChungDXKHLCNT.blanhDthau = '1%';
+    // }
   }
+
   deleteRow(idVirtual: number): void {
-    this.chiTietThongTinDXKHLCNT.children2 =
-      this.chiTietThongTinDXKHLCNT.children2.filter(
-        (d) => d.idVirtual !== idVirtual,
-      );
-    Object.assign(this.dsGoiThauClone, this.chiTietThongTinDXKHLCNT.children2);
+      this.listOfData = this.listOfData.filter(d => d.idVirtual !== idVirtual);
+    // this.chiTietThongTinDXKHLCNT.children2 =
+    //   this.chiTietThongTinDXKHLCNT.children2.filter(
+    //     (d) => d.idVirtual !== idVirtual,
+    //   );
+    // Object.assign(this.dsGoiThauClone, this.chiTietThongTinDXKHLCNT.children2);
   }
 
   ngOnInit(): void {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
+    this.listVthh = LIST_VAT_TU_HANG_HOA;
     this.initForm();
     if (this.id > 0) {
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.id);
@@ -150,41 +168,38 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   initForm() {
-    this.formData = this.fb.group({
-      canCu: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.qdCanCu
-          : null,
-        [Validators.required],
-      ],
-      soDeXuat: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.soDxuat
-          : null,
-        [Validators.required],
-      ],
-      hangHoa: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.loaiVthh
-          : null,
-      ],
-      maHangHoa: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.maHangHoa
-          : null,
-      ],
-      trichYeu: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.trichYeu
-          : null,
-      ],
-      ghiChu: [
-        this.chiTietThongTinDXKHLCNT
-          ? this.chiTietThongTinDXKHLCNT.ghiChu
-          : null,
-        [Validators.required],
-      ],
-    });
+    let vthh = this.router.url.split('/')[4];
+    this.formData = this.fb.group(
+      {
+        soQd: [ null, [Validators.required] ],
+        soDxuat: [ null,[Validators.required]],
+        maHangHoa: [null,],
+        trichYeu: [  'Trich yeu', ],
+        ghiChu: [  'Ghi chu' ,  [Validators.required]],
+        namKhoach : [ dayjs().get('year') ,[Validators.required]],
+        loaiVthh : [ convertVthhToId(vthh) , [Validators.required] ],
+        ngayKy : [,[Validators.required]],
+      }
+    );
+    this.formThongTinChung = this.fb.group(
+      {
+        tenDuAn : ['tenDuAn',[Validators.required]],
+        chuDauTu : ['abcc',[Validators.required]],
+        tongMucDt : [1000,[Validators.required]],
+        nguonVon : ['NGV01',[Validators.required]],
+        tchuanCluong : ['Tieu chuan chat luong',[Validators.required]],
+        loaiHdong : [null,[Validators.required]],
+        hthucLcnt : [null,[Validators.required]],
+        pthucLcnt : [null,[Validators.required]],
+        donGiaTtinh : [null,[Validators.required]],
+        tgianTbao : [null,[Validators.required]],
+        tgianMoiThau : [null,[Validators.required]],
+        tgianMoThau : [null,[Validators.required]],
+        tgianDongThau : [null,[Validators.required]],
+        tgianThHienHd : [null,[Validators.required]],
+        tgianNhapHang : [null,[Validators.required]],
+      }
+    )
   }
 
   editCanCuTaiLieuDinhKem(data: CanCuXacDinh, type?: string) {
@@ -318,6 +333,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       const dsGoiThauDialog = new DanhSachGoiThau();
       dsGoiThauDialog.bangChu = res.value.bangChu;
       dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
+      dsGoiThauDialog.maDvi = res.value.maDvi;
+      dsGoiThauDialog.maDiemKho = res.value.maDiemKho;
       dsGoiThauDialog.donGia = +res.value.donGia;
       dsGoiThauDialog.goiThau = res.value.goiThau;
       // dsGoiThauDialog.id = +res.value.id;
@@ -325,12 +342,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       dsGoiThauDialog.thanhTien = res.value.thanhTien;
       dsGoiThauDialog.idVirtual = new Date().getTime();
 
-      this.chiTietThongTinDXKHLCNT.children2 = [
-        ...this.chiTietThongTinDXKHLCNT.children2,
-        dsGoiThauDialog,
-      ];
+      // this.chiTietThongTinDXKHLCNT.children2 = [
+      //   ...this.chiTietThongTinDXKHLCNT.children2,
+      //   dsGoiThauDialog,
+      // ];
 
-      this.dsGoiThauClone = this.chiTietThongTinDXKHLCNT.children2;
+      this.listOfData = [
+        ...this.listOfData,
+        dsGoiThauDialog
+      ]
+
+      this.listOfData.forEach((value, index) => {
+        this.editCache[index] = {
+          edit: false,
+          data: { ...value }
+        };
+      })
+      // this.cacheData = this.listOfData;
+      // this.dsGoiThauClone = this.chiTietThongTinDXKHLCNT.children2;
       this.dsGoiThauClone?.forEach((goiThau) => {
         this.tongGiaTriCacGoiThau += +goiThau.thanhTien;
       });
@@ -340,6 +369,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.thongTinChungDXKHLCNT.blanhDthau = '1%';
       }
     });
+  }
+
+  async themMoi(){
+    // console.log(this.formData.value);
+    let body = this.formData.value;
+    body.detail1 = this.formThongTinChung.value;
+    body.detail2 = this.listOfData
+    // this.dauThauService.create()
+    let res = await this.dauThauService.create(body);
+    console.log(res);
   }
 
   redirectToDanhSachDauThau() {
@@ -517,6 +556,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
   }
+
   saveThongTinDeXuatKeHoachLCNT(isGuiDuyet?: boolean) {
     this.chiTietThongTinDXKHLCNT.qdCanCu = this.formData.get('canCu').value;
     this.chiTietThongTinDXKHLCNT.soDxuat = this.formData.get('soDeXuat').value;

@@ -95,6 +95,7 @@ import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
 import { DialogPhieuNhapKhoComponent } from './dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
 import { DialogGuiDuyetComponent } from './dialog/dialog-gui-duyet/dialog-gui-duyet.component';
 import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [
@@ -196,6 +197,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
+    NzPopconfirmModule
   ],
   exports: [
     FormsModule,
@@ -251,6 +253,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     FilterPipe,
     NzAlertModule,
     MultipleTagComponent,
+    NzPopconfirmModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

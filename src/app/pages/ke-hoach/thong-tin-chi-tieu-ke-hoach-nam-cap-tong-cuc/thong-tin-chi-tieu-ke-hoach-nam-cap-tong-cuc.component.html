@@ -288,14 +288,13 @@
                       class="search__input autocomplete__input donvi__input">
                       <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input
                         (input)="onInput($event,'luong-thuc')" [nzAutocomplete]="auto" class="w-300"
-                        [(ngModel)]="keHoachLuongThucCreate.tenDonvi"
-                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                        [(ngModel)]="keHoachLuongThucCreate.tenDonvi" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                     <nz-autocomplete #auto (selectionChange)="selectDonViKeyDown($event,'khlt')" [nzBackfill]="false">
-                      <ng-container *ngIf="userInfo.CAP_DVI !== globals.prop.CUC">
+                      <ng-container>
                         <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
                           (click)="selectDonViKHLT(option)">
                           {{ option.labelDonVi }}
@@ -692,14 +691,14 @@
                       class="search__input autocomplete__input donvi__input w-300">
                       <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input (input)="onInput($event, 'muoi')"
                         [nzAutocomplete]="autoMuoi" class="" [(ngModel)]="keHoachMuoiCreate.tenDonVi"
-                        (input)="changeDonViMuoi()" [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                        (input)="changeDonViMuoi()" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                     <nz-autocomplete #autoMuoi (selectionChange)="selectDonViKeyDown($event,'kh-muoi')"
                       [nzBackfill]="false">
-                      <ng-container *ngIf="userInfo.CAP_DVI !== globals.prop.CUC">
+                      <ng-container>
                         <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
                           (click)="selectDonViMuoi(option)">
                           {{ option.labelDonVi }}
@@ -951,15 +950,14 @@
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                       class="search__input autocomplete__input donvi__input w-300">
                       <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input (input)="onInput($event,'vat-tu')"
-                        [nzAutocomplete]="autoDonViVatTu" class="" [(ngModel)]="keHoachVatTuCreate.tenDonVi"
-                        [readonly]="userInfo.CAP_DVI === globals.prop.CUC" />
+                        [nzAutocomplete]="autoDonViVatTu" class="" [(ngModel)]="keHoachVatTuCreate.tenDonVi" />
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                     <nz-autocomplete #autoDonViVatTu (selectionChange)="selectDonViKeyDown($event,'kh-vat-tu')"
                       [nzBackfill]="false">
-                      <ng-container *ngIf="userInfo.CAP_DVI !== globals.prop.CUC">
+                      <ng-container>
                         <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
                           (click)="selectDonViVatTu(option)">
                           {{ option.labelDonVi }}
