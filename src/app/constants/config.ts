@@ -187,5 +187,22 @@ export const LEVEL_USER = {
   CUC: '2',
   CHI_CUC: '3',
 };
-
+export const LIST_VAT_TU_HANG_HOA = [
+  {
+    value : LOAI_HANG_DTQG.THOC,
+    text : 'Thóc'
+  },
+  {
+    value : LOAI_HANG_DTQG.GAO,
+    text : 'Gạo'
+  },
+  {
+    value : LOAI_HANG_DTQG.MUOI,
+    text : 'Muối'
+  },
+  {
+    value : LOAI_HANG_DTQG.VAT_TU,
+    text : 'Vật tư'
+  }
+]
 
