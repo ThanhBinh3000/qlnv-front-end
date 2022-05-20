@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -20,7 +20,9 @@ import {
   NHAP_THEO_KE_HOACH,
   NHAP_THEO_PHUONG_THUC_DAU_THAU,
   THOC,
-} from '../../../nhap.constant';
+} from '../../../nhap/nhap.constant';
+import { convertTenVthh } from 'src/app/shared/commonFunction';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'nhap-theo-phuong-thuc-dau-thau',
@@ -28,6 +30,7 @@ import {
   styleUrls: ['./nhap-theo-phuong-thuc-dau-thau.component.scss'],
 })
 export class NhapTheoPhuongThucDauThauComponent implements OnInit {
+
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -61,6 +64,8 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     namKeHoach: '',
   };
   listNam: any[] = [];
+  loaiVthh: string = '';
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -68,11 +73,14 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+    private route: ActivatedRoute,
+    public userService: UserService
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.getTitleVthh();
       let dayNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -100,6 +108,11 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  getTitleVthh() {
+    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
+    this.router.navigate(['/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' + this.route.snapshot.paramMap.get('type')]);
   }
 
   openDialogHopDong() {
