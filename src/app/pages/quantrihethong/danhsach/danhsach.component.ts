@@ -115,10 +115,6 @@ export class DanhSachComponent implements OnInit {
         allowRouter: []
       }),
     ]
-
-    // this.route.url.subscribe(() => {
-    //   this.checkActiveRouter(this.route.snapshot.routeConfig.path);
-    // });
   }
 
   async ngOnInit() {

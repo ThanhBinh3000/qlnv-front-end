@@ -15,6 +15,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
+import { QlTShethongService } from 'src/app/services/quantri-nguoidung/qlTshethong.service';
 
 interface TreeNode {
   name: string;
@@ -59,6 +60,7 @@ export class ThemQlTSHethongComponent implements OnInit {
   public formGroup: FormGroup;
   statusValue = "A"
   data: any;
+  detail: any;
   comfirmPass: any;
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -72,6 +74,7 @@ export class ThemQlTSHethongComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalRef,
+    private _qlTShethongService: QlTShethongService
 
   ) {
 
@@ -86,24 +89,21 @@ export class ThemQlTSHethongComponent implements OnInit {
     // console.log(this.userInfo)
 
     this.initForm()
-    this.laytatcadonvi()
-
+    if (this.data) {
+      this.chitietthamso()
+    }
   }
 
 
-  async laytatcadonvi() {
+  async chitietthamso() {
     this.spinner.show();
     try {
-      let res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          var item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
+      let res = await this._qlTShethongService.find({ id: this.data.id });
+
+      if (res.data) {
+
+        this.data = res.data;
+        this.initForm()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -128,21 +128,14 @@ export class ThemQlTSHethongComponent implements OnInit {
 
   initForm() {
     this.formGroup = this.fb.group({
-      "chucvuId": [this.data?.chucvuId ?? 0],
-      "dvql": [this.data?.dvql ?? "", Validators.required],
-      "email": [this.data?.email ?? ""],
-      "fullName": [this.data?.fullName ?? ""],
-      "groupId": [this.data?.groupId ?? 0, Validators.required],
-      "groupsArr": [this.data?.groupsArr ?? ""],
-      "password": [this.data?.password ?? "", Validators.required],
-      "cfpassword": ["", Validators.required],
-      "phoneNo": [this.data?.phoneNo ?? ""],
-      "status": [this.data?.status ?? ""],
-      "str": [this.data?.str ?? ""],
-      "sysType": [this.data?.sysType ?? "AD", Validators.required],
-      "token": [this.data?.token ?? ""],
-      "trangThai": [this.data?.trangThai ?? STATUS_USER.HOAT_DONG],
-      "username": [this.data?.username ?? "", Validators.required],
+      "description": [this.data?.moTa ?? null],
+      "paramId": [this.data?.ma ?? null, Validators.required],
+      "paramName": [this.data?.ten ?? null, Validators.required],
+      "paramValue": [this.data?.giaTri ?? null, Validators.required],
+      "status": [this.data?.trangThai ?? STATUS_USER.HOAT_DONG],
+      "str": [null],
+      "trangThai": [null],
+
     });
   }
 
@@ -153,19 +146,28 @@ export class ThemQlTSHethongComponent implements OnInit {
       return;
     }
     let body = this.formGroup.value
-    body.paggingReq = {
-      "limit": 20,
-      "page": 1
-    },
-      delete body.cfpassword
-    debugger
-    let res = await this.qlNSDService.create(body);
-    debugger
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    let res
+    if (this.data) {
+      body.id = this.data.id
+      res = await this._qlTShethongService.update(body);
+      debugger
+      if (res.msg == MESSAGE.UPDATE_SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      res = await this._qlTShethongService.create(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
+
+
 
   }
 
