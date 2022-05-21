@@ -1,3 +1,4 @@
+import { DialogChonPhuLucDieuChinhComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-phu-luc-dieu-chinh/dialog-chon-phu-luc-dieu-chinh.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -86,14 +87,12 @@ import { DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent } from './dialog/dialo
 
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
-import { DialogChonThemKhoanMucComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-chon-them-khoan-muc/dialog-chon-them-khoan-muc.component';
+
 import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component'
 import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from './dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
 import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
 import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
-import { DialogDanhSachKeHoachPhanBoGiaoDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi/dialog-danh-sach-ke-hoach-phan-bo-giao-du-toan-cua-don-vi.component';
-import { DialogDanhSachBaoCaoDieuChinhDuToanComponent } from './dialog/dialog-quan-ly-dieu-chinh-du-toan-chi-nsnn/dialog-danh-sach-bao-cao-dieu-chinh-du-toan/dialog-danh-sach-bao-cao-dieu-chinh-du-toan.component';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
 
@@ -127,23 +126,21 @@ import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component'
     DialogDanhSachChiTietNganKhoComponent,
     DialogDanhSachHangHoaComponent,
     DialogThemMoiCtbbChuanBiKhoTruocKhiNhapComponent,
+    DialogChonPhuLucDieuChinhComponent,
     //pipes
     FilterPipe,
-    
+
     DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent,
-    
+
 
     //
     DialogLuaChonThemPhuLucComponent,
-    DialogChonThemKhoanMucComponent,
     DialogChonThemBieuMauBaoCaoComponent,
     DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
     //
     DialogDanhSachMuaTbiVtuComponent,
     DialogDanhSachMuaLuongThucMuoiComponent,
     //
-    DialogDanhSachKeHoachPhanBoGiaoDuToanComponent,
-    DialogDanhSachBaoCaoDieuChinhDuToanComponent,
     DialogCopyComponent,
   ],
   imports: [
