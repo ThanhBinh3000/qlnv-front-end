@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -41,7 +41,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 	loaiVbans: any = [];
 	maDviChuTris: any = [];
 	donVis: any = [];                            // danh muc don vi
-	donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
 	lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
 	userInfo: any;
 	errorMessage!: String;                      //
@@ -337,7 +337,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		let checkMoneyRange = true;
 		this.lstCTietBCao.filter(element => {
 			let dtoanKphi= mulMoney(element.dtoanKphi, this.maDviTien);
-			if (dtoanKphi > MONEYLIMIT) {
+			if (dtoanKphi > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -747,7 +747,7 @@ export class KeHoachXayDungVanBanQpplDtqg3NamComponent implements OnInit {
 		let checkMoneyRange = true;
 		this.lstCTietBCao.filter(element => {
 			let dtoanKphi= mulMoney(element.dtoanKphi, this.maDviTien);
-			if (dtoanKphi > MONEYLIMIT) {
+			if (dtoanKphi > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

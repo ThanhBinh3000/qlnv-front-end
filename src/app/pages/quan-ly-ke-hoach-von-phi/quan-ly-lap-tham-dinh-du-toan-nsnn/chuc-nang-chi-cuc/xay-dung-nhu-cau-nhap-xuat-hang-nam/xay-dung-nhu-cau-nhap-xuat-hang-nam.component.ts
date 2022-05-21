@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU, Utils } from "../../../../../Utility/utils";
+import { DON_VI_TIEN, mulMoney, QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU, Utils } from "../../../../../Utility/utils";
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
@@ -99,7 +99,7 @@ export class XayDungNhuCauNhapXuatHangNamComponent implements OnInit {
   currentday: Date = new Date();
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);

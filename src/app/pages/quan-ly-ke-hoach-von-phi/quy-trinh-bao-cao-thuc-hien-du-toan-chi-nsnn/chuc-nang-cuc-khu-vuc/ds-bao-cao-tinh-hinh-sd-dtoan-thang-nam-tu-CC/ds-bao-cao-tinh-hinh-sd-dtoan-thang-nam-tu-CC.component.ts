@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT, Utils } from 'src/app/Utility/utils';
+import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as fileSaver from 'file-saver';
 
@@ -32,7 +32,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   listBcaoKqua: any[] = [];
   lenght: any = 0;
 
-  trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
+  trangThais: any = TRANG_THAI_GUI_DVCT;                          // danh muc loai bao cao
   trangThai!: string;
   searchFilter = {
     ngayTaoTu: '',
@@ -54,7 +54,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   };
 
   donViTaos: any = [];
-  baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
+  baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,

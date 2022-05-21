@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { TRANGTHAIBANGHI, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_BAN_GHI, Utils } from 'src/app/Utility/utils';
 
 export class ItemData {
     id!: any;
@@ -37,7 +37,7 @@ export class DialogDanhSachKeHoachPhanBoGiaoDuToanComponent implements OnInit {
         nam: null,
     };
 
-    trangThais: any[] = TRANGTHAIBANGHI;
+    trangThais: any[] = TRANG_THAI_BAN_GHI;
 
     totalPages: number = 0;
     totalElements: number = 0;

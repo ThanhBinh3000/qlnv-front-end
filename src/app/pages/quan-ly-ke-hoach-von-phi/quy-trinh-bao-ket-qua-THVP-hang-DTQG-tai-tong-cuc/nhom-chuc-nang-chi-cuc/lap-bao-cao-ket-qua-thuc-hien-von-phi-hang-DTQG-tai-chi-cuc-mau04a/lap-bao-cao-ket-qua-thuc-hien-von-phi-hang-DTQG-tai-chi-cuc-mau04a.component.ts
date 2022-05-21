@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
+import { DON_VI_TIEN, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { DatePipe, Location } from '@angular/common';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -204,7 +204,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   nho: boolean;
   tab =TAB_SELECTED;
   tabSelected: number;
-  listDonViTien:any []=DONVITIEN;
+  listDonViTien:any []=DON_VI_TIEN;
   congVan:any;
   checkCongVan:boolean = true;
   totalElements = 0;
@@ -649,7 +649,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   pheDuyetChiTiet(mcn: string,maLoai:any) {
     if (mcn == OK) {
       this.pheDuyetBieuMau(mcn,maLoai, null);
-    } else if (mcn == NOTOK) {
+    } else if (mcn == NOT_OK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
         nzContent: DialogTuChoiComponent,
@@ -2309,7 +2309,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   }
   //lay ten trang thai biểu mẫu
   getStatusNameBieuMau(status:any):string {
-    return TRANGTHAIPHULUC.find(item => item.id ==Number(status))?.ten;
+    return TRANG_THAI_PHU_LUC.find(item => item.id ==Number(status))?.ten;
   }
 
   //lay ten don vi tạo

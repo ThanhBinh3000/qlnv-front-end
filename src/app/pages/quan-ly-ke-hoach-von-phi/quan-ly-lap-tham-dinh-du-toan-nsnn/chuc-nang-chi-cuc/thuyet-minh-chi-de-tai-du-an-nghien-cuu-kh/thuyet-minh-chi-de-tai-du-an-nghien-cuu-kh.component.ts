@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -96,7 +96,7 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
   currentday: Date = new Date();
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -343,13 +343,13 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       let kphiTongPhiDuocDuyet = mulMoney(e.kphiTongPhiDuocDuyet, this.maDviTien)
       let kphiThuhoi = mulMoney(e.kphiThuhoi, this.maDviTien)
       if(
-        kphiDaDuocBoTriDenNamN > MONEYLIMIT ||
-        kphiDuKienBtriN1 > MONEYLIMIT ||
-        kphiDuKienBtriN2 > MONEYLIMIT ||
-        kphiDuKienBtriN3 > MONEYLIMIT ||
-        kphiDuocThienDenThoiDiemBcao > MONEYLIMIT ||
-        kphiTongPhiDuocDuyet > MONEYLIMIT ||
-        kphiThuhoi > MONEYLIMIT
+        kphiDaDuocBoTriDenNamN > MONEY_LIMIT ||
+        kphiDuKienBtriN1 > MONEY_LIMIT ||
+        kphiDuKienBtriN2 > MONEY_LIMIT ||
+        kphiDuKienBtriN3 > MONEY_LIMIT ||
+        kphiDuocThienDenThoiDiemBcao > MONEY_LIMIT ||
+        kphiTongPhiDuocDuyet > MONEY_LIMIT ||
+        kphiThuhoi > MONEY_LIMIT
       ){
         checkMoneyRange = false;
 				return;
@@ -786,13 +786,13 @@ export class ThuyetMinhChiDeTaiDuAnNghienCuuKhComponent implements OnInit {
       let kphiTongPhiDuocDuyet = mulMoney(item.kphiTongPhiDuocDuyet, this.maDviTien)
       let kphiThuhoi = mulMoney(item.kphiThuhoi, this.maDviTien)
       if(
-        kphiDaDuocBoTriDenNamN > MONEYLIMIT ||
-        kphiDuKienBtriN1 > MONEYLIMIT ||
-        kphiDuKienBtriN2 > MONEYLIMIT ||
-        kphiDuKienBtriN3 > MONEYLIMIT ||
-        kphiDuocThienDenThoiDiemBcao > MONEYLIMIT ||
-        kphiTongPhiDuocDuyet > MONEYLIMIT ||
-        kphiThuhoi > MONEYLIMIT
+        kphiDaDuocBoTriDenNamN > MONEY_LIMIT ||
+        kphiDuKienBtriN1 > MONEY_LIMIT ||
+        kphiDuKienBtriN2 > MONEY_LIMIT ||
+        kphiDuKienBtriN3 > MONEY_LIMIT ||
+        kphiDuocThienDenThoiDiemBcao > MONEY_LIMIT ||
+        kphiTongPhiDuocDuyet > MONEY_LIMIT ||
+        kphiThuhoi > MONEY_LIMIT
         ){
           checkMoneyRange = false;
           return

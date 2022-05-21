@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { TRANGTHAITIMKIEM, Utils } from "../../../../Utility/utils";
+import { TRANG_THAI_TIM_KIEM, Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -27,7 +27,7 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
     lstCTietBCao: any = [];                         // chi tiet nooi dung tim kiem
     totalElements: number = 0;
     totalPages: number = 0;
-    trangThais: any = TRANGTHAITIMKIEM;
+    trangThais: any = TRANG_THAI_TIM_KIEM;
     userInfo!: any;
 
     phanLoais: any[] = [

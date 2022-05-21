@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { TRANGTHAIBANGHI, Utils } from "../../../../Utility/utils";
+import { TRANG_THAI_BAN_GHI, Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -45,7 +45,7 @@ export class DanhSachDeXuatDieuChinhDuToanChiNganSachComponent implements OnInit
      donVis: any = [];                            //don vi se hien thi
      messageValidate: any = MESSAGEVALIDATE;
 
-     trangThais: any[] = TRANGTHAIBANGHI;
+     trangThais: any[] = TRANG_THAI_BAN_GHI;
 
      searchFilter = {
           tuNgay: "",

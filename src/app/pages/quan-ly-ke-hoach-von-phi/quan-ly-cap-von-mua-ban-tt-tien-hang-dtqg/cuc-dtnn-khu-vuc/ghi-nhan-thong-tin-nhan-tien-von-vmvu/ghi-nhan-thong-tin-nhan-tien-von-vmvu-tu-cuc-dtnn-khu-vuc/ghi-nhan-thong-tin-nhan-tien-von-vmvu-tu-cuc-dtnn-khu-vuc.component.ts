@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, Utils } from "../../../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -40,7 +40,7 @@ export class GhiNhanThongTinNhanTienVonVmvuTuCucDtnnKhuVucComponent implements O
      nguonVons: any = [];
      chungLoais: any = [];
      dviTinhs: any = [];
-     dviTiens: any = DONVITIEN;
+     dviTiens: any = DON_VI_TIEN;
      ngayNhap!: string;
      nguoiNhap!: string;
      noiLap: string = "TCDT";

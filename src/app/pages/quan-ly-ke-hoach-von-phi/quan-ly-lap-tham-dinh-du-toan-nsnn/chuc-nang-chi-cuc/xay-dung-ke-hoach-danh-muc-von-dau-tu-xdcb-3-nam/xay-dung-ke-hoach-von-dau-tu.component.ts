@@ -6,7 +6,7 @@ import { DatePipe,Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_DM_VONDT_XDCBGD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_DM_VONDT_XDCBGD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -116,7 +116,7 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
   currentday: Date = new Date();
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -424,21 +424,21 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       let ncauVonN2 = mulMoney(e.ncauVonN2, this.maDviTien)
       let ncauVonN3 = mulMoney(e.ncauVonN3, this.maDviTien)
       if(
-        qdDuyetDanDtuTongVon > MONEYLIMIT ||
-        qdDchinhDanDtuTongVon > MONEYLIMIT ||
-        qdDuyetTkDtoanXl > MONEYLIMIT ||
-        qdDuyetTkDtoanTb > MONEYLIMIT ||
-        qdDuyetTkDtoanCk > MONEYLIMIT ||
-        klthCapDen3006Nstt > MONEYLIMIT ||
-        klthCapDen3006DtoanChiTx > MONEYLIMIT ||
-        klthCapDen3112Nstt > MONEYLIMIT ||
-        klthCapDen3112DtoanChiTx > MONEYLIMIT ||
-        qdDuyetTkDtoanTong > MONEYLIMIT ||
-        klthCapDen3006Quykhac > MONEYLIMIT ||
-        klthCapDen3112Quykhac > MONEYLIMIT ||
-        ncauVonN1 > MONEYLIMIT ||
-        ncauVonN2 > MONEYLIMIT ||
-        ncauVonN3 > MONEYLIMIT
+        qdDuyetDanDtuTongVon > MONEY_LIMIT ||
+        qdDchinhDanDtuTongVon > MONEY_LIMIT ||
+        qdDuyetTkDtoanXl > MONEY_LIMIT ||
+        qdDuyetTkDtoanTb > MONEY_LIMIT ||
+        qdDuyetTkDtoanCk > MONEY_LIMIT ||
+        klthCapDen3006Nstt > MONEY_LIMIT ||
+        klthCapDen3006DtoanChiTx > MONEY_LIMIT ||
+        klthCapDen3112Nstt > MONEY_LIMIT ||
+        klthCapDen3112DtoanChiTx > MONEY_LIMIT ||
+        qdDuyetTkDtoanTong > MONEY_LIMIT ||
+        klthCapDen3006Quykhac > MONEY_LIMIT ||
+        klthCapDen3112Quykhac > MONEY_LIMIT ||
+        ncauVonN1 > MONEY_LIMIT ||
+        ncauVonN2 > MONEY_LIMIT ||
+        ncauVonN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -952,21 +952,21 @@ export class XayDungKeHoachVonDauTuComponent implements OnInit {
       let ncauVonN2 = mulMoney(item.ncauVonN2, this.maDviTien)
       let ncauVonN3 = mulMoney(item.ncauVonN3, this.maDviTien)
       if(
-        qdDuyetDanDtuTongVon > MONEYLIMIT ||
-        qdDchinhDanDtuTongVon > MONEYLIMIT ||
-        qdDuyetTkDtoanXl > MONEYLIMIT ||
-        qdDuyetTkDtoanTb > MONEYLIMIT ||
-        qdDuyetTkDtoanCk > MONEYLIMIT ||
-        klthCapDen3006Nstt > MONEYLIMIT ||
-        klthCapDen3006DtoanChiTx > MONEYLIMIT ||
-        klthCapDen3112Nstt > MONEYLIMIT ||
-        klthCapDen3112DtoanChiTx > MONEYLIMIT ||
-        qdDuyetTkDtoanTong > MONEYLIMIT ||
-        klthCapDen3006Quykhac > MONEYLIMIT ||
-        klthCapDen3112Quykhac > MONEYLIMIT ||
-        ncauVonN1 > MONEYLIMIT ||
-        ncauVonN2 > MONEYLIMIT ||
-        ncauVonN3 > MONEYLIMIT
+        qdDuyetDanDtuTongVon > MONEY_LIMIT ||
+        qdDchinhDanDtuTongVon > MONEY_LIMIT ||
+        qdDuyetTkDtoanXl > MONEY_LIMIT ||
+        qdDuyetTkDtoanTb > MONEY_LIMIT ||
+        qdDuyetTkDtoanCk > MONEY_LIMIT ||
+        klthCapDen3006Nstt > MONEY_LIMIT ||
+        klthCapDen3006DtoanChiTx > MONEY_LIMIT ||
+        klthCapDen3112Nstt > MONEY_LIMIT ||
+        klthCapDen3112DtoanChiTx > MONEY_LIMIT ||
+        qdDuyetTkDtoanTong > MONEY_LIMIT ||
+        klthCapDen3006Quykhac > MONEY_LIMIT ||
+        klthCapDen3112Quykhac > MONEY_LIMIT ||
+        ncauVonN1 > MONEY_LIMIT ||
+        ncauVonN2 > MONEY_LIMIT ||
+        ncauVonN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

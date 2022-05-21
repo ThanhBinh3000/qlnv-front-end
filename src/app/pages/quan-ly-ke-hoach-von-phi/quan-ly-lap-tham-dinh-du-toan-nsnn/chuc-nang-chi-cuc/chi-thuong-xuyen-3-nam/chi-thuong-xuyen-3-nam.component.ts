@@ -10,7 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { QLNV_KHVONPHI_CHI_TX_GD3N, Utils, divMoney, mulMoney, DONVITIEN, MONEYLIMIT } from "../../../../../Utility/utils";
+import { QLNV_KHVONPHI_CHI_TX_GD3N, Utils, divMoney, mulMoney, DON_VI_TIEN, MONEY_LIMIT } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
 import { filter, pairwise } from 'rxjs/operators';
@@ -51,7 +51,7 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 	nhomChis: any = [];                          // danh muc nhom chi
 	loaiChis: any = [];                          // danh muc loai chi
 	donVis: any = [];                            // danh muc don vi
-	donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
 	tong: ItemData = {
 		namHhanhN: 0,
 		tranChiDuocTbN1: 0,
@@ -365,9 +365,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			let tranChiDuocTbN3 = mulMoney(element.tranChiDuocTbN3, this.maDviTien);
 			let ncauChiCuaDviN3 = mulMoney(element.ncauChiCuaDviN3, this.maDviTien);
 			let clechTranChiVsNcauN3 = mulMoney(element.clechTranChiVsNcauN3, this.maDviTien);
-			if (tranChiDuocTbN1 > MONEYLIMIT || ncauChiCuaDviN1 > MONEYLIMIT || clechTranChiVsNcauN1 > MONEYLIMIT ||
-				tranChiDuocTbN2 > MONEYLIMIT || ncauChiCuaDviN2 > MONEYLIMIT || clechTranChiVsNcauN2 > MONEYLIMIT ||
-				tranChiDuocTbN3 > MONEYLIMIT || ncauChiCuaDviN3 > MONEYLIMIT || clechTranChiVsNcauN3 > MONEYLIMIT) {
+			if (tranChiDuocTbN1 > MONEY_LIMIT || ncauChiCuaDviN1 > MONEY_LIMIT || clechTranChiVsNcauN1 > MONEY_LIMIT ||
+				tranChiDuocTbN2 > MONEY_LIMIT || ncauChiCuaDviN2 > MONEY_LIMIT || clechTranChiVsNcauN2 > MONEY_LIMIT ||
+				tranChiDuocTbN3 > MONEY_LIMIT || ncauChiCuaDviN3 > MONEY_LIMIT || clechTranChiVsNcauN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -824,9 +824,9 @@ export class ChiThuongXuyen3NamComponent implements OnInit {
 			let tranChiDuocTbN3 = mulMoney(element.tranChiDuocTbN3, this.maDviTien);
 			let ncauChiCuaDviN3 = mulMoney(element.ncauChiCuaDviN3, this.maDviTien);
 			let clechTranChiVsNcauN3 = mulMoney(element.clechTranChiVsNcauN3, this.maDviTien);
-			if (tranChiDuocTbN1 > MONEYLIMIT || ncauChiCuaDviN1 > MONEYLIMIT || clechTranChiVsNcauN1 > MONEYLIMIT ||
-				tranChiDuocTbN2 > MONEYLIMIT || ncauChiCuaDviN2 > MONEYLIMIT || clechTranChiVsNcauN2 > MONEYLIMIT ||
-				tranChiDuocTbN3 > MONEYLIMIT || ncauChiCuaDviN3 > MONEYLIMIT || clechTranChiVsNcauN3 > MONEYLIMIT) {
+			if (tranChiDuocTbN1 > MONEY_LIMIT || ncauChiCuaDviN1 > MONEY_LIMIT || clechTranChiVsNcauN1 > MONEY_LIMIT ||
+				tranChiDuocTbN2 > MONEY_LIMIT || ncauChiCuaDviN2 > MONEY_LIMIT || clechTranChiVsNcauN2 > MONEY_LIMIT ||
+				tranChiDuocTbN3 > MONEY_LIMIT || ncauChiCuaDviN3 > MONEY_LIMIT || clechTranChiVsNcauN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

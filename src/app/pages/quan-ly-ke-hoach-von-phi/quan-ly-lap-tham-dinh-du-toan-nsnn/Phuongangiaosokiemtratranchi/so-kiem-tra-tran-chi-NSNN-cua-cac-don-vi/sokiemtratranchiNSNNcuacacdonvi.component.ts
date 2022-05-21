@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DONVITIEN, Utils } from 'src/app/Utility/utils';
+import { DON_VI_TIEN, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -53,7 +53,7 @@ export class SokiemtratranchiNSNNcuacacdonviComponent implements OnInit {
   statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
   statusBtnDVCT: boolean; // trang thai nut don vi cap tren
 
-  listDonViTien:any []=DONVITIEN;
+  listDonViTien:any []=DON_VI_TIEN;
   currentday: Date = new Date();
   //////
     id!: any;

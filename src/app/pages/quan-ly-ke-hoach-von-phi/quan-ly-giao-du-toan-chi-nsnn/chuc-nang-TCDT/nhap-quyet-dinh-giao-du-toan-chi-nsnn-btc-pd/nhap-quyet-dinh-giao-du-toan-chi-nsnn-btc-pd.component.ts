@@ -10,7 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DONVITIEN, Utils } from "../../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 // import { KHOANMUCLIST } from './nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd-constant';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -40,7 +40,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   maLoais: any = [];                          // ma loai
   maNhoms: any = [];                          // ma nhom
   maMatHangs: any = [] ;                      // ma mat hang
-  maDviTiens: any = DONVITIEN;                // ma don vi tien
+  maDviTiens: any = DON_VI_TIEN;                // ma don vi tien
   maDviTinhs:any = [];                        // ma don vi tinh
   donVis: any = [];                           // ma don vi
   ngayQd!: any;                               // ngay quyet dinh

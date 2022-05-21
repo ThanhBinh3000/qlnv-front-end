@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -77,7 +77,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
   fileUrl: any;                               // url
   listIdDelete: string = "";                  // list id delete
   listIdDeleteVtus: string = "";
-  listDonViTien: any[] = DONVITIEN;
+  listDonViTien: any[] = DON_VI_TIEN;
 
   statusBtnDel: boolean;                       // trang thai an/hien nut xoa
   statusBtnSave: boolean;                      // trang thai an/hien nut luu
@@ -597,7 +597,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
           let n1= mulMoney(e.n1, this.maDviTien);
           let n2= mulMoney(e.n2, this.maDviTien);
           let n3= mulMoney(e.n3, this.maDviTien);
-          if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+          if (n1 > MONEY_LIMIT || n2 > MONEY_LIMIT || n3 > MONEY_LIMIT ) {
             checkMoneyRange = false;
             return;
           }
@@ -611,7 +611,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
        let tcongN1= mulMoney(item.tcongN1, this.maDviTien);
        let tcongN2= mulMoney(item.tcongN2, this.maDviTien);
        let tcongN3= mulMoney(item.tcongN3, this.maDviTien);
-       if(tcongN1 > MONEYLIMIT || tcongN2 > MONEYLIMIT || tcongN3 > MONEYLIMIT){
+       if(tcongN1 > MONEY_LIMIT || tcongN2 > MONEY_LIMIT || tcongN3 > MONEY_LIMIT){
          checkMoneyRange = false;
          return;
        }
@@ -896,7 +896,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
          let  n1= mulMoney(e.n1, this.maDviTien);
          let  n2= mulMoney(e.n2, this.maDviTien);
          let  n3= mulMoney(e.n3, this.maDviTien);
-         if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+         if (n1 > MONEY_LIMIT || n2 > MONEY_LIMIT || n3 > MONEY_LIMIT ) {
           checkMoneyRange = false;
           return;
         }
@@ -911,7 +911,7 @@ export class Dutoanchimuasammaymocthietbichuyendung3namComponent implements OnIn
        let  tcongN1= mulMoney(item.tcongN1, this.maDviTien);
        let  tcongN2= mulMoney(item.tcongN2, this.maDviTien);
        let  tcongN3= mulMoney(item.tcongN3, this.maDviTien);
-       if(tcongN1 > MONEYLIMIT || tcongN2 > MONEYLIMIT || tcongN3 > MONEYLIMIT){
+       if(tcongN1 > MONEY_LIMIT || tcongN2 > MONEY_LIMIT || tcongN3 > MONEY_LIMIT){
         checkMoneyRange = false;
         return;
       }

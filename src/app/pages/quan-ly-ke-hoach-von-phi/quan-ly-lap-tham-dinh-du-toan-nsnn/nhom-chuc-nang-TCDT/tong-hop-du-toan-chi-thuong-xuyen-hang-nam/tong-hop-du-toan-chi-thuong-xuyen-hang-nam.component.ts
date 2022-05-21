@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -58,7 +58,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	maLoaiBacao: string = '25';
 	nam: any;
 	donVis: any = [];
-	donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
 	tong: ItemData = {
 		id: "",
 		stt: 0,
@@ -369,14 +369,14 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			let k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
 			let k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
 			let k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
-			if (tongCong > MONEYLIMIT || k331Tcong > MONEYLIMIT || k331KhongTchuCoDmucCong > MONEYLIMIT ||
-				k331KhongTchuChuaDmucCong > MONEYLIMIT || k341Tcong > MONEYLIMIT || k331KhongTchuCoDmucNx > MONEYLIMIT ||
-				k331KhongTchuCoDmucVtct > MONEYLIMIT || k331KhongTchuCoDmucBquan > MONEYLIMIT || k331KhongTchuChuaDmucCntt > MONEYLIMIT ||
-				k331KhongTchuChuaDmucThueKho > MONEYLIMIT || k331KhongTchuChuaDmucMsamTsan > MONEYLIMIT || k331KhongTchuChuaDmucBhiemHhoa > MONEYLIMIT ||
-				k331KhongTchuChuaDmucPhongChongMoiKplb > MONEYLIMIT || k331KhongTchuChuaDmucVchuyenBquanTsanQhiem > MONEYLIMIT || k331KhongTchuChuaDmucSchuaKhoTang > MONEYLIMIT ||
-				k341LuongTuChu > MONEYLIMIT || k341ChiTxKhongDmucTuChu > MONEYLIMIT || k341TxTheoDmucTuChu > MONEYLIMIT ||
-				k341LuongKhongTuChu > MONEYLIMIT || k341ChiTxKhongDmucKhongTuChu > MONEYLIMIT || k341TxTheoDmucKhongTuChu > MONEYLIMIT ||
-				k085DaoTao > MONEYLIMIT || k102NghienCuuKhoaHoc > MONEYLIMIT || k398DamBaoXaHoi > MONEYLIMIT) {
+			if (tongCong > MONEY_LIMIT || k331Tcong > MONEY_LIMIT || k331KhongTchuCoDmucCong > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucCong > MONEY_LIMIT || k341Tcong > MONEY_LIMIT || k331KhongTchuCoDmucNx > MONEY_LIMIT ||
+				k331KhongTchuCoDmucVtct > MONEY_LIMIT || k331KhongTchuCoDmucBquan > MONEY_LIMIT || k331KhongTchuChuaDmucCntt > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucThueKho > MONEY_LIMIT || k331KhongTchuChuaDmucMsamTsan > MONEY_LIMIT || k331KhongTchuChuaDmucBhiemHhoa > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucPhongChongMoiKplb > MONEY_LIMIT || k331KhongTchuChuaDmucVchuyenBquanTsanQhiem > MONEY_LIMIT || k331KhongTchuChuaDmucSchuaKhoTang > MONEY_LIMIT ||
+				k341LuongTuChu > MONEY_LIMIT || k341ChiTxKhongDmucTuChu > MONEY_LIMIT || k341TxTheoDmucTuChu > MONEY_LIMIT ||
+				k341LuongKhongTuChu > MONEY_LIMIT || k341ChiTxKhongDmucKhongTuChu > MONEY_LIMIT || k341TxTheoDmucKhongTuChu > MONEY_LIMIT ||
+				k085DaoTao > MONEY_LIMIT || k102NghienCuuKhoaHoc > MONEY_LIMIT || k398DamBaoXaHoi > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -920,14 +920,14 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 			let k085DaoTao = mulMoney(element.k085DaoTao, this.maDviTien);
 			let k102NghienCuuKhoaHoc = mulMoney(element.k102NghienCuuKhoaHoc, this.maDviTien);
 			let k398DamBaoXaHoi = mulMoney(element.k398DamBaoXaHoi, this.maDviTien);
-			if (tongCong > MONEYLIMIT || k331Tcong > MONEYLIMIT || k331KhongTchuCoDmucCong > MONEYLIMIT ||
-				k331KhongTchuChuaDmucCong > MONEYLIMIT || k341Tcong > MONEYLIMIT || k331KhongTchuCoDmucNx > MONEYLIMIT ||
-				k331KhongTchuCoDmucVtct > MONEYLIMIT || k331KhongTchuCoDmucBquan > MONEYLIMIT || k331KhongTchuChuaDmucCntt > MONEYLIMIT ||
-				k331KhongTchuChuaDmucThueKho > MONEYLIMIT || k331KhongTchuChuaDmucMsamTsan > MONEYLIMIT || k331KhongTchuChuaDmucBhiemHhoa > MONEYLIMIT ||
-				k331KhongTchuChuaDmucPhongChongMoiKplb > MONEYLIMIT || k331KhongTchuChuaDmucVchuyenBquanTsanQhiem > MONEYLIMIT || k331KhongTchuChuaDmucSchuaKhoTang > MONEYLIMIT ||
-				k341LuongTuChu > MONEYLIMIT || k341ChiTxKhongDmucTuChu > MONEYLIMIT || k341TxTheoDmucTuChu > MONEYLIMIT ||
-				k341LuongKhongTuChu > MONEYLIMIT || k341ChiTxKhongDmucKhongTuChu > MONEYLIMIT || k341TxTheoDmucKhongTuChu > MONEYLIMIT ||
-				k085DaoTao > MONEYLIMIT || k102NghienCuuKhoaHoc > MONEYLIMIT || k398DamBaoXaHoi > MONEYLIMIT) {
+			if (tongCong > MONEY_LIMIT || k331Tcong > MONEY_LIMIT || k331KhongTchuCoDmucCong > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucCong > MONEY_LIMIT || k341Tcong > MONEY_LIMIT || k331KhongTchuCoDmucNx > MONEY_LIMIT ||
+				k331KhongTchuCoDmucVtct > MONEY_LIMIT || k331KhongTchuCoDmucBquan > MONEY_LIMIT || k331KhongTchuChuaDmucCntt > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucThueKho > MONEY_LIMIT || k331KhongTchuChuaDmucMsamTsan > MONEY_LIMIT || k331KhongTchuChuaDmucBhiemHhoa > MONEY_LIMIT ||
+				k331KhongTchuChuaDmucPhongChongMoiKplb > MONEY_LIMIT || k331KhongTchuChuaDmucVchuyenBquanTsanQhiem > MONEY_LIMIT || k331KhongTchuChuaDmucSchuaKhoTang > MONEY_LIMIT ||
+				k341LuongTuChu > MONEY_LIMIT || k341ChiTxKhongDmucTuChu > MONEY_LIMIT || k341TxTheoDmucTuChu > MONEY_LIMIT ||
+				k341LuongKhongTuChu > MONEY_LIMIT || k341ChiTxKhongDmucKhongTuChu > MONEY_LIMIT || k341TxTheoDmucKhongTuChu > MONEY_LIMIT ||
+				k085DaoTao > MONEY_LIMIT || k102NghienCuuKhoaHoc > MONEY_LIMIT || k398DamBaoXaHoi > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -44,7 +44,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 	maKhoans: any = [];
 	maChiMucs: any = [];
 	cucKhuVucs: any = [];
-	donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
 	lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
 	tong: ItemData = {
 		id: uuid.v4()+'FE',
@@ -378,7 +378,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 			let thanhTienN2 = mulMoney(element.thanhTienN2, this.maDviTien);
 			let thanhTienN3 = mulMoney(element.thanhTienN3, this.maDviTien);
 			debugger
-			if (thanhTienN1 > MONEYLIMIT || thanhTienN2 > MONEYLIMIT || thanhTienN3 > MONEYLIMIT) {
+			if (thanhTienN1 > MONEY_LIMIT || thanhTienN2 > MONEY_LIMIT || thanhTienN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -841,7 +841,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
 			let thanhTienN2 = mulMoney(element.thanhTienN2, this.maDviTien);
 			let thanhTienN3 = mulMoney(element.thanhTienN3, this.maDviTien);
 			debugger
-			if (thanhTienN1 > MONEYLIMIT || thanhTienN2 > MONEYLIMIT || thanhTienN3 > MONEYLIMIT) {
+			if (thanhTienN1 > MONEY_LIMIT || thanhTienN2 > MONEY_LIMIT || thanhTienN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

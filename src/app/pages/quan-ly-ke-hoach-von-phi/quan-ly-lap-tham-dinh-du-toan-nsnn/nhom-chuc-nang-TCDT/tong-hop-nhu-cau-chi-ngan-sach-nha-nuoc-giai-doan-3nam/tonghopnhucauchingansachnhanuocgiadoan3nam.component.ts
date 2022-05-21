@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -70,7 +70,7 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-  listDonViTien:any = DONVITIEN;
+  listDonViTien:any = DON_VI_TIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -520,10 +520,10 @@ export class Tonghopnhucauchingansachnhanuocgiadoan3namComponent implements OnIn
        let  tranChiN3 = mulMoney(item.tranChiN3, this.donvitien);
        let  ncauChiN3 = mulMoney(item.ncauChiN3, this.donvitien);
        let  clechTranChiVsNcauChiN3 = mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
-       if(dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT || ncauChiN1 > MONEYLIMIT ||
-        clechTranChiVsNcauChiN1 > MONEYLIMIT || ssanhNcauNVoiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
-        ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT || ncauChiN3 > MONEYLIMIT ||
-        clechTranChiVsNcauChiN3 > MONEYLIMIT){
+       if(dtoanN > MONEY_LIMIT || uocThienN > MONEY_LIMIT || tranChiN1 > MONEY_LIMIT || ncauChiN1 > MONEY_LIMIT ||
+        clechTranChiVsNcauChiN1 > MONEY_LIMIT || ssanhNcauNVoiN1 > MONEY_LIMIT || tranChiN2 > MONEY_LIMIT ||
+        ncauChiN2 > MONEY_LIMIT || clechTranChiVsNcauChiN2 > MONEY_LIMIT || tranChiN3 > MONEY_LIMIT || ncauChiN3 > MONEY_LIMIT ||
+        clechTranChiVsNcauChiN3 > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }
@@ -745,10 +745,10 @@ xoaBaoCao(){
        let  tranChiN3 = mulMoney(item.tranChiN3, this.donvitien);
        let  ncauChiN3 = mulMoney(item.ncauChiN3, this.donvitien);
        let  clechTranChiVsNcauChiN3 = mulMoney(item.clechTranChiVsNcauChiN3, this.donvitien);
-       if(dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT || ncauChiN1 > MONEYLIMIT ||
-        clechTranChiVsNcauChiN1 > MONEYLIMIT || ssanhNcauNVoiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
-        ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT || ncauChiN3 > MONEYLIMIT ||
-        clechTranChiVsNcauChiN3 > MONEYLIMIT){
+       if(dtoanN > MONEY_LIMIT || uocThienN > MONEY_LIMIT || tranChiN1 > MONEY_LIMIT || ncauChiN1 > MONEY_LIMIT ||
+        clechTranChiVsNcauChiN1 > MONEY_LIMIT || ssanhNcauNVoiN1 > MONEY_LIMIT || tranChiN2 > MONEY_LIMIT ||
+        ncauChiN2 > MONEY_LIMIT || clechTranChiVsNcauChiN2 > MONEY_LIMIT || tranChiN3 > MONEY_LIMIT || ncauChiN3 > MONEY_LIMIT ||
+        clechTranChiVsNcauChiN3 > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }

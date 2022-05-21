@@ -7,8 +7,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCKETQUATHUCHIENHANGDTQG, Utils} from 'src/app/Utility/utils';
-import { TRANGTHAI } from 'src/app/Utility/utils';
+import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Utils} from 'src/app/Utility/utils';
+import { TRANG_THAI } from 'src/app/Utility/utils';
 import { UserService } from 'src/app/services/user.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 @Component({
@@ -38,7 +38,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   noParent = true;
   searchValue = '';
   messageValidate:any =MESSAGEVALIDATE;
-  listTrangThai:any = TRANGTHAI;
+  listTrangThai:any = TRANG_THAI;
   
   listBcaoKqua:any []=[];
   lenght:any=0;
@@ -73,7 +73,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
   }
 
   donViTaos: any = [];
-  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
+  baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 
 
   submitForm(): void {

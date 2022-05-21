@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, mulMoney, TRANGTHAIBANGHI, Utils } from "../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, mulMoney, TRANG_THAI_BAN_GHI, Utils } from "../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -43,8 +43,8 @@ export class ItemData {
 
 export class LapBaoCaoDieuChinhDuToanChiNsnnComponent implements OnInit {
      donVis: any = [];                            //don vi se hien thi
-     donViTiens: any[] = DONVITIEN;
-     trangThais: any[] = TRANGTHAIBANGHI;
+     donViTiens: any[] = DON_VI_TIEN;
+     trangThais: any[] = TRANG_THAI_BAN_GHI;
      khoanMucs: any[] = KHOANMUCLIST;
 
      maDviTien: any;

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -57,7 +57,7 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
      maLoaiCts: any = [];
      maCquanQds: any = [];
      donVis: any = [];
-     donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+     donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
      listBaoCao: ItemData[] = [];
      lstCTietBCao: ItemData[] = [];
      tong: ItemData = {
@@ -402,9 +402,9 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                let phatSinhN3 = mulMoney(element.phatSinhN3, this.maDviTien);
                let tsoN3 = mulMoney(element.tsoN3, this.maDviTien);
                debugger
-               if (tongGtri > MONEYLIMIT || dtoanKphi3006n > MONEYLIMIT || uocThienN > MONEYLIMIT || daTtoan3006n > MONEYLIMIT ||
-                    uocTtoanN > MONEYLIMIT || ttoanN1 > MONEYLIMIT || phatSinhN1 > MONEYLIMIT || tsoN1 > MONEYLIMIT || tsoN3 > MONEYLIMIT ||
-                    ttoanN2 > MONEYLIMIT || phatSinhN2 > MONEYLIMIT || tsoN2 > MONEYLIMIT || ttoanN3 > MONEYLIMIT || phatSinhN3 > MONEYLIMIT) {
+               if (tongGtri > MONEY_LIMIT || dtoanKphi3006n > MONEY_LIMIT || uocThienN > MONEY_LIMIT || daTtoan3006n > MONEY_LIMIT ||
+                    uocTtoanN > MONEY_LIMIT || ttoanN1 > MONEY_LIMIT || phatSinhN1 > MONEY_LIMIT || tsoN1 > MONEY_LIMIT || tsoN3 > MONEY_LIMIT ||
+                    ttoanN2 > MONEY_LIMIT || phatSinhN2 > MONEY_LIMIT || tsoN2 > MONEY_LIMIT || ttoanN3 > MONEY_LIMIT || phatSinhN3 > MONEY_LIMIT) {
                     checkMoneyRange = false;
                     return;
                }
@@ -904,9 +904,9 @@ export class KeHoachCaiTaoVaSuaChuaLon3NamComponent implements OnInit {
                let phatSinhN3 = mulMoney(element.phatSinhN3, this.maDviTien);
                let tsoN3 = mulMoney(element.tsoN3, this.maDviTien);
                debugger
-               if (tongGtri > MONEYLIMIT || dtoanKphi3006n > MONEYLIMIT || uocThienN > MONEYLIMIT || daTtoan3006n > MONEYLIMIT ||
-                    uocTtoanN > MONEYLIMIT || ttoanN1 > MONEYLIMIT || phatSinhN1 > MONEYLIMIT || tsoN1 > MONEYLIMIT || tsoN3 > MONEYLIMIT ||
-                    ttoanN2 > MONEYLIMIT || phatSinhN2 > MONEYLIMIT || tsoN2 > MONEYLIMIT || ttoanN3 > MONEYLIMIT || phatSinhN3 > MONEYLIMIT) {
+               if (tongGtri > MONEY_LIMIT || dtoanKphi3006n > MONEY_LIMIT || uocThienN > MONEY_LIMIT || daTtoan3006n > MONEY_LIMIT ||
+                    uocTtoanN > MONEY_LIMIT || ttoanN1 > MONEY_LIMIT || phatSinhN1 > MONEY_LIMIT || tsoN1 > MONEY_LIMIT || tsoN3 > MONEY_LIMIT ||
+                    ttoanN2 > MONEY_LIMIT || phatSinhN2 > MONEY_LIMIT || tsoN2 > MONEY_LIMIT || ttoanN3 > MONEY_LIMIT || phatSinhN3 > MONEY_LIMIT) {
                     checkMoneyRange = false;
                     return;
                }

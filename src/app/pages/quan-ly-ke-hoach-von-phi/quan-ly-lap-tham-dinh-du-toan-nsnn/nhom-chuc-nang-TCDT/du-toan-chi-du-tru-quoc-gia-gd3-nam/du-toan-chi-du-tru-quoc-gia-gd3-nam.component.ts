@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -97,7 +97,7 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
   currentday: Date = new Date();
   validateForm!: FormGroup;
   messageValidate:any =MESSAGEVALIDATE;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   capDv: any;
   checkDv: boolean;
   tongnam1:number;
@@ -368,9 +368,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       let khoachChiNsnnN2 = mulMoney(e.khoachChiNsnnN2, this.maDviTien)
       let khoachChiNsnnN3 = mulMoney(e.khoachChiNsnnN3, this.maDviTien)
       if(
-        khoachChiNsnnN1 > MONEYLIMIT ||
-        khoachChiNsnnN2 > MONEYLIMIT ||
-        khoachChiNsnnN3 > MONEYLIMIT
+        khoachChiNsnnN1 > MONEY_LIMIT ||
+        khoachChiNsnnN2 > MONEY_LIMIT ||
+        khoachChiNsnnN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -810,9 +810,9 @@ export class DuToanChiDuTruQuocGiaGd3NamComponent implements OnInit {
       let khoachChiNsnnN2 = mulMoney(item.khoachChiNsnnN2, this.maDviTien)
       let khoachChiNsnnN3 = mulMoney(item.khoachChiNsnnN3, this.maDviTien)
       if(
-        khoachChiNsnnN1 > MONEYLIMIT ||
-        khoachChiNsnnN2 > MONEYLIMIT ||
-        khoachChiNsnnN3 > MONEYLIMIT
+        khoachChiNsnnN1 > MONEY_LIMIT ||
+        khoachChiNsnnN2 > MONEY_LIMIT ||
+        khoachChiNsnnN3 > MONEY_LIMIT
       )
       {
         checkMoneyRange = false;
