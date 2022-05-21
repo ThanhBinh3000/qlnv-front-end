@@ -28,6 +28,8 @@ export class ItemData {
 	checked!: boolean;
 }
 
+
+
 @Component({
 	selector: 'app-bao-cao',
 	templateUrl: './bao-cao.component.html',
