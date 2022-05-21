@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
-import { TRANGTHAITIMKIEM, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc',
@@ -31,7 +31,7 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
   @Input() maDviTien: any
   danhSachBaoCao: any;
   khoanMucs: any = [];
-  trangThais: any = TRANGTHAITIMKIEM;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
   radioValue!: any;
   options: []
   searchFilter = {

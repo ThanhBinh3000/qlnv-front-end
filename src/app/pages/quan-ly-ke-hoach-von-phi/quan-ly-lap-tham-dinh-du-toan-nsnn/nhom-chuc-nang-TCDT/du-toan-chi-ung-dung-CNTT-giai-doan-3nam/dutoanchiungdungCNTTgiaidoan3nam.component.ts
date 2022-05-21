@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -75,7 +75,7 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-  listDonViTien:any [] = DONVITIEN;
+  listDonViTien:any [] = DON_VI_TIEN;
   cucKhuVucs: any = [];
 
   capDvi:any;
@@ -574,9 +574,9 @@ export class DutoanchiungdungCNTTgiaidoan3namComponent implements OnInit {
       let  dtoanThienN2Th = mulMoney(item.dtoanThienN2Th, this.donvitien);
       let  dtoanThienN3Cb = mulMoney(item.dtoanThienN3Cb, this.donvitien);
       let  dtoanThienN3Th = mulMoney(item.dtoanThienN3Th, this.donvitien);
-      if(tongDtoanGtri > MONEYLIMIT || thienNamTruoc > MONEYLIMIT || dtoanThienNCb > MONEYLIMIT ||
-        dtoanThienNTh > MONEYLIMIT || dtoanThienN1Cb > MONEYLIMIT || dtoanThienN1Th > MONEYLIMIT ||
-        dtoanThienN2Cb > MONEYLIMIT || dtoanThienN2Th > MONEYLIMIT || dtoanThienN3Cb > MONEYLIMIT || dtoanThienN3Th > MONEYLIMIT){
+      if(tongDtoanGtri > MONEY_LIMIT || thienNamTruoc > MONEY_LIMIT || dtoanThienNCb > MONEY_LIMIT ||
+        dtoanThienNTh > MONEY_LIMIT || dtoanThienN1Cb > MONEY_LIMIT || dtoanThienN1Th > MONEY_LIMIT ||
+        dtoanThienN2Cb > MONEY_LIMIT || dtoanThienN2Th > MONEY_LIMIT || dtoanThienN3Cb > MONEY_LIMIT || dtoanThienN3Th > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }
@@ -814,9 +814,9 @@ xoaBaoCao(){
       let  dtoanThienN2Th = mulMoney(item.dtoanThienN2Th, this.donvitien);
       let  dtoanThienN3Cb = mulMoney(item.dtoanThienN3Cb, this.donvitien);
       let  dtoanThienN3Th = mulMoney(item.dtoanThienN3Th, this.donvitien);
-      if(tongDtoanGtri > MONEYLIMIT || thienNamTruoc > MONEYLIMIT || dtoanThienNCb > MONEYLIMIT ||
-        dtoanThienNTh > MONEYLIMIT || dtoanThienN1Cb > MONEYLIMIT || dtoanThienN1Th > MONEYLIMIT ||
-        dtoanThienN2Cb > MONEYLIMIT || dtoanThienN2Th > MONEYLIMIT || dtoanThienN3Cb > MONEYLIMIT || dtoanThienN3Th > MONEYLIMIT){
+      if(tongDtoanGtri > MONEY_LIMIT || thienNamTruoc > MONEY_LIMIT || dtoanThienNCb > MONEY_LIMIT ||
+        dtoanThienNTh > MONEY_LIMIT || dtoanThienN1Cb > MONEY_LIMIT || dtoanThienN1Th > MONEY_LIMIT ||
+        dtoanThienN2Cb > MONEY_LIMIT || dtoanThienN2Th > MONEY_LIMIT || dtoanThienN3Cb > MONEY_LIMIT || dtoanThienN3Th > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }

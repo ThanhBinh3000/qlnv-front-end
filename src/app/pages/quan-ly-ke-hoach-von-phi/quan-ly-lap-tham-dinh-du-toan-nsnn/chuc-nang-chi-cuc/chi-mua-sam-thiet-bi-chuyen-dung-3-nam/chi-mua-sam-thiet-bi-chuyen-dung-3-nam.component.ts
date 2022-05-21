@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -40,7 +40,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 	lstCTietBCao: ItemData[] = [];
 	donVis: any = [];
 	listMachitieu: any = [];
-	donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
 	id!: any;
 	chiTietBcaos: any;
 	lstFile: any = [];
@@ -324,7 +324,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			let n1 = mulMoney(element.n1, this.maDviTien);
 			let n2 = mulMoney(element.n2, this.maDviTien);
 			let n3 = mulMoney(element.n3, this.maDviTien);
-			if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+			if (n1 > MONEY_LIMIT || n2 > MONEY_LIMIT || n3 > MONEY_LIMIT ) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -787,7 +787,7 @@ export class ChiMuaSamThietBiChuyenDung3NamComponent implements OnInit {
 			let n1 = mulMoney(element.n1, this.maDviTien);
 			let n2 = mulMoney(element.n2, this.maDviTien);
 			let n3 = mulMoney(element.n3, this.maDviTien);
-			if (n1 > MONEYLIMIT || n2 > MONEYLIMIT || n3 > MONEYLIMIT ) {
+			if (n1 > MONEY_LIMIT || n2 > MONEY_LIMIT || n3 > MONEY_LIMIT ) {
 				checkMoneyRange = false;
 				return;
 			}

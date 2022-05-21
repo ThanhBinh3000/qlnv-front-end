@@ -10,7 +10,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { LOAIBAOCAO, Utils } from "../../../../../Utility/utils";
+import { LOAI_BAO_CAO, Utils } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
@@ -40,7 +40,7 @@ export class VanBanGuiTcdtVeNsnnVaKhtc3NamComponent implements OnInit {
 	noiTao!: string;
 	soVban!: string;
 	ngayDuyetVban!: string;
-	baoCaos: any = LOAIBAOCAO;
+	baoCaos: any = LOAI_BAO_CAO;
 	donVis: any = [];
 	cucKhuVucs: any = [];
 	lstBcao: any = [];

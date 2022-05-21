@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -69,7 +69,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
-  listDonViTien:any []= DONVITIEN;
+  listDonViTien:any []= DON_VI_TIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -517,7 +517,7 @@ export class KehoachxaydungvanbanquyphamphapluatDTQGgiaidoan3namComponent
     let checkMoneyRange = true;
     this.lstCTietBCao.filter(element => {
       let dtoanKphi = mulMoney(element.dtoanKphi, this.donvitien);
-      if(dtoanKphi > MONEYLIMIT){
+      if(dtoanKphi > MONEY_LIMIT){
         checkMoneyRange = false;
         return;
       }
@@ -711,7 +711,7 @@ xoaBaoCao(){
     let checkMoneyRange = true;
     this.lstCTietBCao.filter( item =>{
       let dtoanKphi = mulMoney(item.dtoanKphi, this.donvitien);
-      if(dtoanKphi > MONEYLIMIT){
+      if(dtoanKphi > MONEY_LIMIT){
         checkMoneyRange = false;
         return;
       }

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -124,7 +124,7 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
   currentday: Date = new Date();
   validateForm!: FormGroup;
   messageValidate:any =MESSAGEVALIDATE;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -379,31 +379,31 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       let phuCapN3 = mulMoney(e.phuCapN3, this.maDviTien)
       let cacKhoanDgopN3 = mulMoney(e.cacKhoanDgopN3, this.maDviTien)
       if(
-        tongQuyLuongCoTchatLuongN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN > MONEYLIMIT ||
-        tuongCbanN > MONEYLIMIT ||
-        phuCapN > MONEYLIMIT ||
-        cacKhoanDgopN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongThienN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheThienN > MONEYLIMIT ||
-        luongCbanThienN > MONEYLIMIT ||
-        phuCapThienN > MONEYLIMIT ||
-        cacKhoanDgopThienN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN1 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN1 > MONEYLIMIT ||
-        luongCbanN1 > MONEYLIMIT ||
-        phuCapN1 > MONEYLIMIT ||
-        cacKhoanDgopN1 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN2 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN2 > MONEYLIMIT ||
-        luongCbanN2 > MONEYLIMIT ||
-        phuCapN2 > MONEYLIMIT ||
-        cacKhoanDgopN2 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN3 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN3 > MONEYLIMIT ||
-        luongCbanN3 > MONEYLIMIT ||
-        phuCapN3 > MONEYLIMIT ||
-        cacKhoanDgopN3 > MONEYLIMIT
+        tongQuyLuongCoTchatLuongN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN > MONEY_LIMIT ||
+        tuongCbanN > MONEY_LIMIT ||
+        phuCapN > MONEY_LIMIT ||
+        cacKhoanDgopN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongThienN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheThienN > MONEY_LIMIT ||
+        luongCbanThienN > MONEY_LIMIT ||
+        phuCapThienN > MONEY_LIMIT ||
+        cacKhoanDgopThienN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN1 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN1 > MONEY_LIMIT ||
+        luongCbanN1 > MONEY_LIMIT ||
+        phuCapN1 > MONEY_LIMIT ||
+        cacKhoanDgopN1 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN2 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN2 > MONEY_LIMIT ||
+        luongCbanN2 > MONEY_LIMIT ||
+        phuCapN2 > MONEY_LIMIT ||
+        cacKhoanDgopN2 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN3 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN3 > MONEY_LIMIT ||
+        luongCbanN3 > MONEY_LIMIT ||
+        phuCapN3 > MONEY_LIMIT ||
+        cacKhoanDgopN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -928,31 +928,31 @@ export class XayDungKeHoachQuyTienLuong3NamComponent implements OnInit {
       let phuCapN3 = mulMoney(item.phuCapN3, this.maDviTien)
       let cacKhoanDgopN3 = mulMoney(item.cacKhoanDgopN3, this.maDviTien)
       if(
-        tongQuyLuongCoTchatLuongN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN > MONEYLIMIT ||
-        tuongCbanN > MONEYLIMIT ||
-        phuCapN > MONEYLIMIT ||
-        cacKhoanDgopN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongThienN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheThienN > MONEYLIMIT ||
-        luongCbanThienN > MONEYLIMIT ||
-        phuCapThienN > MONEYLIMIT ||
-        cacKhoanDgopThienN > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN1 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN1 > MONEYLIMIT ||
-        luongCbanN1 > MONEYLIMIT ||
-        phuCapN1 > MONEYLIMIT ||
-        cacKhoanDgopN1 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN2 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN2 > MONEYLIMIT ||
-        luongCbanN2 > MONEYLIMIT ||
-        phuCapN2 > MONEYLIMIT ||
-        cacKhoanDgopN2 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongN3 > MONEYLIMIT ||
-        tongQuyLuongCoTchatLuongTheoBcheN3 > MONEYLIMIT ||
-        luongCbanN3 > MONEYLIMIT ||
-        phuCapN3 > MONEYLIMIT ||
-        cacKhoanDgopN3 > MONEYLIMIT
+        tongQuyLuongCoTchatLuongN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN > MONEY_LIMIT ||
+        tuongCbanN > MONEY_LIMIT ||
+        phuCapN > MONEY_LIMIT ||
+        cacKhoanDgopN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongThienN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheThienN > MONEY_LIMIT ||
+        luongCbanThienN > MONEY_LIMIT ||
+        phuCapThienN > MONEY_LIMIT ||
+        cacKhoanDgopThienN > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN1 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN1 > MONEY_LIMIT ||
+        luongCbanN1 > MONEY_LIMIT ||
+        phuCapN1 > MONEY_LIMIT ||
+        cacKhoanDgopN1 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN2 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN2 > MONEY_LIMIT ||
+        luongCbanN2 > MONEY_LIMIT ||
+        phuCapN2 > MONEY_LIMIT ||
+        cacKhoanDgopN2 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongN3 > MONEY_LIMIT ||
+        tongQuyLuongCoTchatLuongTheoBcheN3 > MONEY_LIMIT ||
+        luongCbanN3 > MONEY_LIMIT ||
+        phuCapN3 > MONEY_LIMIT ||
+        cacKhoanDgopN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

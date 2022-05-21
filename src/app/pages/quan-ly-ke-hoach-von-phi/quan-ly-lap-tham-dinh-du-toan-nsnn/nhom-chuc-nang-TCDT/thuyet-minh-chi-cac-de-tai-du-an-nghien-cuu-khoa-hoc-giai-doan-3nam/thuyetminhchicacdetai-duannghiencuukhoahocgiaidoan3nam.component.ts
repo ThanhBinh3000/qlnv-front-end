@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney,  DON_VI_TIEN,  MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -72,7 +72,7 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
   loaiBaocao: any;
 
   
-  listDonViTien:any []=DONVITIEN;
+  listDonViTien:any []=DON_VI_TIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -509,8 +509,8 @@ export class ThuyetminhchicacdetaiDuannghiencuukhoahocgiaidoan3namComponent impl
       let kphiDkienBtriN2 = mulMoney(element.kphiDkienBtriN2, this.donvitien);
       let kphiDkienBtriN3 = mulMoney(element.kphiDkienBtriN3, this.donvitien);
       let kphiThuHoi = mulMoney(element.kphiThuHoi, this.donvitien);
-      if(kphiTongPhiDuocDuyet > MONEYLIMIT || kphiDaDuocBoTriDenNamN >MONEYLIMIT || kphiDaDuocThienDenTdiemBcao > MONEYLIMIT ||
-        kphiDkienBtriN1 > MONEYLIMIT || kphiDkienBtriN2 > MONEYLIMIT || kphiDkienBtriN3 > MONEYLIMIT || kphiThuHoi > MONEYLIMIT){
+      if(kphiTongPhiDuocDuyet > MONEY_LIMIT || kphiDaDuocBoTriDenNamN >MONEY_LIMIT || kphiDaDuocThienDenTdiemBcao > MONEY_LIMIT ||
+        kphiDkienBtriN1 > MONEY_LIMIT || kphiDkienBtriN2 > MONEY_LIMIT || kphiDkienBtriN3 > MONEY_LIMIT || kphiThuHoi > MONEY_LIMIT){
           checkMoneyRange = false;
           return; 
         }
@@ -731,8 +731,8 @@ xoaBaoCao(){
       let kphiDkienBtriN2 = mulMoney(item.kphiDkienBtriN2, this.donvitien);
       let kphiDkienBtriN3 = mulMoney(item.kphiDkienBtriN3, this.donvitien);
       let kphiThuHoi = mulMoney(item.kphiThuHoi, this.donvitien);
-      if(kphiTongPhiDuocDuyet > MONEYLIMIT || kphiDaDuocBoTriDenNamN >MONEYLIMIT || kphiDaDuocThienDenTdiemBcao > MONEYLIMIT ||
-        kphiDkienBtriN1 > MONEYLIMIT || kphiDkienBtriN2 > MONEYLIMIT || kphiDkienBtriN3 > MONEYLIMIT || kphiThuHoi > MONEYLIMIT){
+      if(kphiTongPhiDuocDuyet > MONEY_LIMIT || kphiDaDuocBoTriDenNamN >MONEY_LIMIT || kphiDaDuocThienDenTdiemBcao > MONEY_LIMIT ||
+        kphiDkienBtriN1 > MONEY_LIMIT || kphiDkienBtriN2 > MONEY_LIMIT || kphiDkienBtriN3 > MONEY_LIMIT || kphiThuHoi > MONEY_LIMIT){
           checkMoneyRange = false;
           return; 
         }

@@ -8,7 +8,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -126,7 +126,7 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   capDv: any;
 
   // tong cong
@@ -435,21 +435,21 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       let ncauVonN2  = mulMoney(e.ncauVonN2, this.maDviTien)
       let ncauVonN3  = mulMoney(e.ncauVonN3, this.maDviTien)
       if(
-        qdDuyetDanDtuTongVon > MONEYLIMIT ||
-        qdDchinhDanDtuTongVon > MONEYLIMIT ||
-        qdDuyetTkDtoanTong > MONEYLIMIT ||
-        klthCapDen3006Quykhac > MONEYLIMIT ||
-        klthCapDen3112Quykhac > MONEYLIMIT ||
-        qdDuyetTkDtoanXl > MONEYLIMIT ||
-        qdDuyetTkDtoanTb > MONEYLIMIT ||
-        qdDuyetTkDtoanCk > MONEYLIMIT ||
-        klthCapDen3006Nstt > MONEYLIMIT ||
-        klthCapDen3006DtoanChiTx > MONEYLIMIT ||
-        klthCapDen3112Nstt > MONEYLIMIT ||
-        klthCapDen3112DtoanChiTx > MONEYLIMIT ||
-        ncauVonN1 > MONEYLIMIT ||
-        ncauVonN2 > MONEYLIMIT ||
-        ncauVonN3 > MONEYLIMIT
+        qdDuyetDanDtuTongVon > MONEY_LIMIT ||
+        qdDchinhDanDtuTongVon > MONEY_LIMIT ||
+        qdDuyetTkDtoanTong > MONEY_LIMIT ||
+        klthCapDen3006Quykhac > MONEY_LIMIT ||
+        klthCapDen3112Quykhac > MONEY_LIMIT ||
+        qdDuyetTkDtoanXl > MONEY_LIMIT ||
+        qdDuyetTkDtoanTb > MONEY_LIMIT ||
+        qdDuyetTkDtoanCk > MONEY_LIMIT ||
+        klthCapDen3006Nstt > MONEY_LIMIT ||
+        klthCapDen3006DtoanChiTx > MONEY_LIMIT ||
+        klthCapDen3112Nstt > MONEY_LIMIT ||
+        klthCapDen3112DtoanChiTx > MONEY_LIMIT ||
+        ncauVonN1 > MONEY_LIMIT ||
+        ncauVonN2 > MONEY_LIMIT ||
+        ncauVonN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -977,21 +977,21 @@ export class NhuCauKeHoachDtxd3NamComponent implements OnInit {
       let ncauVonN2  = mulMoney(e.ncauVonN2, this.maDviTien)
       let ncauVonN3  = mulMoney(e.ncauVonN3, this.maDviTien)
       if(
-        qdDuyetDanDtuTongVon > MONEYLIMIT ||
-        qdDchinhDanDtuTongVon > MONEYLIMIT ||
-        qdDuyetTkDtoanTong > MONEYLIMIT ||
-        klthCapDen3006Quykhac > MONEYLIMIT ||
-        klthCapDen3112Quykhac > MONEYLIMIT ||
-        qdDuyetTkDtoanXl > MONEYLIMIT ||
-        qdDuyetTkDtoanTb > MONEYLIMIT ||
-        qdDuyetTkDtoanCk > MONEYLIMIT ||
-        klthCapDen3006Nstt > MONEYLIMIT ||
-        klthCapDen3006DtoanChiTx > MONEYLIMIT ||
-        klthCapDen3112Nstt > MONEYLIMIT ||
-        klthCapDen3112DtoanChiTx > MONEYLIMIT ||
-        ncauVonN1 > MONEYLIMIT ||
-        ncauVonN2 > MONEYLIMIT ||
-        ncauVonN3 > MONEYLIMIT
+        qdDuyetDanDtuTongVon > MONEY_LIMIT ||
+        qdDchinhDanDtuTongVon > MONEY_LIMIT ||
+        qdDuyetTkDtoanTong > MONEY_LIMIT ||
+        klthCapDen3006Quykhac > MONEY_LIMIT ||
+        klthCapDen3112Quykhac > MONEY_LIMIT ||
+        qdDuyetTkDtoanXl > MONEY_LIMIT ||
+        qdDuyetTkDtoanTb > MONEY_LIMIT ||
+        qdDuyetTkDtoanCk > MONEY_LIMIT ||
+        klthCapDen3006Nstt > MONEY_LIMIT ||
+        klthCapDen3006DtoanChiTx > MONEY_LIMIT ||
+        klthCapDen3112Nstt > MONEY_LIMIT ||
+        klthCapDen3112DtoanChiTx > MONEY_LIMIT ||
+        ncauVonN1 > MONEY_LIMIT ||
+        ncauVonN2 > MONEY_LIMIT ||
+        ncauVonN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

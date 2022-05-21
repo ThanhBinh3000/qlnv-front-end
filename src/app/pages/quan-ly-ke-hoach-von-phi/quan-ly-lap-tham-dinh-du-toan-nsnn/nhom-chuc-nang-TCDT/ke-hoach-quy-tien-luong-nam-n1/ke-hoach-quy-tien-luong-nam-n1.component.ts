@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -117,7 +117,7 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   // upload file
   addFile() {
     const id = this.fileToUpload?.lastModified.toString();
@@ -353,17 +353,17 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       let bcheChuaSdungCkdg = mulMoney(e.bcheChuaSdungCkdg, this.maDviTien)
       let quyLuongPcapCkdgTheoLuongHdld = mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien)
       if(
-        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEYLIMIT ||
-        tongSo > MONEYLIMIT ||
-        ccvc0101n1Cong > MONEYLIMIT ||
-        ccvc0101n1Luong > MONEYLIMIT ||
-        ccvc0101n1Pcap > MONEYLIMIT ||
-        ccvc0101n1Ckdg > MONEYLIMIT ||
-        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEYLIMIT ||
-        bcheChuaSdungCong > MONEYLIMIT ||
-        bcheChuaSdungLuongHeSo234 > MONEYLIMIT ||
-        bcheChuaSdungCkdg > MONEYLIMIT ||
-        quyLuongPcapCkdgTheoLuongHdld > MONEYLIMIT
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEY_LIMIT ||
+        tongSo > MONEY_LIMIT ||
+        ccvc0101n1Cong > MONEY_LIMIT ||
+        ccvc0101n1Luong > MONEY_LIMIT ||
+        ccvc0101n1Pcap > MONEY_LIMIT ||
+        ccvc0101n1Ckdg > MONEY_LIMIT ||
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEY_LIMIT ||
+        bcheChuaSdungCong > MONEY_LIMIT ||
+        bcheChuaSdungLuongHeSo234 > MONEY_LIMIT ||
+        bcheChuaSdungCkdg > MONEY_LIMIT ||
+        quyLuongPcapCkdgTheoLuongHdld > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -814,17 +814,17 @@ export class KeHoachQuyTienLuongNamN1Component implements OnInit {
       let bcheChuaSdungCkdg = mulMoney(e.bcheChuaSdungCkdg, this.maDviTien)
       let quyLuongPcapCkdgTheoLuongHdld = mulMoney(e.quyLuongPcapCkdgTheoLuongHdld, this.maDviTien)
       if(
-        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEYLIMIT ||
-        tongSo > MONEYLIMIT ||
-        ccvc0101n1Cong > MONEYLIMIT ||
-        ccvc0101n1Luong > MONEYLIMIT ||
-        ccvc0101n1Pcap > MONEYLIMIT ||
-        ccvc0101n1Ckdg > MONEYLIMIT ||
-        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEYLIMIT ||
-        bcheChuaSdungCong > MONEYLIMIT ||
-        bcheChuaSdungLuongHeSo234 > MONEYLIMIT ||
-        bcheChuaSdungCkdg > MONEYLIMIT ||
-        quyLuongPcapCkdgTheoLuongHdld > MONEYLIMIT
+        tongQuyLuongPcapCkdgTheoLuongCcvcHdld > MONEY_LIMIT ||
+        tongSo > MONEY_LIMIT ||
+        ccvc0101n1Cong > MONEY_LIMIT ||
+        ccvc0101n1Luong > MONEY_LIMIT ||
+        ccvc0101n1Pcap > MONEY_LIMIT ||
+        ccvc0101n1Ckdg > MONEY_LIMIT ||
+        quyLuongTangThemDoNangBacLuongCcvc0101n1 > MONEY_LIMIT ||
+        bcheChuaSdungCong > MONEY_LIMIT ||
+        bcheChuaSdungLuongHeSo234 > MONEY_LIMIT ||
+        bcheChuaSdungCkdg > MONEY_LIMIT ||
+        quyLuongPcapCkdgTheoLuongHdld > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

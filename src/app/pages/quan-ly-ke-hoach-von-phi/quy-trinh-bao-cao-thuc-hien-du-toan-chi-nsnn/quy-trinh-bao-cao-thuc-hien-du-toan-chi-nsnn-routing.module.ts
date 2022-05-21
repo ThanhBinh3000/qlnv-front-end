@@ -58,6 +58,7 @@ const routes: Routes = [
         './chuc-nang-cuc-khu-vuc/kiem-tra/kiem-tra.module'
       ).then((m) => m.KiemTraModule),
   },
+
 ];
 
 @NgModule({

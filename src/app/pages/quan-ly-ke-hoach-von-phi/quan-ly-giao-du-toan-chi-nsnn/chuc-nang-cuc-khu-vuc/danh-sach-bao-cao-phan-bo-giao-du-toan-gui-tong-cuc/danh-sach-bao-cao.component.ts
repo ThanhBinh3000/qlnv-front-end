@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { MESSAGE } from '../../../../../constants/message';
-import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-danh-sach-bao-cao',
@@ -55,7 +55,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
   donViTaos: any = [];
   baoCaos: any = [];
   allChecked: any;
-  trangThais: any = TRANGTHAITIMKIEM;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,

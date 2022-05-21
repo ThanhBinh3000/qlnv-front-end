@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BAOCAODOT, BAOCAONAM, NOTOK, OK, TRANGTHAIPHULUC, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BAO_CAO_NAM, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import { BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, TAB_SELECTED,SOLAMA, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, KHOAN_MUC } from './bao-cao.constant';
 import * as uuid from 'uuid';
 import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
@@ -307,7 +307,7 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.baoCao.trangThai = '1';
       
-      if(this.maLoaiBaoCaoParam ==BAOCAODOT){
+      if(this.maLoaiBaoCaoParam ==BAO_CAO_DOT){
         await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
           if(res.statusCode==0){            
             this.baoCao.dotBcao = res.data;
@@ -317,7 +317,7 @@ export class BaoCaoComponent implements OnInit {
         },err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        this.maLoaiBaocao = BAOCAODOT;
+        this.maLoaiBaocao = BAO_CAO_DOT;
         LISTBIEUMAUDOT.forEach(e => {
           this.baoCao.lstBCao.push(
             {
@@ -332,7 +332,7 @@ export class BaoCaoComponent implements OnInit {
           )
         })
       }else{
-        this.maLoaiBaocao =BAOCAONAM;
+        this.maLoaiBaocao =BAO_CAO_NAM;
         LISTBIEUMAUNAM.forEach(e => {
           this.baoCao.lstBCao.push(
             {
@@ -431,7 +431,7 @@ export class BaoCaoComponent implements OnInit {
   pheDuyetChiTiet(mcn: string,maLoai:any) {
     if (mcn == OK) {
       this.pheDuyetBieuMau(mcn,maLoai, null);
-    } else if (mcn == NOTOK) {
+    } else if (mcn == NOT_OK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
         nzContent: DialogTuChoiComponent,
@@ -630,7 +630,7 @@ export class BaoCaoComponent implements OnInit {
           this.maLoaiBaocao = data.data.maLoaiBcao;
           this.lstFile = data.data.lstFile;
           this.trangThaiBanGhi = data.data.trangThai;
-          if(this.maLoaiBaocao==BAOCAODOT){
+          if(this.maLoaiBaocao==BAO_CAO_DOT){
             this.baoCao?.lstBCao?.forEach(item => {
               let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
               if(index !== -1){
@@ -861,7 +861,7 @@ export class BaoCaoComponent implements OnInit {
     }
   }
   getStatusNameBieuMau(Status:any){
-    return TRANGTHAIPHULUC.find(item => item.id ==Number(Status))?.ten;
+    return TRANG_THAI_PHU_LUC.find(item => item.id ==Number(Status))?.ten;
   }
 
   changeTab(maPhuLuc){
@@ -903,7 +903,7 @@ export class BaoCaoComponent implements OnInit {
 
   addPhuLuc() {
     var danhSach:any;    
-    if(this.maLoaiBaoCaoParam==BAOCAODOT){
+    if(this.maLoaiBaoCaoParam==BAO_CAO_DOT){
       LISTBIEUMAUDOT.forEach(item => item.status = false);
        danhSach = LISTBIEUMAUDOT.filter(item => this.baoCao?.lstBCao?.findIndex(data => Number(data.maLoai) == item.maPhuLuc) == -1);
     }else{

@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -105,7 +105,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   kphi!: number;
   messageValidate: any = MESSAGEVALIDATE;
   validateForm: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
@@ -381,7 +381,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     let checkMoneyRange = true
     this.lstCTiet.filter(e => {
       let kphi = mulMoney(e.kphi, this.maDviTien)
-      if(kphi > MONEYLIMIT){
+      if(kphi > MONEY_LIMIT){
         checkMoneyRange = false;
         return
       }
@@ -396,10 +396,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
     let kphiBquanGaoTx = mulMoney(this.kphiBquanGaoTx, this.maDviTien)
     let kphiBquanGaoLd = mulMoney(this.kphiBquanGaoLd, this.maDviTien)
     if(
-      kphiBquanThocTx > MONEYLIMIT ||
-      kphiBquanThocLd > MONEYLIMIT ||
-      kphiBquanGaoTx > MONEYLIMIT ||
-      kphiBquanGaoLd > MONEYLIMIT
+      kphiBquanThocTx > MONEY_LIMIT ||
+      kphiBquanThocLd > MONEY_LIMIT ||
+      kphiBquanGaoTx > MONEY_LIMIT ||
+      kphiBquanGaoLd > MONEY_LIMIT
     ){
       checkMoneyRange = false;
       return
@@ -835,7 +835,7 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   let checkMoneyRange = true;
   this.lstCTiet.filter(item => {
     let kphi = mulMoney(item.kphi, this.maDviTien)
-    if(kphi > MONEYLIMIT){
+    if(kphi > MONEY_LIMIT){
       checkMoneyRange = false;
       return
     }
@@ -851,10 +851,10 @@ export class XayDungKeHoachBaoQuanHangNamComponent implements OnInit {
   let kphiBquanGaoTx =  mulMoney(this.kphiBquanGaoTx, this.maDviTien)
   let kphiBquanGaoLd =  mulMoney(this.kphiBquanGaoLd, this.maDviTien)
   if(
-    kphiBquanThocTx > MONEYLIMIT ||
-    kphiBquanThocLd > MONEYLIMIT ||
-    kphiBquanGaoTx > MONEYLIMIT ||
-    kphiBquanGaoLd > MONEYLIMIT
+    kphiBquanThocTx > MONEY_LIMIT ||
+    kphiBquanThocLd > MONEY_LIMIT ||
+    kphiBquanGaoTx > MONEY_LIMIT ||
+    kphiBquanGaoLd > MONEY_LIMIT
   ){
     checkMoneyRange = false;
     return

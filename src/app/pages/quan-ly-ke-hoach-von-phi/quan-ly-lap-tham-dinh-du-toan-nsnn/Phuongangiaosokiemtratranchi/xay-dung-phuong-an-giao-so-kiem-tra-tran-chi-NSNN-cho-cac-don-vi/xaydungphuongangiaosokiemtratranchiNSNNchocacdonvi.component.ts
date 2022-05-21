@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { UserService } from 'src/app/services/user.service';
@@ -72,7 +72,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
-  listDonViTien:any []=DONVITIEN;
+  listDonViTien:any []=DON_VI_TIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -623,7 +623,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       let listCtietDvi = [];
       item.listCtietDvi.forEach(e => {
         let soTranChi = mulMoney(e.soTranChi, this.donvitien);
-        if(soTranChi > MONEYLIMIT){
+        if(soTranChi > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }
@@ -910,7 +910,7 @@ export class XaydungphuongangiaosokiemtratranchiNSNNchocacdonviComponent
       let listCtietDvi = [];
       item.listCtietDvi.forEach(e => {
         let soTranChi = mulMoney(e.soTranChi, this.donvitien);
-        if(soTranChi > MONEYLIMIT){
+        if(soTranChi > MONEY_LIMIT){
           checkMoneyRange = false;
           return;
         }

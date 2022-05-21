@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANGTHAIGUIDVCT, LBCKETQUATHUCHIENHANGDTQG, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_GUI_DVCT, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc',
@@ -59,7 +59,7 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
     page: 1,
   }
   donViTaos: any = [];
-  baoCaos: any = LBCKETQUATHUCHIENHANGDTQG;
+  baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,

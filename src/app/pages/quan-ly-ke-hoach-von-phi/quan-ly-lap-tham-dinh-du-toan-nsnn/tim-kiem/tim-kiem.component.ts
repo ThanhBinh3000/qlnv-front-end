@@ -6,7 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -26,7 +26,7 @@ export class TimKiemComponent implements OnInit {
   url!: string;
   messageValidate:any = MESSAGEVALIDATE
 
-  trangThais: any = TRANGTHAITIMKIEM;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
   searchFilter = {
     nam: null,
     tuNgay: "",
@@ -84,7 +84,7 @@ export class TimKiemComponent implements OnInit {
     });
 
     //lay danh sach loai bao cao
-    this.baoCaos = LOAIBAOCAO;
+    this.baoCaos = LOAI_BAO_CAO;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {

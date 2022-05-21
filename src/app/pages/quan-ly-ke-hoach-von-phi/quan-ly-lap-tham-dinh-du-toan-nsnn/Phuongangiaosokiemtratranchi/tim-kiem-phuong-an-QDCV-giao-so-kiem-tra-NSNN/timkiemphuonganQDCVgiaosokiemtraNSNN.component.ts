@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANGTHAI, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI, Utils } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-timkiemphuonganQDCVgiaosokiemtraNSNN',
@@ -33,7 +33,7 @@ export class TimkiemphuonganQDCVgiaosokiemtraNSNNComponent implements OnInit {
   donViTaos: any[] = [];
   totalitem:any;
   checkroleDvi:any;
-  listTrangThai: any=TRANGTHAI;
+  listTrangThai: any=TRANG_THAI;
   validateForm!: FormGroup; 
   messageValidate:any = MESSAGEVALIDATE;
   totalElements = 0;

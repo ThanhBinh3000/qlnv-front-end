@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -54,7 +54,7 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 	loaiDans: any = [];
 	donVis: any = [];
 	cucKhuVucs: any = [];
-	donViTiens: any = DONVITIEN; // danh muc don vi tien
+	donViTiens: any = DON_VI_TIEN; // danh muc don vi tien
 	listBaoCao: ItemData[] = [];
 	lstCTietBCao: ItemData[] = [];
 	tong: ItemData = {
@@ -421,9 +421,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			let cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
 			let thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
 			debugger
-			if (tongDtoanGtri > MONEYLIMIT || cbDtuN > MONEYLIMIT || thienNamTruoc > MONEYLIMIT ||
-				thDtuN > MONEYLIMIT || cbDtuN1 > MONEYLIMIT || thDtuN1 > MONEYLIMIT ||
-				cbDtuN2 > MONEYLIMIT || thDtuN2 > MONEYLIMIT || cbDtuN3 > MONEYLIMIT || thDtuN3 > MONEYLIMIT) {
+			if (tongDtoanGtri > MONEY_LIMIT || cbDtuN > MONEY_LIMIT || thienNamTruoc > MONEY_LIMIT ||
+				thDtuN > MONEY_LIMIT || cbDtuN1 > MONEY_LIMIT || thDtuN1 > MONEY_LIMIT ||
+				cbDtuN2 > MONEY_LIMIT || thDtuN2 > MONEY_LIMIT || cbDtuN3 > MONEY_LIMIT || thDtuN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -897,9 +897,9 @@ export class DuToanChiUngDungCntt3NamComponent implements OnInit {
 			let cbDtuN3 = mulMoney(element.cbDtuN3, this.maDviTien);
 			let thDtuN3 = mulMoney(element.thDtuN3, this.maDviTien);
 			debugger
-			if (tongDtoanGtri > MONEYLIMIT || cbDtuN > MONEYLIMIT || thienNamTruoc > MONEYLIMIT ||
-				thDtuN > MONEYLIMIT || cbDtuN1 > MONEYLIMIT || thDtuN1 > MONEYLIMIT ||
-				cbDtuN2 > MONEYLIMIT || thDtuN2 > MONEYLIMIT || cbDtuN3 > MONEYLIMIT || thDtuN3 > MONEYLIMIT) {
+			if (tongDtoanGtri > MONEY_LIMIT || cbDtuN > MONEY_LIMIT || thienNamTruoc > MONEY_LIMIT ||
+				thDtuN > MONEY_LIMIT || cbDtuN1 > MONEY_LIMIT || thDtuN1 > MONEY_LIMIT ||
+				cbDtuN2 > MONEY_LIMIT || thDtuN2 > MONEY_LIMIT || cbDtuN3 > MONEY_LIMIT || thDtuN3 > MONEY_LIMIT) {
 				checkMoneyRange = false;
 				return;
 			}

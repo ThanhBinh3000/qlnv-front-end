@@ -274,13 +274,13 @@ export class Utils {
 
     // lay ten trang thai theo ma trang thai
     public getStatusAppendixName(id: any) {
-        let statusName = TRANGTHAIPHULUC.find(item => item.id == id)
+        let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
         return statusName?.ten;
     }
 }
 
 // loai bao cao quan ly von phi
-export const LOAIBAOCAO = [
+export const LOAI_BAO_CAO = [
     {
         id: '12',
         tenDm: 'Xây dựng Chi thường xuyên giai đoạn 03 năm'
@@ -476,7 +476,7 @@ export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N: string = "3
 export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N: string = "32";
 
 // loai bao cao quy trinh thuc hien du toan chi
-export const LBCQUYTRINHTHUCHIENDUTOANCHI = [
+export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
     {
         id: 526,
         tenDm: 'Báo cáo giải ngân định kỳ tháng'
@@ -488,7 +488,7 @@ export const LBCQUYTRINHTHUCHIENDUTOANCHI = [
 ]
 
 // loai bao cao ket qua thuc hien hang du tru quoc gia
-export const LBCKETQUATHUCHIENHANGDTQG = [
+export const LBC_KET_QUA_THUC_HIEN_HANG_DTQG = [
     {
         id: 1,
         tenDm: 'Đợt'
@@ -498,10 +498,10 @@ export const LBCKETQUATHUCHIENHANGDTQG = [
         tenDm: 'Năm'
     },
 ]
-export const BAOCAODOT = "1";
-export const BAOCAONAM = "2";
+export const BAO_CAO_DOT = "1";
+export const BAO_CAO_NAM = "2";
 // trang thai ban ghi cua anh Ninh
-export const TRANGTHAIBANGHI = [
+export const TRANG_THAI_BAN_GHI = [
     {
         id: '1',
         tenDm: 'Đang soạn'
@@ -543,7 +543,7 @@ export const TRANGTHAIBANGHI = [
 
 
 // trang thai ban ghi
-export const TRANGTHAI = [
+export const TRANG_THAI = [
     {
         id: 1,
         tenDm: 'Đang soạn'
@@ -591,7 +591,7 @@ export const TRANGTHAI = [
 ]
 
 // trang thai ban ghi
-export const TRANGTHAITIMKIEM = [
+export const TRANG_THAI_TIM_KIEM = [
     {
         id: "1",
         tenDm: 'Đang soạn'
@@ -636,11 +636,14 @@ export const TRANGTHAITIMKIEM = [
 
 // trang thai chi tiet bao cao
 export const OK = "1";
-export const NOTOK = "0";
-export const CHUADANHGIA = "2";
+export const NOT_OK = "0";
+export const CHUA_DANH_GIA = "2";
+export const MOI = "3";
+export const DANG_NHAP_LIEU = "4";
+export const HOAN_TAT_NHAP_LIEU = "5";
 
 // loai trang thai gui don vi cap tren
-export const TRANGTHAIGUIDVCT = [
+export const TRANG_THAI_GUI_DVCT = [
     {
         id: '9',
         ten: 'Chấp nhận'
@@ -656,7 +659,7 @@ export const TRANGTHAIGUIDVCT = [
 ]
 
 // loai trang thai kiem tra
-export const TRANGTHAIKIEMTRABAOCAO = [
+export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
     {
         id: '9',
         ten: 'Chấp nhận'
@@ -675,7 +678,7 @@ export const TRANGTHAIKIEMTRABAOCAO = [
     },
 ]
 
-export const TRANGTHAIPHULUC = [
+export const TRANG_THAI_PHU_LUC = [
     {
         id: 0,
         ten: 'NOT OK'
@@ -687,10 +690,22 @@ export const TRANGTHAIPHULUC = [
     {
         id: 2,
         ten: 'Chưa đánh giá (để trống)'
+    },
+    {
+        id: 3,
+        ten: 'Mới'
+    },
+    {
+        id: 4,
+        ten: 'Đang nhập liệu'
+    },
+    {
+        id: 5,
+        ten: 'Hoàn tất nhập liệu'
     }
 ]
 
-export const LISTBAOCAOTONGHOP = [
+export const LIST_BAO_CAO_TONG_HOP = [
     {
         id: '01',
         tenDm: 'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
@@ -762,7 +777,7 @@ export const LISTBAOCAOTONGHOP = [
 ]
 
 // loai bao cao quy trinh thuc hien du toan chi
-export const DONVITIEN = [
+export const DON_VI_TIEN = [
     {
         id: '1',
         tenDm: 'Đồng',
@@ -786,7 +801,7 @@ export const DONVITIEN = [
 ]
 
 export function divMoney(value, maDonViTien) {
-    let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+    let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
         return null;
     }
@@ -800,7 +815,7 @@ export function divMoney(value, maDonViTien) {
 
 export function mulMoney(value, maDonViTien) {
 
-    let donVi = DONVITIEN.find(item => item.id == maDonViTien);
+    let donVi = DON_VI_TIEN.find(item => item.id == maDonViTien);
     if (!value && value != 0) {
         return null;
     }
@@ -814,7 +829,7 @@ export function mulMoney(value, maDonViTien) {
 
 
 // trang thai phan bo du toan chi nsnn
-export const TRANGTHAIPHANBO = [
+export const TRANG_THAI_PHAN_BO = [
     {
         id: '1',
         ten: 'Chưa ghi nhận',
@@ -832,4 +847,4 @@ export const TRANGTHAIPHANBO = [
         ten: 'Chờ tiếp nhận',
     },
 ]
-export const MONEYLIMIT = 9000000000000000000;
+export const MONEY_LIMIT = 9000000000000000000;

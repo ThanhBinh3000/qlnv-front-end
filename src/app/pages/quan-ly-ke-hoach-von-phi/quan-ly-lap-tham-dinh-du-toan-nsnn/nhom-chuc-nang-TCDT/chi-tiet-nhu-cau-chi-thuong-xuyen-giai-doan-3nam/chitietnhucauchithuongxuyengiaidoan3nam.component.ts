@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -65,7 +65,7 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
 
-  listDonViTien:any =DONVITIEN;
+  listDonViTien:any =DON_VI_TIEN;
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
   lstFile: any[] = [];
@@ -536,8 +536,8 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         let ncauDtoanN1 = mulMoney(element.ncauDtoanN1, this.donvitien);
         let ncauDtoanN2 = mulMoney(element.ncauDtoanN2, this.donvitien);
         let ncauDtoanN3 = mulMoney(element.ncauDtoanN3, this.donvitien);
-      if (thienNamHhanhN > MONEYLIMIT || ncauDtoanN1 > MONEYLIMIT || ncauDtoanN2 > MONEYLIMIT ||
-				ncauDtoanN3 > MONEYLIMIT ) {
+      if (thienNamHhanhN > MONEY_LIMIT || ncauDtoanN1 > MONEY_LIMIT || ncauDtoanN2 > MONEY_LIMIT ||
+				ncauDtoanN3 > MONEY_LIMIT ) {
 				checkMoneyRange = false;
 				return;
 			}
@@ -727,8 +727,8 @@ export class Chitietnhucauchithuongxuyengiaidoan3namComponent
         let ncauDtoanN1 = mulMoney(item.ncauDtoanN1, this.donvitien);
         let ncauDtoanN2 = mulMoney(item.ncauDtoanN2, this.donvitien);
         let ncauDtoanN3 = mulMoney(item.ncauDtoanN3, this.donvitien);
-        if (thienNamHhanhN > MONEYLIMIT || ncauDtoanN1 > MONEYLIMIT || ncauDtoanN2 > MONEYLIMIT ||
-          ncauDtoanN3 > MONEYLIMIT ) {
+        if (thienNamHhanhN > MONEY_LIMIT || ncauDtoanN1 > MONEY_LIMIT || ncauDtoanN2 > MONEY_LIMIT ||
+          ncauDtoanN3 > MONEY_LIMIT ) {
           checkMoneyRange = false;
           return;
         }

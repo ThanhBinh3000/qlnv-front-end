@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -101,7 +101,7 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
   checkDv:boolean;
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   tongthanhTienN1: number
   tongthanhTienN2: number
   tongthanhTienN3: number
@@ -380,9 +380,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       let thanhTienN2 = mulMoney(e.thanhTienN2, this.maDviTien)
       let thanhTienN3 = mulMoney(e.thanhTienN3, this.maDviTien)
       if(
-        thanhTienN1 > MONEYLIMIT ||
-        thanhTienN2 > MONEYLIMIT ||
-        thanhTienN3 > MONEYLIMIT
+        thanhTienN1 > MONEY_LIMIT ||
+        thanhTienN2 > MONEY_LIMIT ||
+        thanhTienN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -824,9 +824,9 @@ export class KeHoachDaoTaoBoiDuong3NamComponent implements OnInit {
       let thanhTienN2 = mulMoney(item.thanhTienN2, this.maDviTien)
       let thanhTienN3 = mulMoney(item.thanhTienN3, this.maDviTien)
       if(
-        thanhTienN1 > MONEYLIMIT ||
-        thanhTienN2 > MONEYLIMIT ||
-        thanhTienN3 > MONEYLIMIT
+        thanhTienN1 > MONEY_LIMIT ||
+        thanhTienN2 > MONEY_LIMIT ||
+        thanhTienN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

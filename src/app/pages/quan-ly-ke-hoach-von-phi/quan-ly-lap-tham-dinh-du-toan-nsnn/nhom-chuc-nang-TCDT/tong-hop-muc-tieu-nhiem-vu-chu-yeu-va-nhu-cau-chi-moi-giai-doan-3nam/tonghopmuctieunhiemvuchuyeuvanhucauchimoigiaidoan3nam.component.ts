@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N, Utils } from 'src/app/Utility/utils';
+import { divMoney,  DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -70,7 +70,7 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
   namBcaohienhanh: any;
   trangThaiBanGhi: string = '1';
   loaiBaocao: any;
-  listDonViTien:any [] = DONVITIEN;
+  listDonViTien:any [] = DON_VI_TIEN;
 
   chiTietBcaos: any;
   lstCTietBCao: ItemData[] = [];
@@ -518,8 +518,8 @@ export class Tonghopmuctieunhiemvuchuyeuvanhucauchimoigiaidoan3namComponent impl
         let chiTx = mulMoney(item.chiTx, this.donvitien);
         let chiTxChiCs = mulMoney(item.chiTxChiCs, this.donvitien);
         let chiTxChiMoi = mulMoney(item.chiTxChiMoi, this.donvitien);
-        if(nguonKphi > MONEYLIMIT || tongSo > MONEYLIMIT || chiCs > MONEYLIMIT || chiMoi > MONEYLIMIT || dtuPtrien > MONEYLIMIT ||
-          dtuPtrienChiCs > MONEYLIMIT || dtuPtrienChiMoi > MONEYLIMIT || chiTx > MONEYLIMIT || chiTxChiCs > MONEYLIMIT || chiTxChiMoi > MONEYLIMIT){
+        if(nguonKphi > MONEY_LIMIT || tongSo > MONEY_LIMIT || chiCs > MONEY_LIMIT || chiMoi > MONEY_LIMIT || dtuPtrien > MONEY_LIMIT ||
+          dtuPtrienChiCs > MONEY_LIMIT || dtuPtrienChiMoi > MONEY_LIMIT || chiTx > MONEY_LIMIT || chiTxChiCs > MONEY_LIMIT || chiTxChiMoi > MONEY_LIMIT){
             checkMoneyRange = false;
             return;
           }
@@ -787,8 +787,8 @@ changeModel(id: string): void {
         let chiTx = mulMoney(item.chiTx, this.donvitien);
         let chiTxChiCs = mulMoney(item.chiTxChiCs, this.donvitien);
         let chiTxChiMoi = mulMoney(item.chiTxChiMoi, this.donvitien);
-        if(nguonKphi > MONEYLIMIT || tongSo > MONEYLIMIT || chiCs > MONEYLIMIT || chiMoi > MONEYLIMIT || dtuPtrien > MONEYLIMIT ||
-          dtuPtrienChiCs > MONEYLIMIT || dtuPtrienChiMoi > MONEYLIMIT || chiTx > MONEYLIMIT || chiTxChiCs > MONEYLIMIT || chiTxChiMoi > MONEYLIMIT){
+        if(nguonKphi > MONEY_LIMIT || tongSo > MONEY_LIMIT || chiCs > MONEY_LIMIT || chiMoi > MONEY_LIMIT || dtuPtrien > MONEY_LIMIT ||
+          dtuPtrienChiCs > MONEY_LIMIT || dtuPtrienChiMoi > MONEY_LIMIT || chiTx > MONEY_LIMIT || chiTxChiCs > MONEY_LIMIT || chiTxChiMoi > MONEY_LIMIT){
             checkMoneyRange = false;
             return;
           }

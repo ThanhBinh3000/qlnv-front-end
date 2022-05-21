@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DONVITIEN, Utils } from "../../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../../Utility/utils";
 import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
@@ -43,7 +43,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
   maLoais: any = [];                          // ma loai
   maNhoms: any = [];                          // ma nhom
   maMatHangs: any = [] ;                      // ma mat hang
-  maDviTiens: any = DONVITIEN;                // ma don vi tien
+  maDviTiens: any = DON_VI_TIEN;                // ma don vi tien
   maDviTinhs:any = [];                        // ma don vi tinh
   donVis: any = [];                           // ma don vi
   ngayQd!: any;                               // ngay quyet dinh

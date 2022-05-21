@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UserService } from 'src/app/services/user.service';
@@ -110,7 +110,7 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
   currentday: Date = new Date();
   messageValidate:any =MESSAGEVALIDATE;
   validateForm!: FormGroup;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
   capDv: any;
   checkDv: boolean;
 
@@ -402,20 +402,20 @@ export class KeHoachDuToanCaiTaoSuaChuaHtKt3NamComponent implements OnInit {
       let ttoanNamTruocChuyenSangN2 = mulMoney(e.ttoanNamTruocChuyenSangN2, this.maDviTien)
       let ttoanNamTruocChuyenSangN3 = mulMoney(e.ttoanNamTruocChuyenSangN3, this.maDviTien)
       if(
-        dtoanDuocDuyetTongGtri > MONEYLIMIT ||
-        psinhMoiN1 > MONEYLIMIT ||
-        psinhMoiN2 > MONEYLIMIT ||
-        psinhMoiN3 > MONEYLIMIT ||
-        thienKluongNDtoanKphiDen3006n > MONEYLIMIT ||
-        thienKluongNUocThienCaNamN > MONEYLIMIT ||
-        tongSoN1 > MONEYLIMIT ||
-        tongSoN2 > MONEYLIMIT ||
-        tongSoN3 > MONEYLIMIT ||
-        ttoanKluongNDaTtoanDen3006n > MONEYLIMIT ||
-        ttoanKluongNUocThienCaNamN > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN1 > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN2 > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN3 > MONEYLIMIT
+        dtoanDuocDuyetTongGtri > MONEY_LIMIT ||
+        psinhMoiN1 > MONEY_LIMIT ||
+        psinhMoiN2 > MONEY_LIMIT ||
+        psinhMoiN3 > MONEY_LIMIT ||
+        thienKluongNDtoanKphiDen3006n > MONEY_LIMIT ||
+        thienKluongNUocThienCaNamN > MONEY_LIMIT ||
+        tongSoN1 > MONEY_LIMIT ||
+        tongSoN2 > MONEY_LIMIT ||
+        tongSoN3 > MONEY_LIMIT ||
+        ttoanKluongNDaTtoanDen3006n > MONEY_LIMIT ||
+        ttoanKluongNUocThienCaNamN > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN1 > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN2 > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return
@@ -902,20 +902,20 @@ xoaBaoCao(){
       let ttoanNamTruocChuyenSangN2 = mulMoney(e.ttoanNamTruocChuyenSangN2, this.maDviTien)
       let ttoanNamTruocChuyenSangN3 = mulMoney(e.ttoanNamTruocChuyenSangN3, this.maDviTien)
       if(
-        dtoanDuocDuyetTongGtri > MONEYLIMIT ||
-        psinhMoiN1 > MONEYLIMIT ||
-        psinhMoiN2 > MONEYLIMIT ||
-        psinhMoiN3 > MONEYLIMIT ||
-        thienKluongNDtoanKphiDen3006n > MONEYLIMIT ||
-        thienKluongNUocThienCaNamN > MONEYLIMIT ||
-        tongSoN1 > MONEYLIMIT ||
-        tongSoN2 > MONEYLIMIT ||
-        tongSoN3 > MONEYLIMIT ||
-        ttoanKluongNDaTtoanDen3006n > MONEYLIMIT ||
-        ttoanKluongNUocThienCaNamN > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN1 > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN2 > MONEYLIMIT ||
-        ttoanNamTruocChuyenSangN3 > MONEYLIMIT
+        dtoanDuocDuyetTongGtri > MONEY_LIMIT ||
+        psinhMoiN1 > MONEY_LIMIT ||
+        psinhMoiN2 > MONEY_LIMIT ||
+        psinhMoiN3 > MONEY_LIMIT ||
+        thienKluongNDtoanKphiDen3006n > MONEY_LIMIT ||
+        thienKluongNUocThienCaNamN > MONEY_LIMIT ||
+        tongSoN1 > MONEY_LIMIT ||
+        tongSoN2 > MONEY_LIMIT ||
+        tongSoN3 > MONEY_LIMIT ||
+        ttoanKluongNDaTtoanDen3006n > MONEY_LIMIT ||
+        ttoanKluongNUocThienCaNamN > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN1 > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN2 > MONEY_LIMIT ||
+        ttoanNamTruocChuyenSangN3 > MONEY_LIMIT
       ){
         checkMoneyRange = false;
         return

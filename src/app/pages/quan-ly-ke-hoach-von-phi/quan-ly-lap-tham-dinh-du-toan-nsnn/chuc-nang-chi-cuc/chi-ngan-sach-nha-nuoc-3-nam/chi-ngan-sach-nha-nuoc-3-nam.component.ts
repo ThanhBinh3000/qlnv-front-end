@@ -6,7 +6,7 @@ import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -53,7 +53,7 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
      mucChis: any = [];
      donVis: any = [];
      maLoaiChiTxs: any = [];
-     donViTiens: any = DONVITIEN;                        // danh muc don vi tien
+     donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
      lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
      tong: ItemData = {
           id: "",
@@ -405,10 +405,10 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                let tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
                let ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
                let clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
-               if (dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT ||
-                    ncauChiN1 > MONEYLIMIT || clechTranChiVsNcauChiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
-                    ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT ||
-                    ncauChiN3 > MONEYLIMIT || clechTranChiVsNcauChiN3 > MONEYLIMIT) {
+               if (dtoanN > MONEY_LIMIT || uocThienN > MONEY_LIMIT || tranChiN1 > MONEY_LIMIT ||
+                    ncauChiN1 > MONEY_LIMIT || clechTranChiVsNcauChiN1 > MONEY_LIMIT || tranChiN2 > MONEY_LIMIT ||
+                    ncauChiN2 > MONEY_LIMIT || clechTranChiVsNcauChiN2 > MONEY_LIMIT || tranChiN3 > MONEY_LIMIT ||
+                    ncauChiN3 > MONEY_LIMIT || clechTranChiVsNcauChiN3 > MONEY_LIMIT) {
                     checkMoneyRange = false;
                     return;
                }
@@ -910,10 +910,10 @@ export class ChiNganSachNhaNuoc3NamComponent implements OnInit {
                let tranChiN3 = mulMoney(element.tranChiN3, this.maDviTien);
                let ncauChiN3 = mulMoney(element.ncauChiN3, this.maDviTien);
                let clechTranChiVsNcauChiN3 = mulMoney(element.clechTranChiVsNcauChiN3, this.maDviTien);
-               if (dtoanN > MONEYLIMIT || uocThienN > MONEYLIMIT || tranChiN1 > MONEYLIMIT ||
-                    ncauChiN1 > MONEYLIMIT || clechTranChiVsNcauChiN1 > MONEYLIMIT || tranChiN2 > MONEYLIMIT ||
-                    ncauChiN2 > MONEYLIMIT || clechTranChiVsNcauChiN2 > MONEYLIMIT || tranChiN3 > MONEYLIMIT ||
-                    ncauChiN3 > MONEYLIMIT || clechTranChiVsNcauChiN3 > MONEYLIMIT) {
+               if (dtoanN > MONEY_LIMIT || uocThienN > MONEY_LIMIT || tranChiN1 > MONEY_LIMIT ||
+                    ncauChiN1 > MONEY_LIMIT || clechTranChiVsNcauChiN1 > MONEY_LIMIT || tranChiN2 > MONEY_LIMIT ||
+                    ncauChiN2 > MONEY_LIMIT || clechTranChiVsNcauChiN2 > MONEY_LIMIT || tranChiN3 > MONEY_LIMIT ||
+                    ncauChiN3 > MONEY_LIMIT || clechTranChiVsNcauChiN3 > MONEY_LIMIT) {
                     checkMoneyRange = false;
                     return;
                }
