@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
+import { Utils } from 'src/app/Utility/utils';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
+import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({

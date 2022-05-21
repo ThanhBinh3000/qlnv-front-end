@@ -2,16 +2,13 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserService } from 'src/app/services/user.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DONVITIEN, Utils } from 'src/app/Utility/utils';
-import * as uuid from 'uuid';
-import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { DON_VI_TIEN } from 'src/app/Utility/utils';
 import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({
@@ -35,7 +32,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     maDviTien: any;
     newDate = new Date();
     //danh muc
-    donViTiens: any[] = DONVITIEN;
+    donViTiens: any[] = DON_VI_TIEN;
     lstCTietBCao: any[];
     donVis: any[] = [];
     trangThais: any[] = TRANGTHAIBAOCAO;

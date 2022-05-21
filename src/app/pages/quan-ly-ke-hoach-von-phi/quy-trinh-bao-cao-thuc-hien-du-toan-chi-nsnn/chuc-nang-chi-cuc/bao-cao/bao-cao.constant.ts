@@ -24,3 +24,18 @@ export const PHULUCLIST = [
     status: false,
   }
 ]
+
+export const LISTCANBO: any[] = [
+	{
+		id: "51480",
+		tenDm: "canbo",
+	},
+	{
+		id: "51520",
+		tenDm: "canbo1",
+	},
+	{
+		id: "51550",
+		tenDm: "canbo2",
+	},
+];

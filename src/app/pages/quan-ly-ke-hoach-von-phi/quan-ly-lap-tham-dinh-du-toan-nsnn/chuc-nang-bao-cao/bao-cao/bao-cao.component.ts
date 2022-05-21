@@ -1,24 +1,22 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { QLNV_KHVONPHI_CHI_TX_GD3N, Utils, divMoney, mulMoney, DONVITIEN, MONEYLIMIT } from "../../../../../Utility/utils";
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
-import { filter, pairwise } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
+import { Utils } from "../../../../../Utility/utils";
 import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 
 
 export class ItemData {

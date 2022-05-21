@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DONVITIEN } from 'src/app/Utility/utils';
+import { DON_VI_TIEN } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
@@ -43,7 +43,7 @@ export class LapDuToanChiNganSachChoDonViComponent implements OnInit {
   errorMessage!: String;                      //
   ngayQd!: any;
   maKhoanMucs: any = [];                          // danh muc nhom chi
-  maDviTiens: any = DONVITIEN;                // ma don vi tien
+  maDviTiens: any = DON_VI_TIEN;                // ma don vi tien
   donVis: any = [];                            // danh muc don vi
   lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router

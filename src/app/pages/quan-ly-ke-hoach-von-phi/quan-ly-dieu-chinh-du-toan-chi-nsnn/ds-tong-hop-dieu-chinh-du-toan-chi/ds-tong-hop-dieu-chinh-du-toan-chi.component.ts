@@ -6,7 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { LOAIBAOCAO, TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -26,14 +26,14 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   url!: string;
   messageValidate:any = MESSAGEVALIDATE
 
-  trangThais: any = TRANGTHAITIMKIEM;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
   searchFilter = {
     nam: null,
     tuNgay: "",
     denNgay: "",
     maBaoCao: "",
     donViTao: "",
-    loaiBaoCao: "",
+    LOAI_BAO_CAO: "",
     trangThai: "",
   };
   pages = {                           // page
@@ -56,7 +56,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   //         control.updateValueAndValidity({ onlySelf: true });
   //       }
   //     });
-  //     if(!this.searchFilter.nam || !this.searchFilter.loaiBaoCao){
+  //     if(!this.searchFilter.nam || !this.searchFilter.LOAI_BAO_CAO){
   //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
   //     }
   //     if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000){
@@ -79,12 +79,12 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
-      loaiBaocao: [null, [Validators.required]],
+      LOAI_BAO_CAO: [null, [Validators.required]],
       temp: [null],
     });
 
     //lay danh sach loai bao cao
-    this.baoCaos = LOAIBAOCAO;
+    this.baoCaos = LOAI_BAO_CAO;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -120,7 +120,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
     let requestReport = {
       maBcao: this.searchFilter.maBaoCao,
       maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.loaiBaoCao,
+      maLoaiBcao: this.searchFilter.LOAI_BAO_CAO,
       namBcao: this.searchFilter.nam,
       ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, 'dd/MM/yyyy'),
       ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, 'dd/MM/yyyy'),
@@ -172,7 +172,7 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBaoCao = null
     this.searchFilter.donViTao = null
-    this.searchFilter.loaiBaoCao = null
+    this.searchFilter.LOAI_BAO_CAO = null
     this.searchFilter.trangThai = null
   }
 

@@ -1,22 +1,14 @@
-import { L } from '@angular/cdk/keycodes';
-import { validateHorizontalPosition } from '@angular/cdk/overlay';
-import { DatePipe, LocationChangeEvent } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Data, Router } from '@angular/router';
-import * as fileSaver from 'file-saver';
-import { Link } from 'gojs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { stringify } from 'querystring';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { Utils } from "../../../../Utility/utils";
-import { linkList } from '../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 import { KHOAN_MUC, LA_MA } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
@@ -354,7 +346,6 @@ export class TestLinkListComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
         this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-
         const index = this.lstCTietBCao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT

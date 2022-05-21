@@ -1,17 +1,16 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
-import { TRANGTHAI} from 'src/app/Utility/utils';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { TRANG_THAI } from 'src/app/Utility/utils';
+
 
 
 @Component({
@@ -28,7 +27,7 @@ export class TongHopComponent implements OnInit {
 	maDviTao: string;
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANGTHAIBAOCAO;
+	trangThais: any[] = TRANG_THAI;
 	donVis: any[] = [];
 	//phan trang
 	totalElements = 0;

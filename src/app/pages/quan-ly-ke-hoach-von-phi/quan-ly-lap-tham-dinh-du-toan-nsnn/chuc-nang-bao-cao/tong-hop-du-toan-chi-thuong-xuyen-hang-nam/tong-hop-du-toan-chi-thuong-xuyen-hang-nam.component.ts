@@ -1,21 +1,18 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as fileSaver from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DONVITIEN, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM, Utils } from "../../../../../Utility/utils";
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DON_VI_TIEN, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM } from "../../../../../Utility/utils";
 import { Role } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -62,7 +59,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	//danh muc
 	donVis: any = [];
 	lstCTietBCao: ItemData[];
-	donViTiens: any[] = DONVITIEN;
+	donViTiens: any[] = DON_VI_TIEN;
 	//thong tin chung
 	tong: ItemData = {
 		id: "",

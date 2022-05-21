@@ -2,19 +2,18 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as fileSaver from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { divMoney, DONVITIEN, MONEYLIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
-import * as uuid from 'uuid';
-import * as fileSaver from 'file-saver';
-import { UserService } from 'src/app/services/user.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { DON_VI_TIEN, MONEY_LIMIT, mulMoney, Utils } from 'src/app/Utility/utils';
+import * as uuid from 'uuid';
 
 
 export class ItemData {
@@ -71,7 +70,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     noiDungs: any[] = [];
     nhomChis: any[] = [];
     dviCapDuois: any[] = [];
-    donViTiens: any[] = DONVITIEN;
+    donViTiens: any[] = DON_VI_TIEN;
     //file
     lstFile: any[] = [];
     listIdFiles: string;
@@ -355,7 +354,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             let listCtietDvi = [];
             item.listCtiet.forEach(e => {
                 let soTranChi = mulMoney(e.soTranChi, this.donViTiens);
-                if (soTranChi > MONEYLIMIT) {
+                if (soTranChi > MONEY_LIMIT) {
                     checkMoneyRange = false;
                     return;
                 }
