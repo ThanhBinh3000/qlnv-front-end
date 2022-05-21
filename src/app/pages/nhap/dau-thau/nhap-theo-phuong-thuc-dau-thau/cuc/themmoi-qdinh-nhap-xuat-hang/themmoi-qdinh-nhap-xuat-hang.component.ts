@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -18,7 +23,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
-  styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss']
+  styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss'],
 })
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   errorInputRequired: string = 'Dữ liệu không được để trống.';
@@ -34,7 +39,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   optionsFullDonVi: any[] = [];
   optionsFullHangHoa: any[] = [];
   optionsHangHoa: any[] = [];
-  userInfo: UserLogin
+  userInfo: UserLogin;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -45,12 +50,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public globals: Globals,
     private userService: UserService,
-    private danhMucService: DanhMucService
-  ) { }
+    private danhMucService: DanhMucService,
+  ) {}
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 45 ~ ThemmoiQdinhNhapXuatHangComponent ~ ngOnInit ~ this.userInfo", this.userInfo)
 
     this.id = +this.activatedRoute.snapshot.paramMap.get('id');
     this.type = this.activatedRoute.snapshot.paramMap.get('type');
@@ -67,10 +71,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       soQdinh: [null, [Validators.required]],
-      ngayQdinh: ["", [Validators.required, this.dateValidator]],
+      ngayQdinh: ['', [Validators.required, this.dateValidator]],
       canCu: [null, [Validators.required]],
       veViec: [null],
-      donvi: [null]
+      donvi: [null],
     });
   }
 
@@ -117,24 +121,15 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  themmoi() {
+  themmoi() {}
 
-  }
+  clearNew() {}
 
-  clearNew() {
+  startEdit(index) {}
 
-  }
-
-  startEdit(index) {
-
-  }
-
-  deleteData(stt) {
-
-  }
+  deleteData(stt) {}
 
   onInput(e: Event): void {
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 132 ~ ThemmoiQdinhNhapXuatHangComponent ~ onInput ~ e", e)
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.optionsDonVi = [];
@@ -145,15 +140,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  selectDonVi(option) {
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 151 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectDonVi ~ option", option)
-  }
+  selectDonVi(option) {}
 
   async loadDonVi() {
     try {
       const body = {
-        maDvi: this.userInfo.MA_DVI
-      }
+        maDvi: this.userInfo.MA_DVI,
+      };
       const res = await this.donViService.layDonViCon();
       this.optionsFullDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -198,13 +191,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  selectHangHoa(option) {
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 203 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectHangHoa ~ this.newQDNhapXuat", this.newQDNhapXuat)
-  }
+  selectHangHoa(option) {}
 
-  changeMaHangHoa() {
-
-  }
+  changeMaHangHoa() {}
 
   onInputDonViTinh(e: Event): void {
     // const value = (e.target as HTMLInputElement).value;
@@ -217,17 +206,14 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     // }
   }
 
-  selectDonViTinh(option) {
-    console.log("🚀 ~ file: themmoi-qdinh-nhap-xuat-hang.component.ts ~ line 151 ~ ThemmoiQdinhNhapXuatHangComponent ~ selectDonVi ~ option", option)
-  }
+  selectDonViTinh(option) {}
 
-  changeDonViTinh() {
-
-  }
+  changeDonViTinh() {}
 
   tenHangHoa() {
-    const tenHangHoa = this.optionsFullHangHoa.find(e => e.ma === this.newQDNhapXuat.maHangHoa)
-    return tenHangHoa ? tenHangHoa.ten : null
+    const tenHangHoa = this.optionsFullHangHoa.find(
+      (e) => e.ma === this.newQDNhapXuat.maHangHoa,
+    );
+    return tenHangHoa ? tenHangHoa.ten : null;
   }
-
 }

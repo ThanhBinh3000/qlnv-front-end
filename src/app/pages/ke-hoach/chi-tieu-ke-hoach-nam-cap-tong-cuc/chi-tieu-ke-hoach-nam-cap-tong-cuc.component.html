@@ -23,7 +23,7 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]" (keydown)="keyDownFunction($event)">
           <div nz-col nzSpan="12">
             <label class="search__label">Số QĐ</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" placeholder="Số QĐ" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày ký từ ngày</label>
@@ -43,7 +43,7 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Trích yếu</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" placeholder="Trích yếu" />
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Đơn vị</label>

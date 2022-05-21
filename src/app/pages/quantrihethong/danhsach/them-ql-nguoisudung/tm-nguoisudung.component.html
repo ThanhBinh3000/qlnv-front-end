@@ -74,11 +74,18 @@
       </nz-form-item>
     </div>
 
-    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngIf="antruongkhichinhsua">
       <nz-form-item>
         <nz-form-label nzRequired>Nhập lại mật khẩu</nz-form-label>
-        <nz-form-control nzErrorTip="Nhập lại mật khẩu là bắt buộc!">
-          <input type="password" nz-input formControlName="cfpassword" />
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <input type="password" nz-input formControlName="checkPassword" />
+          <ng-template #errorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Xác nhận mật khẩu là bắt buộc!</ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              Mật khẩu không khớp!
+            </ng-container>
+          </ng-template>
+
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -87,7 +94,7 @@
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
       <nz-form-item>
         <nz-form-label nzRequired>Họ và tên Người dùng</nz-form-label>
-        <nz-form-control>
+        <nz-form-control nzErrorTip="Họ và tên Người dùng là bắt buộc!">
           <input type="text" nz-input formControlName="fullName" />
         </nz-form-control>
       </nz-form-item>
@@ -105,7 +112,7 @@
     <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
       <nz-form-item>
         <nz-form-label nzRequired>Email</nz-form-label>
-        <nz-form-control>
+        <nz-form-control nzErrorTip="Email là bắt buộc!">
           <input type="text" nz-input formControlName="email" />
         </nz-form-control>
       </nz-form-item>
