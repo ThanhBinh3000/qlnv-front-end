@@ -30,7 +30,6 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./nhap-theo-phuong-thuc-dau-thau.component.scss'],
 })
 export class NhapTheoPhuongThucDauThauComponent implements OnInit {
-
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -74,8 +73,8 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private route: ActivatedRoute,
-    public userService: UserService
-  ) { }
+    public userService: UserService,
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -112,7 +111,10 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
 
   getTitleVthh() {
     this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
-    this.router.navigate(['/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' + this.route.snapshot.paramMap.get('type')]);
+    this.router.navigate([
+      '/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' +
+        this.route.snapshot.paramMap.get('type'),
+    ]);
   }
 
   openDialogHopDong() {
@@ -145,7 +147,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
 
   redirectToChiTiet(id: number) {
     this.router.navigate([
-      `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-hang`,
+      `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin`,
       id,
     ]);
   }
