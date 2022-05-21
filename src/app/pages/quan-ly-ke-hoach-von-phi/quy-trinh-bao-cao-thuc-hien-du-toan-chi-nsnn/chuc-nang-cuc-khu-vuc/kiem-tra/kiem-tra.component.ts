@@ -7,7 +7,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT } from 'src/app/Utility/utils';
+import { LBCQUYTRINHTHUCHIENDUTOANCHI, TRANGTHAIGUIDVCT, TRANGTHAIKIEMTRABAOCAO, Utils } from 'src/app/Utility/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 
@@ -30,17 +30,17 @@ export class KiemTraComponent implements OnInit {
 
   listBcaoKqua:any []=[];
 
-  trangThais: any = TRANGTHAIGUIDVCT;                          // danh muc loai bao cao
-
+  trangThais: any = TRANGTHAIKIEMTRABAOCAO;                          // danh muc loai bao cao
+  trangThai!:string;
   searchFilter = {
     maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
-    trangThai:'',
+    trangThais:[],
     maBcao:'',
     maLoaiBcao:'',
     namBcao:'',
-    thangBCao: '',
+    thangBcao: '',
     dotBcao:'',
     paggingReq: {
       limit: 10,
@@ -48,14 +48,10 @@ export class KiemTraComponent implements OnInit {
     },
     str: '',
     donVi:'',
-    maPhanBcao:'0'
+    maPhanBcao:'0',
+    loaiTimKiem:'1',
   };
 
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
   donViTaos: any = [];
   baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
   constructor(
@@ -108,6 +104,12 @@ export class KiemTraComponent implements OnInit {
 
   async onSubmit(){
     this.spinner.show();
+    this.searchFilter.trangThais= [];
+    if(this.trangThai){
+      this.searchFilter.trangThais.push(this.trangThai)
+    }else{
+      this.searchFilter.trangThais = [Utils.TT_BC_KT,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    }
     await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
         this.listBcaoKqua = res.data.content;
@@ -132,48 +134,25 @@ export class KiemTraComponent implements OnInit {
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
   }
 
-  //set url khi
-  setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
-        break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
-    }
-  }
-
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
   }
 
   close() {
     this.location.back();
+  }
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
   }
 }

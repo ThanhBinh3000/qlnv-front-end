@@ -45,12 +45,12 @@ export const TAB_SELECTED = {
         tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG đợt ',
         status: false,
     },
-    {
-        maPhuLuc:10,
-        tenPhuLuc: '01/BCNXBQ',
-        tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG đợt ',
-        status: false,
-    },
+    // {
+    //     maPhuLuc:10,
+    //     tenPhuLuc: '01/BCNXBQ',
+    //     tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG đợt ',
+    //     status: false,
+    // },
   ]
 
   export const LISTBIEUMAUNAM = [
@@ -90,12 +90,12 @@ export const TAB_SELECTED = {
         tieuDe: 'Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG năm ',
         status: false,
     },
-    {
-        maPhuLuc:10,
-        tenPhuLuc: '01/BCNXBQ',
-        tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG năm ',
-        status: false,
-    },
+    // {
+    //     maPhuLuc:10,
+    //     tenPhuLuc: '01/BCNXBQ',
+    //     tieuDe: 'Báo cáo tổng hợp thực hiện vốn mua, bán và phí nhập - phí xuất - phí bảo quản lần đầu hàng DTQG năm ',
+    //     status: false,
+    // },
   ]
 
   export const BAO_CAO_NHAP_HANG_DTQG:number = 4; //02

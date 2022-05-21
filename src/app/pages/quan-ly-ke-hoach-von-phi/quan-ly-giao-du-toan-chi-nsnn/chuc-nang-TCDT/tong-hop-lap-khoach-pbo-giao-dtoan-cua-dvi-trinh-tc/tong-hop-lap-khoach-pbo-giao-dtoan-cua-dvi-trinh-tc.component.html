@@ -53,23 +53,42 @@
                  <nz-tabset nzType="card" class="tab__container">
                       <nz-tab [nzTitle]="'Tổng hợp, lập kế hoạch phân bổ, giao dự toán của đơn vị trình Tổng Cục'">
                            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                            <div nz-col class="gutter-row" [nzSpan]="8"></div>
+
                             <div nz-col nzSpan="6" >
                               <label class="search__label">Đ/v thực hiện:</label>
-                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="maDonViTao" formControlName="temp">
+                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị thực hiện" [(ngModel)]="maDonViTao" formControlName="temp">
                                 <nz-option *ngFor="let item of maCucDtnnKvucs" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
                               </nz-select>
                             </div>
+                            <div nz-col class="gutter-row" [nzSpan]="4"></div>
                             <div nz-col nzSpan="6">
-                              <div class="search__label">Đơn vị Tiền:
-                              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị">
-                                <nz-option nzValue="1" nzLabel="1.000 đồng"></nz-option>
-                                <nz-option nzValue="2" nzLabel="100.000 đồng"></nz-option>
-                                <nz-option nzValue="3" nzLabel="1.000.000 đồng"></nz-option>
-                                <nz-option nzValue="4" nzLabel="1.000.000.000 đồng"></nz-option>
-                              </nz-select>
-                              </div>
+                              <ng-container *ngIf="status;else templateName">
+                                <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px"> -->
+                                  <!-- <div nz-col class="gutter-row" [nzSpan]="3"> -->
+                                  <label class="search__label pt-4">Đơn vị:</label>
+                                    <div *ngFor="let item of donViTiens">
+                                      <div *ngIf="item.id == maDviTien">
+                                        {{item.tenDm}}
+                                      </div>
+                                    </div>
+                                  <!-- </div> -->
+                                <!-- </div> -->
+                              </ng-container>
+                              <ng-template #templateName>
+                                <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px"> -->
+                                  <!-- <div nz-col class="gutter-row" [nzSpan]="3"> -->
+                                    <!-- <div class="inner-box">Đơn vị: -->
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                      [class]="maDviTien ?'' : 'input-error-validate' ">
+                                      <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+                                    </nz-select>
+                                    <!-- </div> -->
+                                  <!-- </div> -->
+                                <!-- </div> -->
+                              </ng-template>
                             </div>
-                           </div>
+                            </div>
                            <div class="action">
                                 <button type="button" class="btn btn-main" (click)="deleteSelected()">
                                      <i class="fa fa-trash-o"></i>
@@ -85,14 +104,25 @@
                               <tr>
                                 <th nzWidth="170px" rowspan="2" >Tên loại, khoản</th>
                                 <th nzWidth="300px" rowspan="2">Nội dung</th>
-                                <th nzWidth="150px" rowspan="2">Ước thực hiện năm 2020</th>
-                                <th nzWidth="150px" colspan="2">Năm 2021</th>
+                                <th nzWidth="150px" rowspan="2">Ước thực hiện năm {{nam}}</th>
+                                <th nzWidth="150px" colspan="2">Năm {{nam}}</th>
                                 <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>
+                                  <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+                                  </label>
+                                </th>
                               </tr>
                               <tr>
-                                <th>Dự toán giao 2021</th>
+                                <th>Dự toán giao {{nam}}</th>
                                 <th>Dự toán đã phân bổ cho</th>
                                 <th>Phân bổ cho các đơn vị trực thuộc</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                               </tr>
                             </thead>
                             <tbody>
@@ -103,78 +133,110 @@
                                 <td>2</td>
                                 <td>3</td>
                                 <td>4</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                               </tr>
                               <tr *ngFor="let data of lstCTietBCao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                  <td>
-                                    {{data.stt}}
+                                  <td [nzIndentSize]="data.lstKm[0].level * 8">
+                                    {{ getChiMuc(data.tenLoaiKhoan)  }}
                                   </td>
-                                  <div>
-                                    {{data.maNdung}}
-                                  </div>
-                                  <td>{{data.uocThucHienNam}}</td>
-                                  <td>{{data.duToanGiao2021}}</td>
-                                  <td>{{data.duToanDapBo}}</td>
-                                  <td>{{data.pBoChoDviTT}}</td>
-                                  <td [hidden]="status">
-                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                  <td>
+                                      <div *ngFor="let item of data.lstKm">
+                                          <div *ngIf="item.id == data.maKhoanMuc">
+                                              {{item.tenDm}}
+                                          </div>
+                                      </div>
+                                  </td>
+                                  <td>{{data.uocThien}}</td>
+                                  <td>{{data.dtoanGiao}}</td>
+                                  <td>{{data.dtoanDaPbo}}</td>
+                                  <td>{{data.pboChoCacDvi}}</td>
+                                  <td>
+                                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                                  </td>
+                                  <td>
+                                      <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                  </td>
+                                  <td>
+                                      <ng-container *ngIf="!data.status; else them">
+                                          <i class="fa fa-plus" (click)="addSame(data.id, initItem)"></i>
+                                      </ng-container>
+                                      <ng-template #them>
+                                          <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp" (nzOnConfirm)="addSame(data.id, initItem)" nzCancelText="Dưới cấp" (nzOnCancel)="addLow(data.id, initItem)">
+                                              <i class="fa fa-plus"></i>
+                                          </a>
+                                      </ng-template>
+                                  </td>
+                                  <td>
+                                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                                      (ngModelChange)="updateChecked(data.id)"></label>
                                   </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                  <td>
-                                    {{editCache[data.id].data.stt}}
+                                  <td [nzIndentSize]="data.lstKm[0].level * 8">
+                                    {{ getChiMuc(editCache[data.id].data.tenLoaiKhoan) }}
                                   </td>
                                   <td>
-                                    {{editCache[data.id].data.maNdung}}
-                                  </td>
-                                  <td>
-                                         {{editCache[data.id].data.tong}}
-                                  </td>
-                                  <td>
-                                    <nz-input-number nzSize="small" class="search__input"
-                                         [(ngModel)]="editCache[data.id].data.uocThucHienNam"
-                                         (change)="changeTong(data.id)" ></nz-input-number>
+                                      <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn khoản mục" [(ngModel)]="editCache[data.id].data.maKhoanMuc">
+                                          <nz-option *ngFor="let item of data.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                                          </nz-option>
+                                      </nz-select>
                                   </td>
                                   <td>
                                     <nz-input-number nzSize="small" class="search__input"
-                                         [(ngModel)]="editCache[data.id].data.duToanGiao2021"
-                                         (change)="changeTong(data.id)" ></nz-input-number>
+                                         [(ngModel)]="editCache[data.id].data.uocThien"></nz-input-number>
+                                  </td>
+                                  <td>
+                                    <!-- <nz-input-number nzSize="small" class="search__input" [(ngModel)]="editCache[data.id].data.duToanGiao2021"></nz-input-number> -->
+                                    {{editCache[data.id].data.dtoanGiao}}
                                   </td>
                                   <td>
                                     <nz-input-number nzSize="small" class="search__input"
-                                         [(ngModel)]="editCache[data.id].data.duToanDapBo"
-                                         (change)="changeTong(data.id)" ></nz-input-number>
+                                         [(ngModel)]="editCache[data.id].data.dtoanDaPbo" (change)="changeTong(data.id)"></nz-input-number>
                                   </td>
                                   <td>
                                     <nz-input-number nzSize="small" class="search__input"
-                                         [(ngModel)]="editCache[data.id].data.pBoChoDviTT"
-                                         (change)="changeTong(data.id)" ></nz-input-number>
+                                         [(ngModel)]="editCache[data.id].data.pboChoCacDvi" (change)="changeTong(data.id)"></nz-input-number>
                                   </td>
                                   <td>
-                                    <a (click)="saveEdit(data.id)" class="save">Save</a>
-                                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-                                      class="save">Cancel</a>
+                                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                                   </td>
-                                  <!-- <td [hidden]="status">
-                                    <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
-                                  </td> -->
+                                  <td>
+                                      <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                  </td>
+                                  <td>
+                                      <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                          Hủy
+                                      </a>
+                                  </td>
+                                  <td>
+                                      <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                                      (ngModelChange)="updateChecked(data.id)"></label>
+                                  </td>
                                 </ng-template>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>Tổng cộng</td>
                                 <td>
-                                     {{tongCong?.uocThucHienNam}}
+                                     {{tongUocTHien}}
                                 </td>
                                 <td>
-                                     {{tongCong?.duToanGiao2021}}
+                                     {{tongDuToanGiao}}
                                 </td>
                                 <td>
-                                     {{tongCong?.duToanDapBo}}
+                                     {{tongDuToanPb}}
                                 </td>
                                 <td>
-                                     {{tongCong?.pBoChoDviTT}}
+                                     {{tongPBoChoDviTT}}
                                 </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                               </tr>
                             </tbody>
                           </nz-table>

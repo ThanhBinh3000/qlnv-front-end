@@ -10,11 +10,13 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
-            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12" [(ngModel)]="searchFilter.thangBCao" ></nz-input-number>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
+              [(ngModel)]="searchFilter.thangBcao"></nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
@@ -33,23 +35,24 @@
           <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
+              [(ngModel)]="searchFilter.maLoaiBcao">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
         </div>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ đơn vị cấp dưới" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm từ đơn vị cấp dưới"
+        class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
-          
+
         </div>
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -61,24 +64,31 @@
               <th nzWidth="100px">Báo cáo tháng</th>
               <th nzWidth="175px">Công văn</th>
               <th nzWidth="175px">Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span></th>
-              <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày cục khu vực  kiểm tra đánh giá báo cáo)</span></th>
+              <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày cục khu vực kiểm tra đánh giá báo cáo)</span></th>
               <th nzWidth="100px" class="text-center">Trạng thái<br> <span>(Cục khu vực đánh giá)</span></th>
               <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.thangBcao}}</td>
-              <td>Công văn nè</td>
+              <td>
+                <div class="tep" (click)="downloadFileCv(item?.congVan?.fileUrl,item?.congVan?.fileName)">
+              
+                  <span>{{item?.congVan?.fileName}}</span>
+                </div>
+              </td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
-                <button type="button" class="btn btn-main" routerLink="../{{url}}{{ item.id }}">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span>Phê duyệt</span>
                 </button>
               </td>
@@ -92,9 +102,10 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
-                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page"
+                [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit"
+                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
+                (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>
@@ -105,7 +116,8 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
+        <button type="button" class="btn btn-main"
+          (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Tìm kiếm</span>
         </button>

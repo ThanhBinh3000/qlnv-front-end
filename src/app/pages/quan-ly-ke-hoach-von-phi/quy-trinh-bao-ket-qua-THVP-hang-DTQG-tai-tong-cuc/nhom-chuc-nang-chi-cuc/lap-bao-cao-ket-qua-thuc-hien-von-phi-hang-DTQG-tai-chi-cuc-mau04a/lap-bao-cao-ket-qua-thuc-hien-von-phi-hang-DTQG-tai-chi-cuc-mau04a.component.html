@@ -23,26 +23,27 @@
               <td>{{baoCao.maBcao}}</td>
               <td>{{baoCao.namBcao}}</td>
               <td>{{baoCao.dotBcao}}</td>
-              <ng-container>
+              <ng-container *ngIf="checkCongVan ;else templateCongVan">
                 <td>
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
-                  <button nz-button style="margin-top:15px">
-                    <i nz-icon nzType="upload"></i>
-                    Upload File
-                  </button>
+                  <nz-upload
+                  nzAction="http://192.168.1.118:8762/qlnv-gateway/qlnv-core/file/upload"
+                  
+                  (nzChange)="handleChange($event)"
+                >
+                <button nz-button>
+                  <i nz-icon nzType="upload"></i>
+                  Click to Upload
+                </button>
                 </nz-upload>
-                <!-- <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
-                  [hidden]="status" style="margin-top: 16px">
-                  Thêm vào danh sách
-                </button> -->
+               
+                
+                </td>
+              </ng-container>
+              <ng-template #templateCongVan>
                 <button nz-button style="margin-top:15px" (click)="downloadFile('1')">
                   <i nz-icon nzType="download"></i>
                   Download
-                </button>
-              </td>
-              </ng-container>
-              <ng-template>
-                               
+                </button>  
               </ng-template>
               <td>{{baoCao.ngayTao}}</td>             
               <td>{{baoCao.ngayTrinhDuyet}}</td>
@@ -92,14 +93,20 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Từ chối</span>
         </button>
-        <a class="btn btn-main" (click)="onSubmit('9',null)" >
+        <a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
           <i class="icon htvbdh_tcdt_pheduyet" ></i>
-          <span>Cục khu vực chấp thuận</span>
+          <span>Đơn vị cấp trên chấp thuận</span>
         </a>
-        <button class="btn btn-main">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Copy</span>
-        </button>
+        <a class="btn btn-main" 
+					[hidden]="statusBtnCopy" (click)="doCopy()">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Copy</span>
+				</a>
+        <a class="btn btn-main" 
+					[hidden]="statusBtnPrint">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</a>
         <a class="btn btn-main" (click)="xoa()" [hidden]="statusBtnDel">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Xóa</span>
@@ -139,9 +146,9 @@
                 <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="!status">
                   <span>Xem</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="statusBtnTBP">
+                <!-- <button type="button" class="btn btn-main" (click)="changeTab(item.maLoai,item.trangThai)" [hidden]="statusBtnTBP">
                   <span>KIểm tra</span>
-                </button>
+                </button> -->
                 <button type="button" class="btn btn-main" [hidden]="status">
                   <span>Biểu mẫu nhập số liệu</span>
                 </button>
@@ -246,6 +253,41 @@
       <!-- Table mẫu báo cáo 02 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo nhập mua hàng dự trữ quốc gia"
         [nzExtra]="tableCard3" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao1">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien02">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien02" [class]="donViTien02 ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="4">
+            Ngày lập:
+            <nz-date-picker class="search__input" [(ngModel)]="ngayLap02"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            Đến ngày:
+            <nz-date-picker class="search__input" [(ngModel)]="denNgay02"></nz-date-picker>
+          </div>
+          
+          <div nz-col nzSpan="8">
+             Thuyết minh:
+             <br>
+             <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh02"> 
+          </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -528,16 +570,50 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',4);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',4);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
       <!--Table mẫu báo cáo 03 -->
       <nz-card nzTitle="Báo Cáo : - Báo cáo xuất hàng dự trữ quốc gia"
         [nzExtra]="tableCard4" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao2">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien03">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien03" [class]="donViTien03 ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="4">
+            Ngày lập:
+            <nz-date-picker class="search__input" [(ngModel)]="ngayLap03"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            Đến ngày:
+            <nz-date-picker class="search__input" [(ngModel)]="denNgay03"></nz-date-picker>
+          </div>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh03"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -948,10 +1024,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',5);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
@@ -959,6 +1035,32 @@
       <!--Table mẫu báo cáo 04a-x -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG"
         [nzExtra]="tableCard5" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao3">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien04ax">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien04ax" [class]="donViTien04ax ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh04ax"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1217,16 +1319,42 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',6);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',6);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
       <!--Table mẫu báo cáo 04a-n -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí nhập mua hàng DTQG"
         [nzExtra]="tableCard6" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao4">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien04an">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien04an" [class]="donViTien04an ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh04an"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1485,16 +1613,42 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',7);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',7);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
       <!--Table mẫu báo cáo 04bx -->
       <nz-card nzTitle="Báo Cáo: - Báo cáo chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ"
         [nzExtra]="tableCard7" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao5">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien04bx">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien04bx" [class]="donViTien04bx ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh04bx"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -1752,16 +1906,42 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',8);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',8);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>
       <!--Table mẫu báo cáo 05 -->
       <nz-card nzTitle="Báo Cáo: - Khai thác báo cáo chi tiết thực hiện phí bảo quan lần đầu hàng DTQG"
         [nzExtra]="tableCard8" class="mt16 flex-card p-lr16" [hidden]="tabSelected != tab.baoCao6">
+        <div class="search__body" nz-row [nzGutter]="[24]">
+          <ng-container *ngIf="status;else templateName">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Đơn vị:
+                <div *ngFor="let item of listDonViTien">
+                  <div *ngIf="item.id == donViTien05">
+                    {{item.tenDm}}
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <ng-template #templateName>
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                 <div class="inner-box">Đơn vị:
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị" [(ngModel)]="donViTien05" [class]="donViTien05 ?'' : 'input-error-validate' ">
+                    <nz-option  *ngFor="let dvt of listDonViTien" [nzValue]="dvt.id" [nzLabel]="dvt.tenDm"></nz-option>
+                  </nz-select>
+                  </div>
+              </div>
+          </ng-template>
+          <div nz-col nzSpan="8">
+            Thuyết minh:
+            <br>
+            <input type="text" class="search__input" nz-input style="width: 100% !important;" [(ngModel)]="thuyetMinh05"> 
+         </div>
+        </div>
         <nz-table nzBordered class="table__body">
           <thead>
             <tr>
@@ -2017,10 +2197,10 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('1',9);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('1',tabSelected);">
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" [hidden]="statusBtnDuyetBieuMau" (click)="pheDuyetChiTiet('0',9);">
+        <button type="button" class="btn btn-main" [hidden]="statusBtnOk" (click)="pheDuyetChiTiet('0',tabSelected);">
           <span>Not OK</span>
         </button>
       </ng-template>

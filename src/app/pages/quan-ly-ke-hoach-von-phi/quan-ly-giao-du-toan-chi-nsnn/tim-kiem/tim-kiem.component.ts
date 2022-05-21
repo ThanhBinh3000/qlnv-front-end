@@ -1,3 +1,4 @@
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -5,6 +6,7 @@ import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 
 
@@ -54,6 +56,8 @@ export class TimKiemComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
+    private notification: NzNotificationService,
+
   ) {
   }
 
@@ -89,11 +93,22 @@ export class TimKiemComponent implements OnInit {
     );
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-nsnn-btc-pd',
-      0,
-    ]);
+  xoaBanGhiGiao(id: any) {
+      if (id) {
+        this.quanLyVonPhiService.xoaBanGhiGiaoBTC(id).toPromise().then(async res => {
+          if (res.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.onSubmit()
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+      } else {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+    }
+
   }
 
   redirectSuaThongTinTimKiem(id) {
@@ -125,7 +140,7 @@ export class TimKiemComponent implements OnInit {
     };
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    this.quanLyVonPhiService.timBaoCaoGiao(requestReport).toPromise().then(
+    this.quanLyVonPhiService.timBaoCaoGiao1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

@@ -709,5 +709,43 @@ dMucBcaoDuyet(): Observable<any> {
   dmDonViThuocQuanLy(request:any):Observable<any>{
     return this.httpClient.post(this.urlDefault+'/qlnv-category/dmuc-donvi/ds-donvi-child',request);
   }
+
+  // lấy danh sách danh mục vốn phí
+  dmGoc(): Observable<any> {
+    return this._httpClient.post(this.urlDefault + '/qlnv-category/dmuc-khoachvon/danh-muc-goc',
+    {
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": "",
+      "trangThai": "",
+    })
+  }
+  // Thêm danh mục vốn phí
+  addDm(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-category/dmuc-khoachvon/',
+      request,
+    );
+  }
+  // danh sách danh mục con theo danh mục cha
+  danhSachDanhMucCon(request: any, id: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-category/dmuc-khoachvon/' + id,
+      request,
+    );
+  }
+  // Chi tiết danh mục vốn phí
+  chiTietDmGoc(id: any): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-category/dmuc-khoachvon/chi-tiet/' + id,
+    );
+  }
+  xoaDanhMuc(id: any): Observable<any> {
+    return this.httpClient.delete(
+      this.urlDefault + '/qlnv-category/dmuc-khoachvon/' + id,
+    );
+  }
 }
 
