@@ -47,7 +47,7 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
       id: this.searchFilter.khoanMuc,
     };
 
-    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD(requestReport).toPromise().then(
+    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           var tempArr = data.data;
