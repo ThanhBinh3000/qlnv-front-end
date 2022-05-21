@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChiCucComponent } from './chi-cuc.component';
+import { ChiTietNhapTheoPhuongThucDauThauComponent } from './chi-tiet-nhap-theo-phuong-thuc-dau-thau/chi-tiet-nhap-theo-phuong-thuc-dau-thau.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,11 @@ const routes: Routes = [
       {
         path: '',
         component: ChiCucComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        loadChildren: () =>
+          import('../../../../nhap/dau-thau/nhap-theo-phuong-thuc-dau-thau/chi-cuc/chi-tiet-nhap-theo-phuong-thuc-dau-thau/chi-tiet-nhap-theo-phuong-thuc-dau-thau.module').then((m) => m.ChiTietNhapTheoPhuongThucDauThauModule),
       },
     ]
   },

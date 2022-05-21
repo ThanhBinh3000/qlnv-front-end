@@ -345,4 +345,14 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
       },
     });
   }
+
+  xemDanhSachQuyetDinh() {
+
+  }
+
+  chiTietQuyetDinh(isView: boolean, id: number) {
+    this.router.navigate([
+      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/Th%C3%B3c/chi-tiet/${id}/bien-ban`,
+    ]);
+  }
 }
