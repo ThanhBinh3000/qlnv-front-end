@@ -1,0 +1,26 @@
+<div class="modal__content">
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn khoản mục" [(ngModel)]="maKhoanMuc"
+        (ngModelChange)="changeModel()">
+        <nz-option *ngFor="let item of lstParent" [nzValue]="item.id" [nzLabel]="item.tenDm">
+        </nz-option>
+    </nz-select>
+    <label *ngFor="let item of lstChild" nz-checkbox [(ngModel)]="item.status" class="check-box">
+        {{item.tenDm}}
+    </label>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i nz-icon nzType="plus"></i>
+                Thêm
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close"></i>
+                Hủy
+            </button>
+        </div>
+    </div>
+</div>

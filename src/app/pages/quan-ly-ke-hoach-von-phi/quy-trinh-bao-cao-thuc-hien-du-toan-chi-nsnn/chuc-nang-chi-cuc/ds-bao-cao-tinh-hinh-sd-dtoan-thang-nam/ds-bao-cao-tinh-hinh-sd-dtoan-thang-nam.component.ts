@@ -7,8 +7,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LBCQUYTRINHTHUCHIENDUTOANCHI, Utils } from 'src/app/Utility/utils';
-import { TRANGTHAITIMKIEM } from 'src/app/Utility/utils';
+import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -29,7 +29,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   errorMessage = "";
   url: any = '/bao-cao/';
 
-  trangThais: any = TRANGTHAITIMKIEM;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
   trangThai!:string;
   listBcaoKqua: any[] = [];
   lenght: any = 0;
@@ -55,7 +55,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   };
 
   donViTaos: any = [];
-  baoCaos: any = LBCQUYTRINHTHUCHIENDUTOANCHI;
+  baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -106,6 +106,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   async onSubmit() {
     this.spinner.show();
     this.searchFilter.trangThais= [];
+    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy');
+    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy');
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{

@@ -95,6 +95,8 @@ import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoa
 import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
+import { DialogChonThemBieuMauComponent } from './dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogThemKhoanMucComponent } from './dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 
 @NgModule({
   declarations: [
@@ -142,6 +144,8 @@ import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component'
     DialogDanhSachMuaLuongThucMuoiComponent,
     //
     DialogCopyComponent,
+    DialogChonThemBieuMauComponent,
+    DialogThemKhoanMucComponent,
   ],
   imports: [
     CommonModule,

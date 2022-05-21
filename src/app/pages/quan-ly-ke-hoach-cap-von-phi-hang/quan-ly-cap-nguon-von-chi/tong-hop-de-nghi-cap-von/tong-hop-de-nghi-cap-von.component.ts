@@ -9,7 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { DONVITIEN, Utils } from "../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../Utility/utils";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from '../../../../constants/message';
 import { stringify } from 'querystring';
@@ -43,7 +43,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
 
   vatTus: any = [];
   dviTinhs: any = [];
-  dviTiens: any = DONVITIEN;
+  dviTiens: any = DON_VI_TIEN;
   donVis: any = [];
 
   lstCTietBCao: ItemData[] = [];

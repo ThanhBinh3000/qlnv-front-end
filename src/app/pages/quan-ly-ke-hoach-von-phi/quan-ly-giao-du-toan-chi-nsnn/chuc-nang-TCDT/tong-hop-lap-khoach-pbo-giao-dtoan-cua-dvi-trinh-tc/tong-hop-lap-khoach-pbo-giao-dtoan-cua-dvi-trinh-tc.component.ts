@@ -1,7 +1,7 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { FormGroup } from '@angular/forms';
-import { TRANGTHAIPHANBO } from './../../../../../Utility/utils';
+import { TRANG_THAI_PHAN_BO } from './../../../../../Utility/utils';
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
-import { DONVITIEN, Utils } from "../../../../../Utility/utils";
+import { DON_VI_TIEN, Utils } from "../../../../../Utility/utils";
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -104,7 +104,7 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
      ngayQdCha: any;
      namQdCha: any;
      loaiQd: string;
-     trangThaiPbos: any []= TRANGTHAIPHANBO
+     trangThaiPbos: any []= TRANG_THAI_PHAN_BO
      nguoiKys: any [] = [
        {maNguoiKy: "111", tenNguoiKy: "Đoàn Minh Vương"},
        {maNguoiKy: "112", tenNguoiKy: "Nguyễn Thành Công"},
@@ -119,7 +119,7 @@ export class TongHopLapKhoachPboGiaoDtoanCuaDviTrinhTcComponent implements OnIni
      tongDuToanPb: number;
      tongUocTHien: number;
      tongDuToanGiao: any;
-     donViTiens: any = DONVITIEN;
+     donViTiens: any = DON_VI_TIEN;
 
      lstKhoanMuc: any[] ;
 

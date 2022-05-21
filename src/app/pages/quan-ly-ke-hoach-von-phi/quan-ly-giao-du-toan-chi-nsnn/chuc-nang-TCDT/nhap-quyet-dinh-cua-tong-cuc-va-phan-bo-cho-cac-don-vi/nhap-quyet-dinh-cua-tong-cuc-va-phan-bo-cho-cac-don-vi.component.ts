@@ -15,7 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DONVITIEN, TRANGTHAIPHANBO, Utils } from "../../../../../Utility/utils";
+import { DON_VI_TIEN, TRANG_THAI_PHAN_BO, Utils } from "../../../../../Utility/utils";
 import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 export class ItemData {
@@ -94,7 +94,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
   ngayQdCha: any;
   namQdCha: any;
   loaiQd: string;
-  trangThaiPbos: any []= TRANGTHAIPHANBO
+  trangThaiPbos: any []= TRANG_THAI_PHAN_BO
   nguoiKys: any [] = [
     {maNguoiKy: "111", tenNguoiKy: "Đoàn Minh Vương"},
     {maNguoiKy: "112", tenNguoiKy: "Nguyễn Thành Công"},
@@ -110,7 +110,7 @@ export class NhapQuyetDinhCuaTongCucVaPhanBoChoCacDonViComponent implements OnIn
   tongUocTHien: number;
   tongDuToanGiao: any;
   maDviTien: any;
-  donViTiens: any = DONVITIEN;
+  donViTiens: any = DON_VI_TIEN;
 
   lstKhoanMuc: any[] ;
 
