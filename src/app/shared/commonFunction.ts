@@ -5,7 +5,7 @@ export function convertTrangThai(status: string): string {
     // return 'Mới tạo';
     return 'Dự thảo';
   } else if (status == '01') {
-    // return 'Chờ duyệt';
+    return 'Chờ duyệt';
     return 'Lãnh Đạo Duyệt';
   } else if (status == '02') {
     // return 'Đã duyệt';
@@ -21,7 +21,13 @@ export function convertTrangThai(status: string): string {
   } else if (status == '07') {
     return 'Cục duyệt';
   } else if (status == '08') {
-    return 'Tổng cục duyệt';
+    return 'Kỹ thuật trưởng duyệt';
+  } else if (status == '09') {
+    return 'Trưởng phòng duyệt';
+  } else if (status == '10') {
+    return 'Lãnh đạo duyệt';
+  } else if (status == '11') {
+    return 'Ban hành';
   }
 }
 

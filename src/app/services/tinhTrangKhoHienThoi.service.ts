@@ -17,4 +17,10 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/ngan-lo/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  getChiCucByMaTongCuc(id){
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/chi-cuc/chi-tiet/${id}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
+
 }

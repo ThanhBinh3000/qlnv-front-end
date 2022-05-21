@@ -60,10 +60,14 @@
                   <td class="text-center">{{ data.namKhoach }}</td>
                   <td class="text-center">{{ convertTrangThai(data.trangThai) }}</td>
                   <td class="text-center">
-                    <a >
+                    <a *ngIf="data.trangThai !='00' && data.trangThai !='03' " (click)="detail(data)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <!-- Trạng thái 00 : lưu mới và 03 : từ chối  -->
+                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="edit(data)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="xoaItem(data)">
+                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

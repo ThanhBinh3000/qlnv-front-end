@@ -95,8 +95,10 @@ export class ThongTinChung {
 }
 
 export class DanhSachGoiThau {
-  maDvi : string;
+  maCcuc : string;
+  tenCcuc : string;
   maDiemKho : string;
+  tenDiemKho : string;
   diaDiemNhap: string;
   donGia: number;
   goiThau: string;

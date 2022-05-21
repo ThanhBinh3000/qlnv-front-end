@@ -25,6 +25,9 @@ import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { HelperService } from 'src/app/services/helper.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 interface ItemData {
   id: string;
@@ -51,6 +54,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   listOfData: DanhSachGoiThau[] = [];
   cacheData : DanhSachGoiThau[] = [];
+  fileDinhKem : Array<FileDinhKem> = [];
+  userLogin : UserLogin
+  listChiCuc: any[] = [];
+  listDiemKho : any[] = [];
+  titleStatus : string = '';
+  titleButtonDuyet : string = '';
+  iconButtonDuyet : string = '';
 
   id: number;
   formData: FormGroup;
@@ -81,10 +91,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   baoGiaThiTruongList: Array<CanCuXacDinh> = [];
   canCuKhacList: Array<CanCuXacDinh> = [];
 
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-  vatTuIdDefault: string = LOAI_HANG_DTQG.VAT_TU;
 
 
   // muoiIdDefault: number = 78;
@@ -108,10 +114,49 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private userService: UserService,
-  ) { }
+    private helperService: HelperService,
+    private donviService: DonviService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+  ) {
+    this.formData = this.fb.group(
+      {
+        id : [ ],
+        soQd: [ , [Validators.required] ],
+        soDxuat: [ null, [Validators.required]],
+        maHangHoa: [ null],
+        trichYeu: [ null ],
+        ghiChu: [ null,  [Validators.required]],
+        namKhoach : [  ,[Validators.required]],
+        loaiVthh : [  , [Validators.required] ],
+        ngayKy : [ null , [Validators.required] ],
+        trangThai : ['' ]
+      }
+    );
+    this.formThongTinChung = this.fb.group(
+      {
+        tenDuAn : [  null ,[Validators.required]],
+        tenDvi : [  null,[Validators.required]],
+        tongMucDt : [  null,[Validators.required]],
+        nguonVon : [   null,[Validators.required]],
+        tchuanCluong : [   null,[Validators.required]],
+        loaiHdong : [  null,[Validators.required]],
+        hthucLcnt : [  null,[Validators.required]],
+        pthucLcnt : [  null,[Validators.required]],
+        donGiaTtinh : [ null,[Validators.required]],
+        tgianTbao : [   null,[Validators.required]],
+        tgianPhHoSo : [  null,[Validators.required]],
+        tgianMoThau : [  null,[Validators.required]],
+        tgianDongThau : [ null,[Validators.required]],
+        tgianThHienHd : [ null,[Validators.required]],
+        tgianNhapHang : [ null,[Validators.required]],
+        maDvi : [ null]
+      }
+    )
+   }
 
   startEdit(index: number): void {
     this.editCache[index].edit = true;
+    this.changeChiCuc(this.editCache[index].data.maCcuc,null);
   }
 
   cancelEdit(index: number): void {
@@ -123,7 +168,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.listOfData[index],
       this.editCache[index].data,
     );
-
     this.editCache[index].edit = false;
     // this.dsGoiThauClone?.forEach((goiThau) => {
     //   goiThau.thanhTien = (goiThau.donGia * goiThau.soLuong * 1000).toString();
@@ -146,6 +190,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userInfo = this.userService.getUserLogin();
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -154,10 +199,13 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
     }
     this.listVthh = LIST_VAT_TU_HANG_HOA;
-    this.initForm();
+    // this.initForm();
     if (this.id > 0) {
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.id);
+    }else{
+      this.initForm();
     }
+    this.getDonvi();
     this.loadDanhMucHang();
     Promise.all([
       this.nguonVonGetAll(),
@@ -167,41 +215,99 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     ]);
   }
 
-  initForm() {
+  initForm(dataDetail?) {
     let vthh = this.router.url.split('/')[4];
-    this.formData = this.fb.group(
+    this.formData.patchValue(
       {
-        soQd: [ null, [Validators.required] ],
-        soDxuat: [ null,[Validators.required]],
-        maHangHoa: [null,],
-        trichYeu: [  'Trich yeu', ],
-        ghiChu: [  'Ghi chu' ,  [Validators.required]],
-        namKhoach : [ dayjs().get('year') ,[Validators.required]],
-        loaiVthh : [ convertVthhToId(vthh) , [Validators.required] ],
-        ngayKy : [,[Validators.required]],
+        id :  dataDetail ? dataDetail.id : null,
+        soQd:  dataDetail ? dataDetail.soQd : null,
+        soDxuat:  dataDetail ? dataDetail.soDxuat : null,
+        maHangHoa: dataDetail ? dataDetail.maHangHoa : null,
+        trichYeu: dataDetail ? dataDetail.trichYeu : null,
+        ghiChu: dataDetail ? dataDetail.ghiChu : null,  
+        namKhoach : dataDetail ? dataDetail.namKhoach : dayjs().get('year') ,
+        loaiVthh : dataDetail ? dataDetail.loaiVthh : convertVthhToId(vthh) ,
+        ngayKy : dataDetail ? dataDetail.ngayKy : null ,
+        trangThai : dataDetail ? dataDetail.trangThai : ''
       }
     );
-    this.formThongTinChung = this.fb.group(
+    this.formThongTinChung.patchValue(
       {
-        tenDuAn : ['tenDuAn',[Validators.required]],
-        chuDauTu : ['abcc',[Validators.required]],
-        tongMucDt : [1000,[Validators.required]],
-        nguonVon : ['NGV01',[Validators.required]],
-        tchuanCluong : ['Tieu chuan chat luong',[Validators.required]],
-        loaiHdong : [null,[Validators.required]],
-        hthucLcnt : [null,[Validators.required]],
-        pthucLcnt : [null,[Validators.required]],
-        donGiaTtinh : [null,[Validators.required]],
-        tgianTbao : [null,[Validators.required]],
-        tgianMoiThau : [null,[Validators.required]],
-        tgianMoThau : [null,[Validators.required]],
-        tgianDongThau : [null,[Validators.required]],
-        tgianThHienHd : [null,[Validators.required]],
-        tgianNhapHang : [null,[Validators.required]],
+        tenDuAn : dataDetail?.children1 ? dataDetail.children1.tenDuAn : null ,
+        tenDvi : dataDetail?.children1 ? dataDetail.children1.tenDuAn : null,
+        tongMucDt : dataDetail?.children1 ? dataDetail.children1.tongMucDt : null,
+        nguonVon : dataDetail?.children1 ? dataDetail.children1.nguonVon : null,
+        tchuanCluong : dataDetail?.children1 ? dataDetail.children1.tchuanCluong : null,
+        loaiHdong : dataDetail?.children1 ? dataDetail.children1.loaiHdong : null,
+        hthucLcnt : dataDetail?.children1 ? dataDetail.children1.hthucLcnt : null,
+        pthucLcnt : dataDetail?.children1 ? dataDetail.children1.pthucLcnt : null,
+        donGiaTtinh : dataDetail?.children1 ? dataDetail.children1.donGiaTtinh :null,
+        tgianTbao : dataDetail?.children1 ? dataDetail.children1.tgianTbao : null,
+        tgianPhHoSo :dataDetail?.children1 ? dataDetail.children1.tgianPhHoSo : null,
+        tgianMoThau : dataDetail?.children1 ? dataDetail.children1.tgianMoThau : null,
+        tgianDongThau : dataDetail?.children1 ? dataDetail.children1.tgianDongThau : null,
+        tgianThHienHd : dataDetail?.children1 ? dataDetail.children1.tgianThHienHd : null,
+        tgianNhapHang : dataDetail?.children1 ? dataDetail.children1.tgianNhapHang : null,
+        maDvi : this.userInfo.MA_DVI
       }
     )
+    this.loadDonVi();
+    this.setTitle();
   }
 
+  getDonvi(){
+    let maDonVi = this.userInfo.MA_DVI;
+    this.donviService.getDonVi(maDonVi).then((res) => {
+      this.formThongTinChung.patchValue({
+        tenDvi : res.data.tenDvi
+      })
+    })
+  };
+
+  async changeChiCuc(event,index?){
+    const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    this.listDiemKho = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data?.child.length; i++) {
+        const item = {
+            'value' : res.data.child[i].maDiemkho,
+            'text' : res.data.child[i].tenDiemkho
+        };
+        this.listDiemKho.push(item);
+        
+      }
+    }
+    if(index){
+      this.editCache[index].data.tenCcuc = "";
+      this.editCache[index].data.tenDiemKho = "";
+    }
+  }
+
+  changeDiemKho(index){
+    console.log(index);
+    let chiCuc = this.listChiCuc.filter(item => item.value == this.editCache[index].data.maCcuc);
+    let diemKho = this.listDiemKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
+    if(chiCuc.length > 0 && diemKho.length>0){
+      this.editCache[index].data.tenCcuc = chiCuc[0].text;
+      this.editCache[index].data.tenDiemKho = diemKho[0].text;
+      this.editCache[index].data.diaDiemNhap = diemKho[0]?.text +" - " + chiCuc[0]?.text
+    }
+  } 
+
+  async loadDonVi(){
+    const res = await this.donviService.layDonViCon();
+    this.listChiCuc = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+            'value' : res.data[i].maDvi,
+            'text' : res.data[i].tenDvi
+        };
+        this.listChiCuc.push(item);
+      }
+    }
+  }
+  
   editCanCuTaiLieuDinhKem(data: CanCuXacDinh, type?: string) {
     const modal = this.modal.create({
       nzTitle: 'Chỉnh sửa căn cứ xác định giá',
@@ -274,6 +380,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
                   ...this.chiTietThongTinDXKHLCNT.children,
                   fileDinhKem,
                 ];
+                this.fileDinhKem.push(fileDinhKem);
                 break;
               case 'bao-gia-thi-truong':
                 const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
@@ -327,14 +434,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       },
     });
     modalGT.afterClose.subscribe((res) => {
+      console.warn(res);
       if (!res) {
         return;
       }
       const dsGoiThauDialog = new DanhSachGoiThau();
       dsGoiThauDialog.bangChu = res.value.bangChu;
       dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
-      dsGoiThauDialog.maDvi = res.value.maDvi;
+      dsGoiThauDialog.maCcuc = res.value.maCcuc;
+      dsGoiThauDialog.tenCcuc = res.value.tenCcuc;
       dsGoiThauDialog.maDiemKho = res.value.maDiemKho;
+      dsGoiThauDialog.tenDiemKho = res.value.tenDiemKho;
       dsGoiThauDialog.donGia = +res.value.donGia;
       dsGoiThauDialog.goiThau = res.value.goiThau;
       // dsGoiThauDialog.id = +res.value.id;
@@ -373,12 +483,28 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
 
   async themMoi(){
     // console.log(this.formData.value);
+    this.helperService.markFormGroupTouched(this.formData);
+    this.helperService.markFormGroupTouched(this.formThongTinChung);
+    console.warn(this.formData);
+    console.warn(this.formThongTinChung);
+    if (this.formData.invalid) {
+      return;
+    }
+    if (this.formThongTinChung.invalid) {
+      return;
+    }
     let body = this.formData.value;
-    body.detail1 = this.formThongTinChung.value;
-    body.detail2 = this.listOfData
-    // this.dauThauService.create()
+    body.children = this.fileDinhKem;
+    body.children1 = this.formThongTinChung.value;
+    body.children2 = this.listOfData;
+    body.chidlren3 = [...this.baoGiaThiTruongList, ...this.canCuKhacList]
     let res = await this.dauThauService.create(body);
-    console.log(res);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      this.initForm(res.data);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   redirectToDanhSachDauThau() {
@@ -437,30 +563,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     }
   }
 
-  loadThongTinDeXuatKeHoachLuaChonNhaThau(id: number) {
-    this.dauThauService
-      .getChiTietDeXuatKeHoachLuaChonNhaThau(id)
-      .then((res) => {
+  async loadThongTinDeXuatKeHoachLuaChonNhaThau(id: number) {
+    await this.dauThauService.getDetail(id).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.chiTietThongTinDXKHLCNT.children1 = [];
-          this.chiTietThongTinDXKHLCNT.children2 = [];
-          this.chiTietThongTinDXKHLCNT.children3 = [];
-          this.chiTietThongTinDXKHLCNT.children = [];
-          this.chiTietThongTinDXKHLCNT = res.data;
-          this.tenTaiLieuDinhKem =
-            this.chiTietThongTinDXKHLCNT.children[0]?.fileName;
-          this.chiTietThongTinDXKHLCNT.soDxuat =
-            this.chiTietThongTinDXKHLCNT.soDxuat.split('/')[0];
-          this.thongTinChungDXKHLCNT =
-            this.chiTietThongTinDXKHLCNT.children1[0];
-          this.chiTietThongTinDXKHLCNT.children2.forEach((item) => {
-            item.idVirtual = new Date().getTime();
-          });
-          this.dsGoiThauClone = this.chiTietThongTinDXKHLCNT.children2;
-          this.baoGiaThiTruongList = [];
-          this.canCuKhacList = [];
-          this.convertDataCanCuXacDinh();
-          this.initForm();
+          this.initForm(res.data)
         }
       })
       .catch((e) => {
@@ -469,6 +575,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
+
   convertDataCanCuXacDinh() {
     this.chiTietThongTinDXKHLCNT.children3.forEach((chiTiet) => {
       if (chiTiet.loaiCanCu == '00') {
@@ -478,6 +585,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       }
     });
   }
+
   convertTreeToList(root: VatTu): VatTu[] {
     const stack: VatTu[] = [];
     const array: VatTu[] = [];
@@ -701,7 +809,24 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   redirectChiTieuKeHoachNam() {
     this.router.navigate(['/nhap/dau-thau/danh-sach-dau-thau']);
   }
-  guiDuyet() {
+
+  quayLai(){
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn quay lại ?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        let loatVthh = this.router.url.split('/')[4]
+        this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/danh-sach']);
+      },
+    });
+  }
+
+  async guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -709,11 +834,31 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 310,
+      nzWidth: 350,
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          this.saveThongTinDeXuatKeHoachLCNT(true);
+          let body = {
+            id: this.formData.get('id').value,
+            lyDoTuChoi: null,
+            trangThai : ''
+          };
+          switch (this.formData.get('trangThai').value) {
+            case '00':
+            case '03': {
+              body.trangThai = '01';
+              break;
+            }
+            case '01': {
+              body.trangThai = '09';
+              break;
+            }
+            case '09': {
+              body.trangThai = '11';
+            }
+          }
+          let res = await this.dauThauService.updateStatus(body);
+          this.initForm(res.data);
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -722,6 +867,37 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         }
       },
     });
+  }
+
+  async tuChoi (){
+
+  }
+
+  setTitle(){
+    let trangThai = this.formData.get('trangThai').value
+    switch(trangThai){
+      case '00':{
+        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+        this.titleButtonDuyet = 'Gửi duyệt';
+        break;
+      }
+      case '01':{
+        this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
+        this.titleButtonDuyet = 'Duyệt';
+        this.titleStatus = 'Trưởng phòng duyệt';
+        break
+      }
+      case '09':{
+        this.iconButtonDuyet = 'htvbdh_tcdt_baocao2'
+        this.titleButtonDuyet = 'Ban hành';
+        this.titleStatus = 'Lãnh đạo duyệt';
+        break
+      }
+      case '11':{
+        this.titleStatus = 'Ban hành';
+        break
+      }
+    }
   }
 
   pheDuyet() {
@@ -758,41 +934,41 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     });
   }
 
-  tuChoi() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Từ chối',
-      nzContent: DialogTuChoiComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (text) => {
-      if (text) {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            lyDoTuChoi: text,
-            trangThai: '03',
-          };
-          const res = await this.dauThauService.updateStatus(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
-            this.redirectChiTieuKeHoachNam();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      }
-    });
-  }
+  // tuChoi() {
+  //   const modalTuChoi = this.modal.create({
+  //     nzTitle: 'Từ chối',
+  //     nzContent: DialogTuChoiComponent,
+  //     nzMaskClosable: false,
+  //     nzClosable: false,
+  //     nzWidth: '900px',
+  //     nzFooter: null,
+  //     nzComponentParams: {},
+  //   });
+  //   modalTuChoi.afterClose.subscribe(async (text) => {
+  //     if (text) {
+  //       this.spinner.show();
+  //       try {
+  //         let body = {
+  //           id: this.id,
+  //           lyDoTuChoi: text,
+  //           trangThai: '03',
+  //         };
+  //         const res = await this.dauThauService.updateStatus(body);
+  //         if (res.msg == MESSAGE.SUCCESS) {
+  //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+  //           this.redirectChiTieuKeHoachNam();
+  //         } else {
+  //           this.notification.error(MESSAGE.ERROR, res.msg);
+  //         }
+  //         this.spinner.hide();
+  //       } catch (e) {
+  //         console.log('error: ', e);
+  //         this.spinner.hide();
+  //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //       }
+  //     }
+  //   });
+  // }
 
   huyBo() {
     this.modal.confirm({
@@ -853,42 +1029,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         );
       }
       XLSX.writeFile(workbook, 'can-cu-xac-dinh.xlsx');
-    }
-  }
-  selectTabMenu(tab) {
-    if (tab == this.selectedTab) {
-      return;
-    }
-    if (tab == 'tong-hop') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phuong-an') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phe-duyet') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
     }
   }
 }

@@ -26,6 +26,14 @@ const routes: Routes = [
         path: 'them-moi',
         component: ThemmoiKehoachLcntComponent,
       },
+      {
+        path: 'chinh-sua/:id',
+        component: ThemmoiKehoachLcntComponent,
+      },
+      {
+        path: 'chi-tiet/:id',
+        component: ThemmoiKehoachLcntComponent,
+      },
       // {
       //   path: 'tong-hop',
       //   component: TongHopKhlcntComponent,

@@ -123,6 +123,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -135,6 +136,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -146,6 +150,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   themMoi() {
     let loatVthh = this.router.url.split('/')[4]
     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/them-moi']);
+  }
+
+  detail(data?) {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/chi-tiet',data.id]);
+  }
+
+  edit(data?) {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/chinh-sua',data.id]);
   }
 
   clearFilter() {
@@ -169,12 +183,19 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         try {
           let body = {
             "id": item.id,
-            "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.xoa(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
+          this.danhSachDauThauService.delete(body).then((res) => {
+            if(res.msg == MESSAGE.SUCCESS){
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.UPDATE_SUCCESS,
+              );
+              this.search();
+            }else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
           });
+          this.spinner.hide();
         }
         catch (e) {
           console.log('error: ', e)
