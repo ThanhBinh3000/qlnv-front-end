@@ -33,11 +33,11 @@
                             <tbody>
                                 <tr *ngFor="let data of lstCTietBCao; let i = index">
                                     <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                        <td [nzIndentSize]="data.lstKm[0].level * 8">
+                                        <td [nzIndentSize]="data.level * 8">
                                             {{ getChiMuc(data.stt)  }}
                                         </td>
                                         <td>
-                                            <div *ngFor="let item of data.lstKm">
+                                            <div *ngFor="let item of lstKhoanMuc">
                                                 <div *ngIf="item.id == data.maKhoanMuc">
                                                     {{item.tenDm}}
                                                 </div>
@@ -53,14 +53,15 @@
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="!data.status; else them">
+                                            <!-- <ng-container *ngIf="!data.status; else them">
                                                 <i class="fa fa-plus" (click)="addSame(data.id, initItem)"></i>
                                             </ng-container>
                                             <ng-template #them>
                                                 <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp" (nzOnConfirm)="addSame(data.id, initItem)" nzCancelText="Dưới cấp" (nzOnCancel)="addLow(data.id, initItem)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
-                                            </ng-template>
+                                            </ng-template> -->
+                                            <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                         </td>
                                         <td>
                                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
@@ -68,14 +69,15 @@
                                         </td>
                                     </ng-container>
                                     <ng-template #editTemplate>
-                                        <td [nzIndentSize]="data.lstKm[0].level * 8">
+                                        <td [nzIndentSize]="data.level * 8">
                                             {{ getChiMuc(editCache[data.id].data.stt) }}
                                         </td>
                                         <td>
-                                            <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn khoản mục" [(ngModel)]="editCache[data.id].data.maKhoanMuc">
-                                                <nz-option *ngFor="let item of data.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                                                </nz-option>
-                                            </nz-select>
+                                            <div *ngFor="let item of lstKhoanMuc">
+                                                <div *ngIf="item.id == data.maKhoanMuc">
+                                                    {{item.tenDm}}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>
                                             <input class="search__input" nz-input type="number" [(ngModel)]="editCache[data.id].data.abc" />
@@ -107,7 +109,7 @@
                         <span>Xóa</span>
                     </button>
                     <ng-container *ngIf="lstCTietBCao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
+                        <button type="button" class="btn btn-main" (click)="addLine(null)">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

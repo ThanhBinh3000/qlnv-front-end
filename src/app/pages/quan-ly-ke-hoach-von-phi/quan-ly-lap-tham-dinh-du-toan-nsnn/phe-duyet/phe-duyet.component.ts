@@ -6,18 +6,18 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { LOAIBAOCAO, TRANGTHAITIMKIEM, Utils } from 'src/app/Utility/utils';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({
-	selector: 'app-tim-kiem',
-	templateUrl: './tim-kiem.component.html',
-	styleUrls: ['./tim-kiem.component.scss'],
+	selector: 'app-phe-duyet',
+	templateUrl: './phe-duyet.component.html',
+	styleUrls: ['./phe-duyet.component.scss'],
 })
-export class TimKiemComponent implements OnInit {
+export class PheDuyetComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
 	//thong tin tim kiem
@@ -27,15 +27,19 @@ export class TimKiemComponent implements OnInit {
 		denNgay: "",
 		maBaoCao: "",
 		donViTao: "",
+		loaiBaoCao: "",
 		trangThai: "",
 	};
 	//danh muc
-	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANGTHAIBAOCAO;
+	danhSachBaoCao: any = [];
+	trangThais: any = TRANGTHAIBAOCAO;
+	donViTaos: any[] = [];
+	donVis: any[] = [];
+	baoCaos: any = [];
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                           
+	pages = {                          
 		size: 10,
 		page: 1,
 	}
@@ -55,8 +59,32 @@ export class TimKiemComponent implements OnInit {
 	async ngOnInit() {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
+        if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+            this.searchFilter.trangThai = Utils.TT_BC_7;
+        } else  {
+            if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
+                this.searchFilter.trangThai = Utils.TT_BC_2;
+            } else {
+                this.searchFilter.trangThai = Utils.TT_BC_4;
+            }
+        }
 
-		this.searchFilter.donViTao = this.userInfo?.dvql;		
+		//lay danh sach loai bao cao
+		this.baoCaos = LOAIBAOCAO;
+		//lay danh sach danh muc
+		this.danhMuc.dMDonVi().toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.donVis = data.data;
+					this.donViTaos = this.donVis.filter(e => e.parent?.maDvi === this.userInfo?.dvql);
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
 	}
 
 	//get user info
@@ -101,6 +129,7 @@ export class TimKiemComponent implements OnInit {
 		let requestReport = {
 			maBcao: this.searchFilter.maBaoCao,
 			maDvi: this.searchFilter.donViTao,
+			maLoaiBcao: this.searchFilter.loaiBaoCao,
 			namBcao: this.searchFilter.nam,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
@@ -150,25 +179,14 @@ export class TimKiemComponent implements OnInit {
 		this.searchFilter.tuNgay = null
 		this.searchFilter.denNgay = null
 		this.searchFilter.maBaoCao = null
-		this.searchFilter.trangThai = null
+		this.searchFilter.donViTao = null
+		this.searchFilter.loaiBaoCao = null
 	}
 
 	taoMoi() {
-		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-			if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-				return;
-			}
-		}
-		if (!this.searchFilter.nam){
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-			]);
-		} else {
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + this.searchFilter.nam,
-			]);
-		}
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
+		]);
 	}
 
 	xemChiTiet(id: string) {
@@ -177,7 +195,7 @@ export class TimKiemComponent implements OnInit {
 		])
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 }
