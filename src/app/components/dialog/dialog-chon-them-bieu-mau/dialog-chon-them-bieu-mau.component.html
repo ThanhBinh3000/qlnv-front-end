@@ -1,0 +1,20 @@
+<div class="modal__content">
+  <label *ngFor="let item of danhSachBieuMau" nz-checkbox [(ngModel)]="item.status" class="check-box">{{item.tenPl}}
+    - {{item.tenDm}}</label>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="handleOk()" class="modal__button--save">
+        <i nz-icon nzType="plus"></i>
+        Thêm
+      </button>
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

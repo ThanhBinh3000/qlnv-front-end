@@ -1,280 +1,179 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LIST_BAO_CAO_TONG_HOP, LOAI_BAO_CAO } from 'src/app/Utility/utils';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { TRANG_THAI } from 'src/app/Utility/utils';
+
 
 
 @Component({
-  selector: 'app-tong-hop',
-  templateUrl: './tong-hop.component.html',
-  styleUrls: ['./tong-hop.component.scss']
+	selector: 'app-tong-hop',
+	templateUrl: './tong-hop.component.html',
+	styleUrls: ['./tong-hop.component.scss']
 })
 export class TongHopComponent implements OnInit {
+	//thong tin dang nhap
+	userInfo: any;
+	//thong tin tim kiem
+	namHienTai: number;
+	trangThai: string = '8';
+	maDviTao: string;
+	//danh muc
+	danhSachBaoCao: any[] = [];
+	trangThais: any[] = TRANG_THAI;
+	donVis: any[] = [];
+	//phan trang
+	totalElements = 0;
+	totalPages = 0;
+	pages = {
+		size: 10,
+		page: 1,
+	}
 
-  validateForm!: FormGroup;
+	constructor(
+		private quanLyVonPhiService: QuanLyVonPhiService,
+		private danhMuc: DanhMucHDVService,
+		private router: Router,
+		private datePipe: DatePipe,
+		private userService: UserService,
+		private notification: NzNotificationService,
+		private fb: FormBuilder,
+		private location: Location,
+		private spinner: NgxSpinnerService,
+	) { }
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-      if(!this.namhientai || !this.loaiBaocao){
-        this.notifi.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-      }
-      if (this.namhientai >= 3000 || this.namhientai < 1000){
-        this.notifi.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-      }
-    }
-  }
-  constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
-    private router: Router,
-    private datePipe: DatePipe,
-    private nguoiDungSerivce: UserService,
-    private notifi : NzNotificationService,
-    private fb:FormBuilder,
-    private location: Location,
-  ) {}
+	async ngOnInit() {
+		let userName = this.userService.getUserName();
+		await this.getUserInfo(userName); //get user info
+		this.maDviTao = this.userInfo?.dvql;
+		//lay danh sach danh muc
+		this.danhMuc.dMDonVi().toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.donVis = data.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+		this.onSubmit();
+	}
 
-  url: any;
-  danhSachBaoCao: any = [];
-  baoCaos: any = [];
-  donViTaos: any[] = []
+	//get user info
+	async getUserInfo(username: string) {
+		await this.userService.getUserInfo(username).toPromise().then(
+			(data) => {
+				if (data?.statusCode == 0) {
+					this.userInfo = data?.data
+					return data?.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
+	}
 
-  errorMessage: any = '';
-  userInfo: any;
-  namhientai: any;
-  kehoach: any;
-  maDonViTao: any;
-  loaiBaocao: any;
+	//search list bao cao theo tieu chi
+	async onSubmit() {
+		if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+			return;
+		}
+		let requestReport = {
+			maBcao: "",
+			maDvi: this.maDviTao,
+			maLoaiBcao: "",
+			namBcao: this.namHienTai,
+			ngayTaoDen: "",
+			ngayTaoTu: "",
+			paggingReq: {
+				limit: this.pages.size,
+				page: this.pages.page,
+			},
+			str: "",
+			trangThai: this.trangThai,
+		};
+		this.spinner.show();
+		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
+		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					this.danhSachBaoCao = data.data.content;
+					this.danhSachBaoCao.forEach(e => {
+						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+					})
+					this.totalElements = data.data.totalElements;
+					this.totalPages = data.data.totalPages;
 
-  messageValidate:any =MESSAGEVALIDATE;
-  // validateForm!: FormGroup;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+		this.spinner.hide();
+	}
 
-  async ngOnInit() {
-    this.validateForm = this.fb.group({
-      namhientai: [null, [Validators.required,Validators.pattern('^[12][0-9]{3}$')]],
-      loaiBaocao: [null, [Validators.required]],
-    });
-    console.log(this.validateForm);
-    let username = this.nguoiDungSerivce.getUserName();
-    await this.getUserInfor(username);
-    //lay danh sach loai bao cao
-    this.baoCaos = LOAI_BAO_CAO;
-
-
-    //lay danh sach danh muc
-    this.quanLyVonPhiService.dMDonVi().subscribe(
-      data => {
-        if (data.statusCode == 0) {
-          console.log(data);
-          this.donViTaos = data.data;
-
-        } else {
-          this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
-      }
-    );
-  }
+	tongHop() {
+		if (!this.namHienTai) {
+			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		if (this.namHienTai < 1000 && this.namHienTai > 2999) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+			return;
+		}
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + this.maDviTao + '/' + this.namHienTai,
+		])
+	}
 
 
-
-  totalElements = 0;
-  totalPages = 0;
-  pages = {
-    size: 10,
-    page: 1,
-  }
+	dong() {
+		// this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
+		this.location.back();
+	}
 
 
-  //get user info
-  async getUserInfor(username: string) {
-    let userInfo = await this.nguoiDungSerivce.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          console.log(data);
-          this.userInfo = data?.data
-          this.maDonViTao = this.userInfo?.dvql;
+	xemChiTiet(id: string) {
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
+		])
+	}
 
-          return data?.data;
-        } else {
+	//doi so trang
+	onPageIndexChange(page) {
+		this.pages.page = page;
+	}
 
-        }
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-    return userInfo;
-  }
+	//doi so luong phan tu tren 1 trang
+	onPageSizeChange(size) {
+		this.pages.size = size;
+	}
+	redirectChiTieuKeHoachNam() {
+		this.location.back()
+	}
 
-  tonghop(){
-        if(this.validateForm.valid){
-          this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url+'/'+this.maDonViTao+'/'+this.loaiBaocao+'/'+this.namhientai])
-        }else{
-          return;
-        }
-  }
+	getStatusName(trangThai: string){
+		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+	}
 
-  taomoi(){
-    if(this.validateForm.valid){
-      this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/'+this.url])
-    }else{
-      return;
-    }
-  }
-  dong(){
-    // this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
-    this.location.back();
-  }
-
-  setkeHoach(){
-    this.kehoach=0;
-    this.kehoach = Number(this.namhientai)+3
-  }
-  //set url khi
-  setUrl() {
-    switch (this.loaiBaocao) {
-      case '01':
-        this.url = '/xay-dung-ke-hoach-von-dau-tu';
-        break;
-      case '02':
-        this.url = '/xay-dung-nhu-cau-nhap-xuat-hang-nam';
-        break;
-      case '03':
-        this.url = '/xay-dung-ke-hoach-bao-quan-hang-nam';
-        break;
-      case '04':
-        this.url = '/nhu-cau-xuat-hang-vien-tro';
-        break;
-      case '05':
-        this.url = '/xay-dung-ke-hoach-quy-tien-luong3-nam';
-        break;
-      case '06':
-        this.url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam';
-        break;
-      case '07':
-        this.url = '/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh';
-        break;
-      case '08':
-        this.url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam';
-        break;
-      case '09':
-        this.url = '/du-toan-chi-ung-dung-cntt-3-nam';
-        break;
-      case '10':
-        this.url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam';
-        break;
-      case '11':
-        this.url = '/chi-ngan-sach-nha-nuoc-3-nam';
-        break;
-      case '12':
-        this.url = '/chi-thuong-xuyen-3-nam';
-        break;
-      case '13':
-        this.url = '/nhu-cau-phi-nhap-xuat-3-nam';
-        break;
-      case '14':
-          this.url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam';
-          break;
-      case '15':
-          this.url = '/ke-hoach-dao-tao-boi-duong-3-nam';
-          break;
-      case '16':
-          this.url = '/nhu-cau-ke-hoach-dtxd3-nam/';
-          break;
-      case '17':
-        this.url = '/tong-hop-du-toan-chi-thuong-xuyen-hang-nam';
-        break;
-      case '18':
-        this.url = '/du-toan-xuat-nhap-hang-dtqg-hang-nam';
-        break;
-      case '19':
-        this.url = '/ke-hoach-bao-quan-hang-nam';
-        break;
-      case '20':
-        this.url = '/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct';
-        break;
-      case '21':
-        this.url = '/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/';
-        break;
-      case '22':
-        this.url = '/ke-hoach-quy-tien-luong-nam-n1/';
-        break;
-      case '23':
-          this.url ='/du-toan-chi-du-tru-quoc-gia-gd3-nam/';
-        break;
-      case '24':
-        this.url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/';
-        break;
-      case '25':
-        this.url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam';
-        break;
-      case '26':
-        this.url = '/du-toan-chi-ung-dung-cntt-giai-doan-3nam';
-        break;
-      case '27':
-        this.url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam';
-        break;
-      case '28':
-        this.url = '/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam';
-        break;
-      case '29':
-        this.url = '/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
-        break;
-      case '30':
-        this.url = '/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam';
-        break;
-      case '31':
-        this.url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam';
-        break;
-      case '32':
-        this.url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc';
-        break;
-      default:
-        this.url=null;
-        break;
-    }
-
-  }
-
-  //lay ten don vi tạo
-  getUnitName() {
-    return this.donViTaos.find(item => item.id == this.maDonViTao)?.tenDvi;
-  }
-  //doi so trang
-  onPageIndexChange(page) {
-    this.pages.page = page;
-  }
-
-  //doi so luong phan tu tren 1 trang
-  onPageSizeChange(size) {
-    this.pages.size = size;
-  }
-  redirectChiTieuKeHoachNam(){
-    this.location.back()
-  }
-  xoaDieuKien(){
-    this.namhientai = ''
-    this.kehoach = ''
-    this.loaiBaocao = ''
-  }
-  tinhnam(){
-    this.kehoach= Number(this.namhientai) + 3
-  }
+	getUnitName(maDvi: string){
+		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+	}
 }
