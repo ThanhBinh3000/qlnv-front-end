@@ -152,9 +152,18 @@ export class BaoCaoComponent implements OnInit {
 
   ) {
   }
+  listOfData: any[] = [];
 
   async ngOnInit() {
-
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        name: `Edward King ${i}`,
+        age: 32,
+        address: `London, Park Lane no. ${i}`
+      });
+    }
+    this.listOfData = data;
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
