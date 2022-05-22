@@ -57,10 +57,9 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   selectedCanCu: any = null;
   searchFilter = {
     soQD: '',
-    donViId: '',
-    tenDonVi: '',
-    trichYeu: '',
-    namKeHoach: '',
+    ngayQuyetDinh: '',
+    namNhap: '',
+    noiDungCongVan: ''
   };
   listNam: any[] = [];
   loaiVthh: string = '';
@@ -74,7 +73,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     private modal: NzModalService,
     private route: ActivatedRoute,
     public userService: UserService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -113,7 +112,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
     this.router.navigate([
       '/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' +
-        this.route.snapshot.paramMap.get('type'),
+      this.route.snapshot.paramMap.get('type'),
     ]);
   }
 
@@ -153,58 +152,52 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   clearFilter() {
-    this.soQD = null;
-    this.startValue = null;
-    this.canCu = null;
-    this.inputDonVi = null;
-    this.loaiVTHH = null;
-    this.loaiQd = null;
+    this.searchFilter = {
+      soQD: '',
+      ngayQuyetDinh: '',
+      namNhap: '',
+      noiDungCongVan: ''
+    }
+    this.search();
   }
 
   async search() {
-    let maDonVi = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-      }
-    }
+    this.spinner.show();
     let body = {
-      loaiQd: this.loaiQd,
-      maDvi: maDonVi,
-      maVthh: this.loaiVTHH,
-      ngayQd: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+      "denNgayQd": this.searchFilter.ngayQuyetDinh
+        ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
         : null,
-      orderBy: null,
-      orderDirection: null,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
+      "loaiQd": "",
+      "maDvi": "",
+      "maVthh": "",
+      "namNhap": this.searchFilter.namNhap,
+      "ngayQd": "",
+      "orderBy": "",
+      "orderDirection": "",
+      "paggingReq": {
+        "limit": this.pageSize,
+        "orderBy": "",
+        "orderType": "",
+        "page": this.page - 1
       },
-      soHd: this.soHd,
-      soQd: this.soQD,
-      str: null,
-      trangThai: null,
-    };
+      "soHd": "",
+      "soQd": this.searchFilter.soQD.trim(),
+      "str": "",
+      "trangThai": "",
+      "tuNgayQd": this.searchFilter.ngayQuyetDinh
+        ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
+        : null,
+      "veViec": this.searchFilter.noiDungCongVan.trim()
+    }
     let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-        for (let i = 0; i < this.dataTable.length; i++) {
-          let item = this.dataTable[i];
-          if (item && item.children && item.children.length > 0) {
-            this.dataTable[i].tenHangDTQG = item.children[0].tenVthh;
-          }
-        }
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -274,30 +267,32 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let maDonVi = null;
-        if (this.inputDonVi && this.inputDonVi.length > 0) {
-          let getDonVi = this.optionsDonVi.filter(
-            (x) => x.labelDonVi == this.inputDonVi,
-          );
-          if (getDonVi && getDonVi.length > 0) {
-            maDonVi = getDonVi[0].maDvi;
-          }
-        }
         let body = {
-          loaiQd: this.loaiQd,
-          maDvi: maDonVi,
-          maVthh: this.loaiVTHH,
-          ngayQd: this.startValue
-            ? dayjs(this.startValue).format('YYYY-MM-DD')
+          "denNgayQd": this.searchFilter.ngayQuyetDinh
+            ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
             : null,
-          orderBy: null,
-          orderDirection: null,
-          paggingReq: null,
-          soHd: this.soHd,
-          soQd: this.soQD,
-          str: null,
-          trangThai: null,
-        };
+          "loaiQd": "",
+          "maDvi": "",
+          "maVthh": "",
+          "namNhap": this.searchFilter.namNhap,
+          "ngayQd": "",
+          "orderBy": "",
+          "orderDirection": "",
+          "paggingReq": {
+            "limit": null,
+            "orderBy": "",
+            "orderType": "",
+            "page": null
+          },
+          "soHd": "",
+          "soQd": this.searchFilter.soQD.trim(),
+          "str": "",
+          "trangThai": "",
+          "tuNgayQd": this.searchFilter.ngayQuyetDinh
+            ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
+            : null,
+          "veViec": this.searchFilter.noiDungCongVan.trim()
+        }
         this.quyetDinhGiaoNhapHangService
           .exportList(body)
           .subscribe((blob) =>
@@ -354,7 +349,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
 
   chiTietQuyetDinh(isView: boolean, id: number) {
     this.router.navigate([
-      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/Th%C3%B3c/chi-tiet/${id}/bien-ban`,
+      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc/chi-tiet/${id}/bien-ban`,
     ]);
   }
 }

@@ -159,14 +159,14 @@ export const LOAI_HANG_DTQG = {
   GAO: '00',
   THOC: '01',
   MUOI: '02',
-  VAT_TU : '03',
+  VAT_TU: '03',
 };
 
 export const TEN_HANG_DTQG = {
   GAO: 'gao',
   THOC: 'thoc',
   MUOI: 'muoi',
-  VAT_TU : 'vat-tu'
+  VAT_TU: 'vat-tu'
 };
 
 export const STATUS_USER = {
@@ -189,20 +189,20 @@ export const LEVEL_USER = {
 };
 export const LIST_VAT_TU_HANG_HOA = [
   {
-    value : LOAI_HANG_DTQG.THOC,
-    text : 'Thóc'
+    value: LOAI_HANG_DTQG.THOC,
+    text: 'Thóc'
   },
   {
-    value : LOAI_HANG_DTQG.GAO,
-    text : 'Gạo'
+    value: LOAI_HANG_DTQG.GAO,
+    text: 'Gạo'
   },
   {
-    value : LOAI_HANG_DTQG.MUOI,
-    text : 'Muối'
+    value: LOAI_HANG_DTQG.MUOI,
+    text: 'Muối'
   },
   {
-    value : LOAI_HANG_DTQG.VAT_TU,
-    text : 'Vật tư'
+    value: LOAI_HANG_DTQG.VAT_TU,
+    text: 'Vật tư'
   }
 ]
 

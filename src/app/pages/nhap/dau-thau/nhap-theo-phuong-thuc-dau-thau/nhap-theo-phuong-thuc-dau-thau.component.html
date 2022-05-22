@@ -35,17 +35,17 @@
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="12">
                                 <label class="search__label">Số quyết định</label>
-                                <input class="search__input" placeholder="Số quyết định" nz-input [(ngModel)]="soQD" />
+                                <input class="search__input" placeholder="Số quyết định" nz-input
+                                    [(ngModel)]="searchFilter.soQD" />
                             </div>
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Ngày quyết định</label>
-                                <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" [(ngModel)]="startValue"
-                                    nzPlaceHolder="Ngày QĐ">
-                                </nz-date-picker>
+                                <nz-range-picker [(ngModel)]="searchFilter.ngayQuyetDinh" nzFormat="dd/MM/yyyy">
+                                </nz-range-picker>
                             </div>
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Năm nhập</label>
-                                <nz-select [(ngModel)]="searchFilter.namKeHoach">
+                                <nz-select [(ngModel)]="searchFilter.namNhap">
                                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                     </nz-option>
                                 </nz-select>
@@ -53,7 +53,8 @@
                             <div nz-col nzSpan="24">
                                 <label class="search__label">Nội dung công văn</label>
                                 <nz-input-group nzAddOnAfterIcon="folder-open">
-                                    <input nz-input [(ngModel)]="soHd" placeholder="Nội dung công văn" />
+                                    <input nz-input [(ngModel)]="searchFilter.noiDungCongVan"
+                                        placeholder="Nội dung công văn" />
                                 </nz-input-group>
                             </div>
                         </div>
@@ -93,9 +94,9 @@
                                         <label nz-checkbox></label>
                                     </th>
                                     <td>{{ data.soQd }}</td>
-                                    <td>{{ data.ngayKy }}</td>
+                                    <td>{{ data.ngayQdinh }}</td>
                                     <td>{{ data.namNhap }}</td>
-                                    <td>{{ data.noiDungCongVan }}</td>
+                                    <td>{{ data.veViec }}</td>
                                     <td>{{ convertTrangThai(data.trangThai) }}</td>
                                     <td class="text-center">
                                         <a (click)="redirectToChiTiet(data.id)" *ngIf="userService.isCuc()">

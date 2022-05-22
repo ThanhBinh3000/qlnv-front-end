@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+import { DetailQuyetDinhNhapXuat } from './../../../../../../models/QuyetDinhNhapXuat';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -11,7 +13,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { DATEPICKER_CONFIG } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -19,6 +21,8 @@ import { Globals } from 'src/app/shared/globals';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
@@ -33,13 +37,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   datePickerConfig = DATEPICKER_CONFIG;
   id: number;
   type: string = '';
-  newQDNhapXuat: QuyetDinhNhapXuat;
+  quyetDinhNhapXuat: QuyetDinhNhapXuat = new QuyetDinhNhapXuat();
   dataQDNhapXuat;
   optionsDonVi: any[] = [];
   optionsFullDonVi: any[] = [];
   optionsFullHangHoa: any[] = [];
   optionsHangHoa: any[] = [];
   userInfo: UserLogin;
+  routerUrl: string;
+  quyetDinhNhapXuatDetailCreate: DetailQuyetDinhNhapXuat;
+  dsQuyetDinhNhapXuatDetailClone: Array<DetailQuyetDinhNhapXuat> = [];
+  isAddQdNhapXuat: boolean = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -51,17 +60,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     public globals: Globals,
     private userService: UserService,
     private danhMucService: DanhMucService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
-
+    this.routerUrl = this.router.url;
     this.id = +this.activatedRoute.snapshot.paramMap.get('id');
     this.type = this.activatedRoute.snapshot.paramMap.get('type');
     this.initForm();
-    this.newObjectQDNhapXuat();
-    this.loadDonVi();
+    this.loadDonVi("chi-cuc");
+    this.loadDonVi("all");
     this.loadDanhMucHang();
+    this.newObjectQdNhapXuat();
   }
 
   redirectToDanhSachDauThau() {
@@ -74,7 +84,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       ngayQdinh: ['', [Validators.required, this.dateValidator]],
       canCu: [null, [Validators.required]],
       veViec: [null],
-      donvi: [null],
+      donVi: [null],
+      ghiChu: [null],
     });
   }
 
@@ -87,8 +98,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   openDialogQuyetDinhGiaoChiTieu() {
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
-      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzTitle: 'Thông tin hợp đồng',
+      nzContent: DialogCanCuHopDongComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -97,9 +108,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-        // this.chiTietThongTinDXKHLCNT.qdCanCu = data.soQuyetDinh;
         this.formData.patchValue({
-          canCu: data.soQuyetDinh,
+          canCu: data.tenHdong,
         });
       }
     });
@@ -114,25 +124,107 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   openFile(event) {
     let item = {
       id: new Date().getTime(),
-      text: event,
+      text: event.name,
     };
     if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
       this.taiLieuDinhKemList.push(item);
     }
   }
+  newObjectQdNhapXuat() {
+    this.quyetDinhNhapXuatDetailCreate = new DetailQuyetDinhNhapXuat();
+    if (this.routerUrl.includes("thoc")) {
+      this.quyetDinhNhapXuatDetailCreate.maVthh = "010101";
+      this.quyetDinhNhapXuatDetailCreate.tenVthh = "Thóc";
+      this.quyetDinhNhapXuatDetailCreate.donViTinh = "Tấn";
+    } else if (this.routerUrl.includes("gao")) {
+      this.quyetDinhNhapXuatDetailCreate.maVthh = "010103";
+      this.quyetDinhNhapXuatDetailCreate.tenVthh = "Gạo";
+      this.quyetDinhNhapXuatDetailCreate.donViTinh = "Tấn";
+    } else if (this.routerUrl.includes("muoi")) {
+      this.quyetDinhNhapXuatDetailCreate.maVthh = "04";
+      this.quyetDinhNhapXuatDetailCreate.tenVthh = "Muối";
+      this.quyetDinhNhapXuatDetailCreate.donViTinh = "Tấn";
+    }
+  }
 
-  themmoi() {}
+  themmoi() {
+    if (!this.isAddQdNhapXuat) {
+      return;
+    }
+    const quyetDinhNhapXuatTemp = new DetailQuyetDinhNhapXuat();
+    quyetDinhNhapXuatTemp.maDvi = this.quyetDinhNhapXuatDetailCreate.maDvi;
+    quyetDinhNhapXuatTemp.tenDonVi = this.quyetDinhNhapXuatDetailCreate.tenDonVi;
+    quyetDinhNhapXuatTemp.maVthh = this.quyetDinhNhapXuatDetailCreate.maVthh;
+    quyetDinhNhapXuatTemp.tenVthh = this.quyetDinhNhapXuatDetailCreate.tenVthh;
+    quyetDinhNhapXuatTemp.donViTinh = this.quyetDinhNhapXuatDetailCreate.donViTinh;
+    quyetDinhNhapXuatTemp.soLuong = this.quyetDinhNhapXuatDetailCreate.soLuong ?? 0;
+    quyetDinhNhapXuatTemp.thoiGianNhapKhoMuonNhat = this.quyetDinhNhapXuatDetailCreate.thoiGianNhapKhoMuonNhat ?? dayjs().toString();
+    this.checkDataExistQdNhapXuat(quyetDinhNhapXuatTemp);
+    this.isAddQdNhapXuat = false;
+    this.newObjectQdNhapXuat();
+    this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(this.quyetDinhNhapXuat.detail);
+    // this.loadData();
+  }
+  checkDataExistQdNhapXuat(quyetDinhNhapXuat: DetailQuyetDinhNhapXuat) {
+    if (this.quyetDinhNhapXuat.detail) {
+      let indexExist = this.quyetDinhNhapXuat.detail.findIndex(
+        (x) => x.maDvi == quyetDinhNhapXuat.maDvi,
+      );
+      if (indexExist != -1) {
+        this.quyetDinhNhapXuat.detail.splice(indexExist, 1);
+      }
+    } else {
+      this.quyetDinhNhapXuat.detail = [];
+    }
+    this.quyetDinhNhapXuat.detail = [
+      ...this.quyetDinhNhapXuat.detail,
+      quyetDinhNhapXuat,
+    ];
+    this.quyetDinhNhapXuat.detail.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
 
-  clearNew() {}
+  }
+  clearNew() {
+    this.isAddQdNhapXuat = false;
+    this.newObjectQdNhapXuat();
+  }
 
-  startEdit(index) {}
+  startEdit(index: number) {
+    this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = true;
+  }
 
-  deleteData(stt) {}
+  deleteData(stt: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.quyetDinhNhapXuat.detail =
+          this.quyetDinhNhapXuat?.detail.filter(
+            (khlt) => khlt.stt !== stt,
+          );
+        this.quyetDinhNhapXuat?.detail.forEach((lt, i) => {
+          if (i >= stt - 1) {
+            lt.stt = i + 1;
+          }
+        });
+        this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(
+          this.quyetDinhNhapXuat.detail,
+        );
+        // this.loadData();
+      },
+    });
+  }
 
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonVi = [];
+      // this.optionsDonVi = [];
     } else {
       this.optionsDonVi = this.optionsFullDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -140,24 +232,51 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  selectDonVi(option) {}
+  selectDonVi(qdNhapXuat) {
+    this.isAddQdNhapXuat = true;
+    this.quyetDinhNhapXuatDetailCreate.maDvi = qdNhapXuat.maDvi;
+    this.quyetDinhNhapXuatDetailCreate.tenDonVi = qdNhapXuat.tenDvi;
+  }
 
-  async loadDonVi() {
+  async loadDonVi(type?: string) {
     try {
       const body = {
         maDvi: this.userInfo.MA_DVI,
       };
-      const res = await this.donViService.layDonViCon();
+      let res;
+      switch (type) {
+        case "all":
+          res = await this.donViService.layTatCaDonVi();
+          break;
+        case "chi-cuc":
+          res = await this.donViService.layDonViCon();
+          break;
+        default:
+          break;
+      }
       this.optionsFullDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsFullDonVi.push(item);
+        if (type === "chi-cuc") {
+          for (let i = 0; i < res.data.length; i++) {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsFullDonVi.push(item);
+          }
+          this.optionsDonVi = this.optionsFullDonVi;
         }
-        this.optionsDonVi = this.optionsFullDonVi;
+        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC && type === "all") {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+              this.quyetDinhNhapXuat.tenDonVi = res.data[i].tenDvi;
+              this.formData.patchValue({
+                donVi: this.quyetDinhNhapXuat.tenDonVi,
+              });
+              break;
+            }
+          }
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -176,10 +295,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     });
   }
 
-  newObjectQDNhapXuat() {
-    this.newQDNhapXuat = new QuyetDinhNhapXuat();
-  }
-
   onInputHangHoa(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
@@ -191,9 +306,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  selectHangHoa(option) {}
+  selectHangHoa(option) { }
 
-  changeMaHangHoa() {}
+  changeMaHangHoa() { }
 
   onInputDonViTinh(e: Event): void {
     // const value = (e.target as HTMLInputElement).value;
@@ -206,14 +321,15 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     // }
   }
 
-  selectDonViTinh(option) {}
-
-  changeDonViTinh() {}
-
-  tenHangHoa() {
-    const tenHangHoa = this.optionsFullHangHoa.find(
-      (e) => e.ma === this.newQDNhapXuat.maHangHoa,
+  saveEditQdNhapXuat(i: number): void {
+    this.dsQuyetDinhNhapXuatDetailClone[i].isEdit = false;
+    Object.assign(
+      this.quyetDinhNhapXuat.detail[i],
+      this.dsQuyetDinhNhapXuatDetailClone[i],
     );
-    return tenHangHoa ? tenHangHoa.ten : null;
+  }
+  cancelEditQdNhapXuat(index: number) {
+    this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(this.quyetDinhNhapXuat.detail);
+    this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
   }
 }
