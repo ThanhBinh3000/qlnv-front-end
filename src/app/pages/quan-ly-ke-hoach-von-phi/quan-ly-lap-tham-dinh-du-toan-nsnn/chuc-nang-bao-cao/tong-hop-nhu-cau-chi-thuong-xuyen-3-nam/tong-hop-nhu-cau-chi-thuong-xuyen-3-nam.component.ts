@@ -11,8 +11,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N } from "../../../../../Utility/utils";
-import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+import { DON_VI_TIEN, LA_MA, QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N } from "../../../../../Utility/utils";
+// import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-thuong-xuyen-3-nam.constant';
 
 export class ItemData {
@@ -147,7 +147,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     getHead(str: string): string {
         return str.substring(0, str.lastIndexOf('.'));
     }
-    // lấy phần đuôi của stt 
+    // lấy phần đuôi của stt
     getTail(str: string): number {
         return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
     }

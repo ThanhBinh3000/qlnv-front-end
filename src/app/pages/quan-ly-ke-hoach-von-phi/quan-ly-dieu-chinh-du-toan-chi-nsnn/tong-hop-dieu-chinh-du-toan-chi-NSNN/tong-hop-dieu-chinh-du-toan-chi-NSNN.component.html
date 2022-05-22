@@ -159,151 +159,22 @@
 			<div class="tab__container">
 				<nz-tabset nzType="card" class="tab__container">
 					<nz-tab>
-
-            <div class="mt-4">
+            <div class="mt-4" style="font-weight: 600;">
               Danh sách biểu mẫu
             </div>
-
 						<div id="tablePrint">
 							<nz-table nzBordered class="table__body">
 								<thead>
 									<tr>
-										<th rowspan="2">STT</th>
+										<th rowspan="2" nzWidth="170px">STT</th>
 										<th rowspan="2" nzWidth="170px">Biêu mẫu</th>
 										<th rowspan="2" nzWidth="150px">Tên biểu mẫu</th>
 										<th rowspan="2" nzWidth="150px">Trạng thái</th>
 										<th rowspan="2" nzWidth="50px">
-											Năm hiện hành N
-										</th>
-										<th colspan="3" nzWidth="150px">
-											Dự kiến năm dự toán N + 1
-										</th>
-										<th colspan="3">
-											Dự kiến năm dự toán N + 2
-										</th>
-										<th colspan="3">
-											Dự kiến năm dự toán N + 3
-										</th>
-										<th colspan="3" rowspan="2" [hidden]="status"></th>
-										<th rowspan="2" [hidden]="status">
-											<label nz-checkbox [(ngModel)]="allChecked"
-												(ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
-											</label>
-										</th>
-									</tr>
-									<tr class="text-title">
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
-										</th>
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
-										</th>
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
 										</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>A</td>
-										<td style="width: 50px;">B</td>
-										<td></td>
-										<td></td>
-										<td>1</td>
-										<td>2</td>
-										<td>3</td>
-										<td>4=3-2</td>
-										<td>5</td>
-										<td>6</td>
-										<td>7=6-5</td>
-										<td>8</td>
-										<td>9</td>
-										<td>10=9-8</td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Tổng nhu cầu</td>
-										<td></td>
-										<td></td>
-										<td>{{ tong.namHhanhN }}</td>
-										<td>{{ tong.tranChiDuocTbN1 }}</td>
-										<td>{{ tong.ncauChiCuaDviN1 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN1 }}</td>
-										<td>{{ tong.tranChiDuocTbN2 }}</td>
-										<td>{{ tong.ncauChiCuaDviN2 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN2 }}</td>
-										<td>{{ tong.tranChiDuocTbN3 }}</td>
-										<td>{{ tong.ncauChiCuaDviN3 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN3 }}</td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>- Chi thường xuyên cơ sở</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>- Chi thường xuyên mới</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-									</tr>
 									<tr *ngFor="let data of lstCTietBCao; let i = index">
 										<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 											<td>{{ i + 1 }}</td>
@@ -443,149 +314,24 @@
 								</tbody>
 							</nz-table>
 						</div>
-
-            <div class="mt-4">
+            <div class="mt-4" style="font-weight: 600;">
               Danh sách báo cáo từ các đơn vị trực thuộc
             </div>
             <div id="tablePrint">
 							<nz-table nzBordered class="table__body">
 								<thead>
 									<tr>
-										<th rowspan="2">STT</th>
-										<th rowspan="2" nzWidth="170px">Nội dung</th>
-										<th rowspan="2" nzWidth="150px">Nhóm chi</th>
-										<th rowspan="2" nzWidth="150px">Loại chi</th>
-										<th rowspan="2" nzWidth="50px">
-											Năm hiện hành N
-										</th>
-										<th colspan="3" nzWidth="150px">
-											Dự kiến năm dự toán N + 1
-										</th>
-										<th colspan="3">
-											Dự kiến năm dự toán N + 2
-										</th>
-										<th colspan="3">
-											Dự kiến năm dự toán N + 3
-										</th>
-										<th colspan="3" rowspan="2" [hidden]="status"></th>
-										<th rowspan="2" [hidden]="status">
-											<label nz-checkbox [(ngModel)]="allChecked"
-												(ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
-											</label>
-										</th>
-									</tr>
-									<tr class="text-title">
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
-										</th>
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
-										</th>
-										<th style="width: 50px">
-											Trần chi được thông báo
-										</th>
-										<th style="width: 50px">
-											Nhu cầu chi của đơn vị
-										</th>
-										<th style="width: 50px">
-											Chênh lệch trần chi - nhu cầu
-										</th>
+										<th rowspan="2" nzWidth="170px">STT</th>
+										<th rowspan="2" nzWidth="170px">Đơn vị lập</th>
+										<th rowspan="2" nzWidth="150px">Mã báo cáo</th>
+										<th rowspan="2" nzWidth="150px">Năm hiện tại(N)</th>
+										<th rowspan="2" nzWidth="150px">Ngày trình duyệt(Ngày đơn vị cấp dưới gửi báo cáo)</th>
+                    <th rowspan="2" nzWidth="150px">Ngày duyệt(ngày cấp trên duyệt báo cáo)</th>
+                    <th rowspan="2" nzWidth="150px">Trạng thái</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>A</td>
-										<td style="width: 50px;">B</td>
-										<td></td>
-										<td></td>
-										<td>1</td>
-										<td>2</td>
-										<td>3</td>
-										<td>4=3-2</td>
-										<td>5</td>
-										<td>6</td>
-										<td>7=6-5</td>
-										<td>8</td>
-										<td>9</td>
-										<td>10=9-8</td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-										<td width="2.25%" [hidden]="status"></td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Tổng nhu cầu</td>
-										<td></td>
-										<td></td>
-										<td>{{ tong.namHhanhN }}</td>
-										<td>{{ tong.tranChiDuocTbN1 }}</td>
-										<td>{{ tong.ncauChiCuaDviN1 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN1 }}</td>
-										<td>{{ tong.tranChiDuocTbN2 }}</td>
-										<td>{{ tong.ncauChiCuaDviN2 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN2 }}</td>
-										<td>{{ tong.tranChiDuocTbN3 }}</td>
-										<td>{{ tong.ncauChiCuaDviN3 }}</td>
-										<td>{{ tong.clechTranChiVsNcauN3 }}</td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>- Chi thường xuyên cơ sở</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>- Chi thường xuyên mới</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
-										<td [hidden]="status"></td>
+                  <tr>
 									</tr>
 									<tr *ngFor="let data of lstCTietBCao; let i = index">
 										<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -726,6 +472,10 @@
 								</tbody>
 							</nz-table>
 						</div>
+            <div class="mt-4">
+              <span style="font-weight: 600;">Thuyết minh</span>
+              <textarea nz-input [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+            </div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col class="gutter-row" [nzSpan]="3">
 								Danh sách văn bản đính kèm
@@ -772,7 +522,7 @@
 					</nz-tab>
 				</nz-tabset>
 				<div class="action">
-					<button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
+					<!-- <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
@@ -783,7 +533,7 @@
 					<button type="button" class="btn btn-sub" [hidden]="status">
 						<i class="icon htvbdh_tcdt_import"></i>
 						<span>Import</span>
-					</button>
+					</button> -->
 					<!-- <button class="btn btn-primary"
 						[useExistingCss]="true"
 						styleSheetFile="node_modules/bootstrap/dist/css/bootstrap.min.css"

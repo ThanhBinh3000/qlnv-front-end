@@ -14,10 +14,10 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, MONEY_LIMIT, mulMoney, NOT_OK, OK, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
-import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.constant';
 import { LISTCANBO, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
@@ -978,7 +978,7 @@ export class BaoCaoComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);
       return;
     }
-    // validate bao cao 
+    // validate bao cao
     if (baoCaoChiTietTemp.id?.length != 36) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.SAVEREPORT);
       return;
@@ -1795,7 +1795,7 @@ export class BaoCaoComponent implements OnInit {
     if (str)
       return str.substring(0, str.lastIndexOf('.'));
   }
-  // lấy phần đuôi của stt 
+  // lấy phần đuôi của stt
   getTail(str: string): number {
     if (str)
       return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
