@@ -969,7 +969,7 @@ export class BaoCaoComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);
       return;
     }
-    // validate bao cao 
+    // validate bao cao
     if (baoCaoChiTietTemp.id?.length != 36) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.SAVEREPORT);
       return;
@@ -1786,7 +1786,7 @@ export class BaoCaoComponent implements OnInit {
     if (str)
       return str.substring(0, str.lastIndexOf('.'));
   }
-  // lấy phần đuôi của stt 
+  // lấy phần đuôi của stt
   getTail(str: string): number {
     if (str)
       return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
