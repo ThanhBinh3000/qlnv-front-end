@@ -7,6 +7,7 @@ export class KeHoachLuongThuc {
   cucDTNNKhuVuc: string;
   tenDonvi: string;
   maDonVi: string;
+  maDvi: string;
   donViTinh: string;
   donViId: number;
   khGaoId: number;

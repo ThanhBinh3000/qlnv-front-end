@@ -620,6 +620,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.isAddLuongThuc = isAdd;
 
       item.maDonVi = donVi.maDvi;
+      item.maDvi = donVi.maDvi;
       item.tenDonvi = donVi.tenDvi;
       item.donViId = donVi.id;
 

@@ -1,4 +1,5 @@
 import { LOAI_HANG_DTQG, TEN_HANG_DTQG } from "../constants/config";
+import VNnum2words from 'vn-num2words';
 
 export function convertTrangThai(status: string): string {
   if (status == '00') {
@@ -40,42 +41,47 @@ export function convertTrangThaiUser(status: string): string {
   return '';
 }
 
-export function convertTenVthh(ten:string){
+export function convertTenVthh(ten: string) {
   let nameConvert = "";
-  switch(ten){
-    case TEN_HANG_DTQG.GAO : 
+  switch (ten) {
+    case TEN_HANG_DTQG.GAO:
       nameConvert = "Gạo";
       break;
-    case TEN_HANG_DTQG.THOC : 
+    case TEN_HANG_DTQG.THOC:
       nameConvert = "Thóc";
       break;
-    case TEN_HANG_DTQG.MUOI : 
+    case TEN_HANG_DTQG.MUOI:
       nameConvert = "Muối";
       break;
-    case TEN_HANG_DTQG.VAT_TU : 
+    case TEN_HANG_DTQG.VAT_TU:
       nameConvert = "Vật tư";
       break;
   }
   return nameConvert;
 }
 
-export function convertVthhToId(ten:string){
+export function convertVthhToId(ten: string) {
   let idConvert = "";
-  switch(ten){
-    case TEN_HANG_DTQG.GAO : 
+  switch (ten) {
+    case TEN_HANG_DTQG.GAO:
       idConvert = LOAI_HANG_DTQG.GAO;
       break;
-    case TEN_HANG_DTQG.THOC : 
+    case TEN_HANG_DTQG.THOC:
       idConvert = LOAI_HANG_DTQG.THOC;
       break;
-    case TEN_HANG_DTQG.MUOI : 
+    case TEN_HANG_DTQG.MUOI:
       idConvert = LOAI_HANG_DTQG.MUOI;
       break;
-    case TEN_HANG_DTQG.VAT_TU : 
-        idConvert = LOAI_HANG_DTQG.VAT_TU;
+    case TEN_HANG_DTQG.VAT_TU:
+      idConvert = LOAI_HANG_DTQG.VAT_TU;
       break;
   }
   return idConvert;
+}
+
+
+export function convertTienTobangChu(tien: number): string {
+  return VNnum2words(tien);
 }
 
 // public static final String TAO_MOI = "00";

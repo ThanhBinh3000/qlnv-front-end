@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
 export class DanhMucService extends BaseService {
   gateway: string = '/qlnv-gateway/qlnv-category'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DanhMuc','');
+    super(httpClient, 'DanhMuc', '');
   }
 
   loadDanhMucHangHoa() {
@@ -50,5 +50,20 @@ export class DanhMucService extends BaseService {
   danhMucChungGetAll(loai: string): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/${loai}`;
     return this.httpClient.get<any>(url).toPromise();
+  }
+
+  danhMucThuKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-thukho/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhMucLoaiKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-lh-kho/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhMucPhuongThucBaoQuanGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 }
