@@ -8,7 +8,7 @@ import { PhuLuc1Component } from './phu-luc1/phu-luc1.component';
 @NgModule({
   declarations: [
     GiaoNhiemVuComponent,
-    // PhuLuc1Component
+    PhuLuc1Component
   ],
   imports: [
     CommonModule,

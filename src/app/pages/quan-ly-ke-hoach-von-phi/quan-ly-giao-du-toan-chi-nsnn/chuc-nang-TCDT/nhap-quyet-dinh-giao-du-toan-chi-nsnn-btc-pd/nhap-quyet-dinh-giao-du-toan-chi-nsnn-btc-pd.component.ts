@@ -1,3 +1,4 @@
+import { LA_MA } from './../../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -14,7 +15,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DON_VI_TIEN, Utils } from "../../../../../Utility/utils";
-import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
 export class ItemData {

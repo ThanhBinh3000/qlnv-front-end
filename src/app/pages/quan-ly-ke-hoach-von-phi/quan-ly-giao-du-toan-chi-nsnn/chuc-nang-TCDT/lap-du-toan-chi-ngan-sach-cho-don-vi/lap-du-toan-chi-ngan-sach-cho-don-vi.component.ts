@@ -11,12 +11,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN } from 'src/app/Utility/utils';
+import { DON_VI_TIEN, LA_MA } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../../Utility/utils";
-import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 export class ItemData {
   uocThien!: number;
