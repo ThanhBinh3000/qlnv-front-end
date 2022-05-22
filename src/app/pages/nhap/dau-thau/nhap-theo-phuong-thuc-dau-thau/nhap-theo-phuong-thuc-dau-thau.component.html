@@ -139,7 +139,8 @@
                         </div>
                     </nz-card>
                     <ng-template #tableCard1>
-                        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+                        <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
+                            (click)="redirectToChiTiet(0)">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

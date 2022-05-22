@@ -100,10 +100,7 @@
                   </nz-form-label>
                 </div>
                 <div nz-col [nzSpan]="4" class="mg-t-10">
-                  <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
-                    [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                  </nz-select>
+                  <input formControlName="namKeHoach" rows="1" nz-input [readonly]="true" />
                 </div>
               </div>
             </div>

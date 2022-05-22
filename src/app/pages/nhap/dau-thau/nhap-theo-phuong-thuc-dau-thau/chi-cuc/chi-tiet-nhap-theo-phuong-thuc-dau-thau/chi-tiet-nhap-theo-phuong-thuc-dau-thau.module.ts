@@ -5,6 +5,7 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { ChiTietNhapTheoPhuongThucDauThauRoutingModule } from './chi-tiet-nhap-theo-phuong-thuc-dau-thau-routing.module';
 import { ChiTietNhapTheoPhuongThucDauThauComponent } from './chi-tiet-nhap-theo-phuong-thuc-dau-thau.component';
 import { LapBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/lap-bien-ban-nghiem-thu-bao-quan.component';
+import { ThongTinBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan.component';
 
 
 
@@ -12,6 +13,7 @@ import { LapBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-b
     declarations: [
         ChiTietNhapTheoPhuongThucDauThauComponent,
         LapBienBanNghiemThuBaoQuanComponent,
+        ThongTinBienBanNghiemThuBaoQuanComponent,
     ],
     imports: [
         CommonModule,
