@@ -42,13 +42,6 @@ const routes: Routes = [
         './giao-nhiem-vu/giao-nhiem-vu.module'
       ).then((m) => m.GiaoNhiemVuModule),
   },
-  {
-    path: 'test-join-phu-luc',
-    loadChildren: () =>
-      import(
-        './test-join-phu-luc/test-join-phu-luc.module'
-      ).then((m) => m.TestJoinPhuLucModule),
-  },
 
 ];
 

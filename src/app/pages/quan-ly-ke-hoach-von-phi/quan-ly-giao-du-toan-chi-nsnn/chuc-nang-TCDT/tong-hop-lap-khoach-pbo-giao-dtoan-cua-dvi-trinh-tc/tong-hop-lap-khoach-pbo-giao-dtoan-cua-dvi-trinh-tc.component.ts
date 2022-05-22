@@ -1,7 +1,7 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+// import { LA_MA } from './../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { FormGroup } from '@angular/forms';
-import { TRANG_THAI_PHAN_BO } from './../../../../../Utility/utils';
+import { LA_MA, TRANG_THAI_PHAN_BO } from './../../../../../Utility/utils';
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';

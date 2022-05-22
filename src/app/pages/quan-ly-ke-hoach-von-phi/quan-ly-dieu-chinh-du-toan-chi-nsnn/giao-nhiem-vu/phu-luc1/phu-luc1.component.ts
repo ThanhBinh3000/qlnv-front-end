@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-phu-luc1',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./phu-luc1.component.scss']
 })
 export class PhuLuc1Component implements OnInit {
-
+  @Input() data;
   constructor() { }
 
   ngOnInit() {
