@@ -33,44 +33,99 @@
 <nz-table nzBordered class="table__body">
   <thead>
       <tr>
-          <th nzWidth="100px" rowspan="2">STT</th>
-          <th nzWidth="500px" rowspan="2">Nội dung</th>
-          <th nzWidth="200px" rowspan="2">Loại khoản</th>
-          <th nzWidth="200px" rowspan="2">Tổng hợp nhu cầu kinh phí năm {{namBcao}}</th>
-          <th colspan="3">Dự toán kinh phí được sử dụng trong năm</th>
-          <th nzWidth="200px" rowspan="2">Kinh phí ước thực hiện cả năm</th>
-          <th colspan="2">Kinh phí đề nghị điều chỉnh</th>
-          <th colspan="3" [hidden]="status"></th>
-          <th [hidden]="status">
+          <th nzWidth="100px" rowspan="4">STT</th>
+          <th nzWidth="500px" rowspan="4">Tên đơn vị(Biên chế thực tế có mặt)</th>
+          <th nzWidth="200px" rowspan="4">Biên chế {{namBcao}} được giao</th>
+          <th nzWidth="200px" rowspan="4">Biên chế chưa tuyển</th>
+          <th nzWidth="200px" rowspan="4">Lao động hợp đồng 68 có mặt tại 01/01/{{namBcao}}</th>
+          <th colspan="12">Hệ số lương và các loại phụ cấp biên chế công chức có mặt tại 01/01/{{namBcao}}(không tính HĐ 68)</th>
+          <th colspan="12">Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm {{namBcao}}(tính đến 31/12/{{namBcao}} (không tính HĐ 68))</th>
+          <th nzWidth="200px" rowspan="4">Tổng nhu cầu tiền lương năm {{namBcao}}</th>
+          <th nzWidth="200px" colspan="3">Bao gồm</th>
+          <th colspan="3" rowspan="4" [hidden]="status"></th>
+          <th [hidden]="status" rowspan="4">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
               </label>
           </th>
       </tr>
       <tr>
-        <th>Năm trước chuyển sang</th>
-        <th>Dự toán đã giao <br/> trong năm</th>
-        <th>Cộng</th>
-        <th>Tăng(+)</th>
-        <th>Giảm(-)</th>
+        <th rowspan="3">Tổng số</th>
+        <th colspan="11">Bao gồm</th>
+        <th rowspan="3">Tổng số </th>
+        <th colspan="11" >Bao gồm</th>
+        <th rowspan="3">Tiền lương biên chế thực tế có mặt</th>
+        <th rowspan="3">Các khoản đóng góp theo lương của biên chế thực tế</th>
+        <th rowspan="3">Lương CBCC chưa tuyển dụng</th>
+      </tr>
+      <tr>
+        <th rowspan="2">Hệ số lương</th>
+        <th colspan="10">Hệ số các loại phụ cấp</th>
+        <th rowspan="2">Tiền lương</th>
+        <th colspan="10">Hệ số các loại phụ cấp</th>
+      </tr>
+      <tr>
+        <th>Tổng</th>
+        <th>PC chức vụ</th>
+        <th>PC trách nhiệm</th>
+        <th>PC thâm niên vượt khung</th>
+        <th>HSBL</th>
+        <th>Phụ cấp công vụ</th>
+        <th>PC thâm niên</th>
+        <th>Phụ cấp ưu đãi nghề</th>
+        <th>PC khu vực</th>
+        <th>PC khác</th>
+        <th>Tổng</th>
+        <th>PC chức vụ</th>
+        <th>PC trách nhiệm</th>
+        <th>PC thâm niên vượt khung</th>
+        <th>HSBL</th>
+        <th>Phụ cấp công vụ</th>
+        <th>PC thâm niên</th>
+        <th>Phụ cấp ưu đãi nghề</th>
+        <th>PC khu vực</th>
+        <th>PC khác</th>
+      </tr>
+      <tr>
+        <th>A</th>
+        <th>B</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4=5+6</th>
+        <th>5</th>
+        <th>6=7+...+15</th>
+        <th>7</th>
+        <th>8</th>
+        <th>9</th>
+        <th>10</th>
+        <th>11</th>
+        <th>12</th>
+        <th>13</th>
+        <th>14</th>
+        <th>15</th>
+        <th>16=17+18</th>
+        <th>17</th>
+        <th>18=19+...+27</th>
+        <th>19</th>
+        <th>20</th>
+        <th>21</th>
+        <th>22</th>
+        <th>23</th>
+        <th>24</th>
+        <th>25</th>
+        <th>26</th>
+        <th>27</th>
+        <th>28=29+30+31</th>
+        <th>29</th>
+        <th>30</th>
+        <th>31</th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
       </tr>
   </thead>
   <tbody>
-      <tr>
-        <td>A</td>
-        <td>B</td>
-        <td>C</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4=2+3</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-      </tr>
       <tr *ngFor="let data of lstCTietBCao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
               <td [nzIndentSize]="data.level * 8">
@@ -175,6 +230,45 @@
                       (ngModelChange)="updateChecked(data.id)"></label>
               </td>
           </ng-template>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Tổng cộng</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td [hidden]="status"></td>
+        <td [hidden]="status"></td>
+        <td [hidden]="status"></td>
+        <td [hidden]="status"></td>
       </tr>
   </tbody>
 </nz-table>

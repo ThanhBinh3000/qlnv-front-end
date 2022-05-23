@@ -1,5 +1,5 @@
 import { QuanLyDieuChinhDuToanChiNSNN } from './quan-ly-dieu-chinh-du-toan-chi-nsnn.type';
-import { MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN } from '../../../constants/routerUrl';
+import { MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI, MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN } from '../../../constants/routerUrl';
 
 //**************** */ hang so cho cac cap
 //cap chi cuc
@@ -49,7 +49,7 @@ export const QUAN_LY_DIEU_CHINH_DU_TOAN_NSNN_LIST: QuanLyDieuChinhDuToanChiNSNN[
 		icon: 'htvbdh_tcdt_icon-common',
 		title: 'Tìm kiếm',
 		description: 'Tìm kiếm điều chỉnh dự toán chi NSNN',
-		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-dieu-chinh-du-toan-chi-NSNN`,
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/tim-kiem-dieu-chinh-du-toan-chi-NSNN`,
 		unRole: [],
 		isDisabled: false,
 	},

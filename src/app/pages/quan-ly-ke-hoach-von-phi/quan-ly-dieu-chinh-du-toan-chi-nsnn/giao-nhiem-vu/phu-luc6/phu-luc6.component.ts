@@ -15,7 +15,7 @@ import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DON_VI_TIEN, LA_MA, QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N } from "../../../../../Utility/utils";
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { Role } from '../../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
-import { LINH_VUC } from './phu-luc1.constant';
+import { LINH_VUC } from './phu-luc6.constant';
 
 export class ItemData {
     id: any;
@@ -31,12 +31,11 @@ export class ItemData {
     kphiDchinhGiam: number;
     checked!: boolean;
 }
-
 @Component({
-  selector: 'app-phu-luc1',
-  templateUrl: './phu-luc1.component.html',
+  selector: 'app-phu-luc6',
+  templateUrl: './phu-luc6.component.html',
 })
-export class PhuLuc1Component implements OnInit {
+export class PhuLuc6Component implements OnInit {
     @Input() data;
     //danh muc
     donVis: any = [];

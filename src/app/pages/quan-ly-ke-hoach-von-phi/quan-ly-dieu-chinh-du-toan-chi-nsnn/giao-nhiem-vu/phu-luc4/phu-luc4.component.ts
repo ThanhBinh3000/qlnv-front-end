@@ -15,32 +15,38 @@ import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { DON_VI_TIEN, LA_MA, QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N } from "../../../../../Utility/utils";
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { Role } from '../../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
-import { LINH_VUC } from './phu-luc1.constant';
+import { LINH_VUC } from './phu-luc4.constant';
 
 export class ItemData {
     id: any;
     stt: string;
     level: number;
-    maNdung: number;
-    tongNcauDtoanKphi: number;
-    dtoanKphiNtruoc: number;
-    dtoanKphiDaGiao: number;
-    dtoanKphiCong: number;
-    kphiUocThien: number;
-    kphiDchinhTang: number;
-    kphiDchinhGiam: number;
+    loaiMatHang: string;
+    maDviTinh: number;
+    slBquanKh: number;
+    slBquanTte: number;
+    slBquanUocThien: number;
+    slBquanTcong: number;
+    dinhMuc: number;
+    thanhTien: number;
+    dtoanThieuNTruoc: number;
+    tongNcauKphi: number;
+    kphiTcong: number;
+    kphiQtoanNtruoc: number;
+    kphiDtoanGiaoTnam: number;
+    kphiPvcTcDchuyen: number;
+    dtoanDchinh: number;
     checked!: boolean;
 }
-
 @Component({
-  selector: 'app-phu-luc1',
-  templateUrl: './phu-luc1.component.html',
+  selector: 'app-phu-luc4',
+  templateUrl: './phu-luc4.component.html',
 })
-export class PhuLuc1Component implements OnInit {
+export class PhuLuc4Component implements OnInit {
     @Input() data;
     //danh muc
     donVis: any = [];
-    noiDungs: any[] = LINH_VUC;
+    matHangs: any[] = LINH_VUC;
     lstCTietBCao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
@@ -55,14 +61,21 @@ export class PhuLuc1Component implements OnInit {
         id: null,
         stt: "0",
         level: 0,
-        maNdung: 0,
-        tongNcauDtoanKphi: 0,
-        dtoanKphiNtruoc: 0,
-        dtoanKphiDaGiao: 0,
-        dtoanKphiCong: 0,
-        kphiUocThien: 0,
-        kphiDchinhTang: 0,
-        kphiDchinhGiam: 0,
+        loaiMatHang: '',
+        maDviTinh: 0,
+        slBquanKh: 0,
+        slBquanTte: 0,
+        slBquanUocThien: 0,
+        slBquanTcong: 0,
+        dinhMuc: 0,
+        thanhTien: 0,
+        dtoanThieuNTruoc: 0,
+        tongNcauKphi: 0,
+        kphiTcong: 0,
+        kphiQtoanNtruoc: 0,
+        kphiDtoanGiaoTnam: 0,
+        kphiPvcTcDchuyen: 0,
+        dtoanDchinh: 0,
         checked: false,
     };
     //trang thai cac nut
@@ -426,12 +439,12 @@ export class PhuLuc1Component implements OnInit {
 
     setDetail() {
         this.lstCTietBCao.forEach(item => {
-            item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
+            item.level = this.matHangs.find(e => e.id == item.loaiMatHang)?.level;
         })
     }
 
     getIdCha(maKM: any) {
-        return this.noiDungs.find(e => e.id == maKM)?.idCha;
+        return this.matHangs.find(e => e.id == maKM)?.idCha;
     }
 
     sortWithoutIndex() {
@@ -445,12 +458,12 @@ export class PhuLuc1Component implements OnInit {
         var lstTemp: ItemData[] = lstCTietBCaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
-                let idCha = this.getIdCha(item.maNdung);
-                var index: number = this.lstCTietBCao.findIndex(e => e.maNdung === idCha);
+                let idCha = this.getIdCha(item.loaiMatHang);
+                var index: number = this.lstCTietBCao.findIndex(e => e.loaiMatHang === idCha);
                 if (index != -1) {
                     this.addLow(this.lstCTietBCao[index].id, item);
                 } else {
-                    index = this.lstCTietBCao.findIndex(e => this.getIdCha(e.maNdung) === idCha);
+                    index = this.lstCTietBCao.findIndex(e => this.getIdCha(e.loaiMatHang) === idCha);
                     this.addSame(this.lstCTietBCao[index].id, item);
                 }
             })
@@ -460,10 +473,10 @@ export class PhuLuc1Component implements OnInit {
     }
 
     addLine(id: any) {
-        var maNdung: any = this.lstCTietBCao.find(e => e.id == id)?.maNdung;
+        var loaiMatHang: any = this.lstCTietBCao.find(e => e.id == id)?.loaiMatHang;
         let obj = {
-            maKhoanMuc: maNdung,
-            lstKhoanMuc: this.noiDungs,
+            maKhoanMuc: loaiMatHang,
+            lstKhoanMuc: this.matHangs,
         }
 
         const modalIn = this.modal.create({
@@ -479,12 +492,12 @@ export class PhuLuc1Component implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCTietBCao.findIndex(e => e.maNdung == res.maKhoanMuc);
+                var index: number = this.lstCTietBCao.findIndex(e => e.loaiMatHang == res.maKhoanMuc);
                 if (index == -1) {
                     let data: any = {
                         ...this.initItem,
-                        maNdung: res.maKhoanMuc,
-                        level: this.noiDungs.find(e => e.id == maNdung)?.level,
+                        loaiMatHang: res.maKhoanMuc,
+                        level: this.matHangs.find(e => e.id == loaiMatHang)?.level,
                     };
                     if (this.lstCTietBCao.length == 0) {
                         this.addFirst(data);
@@ -492,11 +505,11 @@ export class PhuLuc1Component implements OnInit {
                         this.addSame(id, data);
                     }
                 }
-                id = this.lstCTietBCao.find(e => e.maNdung == res.maKhoanMuc)?.id;
+                id = this.lstCTietBCao.find(e => e.loaiMatHang == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
                     var data: ItemData = {
                         ...this.initItem,
-                        maNdung: item.id,
+                        loaiMatHang: item.id,
                         level: item.level,
                     };
                     this.addLow(id, data);

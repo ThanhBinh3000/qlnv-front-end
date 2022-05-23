@@ -53,6 +53,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	trangThaiBaoCao: string = '1';
 	maDviTao!: string;
 	thuyetMinh: string;
+  dotBcao: number = 1;
 	//danh muc
 	lstCTietBCao: ItemData[] = [];
 	phuLucs: any[] = PHU_LUC;

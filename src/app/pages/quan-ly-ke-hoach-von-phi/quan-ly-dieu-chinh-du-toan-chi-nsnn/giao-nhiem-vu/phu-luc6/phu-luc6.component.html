@@ -34,43 +34,56 @@
   <thead>
       <tr>
           <th nzWidth="100px" rowspan="2">STT</th>
-          <th nzWidth="500px" rowspan="2">Nội dung</th>
-          <th nzWidth="200px" rowspan="2">Loại khoản</th>
-          <th nzWidth="200px" rowspan="2">Tổng hợp nhu cầu kinh phí năm {{namBcao}}</th>
-          <th colspan="3">Dự toán kinh phí được sử dụng trong năm</th>
-          <th nzWidth="200px" rowspan="2">Kinh phí ước thực hiện cả năm</th>
-          <th colspan="2">Kinh phí đề nghị điều chỉnh</th>
-          <th colspan="3" [hidden]="status"></th>
-          <th [hidden]="status">
+          <th nzWidth="500px" rowspan="2">Tên hàng dự trữ quốc gia</th>
+          <th nzWidth="200px" rowspan="2">ĐVT</th>
+          <th nzWidth="200px" rowspan="2">Số lượng hàng thực tế</th>
+          <th colspan="2">Kinh phí được hưởng</th>
+          <th colspan="3">Chi phí thực hiện</th>
+          <th nzWidth="200px" rowspan="2">Chênh lệch</th>
+          <th nzWidth="200px" rowspan="2">Kinh phí quyết toán năm {{namBcao}}</th>
+          <th colspan="3">Kinh phí chưa quyết toán chuyển sang</th>
+          <th nzWidth="200px" rowspan="2">Số đã sử dụng dự toán năm {{namBcao + 1}} để thanh toán quyết toán năm {{namBcao}}</th>
+          <th nzWidth="200px" rowspan="2">Số còn chưa thanh quyết toán</th>
+          <th colspan="3" rowspan="2" [hidden]="status"></th>
+          <th [hidden]="status" rowspan="2">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
               </label>
           </th>
       </tr>
       <tr>
-        <th>Năm trước chuyển sang</th>
-        <th>Dự toán đã giao <br/> trong năm</th>
+        <th>Định mức</th>
+        <th>Thành tiền</th>
+        <th>Tổng cộng</th>
+        <th>Năm trước</th>
+        <th>Năm nay</th>
         <th>Cộng</th>
-        <th>Tăng(+)</th>
-        <th>Giảm(-)</th>
+        <th>KP tiết kiệm</th>
+        <th>KP thực thi</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>1</th>
+        <th>2</th>
+        <th>3=1*2</th>
+        <th>4=5+6</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7=3-4</th>
+        <th>8</th>
+        <th>9=10+11</th>
+        <th>10</th>
+        <th>11</th>
+        <th>12</th>
+        <th>13=9-12</th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
+        <th [hidden]="status"></th>
       </tr>
   </thead>
   <tbody>
-      <tr>
-        <td>A</td>
-        <td>B</td>
-        <td>C</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4=2+3</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-        <td [hidden]="status"></td>
-      </tr>
       <tr *ngFor="let data of lstCTietBCao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
               <td [nzIndentSize]="data.level * 8">

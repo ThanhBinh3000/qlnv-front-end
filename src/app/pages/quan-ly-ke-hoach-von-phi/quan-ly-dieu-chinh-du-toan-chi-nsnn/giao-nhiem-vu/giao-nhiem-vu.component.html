@@ -48,10 +48,10 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusDelReport">
+				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusDelReport">
 					<i nz-icon nzType="delete" nzTheme="outline"></i>
 					<span>Xóa</span>
-				</a>
+				</a> -->
 				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()"
 					[hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
@@ -78,9 +78,10 @@
 					<thead>
 						<tr>
 							<th width="130px">Mã báo cáo</th>
-							<th width="175px">Năm hiện hành</th>
-							<th width="175px">Ngày lập</th>
-							<th width="175px">Người lập</th>
+							<th width="175px">Báo cáo năm</th>
+							<th width="175px">Đợt báo cáo</th>
+							<th width="175px">Ngày tạo</th>
+							<th width="175px">Người tạo</th>
 							<th width="175px">Số công văn</th>
 							<th width="175px">Ngày trình duyệt</th>
 							<th width="175px">Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
@@ -94,6 +95,7 @@
 						<tr>
 							<td>{{maBaoCao}}</td>
 							<td>{{namHienHanh}}</td>
+							<td>{{dotBcao}}</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>
 							<td>
@@ -306,9 +308,37 @@
 						</div>
 					</nz-tab>
 					<nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab.tenPl">
-						<ng-container *ngIf="tab.id == '17'">
+						<ng-container *ngIf="tab.id == '1'">
 							<app-phu-luc1 [data]="data">
 							</app-phu-luc1>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '2'">
+							<app-phu-luc2 [data]="data">
+							</app-phu-luc2>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '3'">
+							<app-phu-luc3 [data]="data">
+							</app-phu-luc3>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '4'">
+							<app-phu-luc4 [data]="data">
+							</app-phu-luc4>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '5'">
+							<app-phu-luc5 [data]="data">
+							</app-phu-luc5>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '6'">
+							<app-phu-luc6 [data]="data">
+							</app-phu-luc6>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '7'">
+							<app-phu-luc7 [data]="data">
+							</app-phu-luc7>
+						</ng-container>
+						<ng-container *ngIf="tab.id == '8'">
+							<app-phu-luc8 [data]="data">
+							</app-phu-luc8>
 						</ng-container>
 					</nz-tab>
 				</nz-tabset>
