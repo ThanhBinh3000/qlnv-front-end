@@ -19,17 +19,17 @@ export abstract class BaseService {
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `http://localhost:8099/dx-kh/lcnt/them-moi`;
+    const url = `${environment.SERVICE_API}api/${this.table}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `http://localhost:8099/dx-kh/lcnt/cap-nhat`;
+    const url = `${environment.SERVICE_API}api/${this.table}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `http://localhost:8099/dx-kh/lcnt/chi-tiet/${id}`;
+    const url = `${environment.SERVICE_API}api/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -39,7 +39,7 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `http://localhost:8099/dx-kh/lcnt/tra-cuu`;
+    const url = `${environment.SERVICE_API}api/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

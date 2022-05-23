@@ -53,7 +53,7 @@ export class DanhSachDauThauService extends BaseService {
       .toPromise();
   }
   updateStatus(body: any): Promise<any> {
-    const url = `http://localhost:8099/dx-kh/lcnt/phe-duyet`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/phe-duyet`;
     return this.httpClient.post(url, body).toPromise();
   }
   deleteKeHoachLCNT(body: any): Promise<any> {
