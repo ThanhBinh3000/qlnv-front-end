@@ -24,7 +24,7 @@ export class TinhTrangKhoHienThoiService extends BaseService {
   }
 
   getAllDiemKho() {
-    const url = `http://localhost:8097/mlk/diem-kho/tat-ca`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/diem-kho/tat-ca`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 

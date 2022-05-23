@@ -92,8 +92,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   // editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau }; } = {};
 
   dsGoiThauClone: Array<DanhSachGoiThau>;
-  baoGiaThiTruongList: Array<CanCuXacDinh> = [];
-  canCuKhacList: Array<CanCuXacDinh> = [];
+  baoGiaThiTruongList: CanCuXacDinh[] = [];
+  canCuKhacList: CanCuXacDinh[] = [];
 
   // muoiIdDefault: number = 78;
   tongGiaTriCacGoiThau: number = 0;
@@ -187,8 +187,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     // }
   }
 
-  deleteRow(idVirtual: number): void {
-    this.listOfData = this.listOfData.filter(d => d.idVirtual !== idVirtual);
+  deleteRow(i: number): void {
+    this.listOfData = this.listOfData.filter((d, index) => index !== i);
+    // this.listOfData = this.listOfData.filter(d => d.idVirtual !== idVirtual);
     // this.chiTietThongTinDXKHLCNT.children2 =
     //   this.chiTietThongTinDXKHLCNT.children2.filter(
     //     (d) => d.idVirtual !== idVirtual,
@@ -214,11 +215,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.initForm();
     }
     this.loadDanhMucHang();
-    // this.observableService.routerObservable.subscribe(e => {
-    //   console.log(e);
-    //   this.danhMucDonVi = e?.danhMucDonVi;
-    //   this.ktDiemKho = e?.ktDiemKho
-    // })
     Promise.all([
       this.nguonVonGetAll(),
       this.phuongThucDauThauGetAll(),
@@ -265,6 +261,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         maDvi: this.userInfo.MA_DVI
       }
     )
+    // this.tenTaiLieuDinhKem = dataDetail?.children ? dataDetail?.children[0].fileName : null;
     this.listOfData = dataDetail?.children2 ?? [];
     this.editCache = {};
     this.listOfData?.forEach((value, index) => {
@@ -285,7 +282,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   getTenDviTable(maDvi: string) {
-    console.log(maDvi);
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
     return donVi ? donVi[0].tenDvi : null
   }
@@ -524,7 +520,8 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     body.children = this.fileDinhKem;
     body.children1 = this.formThongTinChung.value;
     body.children2 = this.listOfData;
-    body.chidlren3 = [...this.baoGiaThiTruongList, ...this.canCuKhacList]
+    body.chidlren3 = this.baoGiaThiTruongList;
+    console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dauThauService.update(body);
@@ -947,7 +944,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   setTitle() {
     let trangThai = this.formData.get('trangThai').value
     switch (trangThai) {
-      case '00':
+      case '00': {
+        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
+        this.titleButtonDuyet = 'Gửi duyệt';
+        break;
+      }
       case '03': {
         this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
         this.titleButtonDuyet = 'Gửi duyệt';

@@ -4542,11 +4542,11 @@ td nz-upload .upload-content .card-content {
 //   font-weight: 400;
 // }
 
-// body,
-// .ant-input-affix-wrapper>input.ant-input,
-// .ant-table-tbody>tr.ant-table-row>td {
-//   font-weight: 300;
-// }
+body,
+.ant-input-affix-wrapper>input.ant-input,
+.ant-table-tbody>tr.ant-table-row>td {
+  font-weight: 400;
+}
 
 // .nav-tabs .nav-item:hover {
 //   z-index: 9;
@@ -4910,13 +4910,13 @@ td nz-upload .upload-content .card-content {
 //   margin-top: 8px;
 // }
 
-// .ant-picker-input>input-disabled,
-// .ant-picker-input>input[disabled],
-// .ant-select-selection-placeholder,
-// .ant-input[readonly] {
-//   color: #444;
-//   font-weight: 300;
-// }
+.ant-picker-input>input-disabled,
+.ant-picker-input>input[disabled],
+.ant-select-selection-placeholder,
+.ant-input[readonly] {
+  color: #444;
+  font-weight: 400;
+}
 
 // .ant-input-affix-wrapper .ant-input-suffix {
 //   color: #777777;

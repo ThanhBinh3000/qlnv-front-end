@@ -47,7 +47,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       diaDiemNhap: [
         this.thongtinDauThau ? this.thongtinDauThau.diaDiemNhap : null, [Validators.required]
       ],
-      maCcuc: [
+      maDvi: [
         this.thongtinDauThau ? this.thongtinDauThau.maDvi : null, [Validators.required]
       ],
       tenCcuc: [null],
@@ -103,7 +103,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   changeDiemKho() {
-    let chiCuc = this.listChiCuc.filter(item => item.value == this.formData.get('maCcuc').value);
+    let chiCuc = this.listChiCuc.filter(item => item.value == this.formData.get('maDvi').value);
     let diemKho = this.listDiemKho.filter(item => item.value == this.formData.get('maDiemKho').value);
     if (chiCuc.length > 0 && diemKho.length > 0) {
       this.formData.get('tenCcuc').setValue(chiCuc[0].text);

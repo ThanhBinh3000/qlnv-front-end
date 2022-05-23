@@ -27,13 +27,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService : DanhSachDauThauService,
+    private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
-  ) { 
-    router.events.subscribe((val)=>{
+  ) {
+    router.events.subscribe((val) => {
       this.getTitleVthh();
     })
   }
@@ -84,7 +84,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     }
   }
 
-  getTitleVthh(){
+  getTitleVthh() {
     let loatVthh = this.router.url.split('/')[4]
     this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
@@ -100,13 +100,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         : null,
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKh : this.searchFilter.namKh,
+      namKh: this.searchFilter.namKh,
       paggingReq: {
         limit: this.pageSize,
-        page: this.page-1,
+        page: this.page - 1,
       },
     };
-    let res =  await this.danhSachDauThauService.search(body);
+    let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -149,17 +149,17 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   themMoi() {
     let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/them-moi']);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/them-moi']);
   }
 
   detail(data?) {
     let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/chi-tiet',data.id]);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/chi-tiet', data.id]);
   }
 
   edit(data?) {
     let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/chinh-sua',data.id]);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/chinh-sua', data.id]);
   }
 
   clearFilter() {
@@ -185,13 +185,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
             "id": item.id,
           }
           this.danhSachDauThauService.delete(body).then((res) => {
-            if(res.msg == MESSAGE.SUCCESS){
+            if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
               );
               this.search();
-            }else {
+            } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
           });

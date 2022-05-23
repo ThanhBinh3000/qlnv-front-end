@@ -14,7 +14,7 @@ export class DonviService extends BaseService {
   }
 
   layTatCaDonVi(): Promise<any> {
-    const url = `http://localhost:8093/dmuc-donvi/danh-sach/hoat-dong`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/hoat-dong`;
     return this.httpClient.get<any>(url).toPromise();
   }
 
