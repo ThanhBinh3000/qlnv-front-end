@@ -23,6 +23,11 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
+  getAllDiemKho() {
+    const url = `http://localhost:8097/mlk/diem-kho/tat-ca`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
+
   nganKhoGetList(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/ngan-kho/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();

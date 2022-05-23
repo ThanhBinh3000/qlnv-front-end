@@ -7,29 +7,29 @@ export abstract class BaseService {
   table = '';
   _httpClient: HttpClient;
   GATEWAY = ''
-  constructor(httpClient: HttpClient, tableName: string, GATEWAY : string ) {
+  constructor(httpClient: HttpClient, tableName: string, GATEWAY: string) {
     this.table = tableName;
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
 
-  layTatca(): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/LayTatca`;
+  getAll(): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}api/${this.table}/tat-ca`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
+    const url = `http://localhost:8099/dx-kh/lcnt/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
+    const url = `http://localhost:8099/dx-kh/lcnt/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
+    const url = `http://localhost:8099/dx-kh/lcnt/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -39,7 +39,7 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    const url = `http://localhost:8099/dx-kh/lcnt/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
