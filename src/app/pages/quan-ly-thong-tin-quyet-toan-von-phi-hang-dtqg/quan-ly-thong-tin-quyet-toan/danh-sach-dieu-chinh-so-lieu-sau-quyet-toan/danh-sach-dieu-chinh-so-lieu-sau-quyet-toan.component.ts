@@ -181,13 +181,13 @@ export class DanhSachDieuChinhSoLieuSauQuyetToanComponent implements OnInit {
     // click o checkbox all
     // updateAllChecked(): void {
     //   this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    //   if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+    //   if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcao.checked = true
+    //     this.lstCtietBcao = this.lstCtietBcao.map(item => ({
     //       ...item,
     //       checked: true
     //     }));
     //   } else {
-    //     this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+    //     this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCtietBcao.checked = false
     //       ...item,
     //       checked: false
     //     }));

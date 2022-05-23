@@ -46,7 +46,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
   dviTiens: any = DON_VI_TIEN;
   donVis: any = [];
 
-  lstCTietBCao: ItemData[] = [];
+  lstCtietBcao: ItemData[] = [];
 
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
@@ -178,7 +178,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
 
   // xoa
   xoa() {
-    this.lstCTietBCao = [];
+    this.lstCtietBcao = [];
     this.lstFile = [];
     this.listFile = []
   }
@@ -191,7 +191,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if (item.id?.length == 38) {
         item.id = null;
       }
@@ -202,7 +202,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCTietBCao: this.lstCTietBCao,
+      lstCtietBcao: this.lstCtietBcao,
       // maBcao: this.maBaoCao,
       // maDvi: this.maDonViTao,
       // maDviTien: this.maDviTien,
@@ -236,7 +236,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
         }
       })
     }
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if (!item.id) {
         item.id = uuid.v4()+'FE';
       }
@@ -291,7 +291,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
     this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).subscribe(
       (data) => {
         if (data.statusCode == 0) {
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCtietBcao = data.data.lstCtietBcao;
           this.lstFile = data.data.lstFile;
 
           // set list id file ban dau
@@ -334,7 +334,7 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+    this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
     if (id?.length == 36) {
       this.listIdDelete += id + ",";
     }
@@ -343,13 +343,13 @@ export class TongHopDeNghiCapVonComponent implements OnInit {
   // xóa với checkbox
   deleteSelected() {
     // add list delete id
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if (item.checked == true && item?.id?.length == 36) {
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
+    this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
   }
 
   // xoa file trong bang file

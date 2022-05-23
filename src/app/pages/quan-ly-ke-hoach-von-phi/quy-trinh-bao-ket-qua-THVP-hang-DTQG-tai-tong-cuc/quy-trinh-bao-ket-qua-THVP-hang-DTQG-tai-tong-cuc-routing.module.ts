@@ -57,32 +57,32 @@ const routes: Routes = [
       ).then((m) => m.KiemTraTinhTrangPheDuyetBaoCaoTuChiCucModule),
   },
   {
-    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/:id',
+    path: 'bao-cao/:id',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a.module'
-      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aModule),
+        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
   },
   {
-    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/:namBcao/:maLoaiBcao/:dotBcao',
+    path: 'bao-cao/:namBcao/:maLoaiBcao/:dotBcao',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a-routing.module'
-      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aRoutingModule),
+        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
+      ).then((m) => m.BaoCaoRoutingModule),
   },
   {
-    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/:namBcao/:maLoaiBcao',
+    path: 'bao-cao/:namBcao/:maLoaiBcao',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a-routing.module'
-      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aRoutingModule),
+        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
+      ).then((m) => m.BaoCaoRoutingModule),
   },
   {
-    path: 'lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a-/:loai/:namBaoCao',
+    path: 'bao-cao-/:loai/:namBaoCao',
     loadChildren: () =>
       import(
-        './nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a.module'
-      ).then((m) => m.LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aModule),
+        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
   },
   
 ];

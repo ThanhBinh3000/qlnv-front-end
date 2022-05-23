@@ -1653,6 +1653,16 @@ span.ant-descriptions-item-content {
     }
   }
 
+  thead.ant-table-thead {
+    tr {
+      .th{
+        height: 32px;
+        vertical-align: middle;
+        white-space: normal !important;
+      }
+    }
+  }
+
   .ant-table-tbody {
     > tr {
       &:nth-child(even) {
