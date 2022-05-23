@@ -33,7 +33,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     newDate = new Date();
     //danh muc
     donViTiens: any[] = DON_VI_TIEN;
-    lstCTietBCao: any[];
+    lstCtietBcao: any[];
     donVis: any[] = [];
     trangThais: any[] = TRANGTHAIBAOCAO;
 

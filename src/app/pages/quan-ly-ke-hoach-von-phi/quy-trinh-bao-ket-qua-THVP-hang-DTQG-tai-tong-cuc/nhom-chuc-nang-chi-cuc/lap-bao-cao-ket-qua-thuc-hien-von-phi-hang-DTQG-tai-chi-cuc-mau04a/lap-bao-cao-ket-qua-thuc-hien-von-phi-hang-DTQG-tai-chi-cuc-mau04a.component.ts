@@ -195,7 +195,7 @@ export class LapBaoCaoKetQuaThucHienVonPhiHangDTQGTaiChiCucMau04aComponent
   listFile: File[] = [];
   fileToUpload!: File;
   fileUrl: any;
-  urlDetail:string ='qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
+  urlDetail:string ='qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/bao-cao/'
 
   loaiBaoCaoParam:any;
   namBaoCaoParam:any;

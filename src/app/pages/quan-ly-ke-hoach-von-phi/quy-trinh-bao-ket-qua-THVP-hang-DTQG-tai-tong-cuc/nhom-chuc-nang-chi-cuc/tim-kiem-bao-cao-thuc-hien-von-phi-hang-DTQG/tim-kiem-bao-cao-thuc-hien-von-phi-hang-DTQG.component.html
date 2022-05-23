@@ -5,7 +5,7 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
+        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -31,7 +31,7 @@
             <label class="search__label">Mã báo cáo</label>
             <nz-form-item>
               <nz-form-control nzErrorTip="">
-                <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" formControlName="temp"/>
+                <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -47,7 +47,7 @@
             <label class="search__label">Đợt báo cáo</label>
             <nz-form-item>
               <nz-form-control nzErrorTip="">
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" formControlName="temp" />
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -71,7 +71,7 @@
             <label class="search__label">Trạng thái</label>
             <nz-form-item>
               <nz-form-control nzErrorTip="">
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" formControlName="temp" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" formControlName="temp" [(ngModel)]="trangThai">
               <nz-option *ngFor="let t of listTrangThai" [nzValue]="t.id" [nzLabel]="t.tenDm"></nz-option>
             </nz-select>
             </nz-form-control>

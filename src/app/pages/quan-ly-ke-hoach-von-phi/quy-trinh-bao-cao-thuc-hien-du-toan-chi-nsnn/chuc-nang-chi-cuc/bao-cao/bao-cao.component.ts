@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as fileSaver from 'file-saver';
@@ -24,7 +24,7 @@ export class ItemData {
   id!: any;
   maLoai!: string;
   maDviTien!: any;
-  lstCTietBCaos!: any;
+  lstCtietBcaos!: any;
   trangThai!: string;
   checked!: boolean;
   tieuDe!: string;
@@ -59,9 +59,9 @@ export class ItemDanhSach {
 
   stt!: String;
   checked!: boolean;
-  lstBCaos: ItemData[] = [];
+  lstBcaos: ItemData[] = [];
   lstFiles: any[] = [];
-  lstBCaoDviTrucThuocs: any[] = [];
+  lstBcaoDviTrucThuocs: any[] = [];
   tongHopTuIds!: [];
 }
 
@@ -102,11 +102,13 @@ export class BaoCaoComponent implements OnInit {
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
 
-  maDviTien: string = "1";                   // ma don vi tien
-  thuyetMinh: string;                   // ma don vi tien
+  maDviTien: string = "1";                    // ma don vi tien
+  thuyetMinh: string;                         // thuyet minh
   newDate = new Date();                       //
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
   listIdDelete: any = [];                  // list id delete
+
+
 
   maDans: any = [];
   ddiemXdungs: any = [];
@@ -121,7 +123,8 @@ export class BaoCaoComponent implements OnInit {
   statusBtnCopy: boolean = true;                      // trang thai copy
   statusBtnPrint: boolean = true;                     // trang thai print
   statusBtnOk: boolean = true;                        // trang thai ok/ not ok
-  statusBtnClose: boolean = false;                        // trang thai ok/ not ok
+  statusBtnClose: boolean = false;                    // trang thai ok/ not ok
+  statusBtnFinish: boolean = true;                    // trang thai hoan tat nhap lieu
 
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
 
@@ -133,7 +136,7 @@ export class BaoCaoComponent implements OnInit {
   fileList: NzUploadFile[] = [];
   fileDetail: NzUploadFile;
   tabSelected: string;
-  danhSachChiTietPhuLucTemp: any = [];
+  danhSachChiTietPhuLucTemp: any[] = [];
   tab = TAB_SELECTED;
   lstKhoanMuc: any[] = KHOAN_MUC;
   nguoiBcaos: any[] = LISTCANBO;
@@ -149,12 +152,22 @@ export class BaoCaoComponent implements OnInit {
     private notifi: NzNotificationService,
     private modal: NzModalService,
     private location: Location,
+    private datePipe : DatePipe,
 
   ) {
   }
+  listOfData: any[] = [];
 
   async ngOnInit() {
-
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        name: `Edward King ${i}`,
+        age: 32,
+        address: `London, Park Lane no. ${i}`
+      });
+    }
+    this.listOfData = data;
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
@@ -188,6 +201,7 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.nguoiTao = userName;
       this.baoCao.ngayTao = new Date().toDateString();
       this.baoCao.trangThai = "1";
+      
     } else {
       this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
@@ -208,17 +222,17 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.thangBcao = Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang'));
 
       this.baoCao.nguoiTao = userName;
-      this.baoCao.ngayTao = new Date().toDateString();
+      this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
       this.baoCao.trangThai = "1";
       PHULUCLIST.forEach(item => {
-        this.baoCao.lstBCaos.push({
+        this.baoCao.lstBcaos.push({
           id: uuid.v4() + 'FE',
           checked: false,
           tieuDe: item.tieuDe,
           maLoai: item.maPhuLuc,
           tenPhuLuc: item.tenPhuLuc,
           trangThai: '3',
-          lstCTietBCaos: [],
+          lstCtietBcaos: [],
           maDviTien: '1',
           thuyetMinh: null,
           lyDoTuChoi: null,
@@ -336,7 +350,7 @@ export class BaoCaoComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
-          this.baoCao?.lstBCaos?.forEach(item => {
+          this.baoCao?.lstBcaos?.forEach(item => {
             let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
             if (index !== -1) {
               item.tieuDe = PHULUCLIST[index].tieuDe;
@@ -379,7 +393,7 @@ export class BaoCaoComponent implements OnInit {
   // chuc nang check role
   async onSubmit(mcn: String, lyDoTuChoi: string) {
     if (this.id) {
-      let checkStatusReport = this.baoCao?.lstBCaos?.findIndex(item => item.trangThai != '5');
+      let checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => (item.trangThai != '5' && item.trangThai != '1'));
       if (checkStatusReport != -1) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
         return;
@@ -431,10 +445,10 @@ export class BaoCaoComponent implements OnInit {
 
   // click o checkbox single
   updateSingleChecked(): void {
-    if (this.baoCao?.lstBCaos.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+    if (this.baoCao?.lstBcaos.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.baoCao?.lstBCaos.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+    } else if (this.baoCao?.lstBcaos.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
       this.allChecked = true;
       this.indeterminate = false;
     } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
@@ -445,7 +459,7 @@ export class BaoCaoComponent implements OnInit {
   // update all
   updateAllChecked(): void {
     this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    this.baoCao?.lstBCaos.filter(item =>
+    this.baoCao?.lstBcaos.filter(item =>
       item.checked = this.allChecked
     );
   }
@@ -535,16 +549,16 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBCaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCTietBCaos = Object.assign([], this.danhSachChiTietPhuLucTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
     this.tabSelected = maPhuLuc;
     // set listBCaoTemp theo ma phu luc vua chon
-    let lstBCaosTemp = this.baoCao?.lstBCaos.find(item => item.maLoai == maPhuLuc);
-    this.danhSachChiTietPhuLucTemp = lstBCaosTemp?.lstCTietBCaos;
-    this.maDviTien = lstBCaosTemp?.maDviTien;
-    this.thuyetMinh = lstBCaosTemp?.thuyetMinh;
+    let lstBcaosTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc);
+    this.danhSachChiTietPhuLucTemp = lstBcaosTemp?.lstCtietBcaos || [];
+    this.maDviTien = lstBcaosTemp?.maDviTien;
+    this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
     this.listIdDelete = []
     this.trangThaiChiTiet = trangThaiChiTiet;
-    this.danhSachChiTietPhuLucTemp.filter(data => {
+    this.danhSachChiTietPhuLucTemp?.filter(data => {
       switch (maPhuLuc) {
         // phu luc 1
         case PHULUCLIST[0].maPhuLuc:
@@ -650,16 +664,23 @@ export class BaoCaoComponent implements OnInit {
       checkParent = true;
     }
 
-    let a = this.userInfo?.roles[0]?.code;
-
-    if (this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfo?.roles[0]?.code == '3' && checkParent && this.trangThaiChiTiet == 2) {
+    let roleNguoiTao = this.userInfo?.roles[0]?.code;
+    let trangThaiBaoCao = this.baoCao?.trangThai;
+    if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfo?.roles[0]?.code == '2' && checkChirld && this.trangThaiChiTiet == 2) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
-    } else if (this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfo?.roles[0]?.code == '1' && checkChirld && this.trangThaiChiTiet == 2) {
+    } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
+    }
+
+    if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8) 
+        && roleNguoiTao == '3' && checkChirld) {
+      this.statusBtnFinish = false;
+    } else {
+      this.statusBtnFinish = true;
     }
   }
 
@@ -787,9 +808,9 @@ export class BaoCaoComponent implements OnInit {
 
   // luu thay doi
   // saveEdit(id: string): void {
-  //   this.editCache[id].data.checked = this.danhSachChiTietPhuLucTemp.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCaos
+  //   this.editCache[id].data.checked = this.danhSachChiTietPhuLucTemp.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcaos
   //   const index = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-  //   Object.assign(this.danhSachChiTietPhuLucTemp[index], this.editCache[id].data); // set lai data cua lstCTietBCaos[index] = this.editCache[id].data
+  //   Object.assign(this.danhSachChiTietPhuLucTemp[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
   //   this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   // }
 
@@ -819,9 +840,9 @@ export class BaoCaoComponent implements OnInit {
 
   // luu temp vao bang chinh
   saveTemp() {
-    this.baoCao?.lstBCaos.forEach(item => {
+    this.baoCao?.lstBcaos.forEach(item => {
       if (item.maLoai == this.tabSelected) {
-        item.lstCTietBCaos = this.danhSachChiTietPhuLucTemp;
+        item.lstCtietBcaos = this.danhSachChiTietPhuLucTemp;
       }
     });
     this.tabSelected = null;
@@ -829,8 +850,8 @@ export class BaoCaoComponent implements OnInit {
 
   // xoa phu luc
   deletePhuLucList() {
-    this.baoCao.lstBCaos = this.baoCao?.lstBCaos.filter(item => item.checked == false);
-    if (this.baoCao?.lstBCaos?.findIndex(item => item.maLoai == this.tabSelected) == -1) {
+    this.baoCao.lstBcaos = this.baoCao?.lstBcaos.filter(item => item.checked == false);
+    if (this.baoCao?.lstBcaos?.findIndex(item => item.maLoai == this.tabSelected) == -1) {
       this.tabSelected = null;
     }
     this.allChecked = false;
@@ -839,7 +860,7 @@ export class BaoCaoComponent implements OnInit {
   // them phu luc
   addPhuLuc() {
     PHULUCLIST.forEach(item => item.status = false);
-    var danhSach = PHULUCLIST.filter(item => this.baoCao?.lstBCaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+    var danhSach = PHULUCLIST.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
 
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách phụ lục',
@@ -856,14 +877,14 @@ export class BaoCaoComponent implements OnInit {
       if (res) {
         res.forEach(item => {
           if (item.status) {
-            this.baoCao.lstBCaos.push({
+            this.baoCao.lstBcaos.push({
               id: uuid.v4() + 'FE',
               checked: false,
               tieuDe: item.tieuDe,
               maLoai: item.maPhuLuc,
               tenPhuLuc: item.tenPhuLuc,
               trangThai: '3',
-              lstCTietBCaos: [],
+              lstCtietBcaos: [],
               maDviTien: '1',
               thuyetMinh: null,
               lyDoTuChoi: null,
@@ -953,10 +974,10 @@ export class BaoCaoComponent implements OnInit {
 
   //luu chi tiet phu luc
   async saveAppendix(maChucNang: string) {
-    let baoCaoChiTiet = this.baoCao?.lstBCaos.find(item => item.maLoai == this.tabSelected);
+    let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
 
-    baoCaoChiTietTemp.lstCTietBCaos = JSON.parse(JSON.stringify(this.danhSachChiTietPhuLucTemp));
+    baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.danhSachChiTietPhuLucTemp));
     baoCaoChiTietTemp.maDviTien = this.maDviTien, baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
     baoCaoChiTietTemp.lstIdDeletes = this.listIdDelete;
 
@@ -975,7 +996,7 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     baoCaoChiTietTemp.trangThai = maChucNang;
-    baoCaoChiTietTemp?.lstCTietBCaos.filter(data => {
+    baoCaoChiTietTemp?.lstCtietBcaos.filter(data => {
       if (baoCaoChiTietTemp.id?.length == 38) {
         data.id = null;
       }
@@ -1132,7 +1153,7 @@ export class BaoCaoComponent implements OnInit {
   async save() {
 
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBCaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCTietBCaos = Object.assign([], this.danhSachChiTietPhuLucTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.danhSachChiTietPhuLucTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
     let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
     //get list file url
     let listFile: any = [];
@@ -1149,7 +1170,7 @@ export class BaoCaoComponent implements OnInit {
     let checkMoneyRange = true;
     let checkPersonReport = true;
     // replace nhung ban ghi dc them moi id thanh null
-    baoCaoTemp?.lstBCaos?.filter(item => {
+    baoCaoTemp?.lstBcaos?.filter(item => {
       if (!item.nguoiBcao) {
         checkPersonReport = false;
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.PERSONREPORT);
@@ -1159,7 +1180,7 @@ export class BaoCaoComponent implements OnInit {
         item.id = null;
       }
       item.trangThai = '3'; // set trang thai phu luc la chua danh gia
-      item?.lstCTietBCaos.filter(data => {
+      item?.lstCtietBcaos.filter(data => {
         if (item.id?.length == 38) {
           data.id = null;
         }
@@ -1296,7 +1317,7 @@ export class BaoCaoComponent implements OnInit {
     } else {
       // replace nhung ban ghi dc them moi id thanh null
       baoCaoTemp.tongHopTuIds = [];
-      baoCaoTemp?.lstBCaoDviTrucThuocs?.filter(item => {
+      baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
         baoCaoTemp.tongHopTuIds.push(item.id);
       })
 
@@ -1309,10 +1330,10 @@ export class BaoCaoComponent implements OnInit {
       //call service them moi
       this.spinner.show();
       if (this.id == null) {
-        //net la tao bao cao moi thi khong luu lstCTietBCaos, con la tong hop thi khong luu
+        //net la tao bao cao moi thi khong luu lstCtietBcaos, con la tong hop thi khong luu
         let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
         if (lbc == 'bao-cao') {
-          baoCaoTemp?.lstBCaos?.filter(item => item.lstCTietBCaos = []);
+          baoCaoTemp?.lstBcaos?.filter(item => item.lstCtietBcaos = []);
         }
         this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
           async data => {
@@ -1373,7 +1394,7 @@ export class BaoCaoComponent implements OnInit {
     return temp;
   }
 
-  // gan editCache.data == lstCTietBCaos
+  // gan editCache.data == lstCtietBcaos
   updateEditCache(): void {
     this.danhSachChiTietPhuLucTemp.forEach(item => {
       this.editCache[item.id] = {
@@ -1440,7 +1461,7 @@ export class BaoCaoComponent implements OnInit {
 
   //call api duyet bieu mau
   async pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
-    var idBieuMau: any = this.baoCao.lstBCaos.find((item) => item.maLoai == maLoai).id;
+    var idBieuMau: any = this.baoCao.lstBcaos.find((item) => item.maLoai == maLoai).id;
     const requestPheDuyetBieuMau = {
       id: idBieuMau,
       trangThai: trangThai,
@@ -1537,7 +1558,7 @@ export class BaoCaoComponent implements OnInit {
       async (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
-          await this.baoCao?.lstBCaos?.forEach(item => {
+          await this.baoCao?.lstBcaos?.forEach(item => {
             item.maDviTien = '1';   // set defaul ma don vi tien la Dong
             item.checked = false;
             item.trangThai = '5';
@@ -1545,6 +1566,7 @@ export class BaoCaoComponent implements OnInit {
             if (index !== -1) {
               item.tieuDe = PHULUCLIST[index].tieuDe;
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+              item.trangThai = '3';
             }
           })
           this.listFile = [];
@@ -1595,16 +1617,16 @@ export class BaoCaoComponent implements OnInit {
     }
 
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBCaos.find(item => { if (item.maLoai == this.tabSelected) { item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh } });
     let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
 
     let checkMoneyRange = true;
     // replace nhung ban ghi dc them moi id thanh null
-    baoCaoTemp?.lstBCaos?.filter(item => {
+    baoCaoTemp?.lstBcaos?.filter(item => {
       item.id = null;
       item.listIdDelete = null;
       item.trangThai = '3'; // set trang thai phu luc la chua danh gia
-      item?.lstCTietBCaos.filter(data => {
+      item?.lstCtietBcaos.filter(data => {
         data.id = null;
         switch (item.maLoai) {
           // phu luc 1
@@ -1741,7 +1763,7 @@ export class BaoCaoComponent implements OnInit {
       baoCaoTemp.id = null;
       baoCaoTemp.maBcao = maBaoCao;
       baoCaoTemp.tongHopTuIds = [];
-      baoCaoTemp?.lstBCaoDviTrucThuocs?.filter(item => {
+      baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
         baoCaoTemp.tongHopTuIds.push(item.id);
       })
       baoCaoTemp.fileDinhKems = [];
@@ -2216,7 +2238,6 @@ export class BaoCaoComponent implements OnInit {
     var index: number = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id === id);
     var parentId: number = this.lstKhoanMuc.find(e => e.id == this.danhSachChiTietPhuLucTemp[index].maNdung).idCha;
     this.danhSachChiTietPhuLucTemp[index].lstKm = this.lstKhoanMuc.filter(e => e.idCha == parentId);
-    debugger
     if (this.lstKhoanMuc.findIndex(e => e.idCha === this.danhSachChiTietPhuLucTemp[index].maNdung) == -1) {
       this.danhSachChiTietPhuLucTemp[index].status = false;
     } else {

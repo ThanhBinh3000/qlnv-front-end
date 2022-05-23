@@ -28,7 +28,7 @@ export class DanhSachCapVonComponent implements OnInit {
      noiLap!: string;
      noiCap!: string;
 
-     lstCTietBCao: any = [];              // list chi tiet bao cao
+     lstCtietBcao: any = [];              // list chi tiet bao cao
 
      userInfo: any;
      errorMessage!: String;                      //
@@ -154,7 +154,7 @@ export class DanhSachCapVonComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          //this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.lstCtietBcao = data.data.lstCtietBcao;
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }

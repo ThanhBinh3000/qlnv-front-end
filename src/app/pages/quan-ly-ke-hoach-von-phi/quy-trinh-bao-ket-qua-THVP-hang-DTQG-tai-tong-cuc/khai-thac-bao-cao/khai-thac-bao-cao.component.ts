@@ -24,7 +24,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url: string ='/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/';
+  url: string ='/bao-cao/';
 
   userInfor:any;
   maDonVi:any;
@@ -197,10 +197,10 @@ export class KhaiThacBaoCaoComponent implements OnInit {
     console.log(lbaocao)
     switch (lbaocao) {
       case 1:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
+        this.url = '/bao-cao/'
         break;
       case 2:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-chi-tiet/'
+        this.url = '/bao-cao/'
         break;
       default:
         this.url = null;

@@ -24,7 +24,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 })
 
 export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
-    lstCTietBCao: any = [];                         // chi tiet nooi dung tim kiem
+    lstCtietBcao: any = [];                         // chi tiet nooi dung tim kiem
     totalElements: number = 0;
     totalPages: number = 0;
     trangThais: any = TRANG_THAI_TIM_KIEM;
@@ -109,7 +109,7 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
 
     // // chuc nang check role
     // onSubmit(mcn: String, lyDoTuChoi: string) {
-    //     this.lstCTietBCao.forEach(item => {
+    //     this.lstCtietBcao.forEach(item => {
     //         if (item.checked) {
     //             const requestGroupButtons = {
     //                 id: item.id,
@@ -172,7 +172,7 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
         this.quanLyVonPhiService.timKiemDieuChinh(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
-                    this.lstCTietBCao = data.data.content;
+                    this.lstCtietBcao = data.data.content;
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
 
@@ -191,7 +191,7 @@ export class DanhSachCongVanDeNghiCapVonComponent implements OnInit {
 
     // xoa dong
     deleteById(id: any): void {
-        this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
     }
 
     // // lay ten don vi tao
