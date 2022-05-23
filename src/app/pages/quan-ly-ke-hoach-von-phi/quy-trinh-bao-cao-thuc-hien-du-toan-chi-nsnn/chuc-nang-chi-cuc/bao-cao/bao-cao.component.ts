@@ -1189,7 +1189,9 @@ export class BaoCaoComponent implements OnInit {
       if (item.id?.length == 38) {
         item.id = null;
       }
-      item.trangThai = '3'; // set trang thai phu luc la chua danh gia
+      if(this.id == null){
+        item.trangThai = '3'; // set trang thai phu luc la chua danh gia
+      }
       item?.lstCtietBcaos.filter(data => {
         if (item.id?.length == 38) {
           data.id = null;
@@ -1565,7 +1567,7 @@ export class BaoCaoComponent implements OnInit {
       namBcao: Number(this.routerActive.snapshot.paramMap.get('nam')),
       thangBcao: Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang')),
       dotBcao: null,
-      maPhanBCao: '0',
+      maPhanBcao: '0',
     }
     await this.quanLyVonPhiService.tongHopBaoCaoKetQua(request).toPromise().then(
       async (data) => {
