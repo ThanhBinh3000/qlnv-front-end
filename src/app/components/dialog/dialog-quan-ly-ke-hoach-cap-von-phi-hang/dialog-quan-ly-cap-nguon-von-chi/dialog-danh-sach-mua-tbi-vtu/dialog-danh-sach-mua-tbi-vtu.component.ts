@@ -77,7 +77,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
             },
       ];
 
-      lstCTietBCao: HopDong[] = [];
+      lstCtietBcao: HopDong[] = [];
       constructor(
             private _modalRef: NzModalRef,
             private notification: NzNotificationService,
@@ -108,7 +108,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
             this.quanLyVonPhiService.timKiemDieuChinh(request).toPromise().then(
                   (data) => {
                         if (data.statusCode == 0) {
-                              this.lstCTietBCao = data.data.content;
+                              this.lstCtietBcao = data.data.content;
                               this.totalElements = data.data.totalElements;
                               this.totalPages = data.data.totalPages;
 
@@ -124,7 +124,7 @@ export class DialogDanhSachMuaTbiVtuComponent implements OnInit {
       }
 
       updateLstHopDong(){
-            this.lstCTietBCao.forEach(item => {
+            this.lstCtietBcao.forEach(item => {
                   var index: number = this.lstHopDong.findIndex(e => e.maHd === item.maHd);
                   if (index == -1){
                         this.lstHopDong.push(item);

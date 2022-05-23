@@ -39,7 +39,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     //danh muc
     donVis: any = [];
     linhVucs: any[] = LINH_VUC;
-    lstCTietBCao: ItemData[];
+    lstCtietBcao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     //thong tin chung
@@ -86,7 +86,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     async ngOnInit() {
         this.namHienHanh = this.data?.namHienHanh;
-        this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
+        this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
         this.sortByIndex();
         this.updateEditCache();
 
@@ -152,10 +152,10 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
     //tìm vị trí cần để thêm mới
     findVt(str: string): number {
-        var start: number = this.lstCTietBCao.findIndex(e => e.stt == str);
+        var start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
         var index: number = start;
-        for (var i = start + 1; i < this.lstCTietBCao.length; i++) {
-            if (this.lstCTietBCao[i].stt.startsWith(str)) {
+        for (var i = start + 1; i < this.lstCtietBcao.length; i++) {
+            if (this.lstCtietBcao[i].stt.startsWith(str)) {
                 index = i;
             }
         }
@@ -165,23 +165,23 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     replaceIndex(lstIndex: number[], heSo: number) {
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
-            var str = this.getHead(this.lstCTietBCao[item].stt) + "." + (this.getTail(this.lstCTietBCao[item].stt) + heSo).toString();
-            var nho = this.lstCTietBCao[item].stt;
-            this.lstCTietBCao.forEach(item => {
+            var str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+            var nho = this.lstCtietBcao[item].stt;
+            this.lstCtietBcao.forEach(item => {
                 item.stt = item.stt.replace(nho, str);
             })
         })
     }
     //thêm ngang cấp
     addSame(id: any, initItem: ItemData) {
-        var index: number = this.lstCTietBCao.findIndex(e => e.id === id); // vi tri hien tai
-        var head: string = this.getHead(this.lstCTietBCao[index].stt); // lay phan dau cua so tt
-        var tail: number = this.getTail(this.lstCTietBCao[index].stt); // lay phan duoi cua so tt
-        var ind: number = this.findVt(this.lstCTietBCao[index].stt); // vi tri can duoc them
+        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        var tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
+        var ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
         // tim cac vi tri can thay doi lai stt
         let lstIndex: number[] = [];
-        for (var i = this.lstCTietBCao.length - 1; i > ind; i--) {
-            if (this.getHead(this.lstCTietBCao[i].stt) == head) {
+        for (var i = this.lstCtietBcao.length - 1; i > ind; i--) {
+            if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
         }
@@ -192,7 +192,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 ...initItem,
                 stt: head + "." + (tail + 1).toString(),
             }
-            this.lstCTietBCao.splice(ind + 1, 0, item);
+            this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -203,7 +203,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 id: uuid.v4(),
                 stt: head + "." + (tail + 1).toString(),
             }
-            this.lstCTietBCao.splice(ind + 1, 0, item);
+            this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
                 edit: true,
                 data: { ...item }
@@ -211,9 +211,9 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         }
     }
 
-    // gan editCache.data == lstCTietBCao
+    // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -222,16 +222,16 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
     //thêm cấp thấp hơn
     addLow(id: any, initItem: ItemData) {
-        var data: ItemData = this.lstCTietBCao.find(e => e.id === id);
-        var index: number = this.lstCTietBCao.findIndex(e => e.id === id); // vi tri hien tai
+        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         var stt: string;
-        if (this.lstCTietBCao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
             stt = data.stt + '.1';
         } else {
             index = this.findVt(data.stt);
-            for (var i = this.lstCTietBCao.length - 1; i >= 0; i--) {
-                if (this.getHead(this.lstCTietBCao[i].stt) == data.stt) {
-                    stt = data.stt + '.' + (this.getTail(this.lstCTietBCao[i].stt) + 1).toString();
+            for (var i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+                if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
+                    stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
                     break;
                 }
             }
@@ -243,7 +243,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 ...initItem,
                 stt: stt,
             }
-            this.lstCTietBCao.splice(index + 1, 0, item);
+            this.lstCtietBcao.splice(index + 1, 0, item);
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -254,7 +254,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 id: uuid.v4(),
                 stt: stt,
             }
-            this.lstCTietBCao.splice(index + 1, 0, item);
+            this.lstCtietBcao.splice(index + 1, 0, item);
 
             this.editCache[item.id] = {
                 edit: true,
@@ -264,15 +264,15 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
     //xóa dòng
     deleteLine(id: any) {
-        var index: number = this.lstCTietBCao.findIndex(e => e.id === id); // vi tri hien tai
-        var nho: string = this.lstCTietBCao[index].stt;
-        var head: string = this.getHead(this.lstCTietBCao[index].stt); // lay phan dau cua so tt
+        var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        var nho: string = this.lstCtietBcao[index].stt;
+        var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
         //xóa phần tử và con của nó
-        this.lstCTietBCao = this.lstCTietBCao.filter(e => !e.stt.startsWith(nho));
+        this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
         let lstIndex: number[] = [];
-        for (var i = this.lstCTietBCao.length - 1; i >= index; i--) {
-            if (this.getHead(this.lstCTietBCao[i].stt) == head) {
+        for (var i = this.lstCtietBcao.length - 1; i >= index; i--) {
+            if (this.getHead(this.lstCtietBcao[i].stt) == head) {
                 lstIndex.push(i);
             }
         }
@@ -289,53 +289,53 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     // huy thay doi
     cancelEdit(id: string): void {
-        const index = this.lstCTietBCao.findIndex(item => item.id === id);
+        const index = this.lstCtietBcao.findIndex(item => item.id === id);
         // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCTietBCao[index] },
+            data: { ...this.lstCtietBcao[index] },
             edit: false
         };
     }
 
     // luu thay doi
     saveEdit(id: string): void {
-        this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
+        this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
 
-        const index = this.lstCTietBCao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+        const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
 
     updateChecked(id: any) {
-        var data: ItemData = this.lstCTietBCao.find(e => e.id === id);
+        var data: ItemData = this.lstCtietBcao.find(e => e.id === id);
         //đặt các phần tử con có cùng trạng thái với nó
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             if (item.stt.startsWith(data.stt)) {
                 item.checked = data.checked;
             }
         })
         //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-        var index: number = this.lstCTietBCao.findIndex(e => e.stt == this.getHead(data.stt));
+        var index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
         if (index == -1) {
             this.allChecked = this.checkAllChild('0');
         } else {
-            var nho: boolean = this.lstCTietBCao[index].checked;
-            while (nho != this.checkAllChild(this.lstCTietBCao[index].stt)) {
-                this.lstCTietBCao[index].checked = !nho;
-                index = this.lstCTietBCao.findIndex(e => e.stt == this.getHead(this.lstCTietBCao[index].stt));
+            var nho: boolean = this.lstCtietBcao[index].checked;
+            while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
+                this.lstCtietBcao[index].checked = !nho;
+                index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
                 if (index == -1) {
                     this.allChecked = !nho;
                     break;
                 }
-                nho = this.lstCTietBCao[index].checked;
+                nho = this.lstCtietBcao[index].checked;
             }
         }
     }
     //kiểm tra các phần tử con có cùng được đánh dấu hay ko
     checkAllChild(str: string): boolean {
         var nho: boolean = true;
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
                 nho = item.checked;
             }
@@ -345,20 +345,20 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
 
     updateAllChecked() {
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             item.checked = this.allChecked;
         })
     }
 
     deleteAllChecked() {
         var lstId: any[] = [];
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             if (item.checked) {
                 lstId.push(item.id);
             }
         })
         lstId.forEach(item => {
-            if (this.lstCTietBCao.findIndex(e => e.id == item) != -1) {
+            if (this.lstCtietBcao.findIndex(e => e.id == item) != -1) {
                 this.deleteLine(item);
             }
         })
@@ -370,7 +370,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 ...initItem,
                 stt: "0.1",
             }
-            this.lstCTietBCao.push(item);
+            this.lstCtietBcao.push(item);
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item }
@@ -381,7 +381,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
             }
-            this.lstCTietBCao.push(item);
+            this.lstCtietBcao.push(item);
 
             this.editCache[item.id] = {
                 edit: true,
@@ -392,7 +392,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     sortByIndex() {
         this.setDetail();
-        this.lstCTietBCao.sort((item1, item2) => {
+        this.lstCtietBcao.sort((item1, item2) => {
             if (item1.level > item2.level) {
                 return 1;
             }
@@ -408,7 +408,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             return 0;
         });
         var lstTemp: any[] = [];
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
             if (index == -1) {
                 lstTemp.splice(0, 0, item);
@@ -417,11 +417,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             }
         })
 
-        this.lstCTietBCao = lstTemp;
+        this.lstCtietBcao = lstTemp;
     }
 
     setDetail() {
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             item.level = this.linhVucs.find(e => e.id == item.maLvucNdChi)?.level;
         })
     }
@@ -433,30 +433,30 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     sortWithoutIndex() {
         this.setDetail();
         var level = 0;
-        var lstCTietBCaoTemp: ItemData[] = this.lstCTietBCao;
-        this.lstCTietBCao = [];
-        var data: ItemData = lstCTietBCaoTemp.find(e => e.level == 0);
+        var lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
+        this.lstCtietBcao = [];
+        var data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
         this.addFirst(data);
-        lstCTietBCaoTemp = lstCTietBCaoTemp.filter(e => e.id != data.id);
-        var lstTemp: ItemData[] = lstCTietBCaoTemp.filter(e => e.level == level);
+        lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
+        var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
                 let idCha = this.getIdCha(item.maLvucNdChi);
-                var index: number = this.lstCTietBCao.findIndex(e => e.maLvucNdChi === idCha);
+                var index: number = this.lstCtietBcao.findIndex(e => e.maLvucNdChi === idCha);
                 if (index != -1) {
-                    this.addLow(this.lstCTietBCao[index].id, item);
+                    this.addLow(this.lstCtietBcao[index].id, item);
                 } else {
-                    index = this.lstCTietBCao.findIndex(e => this.getIdCha(e.maLvucNdChi) === idCha);
-                    this.addSame(this.lstCTietBCao[index].id, item);
+                    index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.maLvucNdChi) === idCha);
+                    this.addSame(this.lstCtietBcao[index].id, item);
                 }
             })
             level += 1;
-            lstTemp = lstCTietBCaoTemp.filter(e => e.level == level);
+            lstTemp = lstCtietBcaoTemp.filter(e => e.level == level);
         }
     }
 
     addLine(id: any) {
-        var maLvucNdChi: any = this.lstCTietBCao.find(e => e.id == id)?.maLvucNdChi;
+        var maLvucNdChi: any = this.lstCtietBcao.find(e => e.id == id)?.maLvucNdChi;
         let obj = {
             maKhoanMuc: maLvucNdChi,
             lstKhoanMuc: this.linhVucs,
@@ -475,20 +475,20 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCTietBCao.findIndex(e => e.maLvucNdChi == res.maKhoanMuc);
+                var index: number = this.lstCtietBcao.findIndex(e => e.maLvucNdChi == res.maKhoanMuc);
                 if (index == -1) {
                     let data: any = {
                         ...this.initItem,
                         maLvucNdChi: res.maKhoanMuc,
                         level: this.linhVucs.find(e => e.id == maLvucNdChi)?.level,
                     };
-                    if (this.lstCTietBCao.length == 0) {
+                    if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
                     } else {
                         this.addSame(id, data);
                     }
                 }
-                id = this.lstCTietBCao.find(e => e.maLvucNdChi == res.maKhoanMuc)?.id;
+                id = this.lstCtietBcao.find(e => e.maLvucNdChi == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
                     var data: ItemData = {
                         ...this.initItem,

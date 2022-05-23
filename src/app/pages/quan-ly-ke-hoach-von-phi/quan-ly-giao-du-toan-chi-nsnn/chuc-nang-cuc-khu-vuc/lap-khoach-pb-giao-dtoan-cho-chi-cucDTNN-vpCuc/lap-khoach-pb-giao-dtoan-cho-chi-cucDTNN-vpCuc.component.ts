@@ -50,7 +50,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   maChis:any = [];                          // danh muc loai chi
 
   donVis:any = [];                            // danh muc don vi
-  lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
+  lstCtietBcao: ItemData[] = [];              // list chi tiet bao cao
   id!: any;                                   // id truyen tu router
   chiTietBcaos: any;                          // thong tin chi tiet bao cao
   lstFile: any = [];                          // list File de day vao api
@@ -238,7 +238,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
 
   // xoa
   xoa() {
-    this.lstCTietBCao = [];
+    this.lstCtietBcao = [];
     this.lstFile = [];
     this.listFile = []
   }
@@ -251,7 +251,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
     }
 
     // replace nhung ban ghi dc them moi id thanh null
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if (item.id?.length == 38) {
         item.id = null;
       }
@@ -262,7 +262,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       listIdFiles: this.listIdFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCtiet: this.lstCTietBCao,
+      lstCtiet: this.lstCtietBcao,
       maBcao: this.maBaoCao,
       // maDvi: this.maDonViTao,
       maDvi: this.maDonViTao,
@@ -301,7 +301,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       })
     }
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if (!item.id) {
         item.id = uuid.v4()+'FE';
       }
@@ -344,7 +344,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.chiTietBcaos = data.data;
-          this.lstCTietBCao = data.data.lstCTietBCao;
+          this.lstCtietBcao = data.data.lstCtietBcao;
           this.updateEditCache();
           this.lstFile = data.data.lstFile;
 
@@ -420,7 +420,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
       checked:false,
     }
 
-    this.lstCTietBCao.splice(id, 0, item);
+    this.lstCtietBcao.splice(id, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
@@ -429,7 +429,7 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
 
   // xoa dong
   deleteById(id: any): void {
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+    this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
     if (id?.length == 36) {
       this.listIdDelete += id + ",";
     }
@@ -438,13 +438,13 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   // xóa với checkbox
   deleteSelected() {
     // add list delete id
-    this.lstCTietBCao.filter(item => {
+    this.lstCtietBcao.filter(item => {
       if(item.checked == true && item?.id?.length == 36){
         this.listIdDelete += item.id + ","
       }
     })
     // delete object have checked = true
-    this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true )
+    this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true )
     this.allChecked = false;
   }
 
@@ -472,13 +472,13 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
   // click o checkbox all
   updateAllChecked(): void {
     this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcao.checked = true
+      this.lstCtietBcao = this.lstCtietBcao.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+      this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCtietBcao.checked = false
         ...item,
         checked: false
       }));
@@ -487,10 +487,10 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
 
   // click o checkbox single
   updateSingleChecked(): void {
-    if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+    if (this.lstCtietBcao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
       this.allChecked = false;
       this.indeterminate = false;
-    } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+    } else if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
       this.allChecked = true;
       this.indeterminate = false;
     } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
@@ -520,24 +520,24 @@ export class LapKhoachPbGiaoDtoanChoChiCucDTNNVpCucComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+    const index = this.lstCtietBcao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
     this.editCache[id] = {
-      data: { ...this.lstCTietBCao[index] },
+      data: { ...this.lstCtietBcao[index] },
       edit: false
     };
   }
 
   // luu thay doi
   saveEdit(id: string): void {
-    this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-    const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-    Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
+    const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+    Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
   }
 
-  // gan editCache.data == lstCTietBCao
+  // gan editCache.data == lstCtietBcao
   updateEditCache(): void {
-    this.lstCTietBCao.forEach(item => {
+    this.lstCtietBcao.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }

@@ -1,76 +1,88 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { BAO_CAO_DOT, BAO_CAO_NAM, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
-import { BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, TAB_SELECTED,SOLAMA, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, KHOAN_MUC } from './bao-cao.constant';
 import * as uuid from 'uuid';
-import { DialogChonThemBieuMauBaoCaoComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { LISTCANBO } from '../../../quy-trinh-bao-cao-thuc-hien-du-toan-chi-nsnn/chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
+import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, BAO_CAO_NHAP_HANG_DTQG, BAO_CAO_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, KHOAN_MUC, LISTBIEUMAUDOT, LISTBIEUMAUNAM, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
+import * as fileSaver from 'file-saver';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 export class ItemDanhSach {
   id!: any;
   maBcao!: String;
   namBcao!: Number;
   dotBcao!: Number;
-  trangThai!:string;
-  ngayTao!: string;
-  nguoiTao!:string;
-  maDviTien!:string;
-  maDvi:number;
-  congVan!:string;
-  ngayTrinhDuyet!:string;
-  ngayDuyet!:string;
-  ngayPheDuyet!:string;
-  ngayCapTrenTraKq!:string;
 
+  trangThai!: string;
+  ngayTao!: string;
+  nguoiTao!: string;
+  maDviTien!: string;
+  maDvi: number;
+  congVan!: ItemCongVan;
+  ngayTrinh!: string;
+  ngayDuyet!: string;
+  ngayPheDuyet!: string;
+  ngayTraKq!: string;
   // dung cho request
   fileDinhKems!: any[];
   listIdDeletes!: string;
-  listIdDeleteFiles: string= '';
+  listIdDeleteFiles: string = '';
   maLoaiBcao!: string;
-
-
+  thangBcao!: string;
   stt!: String;
-  checked!:boolean;
-  lstBCao: ItemData[] = [];
+  checked!: boolean;
+  lstBcaos: ItemData[] = [];
   lstFile: any[] = [];
 }
 
-
+export class ItemCongVan {
+  fileName: string;
+  fileSize: number;
+  fileUrl: number;
+}
 export class ItemData {
   id!: any;
-  maLoai!:string;
-  lstCTietBCao!: any;
+  maLoai!: string;
+  maDviTien!: any;
+  lstCtietBcaos!: any;
   trangThai!: string;
-  checked!:boolean;
+  checked!: boolean;
   tieuDe!: string;
   tenPhuLuc!: string;
-
+  thuyetMinh!: string;
+  lyDoTuChoi!: string;
+  lstIdDeletes!: [];
+  nguoiBcao!: string;
+  qlnvKhvonphiBcaoId!: string;
 }
 
 export class ItemDataMau02 {
   id: any;
   stt: any;
-  index:any;
+  index: any;
   maVtu: string;
   maDviTinh: string;
   soQd: string;
   khSoLuong: number;
   khGiaMuaTd: number;
   khTtien: number;
-  thSoLuong:any;
-  thGiaMuaTd:any;
-  thTtien:any;
-  ghiChu:any;
-  maVtuHeader:any;
-  loai:any;
+  thSoLuong: any;
+  thGiaMuaTd: any;
+  thTtien: any;
+  ghiChu: any;
+  maVtuHeader: any;
+  loai: any;
   checked!: boolean;
 }
 
@@ -83,21 +95,21 @@ export class ItemDataMau03 {
   soLuongTte: number;
   dgGiaKhoach: number;
   dgGiaBanTthieu: number;
-  dgGiaBanTte:any;
-  ttGiaHtoan:any;
-  ttGiaBanTte:any;
-  ttClechGiaTteVaGiaHtoan:number;
-  ghiChu:any;
-  maVtuHeader:any;
-  loai:any;
+  dgGiaBanTte: any;
+  ttGiaHtoan: any;
+  ttGiaBanTte: any;
+  ttClechGiaTteVaGiaHtoan: number;
+  ghiChu: any;
+  maVtuHeader: any;
+  loai: any;
   checked!: boolean;
 }
 
 
-export class ItemDataMau04a1{
+export class ItemDataMau04a1 {
   id: any;
   stt: string;
-  listKhoanMuc:any [];
+  listKhoanMuc: any[];
   maNdungChi: string;
   maNdungChiParent: string;
   trongDotTcong: number;
@@ -110,7 +122,7 @@ export class ItemDataMau04a1{
   parentId: any;
   ghiChu: string;
   checked: boolean;
-  status:boolean;  
+  status: boolean;
   maLoai: number;
 }
 
@@ -120,7 +132,7 @@ export class vatTu {
   loaiMatHang: any;
   colName: any;
   sl: any;
-  col:number;
+  col: number;
 }
 @Component({
   selector: 'app-bao-cao',
@@ -130,89 +142,98 @@ export class vatTu {
 export class BaoCaoComponent implements OnInit {
 
   constructor(
-    private nguoiDungSerivce : UserService,
+    private nguoiDungSerivce: UserService,
     private notification: NzNotificationService,
-    private route:Router,
+    private route: Router,
     private router: ActivatedRoute,
-    private danhMucService :DanhMucHDVService,
-    private quanLyVonPhiService:QuanLyVonPhiService,
-    private datePipe : DatePipe,
+    private danhMucService: DanhMucHDVService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
+    private datePipe: DatePipe,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
+    private location: Location,
   ) { }
 
+  statusBtnDel: boolean = true;                       // trang thai an/hien nut xoa
+  statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
+  statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
+  statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
+  statusBtnLD: boolean = true;                        // trang thai an/hien nut lanh dao
+  statusBtnGuiDVCT: boolean = true;                   // trang thai nut gui don vi cap tren
+  statusBtnDVCT: boolean = true;                      // trang thai nut don vi cap tren
+  statusBtnCopy: boolean = true;                      // trang thai copy
+  statusBtnPrint: boolean = true;                     // trang thai print
+  statusBtnOk: boolean = true;                        // trang thai ok/ not ok
+  statusBtnClose: boolean = false;                        // trang thai ok/ not ok
+  lstFiles: any = [];                          // list File de day vao api
 
-  statusBtnDel: boolean; // trang thai an/hien nut xoa
-  statusBtnSave: boolean; // trang thai an/hien nut luu
-  statusBtnApprove: boolean; // trang thai an/hien nut trinh duyet
-  statusBtnTBP: boolean; // trang thai an/hien nut truong bo phan
-  statusBtnLD: boolean; // trang thai an/hien nut lanh dao
-  statusBtnGuiDVCT: boolean; // trang thai nut gui don vi cap tren
-  statusBtnDVCT: boolean; // trang thai nut don vi cap tren
-  statusBtnOk:boolean; //trang thai nut ok - not ok
+  maDviTien: string = "1";                    // ma don vi tien
+  thuyetMinh: string;                         // thuyet minh
+  listIdDelete: any = [];                  // list id delete
+  trangThaiChiTiet!: any;
 
 
-  //
-  donViTaos:any[]=[];
-  userInfor:any;
-  maDonViTao:any;
-  donvitien:string;
+
+  donVis: any[] = [];
+  userInfor: any;
+  maDonViTao: any;
+  donvitien: string;
   listFile: File[] = [];
   lstFile: any[] = [];
-  trangThaiBanGhi:any;
+  trangThaiBanGhi: any;
   totalElements = 0;
   totalPages = 0;
   pages = {
     size: 10,
     page: 1,
   }
-  status:boolean = false;
-  beforeUpload:any;
-  fileList:any;
+  status: boolean = false;
+  beforeUpload: any;
+  fileList: any;
   lstDeleteCTietBCao: any = [];
 
   //nhóm biến router
-  id:any; // id của bản ghi
-  maLoaiBaoCaoParam:any;  // phân biệt 2 loại báo cáo (năm hoặc đợt)
+  id: any; // id của bản ghi
+  maLoaiBaoCaoParam: any;  // phân biệt 2 loại báo cáo (năm hoặc đợt)
 
 
   //----
-  listVattu:any [] =[];
-  baoCao:ItemDanhSach = new ItemDanhSach();
+  listVattu: any[] = [];
+  baoCao: ItemDanhSach = new ItemDanhSach();
   currentday = new Date();
-  maPhanBcao:string ='1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
-  maLoaiBaocao:any;
-  listDonvitinh:any []=[];
+  maPhanBcao: string = '1'; //phân biệt phần giữa 3.2.9 và 3.2.8 
+  maLoaiBaocao: any;
+  listDonvitinh: any[] = [];
 
   //nhóm biến biểu mẫu
-  allChecked:any;
-  indeterminate:boolean;
-  tabSelected:number;
-  tab =TAB_SELECTED;
+  allChecked: any;
+  indeterminate: boolean;
+  tabSelected: string;
+  tab = TAB_SELECTED;
 
 
   //nhóm biến biểu mẫu 02------------------
-  allChecked02:any;
-  indeterminate02:boolean;
-  lstCTietBCao02: ItemDataMau02[] = [];
-  lstCTietBCao1: ItemDataMau02 [] =[];
-  lstCTietBCao2:ItemDataMau02 [] =[];
+  allChecked02: any;
+  indeterminate02: boolean;
+  lstCtietBcao02: ItemDataMau02[] = [];
+  lstCtietBcao1: ItemDataMau02[] = [];
+  lstCtietBcao2: ItemDataMau02[] = [];
   editCache1: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
   editCache2: { [key: string]: { edit: boolean; data: ItemDataMau02 } } = {};
-  lstIdDeleteMau02:string ='';
+  lstIdDeleteMau02: string = '';
 
 
   //nhóm biến biểu mẫu 03----------
-  allChecked03:any;
-  indeterminate03:boolean;
-  lstCTietBCao03: ItemDataMau03[] = [];
-  lstCTietBCao031:ItemDataMau03[] = [];
-  lstCTietBCao032:ItemDataMau03[] = [];
-  lstCTietBCao033:ItemDataMau03[] = [];
+  allChecked03: any;
+  indeterminate03: boolean;
+  lstCtietBcao03: ItemDataMau03[] = [];
+  lstCtietBcao031: ItemDataMau03[] = [];
+  lstCtietBcao032: ItemDataMau03[] = [];
+  lstCtietBcao033: ItemDataMau03[] = [];
   editCache031: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
   editCache032: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
   editCache033: { [key: string]: { edit: boolean; data: ItemDataMau03 } } = {};
-  lstIdDeleteMau03:string ='';
+  lstIdDeleteMau03: string = '';
 
   //nhóm biến biểu mẫu 04 --> 05
   vt: number;
@@ -220,19 +241,19 @@ export class BaoCaoComponent implements OnInit {
   kt: boolean;
   disable: boolean = false;
   soLaMa: any[] = SOLAMA;
-  lstCTietBaoCaoTemp:any []=[];
-  lstCTietBCao04ax: ItemDataMau04a1[] = [];
-  lstCTietBCao04an: ItemDataMau04a1[] = [];
-  lstCTietBCao04bx: ItemDataMau04a1[] = [];
-  lstCTietBCao05: ItemDataMau04a1[] = [];
-  initItem : ItemDataMau04a1 ={
+  lstCTietBaoCaoTemp: any[] = [];
+  lstCtietBcao04ax: ItemDataMau04a1[] = [];
+  lstCtietBcao04an: ItemDataMau04a1[] = [];
+  lstCtietBcao04bx: ItemDataMau04a1[] = [];
+  lstCtietBcao05: ItemDataMau04a1[] = [];
+  initItem: ItemDataMau04a1 = {
     id: null,
     stt: '0',
     listKhoanMuc: [],
     maNdungChi: '',
     maNdungChiParent: '',
     trongDotTcong: 0,
-    trongDotThoc:0,
+    trongDotThoc: 0,
     trongDotGao: 0,
     luyKeTcong: 0,
     luyKeThoc: 0,
@@ -241,7 +262,7 @@ export class BaoCaoComponent implements OnInit {
     parentId: '',
     ghiChu: '',
     checked: false,
-    status:false,
+    status: false,
     maLoai: 0,
   }
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -249,20 +270,22 @@ export class BaoCaoComponent implements OnInit {
   cols4an: number = 0;
   cols4bx: number = 0;
   cols05: number = 0;
-  allChecked1:any;
-  listColTrongDot4ax:any []=[];
-  listColTrongDot4an:any []=[];
-  listColTrongDot4bx:any []=[];
-  listColTrongDot05:any []=[];
-  idVatTu:any;
-  listColTemp:any []=[];
-  cols:number=0;
-  lstIdDeleteCols:string ='';
-  listKhoanMuc:any [] = KHOAN_MUC;
-  lstIdDeleteMau04ax:string ='';
-  lstIdDeleteMau04an:string ='';
-  lstIdDeleteMau04bx:string ='';
-  lstIdDeleteMau05:string ='';
+  allChecked1: any;
+  listColTrongDot4ax: any[] = [];
+  listColTrongDot4an: any[] = [];
+  listColTrongDot4bx: any[] = [];
+  listColTrongDot05: any[] = [];
+  idVatTu: any;
+  listColTemp: any[] = [];
+  cols: number = 0;
+  lstIdDeleteCols: string = '';
+  listKhoanMuc: any[] = KHOAN_MUC;
+  lstIdDeleteMau04ax: string = '';
+  lstIdDeleteMau04an: string = '';
+  lstIdDeleteMau04bx: string = '';
+  lstIdDeleteMau05: string = '';
+  nguoiBcaos: any[] = LISTCANBO;
+  fileDetail: NzUploadFile;
 
 
   async ngOnInit() {
@@ -274,26 +297,26 @@ export class BaoCaoComponent implements OnInit {
 
     this.maLoaiBaoCaoParam = this.router.snapshot.paramMap.get('loai');
     this.id = this.router.snapshot.paramMap.get('id');
-    
+
     //lấy danh sách vật tư
     this.danhMucService.dMVatTu().subscribe(res => {
-      if(res.statusCode==0){
+      if (res.statusCode == 0) {
         this.listVattu = res.data?.content;
-      }else{
+      } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
-    },err => {
-    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-    if(this.id!=null){
+    if (this.id != null) {
       // gọi xem chi tiết
       await this.getDetailReport();
-    }else{
+    } else {
       //tạo mã báo cáo
       this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
         (res) => {
-          if (res.statusCode == 0) {            
-            this.baoCao.maBcao = res.data.data;
+          if (res.statusCode == 0) {
+            this.baoCao.maBcao = res.data;
             // this.notification.success(MESSAGE.SUCCESS, res?.msg);
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -306,43 +329,59 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.namBcao = this.currentday.getFullYear();
       this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
       this.baoCao.trangThai = '1';
-      
-      if(this.maLoaiBaoCaoParam ==BAO_CAO_DOT){
-        await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then( res =>{
-          if(res.statusCode==0){            
+
+      //this.baoCao.maLoaiBcao = this.routerActive.snapshot.paramMap.get('loaiBaoCao');
+      //this.baoCao.namBcao = Number(this.routerActive.snapshot.paramMap.get('nam'));
+      this.baoCao.nguoiTao = userName;
+
+      if (this.maLoaiBaoCaoParam == BAO_CAO_DOT) {
+        await this.quanLyVonPhiService.sinhDotBaoCao().toPromise().then(res => {
+          if (res.statusCode == 0) {
             this.baoCao.dotBcao = res.data;
-          }else{
-            this.notification.error(MESSAGE.ERROR,res?.msg);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
           }
-        },err => {
+        }, err => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
         this.maLoaiBaocao = BAO_CAO_DOT;
         LISTBIEUMAUDOT.forEach(e => {
-          this.baoCao.lstBCao.push(
+          this.baoCao.lstBcaos.push(
             {
-              id:uuid.v4()+'FE',
-              checked:false,
-              tieuDe: e.tieuDe+this.baoCao.dotBcao,
-              maLoai:e.maPhuLuc.toString(),
+              id: uuid.v4() + 'FE',
+              checked: false,
+              tieuDe: e.tieuDe + this.baoCao.dotBcao,
+              maLoai: e.maPhuLuc.toString(),
               tenPhuLuc: e.tenPhuLuc,
-              trangThai: '2',
-              lstCTietBCao: []
+              trangThai: '3',
+              lstCtietBcaos: [],
+              maDviTien: '1',
+              thuyetMinh: null,
+              lyDoTuChoi: null,
+              lstIdDeletes: [],
+              nguoiBcao: null,
+              qlnvKhvonphiBcaoId: this.id,
             }
           )
         })
-      }else{
-        this.maLoaiBaocao =BAO_CAO_NAM;
+      } else {
+        this.maLoaiBaocao = BAO_CAO_NAM;
         LISTBIEUMAUNAM.forEach(e => {
-          this.baoCao.lstBCao.push(
+          this.baoCao.lstBcaos.push(
             {
-              id:uuid.v4()+'FE',
-              checked:false,
-              tieuDe: e.tieuDe+this.baoCao.namBcao,
-              maLoai:e.maPhuLuc.toString(),
+              id: uuid.v4() + 'FE',
+              checked: false,
+              tieuDe: e.tieuDe + this.baoCao.namBcao,
+              maLoai: e.maPhuLuc.toString(),
               tenPhuLuc: e.tenPhuLuc,
-              trangThai: '2',
-              lstCTietBCao: []
+              trangThai: '3',
+              lstCtietBcaos: [],
+              maDviTien: '1',
+              thuyetMinh: null,
+              lyDoTuChoi: null,
+              lstIdDeletes: [],
+              nguoiBcao: null,
+              qlnvKhvonphiBcaoId: this.id,
             }
           )
         })
@@ -355,42 +394,42 @@ export class BaoCaoComponent implements OnInit {
           this.listDonvitinh = data.data?.content;
 
         } else {
-          this.notification.error(MESSAGE.ERROR,data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       (err) => {
-        this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    
-    
+
+
     //lay danh sach cac đơn vị quản lý (hn, thái nguyên,...)
     await this.quanLyVonPhiService.dMDonVi().toPromise().then(res => {
-      if(res.statusCode==0){
-        this.donViTaos =res.data;
+      if (res.statusCode == 0) {
+        this.donVis = res.data;
 
       } else {
-        this.notification.error(MESSAGE.ERROR,res?.msg);
+        this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     },
-    (err) => {
-      this.notification.error(MESSAGE.ERROR,MESSAGE.SYSTEM_ERROR);
-    })
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      })
     this.getStatusButton();
   }
 
   //nhóm các nút chức năng --báo cáo-----
-  getStatusButton(){
+  getStatusButton() {
     let checkParent = false;
     let checkChirld = false;
-    let dVi = this.donViTaos.find(e => e.maDvi == this.maDonViTao);
-    if(dVi && dVi.maDvi == this.userInfor.dvql){ 
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfor.dvql) {
       checkChirld = true;
     }
-    if(dVi && dVi.parent?.maDvi == this.userInfor.dvql){
+    if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
-    
+
     const utils = new Utils();
     this.statusBtnDel = utils.getRoleDel(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
     this.statusBtnSave = utils.getRoleSave(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
@@ -398,7 +437,7 @@ export class BaoCaoComponent implements OnInit {
     this.statusBtnTBP = utils.getRoleTBP(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
     this.statusBtnLD = utils.getRoleLD(this.baoCao.trangThai, checkChirld, this.userInfor?.roles[0]?.code);
     this.statusBtnDVCT = utils.getRoleDVCT(this.baoCao.trangThai, checkParent, this.userInfor?.roles[0]?.code);
-    
+
   }
 
   //lay thong tin nguoi dang nhap
@@ -421,16 +460,16 @@ export class BaoCaoComponent implements OnInit {
       );
   }
 
-  getStatusName(Status:any){
+  getStatusName(Status: any) {
     const utils = new Utils();
     return utils.getStatusName(Status);
   };
 
 
   //show popup tu choi dùng cho nut ok - not ok
-  pheDuyetChiTiet(mcn: string,maLoai:any) {
+  pheDuyetChiTiet(mcn: string, maLoai: any) {
     if (mcn == OK) {
-      this.pheDuyetBieuMau(mcn,maLoai, null);
+      this.pheDuyetBieuMau(mcn, maLoai, null);
     } else if (mcn == NOT_OK) {
       const modalTuChoi = this.modal.create({
         nzTitle: 'Not OK',
@@ -443,7 +482,7 @@ export class BaoCaoComponent implements OnInit {
       });
       modalTuChoi.afterClose.subscribe(async (text) => {
         if (text) {
-          this.pheDuyetBieuMau(mcn,maLoai, text);
+          this.pheDuyetBieuMau(mcn, maLoai, text);
         }
       });
     }
@@ -451,89 +490,89 @@ export class BaoCaoComponent implements OnInit {
 
 
   //call api duyet bieu mau
-  pheDuyetBieuMau(trangThai:any,maLoai:any,lyDo:string){
-    var idBieuMau:any  = this.baoCao.lstBCao.find((item)=> item.maLoai==maLoai).id;
+  pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
+    var idBieuMau: any = this.baoCao.lstBcaos.find((item) => item.maLoai == maLoai).id;
     const requestPheDuyetBieuMau = {
       id: idBieuMau,
       trangThai: trangThai,
       lyDoTuChoi: lyDo,
     };
     this.spinner.show();
-    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res =>{
-        if(res.statusCode==0){
-          this.notification.success(MESSAGE.SUCCESS,MESSAGE.APPROVE_SUCCESS);
-          this.getDetailReport();
-        }else{
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-    },err => {
+    this.quanLyVonPhiService.approveBieuMau(requestPheDuyetBieuMau).subscribe(res => {
+      if (res.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        this.getDetailReport();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
   }
 
-  saveTemp(){
-    if(this.tabSelected==BAO_CAO_NHAP_HANG_DTQG){
+  saveTemp() {
+    if (this.tabSelected == BAO_CAO_NHAP_HANG_DTQG) {
       this.saveMau02();
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBCao02;
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCtietBcao02;
         }
       });
-    }else if(this.tabSelected==BAO_CAO_XUAT_HANG_DTQG){
+    } else if (this.tabSelected == BAO_CAO_XUAT_HANG_DTQG) {
       this.saveMau03();
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBCao03;
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCtietBcao03;
         }
       });
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCTietBaoCaoTemp;
         }
       });
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCTietBaoCaoTemp;
         }
       });
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCTietBaoCaoTemp;
         }
       });
-    }else if(this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
-      this.baoCao?.lstBCao.forEach(item => {
-        if(Number(item.maLoai) == this.tabSelected){
-          item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+      this.baoCao?.lstBcaos.forEach(item => {
+        if (item.maLoai == this.tabSelected) {
+          item.lstCtietBcaos = this.lstCTietBaoCaoTemp;
         }
       });
     }
 
-    
+
     this.updateEditCache02();
     this.updateEditCache03();
     this.updateEditCache();
     this.tabSelected = null;
   }
 
-  async luu(){
-    this.baoCao.lstBCao.forEach((e) => {
-      
+  async save() {
+    this.baoCao.lstBcaos.forEach((e) => {
+
       if (typeof e.id != 'number') {
         e.id = null;
       }
 
-      e.lstCTietBCao.forEach(el => {
+      e.lstCtietBcaos.forEach(el => {
         if (typeof el.id != 'number') {
           el.id = null;
         }
-        if(el.maLoai== BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG.toString() || el.maLoai==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG.toString() ||
-        el.maLoai==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO.toString() || el.maLoai==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG.toString()){
-          el.listCtiet.forEach(element=>{
+        if (el.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG.toString() || el.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG.toString() ||
+          el.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO.toString() || el.maLoai == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG.toString()) {
+          el.listCtiet.forEach(element => {
             if (typeof element.id != 'number') {
               element.id = null;
             }
@@ -558,17 +597,17 @@ export class BaoCaoComponent implements OnInit {
       id: this.id,
       fileDinhKems: listFile,
       lstDeleteCTietBCao: this.lstDeleteCTietBCao,
-      listColDeleteVtus:this.lstIdDeleteCols,
+      listColDeleteVtus: this.lstIdDeleteCols,
       listIdDeleteFiles: this.baoCao.listIdDeleteFiles,
-      lstBCao: this.baoCao.lstBCao,
-      maBcao:this.baoCao.maBcao,
-      maDvi:this.maDonViTao,
+      lstBcaos: this.baoCao.lstBcaos,
+      maBcao: this.baoCao.maBcao,
+      maDvi: this.maDonViTao,
       maDviTien: this.donvitien,
       maLoaiBcao: this.maLoaiBaocao,
-      maPhanBcao:this.maPhanBcao,
-      namBcao:this.baoCao.namBcao,
+      maPhanBcao: this.maPhanBcao,
+      namBcao: this.baoCao.namBcao,
       namHienHanh: this.baoCao.namBcao,
-      dotBcao:this.baoCao.dotBcao,
+      dotBcao: this.baoCao.dotBcao,
       trangThai: this.baoCao.trangThai,
     };
 
@@ -582,7 +621,7 @@ export class BaoCaoComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
-      },err =>{
+      }, err => {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
     } else {
@@ -610,189 +649,54 @@ export class BaoCaoComponent implements OnInit {
 
 
   //call service xem chi tiết
-  getDetailReport(){
-
+  getDetailReport() {
     this.spinner.show();
     this.quanLyVonPhiService.baoCaoChiTiet(this.id).toPromise().then(data => {
-      if(data.statusCode==0){
-        this.baoCao.lstBCao = data.data.lstBCao;
-          this.baoCao.dotBcao = data.data.dotBcao;
-          this.baoCao.maBcao = data.data.maBcao;
-          this.baoCao.namBcao = data.data.namBcao;
-          this.baoCao.maDvi = data.data.maDvi;
-          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet,Utils.FORMAT_DATE_STR);
-          this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq,Utils.FORMAT_DATE_STR);
-          this.baoCao.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh,Utils.FORMAT_DATE_STR);
-          this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR)
-          this.baoCao.trangThai = data.data.trangThai;
-          this.donvitien = data.data.maDviTien;
-          this.maLoaiBaocao = data.data.maLoaiBcao;
-          this.lstFile = data.data.lstFile;
-          this.trangThaiBanGhi = data.data.trangThai;
-          if(this.maLoaiBaocao==BAO_CAO_DOT){
-            this.baoCao?.lstBCao?.forEach(item => {
-              let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == Number(item.maLoai));
-              if(index !== -1){
-                item.checked = false;
-                item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
-                item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
-              }
-            })
-          }else{
-            this.baoCao?.lstBCao?.forEach(item => {
-              let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == Number(item.maLoai));
-              if(index !== -1){
-                item.checked = false;
-                item.tieuDe = LISTBIEUMAUNAM[index].tieuDe;
-                item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
-              }
-            })
-          }
-          this.resetList();
-          //set data cho cac bieu mau
-          this.lstCTietBCao02 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_NHAP_HANG_DTQG)?.lstCTietBCao; //nhập hàng
-          this.lstCTietBCao02.forEach(e => {
-            if(e.maVtuHeader =='1'){
-              this.lstCTietBCao1.push(e);
-            }else{
-              this.lstCTietBCao2.push(e);
+      if (data.statusCode == 0) {
+        this.baoCao = data.data;
+        if (this.baoCao.maLoaiBcao == BAO_CAO_DOT) {
+          this.baoCao?.lstBcaos?.forEach(item => {
+            let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == item.maLoai);
+            if (index !== -1) {
+              item.checked = false;
+              item.tieuDe = LISTBIEUMAUDOT[index].tieuDe;
+              item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
             }
           })
-          this.lstCTietBCao03 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_XUAT_HANG_DTQG)?.lstCTietBCao; // xuất hàng
-          this.lstCTietBCao03.forEach(e => {
-            if(e.maVtuHeader=='1'){
-              this.lstCTietBCao031.push(e);
-            }else if(e.maVtuHeader=='2'){
-              this.lstCTietBCao032.push(e);
-            }else{
-              this.lstCTietBCao033.push(e);
+        } else {
+          this.baoCao?.lstBcaos?.forEach(item => {
+            let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == item.maLoai);
+            if (index !== -1) {
+              item.checked = false;
+              item.tieuDe = LISTBIEUMAUNAM[index].tieuDe;
+              item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
             }
           })
-          this.lstCTietBCao04ax = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG)?.lstCTietBCao;
-          this.lstCTietBCao04an = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCTietBCao;
-          this.lstCTietBCao04bx = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCTietBCao;
-          this.lstCTietBCao05 = this.baoCao?.lstBCao.find(item => Number(item.maLoai) ==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCTietBCao;
-         
-          if(this.lstCTietBCao04ax.length!=0){
-            let e = this.lstCTietBCao04ax[0];
-            e.listCtiet.forEach((el) => {
-              if (el.loaiMatHang == 0) {
-                this.listVattu.forEach((vt) => {
-                  if (vt.id == el.maVtu) {
-                    let objTrongdot = {
-                      id: el.id,
-                      maVtu: vt.id,
-                      loaiMatHang: el.loaiMatHang,
-                      colName: vt.tenDm,
-                      sl: el.sl,
-                      col:el.col,
-                    };
-                    this.listColTrongDot4ax.push(objTrongdot);
-                  }
-                });
-              }
-            });
-            this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
-          }
-          if(this.lstCTietBCao04an.length!=0){
-            let e1 = this.lstCTietBCao04an[0];
-            e1.listCtiet.forEach((el) => {
-              if (el.loaiMatHang == 0) {
-                this.listVattu.forEach((vt) => {
-                  if (vt.id == el.maVtu) {
-                    let objTrongdot = {
-                      id: el.id,
-                      maVtu: vt.id,
-                      loaiMatHang: el.loaiMatHang,
-                      colName: vt.tenDm,
-                      sl: el.sl,
-                      col:el.col,
-                    };
-                    this.listColTrongDot4an.push(objTrongdot);
-                  }
-                });
-              }
-            });
-            this.cols4an = this.cols4an + this.listColTrongDot4an.length;
-          }
-          //-------
-          if(this.lstCTietBCao04bx.length!=0){
-            let e2 = this.lstCTietBCao04bx[0];
-            e2.listCtiet.forEach((el) => {
-              if (el.loaiMatHang == 0) {
-                this.listVattu.forEach((vt) => {
-                  if (vt.id == el.maVtu) {
-                    let objTrongdot = {
-                      id: el.id,
-                      maVtu: vt.id,
-                      loaiMatHang: el.loaiMatHang,
-                      colName: vt.tenDm,
-                      sl: el.sl,
-                      col:el.col,
-                    };
-                    this.listColTrongDot4bx.push(objTrongdot);
-                  }
-                });
-              }
-            });
-            this.cols4bx = this.cols4bx + this.listColTrongDot4bx.length;
-          }
-          //-------
-          if(this.lstCTietBCao05.length!=0){
-            let e3 = this.lstCTietBCao05[0];
-          e3.listCtiet.forEach((el) => {
-            if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
-                if (vt.id == el.maVtu) {
-                  let objTrongdot = {
-                    id: el.id,
-                    maVtu: vt.id,
-                    loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
-                    sl: el.sl,
-                    col:el.col,
-                  };
-                  this.listColTrongDot05.push(objTrongdot);
-                }
-              });
-            }
-          });
-          this.cols05 = this.cols05 + this.listColTrongDot05.length;
-          }
+        }
+        this.lstFiles = data.data.lstFiles;
+        this.listFile = [];
+        this.maDonViTao = data.data.maDvi;
 
-          if (
-            this.baoCao.trangThai == Utils.TT_BC_1 ||
-            this.baoCao.trangThai == Utils.TT_BC_3 ||
-            this.baoCao.trangThai == Utils.TT_BC_5 ||
-            this.baoCao.trangThai == Utils.TT_BC_8 ||
-            this.baoCao.trangThai == Utils.TT_BC_10
-          ) {
-            this.status = false;
-          } else {
-            this.status = true;
-          }
-          this.listFile =[];
-          this.updateEditCache02();
-          this.updateEditCache03();
-          this.updateEditCache();
+        this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+        this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+        this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+        this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+        this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
       }
-      
     })
-    
     this.spinner.hide();
   }
-  resetList(){
-    
-    this.lstCTietBCao1 =[];
-    this.lstCTietBCao2 =[];
-    this.lstCTietBCao031 =[];
-    this.lstCTietBCao032 =[];
-    this.lstCTietBCao033 =[];
-    this.listColTrongDot4ax =[];
-    this.listColTrongDot4an =[];
-    this.listColTrongDot4bx =[];
-    this.listColTrongDot05 =[];
+  resetList() {
+
+    this.lstCtietBcao1 = [];
+    this.lstCtietBcao2 = [];
+    this.lstCtietBcao031 = [];
+    this.lstCtietBcao032 = [];
+    this.lstCtietBcao033 = [];
+    this.listColTrongDot4ax = [];
+    this.listColTrongDot4an = [];
+    this.listColTrongDot4bx = [];
+    this.listColTrongDot05 = [];
     this.updateEditCache02();
     this.updateAllChecked03();
     this.updateEditCache();
@@ -821,20 +725,20 @@ export class BaoCaoComponent implements OnInit {
       );
     return temp;
   }
-  dong(){}
-  xoa(){}
-  onSubmit(mcn,text){}
-  
-  tuChoi(mcn){}
- 
-  
-  
-  downloadFile(fileName:any){}
-  // update all xoa danh sách mẫu báo cáo
-  
-  
+  dong() { }
+  xoa() { }
+  onSubmit(mcn, text) { }
 
-  
+  tuChoi(mcn) { }
+
+
+
+  downloadFile(fileName: any) { }
+  // update all xoa danh sách mẫu báo cáo
+
+
+
+
 
   onPageIndexChange(page) {
     this.pages.page = page;
@@ -848,67 +752,264 @@ export class BaoCaoComponent implements OnInit {
 
   updateAllDanhSachMauBcao(): void {
     this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-      this.baoCao.lstBCao = this.baoCao?.lstBCao.map(item => ({
+    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcaos.checked = true
+      this.baoCao.lstBcaos = this.baoCao?.lstBcaos.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.baoCao.lstBCao = this.baoCao?.lstBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+      this.baoCao.lstBcaos = this.baoCao?.lstBcaos.map(item => ({    // checkboxall == false thi set lai lstCtietBcaos.checked = false
         ...item,
         checked: false
       }));
     }
   }
-  getStatusNameBieuMau(Status:any){
-    return TRANG_THAI_PHU_LUC.find(item => item.id ==Number(Status))?.ten;
+  getStatusNameBieuMau(Status: any) {
+    return TRANG_THAI_PHU_LUC.find(item => item.id == Status)?.ten;
   }
 
-  changeTab(maPhuLuc){
-    this.tabSelected = Number(maPhuLuc);
-    this.listColTemp = [];
-    this.cols = 3;
-    this.lstCTietBaoCaoTemp = this.baoCao?.lstBCao.find(item => item.maLoai == maPhuLuc)?.lstCTietBCao;
-    if(this.tabSelected ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
-      this.listColTemp = this.listColTrongDot4ax;
-      this.cols = this.cols + this.listColTrongDot4ax.length;
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
-      this.listColTemp = this.listColTrongDot4an;
-      this.cols = this.cols + this.listColTrongDot4an.length;
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
-      this.listColTemp = this.listColTrongDot4bx;
-      this.cols = this.cols + this.listColTrongDot4bx.length;
-    }else if(this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
-      this.listColTemp = this.listColTrongDot05;
-      this.cols = this.cols + this.listColTrongDot05.length;
+  changeTab(maPhuLuc, trangThaiChiTiet) {
+
+    let checkSaveEdit;
+    if (!this.maDviTien) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
     }
+
+    //check xem tat ca cac dong du lieu da luu chua?
+    //chua luu thi bao loi, luu roi thi cho di
+    this.lstCTietBaoCaoTemp.filter(element => {
+      if (this.editCache[element.id].edit === true) {
+        checkSaveEdit = false
+      }
+    });
+
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
+    // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.lstCTietBaoCaoTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.tabSelected = maPhuLuc;
+    // set listBCaoTemp theo ma phu luc vua chon
+    let lstBcaosTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc);
+    this.lstCTietBaoCaoTemp = lstBcaosTemp?.lstCtietBcaos || [];
+    this.maDviTien = lstBcaosTemp?.maDviTien;
+    this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
+    this.listIdDelete = []
+    this.trangThaiChiTiet = trangThaiChiTiet;
+    this.lstCTietBaoCaoTemp?.filter(data => {
+      switch (maPhuLuc) {
+        // bm 02
+        case LISTBIEUMAUNAM[0].maPhuLuc:
+          
+          break;
+        // bm 03
+        case LISTBIEUMAUNAM[1].maPhuLuc:
+
+          break;
+        // 04a/BCPN-X_x
+        case LISTBIEUMAUNAM[2].maPhuLuc:
+
+          break;
+        // 04a/BCPN-X_n
+        case LISTBIEUMAUNAM[3].maPhuLuc:
+
+          break;
+        // 04b/BCPN-X
+        case LISTBIEUMAUNAM[4].maPhuLuc:
+
+          break;
+        // 05/BCPBQ
+        case LISTBIEUMAUNAM[5].maPhuLuc:
+
+          break;
+        default:
+          break;
+      }
+    });
+    if (maPhuLuc == LISTBIEUMAUNAM[0].maPhuLuc) {
+      this.sortByIndex();
+    }
+    this.updateEditCache();
+    this.getStatusButtonOk();
+
+
+    ////////////////////////////////////////
+    this.resetList();
+    //set data cho cac bieu mau
+    this.lstCtietBcao02 = this.baoCao?.lstBcaos.find(item => item.maLoai == BAO_CAO_NHAP_HANG_DTQG)?.lstCtietBcaos; //nhập hàng
+    this.lstCtietBcao02.forEach(e => {
+      if (e.maVtuHeader == '1') {
+        this.lstCtietBcao1.push(e);
+      } else {
+        this.lstCtietBcao2.push(e);
+      }
+    })
+    this.lstCtietBcao03 = this.baoCao?.lstBcaos.find(item => item.maLoai == BAO_CAO_XUAT_HANG_DTQG)?.lstCtietBcaos; // xuất hàng
+    this.lstCtietBcao03.forEach(e => {
+      if (e.maVtuHeader == '1') {
+        this.lstCtietBcao031.push(e);
+      } else if (e.maVtuHeader == '2') {
+        this.lstCtietBcao032.push(e);
+      } else {
+        this.lstCtietBcao033.push(e);
+      }
+    })
+    this.lstCtietBcao04ax = this.baoCao?.lstBcaos.find(item => item.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG)?.lstCtietBcaos;
+    this.lstCtietBcao04an = this.baoCao?.lstBcaos.find(item => item.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG)?.lstCtietBcaos;
+    this.lstCtietBcao04bx = this.baoCao?.lstBcaos.find(item => item.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO)?.lstCtietBcaos;
+    this.lstCtietBcao05 = this.baoCao?.lstBcaos.find(item => item.maLoai == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG)?.lstCtietBcaos;
+
+    if (this.lstCtietBcao04ax.length != 0) {
+      let e = this.lstCtietBcao04ax[0];
+      e.listCtiet.forEach((el) => {
+        if (el.loaiMatHang == 0) {
+          this.listVattu.forEach((vt) => {
+            if (vt.id == el.maVtu) {
+              let objTrongdot = {
+                id: el.id,
+                maVtu: vt.id,
+                loaiMatHang: el.loaiMatHang,
+                colName: vt.tenDm,
+                sl: el.sl,
+                col: el.col,
+              };
+              this.listColTrongDot4ax.push(objTrongdot);
+            }
+          });
+        }
+      });
+      this.cols4ax = this.cols4ax + this.listColTrongDot4ax.length;
+    }
+    if (this.lstCtietBcao04an.length != 0) {
+      let e1 = this.lstCtietBcao04an[0];
+      e1.listCtiet.forEach((el) => {
+        if (el.loaiMatHang == 0) {
+          this.listVattu.forEach((vt) => {
+            if (vt.id == el.maVtu) {
+              let objTrongdot = {
+                id: el.id,
+                maVtu: vt.id,
+                loaiMatHang: el.loaiMatHang,
+                colName: vt.tenDm,
+                sl: el.sl,
+                col: el.col,
+              };
+              this.listColTrongDot4an.push(objTrongdot);
+            }
+          });
+        }
+      });
+      this.cols4an = this.cols4an + this.listColTrongDot4an.length;
+    }
+    //-------
+    if (this.lstCtietBcao04bx.length != 0) {
+      let e2 = this.lstCtietBcao04bx[0];
+      e2.listCtiet.forEach((el) => {
+        if (el.loaiMatHang == 0) {
+          this.listVattu.forEach((vt) => {
+            if (vt.id == el.maVtu) {
+              let objTrongdot = {
+                id: el.id,
+                maVtu: vt.id,
+                loaiMatHang: el.loaiMatHang,
+                colName: vt.tenDm,
+                sl: el.sl,
+                col: el.col,
+              };
+              this.listColTrongDot4bx.push(objTrongdot);
+            }
+          });
+        }
+      });
+      this.cols4bx = this.cols4bx + this.listColTrongDot4bx.length;
+    }
+    //-------
+    if (this.lstCtietBcao05.length != 0) {
+      let e3 = this.lstCtietBcao05[0];
+      e3.listCtiet.forEach((el) => {
+        if (el.loaiMatHang == 0) {
+          this.listVattu.forEach((vt) => {
+            if (vt.id == el.maVtu) {
+              let objTrongdot = {
+                id: el.id,
+                maVtu: vt.id,
+                loaiMatHang: el.loaiMatHang,
+                colName: vt.tenDm,
+                sl: el.sl,
+                col: el.col,
+              };
+              this.listColTrongDot05.push(objTrongdot);
+            }
+          });
+        }
+      });
+      this.cols05 = this.cols05 + this.listColTrongDot05.length;
+    }
+
+    if (
+      this.baoCao.trangThai == Utils.TT_BC_1 ||
+      this.baoCao.trangThai == Utils.TT_BC_3 ||
+      this.baoCao.trangThai == Utils.TT_BC_5 ||
+      this.baoCao.trangThai == Utils.TT_BC_8 ||
+      this.baoCao.trangThai == Utils.TT_BC_10
+    ) {
+      this.status = false;
+    } else {
+      this.status = true;
+    }
+    this.listFile = [];
     this.updateEditCache02();
     this.updateEditCache03();
     this.updateEditCache();
-    
-    
+
+
+
+    // this.tabSelected = Number(maPhuLuc);
+    // this.listColTemp = [];
+    // this.cols = 3;
+    // this.lstCTietBaoCaoTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc)?.lstCtietBcaos;
+    // if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
+    //   this.listColTemp = this.listColTrongDot4ax;
+    //   this.cols = this.cols + this.listColTrongDot4ax.length;
+    // } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
+    //   this.listColTemp = this.listColTrongDot4an;
+    //   this.cols = this.cols + this.listColTrongDot4an.length;
+    // } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
+    //   this.listColTemp = this.listColTrongDot4bx;
+    //   this.cols = this.cols + this.listColTrongDot4bx.length;
+    // } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+    //   this.listColTemp = this.listColTrongDot05;
+    //   this.cols = this.cols + this.listColTrongDot05.length;
+    // }
+    // this.updateEditCache02();
+    // this.updateEditCache03();
+    // this.updateEditCache();
+
+
   }
 
-  updateSingleChecked(){
-    if (this.baoCao?.lstBCao.every((item) => !item.checked)) {
-        this.allChecked = false;
-        this.indeterminate = false;
-      } else if (this.baoCao?.lstBCao.every((item) => item.checked)) {
-        this.allChecked = true;
-        this.indeterminate = false;
-      } else {
-        this.indeterminate = true;
-      }
+  updateSingleChecked() {
+    if (this.baoCao?.lstBcaos.every((item) => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.baoCao?.lstBcaos.every((item) => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
   }
 
   addPhuLuc() {
-    var danhSach:any;    
-    if(this.maLoaiBaoCaoParam==BAO_CAO_DOT){
+    var danhSach: any;
+    if (this.maLoaiBaoCaoParam == BAO_CAO_DOT) {
       LISTBIEUMAUDOT.forEach(item => item.status = false);
-       danhSach = LISTBIEUMAUDOT.filter(item => this.baoCao?.lstBCao?.findIndex(data => Number(data.maLoai) == item.maPhuLuc) == -1);
-    }else{
+      danhSach = LISTBIEUMAUDOT.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+    } else {
       LISTBIEUMAUNAM.forEach(item => item.status = false);
-       danhSach = LISTBIEUMAUNAM.filter(item => this.baoCao?.lstBCao?.findIndex(data => Number(data.maLoai) == item.maPhuLuc) == -1);
+      danhSach = LISTBIEUMAUNAM.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
     }
 
     const modalIn = this.modal.create({
@@ -925,15 +1026,21 @@ export class BaoCaoComponent implements OnInit {
     modalIn.afterClose.subscribe((res) => {
       if (res) {
         res.forEach(item => {
-          if(item.status){
-            this.baoCao.lstBCao.push({
-              id: uuid.v4()+'FE',
-              checked:false,
+          if (item.status) {
+            this.baoCao.lstBcaos.push({
+              id: uuid.v4() + 'FE',
+              checked: false,
               tieuDe: item.tieuDe,
-              maLoai:item.maPhuLuc.toString(),
+              maLoai: item.maPhuLuc.toString(),
               tenPhuLuc: item.tenPhuLuc,
-              trangThai: '2',
-              lstCTietBCao: []
+              trangThai: '3',
+              lstCtietBcaos: [],
+              maDviTien: '1',
+              thuyetMinh: null,
+              lyDoTuChoi: null,
+              lstIdDeletes: [],
+              nguoiBcao: null,
+              qlnvKhvonphiBcaoId: this.id,
             });
           }
         })
@@ -942,9 +1049,9 @@ export class BaoCaoComponent implements OnInit {
   }
 
 
-  deletePhuLucList(){
-    this.baoCao.lstBCao = this.baoCao?.lstBCao.filter(item => item.checked == false);
-    if(this.baoCao?.lstBCao?.findIndex(item => Number(item.maLoai) == this.tabSelected) == -1){
+  deletePhuLucList() {
+    this.baoCao.lstBcaos = this.baoCao?.lstBcaos.filter(item => item.checked == false);
+    if (this.baoCao?.lstBcaos?.findIndex(item => item.maLoai == this.tabSelected) == -1) {
       this.tabSelected = null;
     }
     this.allChecked = false;
@@ -955,22 +1062,22 @@ export class BaoCaoComponent implements OnInit {
   //check all input
   updateAllChecked02(): void {
     this.indeterminate02 = false;
-    if(this.allChecked02){
+    if (this.allChecked02) {
 
-      this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
+      this.lstCtietBcao1 = this.lstCtietBcao1.map((item) => ({
         ...item,
         checked: true,
       }));
-      this.lstCTietBCao2 = this.lstCTietBCao2.map((item) => ({
+      this.lstCtietBcao2 = this.lstCtietBcao2.map((item) => ({
         ...item,
         checked: true,
       }));
-    }else{
-      this.lstCTietBCao1 = this.lstCTietBCao1.map((item) => ({
+    } else {
+      this.lstCtietBcao1 = this.lstCtietBcao1.map((item) => ({
         ...item,
         checked: false,
       }));
-      this.lstCTietBCao2 = this.lstCTietBCao2.map((item) => ({
+      this.lstCtietBcao2 = this.lstCtietBcao2.map((item) => ({
         ...item,
         checked: false,
       }));
@@ -978,43 +1085,43 @@ export class BaoCaoComponent implements OnInit {
 
   }
 
-  addLine02(idx:any, loaiList:any): void {
+  addLine02(idx: any, loaiList: any): void {
 
-    var loaiDonVi ;
-    var parentID:any;
-    if(loaiList=='1'){
-      loaiDonVi='dv';
-      parentID=1;
-    }else{
-      loaiDonVi='tc';
-      parentID=2;
+    var loaiDonVi;
+    var parentID: any;
+    if (loaiList == '1') {
+      loaiDonVi = 'dv';
+      parentID = 1;
+    } else {
+      loaiDonVi = 'tc';
+      parentID = 2;
     }
     let item: ItemDataMau02 = {
-      id: uuid.v4()+'FE',
+      id: uuid.v4() + 'FE',
       stt: 0,
-      index:0,
+      index: 0,
       maVtu: '',
       maDviTinh: null,
       soQd: null,
       khSoLuong: null,
       khGiaMuaTd: null,
       khTtien: null,
-      thSoLuong:null,
-      thGiaMuaTd:null,
-      thTtien:null,
-      ghiChu:null,
-      maVtuHeader:parentID,
-      loai:loaiDonVi,
+      thSoLuong: null,
+      thGiaMuaTd: null,
+      thTtien: null,
+      ghiChu: null,
+      maVtuHeader: parentID,
+      loai: loaiDonVi,
       checked!: false,
     };
-    if(loaiList=='1'){
-      this.lstCTietBCao1.splice(idx, 0, item);
+    if (loaiList == '1') {
+      this.lstCtietBcao1.splice(idx, 0, item);
       this.editCache1[item.id] = {
         edit: true,
         data: { ...item },
       };
-    }else{
-      this.lstCTietBCao2.splice(idx, 0, item);
+    } else {
+      this.lstCtietBcao2.splice(idx, 0, item);
       this.editCache2[item.id] = {
         edit: true,
         data: { ...item },
@@ -1024,24 +1131,24 @@ export class BaoCaoComponent implements OnInit {
 
 
   // xoa dong
-  deleteById02(id: any,loaiList:any): void {
-    if(loaiList=='1'){
-      this.lstCTietBCao1 = this.lstCTietBCao1.filter((item) => item?.id != id);
+  deleteById02(id: any, loaiList: any): void {
+    if (loaiList == '1') {
+      this.lstCtietBcao1 = this.lstCtietBcao1.filter((item) => item?.id != id);
       if (id?.length == 36) {
         this.lstIdDeleteMau02 += id + ',';
-        let objecDele ={
-          maLoai:BAO_CAO_NHAP_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau02
+        let objecDele = {
+          maLoai: BAO_CAO_NHAP_HANG_DTQG.toString(),
+          lstIdDelete: this.lstIdDeleteMau02
         }
         this.lstDeleteCTietBCao.push(objecDele);
       }
-    }else{
-      this.lstCTietBCao2 = this.lstCTietBCao2.filter((item) => item?.id != id);
+    } else {
+      this.lstCtietBcao2 = this.lstCtietBcao2.filter((item) => item?.id != id);
       if (id?.length == 36) {
         this.lstIdDeleteMau02 += id + ',';
-        let objecDele ={
-          maLoai:BAO_CAO_NHAP_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau02
+        let objecDele = {
+          maLoai: BAO_CAO_NHAP_HANG_DTQG.toString(),
+          lstIdDelete: this.lstIdDeleteMau02
         }
         this.lstDeleteCTietBCao.push(objecDele);
       }
@@ -1049,10 +1156,10 @@ export class BaoCaoComponent implements OnInit {
   }
 
   //chọn row cần sửa 
-  startEdit02(id: string,loaiList:any): void {
-    if(loaiList=='1'){
+  startEdit02(id: string, loaiList: any): void {
+    if (loaiList == '1') {
       this.editCache1[id].edit = true;
-    }else{
+    } else {
       this.editCache2[id].edit = true;
     }
 
@@ -1061,10 +1168,10 @@ export class BaoCaoComponent implements OnInit {
 
   //checkox trên tùng row
   updateSingleChecked02(): void {
-    if ((this.lstCTietBCao1.every((item) => !item.checked)) && (this.lstCTietBCao2.every((item)=> !item.checked))) {
+    if ((this.lstCtietBcao1.every((item) => !item.checked)) && (this.lstCtietBcao2.every((item) => !item.checked))) {
       this.allChecked02 = false;
       this.indeterminate02 = true;
-    } else if ((this.lstCTietBCao1.every((item) => item.checked)) && (this.lstCTietBCao2.every((item) => item.checked)) ) {
+    } else if ((this.lstCtietBcao1.every((item) => item.checked)) && (this.lstCtietBcao2.every((item) => item.checked))) {
       this.allChecked02 = true;
       this.indeterminate02 = false;
     } else {
@@ -1073,81 +1180,81 @@ export class BaoCaoComponent implements OnInit {
   }
 
   //tinh toan tong so
-  changeModel02(id: string,loaiList:any){
-    if(loaiList=='1'){
+  changeModel02(id: string, loaiList: any) {
+    if (loaiList == '1') {
       this.editCache1[id].data.khTtien = Number(this.editCache1[id].data.khSoLuong) * Number(this.editCache1[id].data.khGiaMuaTd);
       this.editCache1[id].data.thTtien = Number(this.editCache1[id].data.thSoLuong) * Number(this.editCache1[id].data.thGiaMuaTd);
-    }else{
+    } else {
       this.editCache2[id].data.khTtien = Number(this.editCache2[id].data.khSoLuong) * Number(this.editCache2[id].data.khGiaMuaTd);
       this.editCache2[id].data.thTtien = Number(this.editCache2[id].data.thSoLuong) * Number(this.editCache2[id].data.thGiaMuaTd);
     }
   }
 
   //update khi sửa
-  saveEdit02(id: string,loaiList:any): void {
-    if(loaiList=='1'){
-      this.editCache1[id].data.checked = this.lstCTietBCao1.find(
+  saveEdit02(id: string, loaiList: any): void {
+    if (loaiList == '1') {
+      this.editCache1[id].data.checked = this.lstCtietBcao1.find(
         (item) => item.id === id,
-      ).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTietBCao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBCao1[index], this.editCache1[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      ).checked; // set checked editCache = checked lstCtietBcaos
+      const index = this.lstCtietBcao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      Object.assign(this.lstCtietBcao1[index], this.editCache1[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
       this.editCache1[id].edit = false; // CHUYEN VE DANG TEXT
-    }else{
-      this.editCache2[id].data.checked = this.lstCTietBCao2.find(
+    } else {
+      this.editCache2[id].data.checked = this.lstCtietBcao2.find(
         (item) => item.id === id,
-      ).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTietBCao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBCao2[index], this.editCache2[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      ).checked; // set checked editCache = checked lstCtietBcaos
+      const index = this.lstCtietBcao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      Object.assign(this.lstCtietBcao2[index], this.editCache2[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
       this.editCache2[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
-  cancelEdit02(id: string, loaiList:any): void {
-    if(loaiList=='1'){
-      const index = this.lstCTietBCao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+  cancelEdit02(id: string, loaiList: any): void {
+    if (loaiList == '1') {
+      const index = this.lstCtietBcao1.findIndex((item) => item.id === id); // lay vi tri hang minh sua
       this.editCache1[id] = {
-        data: { ...this.lstCTietBCao1[index] },
+        data: { ...this.lstCtietBcao1[index] },
         edit: false,
       };
-    }else{
-      const index = this.lstCTietBCao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    } else {
+      const index = this.lstCtietBcao2.findIndex((item) => item.id === id); // lay vi tri hang minh sua
       this.editCache2[id] = {
-        data: { ...this.lstCTietBCao2[index] },
+        data: { ...this.lstCtietBcao2[index] },
         edit: false,
       };
     }
   }
 
 
-  async saveMau02(){
-    this.lstCTietBCao02 =[];
-    await this.lstCTietBCao1.forEach(e => {
-      this.lstCTietBCao02.push(e);
+  async saveMau02() {
+    this.lstCtietBcao02 = [];
+    await this.lstCtietBcao1.forEach(e => {
+      this.lstCtietBcao02.push(e);
     })
 
-    await this.lstCTietBCao2.forEach(e => {
-      this.lstCTietBCao02.push(e);
+    await this.lstCtietBcao2.forEach(e => {
+      this.lstCtietBcao02.push(e);
     })
 
-    this.lstCTietBCao02.forEach(e =>{
+    this.lstCtietBcao02.forEach(e => {
       if (typeof e.id != 'number') {
         e.id = null;
       }
     })
     this.updateEditCache02();
   }
-  
+
 
   updateEditCache02(): void {
-    this.lstCTietBCao1.forEach((item) => {
+    this.lstCtietBcao1.forEach((item) => {
       this.editCache1[item.id] = {
         edit: false,
         data: { ...item },
       };
     });
-    this.lstCTietBCao2.forEach((item) => {
+    this.lstCtietBcao2.forEach((item) => {
       this.editCache2[item.id] = {
         edit: false,
         data: { ...item },
@@ -1158,56 +1265,56 @@ export class BaoCaoComponent implements OnInit {
   // xóa với checkbox
   deleteSelected02() {
     // add list delete id
-    this.lstCTietBCao1.filter((item) => {
+    this.lstCtietBcao1.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
         this.lstIdDeleteMau02 += item.id + ',';
       }
 
     });
-    this.lstCTietBCao2.filter((item) => {
+    this.lstCtietBcao2.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
         this.lstIdDeleteMau02 += item.id + ',';
       }
 
     });
     // delete object have checked = true
-    this.lstCTietBCao1 = this.lstCTietBCao1.filter(
+    this.lstCtietBcao1 = this.lstCtietBcao1.filter(
       (item) => item.checked != true,
     );
-    this.lstCTietBCao2 = this.lstCTietBCao2.filter(
+    this.lstCtietBcao2 = this.lstCtietBcao2.filter(
       (item) => item.checked != true,
     );
     this.allChecked02 = false;
   }
 
   // nhóm chức năng biểu mẫu 03 -----------------------------------------------
-   ////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
   updateAllChecked03(): void {
     this.indeterminate03 = false;
-    if(this.allChecked03){
+    if (this.allChecked03) {
 
-      this.lstCTietBCao031 = this.lstCTietBCao031.map((item) => ({
+      this.lstCtietBcao031 = this.lstCtietBcao031.map((item) => ({
         ...item,
         checked: true,
       }));
-      this.lstCTietBCao032 = this.lstCTietBCao032.map((item) => ({
+      this.lstCtietBcao032 = this.lstCtietBcao032.map((item) => ({
         ...item,
         checked: true,
       }));
-      this.lstCTietBCao033 = this.lstCTietBCao033.map((item) => ({
+      this.lstCtietBcao033 = this.lstCtietBcao033.map((item) => ({
         ...item,
         checked: true,
       }));
-    }else{
-      this.lstCTietBCao031 = this.lstCTietBCao031.map((item) => ({
+    } else {
+      this.lstCtietBcao031 = this.lstCtietBcao031.map((item) => ({
         ...item,
         checked: false,
       }));
-      this.lstCTietBCao032 = this.lstCTietBCao032.map((item) => ({
+      this.lstCtietBcao032 = this.lstCtietBcao032.map((item) => ({
         ...item,
         checked: false,
       }));
-      this.lstCTietBCao033 = this.lstCTietBCao033.map((item) => ({
+      this.lstCtietBcao033 = this.lstCtietBcao033.map((item) => ({
         ...item,
         checked: false,
       }));
@@ -1215,22 +1322,22 @@ export class BaoCaoComponent implements OnInit {
   }
 
 
-  addLine03(idx:any,loaiList:any): void {
-    var loai:any;
-    var parentId:any;
-    if(loaiList=='1'){
-      loai=1;
-      parentId=1;
-    }else if(loaiList=='2'){
-      loai=2;
-      parentId=2;
-    }else{
-      loai=3;
-      parentId=3;
+  addLine03(idx: any, loaiList: any): void {
+    var loai: any;
+    var parentId: any;
+    if (loaiList == '1') {
+      loai = 1;
+      parentId = 1;
+    } else if (loaiList == '2') {
+      loai = 2;
+      parentId = 2;
+    } else {
+      loai = 3;
+      parentId = 3;
     }
 
     let item: ItemDataMau03 = {
-      id: uuid.v4()+'FE',
+      id: uuid.v4() + 'FE',
       stt: 0,
       maVtu: 0,
       maDviTinh: 0,
@@ -1238,30 +1345,30 @@ export class BaoCaoComponent implements OnInit {
       soLuongTte: 0,
       dgGiaKhoach: 0,
       dgGiaBanTthieu: 0,
-      dgGiaBanTte:0,
-      ttGiaHtoan:0,
-      ttGiaBanTte:0,
-      ttClechGiaTteVaGiaHtoan:0,
-      ghiChu:0,
-      maVtuHeader:parentId,
-      loai:loai,
+      dgGiaBanTte: 0,
+      ttGiaHtoan: 0,
+      ttGiaBanTte: 0,
+      ttClechGiaTteVaGiaHtoan: 0,
+      ghiChu: 0,
+      maVtuHeader: parentId,
+      loai: loai,
       checked: false,
     };
-    
-    if(loaiList=='1'){
-      this.lstCTietBCao031.splice(idx, 0, item);
+
+    if (loaiList == '1') {
+      this.lstCtietBcao031.splice(idx, 0, item);
       this.editCache031[item.id] = {
         edit: true,
         data: { ...item },
       };
-    }else if(loaiList=='2'){
-      this.lstCTietBCao032.splice(idx, 0, item);
+    } else if (loaiList == '2') {
+      this.lstCtietBcao032.splice(idx, 0, item);
       this.editCache032[item.id] = {
         edit: true,
         data: { ...item },
       };
-    }else{
-      this.lstCTietBCao033.splice(idx, 0, item);
+    } else {
+      this.lstCtietBcao033.splice(idx, 0, item);
       this.editCache033[item.id] = {
         edit: true,
         data: { ...item },
@@ -1269,57 +1376,57 @@ export class BaoCaoComponent implements OnInit {
     }
   }
 
-  deleteById03(id: any,loaiList:any): void {
-    if(loaiList=='1'){
-      this.lstCTietBCao031 = this.lstCTietBCao031.filter((item) => item.id != id);
+  deleteById03(id: any, loaiList: any): void {
+    if (loaiList == '1') {
+      this.lstCtietBcao031 = this.lstCtietBcao031.filter((item) => item.id != id);
       if (id?.length == 36) {
         this.lstIdDeleteMau03 += id + ',';
         let objecDele = {
-          maLoai:BAO_CAO_XUAT_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau03,
+          maLoai: BAO_CAO_XUAT_HANG_DTQG.toString(),
+          lstIdDelete: this.lstIdDeleteMau03,
         }
         this.lstDeleteCTietBCao.push(objecDele);
       }
-    }else if(loaiList=='2'){
-      this.lstCTietBCao032 = this.lstCTietBCao032.filter((item) => item.id != id);
+    } else if (loaiList == '2') {
+      this.lstCtietBcao032 = this.lstCtietBcao032.filter((item) => item.id != id);
       if (id?.length == 36) {
         this.lstIdDeleteMau03 += id + ',';
         let objecDele = {
-          maLoai:BAO_CAO_XUAT_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau03,
+          maLoai: BAO_CAO_XUAT_HANG_DTQG.toString(),
+          lstIdDelete: this.lstIdDeleteMau03,
         }
         this.lstDeleteCTietBCao.push(objecDele);
       }
-    }else{
-      this.lstCTietBCao033 = this.lstCTietBCao033.filter((item)=> item.id!=id);
-      if(typeof id =='number'){
-        this.lstIdDeleteMau03 +=id +',';
+    } else {
+      this.lstCtietBcao033 = this.lstCtietBcao033.filter((item) => item.id != id);
+      if (typeof id == 'number') {
+        this.lstIdDeleteMau03 += id + ',';
         let objecDele = {
-          maLoai:BAO_CAO_XUAT_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau03,
+          maLoai: BAO_CAO_XUAT_HANG_DTQG.toString(),
+          lstIdDelete: this.lstIdDeleteMau03,
         }
         this.lstDeleteCTietBCao.push(objecDele);
       }
-    }    
+    }
   }
 
   //chọn row cần sửa
-  startEdit03(id: string, loaiList:any): void {
-    if(loaiList=='1'){
+  startEdit03(id: string, loaiList: any): void {
+    if (loaiList == '1') {
       this.editCache031[id].edit = true;
-    }else if(loaiList=='2'){
+    } else if (loaiList == '2') {
       this.editCache032[id].edit = true;
-    }else{
+    } else {
       this.editCache033[id].edit = true;
     }
   }
 
   //checkox trên tùng row
- updateSingleChecked03(): void {
-    if ((this.lstCTietBCao031.every((item) => !item.checked)) && (this.lstCTietBCao032.every((item)=> !item.checked)) && (this.lstCTietBCao033.every((item)=> !item.checked))) {
+  updateSingleChecked03(): void {
+    if ((this.lstCtietBcao031.every((item) => !item.checked)) && (this.lstCtietBcao032.every((item) => !item.checked)) && (this.lstCtietBcao033.every((item) => !item.checked))) {
       this.allChecked03 = false;
       this.indeterminate03 = true;
-    } else if ((this.lstCTietBCao031.every((item) => item.checked)) && (this.lstCTietBCao032.every((item) => item.checked)) && (this.lstCTietBCao033.every((item) => item.checked))) {
+    } else if ((this.lstCtietBcao031.every((item) => item.checked)) && (this.lstCtietBcao032.every((item) => item.checked)) && (this.lstCtietBcao033.every((item) => item.checked))) {
       this.allChecked03 = true;
       this.indeterminate03 = false;
     } else {
@@ -1328,65 +1435,65 @@ export class BaoCaoComponent implements OnInit {
   }
 
   //tinh tong
-  changeModel03(id:any, loaiList:any){
-    if(loaiList=='1'){
+  changeModel03(id: any, loaiList: any) {
+    if (loaiList == '1') {
       this.editCache031[id].data.ttGiaHtoan = this.editCache031[id].data.soLuongTte * this.editCache031[id].data.dgGiaKhoach;
       this.editCache031[id].data.ttGiaBanTte = this.editCache031[id].data.soLuongTte * this.editCache031[id].data.dgGiaBanTte;
       this.editCache031[id].data.ttClechGiaTteVaGiaHtoan = this.editCache031[id].data.ttGiaBanTte - this.editCache031[id].data.ttGiaHtoan;
-    }else if (loaiList=='2'){
+    } else if (loaiList == '2') {
       this.editCache032[id].data.ttGiaHtoan = this.editCache032[id].data.soLuongTte * this.editCache032[id].data.dgGiaKhoach;
       this.editCache032[id].data.ttGiaBanTte = this.editCache032[id].data.soLuongTte * this.editCache032[id].data.dgGiaBanTte;
       this.editCache032[id].data.ttClechGiaTteVaGiaHtoan = this.editCache032[id].data.ttGiaBanTte - this.editCache032[id].data.ttGiaHtoan;
-    }else{
+    } else {
       this.editCache033[id].data.ttGiaHtoan = this.editCache033[id].data.soLuongTte * this.editCache033[id].data.dgGiaKhoach;
       this.editCache033[id].data.ttGiaBanTte = this.editCache033[id].data.soLuongTte * this.editCache033[id].data.dgGiaBanTte;
       this.editCache033[id].data.ttClechGiaTteVaGiaHtoan = this.editCache033[id].data.ttGiaBanTte - this.editCache033[id].data.ttGiaHtoan;
     }
   }
 
-  saveEdit03(id: string,loaiList:any): void {
-    if(loaiList=='1'){
-      this.editCache031[id].data.checked = this.lstCTietBCao031.find(
+  saveEdit03(id: string, loaiList: any): void {
+    if (loaiList == '1') {
+      this.editCache031[id].data.checked = this.lstCtietBcao031.find(
         (item) => item.id === id,
-      ).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTietBCao031.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBCao031[index], this.editCache031[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      ).checked; // set checked editCache = checked lstCtietBcaos
+      const index = this.lstCtietBcao031.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      Object.assign(this.lstCtietBcao031[index], this.editCache031[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
       this.editCache031[id].edit = false; // CHUYEN VE DANG TEXT
-    }else if(loaiList=='2'){
-      this.editCache032[id].data.checked = this.lstCTietBCao032.find(
+    } else if (loaiList == '2') {
+      this.editCache032[id].data.checked = this.lstCtietBcao032.find(
         (item) => item.id === id,
-      ).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTietBCao032.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBCao032[index], this.editCache032[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      ).checked; // set checked editCache = checked lstCtietBcaos
+      const index = this.lstCtietBcao032.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      Object.assign(this.lstCtietBcao032[index], this.editCache032[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
       this.editCache032[id].edit = false; // CHUYEN VE DANG TEXT
-    }else{
-      this.editCache033[id].data.checked = this.lstCTietBCao033.find(
+    } else {
+      this.editCache033[id].data.checked = this.lstCtietBcao033.find(
         (item) => item.id === id,
-      ).checked; // set checked editCache = checked lstCTietBCao
-      const index = this.lstCTietBCao033.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBCao033[index], this.editCache033[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+      ).checked; // set checked editCache = checked lstCtietBcaos
+      const index = this.lstCtietBcao033.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      Object.assign(this.lstCtietBcao033[index], this.editCache033[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
       this.editCache033[id].edit = false; // CHUYEN VE DANG TEXT
     }
   }
 
   //hủy thao tác sửa update lại giá trị ban đầu
-  cancelEdit03(id: string, loaiList:any): void {
-    if(loaiList=='1'){
-      const index = this.lstCTietBCao031.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+  cancelEdit03(id: string, loaiList: any): void {
+    if (loaiList == '1') {
+      const index = this.lstCtietBcao031.findIndex((item) => item.id === id); // lay vi tri hang minh sua
       this.editCache031[id] = {
-        data: { ...this.lstCTietBCao031[index] },
+        data: { ...this.lstCtietBcao031[index] },
         edit: false,
       };
-    }else if(loaiList=='2'){
-      const index = this.lstCTietBCao032.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    } else if (loaiList == '2') {
+      const index = this.lstCtietBcao032.findIndex((item) => item.id === id); // lay vi tri hang minh sua
       this.editCache032[id] = {
-        data: { ...this.lstCTietBCao032[index] },
+        data: { ...this.lstCtietBcao032[index] },
         edit: false,
       };
-    }else{
-      const index = this.lstCTietBCao033.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+    } else {
+      const index = this.lstCtietBcao033.findIndex((item) => item.id === id); // lay vi tri hang minh sua
       this.editCache033[id] = {
-        data: { ...this.lstCTietBCao033[index] },
+        data: { ...this.lstCtietBcao033[index] },
         edit: false,
       };
     }
@@ -1395,51 +1502,51 @@ export class BaoCaoComponent implements OnInit {
   // xóa với checkbox
   deleteSelected03() {
     // add list delete id
-    this.lstCTietBCao031.filter((item) => {
+    this.lstCtietBcao031.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
         this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
-    this.lstCTietBCao032.filter((item) => {
+    this.lstCtietBcao032.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
         this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
-    this.lstCTietBCao033.filter((item) => {
+    this.lstCtietBcao033.filter((item) => {
       if (item.checked == true && typeof item.id == 'number') {
         this.lstIdDeleteMau03 += item.id + ',';
       }
 
     });
     // delete object have checked = true
-    this.lstCTietBCao031 = this.lstCTietBCao031.filter(
+    this.lstCtietBcao031 = this.lstCtietBcao031.filter(
       (item) => item.checked != true,
     );
-    this.lstCTietBCao032 = this.lstCTietBCao032.filter(
+    this.lstCtietBcao032 = this.lstCtietBcao032.filter(
       (item) => item.checked != true,
     );
-    this.lstCTietBCao033 = this.lstCTietBCao033.filter(
+    this.lstCtietBcao033 = this.lstCtietBcao033.filter(
       (item) => item.checked != true,
     );
     this.allChecked03 = false;
   }
 
   updateEditCache03(): void {
-    this.lstCTietBCao031.forEach((item) => {
+    this.lstCtietBcao031.forEach((item) => {
       this.editCache031[item.id] = {
         edit: false,
         data: { ...item },
       };
     });
-    this.lstCTietBCao032.forEach((item) => {
+    this.lstCtietBcao032.forEach((item) => {
       this.editCache032[item.id] = {
         edit: false,
         data: { ...item },
       };
     });
-    this.lstCTietBCao033.forEach((item) => {
+    this.lstCtietBcao033.forEach((item) => {
       this.editCache033[item.id] = {
         edit: false,
         data: { ...item },
@@ -1447,19 +1554,19 @@ export class BaoCaoComponent implements OnInit {
     });
   }
 
-  async saveMau03(){
-    this.lstCTietBCao03 =[];
-   await this.lstCTietBCao031.forEach(e => {
-      this.lstCTietBCao03.push(e);
+  async saveMau03() {
+    this.lstCtietBcao03 = [];
+    await this.lstCtietBcao031.forEach(e => {
+      this.lstCtietBcao03.push(e);
     })
 
-   await this.lstCTietBCao032.forEach(e => {
-      this.lstCTietBCao03.push(e);
+    await this.lstCtietBcao032.forEach(e => {
+      this.lstCtietBcao03.push(e);
     })
-   await this.lstCTietBCao033.forEach(e =>{
-      this.lstCTietBCao03.push(e);
+    await this.lstCtietBcao033.forEach(e => {
+      this.lstCtietBcao03.push(e);
     })
-    this.lstCTietBCao03.forEach(e =>{
+    this.lstCtietBcao03.forEach(e => {
       if (typeof e.id != 'number') {
         e.id = null;
       }
@@ -1471,15 +1578,15 @@ export class BaoCaoComponent implements OnInit {
   //nhóm chức năng biểu mẫu 04 --> 05 --------------------------------
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
 
-  sinhMa(): number{
+  sinhMa(): number {
     var i: number = 1;
     var kt: boolean = true;
-    while (kt){
+    while (kt) {
       var index1: number = this.listColTrongDot4an.findIndex(item => item.col == i);
       var index2: number = this.listColTrongDot4ax.findIndex(item => item.col == i);
       var index3: number = this.listColTrongDot4bx.findIndex(item => item.col == i);
       var index4: number = this.listColTrongDot05.findIndex(item => item.col == i);
-      if (index1 > -1 || index2 >-1 || index3 > -1 || index4 > -1) {
+      if (index1 > -1 || index2 > -1 || index3 > -1 || index4 > -1) {
         i++;
       } else {
         kt = false;
@@ -1488,33 +1595,33 @@ export class BaoCaoComponent implements OnInit {
     return i;
   }
 
-  addCol(){
-    var listVtu: vatTu[]=[];
+  addCol() {
+    var listVtu: vatTu[] = [];
     var colname;
-    this.listColTemp =[];
+    this.listColTemp = [];
     //loại 6
-    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
-      if (this.idVatTu == undefined ) {
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
+      if (this.idVatTu == undefined) {
         return;
-      }else{
-        var checkVtu = this.listColTrongDot4ax.findIndex(item => item.maVtu ==this.idVatTu);
-        if(checkVtu!=-1){
-            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
-            this.listColTemp = this.listColTrongDot4ax;
-            return;
+      } else {
+        var checkVtu = this.listColTrongDot4ax.findIndex(item => item.maVtu == this.idVatTu);
+        if (checkVtu != -1) {
+          this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+          this.listColTemp = this.listColTrongDot4ax;
+          return;
         }
-        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4()+'FE',
+          id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
           sl: 0,
-          col:this.sinhMa(),
+          col: this.sinhMa(),
         };
-    
+
         this.listColTrongDot4ax.push(objTrongdot);
-        this.cols4ax=0;
+        this.cols4ax = 0;
         this.cols4ax++;
         this.listColTemp = this.listColTrongDot4ax;
         this.cols = this.cols + this.cols4ax;
@@ -1525,7 +1632,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         let objLke = {
           id: null,
@@ -1533,55 +1640,55 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         this.listColTemp.forEach((e) => {
-            objTrongD.id = uuid.v4()+'FE';
-            objTrongD.maVtu= e.maVtu;
-            objTrongD.col=e.col;
-          
-            objLke.id= uuid.v4()+'FE',
-            objLke.maVtu= e.maVtu;
-            objLke.col=e.col;
+          objTrongD.id = uuid.v4() + 'FE';
+          objTrongD.maVtu = e.maVtu;
+          objTrongD.col = e.col;
+
+          objLke.id = uuid.v4() + 'FE',
+            objLke.maVtu = e.maVtu;
+          objLke.col = e.col;
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
-        this.lstCTietBaoCaoTemp.forEach( e =>{
-          if(e.listCtiet.length==0){
-            e.listCtiet=listVtu;
-          }else{
-            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
-            if(idx==-1){
+        this.lstCTietBaoCaoTemp.forEach(e => {
+          if (e.listCtiet.length == 0) {
+            e.listCtiet = listVtu;
+          } else {
+            var idx = e.listCtiet.findIndex(item => item.maVtu === this.idVatTu);
+            if (idx == -1) {
               e.listCtiet.push(objTrongD);
               e.listCtiet.push(objLke);
             }
           }
-          
-        })        
+
+        })
       }
       //loại 7
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
-      if (this.idVatTu == undefined ) {
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
+      if (this.idVatTu == undefined) {
         return;
-      }else{
-        var checkVtu = this.listColTrongDot4an.findIndex(item => item.maVtu ==this.idVatTu);
-        if(checkVtu!=-1){
-            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
-            this.listColTemp = this.listColTrongDot4an;
-            return;
+      } else {
+        var checkVtu = this.listColTrongDot4an.findIndex(item => item.maVtu == this.idVatTu);
+        if (checkVtu != -1) {
+          this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+          this.listColTemp = this.listColTrongDot4an;
+          return;
         }
-        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4()+'FE',
+          id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
           sl: 0,
-          col:this.sinhMa(),
+          col: this.sinhMa(),
         };
-    
+
         this.listColTrongDot4an.push(objTrongdot);
-        this.cols4an=0;
+        this.cols4an = 0;
         this.cols4an++;
         this.listColTemp = this.listColTrongDot4an;
         this.cols = this.cols + this.cols4an;
@@ -1592,7 +1699,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         let objLke = {
           id: null,
@@ -1600,58 +1707,58 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         this.listColTemp.forEach((e) => {
-            objTrongD.id = e.id;
-            objTrongD.maVtu= e.maVtu;
-            objTrongD.col=e.col;
-          
-            objLke.id= e.id,
-            objLke.maVtu= e.maVtu;
-            objLke.col=e.col;
+          objTrongD.id = e.id;
+          objTrongD.maVtu = e.maVtu;
+          objTrongD.col = e.col;
+
+          objLke.id = e.id,
+            objLke.maVtu = e.maVtu;
+          objLke.col = e.col;
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
-        this.lstCTietBaoCaoTemp.forEach( e =>{
-          if(e.listCtiet.length==0){
-            e.listCtiet=listVtu;
-          }else{
-            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
-            if(idx==-1){
+        this.lstCTietBaoCaoTemp.forEach(e => {
+          if (e.listCtiet.length == 0) {
+            e.listCtiet = listVtu;
+          } else {
+            var idx = e.listCtiet.findIndex(item => item.maVtu === this.idVatTu);
+            if (idx == -1) {
               e.listCtiet.push(objTrongD);
               e.listCtiet.push(objLke);
-            }else{
+            } else {
               this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
               return;
             }
           }
-          
-        })        
+
+        })
       }
       //loại 8
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
-      if (this.idVatTu == undefined ) {
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
+      if (this.idVatTu == undefined) {
         return;
-      }else{
-        var checkVtu = this.listColTrongDot4ax.findIndex(item => item.maVtu ==this.idVatTu);
-        if(checkVtu!=-1){
-            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
-            this.listColTemp = this.listColTrongDot4bx;
-            return;
+      } else {
+        var checkVtu = this.listColTrongDot4ax.findIndex(item => item.maVtu == this.idVatTu);
+        if (checkVtu != -1) {
+          this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+          this.listColTemp = this.listColTrongDot4bx;
+          return;
         }
-        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4()+'FE',
+          id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
           sl: 0,
-          col:this.sinhMa(),
+          col: this.sinhMa(),
         };
-    
+
         this.listColTrongDot4bx.push(objTrongdot);
-        this.cols4bx=0;
+        this.cols4bx = 0;
         this.cols4bx++;
         this.listColTemp = this.listColTrongDot4bx;
         this.cols = this.cols + this.cols4bx;
@@ -1662,7 +1769,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         let objLke = {
           id: null,
@@ -1670,196 +1777,196 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         this.listColTemp.forEach((e) => {
-            objTrongD.id = e.id;
-            objTrongD.maVtu= e.maVtu;
-            objTrongD.col=e.col;
-          
-            objLke.id= e.id,
-            objLke.maVtu= e.maVtu;
-            objLke.col=e.col;
+          objTrongD.id = e.id;
+          objTrongD.maVtu = e.maVtu;
+          objTrongD.col = e.col;
+
+          objLke.id = e.id,
+            objLke.maVtu = e.maVtu;
+          objLke.col = e.col;
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
-        this.lstCTietBaoCaoTemp.forEach( e =>{
-          if(e.listCtiet.length==0){
-            e.listCtiet=listVtu;
-          }else{
-            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
-            if(idx==-1){
+        this.lstCTietBaoCaoTemp.forEach(e => {
+          if (e.listCtiet.length == 0) {
+            e.listCtiet = listVtu;
+          } else {
+            var idx = e.listCtiet.findIndex(item => item.maVtu === this.idVatTu);
+            if (idx == -1) {
               e.listCtiet.push(objTrongD);
               e.listCtiet.push(objLke);
-            }else{
+            } else {
               this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
               return;
             }
           }
-          
-        })        
+
+        })
       }
       // loai 9
-    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
-      if (this.idVatTu == undefined ) {
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+      if (this.idVatTu == undefined) {
         return;
-      }else{
-        var checkVtu = this.listColTrongDot05.findIndex(item => item.maVtu ==this.idVatTu);
-        if(checkVtu!=-1){
-            this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
-            this.listColTemp = this.listColTrongDot05;
-            return;
+      } else {
+        var checkVtu = this.listColTrongDot05.findIndex(item => item.maVtu == this.idVatTu);
+        if (checkVtu != -1) {
+          this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
+          this.listColTemp = this.listColTrongDot05;
+          return;
         }
-        colname  = this.listVattu.find( (item) => item.id ==this.idVatTu).tenDm;
+        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
         let objTrongdot = {
-          id: uuid.v4()+'FE',
+          id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
           loaiMatHang: '0',
           colName: colname,
           sl: 0,
-          col:this.sinhMa(),
+          col: this.sinhMa(),
         };
-    
+
         this.listColTrongDot05.push(objTrongdot);
-        this.cols05=0;
+        this.cols05 = 0;
         this.cols05++;
         this.listColTemp = this.listColTrongDot05;
         this.cols = this.cols + this.cols05;
 
-        let objTrongD:any = {
-          id: uuid.v4()+'FE',
+        let objTrongD: any = {
+          id: uuid.v4() + 'FE',
           maVtu: null,
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
-        let objLke:any = {
-          id: uuid.v4()+'FE',
+        let objLke: any = {
+          id: uuid.v4() + 'FE',
           maVtu: null,
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:null,
+          col: null,
         };
         this.listColTemp.forEach((e) => {
-            // objTrongD.id = e.id;
-            objTrongD.maVtu= e.maVtu;
-            objTrongD.col=e.col;
-          
-            // objLke.id= e.id,
-            objLke.maVtu= e.maVtu;
-            objLke.col=e.col;
+          // objTrongD.id = e.id;
+          objTrongD.maVtu = e.maVtu;
+          objTrongD.col = e.col;
+
+          // objLke.id= e.id,
+          objLke.maVtu = e.maVtu;
+          objLke.col = e.col;
           listVtu.push(objTrongD);
           listVtu.push(objLke);
         });
-        this.lstCTietBaoCaoTemp.forEach( e =>{
-          if(e.listCtiet.length==0){
-            e.listCtiet=listVtu;
-          }else{
-            var idx = e.listCtiet.findIndex( item =>item.maVtu ===this.idVatTu);
-            if(idx==-1){
+        this.lstCTietBaoCaoTemp.forEach(e => {
+          if (e.listCtiet.length == 0) {
+            e.listCtiet = listVtu;
+          } else {
+            var idx = e.listCtiet.findIndex(item => item.maVtu === this.idVatTu);
+            if (idx == -1) {
               e.listCtiet.push(objTrongD);
               e.listCtiet.push(objLke);
-            }else{
+            } else {
               this.notification.warning(MESSAGE.WARNING, "Vật tư đã được thêm");
               return;
             }
           }
-          
-        })        
+
+        })
       }
     }
-    
+
     console.log(this.lstCTietBaoCaoTemp)
     this.updateEditCache();
   }
 
 
-  deleteCol(col: any){
-    if(this.tabSelected ==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
-      var itemCol= this.listColTrongDot4ax.find((item) => item.col==col);
-      if(itemCol?.id?.length == 36){
+  deleteCol(col: any) {
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
+      var itemCol = this.listColTrongDot4ax.find((item) => item.col == col);
+      if (itemCol?.id?.length == 36) {
         this.lstIdDeleteCols += itemCol.col + ',';
-        }
-      this.listColTrongDot4ax =  this.listColTrongDot4ax.filter(item => item.col!=col);
+      }
+      this.listColTrongDot4ax = this.listColTrongDot4ax.filter(item => item.col != col);
       this.listColTemp = this.listColTrongDot4ax;
-        this.lstCTietBaoCaoTemp.forEach(e => {
-          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        e.listCtiet = e.listCtiet.filter(item => item.col != col);
       });
       this.cols4ax = this.cols4ax - 1;
       this.cols = this.cols - 1;
-      
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
-      var itemCol= this.listColTrongDot4an.find((item) => item.col==col);
-      if(itemCol?.id?.length == 36){
+
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
+      var itemCol = this.listColTrongDot4an.find((item) => item.col == col);
+      if (itemCol?.id?.length == 36) {
         this.lstIdDeleteCols += itemCol.col + ',';
-        }
-      this.listColTrongDot4an =  this.listColTrongDot4an.filter(item => item.col!=col);
+      }
+      this.listColTrongDot4an = this.listColTrongDot4an.filter(item => item.col != col);
       this.listColTemp = this.listColTrongDot4an;
-        this.lstCTietBaoCaoTemp.forEach(e => {
-          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        e.listCtiet = e.listCtiet.filter(item => item.col != col);
       });
       this.cols4an = this.cols4an - 1;
       this.cols = this.cols - 1;
-    }else if(this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
-      var itemCol= this.listColTrongDot4bx.find((item) => item.col==col);
-      if(itemCol?.id?.length == 36){
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
+      var itemCol = this.listColTrongDot4bx.find((item) => item.col == col);
+      if (itemCol?.id?.length == 36) {
         this.lstIdDeleteCols += itemCol.col + ',';
-        }
-      this.listColTrongDot4bx =  this.listColTrongDot4bx.filter(item => item.col!=col);
+      }
+      this.listColTrongDot4bx = this.listColTrongDot4bx.filter(item => item.col != col);
       this.listColTemp = this.listColTrongDot4bx;
-        this.lstCTietBaoCaoTemp.forEach((e) => {
-          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
+      this.lstCTietBaoCaoTemp.forEach((e) => {
+        e.listCtiet = e.listCtiet.filter(item => item.col != col);
       });
       this.cols4bx = this.cols4bx - 1;
       this.cols = this.cols - 1;
-    }else if(this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
-      var itemCol= this.listColTrongDot05.find((item) => item.col==col);
-      if(itemCol?.id?.length == 36){
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+      var itemCol = this.listColTrongDot05.find((item) => item.col == col);
+      if (itemCol?.id?.length == 36) {
         this.lstIdDeleteCols += itemCol.col + ',';
-        }
-      this.listColTrongDot05 =  this.listColTrongDot05.filter(item => item.col!=col);
+      }
+      this.listColTrongDot05 = this.listColTrongDot05.filter(item => item.col != col);
       this.listColTemp = this.listColTrongDot05;
-        this.lstCTietBaoCaoTemp.forEach((e) => {
-          e.listCtiet = e.listCtiet.filter(item => item.col!=col);
+      this.lstCTietBaoCaoTemp.forEach((e) => {
+        e.listCtiet = e.listCtiet.filter(item => item.col != col);
       });
       this.cols05 = this.cols05 - 1;
       this.cols = this.cols - 1;
     }
     this.tinhTong2();
-      
+
   }
-  tinhTong(id:any){
-    let tonglstChitietVtuTrongDot=0;
-    if(this.editCache[id].data.listCtiet.length!=0){
-      this.editCache[id].data.listCtiet.forEach(e => {  
-        if(e.loaiMatHang=='0'){
-          tonglstChitietVtuTrongDot +=e.sl;
-        }   
+  tinhTong(id: any) {
+    let tonglstChitietVtuTrongDot = 0;
+    if (this.editCache[id].data.listCtiet.length != 0) {
+      this.editCache[id].data.listCtiet.forEach(e => {
+        if (e.loaiMatHang == '0') {
+          tonglstChitietVtuTrongDot += e.sl;
+        }
       })
     }
     this.editCache[id].data.trongDotTcong = this.editCache[id].data.trongDotThoc + this.editCache[id].data.trongDotGao + tonglstChitietVtuTrongDot;
-    let tonglstChitietVtuLuyke =0;
-      if(this.editCache[id].data.listCtiet.length!=0){
-        this.editCache[id].data.listCtiet.forEach(e => {
-          if(e.loaiMatHang=='1'){
-            tonglstChitietVtuLuyke +=e.sl;
-          }
-        })
-      }
-      this.editCache[id].data.luyKeTcong = this.editCache[id].data.luyKeThoc + this.editCache[id].data.luyKeGao + tonglstChitietVtuLuyke;
+    let tonglstChitietVtuLuyke = 0;
+    if (this.editCache[id].data.listCtiet.length != 0) {
+      this.editCache[id].data.listCtiet.forEach(e => {
+        if (e.loaiMatHang == '1') {
+          tonglstChitietVtuLuyke += e.sl;
+        }
+      })
+    }
+    this.editCache[id].data.luyKeTcong = this.editCache[id].data.luyKeThoc + this.editCache[id].data.luyKeGao + tonglstChitietVtuLuyke;
   }
 
-  tinhTong2(){
-    let tonglstChitietVtuTrongDot=0;
+  tinhTong2() {
+    let tonglstChitietVtuTrongDot = 0;
     let tonglstChitietVtuLuyke = 0;
-    this.lstCTietBaoCaoTemp.forEach( e =>{
+    this.lstCTietBaoCaoTemp.forEach(e => {
       e.listCtiet.forEach(el => {
-        if(e.loaiMatHang=='0'){
-          tonglstChitietVtuTrongDot+=el.sl;
-        }else{
-          tonglstChitietVtuLuyke+=el.sl;
+        if (e.loaiMatHang == '0') {
+          tonglstChitietVtuTrongDot += el.sl;
+        } else {
+          tonglstChitietVtuLuyke += el.sl;
         }
       });
       e.trongDotTcong = e.trongDotThoc + e.trongDotGao + tonglstChitietVtuTrongDot;
@@ -1875,24 +1982,24 @@ export class BaoCaoComponent implements OnInit {
     var n: number = chiSo.length - 1;
     var k: number = parseInt(chiSo[n], 10);
     if (n == 0) {
-        for (var i = 0; i < this.soLaMa.length; i++) {
-            while (k >= this.soLaMa[i].gTri) {
-                xau += this.soLaMa[i].kyTu;
-                k -= this.soLaMa[i].gTri;
-            }
+      for (var i = 0; i < this.soLaMa.length; i++) {
+        while (k >= this.soLaMa[i].gTri) {
+          xau += this.soLaMa[i].kyTu;
+          k -= this.soLaMa[i].gTri;
         }
+      }
     };
     if (n == 1) {
-        xau = chiSo[n];
+      xau = chiSo[n];
     };
     if (n == 2) {
-        xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     };
     if (n == 3) {
-        xau = String.fromCharCode(k + 96);
+      xau = String.fromCharCode(k + 96);
     }
     if (n == 4) {
-        xau = "-";
+      xau = "-";
     }
     return xau;
   }
@@ -1903,34 +2010,34 @@ export class BaoCaoComponent implements OnInit {
   }
   // lấy phần đuôi của stt 
   getTail(str: string): number {
-      return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
+    return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
   }
   //tìm vị trí cần để thêm mới
   findVt(str: string): number {
-      var start: number = this.lstCTietBaoCaoTemp.findIndex(e => e.stt == str);
-      var index: number = start;
-      for (var i = start + 1; i < this.lstCTietBaoCaoTemp.length; i++) {
-          if (this.lstCTietBaoCaoTemp[i].stt.startsWith(str)) {
-              index = i;
-          }
+    var start: number = this.lstCTietBaoCaoTemp.findIndex(e => e.stt == str);
+    var index: number = start;
+    for (var i = start + 1; i < this.lstCTietBaoCaoTemp.length; i++) {
+      if (this.lstCTietBaoCaoTemp[i].stt.startsWith(str)) {
+        index = i;
       }
-      return index;
+    }
+    return index;
   }
 
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
   replaceIndex(lstIndex: number[], heSo: number) {
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
-        var str = this.getHead(this.lstCTietBaoCaoTemp[item].stt) + "." + (this.getTail(this.lstCTietBaoCaoTemp[item].stt) + heSo).toString();
-        var nho = this.lstCTietBaoCaoTemp[item].stt;
-        this.lstCTietBaoCaoTemp.forEach(item => {
-            item.stt = item.stt.replace(nho, str);
-        })
+      var str = this.getHead(this.lstCTietBaoCaoTemp[item].stt) + "." + (this.getTail(this.lstCTietBaoCaoTemp[item].stt) + heSo).toString();
+      var nho = this.lstCTietBaoCaoTemp[item].stt;
+      this.lstCTietBaoCaoTemp.forEach(item => {
+        item.stt = item.stt.replace(nho, str);
+      })
     })
   }
 
   //thêm ngang cấp
-  addSame(id: any, initItem:ItemDataMau04a1) {
+  addSame(id: any, initItem: ItemDataMau04a1) {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.id === id); // vi tri hien tai
     var head: string = this.getHead(this.lstCTietBaoCaoTemp[index].stt); // lay phan dau cua so tt
     var tail: number = this.getTail(this.lstCTietBaoCaoTemp[index].stt); // lay phan duoi cua so tt
@@ -1938,15 +2045,15 @@ export class BaoCaoComponent implements OnInit {
     // tim cac vi tri can thay doi lai stt
     let lstIndex: number[] = [];
     for (var i = this.lstCTietBaoCaoTemp.length - 1; i > ind; i--) {
-        if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == head) {
-            lstIndex.push(i);
-        }
+      if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == head) {
+        lstIndex.push(i);
+      }
     }
 
     this.replaceIndex(lstIndex, 1);
     var listVtu: vatTu[] = [];
-    var loai:number =0;
-    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+    var loai: number = 0;
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -1954,7 +2061,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -1962,13 +2069,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=6;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+      loai = 6;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -1976,7 +2083,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -1984,13 +2091,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=7;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
+      loai = 7;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -1998,7 +2105,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2006,13 +2113,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=8;
-    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
+      loai = 8;
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2020,7 +2127,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2028,41 +2135,41 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=9;
+      loai = 9;
     }
     // them moi phan tu
     if (initItem.id) {
       let item: ItemDataMau04a1 = {
-          ...initItem,
-          stt: head + "." + (tail + 1).toString(),
-          listCtiet: listVtu,
-          maLoai: loai,
+        ...initItem,
+        stt: head + "." + (tail + 1).toString(),
+        listCtiet: listVtu,
+        maLoai: loai,
       }
       this.lstCTietBaoCaoTemp.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
-          edit: false,
-          data: { ...item }
+        edit: false,
+        data: { ...item }
       };
-  } else {
+    } else {
       let item: ItemDataMau04a1 = {
-          ...initItem,
-          id: uuid.v4()+'FE',
-          stt: head + "." + (tail + 1).toString(),
-          listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
-          listCtiet: listVtu,
-          maLoai: loai,
+        ...initItem,
+        id: uuid.v4() + 'FE',
+        stt: head + "." + (tail + 1).toString(),
+        listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
+        listCtiet: listVtu,
+        maLoai: loai,
       }
       this.lstCTietBaoCaoTemp.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
-          edit: true,
-          data: { ...item }
+        edit: true,
+        data: { ...item }
       };
-  }
+    }
     // let item: ItemDataMau04a1 = {
     //     id: uuid.v4()+'FE',
     //     stt: head + "." + (tail + 1).toString(),
@@ -2089,31 +2196,31 @@ export class BaoCaoComponent implements OnInit {
     // };
   }
 
-  // gan editCache.data == lstCTietBCao
+  // gan editCache.data == lstCtietBcaos
   updateEditCache(): void {
     this.lstCTietBaoCaoTemp.forEach(item => {
-        this.editCache[item.id] = {
-            edit: false,
-            data: { ...item }
-        };
+      this.editCache[item.id] = {
+        edit: false,
+        data: { ...item }
+      };
     });
   }
 
   //thêm cấp thấp hơn
-  addLow(id: any,initItem:ItemDataMau04a1) {
+  addLow(id: any, initItem: ItemDataMau04a1) {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.id === id); // vi tri hien tai
     //list các vị trí cần thay đôi lại stt
     let lstIndex: number[] = [];
     for (var i = this.lstCTietBaoCaoTemp.length - 1; i > index; i--) {
-        if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == this.lstCTietBaoCaoTemp[index].stt) {
-            lstIndex.push(i);
-        }
+      if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == this.lstCTietBaoCaoTemp[index].stt) {
+        lstIndex.push(i);
+      }
     }
 
     this.replaceIndex(lstIndex, 1);
     var listVtu: vatTu[] = [];
-    var loai:number =0;
-    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+    var loai: number = 0;
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2121,7 +2228,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2129,13 +2236,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=6;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+      loai = 6;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2143,7 +2250,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2151,13 +2258,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=7;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
+      loai = 7;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2165,7 +2272,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2173,13 +2280,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=8;
-    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
+      loai = 8;
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2187,7 +2294,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2195,66 +2302,66 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=9;
+      loai = 9;
     }
     // them moi phan tu
     if (initItem.id) {
       let item: ItemDataMau04a1 = {
-          ...initItem,
-          stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
-          listCtiet:listVtu,
-          maLoai:loai,
+        ...initItem,
+        stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
+        listCtiet: listVtu,
+        maLoai: loai,
       }
       this.lstCTietBaoCaoTemp.splice(index + 1, 0, item);
       this.editCache[item.id] = {
-          edit: false,
-          data: { ...item }
+        edit: false,
+        data: { ...item }
       };
-  } else {
+    } else {
       let item: ItemDataMau04a1 = {
-          ...initItem,
-          id: uuid.v4()+'FE',
-          listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
-          stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
-          listCtiet:listVtu,
-          maLoai:loai,
+        ...initItem,
+        id: uuid.v4() + 'FE',
+        listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
+        stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
+        listCtiet: listVtu,
+        maLoai: loai,
       }
       this.lstCTietBaoCaoTemp.splice(index + 1, 0, item);
 
       this.editCache[item.id] = {
-          edit: true,
-          data: { ...item }
+        edit: true,
+        data: { ...item }
       };
-  }
-  //   let item: ItemDataMau04a1 = {
-  //     id: uuid.v4()+'FE',
-  //     stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
-  //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
-  //     maNdungChi:'',
-  //     maNdungChiParent: '',
-  //     trongDotTcong: 0,
-  //     trongDotThoc: 0,
-  //     trongDotGao: 0,
-  //     luyKeTcong: 0,
-  //     luyKeThoc: 0,
-  //     luyKeGao: 0,
-  //     listCtiet:listVtu,
-  //     parentId: null,
-  //     ghiChu: '',
-  //     maLoai: loai,
-  //     checked: false,
-  // }
-  //   this.lstCTietBaoCaoTemp.splice(index + 1, 0, item);
+    }
+    //   let item: ItemDataMau04a1 = {
+    //     id: uuid.v4()+'FE',
+    //     stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
+    //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
+    //     maNdungChi:'',
+    //     maNdungChiParent: '',
+    //     trongDotTcong: 0,
+    //     trongDotThoc: 0,
+    //     trongDotGao: 0,
+    //     luyKeTcong: 0,
+    //     luyKeThoc: 0,
+    //     luyKeGao: 0,
+    //     listCtiet:listVtu,
+    //     parentId: null,
+    //     ghiChu: '',
+    //     maLoai: loai,
+    //     checked: false,
+    // }
+    //   this.lstCTietBaoCaoTemp.splice(index + 1, 0, item);
 
-  //   this.editCache[item.id] = {
-  //       edit: true,
-  //       data: { ...item }
-  //   };
+    //   this.editCache[item.id] = {
+    //       edit: true,
+    //       data: { ...item }
+    //   };
   }
 
   //xóa dòng
@@ -2262,83 +2369,83 @@ export class BaoCaoComponent implements OnInit {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.id === id); // vi tri hien tai
     var nho: string = this.lstCTietBaoCaoTemp[index].stt;
     var head: string = this.getHead(this.lstCTietBaoCaoTemp[index].stt); // lay phan dau cua so tt
-    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
-        
-         this.lstCTietBaoCaoTemp.forEach(e => {
-           if(e.stt.startsWith(nho)){
-              if(id?.length == 36){
-                this.lstIdDeleteMau04ax +=e.id+',';
-              }
-           }
-         })
-        let objectDele ={
-          maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau04ax
-        }
-       
-        this.lstDeleteCTietBCao.push(objectDele);
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
-        
-          this.lstCTietBaoCaoTemp.forEach(e => {
-            if(e.stt.startsWith(nho)){
-              if(id?.length == 36){
-                this.lstIdDeleteMau04an +=e.id+',';
-              }
-            }
-          })
-          let objectDele ={
-          maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG.toString(),
-          lstIdDelete:this.lstIdDeleteMau04an
-        }
-        
-        this.lstDeleteCTietBCao.push(objectDele);
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
-        
-          this.lstCTietBaoCaoTemp.forEach(e => {
-            if(e.stt.startsWith(nho)){
-              if(id?.length == 36){
-                this.lstIdDeleteMau04bx +=e.id+',';
-              }
-            }
-          })
-          let objectDele ={
-            maLoai:BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO.toString(),
-            lstIdDelete:this.lstIdDeleteMau04bx
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
+
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        if (e.stt.startsWith(nho)) {
+          if (id?.length == 36) {
+            this.lstIdDeleteMau04ax += e.id + ',';
           }
-        
-          this.lstDeleteCTietBCao.push(objectDele);
-    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
-        
-          this.lstCTietBaoCaoTemp.forEach(e => {
-            if(e.stt.startsWith(nho)){
-              if(id?.length == 36){
-                this.lstIdDeleteMau05 +=e.id+',';
-              }
-            }
-          })
-          let objectDele ={
-            maLoai:KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG.toString(),
-            lstIdDelete:this.lstIdDeleteMau05
+        }
+      })
+      let objectDele = {
+        maLoai: BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG.toString(),
+        lstIdDelete: this.lstIdDeleteMau04ax
+      }
+
+      this.lstDeleteCTietBCao.push(objectDele);
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
+
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        if (e.stt.startsWith(nho)) {
+          if (id?.length == 36) {
+            this.lstIdDeleteMau04an += e.id + ',';
           }
-        
-          this.lstDeleteCTietBCao.push(objectDele);
+        }
+      })
+      let objectDele = {
+        maLoai: BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG.toString(),
+        lstIdDelete: this.lstIdDeleteMau04an
+      }
+
+      this.lstDeleteCTietBCao.push(objectDele);
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
+
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        if (e.stt.startsWith(nho)) {
+          if (id?.length == 36) {
+            this.lstIdDeleteMau04bx += e.id + ',';
+          }
+        }
+      })
+      let objectDele = {
+        maLoai: BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO.toString(),
+        lstIdDelete: this.lstIdDeleteMau04bx
+      }
+
+      this.lstDeleteCTietBCao.push(objectDele);
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
+
+      this.lstCTietBaoCaoTemp.forEach(e => {
+        if (e.stt.startsWith(nho)) {
+          if (id?.length == 36) {
+            this.lstIdDeleteMau05 += e.id + ',';
+          }
+        }
+      })
+      let objectDele = {
+        maLoai: KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG.toString(),
+        lstIdDelete: this.lstIdDeleteMau05
+      }
+
+      this.lstDeleteCTietBCao.push(objectDele);
     }
-    
+
     //xóa phần tử và con của nó
     this.lstCTietBaoCaoTemp = this.lstCTietBaoCaoTemp.filter(e => !e.stt.startsWith(nho));
     //update lại số thức tự cho các phần tử cần thiết
     let lstIndex: number[] = [];
     for (var i = this.lstCTietBaoCaoTemp.length - 1; i >= index; i--) {
-        if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == head) {
-            lstIndex.push(i);
-        }
+      if (this.getHead(this.lstCTietBaoCaoTemp[i].stt) == head) {
+        lstIndex.push(i);
+      }
     }
-    
+
     this.replaceIndex(lstIndex, -1);
     //save list lại cho bao cao
-    this.baoCao?.lstBCao.forEach(item => {
-      if(Number(item.maLoai) == this.tabSelected){
-        item.lstCTietBCao = this.lstCTietBaoCaoTemp;
+    this.baoCao?.lstBcaos.forEach(item => {
+      if (item.maLoai == this.tabSelected) {
+        item.lstCtietBcaos = this.lstCTietBaoCaoTemp;
       }
     });
     this.updateEditCache();
@@ -2351,53 +2458,53 @@ export class BaoCaoComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string): void {
-      const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id);
-      if (!this.lstCTietBaoCaoTemp[index].maNdungChi) {
-          this.deleteLine(id);
-          return;
-      }
-      // lay vi tri hang minh sua
-      this.editCache[id] = {
-          data: { ...this.lstCTietBaoCaoTemp[index] },
-          edit: false
-      };
+    const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id);
+    if (!this.lstCTietBaoCaoTemp[index].maNdungChi) {
+      this.deleteLine(id);
+      return;
+    }
+    // lay vi tri hang minh sua
+    this.editCache[id] = {
+      data: { ...this.lstCTietBaoCaoTemp[index] },
+      edit: false
+    };
   }
 
   // luu thay doi
   saveEdit(id: string): void {
-      this.editCache[id].data.checked = this.lstCTietBaoCaoTemp.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-      if (this.listKhoanMuc.findIndex(e => e.idCha == this.editCache[id].data.maNdungChi) != -1) {
-        this.editCache[id].data.status = true;
-      }
-      const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id); // lay vi tri hang minh sua
-      Object.assign(this.lstCTietBaoCaoTemp[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
-      this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-      this.updateEditCache();
+    this.editCache[id].data.checked = this.lstCTietBaoCaoTemp.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcaos
+    if (this.listKhoanMuc.findIndex(e => e.idCha == this.editCache[id].data.maNdungChi) != -1) {
+      this.editCache[id].data.status = true;
+    }
+    const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id); // lay vi tri hang minh sua
+    Object.assign(this.lstCTietBaoCaoTemp[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
+    this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.updateEditCache();
   }
 
   updateChecked(id: any) {
     var data: ItemDataMau04a1 = this.lstCTietBaoCaoTemp.find(e => e.id === id);
     //đặt các phần tử con có cùng trạng thái với nó
     this.lstCTietBaoCaoTemp.forEach(item => {
-        if (item.stt.startsWith(data.stt)) {
-            item.checked = data.checked;
-        }
+      if (item.stt.startsWith(data.stt)) {
+        item.checked = data.checked;
+      }
     })
     //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
     var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.stt == this.getHead(data.stt));
     if (index == -1) {
-        this.allChecked = this.checkAllChild('0');
+      this.allChecked = this.checkAllChild('0');
     } else {
-        var nho: boolean = this.lstCTietBaoCaoTemp[index].checked;
-        while (nho != this.checkAllChild(this.lstCTietBaoCaoTemp[index].stt)) {
-            this.lstCTietBaoCaoTemp[index].checked = !nho;
-            index = this.lstCTietBaoCaoTemp.findIndex(e => e.stt == this.getHead(this.lstCTietBaoCaoTemp[index].stt));
-            if (index == -1) {
-                this.allChecked = !nho;
-                break;
-            }
-            nho = this.lstCTietBaoCaoTemp[index].checked;
+      var nho: boolean = this.lstCTietBaoCaoTemp[index].checked;
+      while (nho != this.checkAllChild(this.lstCTietBaoCaoTemp[index].stt)) {
+        this.lstCTietBaoCaoTemp[index].checked = !nho;
+        index = this.lstCTietBaoCaoTemp.findIndex(e => e.stt == this.getHead(this.lstCTietBaoCaoTemp[index].stt));
+        if (index == -1) {
+          this.allChecked = !nho;
+          break;
         }
+        nho = this.lstCTietBaoCaoTemp[index].checked;
+      }
     }
   }
 
@@ -2405,40 +2512,40 @@ export class BaoCaoComponent implements OnInit {
   checkAllChild(str: string): boolean {
     var nho: boolean = true;
     this.lstCTietBaoCaoTemp.forEach(item => {
-        if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
-            nho = item.checked;
-        }
+      if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
+        nho = item.checked;
+      }
     })
     return nho;
   }
 
 
-  updateAllChecked(){
+  updateAllChecked() {
     this.lstCTietBaoCaoTemp.forEach(item => {
-        item.checked = this.allChecked1;
+      item.checked = this.allChecked1;
     })
   }
 
   deleteAllChecked() {
-      var lstId: any[] = [];
-      this.lstCTietBaoCaoTemp.forEach(item => {
-          if (item.checked) {
-              lstId.push(item.id);
-          }
-      })
-      lstId.forEach(item => {
-          if (this.lstCTietBaoCaoTemp.findIndex(e => e.id == item) != -1) {
-              this.deleteLine(item);
-          }
-      })
-      this.allChecked1= false;
+    var lstId: any[] = [];
+    this.lstCTietBaoCaoTemp.forEach(item => {
+      if (item.checked) {
+        lstId.push(item.id);
+      }
+    })
+    lstId.forEach(item => {
+      if (this.lstCTietBaoCaoTemp.findIndex(e => e.id == item) != -1) {
+        this.deleteLine(item);
+      }
+    })
+    this.allChecked1 = false;
   }
-  
+
   //thêm phần tử đầu tiên khi bảng rỗng
-  addFirst(initItem:ItemDataMau04a1){
+  addFirst(initItem: ItemDataMau04a1) {
     var listVtu: vatTu[] = [];
-    var loai:number =0;
-    if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG){
+    var loai: number = 0;
+    if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2446,7 +2553,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2454,13 +2561,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=6;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG){
+      loai = 6;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2468,7 +2575,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2476,13 +2583,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=7;
-    }else if(this.tabSelected==BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO){
+      loai = 7;
+    } else if (this.tabSelected == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2490,7 +2597,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2498,13 +2605,13 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=8;
-    }else if(this.tabSelected==KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG){
+      loai = 8;
+    } else if (this.tabSelected == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG) {
       this.listColTemp.forEach((e) => {
         let objTrongD = {
           id: e.id,
@@ -2512,7 +2619,7 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '0',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         let objLke = {
           id: e.id,
@@ -2520,107 +2627,81 @@ export class BaoCaoComponent implements OnInit {
           loaiMatHang: '1',
           colName: null,
           sl: 0,
-          col:e.col,
+          col: e.col,
         };
         listVtu.push(objTrongD);
         listVtu.push(objLke);
       });
-      loai=9;
+      loai = 9;
     }
     if (initItem.id) {
       let item: ItemDataMau04a1 = {
-          ...initItem,
-          stt: "0.1",
-          listCtiet:listVtu,
-          maLoai:loai,
+        ...initItem,
+        stt: "0.1",
+        listCtiet: listVtu,
+        maLoai: loai,
       }
       this.lstCTietBaoCaoTemp.push(item);
       this.editCache[item.id] = {
-          edit: false,
-          data: { ...item }
+        edit: false,
+        data: { ...item }
       };
     } else {
-        let item: ItemDataMau04a1 = {
-              id: uuid.v4()+'FE',
-              stt: "0.1",
-              listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha==0),
-              maNdungChi:'',
-              maNdungChiParent: '',
-              trongDotTcong: 0,
-              trongDotThoc: 0,
-              trongDotGao: 0,
-              luyKeTcong: 0,
-              luyKeThoc: 0,
-              luyKeGao: 0,
-              listCtiet: listVtu,
-              parentId: '',
-              ghiChu:'',
-              maLoai:loai,
-              checked: false,
-              status:false,
-        }
-        this.lstCTietBaoCaoTemp.push(item);
+      let item: ItemDataMau04a1 = {
+        id: uuid.v4() + 'FE',
+        stt: "0.1",
+        listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == 0),
+        maNdungChi: '',
+        maNdungChiParent: '',
+        trongDotTcong: 0,
+        trongDotThoc: 0,
+        trongDotGao: 0,
+        luyKeTcong: 0,
+        luyKeThoc: 0,
+        luyKeGao: 0,
+        listCtiet: listVtu,
+        parentId: '',
+        ghiChu: '',
+        maLoai: loai,
+        checked: false,
+        status: false,
+      }
+      this.lstCTietBaoCaoTemp.push(item);
 
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
+      this.editCache[item.id] = {
+        edit: true,
+        data: { ...item }
+      };
     }
-    // let item: ItemDataMau04a1 = {
-    //     id: uuid.v4()+'FE',
-    //     stt: "0.1",
-    //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha==0),
-    //     maNdungChi:'',
-    //     maNdungChiParent: '',
-    //     trongDotTcong: 0,
-    //     trongDotThoc: 0,
-    //     trongDotGao: 0,
-    //     luyKeTcong: 0,
-    //     luyKeThoc: 0,
-    //     luyKeGao: 0,
-    //     listCtiet: listVtu,
-    //     parentId: '',
-    //     ghiChu:'',
-    //     maLoai:loai,
-    //     checked: false,
-    //     status:false,
-       
-    // }
-    // this.lstCTietBaoCaoTemp.push(item);
-
-    // this.editCache[item.id] = {
-    //     edit: true,
-    //     data: { ...item }
-    // };
   }
 
   sortByIndex() {
     this.lstCTietBaoCaoTemp.forEach(item => {
-        this.setDetail(item.id);
+      this.setDetail(item.id);
     })
     this.lstCTietBaoCaoTemp.sort((item1, item2) => {
-        if (item1.lstKm[0].level > item2.lstKm[0].level) {
-            return 1;
-        }
-        if (item1.lstKm[0].level < item2.lstKm[0].level) {
-            return -1;
-        }
-        if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-            return -1;
-        }
-        if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-            return 1;
-        }
-        return 0;
+      if (item1.lstKm[0].level > item2.lstKm[0].level) {
+        return 1;
+      }
+      if (item1.lstKm[0].level < item2.lstKm[0].level) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+        return 1;
+      }
+      return 0;
     });
     var lstTemp: any[] = [];
     this.lstCTietBaoCaoTemp.forEach(item => {
-        var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-        if (index == -1) {
-            lstTemp.splice(0, 0, item);
-        } else {
-            lstTemp.splice(index + 1, 0, item);
-        }
+      var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+      if (index == -1) {
+        lstTemp.splice(0, 0, item);
+      } else {
+        lstTemp.splice(index + 1, 0, item);
+      }
     })
 
     this.lstCTietBaoCaoTemp = lstTemp;
@@ -2631,36 +2712,107 @@ export class BaoCaoComponent implements OnInit {
     var parentId: number = this.listKhoanMuc.find(e => e.id == this.lstCTietBaoCaoTemp[index].maKhoanMuc).idCha;
     this.lstCTietBaoCaoTemp[index].lstKm = this.listKhoanMuc.filter(e => e.idCha == parentId);
     if (this.listKhoanMuc.findIndex(e => e.idCha === this.lstCTietBaoCaoTemp[index].maKhoanMuc) == -1) {
-        this.lstCTietBaoCaoTemp[index].status = false;
+      this.lstCTietBaoCaoTemp[index].status = false;
     } else {
-        this.lstCTietBaoCaoTemp[index].status = true;
+      this.lstCTietBaoCaoTemp[index].status = true;
     }
   }
 
   sortWithoutIndex() {
     this.lstCTietBaoCaoTemp.forEach(item => {
-        this.setDetail(item.id);
+      this.setDetail(item.id);
     })
     debugger
     var level = 0;
-    var lstCTietBCaoTemp: ItemDataMau04a1[] = this.lstCTietBaoCaoTemp;
+    var lstCtietBcaoTemp: ItemDataMau04a1[] = this.lstCTietBaoCaoTemp;
     this.lstCTietBaoCaoTemp = [];
-    var data: ItemDataMau04a1 = lstCTietBCaoTemp.find(e => e.listKhoanMuc[0].level == 0);
+    var data: ItemDataMau04a1 = lstCtietBcaoTemp.find(e => e.listKhoanMuc[0].level == 0);
     this.addFirst(data);
-    lstCTietBCaoTemp = lstCTietBCaoTemp.filter(e => e.id != data.id);
-    var lstTemp: ItemDataMau04a1[] = lstCTietBCaoTemp.filter(e => e.listKhoanMuc[0].level == level);
-    while (lstTemp.length !=0 || level == 0){
-        lstTemp.forEach(item => {
-            var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.maKhoanMuc === item.listKhoanMuc[0].idCha);
-            if (index != -1){
-                this.addLow(this.lstCTietBaoCaoTemp[index].id, item);
-            } else {
-                index = this.lstCTietBaoCaoTemp.findIndex(e => e.lstKm[0].idCha === item.listKhoanMuc[0].idCha);
-                this.addSame(this.lstCTietBaoCaoTemp[index].id, item);
-            }
-        })
-        level += 1;
-        lstTemp = lstCTietBCaoTemp.filter(e => e.listKhoanMuc[0].level == level);
+    lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
+    var lstTemp: ItemDataMau04a1[] = lstCtietBcaoTemp.filter(e => e.listKhoanMuc[0].level == level);
+    while (lstTemp.length != 0 || level == 0) {
+      lstTemp.forEach(item => {
+        var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.maKhoanMuc === item.listKhoanMuc[0].idCha);
+        if (index != -1) {
+          this.addLow(this.lstCTietBaoCaoTemp[index].id, item);
+        } else {
+          index = this.lstCTietBaoCaoTemp.findIndex(e => e.lstKm[0].idCha === item.listKhoanMuc[0].idCha);
+          this.addSame(this.lstCTietBaoCaoTemp[index].id, item);
+        }
+      })
+      level += 1;
+      lstTemp = lstCtietBcaoTemp.filter(e => e.listKhoanMuc[0].level == level);
     }
- }
+  }
+
+  getStatusAppendixName(id) {
+    const utils = new Utils();
+    return utils.getStatusAppendixName(id);
+  }
+
+  close() {
+    this.location.back();
+  }
+
+  doPrint() {
+
+  }
+
+  doCopy() {
+
+  }
+
+  //download file về máy tính
+  async downloadFileCv() {
+    if (this.baoCao?.congVan?.fileUrl) {
+      await this.quanLyVonPhiService.downloadFile(this.baoCao?.congVan?.fileUrl).toPromise().then(
+        (data) => {
+          fileSaver.saveAs(data, this.baoCao?.congVan?.fileName);
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    } else {
+      let file: any = this.fileDetail;
+      const blob = new Blob([file], { type: "application/octet-stream" });
+      fileSaver.saveAs(blob, file.name);
+    }
+  }
+
+  // before uploaf file
+  beforeUploadCV = (file: NzUploadFile): boolean => {
+    this.fileDetail = file;
+    this.baoCao.congVan = {
+      fileName: file.name,
+      fileSize: null,
+      fileUrl: null,
+    };
+    return false;
+  };
+
+  getStatusButtonOk() {
+    const utils = new Utils();
+    let checkParent = false;
+    let checkChirld = false;
+    let dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+    if (dVi && dVi.maDvi == this.userInfor.dvql) {
+      checkChirld = true;
+    }
+    if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
+      checkParent = true;
+    }
+
+    let a = this.userInfor?.roles[0]?.code;
+
+    if (this.baoCao?.trangThai == Utils.TT_BC_7 && this.userInfor?.roles[0]?.code == '3' && checkParent && this.trangThaiChiTiet == 2) {
+      this.statusBtnOk = false;
+    } else if (this.baoCao?.trangThai == Utils.TT_BC_2 && this.userInfor?.roles[0]?.code == '2' && checkChirld && this.trangThaiChiTiet == 2) {
+      this.statusBtnOk = false;
+    } else if (this.baoCao?.trangThai == Utils.TT_BC_4 && this.userInfor?.roles[0]?.code == '1' && checkChirld && this.trangThaiChiTiet == 2) {
+      this.statusBtnOk = false;
+    } else {
+      this.statusBtnOk = true;
+    }
+  }
 }

@@ -22,7 +22,7 @@ export class DanhSachCapVonComponent implements OnInit {
      khoachVons: any = [];
      maDvi!: string;
      loaiVon!: string;
-     lstCTietBCao: any = [];              // list chi tiet bao cao
+     lstCtietBcao: any = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
      id!: any;                                   // id truyen tu router
@@ -137,7 +137,7 @@ export class DanhSachCapVonComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.lstCtietBcao = data.data.lstCtietBcao;
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
@@ -152,7 +152,7 @@ export class DanhSachCapVonComponent implements OnInit {
 
      // xoa dong
      deleteById(id: any): void {
-          this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
+          this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
           if (id?.length == 36) {
                this.listIdDelete += id + ",";
           }

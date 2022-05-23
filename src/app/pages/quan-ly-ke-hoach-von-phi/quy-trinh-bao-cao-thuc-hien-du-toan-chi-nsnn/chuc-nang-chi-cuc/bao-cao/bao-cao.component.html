@@ -6,17 +6,17 @@
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th width="130px">Mã báo cáo</th>
-              <th width="175px">Báo cáo năm</th>
-              <th width="175px">Báo cáo tháng</th>
-              <th width="175px">Ngày lập</th>
-              <th width="175px">Công văn</th>
-              <th width="175px">Ngày trình duyệt</th>
-              <th width="175px">Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
-              <th width="175px">Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên
+              <th>Mã báo cáo</th>
+              <th>Báo cáo năm</th>
+              <th>Báo cáo tháng</th>
+              <th>Ngày lập</th>
+              <th>Công văn</th>
+              <th>Ngày trình duyệt</th>
+              <th>Ngày duyệt<br>(Ngày trưởng bộ phận kế toán duyệt)</th>
+              <th>Ngày phê duyệt<br>(Lãnh đạo đơn vị cấp dưới phê duyệt) cũng là ngày gửi đơn vị cấp trên
               </th>
-              <th width="175px">Ngày đơn vị cấp trên trả kết quả</th>
-              <th width>Trạng thái</th>
+              <th>Ngày đơn vị cấp trên trả kết quả</th>
+              <th>Trạng thái</th>
             </tr>
           </thead>
           <tbody>
@@ -101,13 +101,13 @@
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th nzWidth="50px">STT</th>
-              <th nzWidth="150px">Phụ lục</th>
+              <th>STT</th>
+              <th>Phụ lục</th>
               <th>Tiêu đề</th>
-              <th nzWidth="100px">Trạng thái</th>
-              <th nzWidth="100px">Giao cho</th>
-              <th nzWidth="350px">Hành động</th>
-              <th nzWidth="50px" [hidden]="status" >
+              <th>Trạng thái</th>
+              <th>Giao cho</th>
+              <th>Hành động</th>
+              <th class="th" [hidden]="status" >
                 <label [hidden]="userInfo?.username != baoCao?.nguoiTao"
                   nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                   [nzIndeterminate]="indeterminate">
@@ -116,7 +116,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of baoCao?.lstBCaos; let i = index">
+            <tr *ngFor="let item of baoCao?.lstBcaos; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{item.tenPhuLuc}}</td>
               <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/</ng-template>
@@ -186,15 +186,15 @@
 
       <!-- Table danh sách các đơn vị phụ thuộc -->
       <nz-card nzTitle="DANH SÁCH BÁO CÁO TỪ CÁC ĐƠN VỊ TRỰC THUỘC" class="mt16 flex-card p-lr16"
-        [hidden]="baoCao?.lstBCaoDviTrucThuocs?.length > 0 ? false : true">
+        [hidden]="baoCao?.lstBcaoDviTrucThuocs?.length > 0 ? false : true">
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th nzWidth="50px">STT</th>
-              <th nzWidth="150px">Đơn vị lập</th>
-              <th nzWidth="150px">Mã báo cáo</th>
-              <th nzWidth="150px">Báo cáo năm</th>
-              <th nzWidth="150px">Báo cáo tháng</th>
+              <th>STT</th>
+              <th>Đơn vị lập</th>
+              <th>Mã báo cáo</th>
+              <th>Báo cáo năm</th>
+              <th>Báo cáo tháng</th>
               <th>
                 Ngày trình duyệt<br>
                 (Ngày đơn vị cấp dưới gửi báo cáo)
@@ -213,7 +213,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of baoCao?.lstBCaoDviTrucThuocs; let i = index">
+            <tr *ngFor="let item of baoCao?.lstBcaoDviTrucThuocs; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
               <td>{{item.maBcao}}</td>
@@ -259,63 +259,65 @@
             </div>
           </div>
         </ng-template>
-        <nz-table nzBordered class="table__body">
+        <nz-table nzBordered class="table__body" [nzScroll]="{x:'5040px',y: '240px' }">
           <thead>
             <tr>
-              <th rowspan="4" nzWidth="100px">STT</th>
-              <th rowspan="4">Đơn vị - nội dung</th>
-              <th colspan="6">Kinh phí được sử dụng năm ... </th>
-              <th colspan="6">Nguồn kinh phí năm trước được chuyển sang năm ... sử dụng</th>
-              <th colspan="6">Dự toán giao, phê duyệt sử dụng nguồn kinh phí năm ...</th>
-              <th colspan="12">Giải ngân tháng báo cáo</th>
-              <th colspan="12">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng(đến hết thời gian
+              <th class="th" rowspan="4" nzWidth="50px">STT</th>
+              <th class="th" rowspan="4" nzWidth="250px">Đơn vị - nội dung</th>
+              <th class="th" colspan="6">Kinh phí được sử dụng năm ... </th>
+              <th class="th" colspan="6">Nguồn kinh phí năm trước được chuyển sang năm ... sử dụng</th>
+              <th class="th" colspan="6">Dự toán giao, phê duyệt sử dụng nguồn kinh phí năm ...</th>
+              <th class="th" colspan="12">Giải ngân tháng báo cáo</th>
+              <th class="th" colspan="12">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng(đến hết thời gian
                 chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với)</th>
-              <th rowspan="4" colspan="3" [hidden]="status"></th>
-              <th rowspan="4" [hidden]="status">
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight>
                 <label nz-checkbox [(ngModel)]="allCheckedTemp" (change)="updateAllCheckedTemp()">
                 </label>
               </th>
             </tr>
             <tr>
-              <th rowspan="3">Tổng cộng</th>
-              <th colspan="5">Trong đó</th>
-              <th rowspan="3">Tổng cộng</th>
-              <th colspan="5">Trong đó</th>
-              <th rowspan="3">Tổng cộng</th>
-              <th colspan="5">Trong đó</th>
+              <th class="th" rowspan="3">Tổng cộng</th>
+              <th class="th" colspan="5">Trong đó</th>
+              <th class="th" rowspan="3">Tổng cộng</th>
+              <th class="th" colspan="5">Trong đó</th>
+              <th class="th" rowspan="3">Tổng cộng</th>
+              <th class="th" colspan="5">Trong đó</th>
 
-              <th rowspan="2" colspan="2">Tổng cộng</th>
-              <th colspan="10">Trong đó</th>
-              <th rowspan="2" colspan="2">Tổng cộng</th>
-              <th colspan="10">Trong đó</th>
+              <th class="th" rowspan="2" colspan="2">Tổng cộng</th>
+              <th class="th" colspan="10">Trong đó</th>
+              <th class="th" rowspan="2" colspan="2">Tổng cộng</th>
+              <th class="th" colspan="10">Trong đó</th>
             </tr>
             <tr>
-              <th rowspan="2">Dự toán NSNN</th>
-              <th rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
-              <th rowspan="2">Nguồn quỹ</th>
-              <th rowspan="2">Vốn NSTT</th>
-              <th rowspan="2">Vốn CK</th>
-              <th rowspan="2">Dự toán NSNN</th>
-              <th rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
-              <th rowspan="2">Nguồn quỹ</th>
-              <th rowspan="2">Vốn NSTT</th>
-              <th rowspan="2">Vốn CK</th>
-              <th rowspan="2">Dự toán NSNN</th>
-              <th rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
-              <th rowspan="2">Nguồn quỹ</th>
-              <th rowspan="2">Vốn NSTT</th>
-              <th rowspan="2">Vốn CK</th>
+              <th class="th" rowspan="2">Dự toán NSNN</th>
+              <th class="th" rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
+              <th class="th" rowspan="2">Nguồn quỹ</th>
+              <th class="th" rowspan="2">Vốn NSTT</th>
+              <th class="th" rowspan="2">Vốn CK</th>
+              <th class="th" rowspan="2">Dự toán NSNN</th>
+              <th class="th" rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
+              <th class="th" rowspan="2">Nguồn quỹ</th>
+              <th class="th" rowspan="2">Vốn NSTT</th>
+              <th class="th" rowspan="2">Vốn CK</th>
+              <th class="th" rowspan="2">Dự toán NSNN</th>
+              <th class="th" rowspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
+              <th class="th" rowspan="2">Nguồn quỹ</th>
+              <th class="th" rowspan="2">Vốn NSTT</th>
+              <th class="th" rowspan="2">Vốn CK</th>
 
-              <th colspan="2">Dự toán NSNN</th>
-              <th colspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
-              <th colspan="2">Nguồn quỹ</th>
-              <th colspan="2">Vốn NSTT</th>
-              <th colspan="2">Vốn CK</th>
-              <th colspan="2">Dự toán NSNN</th>
-              <th colspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
-              <th colspan="2">Nguồn quỹ</th>
-              <th colspan="2">Vốn NSTT</th>
-              <th colspan="2">Vốn CK</th>
+              <th class="th" colspan="2">Dự toán NSNN</th>
+              <th class="th" colspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
+              <th class="th" colspan="2">Nguồn quỹ</th>
+              <th class="th" colspan="2">Vốn NSTT</th>
+              <th class="th" colspan="2">Vốn CK</th>
+              <th class="th" colspan="2">Dự toán NSNN</th>
+              <th class="th" colspan="2">Nguồn khác(nguồn thu SN, lệ phí hải quan...)</th>
+              <th class="th" colspan="2">Nguồn quỹ</th>
+              <th class="th" colspan="2">Vốn NSTT</th>
+              <th class="th" colspan="2">Vốn CK</th>
             </tr>
             <tr>
               <th>Cộng</th>
@@ -390,6 +392,10 @@
               <td>40</td>
               <td>41</td>
               <td>42</td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
             </tr>
             <tr *ngFor="let item of danhSachChiTietPhuLucTemp; let i = index">
               <ng-container *ngIf="!editCache[item.id].edit; else editTemplate">
@@ -448,13 +454,13 @@
                 <td>{{item.luyKeGiaiNganNsttTle}}</td>
                 <td>{{item.luyKeGiaiNganCk}}</td>
                 <td>{{item.luyKeGiaiNganCkTle}}</td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                 </td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-pencil" (click)="startEdit(item.id)"></i>
                 </td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <ng-container *ngIf="!item.status; else them">
                     <i class="fa fa-plus" (click)="addSame(item.id, null)"></i>
                   </ng-container>
@@ -466,7 +472,7 @@
                     </a>
                   </ng-template>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (change)="updateChecked(item.id)"></label>
                 </td>
@@ -673,19 +679,19 @@
                     [(ngModel)]="editCache[item.id].data.luyKeGiaiNganCkTle" (change)="changeModelPL1(item.id)">
                   </nz-input-number>
                 </td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                 </td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <a (click)="saveEdit(item.id)" class="save">Lưu</a>
                 </td>
-                <td>
+                <td [hidden]="status" nzRight>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                     (nzOnConfirm)="cancelEdit(item.id)" class="save">
                     Hủy
                   </a>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (change)="updateChecked(item.id)"></label>
                 </td>
@@ -708,20 +714,11 @@
 
       <!-- Action Table chi tiết phụ lục I -->
       <ng-template #tableCard3>
-        <!-- <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
-          <i class="fa fa-trash-o"></i>
-          <span>Xóa</span>
-        </button>
-        <button type="button" class="btn btn-main" [hidden]="this.lstCTietBCaoPL1.length!=0" [hidden]="status"
-          (click)="addLinePL1(this.lstCTietBCaoPL1.length)">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button> -->
         <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <ng-container *ngIf="danhSachChiTietPhuLucTemp.length == 0">
+        <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0">
           <button type="button" class="btn btn-main" (click)="addFirst(null)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
@@ -741,10 +738,10 @@
         <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
           <span>Not OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('4')">
+        <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('5');">
+        <button type="button" class="btn btn-main" (click)="saveAppendix('5');" [hidden]="statusBtnFinish">
           <span>Hoàn tất nhập liệu</span>
         </button>
       </ng-template>
@@ -776,119 +773,124 @@
             </div>
           </div>
         </ng-template>
-        <nz-table nzBordered class="table__body" [nzScroll]="{x: '2200px',y: '240px' }">
+
+        <nz-table nzBordered class="table__body" [nzScroll]="{x:'2700px',y: '240px' }">
           <thead>
             <tr>
-              <th rowspan="4">STT</th>
-              <th rowspan="4" nzWidth="170px">Danh mục nội dung</th>
-              <th colspan="4" nzWidth="150px">Dự toán được sử dụng trong năm</th>
-              <th colspan="8" nzWidth="150px">Giải ngân tháng báo cáo</th>
-              <th colspan="8" nzWidth="150px">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng(đến
-                hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm) </th>
-              <th colspan="3" rowspan="4" [hidden]="status"></th>
-              <th rowspan="4" [hidden]="status">
+              <th class="th" nzWidth="50px" rowspan="4">STT</th>
+              <th class="th" nzWidth="150px" rowspan="4">Danh mục nội dung</th>
+              <th class="th" colspan="4">Dự toán được sử dụng trong năm</th>
+              <th class="th" colspan="8">Giải ngân tháng báo cáo</th>
+              <th class="th" colspan="8">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo tháng<br>
+                (đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm) 
+              </th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight>
                 <label nz-checkbox [(ngModel)]="allCheckedTemp" (ngModelChange)="updateAllCheckedTemp()"
                   [nzIndeterminate]="indeterminateTemp">
                 </label>
               </th>
+              
             </tr>
             <tr class="text-title">
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Tổng cộng
               </th>
-              <th style="width: 50px" colspan="3">
+              <th class="th" colspan="3">
                 Trong đó
               </th>
-              <th style="width: 50px" rowspan="2" colspan="2">
+              <th class="th" rowspan="2" colspan="2">
                 Tổng cộng
               </th>
-              <th style="width: 50px" colspan="6">
+              <th class="th" colspan="6">
                 Trong đó
               </th>
-              <th style="width: 50px" rowspan="2" colspan="2">
+              <th class="th" rowspan="2" colspan="2">
                 Tổng cộng
               </th>
-              <th style="width: 50px" colspan="6">
+              <th class="th" colspan="6">
                 Trong đó
               </th>
             </tr>
             <tr>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Nguồn NSNN
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Nguồn thu SN
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Nguồn quỹ
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn NSNN
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn thu SN
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn quỹ
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn NSNN
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn thu SN
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Nguồn quỹ
               </th>
             </tr>
             <tr>
-              <th style="width: 50px">
+              <th>
                 Cộng
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
 
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Cộng
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
             </tr>
@@ -917,10 +919,10 @@
               <td>18</td>
               <td>19</td>
               <td>20</td>
-              <td nzRight width="2.25%" [hidden]="status"></td>
-              <td nzRight width="2.25%" [hidden]="status"></td>
-              <td nzRight width="2.25%" [hidden]="status"></td>
-              <td nzRight width="2.25%" [hidden]="status"></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
             </tr>
             <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -1125,261 +1127,260 @@
             </div>
           </div>
         </ng-template>
-        <nz-table nzBordered class="table__body">
+        <nz-table nzBordered class="table__body" [nzScroll]="{x:'5460px',y: '240px' }">
           <thead>
             <tr>
-              <th rowspan="4">STT</th>
-              <th rowspan="4" nzWidth="170px">Danh mục Dự án</th>
-              <th rowspan="4" nzWidth="170px">Địa điểm XD</th>
-              <th colspan="3" nzWidth="150px">Quyết định đầu tư</th>
-              <th colspan="5" nzWidth="150px">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch</th>
-              <th colspan="3" nzWidth="150px">Lũy kế giải ngân vốn đã bố trí đến hết năm trước năm kế hoạch</th>
-              <th colspan="3" nzWidth="150px">kế hoạch vốn đầu tư phát triển nguồn NSNN năm trước được cấp có thẩm quyền
+              <th class="th" rowspan="4" nzWidth="50px"><p>STT</p></th>
+              <th class="th" rowspan="4" nzWidth="150px">Danh mục Dự án</th>
+              <th class="th" rowspan="4" nzWidth="150px">Địa điểm XD</th>
+              <th class="th" colspan="3" nzWidth="150px">Quyết định đầu tư</th>
+              <th class="th" colspan="5">Lũy kế vốn đã bố trí đến hết năm trước năm kế hoạch</th>
+              <th class="th" colspan="3">Lũy kế giải ngân vốn đã bố trí đến hết năm trước năm kế hoạch</th>
+              <th class="th" colspan="3">kế hoạch vốn đầu tư phát triển nguồn NSNN năm trước được cấp có thẩm quyền
                 cho phép kéo dài sang năm KH(nếu có)</th>
-              <th colspan="5" nzWidth="150px">Kế hoạch năm kế hoạch</th>
-              <th rowspan="3" colspan="2" nzWidth="150px">Khối lượng thực hiện từ đầu năm đến ngày 15 của tháng báo cáo
+              <th class="th" colspan="5">Kế hoạch năm kế hoạch</th>
+              <th class="th" rowspan="3" colspan="2">Khối lượng thực hiện từ đầu năm đến ngày 15 của tháng báo cáo
               </th>
-              <th colspan="10" nzWidth="150px">Giải ngân tháng báo cáo</th>
-              <th colspan="10" nzWidth="150px">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo
+              <th class="th" colspan="10">Giải ngân tháng báo cáo</th>
+              <th class="th" colspan="10">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối với báo cáo
                 tháng(đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm) </th>
-              <th colspan="3" rowspan="2" nzWidth="150px">Tình hình thực hiện dự án</th>
-              <th rowspan="4" nzWidth="150px">Ghi chú</th>
-              <th colspan="3" rowspan="4" [hidden]="status"></th>
-              <th rowspan="4" [hidden]="status">
+              <th class="th" colspan="3" rowspan="2">Tình hình thực hiện dự án</th>
+              <th class="th" rowspan="4">Ghi chú</th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight></th>
+              <th class="th" rowspan="4" [hidden]="status" nzRight>
                 <label nz-checkbox [(ngModel)]="allCheckedTemp" (ngModelChange)="updateAllCheckedTemp()"
                   [nzIndeterminate]="indeterminateTemp">
                 </label>
               </th>
             </tr>
             <tr class="text-title">
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Số quyết định - ngày, tháng, năm ban hành
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 TMDT
               </th>
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Trong đó
               </th>
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Trong đó: NSNN
               </th>
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Tổng số
               </th>
-              <th style="width: 50px" colspan="2">
+              <th class="th" colspan="2">
                 Trong đó
               </th>
-              <th style="width: 50px" rowspan="3">
+              <th class="th" rowspan="3">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Trong đó
               </th>
-              <th style="width: 50px" colspan="2" rowspan="2">
+              <th class="th" colspan="2" rowspan="2">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Trong đó
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Tỷ lệ giải ngân
               </th>
-              <th style="width: 50px" colspan="2" rowspan="2">
+              <th class="th" colspan="2" rowspan="2">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Trong đó
               </th>
-              <th style="width: 50px" colspan="4">
+              <th class="th" colspan="4">
                 Tỷ lệ giải ngân
               </th>
             </tr>
             <!-- dong3 -->
             <tr>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Tổng số(tất cả các nguồn vốn)
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Trong đó: vốn NSNN
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn NSNN
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ngành DT
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ngành Thuế
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn SCL
               </th>
               <!--  -->
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Tổng số
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Trong đó: riêng năm trước năm KH
               </th>
               <!--  -->
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ĐTPT
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn khác
               </th>
               <!--  -->
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ĐTPT nguồn NSNN
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ngành DT
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn ngành thuế
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Vốn SCL
               </th>
               <!--  -->
-              <th style="width: 50px">
+              <th>
                 Vốn NSNN
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn ngành DT
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn ngành Thuế
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn SCL
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn NSNN
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn ngành DT
               </th>
-              <th style="width: 50px">
+              <th>
                 Vốn ngành Thuế
               </th>
-              <th style="width: 50px">
-                Vốn SCL
-              </th>
-              <!--  -->
-              <th style="width: 50px">
-                Vốn NSNN
-              </th>
-              <th style="width: 50px">
-                Vốn ngành DT
-              </th>
-              <th style="width: 50px">
-                Vốn ngành Thuế
-              </th>
-              <th style="width: 50px">
-                Vốn SCL
-              </th>
-              <th style="width: 50px">
-                Vốn NSNN
-              </th>
-              <th style="width: 50px">
-                Vốn ngành DT
-              </th>
-              <th style="width: 50px">
-                Vốn ngành Thuế
-              </th>
-              <th style="width: 50px">
+              <th>
                 Vốn SCL
               </th>
               <!--  -->
-              <th style="width: 50px" rowspan="2">
+              <th>
+                Vốn NSNN
+              </th>
+              <th>
+                Vốn ngành DT
+              </th>
+              <th>
+                Vốn ngành Thuế
+              </th>
+              <th>
+                Vốn SCL
+              </th>
+              <th>
+                Vốn NSNN
+              </th>
+              <th>
+                Vốn ngành DT
+              </th>
+              <th>
+                Vốn ngành Thuế
+              </th>
+              <th>
+                Vốn SCL
+              </th>
+              <!--  -->
+              <th class="th" rowspan="2">
                 Nội dung các công việc chủ yếu đã hoàn thành đến cuối tháng báo cáo
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Nội dung các công việc chủ yếu đang thực hiện dở dang
               </th>
-              <th style="width: 50px" rowspan="2">
+              <th class="th" rowspan="2">
                 Kế hoạch thực hiện các nội dung công việc chủ yếu các tháng còn lại của năm
               </th>
             </tr>
             <tr>
-              <th style="width: 50px">
+              <th>
                 Tổng số
               </th>
-              <th style="width: 50px">
+              <th>
                 Riêng tháng báo cáo
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Số tiền
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
-              <th style="width: 50px">
-                Tỷ lệ(%)
-              </th>
-
-              <th style="width: 50px">
-                Số tiền
-              </th>
-              <th style="width: 50px">
-                Tỷ lệ(%)
-              </th>
-              <th style="width: 50px">
-                Số tiền
-              </th>
-              <th style="width: 50px">
-                Số tiền
-              </th>
-              <th style="width: 50px">
-                Số tiền
-              </th>
-              <th style="width: 50px">
-                Số tiền
-              </th>
-              <th style="width: 50px">
-                Tỷ lệ(%)
-              </th>
-              <th style="width: 50px">
-                Tỷ lệ(%)
-              </th>
-              <th style="width: 50px">
-                Tỷ lệ(%)
-              </th>
-              <th style="width: 50px">
+              <th>
                 Tỷ lệ(%)
               </th>
 
-
-
+              <th>
+                Số tiền
+              </th>
+              <th>
+                Tỷ lệ(%)
+              </th>
+              <th>
+                Số tiền
+              </th>
+              <th>
+                Số tiền
+              </th>
+              <th>
+                Số tiền
+              </th>
+              <th>
+                Số tiền
+              </th>
+              <th>
+                Tỷ lệ(%)
+              </th>
+              <th>
+                Tỷ lệ(%)
+              </th>
+              <th>
+                Tỷ lệ(%)
+              </th>
+              <th>
+                Tỷ lệ(%)
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -1432,10 +1433,10 @@
               <td>23</td>
               <td>24</td>
               <td>25</td>
-              <td width="2.25%" [hidden]="status"></td>
-              <td width="2.25%" [hidden]="status"></td>
-              <td width="2.25%" [hidden]="status"></td>
-              <td width="2.25%" [hidden]="status"></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
+              <td [hidden]="status" nzRight></td>
             </tr>
             <tr *ngFor="let data of danhSachChiTietPhuLucTemp; let i = index">
               <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -1499,16 +1500,16 @@
                 <td>{{ data.ndungCviecDangThien }}</td>
                 <td>{{ data.khoachThienNdungCviecThangConLaiNam }}</td>
                 <td>{{ data.ghiChu }}</td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                     (ngModelChange)="updateSingleCheckedTemp()"></label>
                 </td>
@@ -1710,18 +1711,18 @@
                   <nz-input-number class="search__input" [nzSize]="'small'"
                     [(ngModel)]="editCache[data.id].data.ghiChu"></nz-input-number>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                 </td>
-                <td>
+                <td nzRight>
                   <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                     (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                 </td>
-                <td [hidden]="status">
+                <td [hidden]="status" nzRight>
                   <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                     (ngModelChange)="updateSingleCheckedTemp()"></label>
                 </td>
@@ -1749,7 +1750,7 @@
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="addLine(danhSachChiTietPhuLucTemp.length)"
+        <button type="button" class="btn btn-main" (click)="addLine(danhSachChiTietPhuLucTemp?.length)"
           [hidden]="status">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -1768,10 +1769,10 @@
         <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0',tabSelected);" [hidden]="statusBtnOk">
           <span>Not OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('4')">
+        <button type="button" class="btn btn-main" (click)="saveAppendix('4')" [hidden]="statusBtnFinish">
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="saveAppendix('5')">
+        <button type="button" class="btn btn-main" (click)="saveAppendix('5')" [hidden]="statusBtnFinish">
           <span>Hoàn tất nhập liệu</span>
         </button>
       </ng-template>
@@ -1797,10 +1798,10 @@
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
-                  <th nzWidth="50px">STT</th>
+                  <th>STT</th>
                   <th>Tên file</th>
-                  <th nzWidth="50px"></th>
-                  <th nzWidth="50px" [hidden]="status"></th>
+                  <th></th>
+                  <th class="th" [hidden]="status"></th>
                 </tr>
               </thead>
               <tbody>

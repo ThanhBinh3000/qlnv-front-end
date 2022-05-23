@@ -150,7 +150,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr *ngFor="let data of lstCTietBCao; let i = index">
+								<tr *ngFor="let data of lstCtietBcao; let i = index">
 									<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
 										<td> {{i + 1}}</td>
 										<td>
@@ -244,7 +244,7 @@
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
-					<button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)">
+					<button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm</span>
 					</button>

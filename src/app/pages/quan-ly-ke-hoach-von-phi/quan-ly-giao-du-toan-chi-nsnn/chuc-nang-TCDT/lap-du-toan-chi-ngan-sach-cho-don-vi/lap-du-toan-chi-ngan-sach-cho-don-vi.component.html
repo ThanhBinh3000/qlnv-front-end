@@ -201,7 +201,7 @@
                   <td></td>
                   <td></td>
                 </tr>
-                <tr *ngFor="let data of lstCTietBCao; let i = index">
+                <tr *ngFor="let data of lstCtietBcao; let i = index">
                   <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                     <td [nzIndentSize]="data.lstKm[0].level * 8">
                       {{ getChiMuc(data.tenLoaiKhoan)  }}
@@ -323,7 +323,7 @@
               </div>
             </div>
 
-            <nz-table [nzData]="lstCTietBCao" nzBordered class="table__body" style="width: 600px">
+            <nz-table [nzData]="lstCtietBcao" nzBordered class="table__body" style="width: 600px">
               <thead>
                 <tr>
                   <th nzWidth="50">STT</th>
@@ -356,7 +356,7 @@
                 <i class="fa fa-trash-o" ></i>
                 <span>Xóa</span>
             </button>
-            <ng-container *ngIf="lstCTietBCao.length == 0">
+            <ng-container *ngIf="lstCtietBcao.length == 0">
                 <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>

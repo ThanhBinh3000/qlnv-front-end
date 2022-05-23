@@ -261,8 +261,8 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //xoa phuong an
-  xoaPhuongAn(id:any):Observable<any>{
-    return this.httpClient.get(this.urlDefault +'/qlnv-khoachphi/pa-giao-so-kt/xoa/'+id);
+  xoaPhuongAn(id: any): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/xoa/' + id);
   }
   //xem chi tiet so giao tran chi
   getchitiettranchi(request: any): Observable<any> {
@@ -420,11 +420,7 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  // call api chức năng duyet bieu mau
-  approveBieuMau(request: any): Observable<any> {
-    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
-    // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet',request);
-  }
+
 
   // upload bao cao thuc hien du toan chi
   updateBaoCaoThucHienDTC(request: any): Observable<any> {
@@ -445,8 +441,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   //sinh đợt báo cáo 3.2.9
   sinhDotBaoCao(): Observable<any> {
-    // return this.httpClient.get('http://192.168.1.120:8094/bao-cao/lay-dot-bao-cao');
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/lay-dot-bao-cao')
+    // return this.httpClient.get('http://192.168.1.120:8094/bao-cao/sinh-dot');
+    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-dot')
   }
 
   //tim kiem giao danh sách nội dung khoản mục
@@ -543,6 +539,12 @@ export class QuanLyVonPhiService extends BaseService {
   baoCaoCapNhatChiTiet(request: any): Observable<any> {
     return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
     // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet/',request)
+  }
+
+  // call api chức năng duyet bieu mau
+  approveBieuMau(request: any): Observable<any> {
+    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
+    // return this.httpClient.put('http://192.168.1.120:8094/bao-cao/chi-tiet',request);
   }
 
 }
