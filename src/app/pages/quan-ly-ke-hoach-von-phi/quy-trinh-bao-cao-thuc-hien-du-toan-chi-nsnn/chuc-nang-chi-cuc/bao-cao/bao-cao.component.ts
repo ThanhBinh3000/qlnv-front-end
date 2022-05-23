@@ -151,7 +151,7 @@ export class BaoCaoComponent implements OnInit {
     private notifi: NzNotificationService,
     private modal: NzModalService,
     private location: Location,
-    private datePipe : DatePipe,
+    private datePipe: DatePipe,
 
   ) {
   }
@@ -200,7 +200,7 @@ export class BaoCaoComponent implements OnInit {
       this.baoCao.nguoiTao = userName;
       this.baoCao.ngayTao = new Date().toDateString();
       this.baoCao.trangThai = "1";
-      
+
     } else {
       this.maDonViTao = this.userInfo?.dvql;
       this.spinner.show();
@@ -391,6 +391,20 @@ export class BaoCaoComponent implements OnInit {
 
   // chuc nang check role
   async onSubmit(mcn: String, lyDoTuChoi: string) {
+    // let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
+    // //neu la tong hop thi luu xong trinh duyet luon
+    // if (lbc == 'tong-hop') {
+    //   this.danhSachChiTietPhuLucTemp = this.baoCao?.lstBcaos.find(item => item.maLoai == PHULUCLIST[0].maPhuLuc)?.lstCtietBcaos;
+    //   this.sortWithoutIndex();
+    //   this.baoCao?.lstBcaos.filter(item => {
+    //     item.trangThai = '5';
+    //     if (item.maLoai == PHULUCLIST[0].maPhuLuc) {
+    //       item.lstCtietBcaos = this.danhSachChiTietPhuLucTemp;
+    //     }
+    //   })
+    //   debugger
+    //   await this.save();
+    // }
     if (this.id) {
       let checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => (item.trangThai != '5' && item.trangThai != '1'));
       if (checkStatusReport != -1) {
@@ -530,7 +544,7 @@ export class BaoCaoComponent implements OnInit {
 
   // doi tab
   changeTab(maPhuLuc, trangThaiChiTiet) {
-    debugger
+
     let checkSaveEdit;
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -677,8 +691,8 @@ export class BaoCaoComponent implements OnInit {
       this.statusBtnOk = true;
     }
 
-    if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8) 
-        && roleNguoiTao == '3' && checkChirld) {
+    if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
+      && roleNguoiTao == '3' && checkChirld) {
       this.statusBtnFinish = false;
     } else {
       this.statusBtnFinish = true;
@@ -1145,7 +1159,7 @@ export class BaoCaoComponent implements OnInit {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           this.baoCao?.lstBcaos?.filter(item => {
-            if(item.maLoai == this.tabSelected){
+            if (item.maLoai == this.tabSelected) {
               item.trangThai = maChucNang;
             }
           })
@@ -1194,7 +1208,7 @@ export class BaoCaoComponent implements OnInit {
       if (item.id?.length == 38) {
         item.id = null;
       }
-      if(this.id == null){
+      if (this.id == null) {
         item.trangThai = '3'; // set trang thai phu luc la chua danh gia
       }
       item?.lstCtietBcaos.filter(data => {
@@ -1351,16 +1365,8 @@ export class BaoCaoComponent implements OnInit {
         let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
         if (lbc == 'bao-cao') {
           baoCaoTemp?.lstBcaos?.filter(item => item.lstCtietBcaos = []);
-        }else{
-          this.danhSachChiTietPhuLucTemp = baoCaoTemp?.lstBcaos.find(item => item.maLoai == PHULUCLIST[0].maPhuLuc)?.lstCtietBcaos;
-          this.sortWithoutIndex();
-          baoCaoTemp?.lstBcaos.filter(item => {
-            if(item.maLoai == PHULUCLIST[0].maPhuLuc){
-              item.lstCtietBcaos = this.danhSachChiTietPhuLucTemp;
-            }
-          })
         }
-        this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
+        await this.quanLyVonPhiService.trinhDuyetBaoCaoThucHienDTCService(baoCaoTemp).toPromise().then(
           async data => {
             if (data.statusCode == 0) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
@@ -1378,7 +1384,7 @@ export class BaoCaoComponent implements OnInit {
           },
         );
       } else {
-        this.quanLyVonPhiService.updateBaoCaoThucHienDTC(baoCaoTemp).toPromise().then(async res => {
+        await this.quanLyVonPhiService.updateBaoCaoThucHienDTC(baoCaoTemp).toPromise().then(async res => {
           if (res.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
             this.id = res.data.id
@@ -1502,7 +1508,7 @@ export class BaoCaoComponent implements OnInit {
         }
         this.trangThaiChiTiet = trangThai;
         this.baoCao?.lstBcaos?.filter(item => {
-          if(item.maLoai == maLoai){
+          if (item.maLoai == maLoai) {
             item.trangThai = trangThai;
           }
         })
@@ -1595,6 +1601,7 @@ export class BaoCaoComponent implements OnInit {
               item.tieuDe = PHULUCLIST[index].tieuDe;
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
               item.trangThai = '3';
+              item.nguoiBcao = this.userInfo.username;
             }
           })
           this.listFile = [];
@@ -2262,7 +2269,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   setDetail(id: any) {
-    debugger
+
     var index: number = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id == id);
     var parentId: number = this.lstKhoanMuc.find(e => e.id == this.danhSachChiTietPhuLucTemp[index].maNdung)?.idCha;
     this.danhSachChiTietPhuLucTemp[index].lstKm = this.lstKhoanMuc.filter(e => e.idCha == parentId);
