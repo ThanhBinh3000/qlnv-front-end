@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DATEPICKER_CONFIG, LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 @Component({
-  selector: 'app-phuong-an-khlcnt',
-  templateUrl: './phuong-an-khlcnt.component.html',
-  styleUrls: ['./phuong-an-khlcnt.component.scss']
+  selector: 'app-tong-hop-khlcnt-tongcuc-timkiem',
+  templateUrl: './html-tong-hop-khlcnt-tongcuc-timkiem.component.html',
+  styleUrls: ['./html-tong-hop-khlcnt-tongcuc-timkiem.component.scss']
 })
-export class PhuongAnKhlcntComponent implements OnInit {
+export class TongHopKhlcntTimkiemComponent implements OnInit {
   datePickerConfig = DATEPICKER_CONFIG;
   index = 0;
-  radioValue='';
   constructor() { }
 
   ngOnInit(): void {

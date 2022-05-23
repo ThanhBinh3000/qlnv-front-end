@@ -10,6 +10,9 @@ import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction'
   styleUrls: ['./tong-cuc.component.scss']
 })
 export class TongCucComponent implements OnInit {
+  lydotuchoi = false;
+  dinhkem = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -46,5 +49,22 @@ export class TongCucComponent implements OnInit {
       this.selectTabMenu('phe-duyet','Quyết định phê duyệt kế hoạch lựa chọn nhà thầu');
     }
    
+  }
+  tuchoi(): void {
+    this.lydotuchoi = true;
+  }
+  filedinhkem(): void {
+    this.dinhkem = true;
+  }
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.lydotuchoi = false;
+    this.dinhkem = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.lydotuchoi = false;
+    this.dinhkem = false;
   }
 }

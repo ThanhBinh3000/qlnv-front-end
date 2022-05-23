@@ -24,16 +24,15 @@
     <div class="main-content">
       <div nz-row [nzGutter]="24" nzJustify="center">
         <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
-          <nz-card nzTitle="Thông tin quản lý quyết định" class="mt16 flex-card p-lr16">
+          <nz-card nzTitle="Thông tin đề xuất kế hoạch lựa chọn nhà thầu" class="mt16 flex-card p-lr16">
             <div nz-row [nzGutter]="24">
-
               <!-- Căn cứ -->
               <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                 <nz-form-item>
                   <nz-form-label nzFor="">Căn cứ</nz-form-label>
                   <nz-form-control>
                     <nz-input-group [nzSuffix]="cancu">
-                      <input type="text" nz-input placeholder="Căn cứ" readonly />
+                      <input type="text" nz-input placeholder="Căn cứ" />
                     </nz-input-group>
                     <ng-template #cancu>
                       <i class="icon htvbdh_folder-open"></i>
@@ -65,17 +64,6 @@
                 </nz-form-item>
               </div>
               <!-- Ngày quyết định -->
-              <!-- Ngày hiệu lực -->
-              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
-                <nz-form-item>
-                  <nz-form-label nzFor="">Ngày hiệu lực</nz-form-label>
-                  <nz-form-control>
-                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày hiệu lực">
-                    </nz-date-picker>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <!-- Ngày hiệu lực -->
             </div>
             <div nz-row [nzGutter]="24">
               <!-- Trích yếu -->
@@ -89,24 +77,47 @@
                 </nz-form-item>
               </div>
               <!-- Trích yếu -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+                  <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Tài liệu đính kèm
+                  </button>
+                </nz-upload>
+              </div>
             </div>
             <div nz-row [nzGutter]="24">
-              <!-- Tài liệu đính kèm -->
-              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
-                <nz-form-item>
-                  <!-- <nz-form-label nzFor="">
-                  </nz-form-label> -->
-                  <nz-form-control class="mt-8">
-                    <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
-                      <button nz-button>
-                        <i nz-icon nzType="upload"></i>
-                        Tài liệu đính kèm
-                      </button>
-                    </nz-upload>
-                  </nz-form-control>
-                </nz-form-item>
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <h3 class="sup-title">
+                  Thông tin phương án tổng hợp KHLCNT trình tổng cục
+                </h3>
               </div>
-              <!-- Tài liệu đính kèm -->
+            </div>
+            <!-- Phương án trình tổng cục -->
+            <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+              <nz-form-item>
+                <nz-form-label nzFor="">Phương án trình tổng cục</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group [nzSuffix]="cancu">
+                    <input type="text" nz-input placeholder="Phương án trình tổng cục" />
+                  </nz-input-group>
+                  <ng-template #cancu>
+                    <i class="icon htvbdh_folder-open"></i>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Phương án trình tổng cục -->
+
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <div class="cangiua group-button-search">
+                  <button nz-button class="search__button--search">
+                    <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
+                    Lấy thông tin từ phương án
+                  </button>
+                </div>
+              </div>
             </div>
           </nz-card>
         </div>
@@ -120,26 +131,33 @@
               <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
                 <div nz-row [nzGutter]="24">
                   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
-
+                    <!-- <div nz-row [nzGutter]="24">
+                      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                        <h3 class="sup-title">
+                          Thông tin dự án
+                        </h3>
+                      </div>
+                    </div> -->
                     <div nz-row [nzGutter]="24">
                       <!-- Loại hàng -->
-                      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6">
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                         <nz-form-item>
                           <nz-form-label nzFor="">Loại hàng</nz-form-label>
                           <nz-form-control>
-                            <input nz-input nzValue="" readonly />
+                            <input nz-input nzValue="Thóc tẻ" readonly />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <!-- Loại hàng -->
                     </div>
                     <div nz-row [nzGutter]="24">
+
                       <!-- Hình thức lựa chọn nhà thầu -->
                       <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
                         <nz-form-item>
                           <nz-form-label nzFor="">Hình thức lựa chọn nhà thầu</nz-form-label>
                           <nz-form-control>
-                            <nz-select nzPlaceHolder="Hình thức lựa chọn nhà thầu">
+                            <nz-select nzPlaceHolder="Hình thức lựa chọn nhà thầu" nzDisabled>
                               <nz-option nzValue="loaihopdong" nzLabel="loaihopdong1"></nz-option>
                               <nz-option nzValue="loaihopdong2" nzLabel="loaihopdong2"></nz-option>
                               <nz-option nzValue="loaihopdong3" nzLabel="loaihopdong3"></nz-option>
@@ -153,7 +171,7 @@
                         <nz-form-item>
                           <nz-form-label nzFor="">Phương thức lựa chọn nhà thầu</nz-form-label>
                           <nz-form-control>
-                            <nz-select nzPlaceHolder="Phương thức lựa chọn nhà thầu">
+                            <nz-select nzPlaceHolder="Phương thức lựa chọn nhà thầu" nzDisabled>
                               <nz-option nzValue="loaihopdong" nzLabel="loaihopdong1"></nz-option>
                               <nz-option nzValue="loaihopdong2" nzLabel="loaihopdong2"></nz-option>
                               <nz-option nzValue="loaihopdong3" nzLabel="loaihopdong3"></nz-option>
@@ -167,7 +185,7 @@
                         <nz-form-item>
                           <nz-form-label nzFor="">Loại hợp đồng</nz-form-label>
                           <nz-form-control>
-                            <nz-select nzPlaceHolder="Loại hợp đồng">
+                            <nz-select nzPlaceHolder="Loại hợp đồng" nzDisabled>
                               <nz-option nzValue="loaihopdong" nzLabel="loaihopdong1"></nz-option>
                               <nz-option nzValue="loaihopdong2" nzLabel="loaihopdong2"></nz-option>
                               <nz-option nzValue="loaihopdong3" nzLabel="loaihopdong3"></nz-option>
@@ -179,9 +197,9 @@
                       <!-- Nguồn vốn -->
                       <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
                         <nz-form-item>
-                          <nz-form-label nzFor="">Nguồn vốn</nz-form-label>
+                          <nz-form-label nzFor="">Loại hợp đồng</nz-form-label>
                           <nz-form-control>
-                            <input nz-input nzValue="" readonly />
+                            <input nz-input nzValue="Ngân sách nhà nước" readonly />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -195,30 +213,34 @@
                           <nz-form-label nzFor="">Thời gian đăng thông báo mời thầu duyệt</nz-form-label>
                           <nz-form-control>
                             <nz-date-picker nzFormat="dd-MM-yyyy"
-                              nzPlaceHolder="Thời gian đăng thông báo mời thầu duyệt">
+                              nzPlaceHolder="Thời gian đăng thông báo mời thầu duyệt" [(ngModel)]="Date" nzDisabled>
                             </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <!-- Thời gian đăng thông báo mời thầu duyệt -->
+
                       <!-- Thời gian phát hành hồ sơ mời thầu duyệt -->
                       <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                         <nz-form-item>
                           <nz-form-label nzFor="">Thời gian phát hành hồ sơ mời thầu duyệt</nz-form-label>
                           <nz-form-control>
                             <nz-date-picker nzFormat="dd-MM-yyyy"
-                              nzPlaceHolder="Thời gian phát hành hồ sơ mời thầu duyệt">
+                              nzPlaceHolder="Thời gian phát hành hồ sơ mời thầu duyệt" [(ngModel)]="Date" nzDisabled>
                             </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <!-- Thời gian phát hành hồ sơ mời thầu duyệt -->
+
+
                       <!-- Thời điểm đóng thầu duyệt -->
                       <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                         <nz-form-item>
                           <nz-form-label nzFor="">Thời điểm đóng thầu duyệt</nz-form-label>
                           <nz-form-control>
-                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm đóng thầu duyệt">
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm đóng thầu duyệt"
+                              [(ngModel)]="Date" nzDisabled>
                             </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
@@ -229,55 +251,56 @@
                         <nz-form-item>
                           <nz-form-label nzFor="">Thời điểm mở thầu duyệt</nz-form-label>
                           <nz-form-control>
-                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm mở thầu duyệt">
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm mở thầu duyệt"
+                              [(ngModel)]="Date" nzDisabled>
                             </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <!-- Thời điểm mở thầu duyệt -->
-                    </div>
 
-                    <div nz-row [nzGutter]="24">
                       <!-- Thời gian hoàn thành nhập hàng duyệt -->
                       <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                         <nz-form-item>
                           <nz-form-label nzFor="">Thời gian hoàn thành nhập hàng duyệt</nz-form-label>
                           <nz-form-control>
-                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời gian hoàn thành nhập hàng duyệt">
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời gian hoàn thành nhập hàng duyệt"
+                              [(ngModel)]="Date" nzDisabled>
                             </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <!-- Thời gian hoàn thành nhập hàng duyệt -->
+
                     </div>
                   </div>
                 </div>
               </nz-tab>
               <nz-tab [nzTitle]="'Thông tin phụ luc KHLCNT cho Cục DTNN KV'" class="tt-chung__container">
-                <nz-table #borderedTable nzBordered class="nowrap" [nzFrontPagination]="false"
-                  [nzShowPagination]="false">
+                <nz-table #borderedTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
-                      <th rowspan="2" scope="col">STT</th>
+                      <th rowspan="2" scope="col" width="60px">STT</th>
                       <!-- <th width="45px">
                         <label nz-checkbox></label>
                       </th> -->
+
                       <th rowspan="2" scope="col">Cục DTNN KV</th>
-                      <th rowspan="2" scope="col">Tên dự án</th>
-                      <th rowspan="2" scope="col">Gói thầu</th>
-                      <th rowspan="2" scope="col">Số lượng (Tấn)</th>
-                      <th colspan="3" scope="col">Địa điểm nhập kho</th>
-                      <th rowspan="2" scope="col">Đơn giá (đồng/kg)</th>
-                      <th rowspan="2" scope="col">Tổng tiền đã bao gồm thuế (đồng)</th>
+                      <th rowspan="2" scope="col" width="170px">Tên dự án</th>
+                      <th rowspan="2" scope="col" width="170px">Gói thầu</th>
+                      <th rowspan="2" scope="col" width="130px">Số lượng (Tấn)</th>
+                      <th colspan="3" scope="col" width="300px">Địa điểm nhập kho</th>
+                      <th rowspan="2" scope="col" width="130px">Đơn giá (đồng/kg)</th>
+                      <th rowspan="2" scope="col" width="130px">Tổng tiền<br />bao gồm thuế (đồng)</th>
                       <th rowspan="2" scope="col">Bằng chữ</th>
-                      <th rowspan="2" scope="col">Tiêu chuẩn chất lượng</th>
-                      <th rowspan="2" scope="col">Thời gian thực hiện hợp đồng (ngày)</th>
-                      <th rowspan="2" scope="col">Hành động</th>
+                      <th rowspan="2" scope="col" width="200px">Tiêu chuẩn chất lượng</th>
+                      <th rowspan="2" scope="col" width="130px">Thời gian thực hiện<br />hợp đồng (ngày)</th>
+                      <th rowspan="2" scope="col" width="100px"></th>
                     </tr>
                     <tr>
-                      <th scope="col">Điểm kho</th>
+                      <th scope="col">Tên kho</th>
                       <th scope="col">Tên chi cục</th>
-                      <th scope="col">Địa điểm kho</th>
+                      <th scope="col">Địa điểm chi cục</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -325,8 +348,10 @@
                         </nz-form-control>
                       </td>
                       <td>
+
                       </td>
                       <td>
+
                       </td>
 
                       <td>
@@ -399,7 +424,6 @@
                   </div>
                 </div>
               </nz-tab>
-
             </nz-tabset>
             <ng-template #action>
               <!-- <div>

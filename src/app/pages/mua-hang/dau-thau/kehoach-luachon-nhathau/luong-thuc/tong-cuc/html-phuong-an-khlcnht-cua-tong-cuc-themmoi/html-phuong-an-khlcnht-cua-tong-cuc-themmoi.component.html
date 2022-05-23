@@ -1,0 +1,686 @@
+<!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tạo quyết định PD KHLCNT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix> -->
+
+<div class="contentBor luong-dau-thau-gao__body ant-form-vertical">
+  <div class="contentDetail">
+    <div class="main-content">
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+          <nz-card nzTitle="Thông tin chung của phương án trình tổng cục" class="mt16 flex-card p-lr16">
+            <div nz-row [nzGutter]="24">
+              <!-- Loại hàng -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Loại hàng</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input  nzValue="Thóc tẻ" readonly />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Loại hàng -->
+              <!-- Ngày tạo phương án -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="inDate">Ngày tạo phương án</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Từ ngày tạo phương án">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Ngày tạo phương án -->
+              <!-- Trích yếu -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <nz-form-item>
+                  <!-- nzRequired -->
+                  <nz-form-label nzFor="">Trích yếu</nz-form-label>
+                  <nz-form-control nzErrorTip="">
+                    <textarea rows="3" maxlength="1000" nz-input></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Trích yếu -->
+            </div>
+          </nz-card>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+          <div class="tab__container">
+            <nz-tabset nzType="card" class="tab__container mt-16">
+              <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
+                <div nz-row [nzGutter]="24">
+                  <div class="bg-xam" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                    <h3 class="sup-title">
+                      Thông tin đề xuất của cục
+                    </h3>
+                    <div nz-row [nzGutter]="24">
+                      <!-- Hình thức lựa chọn nhà thầu -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Hình thức lựa chọn nhà thầu
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Hinh thức lựa chọn nhà thầu" nzDisabled>
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Hình thức lựa chọn nhà thầu -->
+                      <!-- Phương thức lựa chọn nhà thầu -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Phương thức lựa chọn nhà thầu
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Phương thức lựa chọn nhà thầu" nzDisabled>
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Phương thức lựa chọn nhà thầu -->
+                      <!-- Loại hợp đồng -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Loại hợp đồng
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Loại hợp đồng" nzDisabled>
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Loại hợp đồng -->
+                      <!-- Nguồn vốn -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Nguồn vốn</nz-form-label>
+                          <nz-form-control>
+                            <input nz-input  nzValue="Thóc tẻ" readonly />
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Nguồn vốn -->
+                      <!-- Thời gian đăng thông báo mời thầu từ ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Thời gian đăng thông báo mời thầu từ ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy"
+                              nzPlaceHolder="Thời gian đăng thông báo mời thầu từ ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Thời gian đăng thông báo mời thầu từ ngày -->
+                      <!-- Đến ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Đến ngày -->
+                      <!-- Thời gian phát hành hồ sơ mời thầu từ ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Thời gian phát hành hồ sơ mời thầu từ ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy"
+                              nzPlaceHolder="Thời gian phát hành hồ sơ mời thầu từ ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Thời gian phát hành hồ sơ mời thầu từ ngày -->
+                      <!-- Đến ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Đến ngày -->
+                      <!-- Thời điểm đóng thầu từ ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Thời điểm đóng thầu từ ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm đóng thầu từ ngày"
+                              nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Thời điểm đóng thầu từ ngày -->
+                      <!-- Đến ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Đến ngày -->
+                      <!-- Thời điểm mở thầu từ ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Thời điểm mở thầu từ ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm mở thầu từ ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Thời điểm mở thầu từ ngày -->
+                      <!-- Đến ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Đến ngày -->
+                      <!-- Thời gian hoàn thành nhập hàng từ ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Thời gian hoàn thành nhập hàng từ ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời gian hoàn thành nhập hàng từ ngày"
+                              nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Thời gian hoàn thành nhập hàng từ ngày -->
+                      <!-- Đến ngày -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Đến ngày</nz-form-label>
+                          <nz-form-control>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày" nzDisabled>
+                            </nz-date-picker>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Đến ngày -->
+                    </div>
+                  </div>
+                  <div class="bg-trang" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                    <h3 class="sup-title">
+                      Thông tin phương án
+                    </h3>
+                    <div nz-row [nzGutter]="24">
+                      <!-- Hình thức lựa chọn nhà thầu -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Hình thức lựa chọn nhà thầu
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Hinh thức lựa chọn nhà thầu">
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Hình thức lựa chọn nhà thầu -->
+                      <!-- Phương thức lựa chọn nhà thầu -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Phương thức lựa chọn nhà thầu
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Phương thức lựa chọn nhà thầu">
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Phương thức lựa chọn nhà thầu -->
+                      <!-- Loại hợp đồng -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <!-- nzRequired -->
+                          <nz-form-label nzFor=" ">
+                            Loại hợp đồng
+                          </nz-form-label>
+                          <nz-form-control nzErrorTip="">
+                            <nz-select nzPlaceHolder="Loại hợp đồng">
+                              <nz-option nzValue="Hinhthuc1" nzLabel="Hinhthuc1"></nz-option>
+                              <nz-option nzValue="Hinhthuc2" nzLabel="Hinhthuc2"></nz-option>
+                              <nz-option nzValue="Hinhthuc3" nzLabel="Hinhthuc3"></nz-option>
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Loại hợp đồng -->
+                      <!-- Nguồn vốn -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <nz-form-item>
+                          <nz-form-label nzFor="">Nguồn vốn</nz-form-label>
+                          <nz-form-control>
+                            <input nz-input  nzValue="Thóc tẻ" readonly />
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <!-- Nguồn vốn -->
+                      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                        <div nz-row [nzGutter]="24">
+                          <!-- Thời gian đăng thông báo mời thầu -->
+                          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                            <nz-form-item>
+                              <nz-form-label nzFor="">Thời gian đăng thông báo mời thầu</nz-form-label>
+                              <nz-form-control>
+                                <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời gian đăng thông báo mời thầu">
+                                </nz-date-picker>
+                              </nz-form-control>
+                            </nz-form-item>
+                          </div>
+                          <!-- Thời gian đăng thông báo mời thầu-->
+                        </div>
+                        <div nz-row [nzGutter]="24">
+                          <!-- Thời gian phát hành hồ sơ mời thầu -->
+                          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                            <nz-form-item>
+                              <nz-form-label nzFor="">Thời gian phát hành hồ sơ mời thầu</nz-form-label>
+                              <nz-form-control>
+                                <nz-date-picker nzFormat="dd-MM-yyyy"
+                                  nzPlaceHolder="Thời gian phát hành hồ sơ mời thầu">
+                                </nz-date-picker>
+                              </nz-form-control>
+                            </nz-form-item>
+                          </div>
+                          <!-- Thời gian phát hành hồ sơ mời thầu -->
+                        </div>
+                        <div nz-row [nzGutter]="24">
+                          <!-- Thời điểm đóng thầu -->
+                          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                            <nz-form-item>
+                              <nz-form-label nzFor="">Thời điểm đóng thầu</nz-form-label>
+                              <nz-form-control>
+                                <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm đóng thầu">
+                                </nz-date-picker>
+                              </nz-form-control>
+                            </nz-form-item>
+                          </div>
+                          <!-- Thời điểm đóng thầu -->
+                        </div>
+                        <div nz-row [nzGutter]="24">
+                          <!-- Thời điểm mở thầu -->
+                          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                            <nz-form-item>
+                              <nz-form-label nzFor="">Thời điểm mở thầu</nz-form-label>
+                              <nz-form-control>
+                                <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời điểm mở thầu">
+                                </nz-date-picker>
+                              </nz-form-control>
+                            </nz-form-item>
+                          </div>
+                          <!-- Thời điểm mở thầu -->
+                        </div>
+                        <div nz-row [nzGutter]="24">
+                          <!-- Thời gian hoàn thành nhập hàng -->
+                          <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                            <nz-form-item>
+                              <nz-form-label nzFor="">Thời gian hoàn thành nhập hàng</nz-form-label>
+                              <nz-form-control>
+                                <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Thời gian hoàn thành nhập hàng">
+                                </nz-date-picker>
+                              </nz-form-control>
+                            </nz-form-item>
+                          </div>
+                          <!-- Thời gian hoàn thành nhập hàng -->
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </nz-tab>
+              <nz-tab [nzTitle]="'Thông tin phụ lục KHLCNT cho các Cục DTNN KV'" class="tt-chung__container">
+                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th width="60px">STT</th>
+                      <!-- <th width="45px">
+                        <label nz-checkbox></label>
+                      </th> -->
+                      <th width="130px">Cục DTNN KV</th>
+                      <th width="175px">Số gói thầu</th>
+                      <th width="">
+                        Số đề xuất
+                      </th>
+                      <th width="175px">Ngày đề xuất</th>
+                      <th width="175px">Tên dự án</th>
+                      <th width="175px">Số lượng (Tấn)</th>
+                      <th width="175px">Đơn giá (đồng)</th>
+                      <th width="" class="text-center">Tổng tiền gồm thuế (đồng)</th>
+                      <th width="130px" class="text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        1
+                      </td>
+                      <!-- <td>
+                        <label nz-checkbox></label>
+                      </td> -->
+                      <td>
+                        Cục DTNN KV Vĩnh phú
+                      </td>
+                      <td>
+                        4
+                      </td>
+                      <td>
+                        DX_KHCNT_01
+                      </td>
+                      <td>
+                        10/03/2022
+                      </td>
+                      <td>
+                        Mua gạo dự trữ A
+                      </td>
+                      <td>
+                        2000
+                      </td>
+                      <td>
+                        2000
+                      </td>
+                      <td>
+                        2000
+                      </td>
+
+                      <td class="text-center">
+                        <a (click)="showModal()">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a>
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+                <div class="tab-content tab-menu">
+                  <div class="tab-pane fade show active justify-content-between">
+                    <div class="trai">
+                    </div>
+                    <div class="canphai">
+                      <!-- begin phân trang  -->
+                      <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="50">
+                      </nz-pagination>
+                      <!-- end phân trang  -->
+                    </div>
+                  </div>
+                </div>
+              </nz-tab>
+            </nz-tabset>
+            <!-- <div class="action">
+              <button type="button" class="btn btn-main">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Thêm</span>
+              </button>
+              <button type="button" class="btn btn-sub">
+                <i class="icon htvbdh_chuyen-xu-ly"></i>
+                <span>Export</span>
+              </button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <!-- Trích yếu -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="ghichu">
+          <nz-form-item>
+            <!-- nzRequired -->
+            <nz-form-label nzFor="">* Ghi chú</nz-form-label>
+            <nz-form-control nzErrorTip="">
+              <textarea rows="3" maxlength="1000" nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- Trích yếu -->
+      </div>
+    </div>
+  </div>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzWidth="1200px" nzTitle="Thông tin phụ lục KH LNCT cho các Cục DTNN KV"
+  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="24">
+      <!-- Cục DTNN KV -->
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+        <nz-form-item>
+          <nz-form-label nzFor="">Cục DTNN KV</nz-form-label>
+          <nz-form-control>
+            <input nz-input  nzValue="Cục DTNN KV Vĩnh phú" readonly />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Cục DTNN KV -->
+    </div>
+    <div nz-row [nzGutter]="24">
+      <!-- Tên dự án-->
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label nzFor="">Tên dự án</nz-form-label>
+          <nz-form-control>
+            <input nz-input  nzValue="Tên dự án" readonly />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Tên dự án -->
+    </div>
+    <div nz-row [nzGutter]="24" class="mt-12">
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-card nzTitle="DANH SÁCH CHỈ TIÊU KẾ HOẠCH NĂM TỔNG CỤC GIAO" [nzExtra]="tableCard1"
+          class="mt16 flex-card p-lr16">
+          <nz-table #borderedTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th rowspan="2" scope="col">STT</th>
+                <th rowspan="2" scope="col">Gói thầu</th>
+                <th colspan="3" scope="col">Địa điểm nhập kho</th>
+                <th rowspan="2" scope="col">Số lượng (tấn)</th>
+                <th rowspan="2" scope="col">
+                  Nguồn vốn
+                </th>
+                <th rowspan="2" scope="col">
+                  Đơn giá gồm <br />
+                  VAT (đồng/kg)
+                </th>
+                <th rowspan="2" scope="col">
+                  Thành tiền (đồng)
+                </th>
+                <th rowspan="2" scope="col">
+                </th>
+              </tr>
+              <tr>
+                <th scope="col">Điểm kho</th>
+                <th scope="col">Tên chi cục</th>
+                <th scope="col">Địa điểm kho</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="edit-td">
+                <td>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                  <nz-form-control>
+                    <input nz-input nzValue="" />
+                  </nz-form-control>
+                </td>
+                <td>
+                </td>
+                <td class="text-center">
+                  <a>
+                    <i class="icon htvbdh_checkmark"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td class="text-center">
+                  <a>
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+          <div class="tab-content tab-menu">
+            <div class="tab-pane fade show active justify-content-between">
+              <div class="trai">
+
+              </div>
+              <div class="canphai">
+                <!-- begin phân trang  -->
+                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="50">
+                </nz-pagination>
+                <!-- end phân trang  -->
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #tableCard1>
+          <!-- <button type="button" class="btn btn-main">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
+          </button> -->
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <div *nzModalFooter class="m-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleOk()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Hủy</span>
+        </a> -->
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Đóng</span>
+        </a>
+
+      </div>
+    </div>
+
+
+  </div>
+
+</nz-modal>

@@ -22,50 +22,111 @@
                 </nz-form-item>
               </div>
               <!-- Năm kế hoạch -->
-              <!-- Loại hàng -->
-              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
-                <nz-form-item>
-                  <nz-form-label nzFor="">Loại hàng</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input nzValue="" readonly />
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <!-- Loại hàng -->
             </div>
             <div nz-row [nzGutter]="24">
-              <!-- Số Quyết định -->
+              <!-- Số đề xuất -->
               <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                 <nz-form-item>
-                  <nz-form-label nzFor="">Số Quyết định</nz-form-label>
+                  <nz-form-label nzFor="">Số đề xuất</nz-form-label>
                   <nz-form-control>
-                    <input nz-input nzValue="" />
+                    <input nz-input  nzValue="123" />
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <!-- Số Quyết định -->
-              <!-- Từ ngày QĐ -->
+              <!-- Số đề xuất -->
+
+              <!-- Ngày ký từ ngày -->
               <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                 <nz-form-item>
-                  <nz-form-label nzFor="">Từ ngày QĐ</nz-form-label>
+                  <nz-form-label nzFor="">Ngày ký từ ngày</nz-form-label>
                   <nz-form-control>
-                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Từ ngày QĐ">
+                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày ký từ ngày">
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <!-- Từ ngày QĐ -->
-              <!-- Đến ngày QĐ -->
+              <!-- Ngày ký từ ngày -->
+
+              <!-- Đến ngày -->
               <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
                 <nz-form-item>
-                  <nz-form-label nzFor="">Đến ngày QĐ</nz-form-label>
+                  <nz-form-label nzFor="inDate">Đến ngày</nz-form-label>
                   <nz-form-control>
-                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày QĐ">
+                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày">
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <!-- Đến ngày QĐ -->
+              <!-- Đến ngày -->
+            </div>
+            <div nz-row [nzGutter]="24">
+              <!-- Trích yếu -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <nz-form-item>
+                  <!-- nzRequired -->
+                  <nz-form-label nzFor="">Trích yếu</nz-form-label>
+                  <nz-form-control nzErrorTip="">
+                    <textarea rows="3" maxlength="1000" nz-input></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Trích yếu -->
+            </div>
+            <div nz-row [nzGutter]="24">
+              <!-- QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                <nz-form-item>
+                  <!-- nzRequired -->
+                  <nz-form-label nzFor=" ">
+                    QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu
+                  </nz-form-label>
+                  <nz-form-control nzErrorTip="">
+                    <nz-select nzPlaceHolder="QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu">
+                      <nz-option nzValue="qd1" nzLabel="QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu1"></nz-option>
+                      <nz-option nzValue="qd2" nzLabel="QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu2"></nz-option>
+                      <nz-option nzValue="qd3" nzLabel="QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu3"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- QĐ giao chỉ tiêu/diều chỉnh giao chỉ tiêu -->
+
+              <!-- Ngày ký từ ngày -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Ngày ký từ ngày</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày ký từ ngày">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Ngày ký từ ngày -->
+
+              <!-- Đến ngày -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="inDate">Đến ngày</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker nzFormat="dd-MM-yyyy" nzPlaceHolder="Đến ngày">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Đến ngày -->
+            </div>
+            <div nz-row [nzGutter]="24">
+              <!-- Trích yếu quyết định -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+                <nz-form-item>
+                  <!-- nzRequired -->
+                  <nz-form-label nzFor="">Trích yếu quyết định</nz-form-label>
+                  <nz-form-control nzErrorTip="">
+                    <textarea rows="3" maxlength="1000" nz-input></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Trích yếu quyết định -->
             </div>
             <div nz-row [nzGutter]="24">
               <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
@@ -86,7 +147,8 @@
       </div>
       <div nz-row [nzGutter]="24" nzJustify="center">
         <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
-          <nz-card nzTitle="Danh sách QĐ phê duyệt KH LCNT" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+          <nz-card nzTitle="Danh sách đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
+            class="mt16 flex-card p-lr16">
             <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
               <thead>
                 <tr>
@@ -94,20 +156,13 @@
                   <th width="45px">
                     <label nz-checkbox></label>
                   </th>
-                  <th width="100px">Số QĐ ĐC</th>
-                  <th width="130px">Ngày QĐ ĐC</th>
+                  <th width="130px">Số đề xuất</th>
+                  <th width="175px">Ngày ký</th>
                   <th width="">
                     Trích yếu
                   </th>
-                  <th width="130px">Năm kế hoạch</th>
-                  <th width="130px">Số QĐ phê duyệt KHLCNT</th>
-                  <th width="130px">Loại hàng</th>
-                  <th width="130px">Tiêu chuẩn CL</th>
-                  <th width="130px">Nguồn vốn</th>
-                  <th width="130px">Hình thức LCNT</th>
-                  <th width="130px">Phương thức LCNT</th>
-                  <th width="130px">Loại hợp đồng</th>
-                  <th width="130px">Trạng thái</th>
+                  <th width="175px">Năm kế hoạch</th>
+                  <th width="175px">Trạng thái</th>
                   <th width="130px" class="text-center"></th>
                 </tr>
               </thead>
@@ -129,26 +184,9 @@
                   </td>
                   <td>
                   </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
                   <td class="text-center">
                     <a>
                       <i class="fa fa-pencil"></i>
-                    </a>
-                    <a>
-                      <i class="icon htvbdh_da-xu-ly"></i>
                     </a>
                     <a>
                       <i class="fa fa-trash-o do"></i>
@@ -183,6 +221,8 @@
           </ng-template>
         </div>
       </div>
+
+
     </div>
   </div>
 </div>

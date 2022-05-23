@@ -1,0 +1,175 @@
+<!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+
+      </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tạo quyết định PD KHLCNT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix> -->
+
+<div class="contentBor luong-dau-thau-gao__body ant-form-vertical">
+  <div class="contentDetail">
+    <div class="main-content">
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+          <nz-card nzTitle="Thông tin đấu thầu" class="mt16 flex-card p-lr16">
+            <div nz-row [nzGutter]="24">
+              <!-- Quyết định phê duyệt KHLCNT -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Quyết định phê duyệt KHLCNT</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-group [nzSuffix]="cancu">
+                      <input type="text" nz-input placeholder="Quyết định phê duyệt KHLCNT" />
+                    </nz-input-group>
+                    <ng-template #cancu>
+                      <i class="icon htvbdh_folder-open"></i>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Quyết định phê duyệt KHLCNT -->
+              <!-- Mã đơn vị -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Mã đơn vị</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-group [nzSuffix]="cancu">
+                      <input type="text" nz-input placeholder="Mã đơn vị" />
+                    </nz-input-group>
+                    <ng-template #cancu>
+                      <i class="icon htvbdh_folder-open"></i>
+                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Mã đơn vị -->
+              <!-- Tên đơn vị -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Tên đơn vị</nz-form-label>
+                  <nz-form-control>
+                    <input type="text" nz-input placeholder="Tên đơn vị" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Tên đơn vị -->
+            </div>
+            <div nz-row [nzGutter]="24">
+              <!-- Loại hàng hóa -->
+              <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+                <nz-form-item>
+                  <nz-form-label nzFor="">Loại hàng hóa</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input nzValue="Thóc tẻ" readonly />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <!-- Loại hàng hóa -->
+            </div>
+          </nz-card>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+          <nz-card nzTitle="Danh sách gói thầu" [nzExtra]="tableCard1" class="mt16 flex-card p-lr16">
+            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <!-- <th width="45px">
+                    <label nz-checkbox></label>
+                  </th> -->
+                  <th width="200px">Tên gói thầu</th>
+                  <th width="">Tiêu chuẩn chất lượng</th>
+                  <th width="130px">Số lượng</th>
+                  <th width="175px">
+                    Đơn giá (đồng/kg)
+                  </th>
+                  <th width="200px">Tổng tiền đã bao gồm thuế (đồng)</th>
+                  <th width="100px" class="text-center"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    1
+                  </td>
+                  <!-- <td>
+                    <label nz-checkbox></label>
+                  </td> -->
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td class="text-center">
+                    <a>
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <div class="tab-content tab-menu">
+              <div class="tab-pane fade show active justify-content-between">
+                <div class="trai">
+
+                </div>
+                <div class="canphai">
+                  <!-- begin phân trang  -->
+                  <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="50">
+                  </nz-pagination>
+                  <!-- end phân trang  -->
+                </div>
+              </div>
+            </div>
+          </nz-card>
+          <ng-template #tableCard1>
+            <!-- <button type="button" class="btn btn-main">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button> -->
+          </ng-template>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" nzJustify="center">
+        <!-- Ghi chú -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="ghichu">
+          <nz-form-item>
+            <!-- nzRequired -->
+            <nz-form-label nzFor="">* Ghi chú</nz-form-label>
+            <nz-form-control nzErrorTip="">
+              <textarea rows="3" maxlength="1000" nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- Ghi chú -->
+      </div>
+    </div>
+  </div>
+</div>
