@@ -922,7 +922,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lt.stt = i + 1;
           }
         });
-        this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+        this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
         this.loadData();
       },
     });
@@ -2402,6 +2402,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
       (x) => x.id !== data.id,
     );
+    this.thongTinChiTieuKeHoachNam.fileDinhKemReqs = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.filter(
+      (x) => x.id !== data.id,
+    );
+
   }
   deleteCanCuTag(data: any) {
     this.canCuList = this.canCuList.filter((x) => x.id !== data.id);

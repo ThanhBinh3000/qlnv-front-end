@@ -47,6 +47,6 @@ export class ChiTietNhapTheoPhuongThucDauThauComponent implements OnInit {
   selectTabMenu(tab, title) {
     this.selectedTab = tab;
     this.title = title;
-    this.router.navigate(['/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' + this.loaiVthh + '/chi-tiet/' + this.route.snapshot.paramMap.get('id') + '/' + tab]);
+    // this.router.navigate(['/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' + this.routerVthh + '/chi-tiet/' + this.route.snapshot.paramMap.get('id') + '/' + tab]);
   }
 }

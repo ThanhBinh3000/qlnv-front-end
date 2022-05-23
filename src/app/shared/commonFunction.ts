@@ -1,4 +1,5 @@
 import { LOAI_HANG_DTQG, TEN_HANG_DTQG } from "../constants/config";
+import VNnum2words from 'vn-num2words';
 
 export function convertTrangThai(status: string): string {
   if (status == '00') {
@@ -76,6 +77,11 @@ export function convertVthhToId(ten: string) {
       break;
   }
   return idConvert;
+}
+
+
+export function convertTienTobangChu(tien: number): string {
+  return VNnum2words(tien);
 }
 
 // public static final String TAO_MOI = "00";
