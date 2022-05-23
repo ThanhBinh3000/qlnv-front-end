@@ -136,32 +136,32 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 
 export const PHU_LUC = [
 	{
-		id: '28',
+		id: '13',
 		tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm',
 		tenPl: 'Biểu mẫu số 13',
 		status: false,
 	},
 	{
-		id: '17',
+		id: '14',
 		tenDm: 'Tổng hợp nhu cầu chi đầu tư phát triển giai đoạn 3 năm',
 		tenPl: 'Biểu mẫu số 14',
 		status: false,
 	},
 
 	{
-		id: '29',
+		id: '16',
 		tenDm: 'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm',
 		tenPl: 'Biểu mẫu số 16',
 		status: false,
 	},
 	{
-		id: '30',
+		id: '17',
 		tenDm: 'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm',
 		tenPl: 'Biểu mẫu số 17',
 		status: false,
 	},
 	{
-		id: '31',
+		id: '18',
 		tenDm: 'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm',
 		tenPl: 'Biểu mẫu số 18',
 		status: false,

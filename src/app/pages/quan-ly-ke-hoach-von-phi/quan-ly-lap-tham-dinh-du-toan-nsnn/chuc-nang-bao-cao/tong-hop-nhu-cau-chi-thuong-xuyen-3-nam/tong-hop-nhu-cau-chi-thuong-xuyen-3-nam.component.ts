@@ -21,16 +21,16 @@ export class ItemData {
     lstNdung: any[];
     status: boolean;
     maNdung!: number;
-    namHhanhN!: number;
+    thNamHienHanhN1!: number;
+    tranChiN!: number;
+    ncauChiN!: number;
+    clechTranChiVsNcauChiN: number;
     tranChiN1!: number;
     ncauChiN1!: number;
     clechTranChiVsNcauChiN1: number;
     tranChiN2!: number;
     ncauChiN2!: number;
     clechTranChiVsNcauChiN2: number;
-    tranChiN3!: number;
-    ncauChiN3!: number;
-    clechTranChiVsNcauChiN3: number;
     checked!: boolean;
 }
 
@@ -44,7 +44,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
     //danh muc
     donVis: any = [];
     noiDungs: any[] = NOI_DUNG;
-    lstCTietBCao: ItemData[];
+    lstCTietBCao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     //thong tin chung
@@ -54,21 +54,21 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         lstNdung: [],
         status: false,
         maNdung: 0,
-        namHhanhN: 0,
+        thNamHienHanhN1: 0,
+        tranChiN: 0,
+        ncauChiN: 0,
+        clechTranChiVsNcauChiN: 0,
         tranChiN1: 0,
         ncauChiN1: 0,
         clechTranChiVsNcauChiN1: 0,
         tranChiN2: 0,
         ncauChiN2: 0,
         clechTranChiVsNcauChiN2: 0,
-        tranChiN3: 0,
-        ncauChiN3: 0,
-        clechTranChiVsNcauChiN3: 0,
         checked: false,
     };
 
-    namBcao: any;
-    maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N;
+    namHienHanh: number;
+    maLoaiBaoCao: string = "16";
     thuyetMinh: string;
     maDviTien: any;
     listIdDelete: string = "";
@@ -95,8 +95,9 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
 
     async ngOnInit() {
-
-        this.lstCTietBCao = this.data?.lstCTiet;
+        this.namHienHanh = this.data.namHienHanh;
+        this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
+        console.log(this.lstCTietBCao);
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(
@@ -465,9 +466,9 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
+        this.editCache[id].data.clechTranChiVsNcauChiN = this.editCache[id].data.ncauChiN - this.editCache[id].data.tranChiN;
         this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.ncauChiN1 - this.editCache[id].data.tranChiN1;
         this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.ncauChiN2 - this.editCache[id].data.tranChiN2;
-        this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.ncauChiN3 - this.editCache[id].data.tranChiN3;
     }
 
 }

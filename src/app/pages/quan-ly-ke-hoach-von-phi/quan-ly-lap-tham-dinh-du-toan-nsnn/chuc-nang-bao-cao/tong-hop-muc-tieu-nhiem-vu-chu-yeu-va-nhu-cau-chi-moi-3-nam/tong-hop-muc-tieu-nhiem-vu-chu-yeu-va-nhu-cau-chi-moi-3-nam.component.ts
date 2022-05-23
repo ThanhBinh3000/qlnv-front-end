@@ -25,15 +25,15 @@ export class ItemData {
     csPhapLyThien: number;
     hdongChuYeu: number;
     nguonKphi: number;
-    tongSo: number;
-    chiCs: number;
-    chiMoi: number;
-    dtuPtrien: number;
-    dtuPtrienChiCs!: number;
-    dtuPtrienChiMoi!: number;
-    chiTx: number;
-    chiTxChiCs!: number;
-    chiTxChiMoi!: number;
+    ncauChiTongSo: number;
+    ncauChiTrongDoChiCs: number;
+    ncauChiTrongDoChiMoi: number;
+    ncauChiChiaRaDtuPtrien: number;
+    ncauChiChiaRaChiCs1!: number;
+    ncauChiChiaRaChiMoi1!: number;
+    ncauChiChiaRaChiTx: number;
+    ncauChiChiaRaChiCs2!: number;
+    ncauChiChiaRaChiMoi2!: number;
     checked!: boolean;
 }
 
@@ -62,18 +62,18 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         csPhapLyThien: 0,
         hdongChuYeu: 0,
         nguonKphi: 0,
-        tongSo: 0,
-        chiCs: 0,
-        chiMoi: 0,
-        dtuPtrien: 0,
-        dtuPtrienChiCs: 0,
-        dtuPtrienChiMoi: 0,
-        chiTx: 0,
-        chiTxChiCs: 0,
-        chiTxChiMoi: 0,
+        ncauChiTongSo: 0,
+        ncauChiTrongDoChiCs: 0,
+        ncauChiTrongDoChiMoi: 0,
+        ncauChiChiaRaDtuPtrien: 0,
+        ncauChiChiaRaChiCs1: 0,
+        ncauChiChiaRaChiMoi1: 0,
+        ncauChiChiaRaChiTx: 0,
+        ncauChiChiaRaChiCs2: 0,
+        ncauChiChiaRaChiMoi2: 0,
         checked: false,
     };
-    namBcao: any;
+    namHienHanh: number;
     maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N;
     thuyetMinh: string;
     maDviTien: any;
@@ -101,8 +101,8 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     async ngOnInit() {
-
-        this.lstCTietBCao = this.data?.lstCTiet;
+        this.namHienHanh = this.data?.namHienHanh;
+        this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(
@@ -472,11 +472,11 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     changeModel(id: string): void {
-        this.editCache[id].data.tongSo = Number(this.editCache[id].data.dtuPtrienChiCs) + Number(this.editCache[id].data.chiTxChiCs) + Number(this.editCache[id].data.dtuPtrienChiMoi) + Number(this.editCache[id].data.chiTxChiMoi);
-        this.editCache[id].data.chiCs = Number(this.editCache[id].data.dtuPtrienChiCs) + Number(this.editCache[id].data.chiTxChiCs);
-        this.editCache[id].data.chiMoi = Number(this.editCache[id].data.dtuPtrienChiMoi) + Number(this.editCache[id].data.chiTxChiMoi);
-        this.editCache[id].data.dtuPtrien = Number(this.editCache[id].data.dtuPtrienChiCs) + Number(this.editCache[id].data.dtuPtrienChiMoi);
-        this.editCache[id].data.chiTx = Number(this.editCache[id].data.chiTxChiCs) + Number(this.editCache[id].data.chiTxChiMoi);
+        this.editCache[id].data.ncauChiTongSo = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
+        this.editCache[id].data.ncauChiTrongDoChiCs = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2);
+        this.editCache[id].data.ncauChiTrongDoChiMoi = Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
+        this.editCache[id].data.ncauChiChiaRaDtuPtrien = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1);
+        this.editCache[id].data.ncauChiChiaRaChiTx = Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
     }
 
 }

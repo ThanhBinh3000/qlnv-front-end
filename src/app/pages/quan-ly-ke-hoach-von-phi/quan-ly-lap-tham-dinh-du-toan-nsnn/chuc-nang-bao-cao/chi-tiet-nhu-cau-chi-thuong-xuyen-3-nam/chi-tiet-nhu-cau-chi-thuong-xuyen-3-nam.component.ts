@@ -21,11 +21,11 @@ export class ItemData {
     id: any;
     stt: string;
     level: number;
-    maLinhVuc: number;
-    thienNamHhanhN: number;
-    ncauDtoanN1: number;
-    ncauDtoanN2: number;
-    ncauDtoanN3: number;
+    maLvucNdChi: number;
+    thNamHienHanhN1: number;
+    ncauNamDtoanN: number;
+    ncauNamN1: number;
+    ncauNamN2: number;
     checked!: boolean;
 }
 
@@ -43,8 +43,8 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
     //thong tin chung
-    namBcao: number = 2022;
-    maLoaiBaoCao: string = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
+    namHienHanh: number;
+    maLoaiBaoCao: string = "17";
     thuyetMinh: string;
     maDviTien: any;
     listIdDelete: string = "";
@@ -53,11 +53,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         id: null,
         stt: "0",
         level: 0,
-        maLinhVuc: 0,
-        thienNamHhanhN: 0,
-        ncauDtoanN1: 0,
-        ncauDtoanN2: 0,
-        ncauDtoanN3: 0,
+        maLvucNdChi: 0,
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
         checked: false,
     };
     //trang thai cac nut
@@ -85,8 +85,9 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     async ngOnInit() {
-
-        this.lstCTietBCao = this.data?.lstCTiet;
+        this.namHienHanh = this.data?.namHienHanh;
+        this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
+        this.sortByIndex();
         this.updateEditCache();
 
         //lay danh sach danh muc don vi
@@ -421,7 +422,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     setDetail() {
         this.lstCTietBCao.forEach(item => {
-            item.level = this.linhVucs.find(e => e.id == item.maLinhVuc)?.level;
+            item.level = this.linhVucs.find(e => e.id == item.maLvucNdChi)?.level;
         })
     }
 
@@ -440,12 +441,12 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         var lstTemp: ItemData[] = lstCTietBCaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
-                let idCha = this.getIdCha(item.maLinhVuc);
-                var index: number = this.lstCTietBCao.findIndex(e => e.maLinhVuc === idCha);
+                let idCha = this.getIdCha(item.maLvucNdChi);
+                var index: number = this.lstCTietBCao.findIndex(e => e.maLvucNdChi === idCha);
                 if (index != -1) {
                     this.addLow(this.lstCTietBCao[index].id, item);
                 } else {
-                    index = this.lstCTietBCao.findIndex(e => this.getIdCha(e.maLinhVuc) === idCha);
+                    index = this.lstCTietBCao.findIndex(e => this.getIdCha(e.maLvucNdChi) === idCha);
                     this.addSame(this.lstCTietBCao[index].id, item);
                 }
             })
@@ -455,9 +456,9 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     addLine(id: any) {
-        var maLinhVuc: any = this.lstCTietBCao.find(e => e.id == id)?.maLinhVuc;
+        var maLvucNdChi: any = this.lstCTietBCao.find(e => e.id == id)?.maLvucNdChi;
         let obj = {
-            maKhoanMuc: maLinhVuc,
+            maKhoanMuc: maLvucNdChi,
             lstKhoanMuc: this.linhVucs,
         }
 
@@ -474,12 +475,12 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCTietBCao.findIndex(e => e.maLinhVuc == res.maKhoanMuc);
+                var index: number = this.lstCTietBCao.findIndex(e => e.maLvucNdChi == res.maKhoanMuc);
                 if (index == -1) {
                     let data: any = {
                         ...this.initItem,
-                        maLinhVuc: res.maKhoanMuc,
-                        level: this.linhVucs.find(e => e.id == maLinhVuc)?.level,
+                        maLvucNdChi: res.maKhoanMuc,
+                        level: this.linhVucs.find(e => e.id == maLvucNdChi)?.level,
                     };
                     if (this.lstCTietBCao.length == 0) {
                         this.addFirst(data);
@@ -487,11 +488,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                         this.addSame(id, data);
                     }
                 }
-                id = this.lstCTietBCao.find(e => e.maLinhVuc == res.maKhoanMuc)?.id;
+                id = this.lstCTietBCao.find(e => e.maLvucNdChi == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
                     var data: ItemData = {
                         ...this.initItem,
-                        maLinhVuc: item.id,
+                        maLvucNdChi: item.id,
                         level: item.level,
                     };
                     this.addLow(id, data);

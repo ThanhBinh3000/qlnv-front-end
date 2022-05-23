@@ -20,40 +20,20 @@ import { Role } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 export class ItemData {
 	id: any;
 	stt!: number;
-	maDvi!: string;
-	tongCong!: number;
-	k331Tcong!: number;
-	k331KhongTchuCoDmucCong!: number;
-	k331KhongTchuCoDmucNx!: number;
-	k331KhongTchuCoDmucVtct!: number;
-	k331KhongTchuCoDmucBquan!: number;
-	k331KhongTchuChuaDmucCong!: number;
-	k331KhongTchuChuaDmucCntt!: number;
-	k331KhongTchuChuaDmucThueKho!: number;
-	k331KhongTchuChuaDmucMsamTsan!: number;
-	k331KhongTchuChuaDmucBhiemHhoa!: number;
-	k331KhongTchuChuaDmucPhongChongMoiKplb!: number;
-	k331KhongTchuChuaDmucVchuyenBquanTsanQhiem!: number;
-	k331KhongTchuChuaDmucSchuaKhoTang!: number;
-	k341Tcong!: number;
-	k341LuongTuChu!: number;
-	k341TxTheoDmucTuChu!: number;
-	k341ChiTxKhongDmucTuChu!: number;
-	k341LuongKhongTuChu!: number;
-	k341TxTheoDmucKhongTuChu!: number;
-	k341ChiTxKhongDmucKhongTuChu!: number;
-	k085DaoTao!: number;
-	k102NghienCuuKhoaHoc!: number;
-	k398DamBaoXaHoi!: number;
+	maNdung: string;
+	thNamHienHanhN1: number;
+	ncauNamDtoanN: number;
+	ncauNamN1: number;
+	ncauNamN2: number;
 	checked!: boolean;
 }
 
 @Component({
-	selector: 'app-tong-hop-du-toan-chi-thuong-xuyen-hang-nam',
-	templateUrl: './tong-hop-du-toan-chi-thuong-xuyen-hang-nam.component.html',
+	selector: 'app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam',
+	templateUrl: './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.component.html',
 	styleUrls: ['../bao-cao/bao-cao.component.scss']
 })
-export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
+export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 	@Input() data;
 	//@Output() output: EventEmitter<any> = new EventEmitter();
 	//danh muc
@@ -64,37 +44,17 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	tong: ItemData = {
 		id: "",
 		stt: 0,
-		maDvi: "",
-		tongCong: 0,
-		k331Tcong: 0,
-		k331KhongTchuCoDmucCong: 0,
-		k331KhongTchuCoDmucNx: 0,
-		k331KhongTchuCoDmucVtct: 0,
-		k331KhongTchuCoDmucBquan: 0,
-		k331KhongTchuChuaDmucCong: 0,
-		k331KhongTchuChuaDmucCntt: 0,
-		k331KhongTchuChuaDmucThueKho: 0,
-		k331KhongTchuChuaDmucMsamTsan: 0,
-		k331KhongTchuChuaDmucBhiemHhoa: 0,
-		k331KhongTchuChuaDmucPhongChongMoiKplb: 0,
-		k331KhongTchuChuaDmucVchuyenBquanTsanQhiem: 0,
-		k331KhongTchuChuaDmucSchuaKhoTang: 0,
-		k341Tcong: 0,
-		k341LuongTuChu: 0,
-		k341TxTheoDmucTuChu: 0,
-		k341ChiTxKhongDmucTuChu: 0,
-		k341LuongKhongTuChu: 0,
-		k341TxTheoDmucKhongTuChu: 0,
-		k341ChiTxKhongDmucKhongTuChu: 0,
-		k085DaoTao: 0,
-		k102NghienCuuKhoaHoc: 0,
-		k398DamBaoXaHoi: 0,
-		checked!: false,
+		maNdung: "",
+		thNamHienHanhN1: 0,
+		ncauNamDtoanN: 0,
+		ncauNamN1: 0,
+		ncauNamN2: 0,
+		checked: false,
 	};
 
 	trangThaiPhuLuc: string = '2';
-	namBcao: any;
-	maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM;
+	namHienHanh: number;
+	maLoaiBaoCao: string = "14";
 	maDviTien: any;
 	listIdDelete: string = "";
 	thuyetMinh: string;
@@ -124,8 +84,8 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
 
 	async ngOnInit() {
-
-		this.lstCTietBCao = this.data?.lstCTiet;
+		this.namHienHanh = this.data.namHienHanh;
+		this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
 		this.updateEditCache();
 
 		//lay danh sach danh muc don vi
@@ -157,31 +117,11 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		let item: ItemData = {
 			id: uuid.v4(),
 			stt: 0,
-			maDvi: "",
-			tongCong: 0,
-			k331KhongTchuCoDmucNx: 0,
-			k331KhongTchuCoDmucVtct: 0,
-			k331KhongTchuCoDmucBquan: 0,
-			k331KhongTchuCoDmucCong: 0, // 3=4+5+6
-			k331KhongTchuChuaDmucCntt: 0,
-			k331KhongTchuChuaDmucThueKho: 0,
-			k331KhongTchuChuaDmucMsamTsan: 0,
-			k331KhongTchuChuaDmucBhiemHhoa: 0,
-			k331KhongTchuChuaDmucPhongChongMoiKplb: 0,
-			k331KhongTchuChuaDmucVchuyenBquanTsanQhiem: 0,
-			k331KhongTchuChuaDmucSchuaKhoTang: 0,
-			k331KhongTchuChuaDmucCong: 0,
-			k331Tcong: 0, //2=3+7
-			k341Tcong: 0,
-			k341LuongTuChu: 0,
-			k341TxTheoDmucTuChu: 0,
-			k341ChiTxKhongDmucTuChu: 0,
-			k341LuongKhongTuChu: 0,
-			k341TxTheoDmucKhongTuChu: 0,
-			k341ChiTxKhongDmucKhongTuChu: 0,
-			k085DaoTao: 0,
-			k102NghienCuuKhoaHoc: 0,
-			k398DamBaoXaHoi: 0,
+			maNdung: "",
+			thNamHienHanhN1: 0,
+			ncauNamDtoanN: 0,
+			ncauNamN1: 0,
+			ncauNamN2: 0,
 			checked: false,
 		}
 
@@ -252,7 +192,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 	// huy thay doi
 	cancelEdit(id: string): void {
 		const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
-		if (!this.lstCTietBCao[index].maDvi) {
+		if (!this.lstCTietBCao[index].maNdung) {
 			this.deleteById(id);
 			return;
 		}
@@ -264,7 +204,7 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 
 	// luu thay doi
 	saveEdit(id: string): void {
-		if (!this.editCache[id].data.maDvi) {
+		if (!this.editCache[id].data.maNdung) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
 		}
@@ -286,40 +226,20 @@ export class TongHopDuToanChiThuongXuyenHangNamComponent implements OnInit {
 		});
 	}
 
-	changeModel(id: string): void {
-		let k: any = this.editCache[id].data;
-		this.editCache[id].data.k331KhongTchuCoDmucCong = k.k331KhongTchuCoDmucNx + k.k331KhongTchuCoDmucVtct + k.k331KhongTchuCoDmucBquan;
-		this.editCache[id].data.k331KhongTchuChuaDmucCong = k.k331KhongTchuChuaDmucCntt + k.k331KhongTchuChuaDmucThueKho + k.k331KhongTchuChuaDmucMsamTsan + k.k331KhongTchuChuaDmucBhiemHhoa + k.k331KhongTchuChuaDmucPhongChongMoiKplb + k.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem + k.k331KhongTchuChuaDmucSchuaKhoTang;
-		this.editCache[id].data.k331Tcong = k.k331KhongTchuCoDmucCong + k.k331KhongTchuChuaDmucCong;
-		this.editCache[id].data.k341Tcong = k.k341LuongTuChu + k.k341TxTheoDmucTuChu + k.k341ChiTxKhongDmucTuChu + k.k341LuongKhongTuChu + k.k341TxTheoDmucKhongTuChu + k.k341ChiTxKhongDmucKhongTuChu;
-		this.editCache[id].data.tongCong = k.k331Tcong + k.k341Tcong + k.k085DaoTao + k.k102NghienCuuKhoaHoc + k.k398DamBaoXaHoi;
-	}
+	// changeModel(id: string): void {
+	// 	let k: any = this.editCache[id].data;
+	// 	this.editCache[id].data.k331KhongTchuCoDmucCong = k.k331KhongTchuCoDmucNx + k.k331KhongTchuCoDmucVtct + k.k331KhongTchuCoDmucBquan;
+	// 	this.editCache[id].data.k331KhongTchuChuaDmucCong = k.k331KhongTchuChuaDmucCntt + k.k331KhongTchuChuaDmucThueKho + k.k331KhongTchuChuaDmucMsamTsan + k.k331KhongTchuChuaDmucBhiemHhoa + k.k331KhongTchuChuaDmucPhongChongMoiKplb + k.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem + k.k331KhongTchuChuaDmucSchuaKhoTang;
+	// 	this.editCache[id].data.k331Tcong = k.k331KhongTchuCoDmucCong + k.k331KhongTchuChuaDmucCong;
+	// 	this.editCache[id].data.k341Tcong = k.k341LuongTuChu + k.k341TxTheoDmucTuChu + k.k341ChiTxKhongDmucTuChu + k.k341LuongKhongTuChu + k.k341TxTheoDmucKhongTuChu + k.k341ChiTxKhongDmucKhongTuChu;
+	// 	this.editCache[id].data.tongCong = k.k331Tcong + k.k341Tcong + k.k085DaoTao + k.k102NghienCuuKhoaHoc + k.k398DamBaoXaHoi;
+	// }
 
 	tinhTong(heSo: number, item: ItemData) {
-		this.tong.tongCong += heSo * item.tongCong;
-		this.tong.k331Tcong += heSo * item.k331Tcong;
-		this.tong.k331KhongTchuCoDmucCong += heSo * item.k331KhongTchuCoDmucCong;
-		this.tong.k331KhongTchuCoDmucNx += heSo * item.k331KhongTchuCoDmucNx;
-		this.tong.k331KhongTchuCoDmucVtct += heSo * item.k331KhongTchuCoDmucVtct;
-		this.tong.k331KhongTchuCoDmucBquan += heSo * item.k331KhongTchuCoDmucBquan;
-		this.tong.k331KhongTchuChuaDmucCong += heSo * item.k331KhongTchuChuaDmucCong;
-		this.tong.k331KhongTchuChuaDmucCntt += heSo * item.k331KhongTchuChuaDmucCntt;
-		this.tong.k331KhongTchuChuaDmucThueKho += heSo * item.k331KhongTchuChuaDmucThueKho;
-		this.tong.k331KhongTchuChuaDmucMsamTsan += heSo * item.k331KhongTchuChuaDmucMsamTsan;
-		this.tong.k331KhongTchuChuaDmucBhiemHhoa += heSo * item.k331KhongTchuChuaDmucBhiemHhoa;
-		this.tong.k331KhongTchuChuaDmucPhongChongMoiKplb += heSo * item.k331KhongTchuChuaDmucPhongChongMoiKplb;
-		this.tong.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem += heSo * item.k331KhongTchuChuaDmucVchuyenBquanTsanQhiem;
-		this.tong.k331KhongTchuChuaDmucSchuaKhoTang += heSo * item.k331KhongTchuChuaDmucSchuaKhoTang;
-		this.tong.k341Tcong += heSo * item.k341Tcong;
-		this.tong.k341LuongTuChu += heSo * item.k341LuongTuChu;
-		this.tong.k341TxTheoDmucTuChu += heSo * item.k341TxTheoDmucTuChu;
-		this.tong.k341ChiTxKhongDmucTuChu += heSo * item.k341ChiTxKhongDmucTuChu;
-		this.tong.k341LuongKhongTuChu += heSo * item.k341LuongKhongTuChu;
-		this.tong.k341TxTheoDmucKhongTuChu += heSo * item.k341TxTheoDmucKhongTuChu;
-		this.tong.k341ChiTxKhongDmucKhongTuChu += heSo * item.k341ChiTxKhongDmucKhongTuChu;
-		this.tong.k085DaoTao += heSo * item.k085DaoTao;
-		this.tong.k102NghienCuuKhoaHoc += heSo * item.k102NghienCuuKhoaHoc;
-		this.tong.k398DamBaoXaHoi += heSo * item.k398DamBaoXaHoi;
+		this.tong.thNamHienHanhN1 += heSo * item.thNamHienHanhN1;
+		this.tong.ncauNamDtoanN += heSo * item.ncauNamDtoanN;
+		this.tong.ncauNamN1 += heSo * item.ncauNamN1;
+		this.tong.ncauNamN2 += heSo * item.ncauNamN2;
 	}
 
 }

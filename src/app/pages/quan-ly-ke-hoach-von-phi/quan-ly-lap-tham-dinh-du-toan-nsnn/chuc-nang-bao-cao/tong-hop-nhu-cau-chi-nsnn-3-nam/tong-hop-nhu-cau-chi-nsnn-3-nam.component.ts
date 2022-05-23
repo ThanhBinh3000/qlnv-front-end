@@ -17,20 +17,19 @@ import { DON_VI_TIEN, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N } from "../../../
 export class ItemData {
     id!: any;
     stt!: number;
-    maNdung!: String;
-    maNhomChiNsnn!: String;
-    dtoanN!: number;
-    uocThienN!: number;
+    maNdung!: string;
+    namHienHanhDtoan!: number;
+    namHienHanhUocThien!: number;
+    tranChiN!: number;
+    ncauChiN!: number;
+    clechTranChiVsNcauChiN: number;
+    ssanhNcauNVoiN1: number;
     tranChiN1!: number;
     ncauChiN1!: number;
     clechTranChiVsNcauChiN1: number;
-    ssanhNcauNVoiN1: number;
     tranChiN2!: number;
     ncauChiN2!: number;
     clechTranChiVsNcauChiN2: number;
-    tranChiN3!: number;
-    ncauChiN3!: number;
-    clechTranChiVsNcauChiN3: number;
     checked!: boolean;
 }
 
@@ -48,8 +47,8 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     lstCTietBCao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     //thong tin chung
-    namBcao: any;       
-    maLoaiBaoCao: string = QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N;              
+    namHienHanh: number;       
+    maLoaiBaoCao: string = "13";              
     thuyetMinh: string;
     maDviTien: any;                   
     listIdDelete: string = "";                  
@@ -76,8 +75,8 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
 
     async ngOnInit() {
-
-        this.lstCTietBCao = this.data?.lstCTiet;
+        this.namHienHanh = this.data.namHienHanh;
+        this.lstCTietBCao = this.data?.lstCtietLapThamDinhs;
         this.updateEditCache();
 
         this.danhMucService.dMNoiDung().toPromise().then(
@@ -127,19 +126,18 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
             id: uuid.v4(),
             stt: 0,
             maNdung: '',
-            maNhomChiNsnn: '',
-            dtoanN: 0,
-            uocThienN: 0,
+            namHienHanhDtoan: 0,
+            namHienHanhUocThien: 0,
+            tranChiN: 0,
+            ncauChiN: 0,
+            clechTranChiVsNcauChiN: 0,
+            ssanhNcauNVoiN1: 0,
             tranChiN1: 0,
             ncauChiN1: 0,
             clechTranChiVsNcauChiN1: 0,
-            ssanhNcauNVoiN1: 0,
             tranChiN2: 0,
             ncauChiN2: 0,
             clechTranChiVsNcauChiN2: 0,
-            tranChiN3: 0,
-            ncauChiN3: 0,
-            clechTranChiVsNcauChiN3: 0,
             checked: false,
         };
 
@@ -216,11 +214,11 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     //update khi sửa
     saveEdit(id: string): void {
-        if (!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChiNsnn
-            || (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !== 0)
-            || (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !== 0)
+        if (!this.editCache[id].data.maNdung 
+            || (!this.editCache[id].data.namHienHanhDtoan && this.editCache[id].data.namHienHanhDtoan !== 0)
+            || (!this.editCache[id].data.namHienHanhUocThien && this.editCache[id].data.namHienHanhUocThien !== 0)
             || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)
-            || (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !== 0)) {
+            || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -246,9 +244,9 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
         this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-        this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
+        this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.namHienHanhUocThien).toFixed(3));
+        this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
         this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
-        this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
     }
 
 
