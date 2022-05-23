@@ -3,7 +3,7 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectQdNhapXuat()">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
@@ -12,31 +12,38 @@
           <nz-breadcrumb-item> Nhập theo phương thức đấu thầu</nz-breadcrumb-item>
           <nz-breadcrumb-item>Thóc </nz-breadcrumb-item>
           <nz-breadcrumb-item>Cục </nz-breadcrumb-item>
-          <nz-breadcrumb-item class="last-breadcrumb">Dự thảo </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{ isChiTiet ? 'Chi tiết' : 'Dự thảo'}} </nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
-      <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+      <div class="canphai phai" *ngIf="!isChiTiet">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="disableBanHanh()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh()"
+          (click)="guiDuyet()">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+          *ngIf="quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET ">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()" *ngIf="quyetDinhNhapXuat.trangThai === globals.prop.DU_THAO || id===0 
+          || quyetDinhNhapXuat.trangThai == globals.prop.TU_CHOI 
+          || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET
+          || quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Hủy bỏ</span>
         </a>
@@ -55,7 +62,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định
                 </nz-form-label>
-                <input nz-input formControlName="soQdinh" />
+                <input nz-input formControlName="soQdinh" [readonly]="isChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="12">
@@ -64,7 +71,7 @@
                   Ngày quyết định
                 </nz-form-label>
                 <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày quyết định"
-                  formControlName="ngayQdinh">
+                  formControlName="ngayQdinh" [nzDisabled]="isChiTiet">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -93,7 +100,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Về việc
                 </nz-form-label>
-                <input nz-input formControlName="veViec" />
+                <input nz-input formControlName="veViec" [readonly]="isChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -103,7 +110,7 @@
                 </nz-form-label>
               </nz-form-item>
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                [data]="taiLieuDinhKemList" [trangThai]="quyetDinhNhapXuat.trangThai" type="file"
+                [data]="taiLieuDinhKemList" [trangThai]="quyetDinhNhapXuat.trangThai" type="file" [disable]="isChiTiet"
                 (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
               </multiple-tag>
             </div>
@@ -121,12 +128,11 @@
             <th class="text-center">ĐVT</th>
             <th class="text-center">SỐ LƯỢNG</th>
             <th class="text-center">THỜI HẠN NHẬP KHO MUỘN NHẤT</th>
-            <th class="text-center">HÀNH ĐỘNG</th>
+            <th class="text-center" *ngIf="!isChiTiet">HÀNH ĐỘNG</th>
           </tr>
         </thead>
         <tbody>
-          <tr [ngClass]="quyetDinhNhapXuat.trangThai===globals.prop.DU_THAO || id===0 ||
-          quyetDinhNhapXuat.trangThai===globals.prop.TU_CHOI ? '' : 'row-disabled'">
+          <tr *ngIf="!isChiTiet">
             <td></td>
             <td>
               <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -219,7 +225,7 @@
               <td>{{dataNhapXuat.donViTinh}}</td>
               <td class="text-right">{{dataNhapXuat.soLuong}}</td>
               <td class="text-right">{{dataNhapXuat.thoiGianNhapKhoMuonNhat | date:'yyyy-MM-dd'}}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isChiTiet">
                 <a (click)="startEdit(i)">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -244,12 +250,12 @@
                   [(ngModel)]="dsQuyetDinhNhapXuatDetailClone[i].thoiGianNhapKhoMuonNhat">
                 </nz-date-picker>
               </td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isChiTiet">
                 <a (click)="saveEditQdNhapXuat(i)">
-                  <i class="fa fa-pencil"></i>
+                  <i class="fa fa-save"></i>
                 </a>
                 <a (click)="cancelEditQdNhapXuat(i)">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-times do"></i>
                 </a>
               </td>
             </ng-template>
@@ -264,7 +270,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ghi chú
                 </nz-form-label>
-                <input nz-input nzSize="large" formControlName="ghiChu" style="height: 40px !important;" />
+                <input nz-input nzSize="large" formControlName="ghiChu" style="height: 40px !important;"
+                  [readonly]="isChiTiet" />
               </nz-form-item>
             </div>
           </div>

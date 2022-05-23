@@ -1870,3 +1870,7 @@ td.action.ant-table-cell {
 .isDisabled {
   opacity: 0.5;
 }
+.row-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

@@ -21,6 +21,10 @@ const routes: Routes = [
         path: 'thong-tin/:id',
         component: ThemmoiQdinhNhapXuatHangComponent,
       },
+      {
+        path: 'chi-tiet/:id',
+        component: ThemmoiQdinhNhapXuatHangComponent,
+      },
     ]
   },
 ];
