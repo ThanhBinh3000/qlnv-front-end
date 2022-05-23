@@ -16,7 +16,7 @@
         </nz-breadcrumb>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -55,7 +55,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Số quyết định
                 </nz-form-label>
-                <input nz-input />
+                <input nz-input formControlName="soQdinh" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="12">
@@ -63,7 +63,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày quyết định
                 </nz-form-label>
-                <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hiệu lực">
+                <nz-date-picker #endDatePicker nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày quyết định"
+                  formControlName="ngayQdinh">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -92,7 +93,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Về việc
                 </nz-form-label>
-                <input nz-input />
+                <input nz-input formControlName="veViec" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">

@@ -5,10 +5,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
+import { DialogThemBienbanNghiemThuKeLotComponent } from 'src/app/components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { DialogThemBienbanNghiemThuKeLotComponent } from '../../../../../../components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
-import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'them-moi-phieu-kiem-tra-chat-luong-hang',
@@ -27,13 +27,14 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
   }
+
   tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -49,11 +50,13 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       }
     });
   }
+
   back() {
     this.router.navigate([
       'nhap/dau-thau/quan-ly-phieu-kiem-tra-chat-luong-hang',
     ]);
   }
+
   themBienBanNgiemThuKeLot() {
     const modalLuongThuc = this.modal.create({
       nzTitle: 'Thêm mới thông tin chi tiết',

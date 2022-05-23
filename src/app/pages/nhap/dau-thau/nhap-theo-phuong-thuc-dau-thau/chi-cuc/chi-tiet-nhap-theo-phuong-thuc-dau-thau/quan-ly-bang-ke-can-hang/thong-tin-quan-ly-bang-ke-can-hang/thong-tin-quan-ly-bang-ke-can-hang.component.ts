@@ -1,5 +1,4 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -16,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { DialogPhieuNhapKhoComponent } from 'src/app/components/dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
