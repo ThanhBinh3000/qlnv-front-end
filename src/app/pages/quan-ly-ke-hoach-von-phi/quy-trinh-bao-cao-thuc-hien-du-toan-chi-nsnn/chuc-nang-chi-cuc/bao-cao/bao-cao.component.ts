@@ -1144,7 +1144,12 @@ export class BaoCaoComponent implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-          await this.getDetailReport();
+          this.baoCao?.lstBcaos?.filter(item => {
+            if(item.maLoai == this.tabSelected){
+              item.trangThai = maChucNang;
+            }
+          })
+          //await this.getDetailReport();
           this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
