@@ -16,6 +16,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import {
+  GAO,
+  MUOI,
   NHAP_MAIN_ROUTE,
   NHAP_THEO_KE_HOACH,
   NHAP_THEO_PHUONG_THUC_DAU_THAU,
@@ -63,6 +65,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   };
   listNam: any[] = [];
   loaiVthh: string = '';
+  routerUrl: string;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -76,6 +79,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.routerUrl = this.router.url;
     this.spinner.show();
     try {
       this.getTitleVthh();
@@ -351,5 +355,14 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     this.router.navigate([
       `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc/chi-tiet/${id}/bien-ban`,
     ]);
+  }
+  redirectQdNhapXuat() {
+    if (this.routerUrl.includes("thoc")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}`]);
+    } else if (this.routerUrl.includes("gao")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}`]);
+    } else if (this.routerUrl.includes("muoi")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}`]);
+    }
   }
 }

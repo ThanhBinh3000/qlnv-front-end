@@ -13,7 +13,7 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang','');
+    super(httpClient, 'QuanLyPhieuKiemTraChatLuongHang', '');
   }
 
   timKiem(body: any): Promise<any> {
@@ -59,13 +59,14 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
-  themMoiChiTieuKeHoach(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+
+  them(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/them-moi`;
     return this.httpClient.post(url, body).toPromise();
   }
 
-  chinhSuaChiTieuKeHoach(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+  sua(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt`;
     return this.httpClient.put(url, body).toPromise();
   }
 }

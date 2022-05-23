@@ -1,17 +1,14 @@
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { PAGE_SIZE_DEFAULT, LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import dayjs from 'dayjs';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -47,7 +44,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();

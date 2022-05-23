@@ -23,6 +23,10 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
 import dayjs from 'dayjs';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
 
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
@@ -60,6 +64,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     public globals: Globals,
     private userService: UserService,
     private danhMucService: DanhMucService,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private uploadFileService: UploadFileService,
+
+
   ) { }
 
   ngOnInit(): void {
@@ -85,6 +93,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       canCu: [null, [Validators.required]],
       veViec: [null],
       donVi: [null],
+      maDonVi: [null],
       ghiChu: [null],
     });
   }
@@ -127,7 +136,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       text: event.name,
     };
     if (!this.taiLieuDinhKemList.find((x) => x.text === item.text)) {
-      this.taiLieuDinhKemList.push(item);
+      this.uploadFileService
+        .uploadFile(event.file, event.name)
+        .then((resUpload) => {
+          const fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          this.quyetDinhNhapXuat.fileDinhKems.push(fileDinhKem);
+          this.taiLieuDinhKemList.push(item);
+        });
     }
   }
   newObjectQdNhapXuat() {
@@ -272,6 +290,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
               this.quyetDinhNhapXuat.tenDonVi = res.data[i].tenDvi;
               this.formData.patchValue({
                 donVi: this.quyetDinhNhapXuat.tenDonVi,
+                maDonVi: this.quyetDinhNhapXuat.maDvi,
               });
               break;
             }
@@ -331,5 +350,106 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   cancelEditQdNhapXuat(index: number) {
     this.dsQuyetDinhNhapXuatDetailClone = cloneDeep(this.quyetDinhNhapXuat.detail);
     this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
+  }
+  save() {
+    this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value;
+    this.quyetDinhNhapXuat.loaiQd = "00";
+    this.quyetDinhNhapXuat.ngayKy = dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD');
+    this.quyetDinhNhapXuat.soHd = this.formData.get('canCu').value;
+    this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
+    this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
+    this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
+    this.quyetDinhNhapXuat.fileDinhKems = this.taiLieuDinhKemList;
+    this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
+    console.log("this.quyetDinhNhapXuat: ", this.quyetDinhNhapXuat);
+    if (this.quyetDinhNhapXuat.id > 0) {
+      this.quyetDinhNhapXuatService
+        .sua(this.quyetDinhNhapXuat)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            console.log("ssssss sua");
+
+            // if (isGuiDuyet) {
+            //   let body = {
+            //     id: res.data.id,
+            //     lyDoTuChoi: null,
+            //     trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
+            //   };
+            //   this.chiTieuKeHoachNamService.updateStatus(body);
+            //   if (res.msg == MESSAGE.SUCCESS) {
+            //     this.notification.success(
+            //       MESSAGE.SUCCESS,
+            //       MESSAGE.UPDATE_SUCCESS,
+            //     );
+            //     this.redirectChiTieuKeHoachNam();
+            //   } else {
+            //     this.notification.error(MESSAGE.ERROR, res.msg);
+            //   }
+            // } else {
+            //   this.notification.success(
+            //     MESSAGE.SUCCESS,
+            //     MESSAGE.UPDATE_SUCCESS,
+            //   );
+            //   // this.redirectChiTieuKeHoachNam();
+            // }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        })
+        .catch((e) => {
+          console.error('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        .finally(() => {
+          this.spinner.hide();
+        });
+    } else {
+      this.quyetDinhNhapXuatService
+        .them(this.quyetDinhNhapXuat)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            console.log("ssssss them");
+
+            // if (isGuiDuyet) {
+            //   let body = {
+            //     id: res.data.id,
+            //     lyDoTuChoi: null,
+            //     trangThai: this.globals.prop.LANH_DAO_DUYET,
+            //   };
+            //   this.chiTieuKeHoachNamService.updateStatus(body);
+            //   if (res.msg == MESSAGE.SUCCESS) {
+            //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            //     this.redirectChiTieuKeHoachNam();
+            //   } else {
+            //     this.notification.error(MESSAGE.ERROR, res.msg);
+            //   }
+            // } else {
+            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            //   // this.redirectChiTieuKeHoachNam();
+            // }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        })
+        .catch((e) => {
+          console.error('error: ', e);
+          this.notification.error(
+            MESSAGE.ERROR,
+            e.error.errors[0].defaultMessage,
+          );
+        })
+        .finally(() => {
+          this.spinner.hide();
+        });
+    }
+  }
+  redirectQdNhapXuat() {
+    if (this.routerUrl.includes("thoc")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}`]);
+    } else if (this.routerUrl.includes("gao")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}`]);
+    } else if (this.routerUrl.includes("muoi")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}`]);
+    }
   }
 }
