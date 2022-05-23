@@ -68,11 +68,9 @@
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <a *ngIf="data.trangThai !='00' && data.trangThai !='03' "
-                                        (click)="redirectToChiTiet(true, data.id)">
+                                    <a (click)="redirectToChiTiet(true, data.id)">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    <!-- Trạng thái 00 : lưu mới và 03 : từ chối  -->
                                     <a *ngIf="data.trangThai=='00' || data.trangThai=='03'"
                                         (click)="redirectToChiTiet(false, data.id)">
                                         <i class="fa fa-pencil"></i>

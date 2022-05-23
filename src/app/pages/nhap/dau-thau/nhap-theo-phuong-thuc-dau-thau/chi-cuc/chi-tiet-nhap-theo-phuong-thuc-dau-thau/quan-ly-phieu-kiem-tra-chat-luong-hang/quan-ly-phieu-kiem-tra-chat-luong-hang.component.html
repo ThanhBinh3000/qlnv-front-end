@@ -4,50 +4,18 @@
       <div class="main-content">
         <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="12">
               <label class="search__label">Số phiếu</label>
-              <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
-                <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'" nzPlaceHolder="Số phiếu"
-                  [(ngModel)]="searchFilter.soPhieu">
-                </nz-input-number>
-              </nz-input-group>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Loại hàng hóa</label>
-              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="searchFilter.maHangHoa">
-                <nz-option [nzValue]="thocIdDefault" nzLabel="Thóc"></nz-option>
-                <nz-option [nzValue]="gaoIdDefault" nzLabel="Gạo"></nz-option>
-              </nz-select>
+              <input class="search__input" placeholder="Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieu" />
             </div>
             <div nz-col nzSpan="12">
-              <label class="search__label">Đơn vị</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
+              <label class="search__label">Ngày lập phiếu</label>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Mã kho / ngăn</label>
-              <input class="search__input" placeholder="Mã kho / ngăn" nz-input [(ngModel)]="searchFilter.maNganKho" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Ngày chứng từ: Từ ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                nzPlaceHolder="Ngày chứng từ: Từ ngày" [(ngModel)]="startValue">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đến ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
-                nzPlaceHolder="Đến ngày" [(ngModel)]="endValue">
-              </nz-date-picker>
+            <div nz-col nzSpan="24">
+              <label class="search__label">Người giao hàng</label>
+              <input class="search__input" placeholder="Người giao hàng" nz-input
+                [(ngModel)]="searchFilter.tenNguoiGiao" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -61,33 +29,35 @@
             </button>
           </div>
         </nz-card>
-        <nz-card nzTitle="DANH SÁCH PHIẾU KIỂM TRA CHẤT LƯỢNG DTQG " [nzExtra]="tableCard1"
+        <nz-card nzTitle="Danh sách phiếu kiểm tra chất lượng hàng dự trữ quốc gia nhập kho" [nzExtra]="tableCard1"
           class="mt-16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+            [nzData]="dataTable">
             <thead>
               <tr>
                 <th width="60px">STT</th>
-                <th width="931px">Số phiếu</th>
-                <th width="161px">Ngày kiểm tra</th>
-                <th width="203px">Tên điểm kho</th>
-                <th width="295px">Tên ngăn lô</th>
-                <th width="295px">Hàng hóa</th>
-                <th width="295px"></th>
+                <th width="161px">Số phiếu</th>
+                <th width="161px">Ngày giám định</th>
+                <th>Kết quả đánh giá</th>
+                <th width="295px">Trạng thái</th>
+                <th width="140px">Hành động</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>PKM01</td>
-                <td>17/02/2022</td>
-                <td>Điểm kho 1</td>
-                <td>Lô 1</td>
-                <td>Gạo</td>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                <td>{{ data.soPhieu }}</td>
+                <td>{{ data.ngayGdinh }}</td>
+                <td>{{ data.ketLuan }}</td>
+                <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td>
-                  <a>
+                  <a (click)="redirectToChiTiet(true, data.id)">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="redirectToChiTiet(false, data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a>
+                  <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -99,10 +69,11 @@
               <div class="trai"></div>
               <div class="canphai">
                 <!-- begin phân trang  -->
-                <nz-pagination class="pagination-card" [nzPageIndex]="1" [nzTotal]="12" nzShowSizeChanger
-                  [nzPageSize]="5" [nzShowTotal]="rangeTemplate">
+                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                  (nzPageSizeChange)="changePageSize($event)">
                   <ng-template #rangeTemplate let-range="range" let-total>
-                    3-3 of 4 items
+                    {{ range[0] }}-{{ range[1] }} of {{ total }} items
                   </ng-template>
                 </nz-pagination>
                 <!-- end phân trang  -->
@@ -111,9 +82,13 @@
           </div>
         </nz-card>
         <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToThemMoi()">
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="export()">
+            <i class="icon htvbdh_chuyen-xu-ly"></i>
+            <span>Export</span>
           </button>
         </ng-template>
       </div>
