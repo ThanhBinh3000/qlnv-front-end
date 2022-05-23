@@ -1,0 +1,10 @@
+::ng-deep {
+    .tab-content.tab-menu {padding: 0;}
+    .flex-card.p-lr16.ant-card .ant-card-body {
+        padding: 0;
+        & > .ant-row {margin: 0 !important;padding: 6px;}
+    }
+    .luong-dau-thau-gao__body .pagination-card li:first-child,
+    .ant-pagination .pagination-card li:first-child {position: relative;left: 0 !important;}
+    .ant-btn>.anticon.anticon-close {font-size: 10px;}
+}

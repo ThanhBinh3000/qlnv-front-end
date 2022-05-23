@@ -43,6 +43,7 @@ export class LuongDauThauGaoComponent implements OnInit {
   userInfo: UserLogin;
 
   selectedTab: string = 'tong-hop';
+  index = 0;
 
   constructor(
     private router: Router,
@@ -319,5 +320,8 @@ export class LuongDauThauGaoComponent implements OnInit {
         ]);
       }
     }
+  }
+  onIndexChange(event: number): void {
+    this.index = event;
   }
 }

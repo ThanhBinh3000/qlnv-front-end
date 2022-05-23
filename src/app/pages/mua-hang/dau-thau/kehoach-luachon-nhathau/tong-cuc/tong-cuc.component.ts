@@ -10,6 +10,8 @@ import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction'
   styleUrls: ['./tong-cuc.component.scss']
 })
 export class TongCucComponent implements OnInit {
+  lydotuchoi = false;
+  dinhkem = false;
 
   constructor(
     private router: Router,
@@ -23,6 +25,7 @@ export class TongCucComponent implements OnInit {
   loaiVthh : string;
   title : string;
   selectedTab: string ;
+  index = 0;
   async ngOnInit() {
     this.getTitleVthh();
     this.selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu');
@@ -38,5 +41,32 @@ export class TongCucComponent implements OnInit {
     // let link = '/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+tab;
     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+ tab]);
   }
+  onIndexChange(event: number): void {
+    this.index = event;
+    if(this.index == 0){
+      this.selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu');
+    } else if(this.index == 1){
+      this.selectTabMenu('phuong-an','Phương án kế hoạch lựa chọn nhà thầu');
+    } else if(this.index == 2){
+      this.selectTabMenu('phe-duyet','Quyết định phê duyệt kế hoạch lựa chọn nhà thầu');
+    }
+   
+  }
+  tuchoi(): void {
+    this.lydotuchoi = true;
+  }
+  filedinhkem(): void {
+    this.dinhkem = true;
+  }
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.lydotuchoi = false;
+    this.dinhkem = false;
+  }
 
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.lydotuchoi = false;
+    this.dinhkem = false;
+  }
 }

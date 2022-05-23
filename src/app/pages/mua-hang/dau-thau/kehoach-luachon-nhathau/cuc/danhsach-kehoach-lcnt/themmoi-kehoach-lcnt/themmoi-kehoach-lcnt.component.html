@@ -54,7 +54,7 @@
                   <nz-form-label [nzNoColon]="true"> Căn cứ </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
-                      <input class="search__input" [readonly]="true" nz-input formControlName="soQd" [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''" />
+                      <input class="search__input" [readonly]="true" nz-input formControlName="soQd" readonly="true" />
                     </nz-input-group>
                     <ng-template #soQDError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -248,7 +248,7 @@
                           <nz-form-label nzRequired [nzNoColon]="true">   Đơn giá tạm tính (Bao gồm VAT)</nz-form-label>
                           <nz-form-control [nzErrorTip]="donGiaTtinhError">
                             <nz-input-group >
-                              <nz-input-number formControlName="donGiaTtinh" nz-input [nzMin]="1"
+                              <nz-input-number formControlName="donGia" nz-input [nzMin]="1"
                               [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                               [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                             </nz-input-number>
@@ -280,8 +280,8 @@
                           <nz-form-label nzRequired [nzNoColon]="true"> Thời gian phát hành hồ sơ mời thầu</nz-form-label>
                           <nz-form-control [nzErrorTip]="tgianPhHoSoError">
                             <nz-input-group >
-                              <nz-date-picker formControlName="tgianPhHoSo" class="search__input" 
-                              name="tgianPhHoSo" nzFormat="dd/MM/yyyy"
+                              <nz-date-picker formControlName="tgianPhatHanh" class="search__input" 
+                              name="tgianPhatHanh" nzFormat="dd/MM/yyyy"
                               [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                             </nz-date-picker>
                             </nz-input-group>
@@ -375,95 +375,111 @@
             </nz-tab>
             <nz-tab [nzTitle]="'Phụ lục đề xuất kế hoạch lựa chon nhà thầu'" class="ds-goi-thau__container"
               (nzClick)="tabSelected = 'dsGoiThau'">
-              <nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData"
-                [nzFrontPagination]="false" [nzShowPagination]="false" id="table-danh-sach-goi-thau">
-                <thead>
-                  <tr>
-                    <th rowspan="2" [width]="35" class="text-center">STT</th>
-                    <th rowspan="2" [width]="218" class="text-center">Gói thầu</th>
-                    <th rowspan="2" [width]="95" class="text-center">Số lượng (tấn)</th>
-                    <th colspan="3" [width]="300" class="text-center">ĐỊA ĐIỂM NHẬP KHO</th>
-                    <th rowspan="2" [width]="100" class="text-center">Đơn giá đã bao gồm VAT (đồng/kg)</th>
-                    <th rowspan="2" [width]="200" class="text-center">Thành tiền (đồng)</th>
-                    <th rowspan="2" [width]="300" class="text-center">Bằng chữ</th>
-                    <th rowspan="2" [width]="80" class="text-center">Thao tác</th>
-                  </tr>
-                  <tr>
-                    <th class="text-center"> Tên chi cục </th>
-                    <th class="text-center"> Điểm kho </th>
-                    <th class="text-center"> Địa điểm kho </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
-                    <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
-                      <td class="text-center">{{i+1}}</td>
-                      <td >{{ data.goiThau }}</td>
-                      <td >{{ data.soLuong }}</td>
-                      <td >{{ data.tenCcuc }}</td>
-                      <td >{{ data.tenDiemKho }}</td>
-                      <td >{{ data.diaDiemNhap }}</td>
-                      <td >{{ data.donGia }}</td>
-                      <td >{{ data.soLuong * 1000 * data.donGia | number: '1.0-1'}}</td>
-                      <td >{{ data.soLuong ? convertTienTobangChu(data.soLuong * 1000 * data.donGia) : '' }}</td>
-                      <td class="text-center">
-                        <a (click)="startEdit(i)">
-                          <i class="fa fa-pencil"></i>
-                        </a>
-                        <a (click)="deleteRow(data.idVirtual)">
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </td>
-                    </ng-container>
-                    <ng-template #editTemplate>
-                      <td class="text-center">{{i+1}}</td>
-                      <td>
-                        <input type="text" [(ngModel)]="editCache[i].data.goiThau" nz-input name="goiThau"  />
-                      </td>
-                      <td>
-                        <nz-input-number nz-input [(ngModel)]="editCache[i].data.soLuong"  [nzMin]="1" [nzStep]="1"
-                          [nzSize]="'small'" (input)="calclatorThanhTien()" >
-                        </nz-input-number>
-                      </td>
-                      <!-- <td><input type="text" [(ngModel)]="editCache[i].data.maCcuc"  nz-input /> </td> -->
-                      <td>
-                        <nz-select [(ngModel)]="editCache[i].data.maCcuc" (ngModelChange)="changeChiCuc($event,i)">
-                          <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                        </nz-select>
-                      </td>
-                      <!-- <td><input type="text" [(ngModel)]="editCache[i].data.maDiemKho" nz-input /> </td> -->
-                      <td>
-                        <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
-                          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                        </nz-select>
-                      </td>
-                      <td><input type="text" [(ngModel)]="editCache[i].data.diaDiemNhap" nz-input /> </td>
-                      <td>
-                        <nz-input-number nz-input  [(ngModel)]="editCache[i].data.donGia"  [nzMin]="1" [nzStep]="1"
-                          [nzSize]="'small'">
-                        </nz-input-number>
-                      </td>
-                      <td >
-                        {{editCache[i].data.soLuong *
-                        1000 *
-                        editCache[i].data.donGia | number: '1.0-1'}}
-                      </td>
-                      <td >{{editCache[i].data.soLuong ?
-                        convertTienTobangChu(editCache[i].data.soLuong *
-                        1000 *
-                        editCache[i].data.donGia) : '' }}</td>
-                      <td class="text-center">
-                        <a (click)="saveEdit(i)" class="save">
-                          <i class="icon htvbdh_tcdt_save"></i>
-                        </a>
-                        <a (click)="cancelEdit(i)">
-                          <i class="fa fa-ban do"></i>
-                        </a>
-                      </td>
-                    </ng-template>
-                  </tr>
-                </tbody>
-              </nz-table>
+              <nz-card nzTitle="Danh sách đề xuất" class="mt16 flex-card p-lr16"
+                    [nzExtra]="tableCardNhaThau">
+                <nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData"
+                [nzFrontPagination]="false" [nzShowPagination]="false" id="table-danh-sach-goi-thau" >
+                  <thead>
+                    <tr>
+                      <th rowspan="2" [width]="35" class="text-center">STT</th>
+                      <th rowspan="2" [width]="218" class="text-center">Gói thầu</th>
+                      <th rowspan="2" [width]="95" class="text-center">Số lượng (tấn)</th>
+                      <th colspan="3" [width]="300" class="text-center">ĐỊA ĐIỂM NHẬP KHO</th>
+                      <th rowspan="2" [width]="100" class="text-center">Đơn giá đã bao gồm VAT (đồng/kg)</th>
+                      <th rowspan="2" [width]="200" class="text-center">Thành tiền (đồng)</th>
+                      <th rowspan="2" [width]="300" class="text-center">Bằng chữ</th>
+                      <th rowspan="2" [width]="80" class="text-center">Thao tác</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center"> Tên chi cục </th>
+                      <th class="text-center"> Điểm kho </th>
+                      <th class="text-center"> Địa điểm kho </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
+                      <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
+                        <td class="text-center">{{i+1}}</td>
+                        <td >{{ data.goiThau }}</td>
+                        <td >{{ data.soLuong }}</td>
+                        <td >{{ getTenDviTable(data.maDvi) }}</td>
+                        <td >{{ getTenDiemKhoTable(data.maDiemKho) }}</td>
+                        <td >{{ data.diaDiemNhap }}</td>
+                        <td >{{ data.donGia }}</td>
+                        <td >{{ data.soLuong * 1000 * data.donGia | number: '1.0-1'}}</td>
+                        <td >{{ data.soLuong ? convertTienTobangChu(data.soLuong * 1000 * data.donGia) : '' }}</td>
+                        <td class="text-center">
+                          <a (click)="startEdit(i)">
+                            <i class="fa fa-pencil"></i>
+                          </a>
+                          <a (click)="deleteRow(data.idVirtual)">
+                            <i class="fa fa-trash-o do"></i>
+                          </a>
+                        </td>
+                      </ng-container>
+                      <ng-template #editTemplate>
+                        <td class="text-center">{{i+1}}</td>
+                        <td>
+                          <input type="text" [(ngModel)]="editCache[i].data.goiThau" nz-input name="goiThau"  />
+                        </td>
+                        <td>
+                          <nz-input-number nz-input [(ngModel)]="editCache[i].data.soLuong"  [nzMin]="1" [nzStep]="1"
+                            [nzSize]="'small'" (input)="calclatorThanhTien()" >
+                          </nz-input-number>
+                        </td>
+                        <!-- <td><input type="text" [(ngModel)]="editCache[i].data.maCcuc"  nz-input /> </td> -->
+                        <td>
+                          <nz-select [(ngModel)]="editCache[i].data.maDvi" (ngModelChange)="changeChiCuc($event,i)">
+                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                          </nz-select>
+                        </td>
+                        <!-- <td><input type="text" [(ngModel)]="editCache[i].data.maDiemKho" nz-input /> </td> -->
+                        <td>
+                          <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                          </nz-select>
+                        </td>
+                        <td><input type="text" [(ngModel)]="editCache[i].data.diaDiemNhap" nz-input /> </td>
+                        <td>
+                          <nz-input-number nz-input  [(ngModel)]="editCache[i].data.donGia"  [nzMin]="1" [nzStep]="1"
+                            [nzSize]="'small'">
+                          </nz-input-number>
+                        </td>
+                        <td >
+                          {{editCache[i].data.soLuong *
+                          1000 *
+                          editCache[i].data.donGia | number: '1.0-1'}}
+                        </td>
+                        <td >{{editCache[i].data.soLuong ?
+                          convertTienTobangChu(editCache[i].data.soLuong *
+                          1000 *
+                          editCache[i].data.donGia) : '' }}</td>
+                        <td class="text-center">
+                          <a (click)="saveEdit(i)" class="save">
+                            <i class="icon htvbdh_tcdt_save"></i>
+                          </a>
+                          <a (click)="cancelEdit(i)">
+                            <i class="fa fa-ban do"></i>
+                          </a>
+                        </td>
+                      </ng-template>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </nz-card>
+              <ng-template #tableCardNhaThau>
+                <button type="button" class="btn btn-main" 
+                  *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''"
+                  (click)="themMoiGoiThau()">
+                  <i class="icon htvbdh_dau-cong"></i>
+                  <span>Thêm</span>
+                </button>
+                <button type="button" class="btn btn-sub" *ngIf="tabSelected !== 'thongTinChung'"
+                  (click)="export()">
+                  <i class="icon htvbdh_chuyen-xu-ly"></i>
+                  <span>Export</span>
+                </button>
+              </ng-template>
             </nz-tab>
             <nz-tab [nzTitle]="'Căn cứ xác định'" class="cc-xac-dinh__container" (nzClick)="tabSelected = 'ccXacDinh'">
               <div nz-row [nzGutter]="[16, 12]">
@@ -533,14 +549,14 @@
               </div>
               <ng-template #tableCardBaoGiaThiTruong>
                 <button type="button" class="btn btn-main" (click)="taiLieuDinhKem('bao-gia-thi-truong')"
-                  *ngIf="chiTietThongTinDXKHLCNT.trangThai === '00'  || id===0 || chiTietThongTinDXKHLCNT.trangThai === '03'">
+                  *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                   <i class="icon htvbdh_dau-cong"></i>
                   <span>Thêm</span>
                 </button>
               </ng-template>
               <ng-template #tableCardCanCuKhac>
                 <button type="button" class="btn btn-main" (click)="taiLieuDinhKem('can-cu-khac')"
-                  *ngIf="chiTietThongTinDXKHLCNT.trangThai === '00'  || id===0 || chiTietThongTinDXKHLCNT.trangThai === '03'">
+                  *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03' || formData.value.trangThai == ''">
                   <i class="icon htvbdh_dau-cong"></i>
                   <span>Thêm</span>
                 </button>
@@ -565,23 +581,12 @@
             </nz-form-item>
             <!-- end thêm sửa -->
             <!-- </form> -->
-            <button type="button" class="btn btn-main btn-them-goi-thau"
-              *ngIf="tabSelected == 'dsGoiThau' && (chiTietThongTinDXKHLCNT.trangThai === '00'  || id===0 || chiTietThongTinDXKHLCNT.trangThai === '03')"
-              (click)="themMoiGoiThau()">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm</span>
-            </button>
-            <button type="button" class="btn btn-sub btn-export" *ngIf="tabSelected !== 'thongTinChung'"
-              (click)="export()">
-              <i class="icon htvbdh_chuyen-xu-ly"></i>
-              <span>Export</span>
-            </button>
             <ng-template #tableCard1>
-              <button *ngIf="formData.value.trangThai == ''" type="button" class="btn btn-main" (click)="themMoi()" >
+              <button *ngIf="formData.value.trangThai == ''" type="button" class="btn btn-main" (click)="save()" >
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
               </button>
-              <button *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'" type="button" class="btn btn-main" (click)="themMoi()" >
+              <button *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == '03'" type="button" class="btn btn-main" (click)="save()" >
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
               </button>

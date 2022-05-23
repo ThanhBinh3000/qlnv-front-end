@@ -25,10 +25,29 @@
           <nz-breadcrumb-item class="last-breadcrumb">{{title}}</nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
+      <div class="canphai phai">
+        <button class="btn btn-main btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuchoi()">
+          <i class="icon htvbdh_tu-choi"></i>
+          <span>Từ chối</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="filedinhkem()">
+          <i class="icon htvbdh_paperclip"></i>
+          <span>file đính kèm</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tạo quyết định PD KHLCNT</span>
+        </button>
+
+      </div>
     </div>
   </div>
 </nz-affix>
-<div class="tab-menu row">
+<!-- <div class="tab-menu row">
   <div class="tab-item col-4" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''"
     (click)="selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu')">
     <div class="content-tab-item">
@@ -47,5 +66,111 @@
       Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
     </div>
   </div>
+</div> -->
+<nz-affix class="menu-step" [nzOffsetTop]="78">
+  <nz-steps nzType="navigation" nzSize="small" [nzCurrent]="index" (nzIndexChange)="onIndexChange($event)">
+    <nz-step nzTitle="Bước 1" [nzSubtitle]="index == 0 ? 'Đang thực hiện' : ''"
+      [nzStatus]="index == 0 ? 'process':'wait'" nzDescription="Tổng hợp kế hoạch lựa chọn nhà thầu">
+    </nz-step>
+    <nz-step nzTitle="Bước 2" [nzSubtitle]="index == 1 ? 'Đang thực hiện' : ''"
+      [nzStatus]="index == 1 ? 'process':'wait'" nzDescription=" Phương án kế hoạch lựa chọn nhà thầu">
+    </nz-step>
+    <nz-step nzTitle="Bước 3" [nzSubtitle]="index == 2 ? 'Đang thực hiện' : ''"
+      [nzStatus]="index == 2 ? 'process':'wait'" nzDescription=" Quyết định phê duyệt kế hoạch lựa chọn nhà thầu">
+    </nz-step>
+  </nz-steps>
+</nz-affix>
+<div *ngIf="selectedTab == 'tong-hop'">
+  <app-tong-hop-khlcnt></app-tong-hop-khlcnt>
 </div>
-<router-outlet></router-outlet>
+<div *ngIf="selectedTab == 'phuong-an'">
+  <app-phuong-an-khlcnt></app-phuong-an-khlcnt>
+</div>
+<div *ngIf="selectedTab == 'phe-duyet'">
+  <app-quyetdinh-pheduyet-khlcnt></app-quyetdinh-pheduyet-khlcnt>
+</div>
+
+<!-- modal Lý do từ chối -->
+<nz-modal [(nzVisible)]="lydotuchoi" nzClassName="tuchoi" nzWidth="600px" nzTitle="Lý do từ chối"
+  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="24">
+      <!-- Lý do từ chối -->
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="ghichu">
+        <nz-form-item>
+          <!-- nzRequired -->
+          <!-- <nz-form-label nzRequired nzFor="">Lý do từ chối</nz-form-label> -->
+          <nz-form-control nzErrorTip="Nhập lý do từ chối">
+            <textarea rows="6" maxlength="1000" nz-input></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Lý do từ chối -->
+    </div>
+  </ng-container>
+  <div *nzModalFooter class="m-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk()">
+          <i aria-hidden="true" class="icon htvbdh_tu-choi"></i>
+          <span>Từ chối</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Đóng</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nz-modal>
+<!-- modal Lý do từ chối -->
+
+<!-- modal Tài liệu đính kèm -->
+<nz-modal [(nzVisible)]="dinhkem" nzClassName="tuchoi" nzWidth="600px" nzTitle="Thêm mới căn cứ xác định giá"
+  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+
+    <div nz-row [nzGutter]="24">
+      <!-- Tên tài liệu -->
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="">Tên tài liệu</nz-form-label>
+          <nz-form-control>
+            <input nz-input nzValue="" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Tên tài liệu -->
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+        <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+          <button nz-button>
+            <i nz-icon nzType="upload"></i>
+            Tài liệu đính kèm
+          </button>
+        </nz-upload>
+      </div>
+
+    </div>
+  </ng-container>
+  <div *nzModalFooter class="m-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk()">
+          <i aria-hidden="true" class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+          <i aria-hidden="true" class="fa fa-sign-out"></i>
+          <span>Đóng</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nz-modal>
+<!-- modal Lý do từ chối -->

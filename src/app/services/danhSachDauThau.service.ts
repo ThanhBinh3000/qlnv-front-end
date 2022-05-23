@@ -15,7 +15,7 @@ import { BaseService } from './base.service';
 export class DanhSachDauThauService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/lcnt','/qlnv-gateway/qlnv-hang');
+    super(httpClient, 'dx-kh/lcnt', '/qlnv-gateway/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {
@@ -53,7 +53,7 @@ export class DanhSachDauThauService extends BaseService {
       .toPromise();
   }
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/phe-duyet`;
+    const url = `http://localhost:8099/dx-kh/lcnt/phe-duyet`;
     return this.httpClient.post(url, body).toPromise();
   }
   deleteKeHoachLCNT(body: any): Promise<any> {
