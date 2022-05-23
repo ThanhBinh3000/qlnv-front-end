@@ -125,7 +125,7 @@
                 <ng-template [ngIf]="item.trangThai == '0'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <ng-container *ngIf="userInfo?.username == baoCao?.nguoiTao && !status && !id;else templateNguoiBcao ">
+                <ng-container *ngIf="userInfo?.username == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện" [(ngModel)]="item.nguoiBcao"
                     [class]="item.nguoiBcao ?'' : 'input-error-validate' ">
                     <nz-option *ngFor="let item of nguoiBcaos" [nzValue]="item.tenDm" [nzLabel]="item.tenDm"></nz-option>
@@ -728,10 +728,6 @@
           <i class="icon htvbdh_tcdt_import"></i>
           <span>Import</span>
         </button>
-        <!-- <button type="button" class="btn btn-sub" [hidden]="status" (click)="saveTemp()">
-          <i class="icon htvbdh_tcdt_import"></i>
-          <span>Lưu</span>
-        </button> -->
         <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1',tabSelected);" [hidden]="statusBtnOk">
           <span>OK</span>
         </button>
