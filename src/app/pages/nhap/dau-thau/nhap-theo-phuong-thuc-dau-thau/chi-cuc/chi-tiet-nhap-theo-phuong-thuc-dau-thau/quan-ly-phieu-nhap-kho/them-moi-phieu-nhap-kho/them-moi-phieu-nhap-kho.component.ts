@@ -1,5 +1,4 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -11,6 +10,7 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { Subject } from 'rxjs';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'them-moi-phieu-nhap-kho',
@@ -29,7 +29,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
