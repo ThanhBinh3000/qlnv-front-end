@@ -168,13 +168,13 @@ export class DanhSachKeHoachPhanBoNganSachComponent implements OnInit {
   // click o checkbox all
   updateAllChecked(): void {
     this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
+    if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcao.checked = true
       this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({
         ...item,
         checked: true
       }));
     } else {
-      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+      this.danhSachBaoCao = this.danhSachBaoCao.map(item => ({    // checkboxall == false thi set lai lstCtietBcao.checked = false
         ...item,
         checked: false
       }));

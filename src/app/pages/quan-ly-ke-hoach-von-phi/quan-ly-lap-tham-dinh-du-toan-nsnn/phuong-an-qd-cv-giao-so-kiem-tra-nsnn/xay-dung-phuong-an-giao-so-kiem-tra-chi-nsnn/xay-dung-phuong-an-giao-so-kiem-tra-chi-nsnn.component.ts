@@ -65,7 +65,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     listIdDelete: string = '';
     maDviTien: string;
     //danh muc
-    lstCTietBCao: ItemData[] = [];
+    lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
     noiDungs: any[] = [];
     nhomChis: any[] = [];
@@ -253,7 +253,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;
-                    this.lstCTietBCao = data.data.listCtiet;
+                    this.lstCtietBcao = data.data.listCtiet;
                     this.maDviTien = data.data.maDviTien;
                     //this.divMoneyTotal();
                     // this.maBaoCao = this.chiTietBcaos?.maBcao;
@@ -331,7 +331,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        this.lstCTietBCao.filter(item => {
+        this.lstCtietBcao.filter(item => {
             if (this.editCache[item.id].edit == true) {
                 checkSaveEdit = false;
             }
@@ -341,16 +341,16 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             return;
         }
 
-        this.lstCTietBCao.forEach((e) => {
+        this.lstCtietBcao.forEach((e) => {
             if (typeof e.id != 'number') {
                 e.id = null;
             }
         });
 
-        let lstCTietBCaoTemp = [];
+        let lstCtietBcaoTemp = [];
         let checkMoneyRange = true;
         // gui du lieu trinh duyet len server
-        this.lstCTietBCao.forEach(item => {
+        this.lstCtietBcao.forEach(item => {
             let listCtietDvi = [];
             item.listCtiet.forEach(e => {
                 let soTranChi = mulMoney(e.soTranChi, this.donViTiens);
@@ -363,7 +363,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     soTranChi: soTranChi,
                 })
             })
-            lstCTietBCaoTemp.push({
+            lstCtietBcaoTemp.push({
                 ...item,
                 listCtiet: listCtietDvi,
             })
@@ -382,7 +382,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: this.id,
                 listIdDeletes: this.listIdDelete,
                 fileDinhKems: listFile,
-                listCtiet: lstCTietBCaoTemp,
+                listCtiet: lstCtietBcaoTemp,
                 maDvi: this.maDonViTao,
                 maDviTien: this.maDviTien,
                 maPa: this.maPa,
@@ -495,9 +495,9 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     //checkox trên tùng row
     updateSingleChecked(): void {
-        if (this.lstCTietBCao.every((item) => !item.checked)) {
+        if (this.lstCtietBcao.every((item) => !item.checked)) {
             this.allChecked = false;
-        } else if (this.lstCTietBCao.every((item) => item.checked)) {
+        } else if (this.lstCtietBcao.every((item) => item.checked)) {
             this.allChecked = true;
         }
     }
@@ -505,12 +505,12 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //check all input
     updateAllChecked(): void {
         if (this.allChecked) {
-            this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
+            this.lstCtietBcao = this.lstCtietBcao.map((item) => ({
                 ...item,
                 checked: true,
             }));
         } else {
-            this.lstCTietBCao = this.lstCTietBCao.map((item) => ({
+            this.lstCtietBcao = this.lstCtietBcao.map((item) => ({
                 ...item,
                 checked: false,
             }));
@@ -519,7 +519,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     // xoa dong
     deleteById(id: any): void {
-        this.lstCTietBCao = this.lstCTietBCao.filter((item) => item.id != id);
+        this.lstCtietBcao = this.lstCtietBcao.filter((item) => item.id != id);
         if (typeof id == 'number') {
             this.listIdDelete += id + ',';
         }
@@ -528,13 +528,13 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     // xóa với checkbox
     deleteSelected() {
         // add list delete id
-        this.lstCTietBCao.filter((item) => {
+        this.lstCtietBcao.filter((item) => {
             if (item.checked == true && typeof item.id == 'number') {
                 this.listIdDelete += item.id + ',';
             }
         });
         // delete object have checked = true
-        this.lstCTietBCao = this.lstCTietBCao.filter(
+        this.lstCtietBcao = this.lstCtietBcao.filter(
             (item) => item.checked != true,
         );
         this.allChecked = false;
@@ -558,7 +558,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         })
 
-        this.lstCTietBCao.splice(id, 0, item);
+        this.lstCtietBcao.splice(id, 0, item);
         this.editCache[item.id] = {
             edit: true,
             data: { ...item },
@@ -588,23 +588,23 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
         //     return;
         // }
-        this.editCache[id].data.checked = this.lstCTietBCao.find((item) => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-        const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+        this.editCache[id].data.checked = this.lstCtietBcao.find((item) => item.id === id).checked; // set checked editCache = checked lstCtietBcao
+        const index = this.lstCtietBcao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
     //hủy thao tác sửa update lại giá trị ban đầu
     cancelEdit(id: string): void {
-        const index = this.lstCTietBCao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+        const index = this.lstCtietBcao.findIndex((item) => item.id === id); // lay vi tri hang minh sua
         this.editCache[id] = {
-            data: { ...this.lstCTietBCao[index] },
+            data: { ...this.lstCtietBcao[index] },
             edit: false,
         };
     }
 
     updateEditCache(): void {
-        this.lstCTietBCao.forEach((item) => {
+        this.lstCtietBcao.forEach((item) => {
             this.editCache[item.id] = {
                 edit: false,
                 data: { ...item },
@@ -620,7 +620,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //     this.lstQlnvKhvonphiDsachGiaoSo = [];
     //     this.quanLyVonPhiService.maGiao().subscribe((res) => {
     //         this.maGiao = res.data;
-    //         this.lstCTietBCao.forEach((e) => {
+    //         this.lstCtietBcao.forEach((e) => {
     //             var manoidung = e.maNoiDung;
     //             var manhom = e.maNhom;
     //             var arr = e.listCtietDvi;
@@ -663,7 +663,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //     this.lstQlnvKhvonphiDsachGiaoSo = [];
     //     this.quanLyVonPhiService.maGiao().subscribe((res) => {
     //         this.maGiao = res.data;
-    //         this.lstCTietBCao.forEach((e) => {
+    //         this.lstCtietBcao.forEach((e) => {
     //             var manoidung = e.maNoiDung;
     //             var nhom = e.maNhom;
     //             var madonvinhan;
@@ -706,7 +706,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     // changeInput() {
     //     this.listColNames.forEach(e => {
     //         e.tong = 0;
-    //         this.lstCTietBCao.forEach(item => {
+    //         this.lstCtietBcao.forEach(item => {
     //             item.listCtietDvi.forEach(el => {
     //                 if (e.maDvi === el.maKhuVuc) {
     //                     e.tong += el.soTranChi;
@@ -723,19 +723,19 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //         sum += Number(e.soTranChi);
     //     })
     //     this.editCache[id].data.tongSo = sum;
-    //     var index = this.lstCTietBCao.findIndex(item => item.id == id);
-    //     Object.assign(this.lstCTietBCao[index], this.editCache[id].data);
+    //     var index = this.lstCtietBcao.findIndex(item => item.id == id);
+    //     Object.assign(this.lstCtietBcao[index], this.editCache[id].data);
     // }
 
     // updateSumtCache(): void {
-    //     this.lstCTietBCao.forEach((item) => {
+    //     this.lstCtietBcao.forEach((item) => {
     //         var arr = item.listCtietDvi;
     //         const index = item.id;
     //         arr.forEach(el => {
     //             item.tongSo += Number(el.soTranChi)
     //         })
     //         // lay vi tri hang minh sua
-    //         // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+    //         // set lai data cua lstCtietBcao[index] = this.editCache[id].data
 
 
     //     })
@@ -785,7 +785,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     //     }
     //     let lstTemp = [];
     //     let checkMoneyRange = true;
-    //     this.lstCTietBCao.forEach(item => {
+    //     this.lstCtietBcao.forEach(item => {
     //         let listCtietDvi = [];
     //         item.listCtietDvi.forEach(e => {
     //             let soTranChi = mulMoney(e.soTranChi, this.donvitien);
@@ -872,7 +872,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
 
     // mullMoneyTotal() {
-    //     this.lstCTietBCao.filter(item => {
+    //     this.lstCtietBcao.filter(item => {
     //         item.listCtietDvi.forEach(e => {
     //             e.soTranChi = mulMoney(e.soTranChi, this.donvitien);
     //         })
@@ -881,7 +881,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
 
     // divMoneyTotal() {
-    //     this.lstCTietBCao.filter(item => {
+    //     this.lstCtietBcao.filter(item => {
     //         item.listCtietDvi.forEach(e => {
     //             e.soTranChi = divMoney(e.soTranChi, this.donvitien);
     //         })
