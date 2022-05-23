@@ -361,7 +361,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
     this.quyetDinhNhapXuat.fileDinhKems = this.taiLieuDinhKemList;
     this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
-    console.log("this.quyetDinhNhapXuat: ", this.quyetDinhNhapXuat);
     if (this.quyetDinhNhapXuat.id > 0) {
       this.quyetDinhNhapXuatService
         .sua(this.quyetDinhNhapXuat)
