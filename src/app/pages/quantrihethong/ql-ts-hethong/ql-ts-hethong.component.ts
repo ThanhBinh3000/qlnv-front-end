@@ -12,6 +12,8 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { ThemQlTSHethongComponent } from './them-ql-ts-hethong/them-ql-ts-hethong.component';
+import { QlTShethongService } from 'src/app/services/quantri-nguoidung/qlTshethong.service';
+import { ActionItem } from 'src/app/constants/form-schema';
 
 
 @Component({
@@ -21,6 +23,7 @@ import { ThemQlTSHethongComponent } from './them-ql-ts-hethong/them-ql-ts-hethon
 })
 export class QlThamSoHeThongComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  [x: string]: any;
   searchValue = '';
   searchFilter = {
     soDxuat: '',
@@ -37,6 +40,7 @@ export class QlThamSoHeThongComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   isVisibleChangeTab$ = new Subject();
+  listAction: ActionItem[];
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -44,11 +48,30 @@ export class QlThamSoHeThongComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private _modalService: NzModalService
-  ) { }
-  // ngAfterViewInit(): void {
-  //   throw new Error('Method not implemented.');
-  // }
+    private _modalService: NzModalService,
+    private _qlTShethongService: QlTShethongService
+  ) {
+    this.initAction();
+  }
+  initAction() {
+    this.listAction = [
+      new ActionItem({
+        class: 'fa fa-pencil-square-o sua',
+        name: 'Sửa',
+        code: 'sua',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.redirectToThemSua(data);
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+    ]
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -134,24 +157,13 @@ export class QlThamSoHeThongComponent implements OnInit {
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
-      },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "param": null,
+      "paramId": null,
+      "status": null,
+      "str": null,
+      "trangThai": null
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this._qlTShethongService.findList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -226,31 +238,42 @@ export class QlThamSoHeThongComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(data?: number) {
-    if (!data) {
-      let modal = this._modalService.create({
-        nzTitle: data
-          ? 'Cập nhập tham số hệ thông'
-          : 'Thêm mới tham số hệ thông',
-        nzContent: ThemQlTSHethongComponent,
-        nzClosable: true,
-        nzFooter: null,
-        nzStyle: { top: '50px' },
-        nzWidth: 600,
-        nzComponentParams: { data },
-      });
-      modal.afterClose.subscribe((b) => {
-        debugger
+  redirectToChiTiet(data?: any, detail?) {
+    let modal = this._modalService.create({
+      nzTitle:
+        'Chi tiết tham số hệ thông',
+      nzContent: ThemQlTSHethongComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 600,
+      nzComponentParams: { data, detail },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+      }
+    });
 
-        if (b) {
-        }
-      });
-    } else {
-      this.router.navigate([
-        '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-        data,
-      ]);
-    }
+
+  }
+
+  redirectToThemSua(data?) {
+    let modal = this._modalService.create({
+      nzTitle: data
+        ? 'Cập nhập tham số hệ thông'
+        : 'Thêm mới tham số hệ thông',
+      nzContent: ThemQlTSHethongComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { data },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+        this.search()
+      }
+    });
 
   }
 

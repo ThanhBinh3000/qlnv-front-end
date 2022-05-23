@@ -15,6 +15,11 @@ import { saveAs } from 'file-saver';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import {
+  CHI_TIEU_KE_HOACH_NAM,
+  MAIN_ROUTE_KE_HOACH,
+  THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
+} from '../ke-hoach.constant';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -54,15 +59,15 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+    if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+    } else if (this.userService.isChiCuc()) {
       this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CUC)) {
+    } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
 
@@ -86,14 +91,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           this.optionsDonVi.push(item);
         }
         this.options = cloneDeep(this.optionsDonVi);
-        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-          for (let i = 0; i < res.data.length; i++) {
-            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-              this.inputDonVi = res.data[i].tenDvi;
-              break;
-            }
-          }
-        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -106,16 +103,9 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  redirectThongTinChiTieuKeHoachNam() {
+  redirectThongTinChiTieuKeHoachNam(id: number) {
     this.router.navigate([
-      '/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinChiTieuKeHoachNam(id) {
-    this.router.navigate([
-      '/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}/${THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
       id,
     ]);
   }

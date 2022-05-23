@@ -11,6 +11,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
         children: [
             {
                 title: 'Thóc',
+                loaiVthh: 'thoc',
                 icon: '',
                 hasChild: true,
                 url: '',
@@ -20,7 +21,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                 children: [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen',
-                        title: 'Kế hoạch lựa chọn nhà thầu tổng cục',
+                        title: 'Kế hoạch lựa chọn nhà thầu',
                         url: '/dau-thau/kehoach-luachon-nhathau/thoc',
                         urlTongCuc: '',
                         urlCuc: '',
@@ -29,7 +30,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Tổ chức triển khai lựa chọn nhà thầu cục',
-                        url: '/dau-thau/thoc/nhap-thong-tin-dau-thau-cuc',
+                        url: '/dau-thau/trienkhai-luachon-nhathau/thoc',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -37,7 +38,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/dieuchinh-luachon-nhathau/thoc',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -46,6 +47,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
             },
             {
                 title: 'Gạo',
+                loaiVthh: 'gao',
                 icon: '',
                 hasChild: true,
                 url: '',
@@ -64,7 +66,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Tổ chức triển khai lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/trienkhai-luachon-nhathau/gao',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -72,7 +74,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/dieuchinh-luachon-nhathau/gao',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -81,6 +83,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
             },
             {
                 title: 'Muối',
+                loaiVthh: 'muoi',
                 icon: '',
                 hasChild: true,
                 url: '',
@@ -99,7 +102,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Tổ chức triển khai lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/trienkhai-luachon-nhathau/muoi',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -107,7 +110,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/dieuchinh-luachon-nhathau/muoi',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -116,6 +119,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
             },
             {
                 title: 'Vật tư',
+                loaiVthh: 'vat-tu',
                 icon: '',
                 hasChild: true,
                 url: '',
@@ -134,7 +138,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Tổ chức triển khai lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/trienkhai-luachon-nhathau/vat-tu',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',
@@ -142,7 +146,7 @@ export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
                     {
                         icon: 'htvbdh_tcdt_nhomquyen2',
                         title: 'Điều chỉnh kế hoạch lựa chọn nhà thầu',
-                        url: '',
+                        url: '/dau-thau/dieuchinh-luachon-nhathau/vat-tu',
                         urlTongCuc: '',
                         urlCuc: '',
                         urlChiCuc: '',

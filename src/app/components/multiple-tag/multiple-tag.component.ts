@@ -21,9 +21,10 @@ export class MultipleTagComponent implements OnInit {
   @Output()
   removeDataEvent = new EventEmitter<any>();
   nameFile: string;
-  constructor(public globals: Globals) {}
+  constructor(public globals: Globals) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   removeData(item: any) {
     this.removeDataEvent.emit(item);

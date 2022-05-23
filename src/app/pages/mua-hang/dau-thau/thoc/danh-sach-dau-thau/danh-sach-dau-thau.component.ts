@@ -60,6 +60,7 @@ export class DanhSachDauThauComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log("âsdsadasdsa");
     this.userInfo = this.userService.getUserLogin();
     if (this.router.url.includes(LEVEL.TONG_CUC)) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;

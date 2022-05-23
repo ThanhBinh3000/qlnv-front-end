@@ -39,6 +39,13 @@
       right: 25px;
       top: 0;
     }
+    .form-data-detail {
+      .ant-form-item-label {
+        display: block;
+        white-space: unset;
+        text-align: left;
+      }
+    }
   }
   .star {
     color: #ff4d4f;

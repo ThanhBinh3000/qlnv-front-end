@@ -22,30 +22,23 @@
                             <div class="contentDetail">
                                 <div class="main-content-dau-thau">
                                     <nz-tabset nzType="card">
-                                        <nz-tab *ngFor="let tab of route.children" [nzTitle]="tab.title">
+                                        <nz-tab *ngFor="let tab of route.children" [nzTitle]="tab.title" >
                                             <div nz-row [nzGutter]="24" class="vat-tu">
-                                                <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6"
-                                                    *ngFor="let item of tab.children">
-                                                    <nz-card class="card-tree" [ngClass]="
-                                item.url && routerUrl.indexOf(item.url) != -1
-                                  ? 'active-tab'
-                                  : ''
-                              " (click)="redirect(item.url)">
-                                                        <div class="content-item">
-                                                            <span class="icon" [ngClass]="item.icon"></span>
-                                                            <div class="content-item-title">
-                                                                {{ item.title }}
+                                                <ng-container *ngFor="let item of tab.children">
+                                                    <div *ngIf="filterRole(item.url)" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+                                                        <nz-card class="card-tree" [ngClass]="item.url && routerUrl.indexOf(item.url) != -1
+                                                                ? 'active-tab'
+                                                                : ''
+                                                            " (click)="redirect(item.url)">
+                                                            <div class="content-item">
+                                                                <span class="icon" [ngClass]="item.icon"></span>
+                                                                <div class="content-item-title">
+                                                                    {{ item.title }}
+                                                                </div>
                                                             </div>
-                                                            <!-- <div class="item-url-menu row">
-                                  <a [href]="item.urlTongCuc" class="col-md-4 text-center item-url-click-left">Tổng
-                                    cục</a>
-                                  <a [href]="item.urlCuc" class="col-md-4 text-center item-url-click-center">Cục</a>
-                                  <a [href]="item.urlChiCuc" class="col-md-4 text-center item-url-click-right">Chi
-                                    cục</a>
-                                </div> -->
-                                                        </div>
-                                                    </nz-card>
-                                                </div>
+                                                        </nz-card>
+                                                    </div>
+                                                </ng-container>
                                             </div>
                                         </nz-tab>
                                     </nz-tabset>
@@ -53,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content-child-menu" *ngIf="!route.hasTab" nz-row [nzGutter]="24">
+                    <!-- <div class="content-child-menu" *ngIf="!route.hasTab" nz-row [nzGutter]="24">
                         <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6" *ngFor="let menu of route.children">
                             <nz-card class="card-tree" [ngClass]="
                     menu.url && routerUrl.indexOf(menu.url) != -1
@@ -63,16 +56,10 @@
                                 <div class="content-item">
                                     <span class="icon" [ngClass]="menu.icon"></span>
                                     <div class="content-item-title">{{ menu.title }}</div>
-                                    <!-- <div class="item-url-menu row">
-                      <a [href]="menu.urlTongCuc" class="col-md-4 text-center item-url-click-left">Tổng cục</a>
-                      <a [href]="menu.urlCuc" class="col-md-4 text-center item-url-click-center">Cục</a>
-                      <a [href]="menu.urlChiCuc" class="col-md-4 text-center item-url-click-right">Chi
-                        cục</a>
-                    </div> -->
                                 </div>
                             </nz-card>
                         </div>
-                    </div>
+                    </div> -->
                 </ng-template>
             </li>
             <li nz-submenu class="nav-item prev" (click)="endSlide()">

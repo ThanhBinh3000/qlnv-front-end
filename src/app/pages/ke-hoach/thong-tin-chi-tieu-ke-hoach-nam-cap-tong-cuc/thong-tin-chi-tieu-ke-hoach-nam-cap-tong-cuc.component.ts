@@ -39,6 +39,10 @@ import * as dayjs from 'dayjs';
 import { ItemDetail } from 'src/app/models/ItemDetail';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
+import {
+  CHI_TIEU_KE_HOACH_NAM,
+  MAIN_ROUTE_KE_HOACH,
+} from '../ke-hoach.constant';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -123,16 +127,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private uploadFileService: UploadFileService,
-    private userService: UserService,
-  ) {}
+    public userService: UserService,
+  ) { }
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
+    if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+    } else if (this.userService.isChiCuc()) {
       this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-    } else if (this.router.url.includes(LEVEL.CUC)) {
+    } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
     this.newObjectLuongThuc();
@@ -645,7 +649,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+    this.router.navigate([`/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`]);
   }
 
   loadThongTinChiTieuKeHoachNam(id: number) {
@@ -918,7 +922,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             lt.stt = i + 1;
           }
         });
-        this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
+        this.dsVatTuClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTu);
         this.loadData();
       },
     });
@@ -1343,9 +1347,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save(isGuiDuyet?: boolean) {
-    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${
-      this.formData.get('soQD').value
-    }${this.qdTCDT}`;
+    this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
+      }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value;
@@ -1571,8 +1574,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
       ? Intl.NumberFormat('en-US').format(
-          this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
-        )
+        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
+      )
       : '0';
   }
   calculatortkcnTongGao(i: number): string {
@@ -1583,8 +1586,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
       ? Intl.NumberFormat('en-US').format(
-          this.dsKeHoachLuongThucClone[i].tkcnTongGao,
-        )
+        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
+      )
       : '0';
   }
   calculatorxtnTongSoQuyThoc(i: number): string {
@@ -1593,8 +1596,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
-        )
+        this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
+      )
       : '0';
   }
   calculatortkcnTongSoQuyThoc(i: number): string {
@@ -1603,8 +1606,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
-        )
+        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
+      )
       : '0';
   }
   calculatorntnTongSoQuyThoc(i: number): string {
@@ -1613,8 +1616,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
-        )
+        this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
+      )
       : '0';
   }
   onInput(e: Event, data: string): void {
@@ -1728,7 +1731,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     try {
       const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
-      let donViCuc = {};
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           const item = {
@@ -1736,22 +1738,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
-          if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-            // this.isAddLuongThuc = true;
-            // this.isAddMuoi = true;
-            for (let i = 0; i < res.data.length; i++) {
-              if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-                donViCuc = res.data[i];
-                this.tenDonViCuc = res.data[i].tenDvi;
-                break;
-              }
-            }
-          }
-        }
-        if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-          this.selectDonViMuoi(donViCuc);
-          this.selectDonViKHLT(donViCuc);
-          this.selectDonViVatTu(donViCuc);
         }
         this.options = cloneDeep(this.optionsDonVi);
       } else {
@@ -1768,8 +1754,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnGao * 2;
     return this.keHoachLuongThucCreate.ntnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
-        )
+        this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
+      )
       : '0';
   }
   calculatorxtnTongThocCreate(): string {
@@ -1781,8 +1767,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         );
       return this.keHoachLuongThucCreate.xtnTongThoc
         ? Intl.NumberFormat('en-US').format(
-            this.keHoachLuongThucCreate.xtnTongThoc,
-          )
+          this.keHoachLuongThucCreate.xtnTongThoc,
+        )
         : '0';
     }
   }
@@ -1792,8 +1778,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
         ? Intl.NumberFormat('en-US').format(
-            this.keHoachLuongThucCreate.xtnTongGao,
-          )
+          this.keHoachLuongThucCreate.xtnTongGao,
+        )
         : '0';
     }
   }
@@ -1803,8 +1789,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
-        )
+        this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
+      )
       : '0';
   }
   calculatortkdnTongQuyThocCreate(): string {
@@ -1813,8 +1799,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
-        )
+        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
+      )
       : '0';
   }
   calculatortkdnTongThocCreate(): string {
@@ -1822,8 +1808,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkdnTongThoc,
-        )
+        this.keHoachLuongThucCreate.tkdnTongThoc,
+      )
       : '0';
   }
   calculatortkdnTongGaoCreate(): string {
@@ -1831,8 +1817,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkdnTongGao,
-        )
+        this.keHoachLuongThucCreate.tkdnTongGao,
+      )
       : '0';
   }
   calculatortkcnTongThocCreate(): string {
@@ -1842,8 +1828,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkcnTongThoc,
-        )
+        this.keHoachLuongThucCreate.tkcnTongThoc,
+      )
       : '0';
   }
   calculatortkcnTongGaoCreate(): string {
@@ -1853,8 +1839,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkcnTongGao,
-        )
+        this.keHoachLuongThucCreate.tkcnTongGao,
+      )
       : '0';
   }
   calculatortkcnTongSoQuyThocCreate(): string {
@@ -1863,8 +1849,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
       ? Intl.NumberFormat('en-US').format(
-          this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
-        )
+        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
+      )
       : '0';
   }
   themMoiKHLT() {
@@ -2285,7 +2271,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachVatTuCreate.vatTuThietBi[0].cacNamTruoc[2].soLuong;
     vatTuTemp.tongNhap = this.keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam
       ? this.keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam +
-        this.keHoachVatTuCreate.vatTuThietBi[0].tongCacNamTruoc
+      this.keHoachVatTuCreate.vatTuThietBi[0].tongCacNamTruoc
       : 0;
     this.keHoachVatTuDialog.vatTuThietBi.push(vatTuTemp);
     this.isAddVatTu = false;
@@ -2396,8 +2382,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam;
     return this.dsVatTuClone[i].vatTuThietBi[0].tongNhap
       ? Intl.NumberFormat('en-US').format(
-          this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
-        )
+        this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
+      )
       : '0';
   }
   calculatorTongChiTieuCacNamTruoc(i: number): string {
@@ -2407,8 +2393,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[2].soLuong;
     return this.dsVatTuClone[i].tongChiTieuCacnamTruoc
       ? Intl.NumberFormat('en-US').format(
-          this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
-        )
+        this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
+      )
       : '0';
   }
 
@@ -2416,6 +2402,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.taiLieuDinhKemList = this.taiLieuDinhKemList.filter(
       (x) => x.id !== data.id,
     );
+    this.thongTinChiTieuKeHoachNam.fileDinhKemReqs = this.thongTinChiTieuKeHoachNam.fileDinhKemReqs.filter(
+      (x) => x.id !== data.id,
+    );
+
   }
   deleteCanCuTag(data: any) {
     this.canCuList = this.canCuList.filter((x) => x.id !== data.id);
@@ -2535,9 +2525,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     return (
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH ||
       this.thongTinChiTieuKeHoachNam.trangThai ===
-        this.globals.prop.LANH_DAO_DUYET ||
+      this.globals.prop.LANH_DAO_DUYET ||
       this.thongTinChiTieuKeHoachNam.trangThai ===
-        this.globals.prop.DU_THAO_TRINH_DUYET
+      this.globals.prop.DU_THAO_TRINH_DUYET
     );
   }
 }

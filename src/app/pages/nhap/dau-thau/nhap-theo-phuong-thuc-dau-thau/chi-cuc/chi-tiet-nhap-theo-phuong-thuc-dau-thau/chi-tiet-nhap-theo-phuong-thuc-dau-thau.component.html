@@ -1,0 +1,75 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2" href="javascript: history.go(-1)">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Nhập</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Nhập theo kế hoạch</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Nhập theo phương thức đấu thầu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">{{loaiVthh}}</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Chi cục</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{title}}</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="tab-menu row">
+  <div class="tab-item col-2" [ngClass]="selectedTab == 'bien-ban' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('bien-ban','Lập biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia')">
+    <div class="content-tab-item pd-l-6">
+      Lập biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia
+    </div>
+  </div>
+  <div class="tab-item col-2" [ngClass]="selectedTab == 'phieu-kiem-tra' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phieu-kiem-tra','Phiếu kiểm tra chất lượng hàng dự trữ quốc gia nhập kho')">
+    <div class="content-tab-item pd-l-6">
+      Phiếu kiểm tra chất lượng hàng dự trữ quốc gia nhập kho
+    </div>
+  </div>
+  <div class="tab-item col-1" [ngClass]="selectedTab == 'phieu-nhap-kho' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phieu-nhap-kho','Phiếu nhập kho')">
+    <div class="content-tab-item">
+      Phiếu nhập kho
+    </div>
+  </div>
+  <div class="tab-item col-1" [ngClass]="selectedTab == 'bang-ke-hang' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('bang-ke-hang','Bảng kê cân hàng')">
+    <div class="content-tab-item">
+      Bảng kê cân hàng
+    </div>
+  </div>
+  <div class="tab-item col-2" [ngClass]="selectedTab == 'bien-ban-day-kho' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('bien-ban-day-kho','Biên bản nhập đầy kho')">
+    <div class="content-tab-item">
+      Biên bản nhập đầy kho
+    </div>
+  </div>
+  <div class="tab-item col-2" [ngClass]="selectedTab == 'bien-ban-lay-mau' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('bien-ban-lay-mau','Biên bản lấy mẫu/ bàn giao mẫu hàng để kiểm tra các chỉ tiêu kỹ thuật')">
+    <div class="content-tab-item pd-l-6">
+      Biên bản lấy mẫu/ bàn giao mẫu hàng để kiểm tra các chỉ tiêu kỹ thuật
+    </div>
+  </div>
+  <div class="tab-item col-2" [ngClass]="selectedTab == 'phieu-kiem-nghiem' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phieu-kiem-nghiem','Phiếu kiểm nghiệm chất lượng thóc dự trữ quốc gia')">
+    <div class="content-tab-item pd-l-6">
+      Phiếu kiểm nghiệm chất lượng thóc dự trữ quốc gia
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

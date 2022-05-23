@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { STATUS_USER } from 'src/app/constants/config';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -23,6 +23,7 @@ import { LoaiDanhMuc } from 'src/app/constants/status';
 export class ThemMoiNSDComponent implements OnInit {
   public formGroup: FormGroup;
   statusValue = "A"
+  antruongkhichinhsua = true;
   data: any;
   detail: any;
   comfirmPass: any;
@@ -58,6 +59,7 @@ export class ThemMoiNSDComponent implements OnInit {
       this.qlNSDService.userInfo({ "str": this.data }).then(res => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.data = res.data;
+          this.antruongkhichinhsua = false;
           this.initForm()
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -124,7 +126,7 @@ export class ThemMoiNSDComponent implements OnInit {
       "groupId": [this.data?.groupId ?? 0, Validators.required],
       "groupsArr": [this.data?.groupsArr ?? "string"],
       "password": [this.data?.password ?? "", Validators.required],
-      "cfpassword": ["", Validators.required],
+      "checkPassword": [null, [Validators.required, this.confirmationValidator]],
       "phoneNo": [this.data?.phoneNo ?? null],
       "status": [this.data?.status ?? STATUS_USER.HOAT_DONG],
       "str": [this.data?.str ?? null],
@@ -134,6 +136,15 @@ export class ThemMoiNSDComponent implements OnInit {
       "username": [this.data?.username ?? "", Validators.required],
     });
   }
+
+  confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.formGroup.controls.password.value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
 
 
   async themmoi() {
@@ -146,7 +157,7 @@ export class ThemMoiNSDComponent implements OnInit {
     let body = this.formGroup.value
 
     body.dvql = maDonVi;
-    delete body.cfpassword
+    delete body.checkPassword
     if (this.data) {
       body.id = this.data.id
     };
