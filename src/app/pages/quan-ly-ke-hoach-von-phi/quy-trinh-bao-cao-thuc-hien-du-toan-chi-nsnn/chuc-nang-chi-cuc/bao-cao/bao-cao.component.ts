@@ -408,6 +408,7 @@ export class BaoCaoComponent implements OnInit {
         if (data.statusCode == 0) {
           await this.getDetailReport();
           this.getStatusButton();
+          this.getStatusButtonOk();
           if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
           } else {
@@ -996,8 +997,13 @@ export class BaoCaoComponent implements OnInit {
       return;
     }
     baoCaoChiTietTemp.trangThai = maChucNang;
+    let checkSaveEdit;
     baoCaoChiTietTemp?.lstCtietBcaos.filter(data => {
-      if (baoCaoChiTietTemp.id?.length == 38) {
+      if (this.editCache[data.id].edit === true) {
+        checkSaveEdit = false;
+        return;
+      }
+      if (data.id?.length == 38) {
         data.id = null;
       }
       switch (baoCaoChiTietTemp.maLoai) {
@@ -1123,6 +1129,10 @@ export class BaoCaoComponent implements OnInit {
           break;
       }
     })
+    if (checkSaveEdit == false) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+      return;
+    }
     if (!checkMoneyRange == true) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
       return;
@@ -1455,7 +1465,6 @@ export class BaoCaoComponent implements OnInit {
         }
       });
     }
-
     this.spinner.hide();
   }
 
@@ -1477,7 +1486,11 @@ export class BaoCaoComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
         }
         this.trangThaiChiTiet = trangThai;
-        await this.getDetailReport();
+        this.baoCao?.lstBcaos?.filter(item => {
+          if(item.maLoai == maLoai){
+            item.trangThai == trangThai;
+          }
+        })
         this.getStatusButtonOk();
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -2235,8 +2248,9 @@ export class BaoCaoComponent implements OnInit {
   }
 
   setDetail(id: any) {
+    debugger
     var index: number = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id === id);
-    var parentId: number = this.lstKhoanMuc.find(e => e.id == this.danhSachChiTietPhuLucTemp[index].maNdung).idCha;
+    var parentId: number = this.lstKhoanMuc.find(e => e.id == this.danhSachChiTietPhuLucTemp[index].maNdung)?.idCha;
     this.danhSachChiTietPhuLucTemp[index].lstKm = this.lstKhoanMuc.filter(e => e.idCha == parentId);
     if (this.lstKhoanMuc.findIndex(e => e.idCha === this.danhSachChiTietPhuLucTemp[index].maNdung) == -1) {
       this.danhSachChiTietPhuLucTemp[index].status = false;
