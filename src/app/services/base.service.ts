@@ -14,22 +14,22 @@ export abstract class BaseService {
   }
 
   getAll(): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/tat-ca`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/cap-nhat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/chi-tiet/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -39,12 +39,12 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `${environment.SERVICE_API}api/${this.table}/tra-cuu`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   timTheoMa(ma): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/TimTheoMa?ma=${ma}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/TimTheoMa?ma=${ma}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 }

@@ -103,7 +103,7 @@ export class LuongDauThauGaoComponent implements OnInit {
           ? dayjs(this.startValue).format('YYYY-MM-DD')
           : null,
       }
-      let res = await this.tongHopDeXuatKHLCNTService.timKiem(param);
+      let res = await this.tongHopDeXuatKHLCNTService.search(param);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;

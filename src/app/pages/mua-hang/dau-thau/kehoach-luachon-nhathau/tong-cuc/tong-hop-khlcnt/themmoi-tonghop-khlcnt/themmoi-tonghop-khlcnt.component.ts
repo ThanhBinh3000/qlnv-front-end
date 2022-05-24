@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,9 +13,11 @@ import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatL
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { LEVEL, LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
+import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { HelperService } from 'src/app/services/helper.service';
 
 interface ItemData {
   id: string;
@@ -34,13 +36,21 @@ interface ItemData {
   styleUrls: ['./themmoi-tonghop-khlcnt.component.scss']
 })
 export class ThemmoiTonghopKhlcntComponent implements OnInit {
+  formTraCuu: FormGroup;
+  formData: FormGroup;
+  isTongHop = false;
+  dataTableDanhSachDX: any[] = [];
+  danhMucDonVi: any;
   searchValue = '';
   searchFilter = {
-    soDeXuat: '',
+    soQdinh: '',
+    namKh: dayjs().get('year'),
+    ngayTongHop: '',
+    loaiVthh: ''
   };
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
-  formData: FormGroup;
+  // formData: FormGroup;
   i = 0;
   id: number;
   editId: string | null = null;
@@ -63,7 +73,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   listNguonVon: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
-
+  listVthh: any[] = [];
   startPH: Date | null = null;
   endPH: Date | null = null;
 
@@ -95,19 +105,41 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     private danhMucService: DanhMucService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private userService: UserService,
-  ) { }
+    private fb: FormBuilder,
+    private helperService: HelperService
+  ) {
+    this.formTraCuu = this.fb.group(
+      {
+        loaiVthh: [convertVthhToId(this.router.url.split('/')[4]), [Validators.required]],
+        namKh: [dayjs().get('year'), [Validators.required]],
+        hthucLcnt: ['HLC01', [Validators.required]],
+        pthucLcnt: ['PTD02', [Validators.required]],
+        loaiHdong: ['LHD01', [Validators.required]],
+        nguonVon: ['NGV01', [Validators.required]],
+      }
+    );
+    this.formData = this.fb.group({
+      ngayTongHop: [, [Validators.required]],
+      loaiVthh: ['', [Validators.required]],
+      veViec: [],
+      hthucLcnt: ['', [Validators.required]],
+      pthucLcnt: ['', [Validators.required]],
+      loaiHdong: ['', [Validators.required]],
+      nguonVon: ['', [Validators.required]],
+      tgianPhatHanh: ['', [Validators.required]],
+      tgianDongthau: ['', [Validators.required]],
+      tgianMoThau: ['', [Validators.required]],
+      tgianNhapHang: ['', [Validators.required]],
+      namKh: [''],
+    })
+    this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
-        this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.lastBreadcrumb = LEVEL.CUC_SHOW;
-      }
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -262,38 +294,40 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
   }
 
+  initForm(dataDetail?) {
+    if (dataDetail) {
+      this.dataTableDanhSachDX = dataDetail.children;
+      this.formData.patchValue({
+        // maDonVi: donVi.maDvi,
+        loaiVthh: dataDetail.loaiVthh,
+        loaiHdong: dataDetail.loaiHdong,
+        pthucLcnt: dataDetail.pthucLcnt,
+        hthucLcnt: dataDetail.hthucLcnt,
+        nguonVon: dataDetail.nguonVon,
+        tgianPhatHanh: [dataDetail.tuTgianTbao, dataDetail.denTgianTbao],
+        tgianDongthau: [dataDetail.tuTgianDthau, dataDetail.denTgianDthau],
+        tgianMoThau: [dataDetail.tuTgianMthau, dataDetail.denTgianMthau],
+        tgianNhapHang: [dataDetail.tuTgianNhang, dataDetail.denTgianNhang],
+        namKh: dataDetail.namKhoach
+      })
+    }
+  }
+
   async tongHopDeXuatTuCuc() {
     this.spinner.show();
     try {
-      let body = {
-        "hthucLcnt": this.hthucLcnt,
-        "loaiHdong": this.loaiHdong,
-        "loaiVthh": '00',
-        "namKhoach": this.chiTiet.namKhoach,
-        "nguonVon": this.nguonVon,
-        "pthucLcnt": this.pthucLcnt,
+      this.helperService.markFormGroupTouched(this.formTraCuu);
+      // this.helperService.markFormGroupTouched(this.formThongTinChung);
+      if (this.formTraCuu.invalid) {
+        this.spinner.hide();
+        return;
       }
+      let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.chiTiet = res.data;
-
-        if (res.data.namKhoach) {
-          this.chiTiet.namKhoach = +res.data.namKhoach;
-        }
-
-        this.startPH = dayjs(this.chiTiet.tuTgianMthau).toDate();
-        this.endPH = dayjs(this.chiTiet.denTgianMthau).toDate();
-
-        this.startDT = dayjs(this.chiTiet.tuTgianDthau).toDate();
-        this.endDT = dayjs(this.chiTiet.denTgianDthau).toDate();
-
-        this.startHS = dayjs(this.chiTiet.tuTgianTbao).toDate();
-        this.endHS = dayjs(this.chiTiet.denTgianTbao).toDate();
-
-        this.startHTN = dayjs(this.chiTiet.tuTgianNhang).toDate();
-        this.endHTN = dayjs(this.chiTiet.denTgianNhang).toDate();
-      }
-      else {
+        this.isTongHop = true;
+        this.initForm(res.data);
+      } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
@@ -304,6 +338,57 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
   }
 
+  async save() {
+    this.helperService.markFormGroupTouched(this.formData);
+    this.spinner.show();
+    try {
+      if (this.formData.invalid) {
+        this.spinner.hide();
+        return;
+      }
+      let body = this.formData.value;
+      let res = await this.tongHopDeXuatKHLCNTService.create(body);
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  quayLai() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn quay lại ?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        let loatVthh = this.router.url.split('/')[4]
+        this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop']);
+      },
+    });
+  }
+
+  // calendarData(list, column) {
+  //   let tongSL = 0;
+  //   let tongTien = 0;
+  //   if (list.length > 0) {
+  //     list.forEach(function (value) {
+  //       tongSL += value.soLuong;
+  //       tongTien += value.thanhTien;
+  //     })
+  //     return column == 'tong-tien' ? tongTien : tongSL;
+  //   }
+  //   return tongSL;
+  // }
+
+  getTenDviTable(maDvi: string) {
+    let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
+    return donVi.length > 0 ? donVi[0].tenDvi : null
+  }
+
   back() {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao`])
   }
@@ -312,7 +397,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.idPA], { queryParams: { idHdr: this.id } });
   }
 
-  async save(isPhuongAn) {
+  async save2(isPhuongAn) {
     this.spinner.show();
     try {
       let body = {
