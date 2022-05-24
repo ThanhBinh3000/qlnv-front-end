@@ -149,11 +149,28 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  //sinh ma bao cao dieu chinh du toan
+  sinhMaBaoCaoDieuChinh(): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/sinh-ma',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/sinh-ma',
+    );
+  }
+
   // trinh duyet
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
       // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/them-moi',
+      request,
+    );
+  }
+
+  // trinh duyet dieu chinh du toan NSNN
+  trinhDuyetDieuChinhService(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/them-moi',
       request,
     );
   }

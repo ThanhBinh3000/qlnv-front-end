@@ -19,11 +19,11 @@
   </div>
   <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
       <button type="button" class="btn btn-main" (click)="deleteAllChecked()">
-          <i class="fa fa-trash-o" ></i>
+          <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
       </button>
-      <ng-container *ngIf="lstCTietBCao.length == 0">
-          <button type="button" class="btn btn-main" (click)="addLine(null)">
+      <ng-container *ngIf="lstCtietBcao.length == 0">
+          <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
           </button>
@@ -33,74 +33,86 @@
 <nz-table nzBordered class="table__body">
   <thead>
       <tr>
-          <th nzWidth="100px" rowspan="2">STT</th>
-          <th nzWidth="500px" rowspan="2">Tên hàng dự trữ quốc gia</th>
-          <th nzWidth="200px" rowspan="2">ĐVT</th>
-          <th nzWidth="200px" rowspan="2">Số lượng hàng thực tế</th>
+          <th rowspan="2" nzWidth="75px">STT</th>
+          <th rowspan="2" nzWidth="200px">Tên hàng dữ trữ quốc gia</th>
+          <th nzWidth="100px" rowspan="2">ĐVT</th>
+          <th nzWidth="100px" rowspan="2">Số lượng hàng thực tế</th>
           <th colspan="2">Kinh phí BQ được hưởng theo định mức</th>
-          <th colspan="3">Chi phí bảo quản thực hiện</th>
-          <th nzWidth="200px" rowspan="2">Chênh lệch</th>
-          <th nzWidth="200px" rowspan="2">Số quyết toán năm {{namBcao}}</th>
-          <th colspan="2">Số chưa QT chuyển năm sau</th>
-          <th nzWidth="200px" rowspan="2">Số đã sử dụng dự toán năm {{namBcao + 1}} để thanh toán quyết toán năm {{namBcao}}</th>
-          <th nzWidth="200px" rowspan="2">Số còn chưa thanh quyết toán</th>
-          <th colspan="3" rowspan="2" [hidden]="status"></th>
-          <th [hidden]="status" rowspan="2">
+          <th colspan="3">Kinh phí bảo quản thực hiện</th>
+          <th nzWidth="100px" rowspan="2">Chênh lệch</th>
+          <th nzWidth="100px" rowspan="2">Số quyết toán năm {{namBcao}}</th>
+          <th colspan="2">Số chưa QT chuyển sang năm sau</th>
+          <th rowspan="2">Số đã sử dụng dự toán năm {{namBcao + 1}} để thanh toán quyết toán năm {{namBcao}}</th>
+          <th rowspan="2">Số còn chưa thanh toán quyết toán</th>
+          <th rowspan="2" colspan="3" [hidden]="status"></th>
+          <th rowspan="2" [hidden]="status">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
               </label>
           </th>
       </tr>
       <tr>
-        <th>Định mức</th>
-        <th>Thành tiền</th>
-        <th>Tổng cộng</th>
-        <th>Năm trước</th>
-        <th>Năm nay</th>
-        <th>KP tiết kiệm</th>
-        <th>KP thực thi</th>
+          <th>Định mức</th>
+          <th>Thành tiền</th>
+          <th>Tổng cộng</th>
+          <th>Năm trước</th>
+          <th>Năm nay</th>
+          <th>PK tiết kiệm</th>
+          <th>KP thực chi</th>
       </tr>
       <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-        <th>5</th>
-        <th>6</th>
-        <th>7=8+9</th>
-        <th>8</th>
-        <th>9</th>
-        <th>10=6-7</th>
-        <th>11</th>
-        <th>12</th>
-        <th>13</th>
-        <th>14</th>
-        <th>15=12+13+14</th>
-        <th [hidden]="status"></th>
-        <th [hidden]="status"></th>
-        <th [hidden]="status"></th>
-        <th [hidden]="status"></th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7=8+9</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10=6-7</th>
+          <th>11</th>
+          <th>12</th>
+          <th>13</th>
+          <th>14</th>
+          <th>15=12+13+14</th>
+          <th [hidden]="status"></th>
+          <th [hidden]="status"></th>
+          <th [hidden]="status"></th>
+          <th [hidden]="status"></th>
       </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let data of lstCTietBCao; let i = index">
+      <tr *ngFor="let data of lstCtietBcao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-              <td [nzIndentSize]="data.level * 8">
-                  {{getChiMuc(data.stt)}}
+              <td [nzIndentSize]="data.lstMatHang[0].level * 8">
+                {{getChiMuc(data.stt)}}
               </td>
               <td>
-                  <div *ngFor="let item of noiDungs">
-                      <div *ngIf="item.id == data.maNdung">
+                  <div *ngFor="let item of data.lstMatHang">
+                      <div *ngIf="item.id == data.loaiMatHang">
                           {{item.tenDm}}
                       </div>
                   </div>
               </td>
-              <td>{{data.tongNcauDtoanKphi}}</td>
-              <td>{{data.dtoanKphiNtruoc}}</td>
-              <td>{{data.dtoanKphiDaGiao}}</td>
-              <td>{{data.dtoanKphiCong}}</td>
-              <td>{{data.kphiUocThien}}</td>
-              <td>{{data.kphiDchinhTang}}</td>
-              <td>{{data.kphiDchinhGiam}}</td>
+              <td>
+                  <div *ngFor="let item of donVis">
+                      <div *ngIf="item.id == data.maDviTinh">
+                          {{item.tenDm}}
+                      </div>
+                  </div>
+              </td>
+              <td>{{data.slHangTte}}</td>
+              <td>{{data.kphiBqDmuc}}</td>
+              <td>{{data.kphiBqTtien}}</td>
+              <td>{{data.cphiBqTcong}}</td>
+              <td>{{data.cphiBqNtruoc}}</td>
+              <td>{{data.cphiBqNnay}}</td>
+              <td>{{data.chenhLech}}</td>
+              <td>{{data.soQtoan}}</td>
+              <td>{{data.soQtoanChuyenNsauKpTk}}</td>
+              <td>{{data.soQtoanChuyenNsauKpTchi}}</td>
+              <td>{{data.dtoan2021ThanhQtoan2020}}</td>
+              <td>{{data.soChuaQtoan}}</td>
               <td [hidden]="status">
                   <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
@@ -108,7 +120,16 @@
                   <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
               <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine(data.id)"></i>
+                  <ng-container *ngIf="!data.status; else them">
+                      <i class="fa fa-plus" (click)="addSame(data.id, initItem)"></i>
+                  </ng-container>
+                  <ng-template #them>
+                      <a nz-popconfirm nzPopconfirmTitle="Cấp khoản mục?" nzOkText="Ngang cấp"
+                          (nzOnConfirm)="addSame(data.id, initItem)" nzCancelText="Dưới cấp"
+                          (nzOnCancel)="addLow(data.id, initItem)">
+                          <i class="fa fa-plus"></i>
+                      </a>
+                  </ng-template>
               </td>
               <td [hidden]="status">
                   <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
@@ -117,57 +138,72 @@
 
           </ng-container>
           <ng-template #editTemplate>
-              <td [nzIndentSize]="data.level * 8">
+              <td [nzIndentSize]="data.lstMatHang[0].level * 8">
                   {{getChiMuc(editCache[data.id].data.stt)}}
               </td>
               <td>
-                  <div *ngFor="let item of noiDungs">
-                      <div *ngIf="item.id == data.maNdung">
-                          {{item.tenDm}}
-                      </div>
-                  </div>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại nội dung"
+                      [(ngModel)]="editCache[data.id].data.loaiMatHang"
+                      [class]="editCache[data.id].data.loaiMatHang ?'' : 'input-error-validate'">
+                      <nz-option *ngFor="let item of data.lstMatHang" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                      </nz-option>
+                  </nz-select>
+              </td>
+              <td>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại nội dung"
+                      [(ngModel)]="editCache[data.id].data.maDviTinh"
+                      [class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate'">
+                      <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                      </nz-option>
+                  </nz-select>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.tongNcauDtoanKphi"
-                      [class]="editCache[data.id].data.tongNcauDtoanKphi || editCache[data.id].data.tongNcauDtoanKphi ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.slHangTte"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.dtoanKphiNtruoc"
-                      [class]="editCache[data.id].data.dtoanKphiNtruoc || editCache[data.id].data.dtoanKphiNtruoc ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.kphiBqDmuc"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.dtoanKphiDaGiao"
-                      [class]="editCache[data.id].data.dtoanKphiDaGiao || editCache[data.id].data.dtoanKphiDaGiao ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.kphiBqTtien"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.dtoanKphiCong"
-                      [class]="editCache[data.id].data.dtoanKphiCong || editCache[data.id].data.dtoanKphiCong ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.cphiBqTcong"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.kphiUocThien"
-                      [class]="editCache[data.id].data.kphiUocThien || editCache[data.id].data.kphiUocThien ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.cphiBqNtruoc"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.kphiDchinhTang"
-                      [class]="editCache[data.id].data.kphiDchinhTang || editCache[data.id].data.kphiDchinhTang ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.cphiBqNnay"></nz-input-number>
               </td>
               <td>
                   <nz-input-number class="search__input" nzSize="small"
-                      [(ngModel)]="editCache[data.id].data.kphiDchinhGiam"
-                      [class]="editCache[data.id].data.kphiDchinhGiam || editCache[data.id].data.kphiDchinhGiam ===0?'' : 'input-error-validate'">
-                  </nz-input-number>
+                      [(ngModel)]="editCache[data.id].data.chenhLech"></nz-input-number>
+              </td>
+              <td>
+                  <nz-input-number class="search__input" nzSize="small"
+                      [(ngModel)]="editCache[data.id].data.soQtoan"></nz-input-number>
+              </td>
+              <td>
+                  <nz-input-number class="search__input" nzSize="small"
+                      [(ngModel)]="editCache[data.id].data.soQtoanChuyenNsauKpTk"></nz-input-number>
+              </td>
+              <td>
+                  <nz-input-number class="search__input" nzSize="small"
+                      [(ngModel)]="editCache[data.id].data.soQtoanChuyenNsauKpTchi"></nz-input-number>
+              </td>
+              <td>
+                  <nz-input-number class="search__input" nzSize="small"
+                      [(ngModel)]="editCache[data.id].data.dtoan2021ThanhQtoan2020"></nz-input-number>
+              </td>
+              <td>
+                  <nz-input-number class="search__input" nzSize="small"
+                      [(ngModel)]="editCache[data.id].data.soChuaQtoan"></nz-input-number>
               </td>
               <td [hidden]="status">
                   <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -200,20 +236,12 @@
       <i nz-icon nzType="printer" nzTheme="outline"></i>
       <span>In</span>
   </button>
-  <button type="button" class="btn btn-main" [hidden]="statusBtnDone">
+  <button type="button" class="btn btn-main" [hidden]="status">
       <i nz-icon nzType="check" nzTheme="outline"></i>
       <span>Hoàn tất nhập liệu</span>
   </button>
-  <button type="button" class="btn btn-main" [hidden]="statusBtnSave">
+  <button type="button" class="btn btn-main" [hidden]="status">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
-  </button>
-  <button type="button" class="btn btn-main" [hidden]="statusBtnOK">
-      <i nz-icon nzType="check" nzTheme="outline"></i>
-      <span>OK</span>
-  </button>
-  <button type="button" class="btn btn-main" [hidden]="statusBtnOK">
-      <i nz-icon nzType="close" nzTheme="outline"></i>
-      <span>Not OK</span>
   </button>
 </div>

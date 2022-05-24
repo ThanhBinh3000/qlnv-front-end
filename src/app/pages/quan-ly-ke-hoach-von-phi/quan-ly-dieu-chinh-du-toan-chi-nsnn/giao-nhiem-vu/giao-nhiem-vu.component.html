@@ -48,10 +48,10 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Chấp nhận</span>
 				</a>
-				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusDelReport">
+				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusDelReport">
 					<i nz-icon nzType="delete" nzTheme="outline"></i>
 					<span>Xóa</span>
-				</a> -->
+				</a>
 				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()"
 					[hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
@@ -155,7 +155,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr *ngFor="let data of lstCtietBcao; let i = index">
+								<tr *ngFor="let data of lstCtietDchinh; let i = index">
 									<td>{{ i + 1 }}</td>
 									<td>
 										<div *ngFor="let item of phuLucs">
@@ -279,7 +279,7 @@
 						</div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col class="gutter-row" [nzSpan]="12">
-								<nz-table [nzData]="lstCtietBcao" nzBordered class="table__body">
+								<nz-table [nzData]="lstCtietDchinh" nzBordered class="table__body">
 									<thead>
 										<tr>
 											<th nzWidth="50px">STT</th>

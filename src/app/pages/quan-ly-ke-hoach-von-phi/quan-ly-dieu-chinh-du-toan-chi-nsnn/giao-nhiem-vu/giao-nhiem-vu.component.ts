@@ -1,7 +1,8 @@
+
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -16,7 +17,7 @@ import { MESSAGE } from '../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { Utils } from "../../../../Utility/utils";
-import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
 export class ItemData {
@@ -31,7 +32,7 @@ export class ItemData {
 
 
 @Component({
-	selector: 'app-giao-nhiem-vu',
+	selector: 'app-bao-cao',
 	templateUrl: './giao-nhiem-vu.component.html',
 	styleUrls: ['./giao-nhiem-vu.component.scss'],
 })
@@ -53,9 +54,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 	trangThaiBaoCao: string = '1';
 	maDviTao!: string;
 	thuyetMinh: string;
-  dotBcao: number = 1;
+  dotBcao: number =  1;
 	//danh muc
-	lstCtietBcao: ItemData[] = [];
+	lstCtietDchinh: ItemData[] = [];
 	phuLucs: any[] = PHU_LUC;
 	donVis: any[] = [];
 	tabs: any[] = [];
@@ -170,7 +171,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 			} else {
 				this.phuLucs.forEach(item => {
-					this.lstCtietBcao.push({
+					this.lstCtietDchinh.push({
 						id: uuid.v4(),
 						stt: '',
 						maBcao: item.id,
@@ -183,7 +184,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				this.nguoiNhap = this.userInfo?.fullName;
 				this.maDviTao = this.userInfo?.dvql;
 				this.spinner.show();
-				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+				this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
 					(data) => {
 						if (data.statusCode == 0) {
 							this.maBaoCao = data.data;
@@ -354,12 +355,12 @@ export class GiaoNhiemVuComponent implements OnInit {
 		}
 
 		// replace nhung ban ghi dc them moi id thanh null
-		this.lstCtietBcao.filter(item => {
+		this.lstCtietDchinh.filter(item => {
 			if (typeof item.id != "number") {
 				item.id = null;
 			}
 		})
-		let lstCtietBcaoTemp = [];
+		let lstCtietDchinhTemp = [];
 		let checkMoneyRange = true;
 		if (!checkMoneyRange == true) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -369,18 +370,24 @@ export class GiaoNhiemVuComponent implements OnInit {
 				id: this.id,
 				listIdDeletes: this.listIdDelete,
 				fileDinhKems: listFile,
-				listIdDeleteFiles: this.listIdDeleteFiles,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-				lstCtietBcao: lstCtietBcaoTemp,
+				listIdFiles: [],                    // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 				maBcao: this.maBaoCao,
 				maDvi: this.maDviTao,
 				namHienHanh: this.namHienHanh,
 				congVan: this.congVan,
+        dotBcao: this.dotBcao,
+        lstDchinh:[
+          {
+            giaoCho: this.data.giaoCho,
+            lstCtietDchinh: lstCtietDchinhTemp
+          }
+        ]
 			};
 
 			//call service them moi
 			this.spinner.show();
 			if (this.id == null) {
-				this.quanLyVonPhiService.trinhDuyetService(request).toPromise().then(
+				this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
 					async data => {
 						if (data.statusCode == 0) {
 							this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -410,7 +417,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 					})
 			}
 		}
-		this.lstCtietBcao.filter(item => {
+		this.lstCtietDchinh.filter(item => {
 			if (!item.id) {
 				item.id = uuid.v4();
 			}
@@ -473,7 +480,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
-					this.lstCtietBcao = data.data.lstCtietBcao;
+					this.lstCtietDchinh = data.data.lstCtietDchinh;
 					this.lstFile = data.data.lstFile;
 					this.listFile = [];
 					// set thong tin chung bao cao
@@ -510,7 +517,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// them phu luc
 	addBieuMau() {
 		this.phuLucs.forEach(item => item.status = false);
-		var danhSach = this.phuLucs.filter(item => this.lstCtietBcao.findIndex(e => e.maBcao == item.id) == -1);
+		var danhSach = this.phuLucs.filter(item => this.lstCtietDchinh.findIndex(e => e.maBcao == item.id) == -1);
 
 		const modalIn = this.modal.create({
 			nzTitle: 'Danh sách biểu mẫu',
@@ -527,7 +534,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 			if (res) {
 				res.forEach(item => {
 					if (item.status) {
-						this.lstCtietBcao.push({
+						this.lstCtietDchinh.push({
 							id: uuid.v4(),
 							stt: '',
 							maBcao: item.id,
@@ -544,25 +551,25 @@ export class GiaoNhiemVuComponent implements OnInit {
 	// xóa với checkbox
 	deleteSelected() {
 		// add list delete id
-		this.lstCtietBcao.filter(item => {
+		this.lstCtietDchinh.filter(item => {
 			if (item.checked == true && item.id.length == 36) {
 				this.listIdDelete += item.id + ","
 			}
 		})
 		// delete object have checked = true
-		this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
+		this.lstCtietDchinh = this.lstCtietDchinh.filter(item => item.checked != true)
 		this.allChecked = false;
 	}
 
 	// click o checkbox all
 	updateAllChecked(): void {
-		if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcao.checked = true
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({
+		if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietDchinh.checked = true
+			this.lstCtietDchinh = this.lstCtietDchinh.map(item => ({
 				...item,
 				checked: true
 			}));
 		} else {
-			this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCtietBcao.checked = false
+			this.lstCtietDchinh = this.lstCtietDchinh.map(item => ({    // checkboxall == false thi set lai lstCtietDchinh.checked = false
 				...item,
 				checked: false
 			}));
@@ -571,9 +578,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 
 	// click o checkbox single
 	updateSingleChecked(): void {
-		if (this.lstCtietBcao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+		if (this.lstCtietDchinh.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
 			this.allChecked = false;
-		} else if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+		} else if (this.lstCtietDchinh.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
 			this.allChecked = true;
 		}
 	}

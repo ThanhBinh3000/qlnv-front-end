@@ -17,20 +17,15 @@ import { DON_VI_TIEN, QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N } from "../../../
 export class ItemData {
     id!: any;
     stt!: number;
-    maNdung!: String;
-    maNhomChiNsnn!: String;
-    dtoanN!: number;
-    uocThienN!: number;
-    tranChiN1!: number;
-    ncauChiN1!: number;
-    clechTranChiVsNcauChiN1: number;
-    ssanhNcauNVoiN1: number;
-    tranChiN2!: number;
-    ncauChiN2!: number;
-    clechTranChiVsNcauChiN2: number;
-    tranChiN3!: number;
-    ncauChiN3!: number;
-    clechTranChiVsNcauChiN3: number;
+    maCongTrinh: string;
+    kh2021: number;
+    lkeVcap: number;
+    gtriCtrinh: number;
+    dxuatDchinhTong: number;
+    dxuatDchinhTang: number;
+    dxuatDchinhGiam: number;
+    kh2021SauDchinh: number;
+    ghiChu: string;
     checked!: boolean;
 }
 
@@ -42,7 +37,7 @@ export class PhuLuc8Component implements OnInit {
     @Input() data;
     //danh muc
     donVis: any = [];
-    noiDungs: any[] = [];
+    congTrinhs: any[] = [];
     nhomChis: any[] = [];
     lstCTietBCao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
@@ -82,7 +77,7 @@ export class PhuLuc8Component implements OnInit {
         this.danhMucService.dMNoiDung().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.noiDungs = res.data?.content;
+                    this.congTrinhs = res.data?.content;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -125,20 +120,15 @@ export class PhuLuc8Component implements OnInit {
         let item: ItemData = {
             id: uuid.v4(),
             stt: 0,
-            maNdung: '',
-            maNhomChiNsnn: '',
-            dtoanN: 0,
-            uocThienN: 0,
-            tranChiN1: 0,
-            ncauChiN1: 0,
-            clechTranChiVsNcauChiN1: 0,
-            ssanhNcauNVoiN1: 0,
-            tranChiN2: 0,
-            ncauChiN2: 0,
-            clechTranChiVsNcauChiN2: 0,
-            tranChiN3: 0,
-            ncauChiN3: 0,
-            clechTranChiVsNcauChiN3: 0,
+            maCongTrinh: '',
+            kh2021: 0,
+            lkeVcap: 0,
+            gtriCtrinh: 0,
+            dxuatDchinhTong: 0,
+            dxuatDchinhTang: 0,
+            dxuatDchinhGiam: 0,
+            kh2021SauDchinh: 0,
+            ghiChu: '',
             checked: false,
         };
 
@@ -215,15 +205,20 @@ export class PhuLuc8Component implements OnInit {
 
     //update khi sửa
     saveEdit(id: string): void {
-        if (!this.editCache[id].data.maNdung || !this.editCache[id].data.maNhomChiNsnn
-            || (!this.editCache[id].data.dtoanN && this.editCache[id].data.dtoanN !== 0)
-            || (!this.editCache[id].data.uocThienN && this.editCache[id].data.uocThienN !== 0)
-            || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)
-            || (!this.editCache[id].data.ncauChiN2 && this.editCache[id].data.ncauChiN2 !== 0)) {
+        if (!this.editCache[id].data.maCongTrinh
+            || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
+            || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
+            || (!this.editCache[id].data.dxuatDchinhTong && this.editCache[id].data.dxuatDchinhTong !== 0)
+            || (!this.editCache[id].data.gtriCtrinh && this.editCache[id].data.gtriCtrinh !== 0)
+            || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
+            || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
+            || (!this.editCache[id].data.dxuatDchinhTong && this.editCache[id].data.dxuatDchinhTong !== 0)
+            || (!this.editCache[id].data.kh2021SauDchinh && this.editCache[id].data.kh2021SauDchinh !== 0)
+            ) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        this.changeModel(id);
+        // this.changeModel(id);
         this.editCache[id].data.checked = this.lstCTietBCao.find(
             (item) => item.id === id,
         ).checked; // set checked editCache = checked lstCTietBCao
@@ -243,12 +238,12 @@ export class PhuLuc8Component implements OnInit {
     }
 
     //gia tri cac o input thay doi thi tinh toan lai
-    changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
-        this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
-        this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
-    }
+    // changeModel(id: string): void {
+    //     this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.tranChiN1 - this.editCache[id].data.ncauChiN1;
+    //     this.editCache[id].data.ssanhNcauNVoiN1 = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
+    //     this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.tranChiN2 - this.editCache[id].data.ncauChiN2;
+    //     this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.tranChiN3 - this.editCache[id].data.ncauChiN3;
+    // }
 
 
 }

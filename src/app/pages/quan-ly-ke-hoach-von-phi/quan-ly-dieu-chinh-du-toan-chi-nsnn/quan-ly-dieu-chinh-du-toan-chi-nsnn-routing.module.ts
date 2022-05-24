@@ -42,6 +42,13 @@ const routes: Routes = [
         './giao-nhiem-vu/giao-nhiem-vu.module'
       ).then((m) => m.GiaoNhiemVuModule),
   },
+  {
+    path: 'giao-nhiem-vu/:id',
+    loadChildren: () =>
+      import(
+        './giao-nhiem-vu/giao-nhiem-vu.module'
+      ).then((m) => m.GiaoNhiemVuModule),
+  },
 
 ];
 
