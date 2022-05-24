@@ -1,0 +1,93 @@
+<div class="luong-thuc__danh-sach">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số biên bản</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngày lấy mẫu</label>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
+              </nz-range-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số hợp đồng</label>
+              <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Điểm kho</label>
+              <input class="search__input" placeholder="Điểm kho" nz-input [(ngModel)]="searchFilter.diemkho" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Nhà kho</label>
+              <input class="search__input" placeholder="Nhà kho" nz-input [(ngModel)]="searchFilter.nhaKho" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngăn/lô bảo quản</label>
+              <input class="search__input" placeholder="Ngăn/lô bảo quản" nz-input
+                [(ngModel)]="searchFilter.nganLoBaoQuan" />
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--search">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+            <button nz-button class="search__button--clear">
+              <i nz-icon nzType="close"></i>
+              Xóa điều kiện
+            </button>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-card nzTitle="DANH SÁCH PHIẾU NHẬP KHO" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="931px">Số biên bản</th>
+                  <th width="161px">Ngày lấy mẫu</th>
+                  <th width="203px">Số hợp đồng</th>
+                  <th width="295px">Điểm kho</th>
+                  <th width="295px">Nhà kho</th>
+                  <th width="295px">Ngăn/lô</th>
+                  <th width="295px">Trạng thái</th>
+                  <th width="295px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>PKM01</td>
+                  <td>17/02/2022</td>
+                  <td>Số hợp đồng</td>
+                  <td>Điểm kho</td>
+                  <td>Nhà kho</td>
+                  <td>Ngăn/lô</td>
+                  <td>Dự thảo</td>
+                  <td>
+                    <a>
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+          <ng-template #tableCard1>
+            <button type="button" class="btn btn-main">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

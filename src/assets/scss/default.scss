@@ -1189,7 +1189,7 @@ app-danh-sach-file.hidecard,
 // }
 
 .flex-card.p-lr16.ant-card .ant-card-body {
-  padding: 8px 16px 8px 16px;
+  padding: 0px 16px;
 }
 
 .checkall-card {
@@ -1868,5 +1868,9 @@ td.action.ant-table-cell {
   }
 }
 .isDisabled {
+  opacity: 0.5;
+}
+.row-disabled {
+  pointer-events: none;
   opacity: 0.5;
 }

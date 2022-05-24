@@ -1341,7 +1341,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+        this.redirectChiTieuKeHoachNam();
       },
     });
   }

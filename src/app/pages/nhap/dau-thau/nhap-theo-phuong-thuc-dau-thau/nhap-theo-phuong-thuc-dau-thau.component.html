@@ -4,7 +4,7 @@
             <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
                 aria-labelledby="banhanh-tab">
                 <div class="trai">
-                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2" (click)="redirectQdNhapXuat()">
+                    <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2">
                         <i class="fa fa-arrow-circle-left"></i>
                     </a>
                     <nz-breadcrumb>
@@ -99,10 +99,10 @@
                                     <td>{{ data.veViec }}</td>
                                     <td>{{ convertTrangThai(data.trangThai) }}</td>
                                     <td class="text-center">
-                                        <a (click)="redirectToChiTiet(data.id)" *ngIf="userService.isCuc()">
+                                        <a (click)="redirectToThongTin(data.id)" *ngIf="userService.isCuc()">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a (click)="xemDanhSachQuyetDinh()">
+                                        <a (click)="redirectToChiTiet(data.id)">
                                             <span class="icon htvbdh_eye"></span>
                                         </a>
                                         <a (click)="chiTietQuyetDinh(true, data.id)" *ngIf="userService.isChiCuc()">
@@ -140,7 +140,7 @@
                     </nz-card>
                     <ng-template #tableCard1>
                         <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-                            (click)="redirectToChiTiet(0)">
+                            (click)="redirectToThongTin(0)">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

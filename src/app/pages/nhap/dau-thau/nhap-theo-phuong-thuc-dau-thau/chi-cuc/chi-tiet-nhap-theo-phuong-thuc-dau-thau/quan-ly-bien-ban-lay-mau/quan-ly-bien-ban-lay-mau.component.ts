@@ -13,9 +13,13 @@ import { DonviService } from 'src/app/services/donvi.service';
   styleUrls: ['./quan-ly-bien-ban-lay-mau.component.scss'],
 })
 export class QuanLyBienBanLayMauComponent implements OnInit {
-  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
+  searchFilter = {
+    ngayLayMau: '',
+    soHopDong: '',
+    diemkho: '',
+    nhaKho: '',
+    nganLoBaoQuan: ''
+  };
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -23,17 +27,9 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
     private router: Router,
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-  }
-  redirectToThemMoiBienBanLayMau() {
-    this.router.navigate([
-      'nhap/dau-thau/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/',
-      0,
-    ]);
+
   }
 }

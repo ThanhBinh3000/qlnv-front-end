@@ -148,11 +148,23 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     }
   }
 
+  redirectToThongTin(id: number) {
+    if (this.routerUrl.includes("thoc")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin`, id]);
+    } else if (this.routerUrl.includes("gao")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}/thong-tin`, id]);
+    } else if (this.routerUrl.includes("muoi")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}/thong-tin`, id]);
+    }
+  }
   redirectToChiTiet(id: number) {
-    this.router.navigate([
-      `/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin`,
-      id,
-    ]);
+    if (this.routerUrl.includes("thoc")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/chi-tiet`, id]);
+    } else if (this.routerUrl.includes("gao")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}/chi-tiet`, id]);
+    } else if (this.routerUrl.includes("muoi")) {
+      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}/chi-tiet`, id]);
+    }
   }
 
   clearFilter() {
@@ -347,22 +359,10 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     });
   }
 
-  xemDanhSachQuyetDinh() {
-
-  }
-
   chiTietQuyetDinh(isView: boolean, id: number) {
     this.router.navigate([
       `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc/chi-tiet/${id}/bien-ban`,
     ]);
   }
-  redirectQdNhapXuat() {
-    if (this.routerUrl.includes("thoc")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}`]);
-    } else if (this.routerUrl.includes("gao")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}`]);
-    } else if (this.routerUrl.includes("muoi")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}`]);
-    }
-  }
+
 }

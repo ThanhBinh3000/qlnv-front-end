@@ -14,6 +14,7 @@ export class MultipleTagComponent implements OnInit {
   @Input() data: any[] = [];
   @Input() type: string;
   @Input() trangThai: string;
+  @Input() disable: boolean;
 
   @Output()
   selectDataEvent = new EventEmitter<any>();
@@ -24,6 +25,8 @@ export class MultipleTagComponent implements OnInit {
   constructor(public globals: Globals) { }
 
   ngOnInit(): void {
+    console.log("disable: ", this.disable);
+
   }
 
   removeData(item: any) {
@@ -45,7 +48,8 @@ export class MultipleTagComponent implements OnInit {
     if (
       this.trangThai === this.globals.prop.BAN_HANH ||
       this.trangThai === this.globals.prop.LANH_DAO_DUYET ||
-      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      this.trangThai === this.globals.prop.DU_THAO_TRINH_DUYET ||
+      this.disable
     ) {
       return;
     }

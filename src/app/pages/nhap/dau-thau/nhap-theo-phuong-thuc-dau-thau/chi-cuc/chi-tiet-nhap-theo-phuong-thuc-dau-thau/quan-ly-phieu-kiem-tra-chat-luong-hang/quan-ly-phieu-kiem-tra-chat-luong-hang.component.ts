@@ -6,8 +6,10 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
@@ -18,25 +20,28 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   searchFilter = {
     soPhieu: '',
-    maHangHoa: '',
-    maDonVi: '',
-    maNganKho: '',
-    ngayKiemTraTuNgay: '',
-    ngayKiemTraDenNgay: '',
+    ngayTongHop: '',
+    tenNguoiGiao: '',
   };
+
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
+
+  loaiVthh: string;
+  loaiStr: string;
+  maVthh: string;
+  routerVthh: string;
+
+  userInfo: UserLogin;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -44,24 +49,14 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
+    private userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      const res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      this.getTitleVthh();
+      this.userInfo = this.userService.getUserLogin();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -70,44 +65,54 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  onInput(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.options = [];
-    } else {
-      this.options = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
+
+  getTitleVthh() {
+    if (this.router.url.indexOf("/thoc/")) {
+      this.loaiStr = "Thóc";
+      this.loaiVthh = "01";
+      this.maVthh = "0101";
+      this.routerVthh = 'thoc';
+    } else if (this.router.url.indexOf("/gao/")) {
+      this.loaiStr = "Gạo";
+      this.loaiVthh = "00";
+      this.maVthh = "0102";
+      this.routerVthh = 'gao';
+    } else if (this.router.url.indexOf("/muoi/")) {
+      this.loaiStr = "Muối";
+      this.loaiVthh = "02";
+      this.maVthh = "04";
+      this.routerVthh = 'muoi';
+    } else if (this.router.url.indexOf("/vat-tu/")) {
+      this.loaiStr = "Vật tư";
+      this.loaiVthh = "03";
+      this.routerVthh = 'vat-tu';
     }
   }
 
   async search() {
-    let maDonVi = null;
-    let tenDvi = null;
-    let donviId = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-        tenDvi = getDonVi[0].tenDvi;
-        donviId = getDonVi[0].id;
-      }
-    }
     let body = {
-      soPhieu: this.searchFilter.soPhieu,
-      maHangHoa: this.searchFilter.maHangHoa,
-      maDonVi: maDonVi,
-      maNganKho: this.searchFilter.maNganKho,
-      ngayKiemTraTuNgay: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+      "maDonVi": this.userInfo.MA_DVI,
+      "maHangHoa": this.maVthh,
+      "maNganKho": null,
+      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
+        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      ngayKiemTraDenNgay: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
+        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "ngayLapPhieu": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "orderBy": null,
+        "orderType": null,
+        "page": this.page - 1
+      },
+      "soPhieu": this.searchFilter.soPhieu,
+      "str": null,
+      "tenNguoiGiao": this.searchFilter.tenNguoiGiao,
+      "trangThai": null
     };
     let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -145,32 +150,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     }
   }
 
-  disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endValue) {
-      return false;
-    }
-    return startValue.getTime() > this.endValue.getTime();
-  };
-
-  disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startValue) {
-      return false;
-    }
-    return endValue.getTime() <= this.startValue.getTime();
-  };
-
   clearFilter() {
     this.searchFilter = {
       soPhieu: '',
-      maHangHoa: '',
-      maDonVi: '',
-      maNganKho: '',
-      ngayKiemTraTuNgay: '',
-      ngayKiemTraDenNgay: '',
+      ngayTongHop: '',
+      tenNguoiGiao: '',
     };
-    this.startValue = null;
-    this.endValue = null;
-    this.inputDonVi = '';
     this.search();
   }
 
@@ -210,10 +195,19 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       },
     });
   }
-  redirectToThemMoi() {
-    this.router.navigate([
-      'nhap/dau-thau/quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/',
-      0,
-    ]);
+
+  redirectToChiTiet(isView: boolean, id: number) {
+    if (!isView) {
+      let urlChiTiet = this.router.url + '/thong-tin'
+      this.router.navigate([urlChiTiet, id,]);
+    }
+    else {
+      let urlChiTiet = this.router.url + '/thong-tin'
+      this.router.navigate([urlChiTiet, id,]);
+    }
+  }
+
+  export() {
+
   }
 }
