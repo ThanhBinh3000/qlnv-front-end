@@ -8,6 +8,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
@@ -21,11 +22,11 @@ export class ItemData {
     id: any;
     stt: string;
     level: number;
-    maLinhVuc: number;
-    thienNamHhanhN: number;
-    ncauDtoanN1: number;
-    ncauDtoanN2: number;
-    ncauDtoanN3: number;
+    maLvucNdChi: number;
+    thNamHienHanhN1: number;
+    ncauNamDtoanN: number;
+    ncauNamN1: number;
+    ncauNamN2: number;
     checked!: boolean;
 }
 
@@ -42,9 +43,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     lstCtietBcao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
+   
     //thong tin chung
-    namBcao: number = 2022;
-    maLoaiBaoCao: string = QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N;
+    id: any;
+    namHienHanh: number;
+    maBieuMau: string;
     thuyetMinh: string;
     maDviTien: any;
     listIdDelete: string = "";
@@ -53,18 +56,17 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         id: null,
         stt: "0",
         level: 0,
-        maLinhVuc: 0,
-        thienNamHhanhN: 0,
-        ncauDtoanN1: 0,
-        ncauDtoanN2: 0,
-        ncauDtoanN3: 0,
+        maLvucNdChi: 0,
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
         checked: false,
     };
     //trang thai cac nut
     status: boolean = false;
-    statusBtnDone: boolean;
-    statusBtnOK: boolean;
-    statusBtnSave: boolean;
+    statusBtnFinish: boolean;
+    statusBtnOk: boolean;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -85,8 +87,17 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     async ngOnInit() {
-
-        this.lstCtietBcao = this.data?.lstCTiet;
+        this.id = this.data?.id;
+        console.log(this.id);
+        this.maBieuMau = this.data?.maBieuMau;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.trangThaiPhuLuc = this.data?.trangThai;
+        this.namHienHanh = this.data?.namHienHanh;
+        this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.sortByIndex();
         this.updateEditCache();
 
         //lay danh sach danh muc don vi
@@ -102,14 +113,72 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.getStatusButton();
         this.spinner.hide();
     }
 
     getStatusButton() {
-        const roles = new Role();
-        this.statusBtnDone = roles.getRoleDone(this.trangThaiPhuLuc, 3);
-        this.statusBtnOK = roles.getRoleOK(this.trangThaiPhuLuc, 3);
-        this.statusBtnSave = roles.getRoleSaveBM(this.trangThaiPhuLuc, 3);
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")){
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
+    }
+
+    // luu
+    async save() {
+        let checkSaveEdit;
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          //check xem tat ca cac dong du lieu da luu chua?
+          //chua luu thi bao loi, luu roi thi cho di
+          this.lstCtietBcao.forEach(element => {
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+        // replace nhung ban ghi dc them moi id thanh null
+        this.lstCtietBcao.forEach(item => {
+            if (item.id?.length == 38) {
+                item.id = null;
+            }
+        })
+
+        let request = {
+            id: this.id,
+            lstCtietLapThamDinhs: this.lstCtietBcao,
+            maBieuMau: this.maBieuMau,
+            maDviTien: this.maDviTien,
+            nguoiBcao: this.data?.nguoiBcao,
+            lyDoTuChoi: this.data?.lyDoTuChoi,
+            thuyetMinh: this.thuyetMinh,
+            trangThai: this.trangThaiPhuLuc,
+        };
+        this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        this.lstCtietBcao.filter(item => {
+            if (!item.id) {
+                item.id = uuid.v4() + 'FE';
+            }
+        });
+        this.spinner.hide();
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
@@ -199,7 +268,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+"FE",
                 stt: head + "." + (tail + 1).toString(),
             }
             this.lstCtietBcao.splice(ind + 1, 0, item);
@@ -250,7 +319,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+"FE",
                 stt: stt,
             }
             this.lstCtietBcao.splice(index + 1, 0, item);
@@ -421,7 +490,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 
     setDetail() {
         this.lstCtietBcao.forEach(item => {
-            item.level = this.linhVucs.find(e => e.id == item.maLinhVuc)?.level;
+            item.level = this.linhVucs.find(e => e.id == item.maLvucNdChi)?.level;
         })
     }
 
@@ -440,12 +509,12 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         var lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
-                let idCha = this.getIdCha(item.maLinhVuc);
-                var index: number = this.lstCtietBcao.findIndex(e => e.maLinhVuc === idCha);
+                let idCha = this.getIdCha(item.maLvucNdChi);
+                var index: number = this.lstCtietBcao.findIndex(e => e.maLvucNdChi === idCha);
                 if (index != -1) {
                     this.addLow(this.lstCtietBcao[index].id, item);
                 } else {
-                    index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.maLinhVuc) === idCha);
+                    index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.maLvucNdChi) === idCha);
                     this.addSame(this.lstCtietBcao[index].id, item);
                 }
             })
@@ -455,9 +524,9 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     addLine(id: any) {
-        var maLinhVuc: any = this.lstCtietBcao.find(e => e.id == id)?.maLinhVuc;
+        var maLvucNdChi: any = this.lstCtietBcao.find(e => e.id == id)?.maLvucNdChi;
         let obj = {
-            maKhoanMuc: maLinhVuc,
+            maKhoanMuc: maLvucNdChi,
             lstKhoanMuc: this.linhVucs,
         }
 
@@ -474,12 +543,12 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                var index: number = this.lstCtietBcao.findIndex(e => e.maLinhVuc == res.maKhoanMuc);
+                var index: number = this.lstCtietBcao.findIndex(e => e.maLvucNdChi == res.maKhoanMuc);
                 if (index == -1) {
                     let data: any = {
                         ...this.initItem,
-                        maLinhVuc: res.maKhoanMuc,
-                        level: this.linhVucs.find(e => e.id == maLinhVuc)?.level,
+                        maLvucNdChi: res.maKhoanMuc,
+                        level: this.linhVucs.find(e => e.id == maLvucNdChi)?.level,
                     };
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
@@ -487,11 +556,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                         this.addSame(id, data);
                     }
                 }
-                id = this.lstCtietBcao.find(e => e.maLinhVuc == res.maKhoanMuc)?.id;
+                id = this.lstCtietBcao.find(e => e.maLvucNdChi == res.maKhoanMuc)?.id;
                 res.lstKhoanMuc.forEach(item => {
                     var data: ItemData = {
                         ...this.initItem,
-                        maLinhVuc: item.id,
+                        maLvucNdChi: item.id,
                         level: item.level,
                     };
                     this.addLow(id, data);

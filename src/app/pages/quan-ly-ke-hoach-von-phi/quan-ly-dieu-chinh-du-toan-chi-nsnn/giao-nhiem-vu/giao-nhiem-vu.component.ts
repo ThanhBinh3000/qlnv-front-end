@@ -403,7 +403,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 					},
 				);
 			} else {
-				this.quanLyVonPhiService.updatelist(request).toPromise().then(
+				this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
 					async data => {
 						if (data.statusCode == 0) {
 							this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
