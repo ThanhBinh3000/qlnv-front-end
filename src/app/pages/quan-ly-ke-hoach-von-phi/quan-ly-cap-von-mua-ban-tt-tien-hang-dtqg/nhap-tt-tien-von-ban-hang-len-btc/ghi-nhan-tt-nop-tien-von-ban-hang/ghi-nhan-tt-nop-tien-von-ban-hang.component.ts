@@ -275,7 +275,7 @@ export class GhiNhanTtNopTienVonBanHangComponent implements OnInit {
           //           },
           //      );
           // } else {
-          //      this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+          //      this.quanLyVonPhiService.updateLapThamDinh(request).subscribe(res => {
           //           if (res.statusCode == 0) {
           //                this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
           //           } else {

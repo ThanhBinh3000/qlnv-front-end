@@ -329,7 +329,7 @@ export class NhanGhiNhanThongTinPboDuAnComponent implements OnInit {
                          console.log();
                     })
           } else {
-               this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+               this.quanLyVonPhiService.updateLapThamDinh(request).subscribe(res => {
                     if (res.statusCode == 0) {
                          alert('trinh duyet thanh cong!');
                     } else {

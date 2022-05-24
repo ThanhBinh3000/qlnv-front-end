@@ -117,7 +117,7 @@ export const LINH_VUC = [
         id: 2200,
         tenDm: "Chi thường xuyên mới",
         idCha: 2000,
-        level: 2,
+        level: 1,
     },
     {
         id: 2210,
