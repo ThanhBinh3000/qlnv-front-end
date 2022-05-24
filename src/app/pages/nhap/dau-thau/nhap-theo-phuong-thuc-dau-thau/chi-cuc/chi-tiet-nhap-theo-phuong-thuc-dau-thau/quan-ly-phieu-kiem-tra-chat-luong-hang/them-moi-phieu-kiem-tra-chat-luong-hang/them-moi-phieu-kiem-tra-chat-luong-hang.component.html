@@ -106,7 +106,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày hợp đồng
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.ngayKiemTra" disabled />
+                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="Ngày hợp đồng" [(ngModel)]="detail.ngayKiemTra">
+                </nz-date-picker>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -138,7 +140,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Khối lượng gạo thực nhập kho (kg)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập khối lượng gạo thực nhập kho" [(ngModel)]="detail.khoiLuong" />
+                <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập khối lượng gạo thực nhập kho"
+                  [(ngModel)]="detail.khoiLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -146,7 +149,9 @@
                 <nz-form-label [nzNoColon]="true">
                   Chứng thư giám định số
                 </nz-form-label>
-                <input nz-input placeholder="Nhập chứng thư giám định số" [(ngModel)]="detail.soChungThuGiamDinh" />
+                <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập chứng thư giám định số"
+                  [(ngModel)]="detail.soChungThuGiamDinh" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
+                </nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -167,9 +172,17 @@
                 <input nz-input placeholder="Nhập tổ chức giám định" [(ngModel)]="detail.tchucGdinh" />
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Biển số xe của phương tiện vận tải
+                </nz-form-label>
+                <input nz-input placeholder="Nhập biển số xe của phương tiện vận tải" [(ngModel)]="detail.bienSoXe" />
+              </nz-form-item>
+            </div>
           </div>
         </nz-card>
-        <nz-card class="mt-16 flex-card p-lr16">
+        <nz-card class="mt-16 flex-card p-lr16 mg-b-60">
           <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24" class="text-title-specical">1. Kết quả đánh giá cảm quan: (Về màu sắc, mùi, vị, tạp
               chất, đánh bóng, sinh vật hại)</div>
@@ -179,7 +192,8 @@
             </div>
             <div nz-col nzSpan="24" class="text-title-specical">2. Kết quả phân tích chỉ tiêu chất lượng:</div>
             <div nz-col nzSpan="24" class="table-ket-qua">
-              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+              <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                [nzData]="detail?.ketQuaKiemTra">
                 <thead>
                   <tr>
                     <th width="60px">STT</th>
@@ -192,19 +206,72 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>1</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                     <td>
-                      <a>
-                        <i class="fa fa-pencil"></i>
+                      <input type="text" nz-input class="w-300" [(ngModel)]="create.tenChiTieu" />
+                    </td>
+                    <td>
+                      <input type="text" nz-input class="w-300" [(ngModel)]="create.tieuChuan" />
+                    </td>
+                    <td>
+                      <input type="text" nz-input class="w-300" [(ngModel)]="create.ketQuaKiemTra" />
+                    </td>
+                    <td>
+                      <input type="text" nz-input class="w-300" [(ngModel)]="create.phuongPhapXacDinh" />
+                    </td>
+                    <td>
+                      <a (click)="addRow()" [class.disabled]="!create.tenChiTieu || create.tenChiTieu == ''">
+                        <i class="fa fa-plus"></i>
                       </a>
-                      <a>
+                      <a (click)="clearItemRow()">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
+                  </tr>
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+                    <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
+                      <td class="text-center">{{i+1}}</td>
+                      <td>{{data.tenChiTieu}}</td>
+                      <td>{{data.tieuChuan}}</td>
+                      <td>{{data.ketQuaKiemTra}}</td>
+                      <td>{{data.phuongPhapXacDinh}}</td>
+                      <td>
+                        <a (click)="editRow(data.stt)">
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                        <a (click)="deleteRow(data)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <ng-template #editTemplate>
+                      <td></td>
+                      <td>
+                        <input type="text" nz-input class="w-300"
+                          [(ngModel)]="editDataCache[data.stt]?.data.tenChiTieu" />
+                      </td>
+                      <td>
+                        <input type="text" nz-input class="w-300"
+                          [(ngModel)]="editDataCache[data.stt]?.data.tieuChuan" />
+                      </td>
+                      <td>
+                        <input type="text" nz-input class="w-300"
+                          [(ngModel)]="editDataCache[data.stt]?.data.ketQuaKiemTra" />
+                      </td>
+                      <td>
+                        <input type="text" nz-input class="w-300"
+                          [(ngModel)]="editDataCache[data.stt]?.data.phuongPhapXacDinh" />
+                      </td>
+                      <td>
+                        <a (click)="saveEdit(data.stt)" class="save"
+                          [class.disabled]="!editDataCache[data.stt]?.data.tenChiTieu || editDataCache[data.stt]?.data.tenChiTieu == ''">
+                          <i class="fa fa-save"></i>
+                        </a>
+                        <a (click)="cancelEdit(data.stt)">
+                          <i class="fa fa-times do"></i>
+                        </a>
+                      </td>
+                    </ng-template>
                   </tr>
                 </tbody>
               </nz-table>
