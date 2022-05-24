@@ -6,8 +6,6 @@ import { DauThauRoutingModule } from './dau-thau-routing.module';
 import { DauThauComponent } from './dau-thau.component';
 import { ChiTietDonViThucHienQuyetDinhComponent } from './luong-thuc/chi-tiet-don-vi-thuc-hien-quyet-dinh/chi-tiet-don-vi-thuc-hien-quyet-dinh.component';
 import { HopDongMuaComponent } from './luong-thuc/hop-dong-mua/hop-dong-mua.component';
-import { QuanLyBienBanLayMauComponent } from './luong-thuc/quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
-import { ThemMoiBienBanLayMauKhoComponent } from './luong-thuc/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
 import { QuanLyBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-ban-nghiem-thu-ke-lot/quan-ly-bien-ban-nghiem-thu-ke-lot.component';
 import { ThemMoiBienBanNghiemThuKeLotComponent } from './luong-thuc/quan-ly-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot/them-moi-bien-ban-nghiem-thu-ke-lot.component';
 import { QuanLyPhieuKiemNghiemChatLuongComponent } from './luong-thuc/quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
@@ -34,8 +32,6 @@ import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-
     ChiTietDonViThucHienQuyetDinhComponent,
     QuanLyBienBanNghiemThuKeLotComponent,
     ThemMoiBienBanNghiemThuKeLotComponent,
-    ThemMoiBienBanLayMauKhoComponent,
-    QuanLyBienBanLayMauComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoPhieuKiemNghiemChatLuongComponent,
     QuanLyPhieuNhapDayKhoComponent,

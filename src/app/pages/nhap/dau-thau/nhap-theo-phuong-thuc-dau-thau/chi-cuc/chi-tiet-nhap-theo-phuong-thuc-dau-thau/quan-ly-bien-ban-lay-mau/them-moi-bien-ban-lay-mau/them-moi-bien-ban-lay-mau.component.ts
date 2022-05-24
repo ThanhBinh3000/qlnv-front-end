@@ -5,9 +5,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { DialogTuChoiComponent } from '../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -26,7 +26,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
