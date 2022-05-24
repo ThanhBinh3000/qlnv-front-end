@@ -8,6 +8,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
@@ -42,9 +43,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     lstCtietBcao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
+   
     //thong tin chung
+    id: any;
     namHienHanh: number;
-    maLoaiBaoCao: string = "17";
+    maBieuMau: string;
     thuyetMinh: string;
     maDviTien: any;
     listIdDelete: string = "";
@@ -62,9 +65,8 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     };
     //trang thai cac nut
     status: boolean = false;
-    statusBtnDone: boolean;
-    statusBtnOK: boolean;
-    statusBtnSave: boolean;
+    statusBtnFinish: boolean;
+    statusBtnOk: boolean;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -85,8 +87,16 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.id = this.data?.id;
+        console.log(this.id);
+        this.maBieuMau = this.data?.maBieuMau;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
         this.sortByIndex();
         this.updateEditCache();
 
@@ -103,14 +113,72 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.getStatusButton();
         this.spinner.hide();
     }
 
     getStatusButton() {
-        const roles = new Role();
-        this.statusBtnDone = roles.getRoleDone(this.trangThaiPhuLuc, 3);
-        this.statusBtnOK = roles.getRoleOK(this.trangThaiPhuLuc, 3);
-        this.statusBtnSave = roles.getRoleSaveBM(this.trangThaiPhuLuc, 3);
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")){
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
+    }
+
+    // luu
+    async save() {
+        let checkSaveEdit;
+          if (!this.maDviTien) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+          //check xem tat ca cac dong du lieu da luu chua?
+          //chua luu thi bao loi, luu roi thi cho di
+          this.lstCtietBcao.forEach(element => {
+               if (this.editCache[element.id].edit === true) {
+                    checkSaveEdit = false
+               }
+          });
+          if (checkSaveEdit == false) {
+               this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+               return;
+          }
+        // replace nhung ban ghi dc them moi id thanh null
+        this.lstCtietBcao.forEach(item => {
+            if (item.id?.length == 38) {
+                item.id = null;
+            }
+        })
+
+        let request = {
+            id: this.id,
+            lstCtietLapThamDinhs: this.lstCtietBcao,
+            maBieuMau: this.maBieuMau,
+            maDviTien: this.maDviTien,
+            nguoiBcao: this.data?.nguoiBcao,
+            lyDoTuChoi: this.data?.lyDoTuChoi,
+            thuyetMinh: this.thuyetMinh,
+            trangThai: this.trangThaiPhuLuc,
+        };
+        this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        this.lstCtietBcao.filter(item => {
+            if (!item.id) {
+                item.id = uuid.v4() + 'FE';
+            }
+        });
+        this.spinner.hide();
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
@@ -200,7 +268,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+"FE",
                 stt: head + "." + (tail + 1).toString(),
             }
             this.lstCtietBcao.splice(ind + 1, 0, item);
@@ -251,7 +319,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4(),
+                id: uuid.v4()+"FE",
                 stt: stt,
             }
             this.lstCtietBcao.splice(index + 1, 0, item);

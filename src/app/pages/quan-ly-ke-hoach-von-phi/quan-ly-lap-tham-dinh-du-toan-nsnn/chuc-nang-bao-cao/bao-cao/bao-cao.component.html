@@ -163,32 +163,35 @@
 										{{ getStatusBM(data.trangThai) }}
 									</td>
 									<td>
-										<ng-container *ngIf="id != null, then selectName">
-											<div *ngFor="let item of canBos">
-												<div *ngIf="item.id == data.nguoiBcao">
-													{{item.fullName}}
-												</div>
-											</div>
-										</ng-container>
-										<ng-template #selectName>
-											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
+										<ng-container *ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện" 
 												[(ngModel)]="data.nguoiBcao">
-												<nz-option *ngFor="let item of canBos" [nzValue]="item.id"
+												<nz-option *ngFor="let item of canBos" [nzValue]="item.fullName"
 													[nzLabel]="item.fullName">
 												</nz-option>
 											</nz-select>
+										</ng-container>
+										<ng-template #templateNguoiBcao>
+											<div *ngFor="let item of canBos" [hidden]="!id">
+												<div *ngIf="item.fullName == data.nguoiBcao">
+													{{item.fullName}}
+												</div>
+											</div>
 										</ng-template>
 									</td>
 
 									<td>
-										<ng-container *ngIf="data.nguoiBcao == userInfo?.id">
-											<button type="button" class="btn btn-main" (click)="newTab(data.maBieuMau)">
-												<span>Nhập dữ liệu</span>
-											</button>
-											<button type="button" class="btn btn-main">
-												<span>Biểu mẫu nhập số liệu</span>
-											</button>
+										<ng-container *ngIf="data?.id?.length != 38">
+											<ng-container *ngIf="data.nguoiBcao == userInfo?.username">
+												<button type="button" class="btn btn-main" (click)="newTab(data.maBieuMau)">
+													<span>Nhập dữ liệu</span>
+												</button>
+												<button type="button" class="btn btn-main">
+													<span>Biểu mẫu nhập số liệu</span>
+												</button>
+											</ng-container>
 										</ng-container>
+										
 									</td>
 									<td>
 										<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"

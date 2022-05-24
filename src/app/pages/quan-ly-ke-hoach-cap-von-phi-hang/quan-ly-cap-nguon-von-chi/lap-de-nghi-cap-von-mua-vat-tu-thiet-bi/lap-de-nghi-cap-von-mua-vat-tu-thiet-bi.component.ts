@@ -254,7 +254,7 @@ export class LapDeNghiCapVonMuaVatTuThietBiComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updatelist(request).subscribe(res => {
+			this.quanLyVonPhiService.updateLapThamDinh(request).subscribe(res => {
 				if (res.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 				} else {

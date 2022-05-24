@@ -97,6 +97,8 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnCopy: boolean = true;                      // trang thai copy
 	statusBtnPrint: boolean = true;                     // trang thai print
 	statusBtnClose: boolean = false;
+	statusBtnOk: boolean;
+	statusBtnFinish: boolean;
 	//khac
 	data: any;
 	selectedIndex: number = 1;
@@ -151,11 +153,6 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-
-		this.data = {
-			lstCTiet: [],
-		}
-
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
@@ -220,7 +217,7 @@ export class BaoCaoComponent implements OnInit {
 			}
 		);
 		this.getStatusButton();
-
+		console.log(this.statusBtnFinish);
 		this.spinner.hide();
 	}
 
@@ -235,16 +232,31 @@ export class BaoCaoComponent implements OnInit {
 		if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
 			checkParent = true;
 		}
+		let roleNguoiTao = this.userInfo?.roles[0]?.code;
 		const utils = new Utils();
-		this.statusBtnDel = utils.getRoleDel(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, this.userInfo?.roles[0]?.code);
-		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
-		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, this.userInfo?.roles[0]?.code);
+		this.statusBtnDel = utils.getRoleDel(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
+		this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
+		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent) ||
+			(this.trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld) ||
+			(this.trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld)){
+			this.statusBtnOk = true;
+		} else {
+			this.statusBtnOk = false;
+		}
+		if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
+			&& roleNguoiTao == '3' && checkChirld) {
+			this.statusBtnFinish = false;
+		} else {
+			this.statusBtnFinish = true;
+		}
+		
 	}
 
 	//get user info
@@ -342,8 +354,6 @@ export class BaoCaoComponent implements OnInit {
 
 	// luu
 	async save() {
-		let checkSaveEdit;
-
 		//upload file
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
@@ -377,7 +387,7 @@ export class BaoCaoComponent implements OnInit {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
 						this.id = data.data.id;
-						await this.getDetailReport();
+						// await this.getDetailReport();
 						this.getStatusButton();
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -388,11 +398,11 @@ export class BaoCaoComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updatelist(request).toPromise().then(
+			this.quanLyVonPhiService.updateBieuMau(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-						await this.getDetailReport();
+						// await this.getDetailReport();
 						this.getStatusButton();
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -471,6 +481,7 @@ export class BaoCaoComponent implements OnInit {
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
 					this.nguoiNhap = data.data.nguoiTao;
 					this.maBaoCao = data.data.maBcao;
+					this.maDviTao = data.data.maDvi;
 					this.namHienHanh = data.data.namHienHanh;
 					this.trangThaiBaoCao = data.data.trangThai;
 					this.ngayTrinhDuyet = data.data.ngayTrinh;
@@ -538,7 +549,7 @@ export class BaoCaoComponent implements OnInit {
 
 	// xóa với checkbox
 	deleteSelected() {
-		
+
 		// delete object have checked = true
 		this.lstLapThamDinhs = this.lstLapThamDinhs.filter(item => item.checked != true)
 		this.allChecked = false;
@@ -604,6 +615,10 @@ export class BaoCaoComponent implements OnInit {
 		this.data = {
 			...item,
 			namHienHanh: this.namHienHanh,
+			trangThaiBaoCao: this.trangThaiBaoCao,
+			statusBtnOk: this.statusBtnOk,
+			statusBtnFinish: this.statusBtnFinish,
+			status: this.status,
 		}
 		if (index == -1) {
 			this.tabs = [];

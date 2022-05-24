@@ -415,7 +415,7 @@ export class NhapQuyetDinhGiaoDuToanChiNsnnBtcPdComponent implements OnInit {
 					},
 				);
 			} else {
-				this.quanLyVonPhiService.updatelistGiaoDuToan1(request).toPromise().then(
+				this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
 					async data => {
 						if (data.statusCode == 0) {
 							this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

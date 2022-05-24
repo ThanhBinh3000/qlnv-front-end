@@ -22,7 +22,7 @@
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
         </button>
-        <ng-container *ngIf="lstCTietBCao.length == 0">
+        <ng-container *ngIf="lstCtietBcao.length == 0">
             <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
@@ -88,7 +88,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of lstCTietBCao; let i = index">
+        <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                 <td [nzIndentSize]="data.lstLvuc[0].level * 8">
                     {{getChiMuc(data.stt)}}
@@ -253,12 +253,20 @@
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="status">
+    <button type="button" class="btn btn-main" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="status">
+    <button type="button" class="btn btn-main" (click)="save()" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
+    </button>
+    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        <span>OK</span>
+    </button>
+    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+        <i nz-icon nzType="close" nzTheme="outline"></i>
+        <span>Not OK</span>
     </button>
 </div>

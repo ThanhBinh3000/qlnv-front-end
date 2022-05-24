@@ -141,19 +141,19 @@
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnDone">
+    <button type="button" class="btn btn-main" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnSave">
+    <button type="button" class="btn btn-main" (click)="save()" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOK">
+    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>OK</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOK">
+    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
         <i nz-icon nzType="close" nzTheme="outline"></i>
         <span>Not OK</span>
     </button>

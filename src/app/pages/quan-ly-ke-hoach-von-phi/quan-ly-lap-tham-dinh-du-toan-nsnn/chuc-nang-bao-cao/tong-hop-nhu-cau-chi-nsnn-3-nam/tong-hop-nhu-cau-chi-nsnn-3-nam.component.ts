@@ -47,13 +47,17 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     lstCtietBcao: ItemData[];
     donViTiens: any[] = DON_VI_TIEN;
     //thong tin chung
+    id: any;
+    trangThaiPhuLuc: string;
     namHienHanh: number;       
-    maLoaiBaoCao: string = "13";              
+    maBieuMau: string = "13";              
     thuyetMinh: string;
     maDviTien: any;                   
     listIdDelete: string = "";                  
     //trang thai cac nut
     status: boolean = false;   
+    statusBtnFinish: boolean;
+    statusBtnOk: boolean;
 
     allChecked = false;                         // check all checkbox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
@@ -75,8 +79,15 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
 
     async ngOnInit() {
-        this.namHienHanh = this.data.namHienHanh;
+        this.id = this.data?.id;
+        this.maBieuMau = this.data?.maBieuMau;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.trangThaiPhuLuc = this.data?.trangThai;
+        this.namHienHanh = this.data?.namHienHanh;
         this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
         this.updateEditCache();
 
         this.danhMucService.dMNoiDung().toPromise().then(
@@ -117,6 +128,54 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.spinner.hide();
+    }
+
+    getStatusButton() {
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")){
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
+    }
+
+    // luu
+    async save() {
+        // replace nhung ban ghi dc them moi id thanh null
+        this.lstCtietBcao.forEach(item => {
+            if (item.id?.length == 38) {
+                item.id = null;
+            }
+        })
+
+        let request = {
+            id: this.id,
+            lstCtietLapThamDinhs: this.lstCtietBcao,
+            maBieuMau: this.maBieuMau,
+            maDviTien: this.maDviTien,
+            nguoiBcao: this.data?.nguoiBcao,
+            lyDoTuChoi: this.data?.lyDoTuChoi,
+            thuyetMinh: this.thuyetMinh,
+            trangThai: this.trangThaiPhuLuc,
+        };
+        this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+
+        this.lstCtietBcao.filter(item => {
+            if (!item.id) {
+                item.id = uuid.v4() + 'FE';
+            }
+        });
         this.spinner.hide();
     }
 
