@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -14,6 +15,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
+import * as dayjs from 'dayjs';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'them-moi-phieu-kiem-tra-chat-luong-hang',
@@ -46,12 +49,14 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     private routerActive: ActivatedRoute,
+    public globals: Globals,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.getIdNhap();
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -125,7 +130,22 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    if (id > 0) {
+      this.updateEditCache();
+    }
+  }
 
+  getIdNhap() {
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/chi-tiet/");
+      if (index != -1) {
+        let url = this.router.url.substring(index + 10);
+        let temp = url.split("/");
+        if (temp && temp.length > 0) {
+          this.detail.quyetDinhNhapId = +temp[0];
+        }
+      }
+    }
   }
 
   getTitleVthh() {
@@ -152,7 +172,72 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   async save(isOther: boolean) {
-
+    this.spinner.show();
+    try {
+      let body = {
+        "bienSoXe": this.detail.bienSoXe,
+        "diaChi": null,
+        "fileDinhKemId": null,
+        "hopDongId": this.detail.hopDongId,
+        "id": this.id,
+        "ketLuan": this.detail.ketLuan,
+        "ketQuaKiemTra": this.detail.ketQuaKiemTra,
+        "khoiLuong": this.detail.khoiLuong,
+        "lyDoTuChoi": null,
+        "maDiemKho": this.detail.maDiemKho,
+        "maDonVi": this.detail.maDvi,
+        "maHangHoa": this.maVthh,
+        "maNganKho": this.detail.maNganKho,
+        "maNhaKho": this.detail.maNhaKho,
+        "maQhns": this.detail.maDvi,
+        "ngayGdinh": this.detail.ngayGdinh,
+        "ngayKiemTra": null,
+        "ngayPheDuyet": null,
+        "nguoiGiaoHang": this.detail.nguoiGiaoHang,
+        "nguoiPheDuyet": null,
+        "quyetDinhNhapId": null,
+        "soChungThuGiamDinh": this.detail.soChungThuGiamDinh,
+        "soPhieu": this.detail.soPhieu,
+        "soPhieuAnToanThucPham": null,
+        "tchucGdinh": this.detail.tchucGdinh,
+        "tenHangHoa": this.loaiStr,
+        "tenNganKho": null,
+        "trangThai": this.detail.trangThai,
+      };
+      if (this.id > 0) {
+        let res = await this.quanLyPhieuKiemTraChatLuongHangService.sua(
+          body,
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS,
+            );
+            this.back();
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      } else {
+        let res = await this.quanLyPhieuKiemTraChatLuongHangService.them(
+          body,
+        );
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   guiDuyet() {
@@ -270,9 +355,13 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate([
-      'nhap/dau-thau/quan-ly-phieu-kiem-tra-chat-luong-hang',
-    ]);
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/thong-tin/");
+      if (index != -1) {
+        let url = this.router.url.substring(0, index);
+        this.router.navigate([url]);
+      }
+    }
   }
 
   themBienBanNgiemThuKeLot() {
@@ -288,6 +377,66 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     modalLuongThuc.afterClose.subscribe((res) => {
       if (res) {
       }
+    });
+  }
+
+  cancelEdit(stt: number): void {
+    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
+    this.editDataCache[stt] = {
+      data: { ...this.detail?.ketQuaKiemTra[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(stt: number): void {
+    const index = this.detail?.ketQuaKiemTra.findIndex(item => item.stt === stt);
+    Object.assign(this.detail?.ketQuaKiemTra[index], this.editDataCache[stt].data);
+    this.editDataCache[stt].edit = false;
+  }
+
+  deleteRow(data: any) {
+    this.detail.ketQuaKiemTra = this.detail?.ketQuaKiemTra.filter(x => x.stt != data.stt);
+    this.sortTableId();
+    this.updateEditCache();
+  }
+
+  editRow(stt: number) {
+    this.editDataCache[stt].edit = true;
+  }
+
+  addRow() {
+    if (!this.detail?.ketQuaKiemTra) {
+      this.detail.ketQuaKiemTra = [];
+    }
+    this.sortTableId();
+    let item = cloneDeep(this.create);
+    item.stt = this.detail?.ketQuaKiemTra.length + 1;
+    this.detail.ketQuaKiemTra = [
+      ...this.detail?.ketQuaKiemTra,
+      item,
+    ]
+    this.updateEditCache();
+    this.clearItemRow();
+  }
+
+  clearItemRow() {
+    this.create = {};
+  }
+
+  updateEditCache(): void {
+    if (this.detail?.ketQuaKiemTra && this.detail?.ketQuaKiemTra.length > 0) {
+      this.detail?.ketQuaKiemTra.forEach((item) => {
+        this.editDataCache[item.stt] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+
+  sortTableId() {
+    this.detail?.ketQuaKiemTra.forEach((lt, i) => {
+      lt.stt = i + 1;
     });
   }
 }
