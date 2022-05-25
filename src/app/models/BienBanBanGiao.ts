@@ -1,6 +1,4 @@
-import { FileDinhKem } from "./FileDinhKem";
-
-export class BienBanLayMau {
+export class BienBanBanGiaoMau {
     id: number;
     canCu: string;
     ccuQdinhGiaoNvuNhap: string;

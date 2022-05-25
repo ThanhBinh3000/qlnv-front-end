@@ -17,11 +17,11 @@ import dayjs from 'dayjs';
 import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
 
 @Component({
-  selector: 'them-moi-bien-ban-lay-mau',
-  templateUrl: './them-moi-bien-ban-lay-mau.component.html',
-  styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
+  selector: 'them-moi-bien-ban-ban-giao-mau',
+  templateUrl: './them-moi-bien-ban-ban-giao-mau.component.html',
+  styleUrls: ['./them-moi-bien-ban-ban-giao-mau.component.scss'],
 })
-export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
   bienBanLayMau: BienBanLayMau;
   id: number;
   routerUrl: string;

@@ -368,6 +368,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
   }
   save(isGuiDuyet?: boolean) {
+    this.spinner.show();
     this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value;
     this.quyetDinhNhapXuat.loaiQd = "00";
     this.quyetDinhNhapXuat.ngayKy = dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD');
