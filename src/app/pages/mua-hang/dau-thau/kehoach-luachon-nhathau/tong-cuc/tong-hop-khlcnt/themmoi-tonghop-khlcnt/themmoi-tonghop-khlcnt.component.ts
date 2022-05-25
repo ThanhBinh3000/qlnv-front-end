@@ -112,16 +112,16 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       {
         loaiVthh: [convertVthhToId(this.router.url.split('/')[4]), [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        hthucLcnt: ['HLC01', [Validators.required]],
-        pthucLcnt: ['PTD02', [Validators.required]],
-        loaiHdong: ['LHD01', [Validators.required]],
-        nguonVon: ['NGV01', [Validators.required]],
+        hthucLcnt: ['', [Validators.required]],
+        pthucLcnt: ['', [Validators.required]],
+        loaiHdong: ['', [Validators.required]],
+        nguonVon: ['', [Validators.required]],
       }
     );
     this.formData = this.fb.group({
       ngayTongHop: [, [Validators.required]],
       loaiVthh: ['', [Validators.required]],
-      veViec: [],
+      veViec: ['', [Validators.required]],
       hthucLcnt: ['', [Validators.required]],
       pthucLcnt: ['', [Validators.required]],
       loaiHdong: ['', [Validators.required]],
@@ -222,15 +222,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
     return endValue.getTime() <= this.startHTN.getTime();
   };
-
-  validateGhiChu() {
-    if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
-      this.errorGhiChu = false;
-    }
-    else {
-      this.errorGhiChu = true;
-    }
-  }
 
   async loadChiTiet() {
     if (this.id > 0) {
@@ -348,6 +339,14 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       }
       let body = this.formData.value;
       let res = await this.tongHopDeXuatKHLCNTService.create(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.quayLai();
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -356,19 +355,8 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   quayLai() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn quay lại ?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        let loatVthh = this.router.url.split('/')[4]
-        this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop']);
-      },
-    });
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop']);
   }
 
   // calendarData(list, column) {
@@ -449,40 +437,4 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
   }
 
-  selectTabMenu(tab) {
-    if (tab == this.selectedTab) {
-      return;
-    }
-    if (tab == 'tong-hop') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phuong-an') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phe-duyet') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    }
-  }
 }
