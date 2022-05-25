@@ -187,7 +187,8 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   redirectToChiTiet(id?) {
-
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop/chi-tiet', id]);
   }
 
   calendarData(list, column) {
