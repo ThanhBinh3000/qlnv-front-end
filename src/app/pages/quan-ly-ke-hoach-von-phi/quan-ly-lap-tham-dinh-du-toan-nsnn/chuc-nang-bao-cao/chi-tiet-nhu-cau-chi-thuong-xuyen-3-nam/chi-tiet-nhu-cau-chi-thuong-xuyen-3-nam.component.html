@@ -19,7 +19,7 @@
     </div>
     <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
         <button type="button" class="btn btn-main" (click)="deleteAllChecked()">
-            <i class="fa fa-trash-o" ></i>
+            <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
         </button>
         <ng-container *ngIf="lstCtietBcao.length == 0">
@@ -103,7 +103,9 @@
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    <ng-container *ngIf="!getLowStatus(data.stt)">
+                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -180,19 +182,19 @@
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnFinish">
+    <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()" [hidden]="statusBtnFinish">
+    <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>OK</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
         <i nz-icon nzType="close" nzTheme="outline"></i>
         <span>Not OK</span>
     </button>

@@ -42,11 +42,11 @@
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
 					<span>Đơn vị cấp trên chấp nhận</span>
 				</a>
-				<a class="btn btn-main"  [hidden]="statusBtnCopy">
+				<a class="btn btn-main" [hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
 				</a>
-				<a class="btn btn-main"  [hidden]="statusBtnPrint">
+				<a class="btn btn-main" [hidden]="statusBtnPrint">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
 				</a>
@@ -69,7 +69,7 @@
 							<th width="175px">Năm hiện hành</th>
 							<th width="175px">Ngày lập</th>
 							<th width="175px">Người lập</th>
-							<th width="175px">Số công văn</th>
+							<th width="300px">Số công văn</th>
 							<th width="175px">Ngày trình duyệt</th>
 							<th width="175px">Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
 							<th width="175px">Ngày phê duyệt<br>(Lãnh đạo duyệt)
@@ -85,7 +85,7 @@
 							<td>{{ngayNhap}}</td>
 							<td>{{nguoiNhap}}</td>
 							<td>
-								<nz-upload [nzBeforeUpload]="beforeUploadCV">
+								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>
 										<i nz-icon nzType="upload"></i>
 										Select File
@@ -163,8 +163,9 @@
 										{{ getStatusBM(data.trangThai) }}
 									</td>
 									<td>
-										<ng-container *ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
-											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện" 
+										<ng-container
+											*ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
 												[(ngModel)]="data.nguoiBcao">
 												<nz-option *ngFor="let item of canBos" [nzValue]="item.fullName"
 													[nzLabel]="item.fullName">
@@ -182,18 +183,24 @@
 
 									<td>
 										<ng-container *ngIf="data?.id?.length != 38">
-											<ng-container *ngIf="data.nguoiBcao == userInfo?.username">
-												<button type="button" class="btn btn-main" (click)="newTab(data.maBieuMau)">
+											<ng-container *ngIf="data.nguoiBcao == userInfo?.username && !status; else xem">
+												<button type="button" class="btn btn-main"
+													(click)="newTab(data.maBieuMau)">
 													<span>Nhập dữ liệu</span>
 												</button>
 												<button type="button" class="btn btn-main">
 													<span>Biểu mẫu nhập số liệu</span>
 												</button>
 											</ng-container>
+											<ng-template #xem>
+												<button type="button" class="btn btn-main"
+													(click)="newTab(data.maBieuMau)">
+													<span>Xem</span>
+												</button>
+											</ng-template>
 										</ng-container>
-										
 									</td>
-									<td>
+									<td [hidden]="status">
 										<label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
 											(ngModelChange)="updateSingleChecked()"></label>
 									</td>
@@ -260,32 +267,32 @@
 										Select File
 									</button>
 								</nz-upload>
-								<button nz-button [nzType]="'primary'" (click)="handleUpload()" [hidden]="status"
-									[disabled]="fileList.length === 0" style="margin-top: 16px">
+								<button nz-button [nzType]="'primary'" (click)="handleUpload()"
+									[disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
 									Thêm vào danh sách
 								</button>
 							</div>
 						</div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col class="gutter-row" [nzSpan]="12">
-								<nz-table [nzData]="lstLapThamDinhs" nzBordered class="table__body">
+								<nz-table nzBordered class="table__body">
 									<thead>
 										<tr>
-											<th nzWidth="50px">STT</th>
+											<th>STT</th>
 											<th>Tên file</th>
-											<th nzWidth="50px"></th>
-											<th nzWidth="50px"></th>
+											<th></th>
+											<th class="th" [hidden]="status"></th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr *ngFor="let data of lstFile; let i = index">
-											<td>{{ i + 1 }}</td>
+										<tr *ngFor="let data of lstFiles; let i = index">
+											<td>{{ i + 1 }} </td>
 											<td>{{ data.fileName }}</td>
 											<td>
 												<button class="btn btn-function"
 													(click)="downloadFile(data.id)">Xem</button>
 											</td>
-											<td>
+											<td [hidden]="status">
 												<button class="btn btn-function"
 													(click)="deleteFile(data.id)">Xóa</button>
 											</td>
@@ -310,7 +317,7 @@
 							</app-tong-hop-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '17'">
-							<app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam [data]="data">
+							<app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam [data]="data" (dataChange)="getNewData($event)">
 							</app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '18'">

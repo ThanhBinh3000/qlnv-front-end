@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
@@ -31,7 +31,7 @@ export class TimKiemComponent implements OnInit {
 	};
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANGTHAIBAOCAO;
+	trangThais: any[] = TRANG_THAI_TIM_KIEM;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -56,7 +56,8 @@ export class TimKiemComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		this.searchFilter.donViTao = this.userInfo?.dvql;		
+		this.searchFilter.donViTao = this.userInfo?.dvql;	
+		this.onSubmit();	
 	}
 
 	//get user info
@@ -99,6 +100,7 @@ export class TimKiemComponent implements OnInit {
 			}
 		}
 		let requestReport = {
+			loaiTimKiem: "0",
 			maBcao: this.searchFilter.maBaoCao,
 			maDvi: this.searchFilter.donViTao,
 			namBcao: this.searchFilter.nam,
@@ -108,8 +110,7 @@ export class TimKiemComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			str: "",
-			trangThai: this.searchFilter.trangThai,
+			trangThais: [],
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

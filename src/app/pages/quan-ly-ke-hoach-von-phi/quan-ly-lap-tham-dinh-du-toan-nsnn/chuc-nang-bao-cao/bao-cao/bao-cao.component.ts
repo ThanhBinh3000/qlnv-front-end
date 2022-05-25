@@ -15,7 +15,7 @@ import * as uuid from "uuid";
 import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { TRANG_THAI_PHU_LUC, Utils } from "../../../../../Utility/utils";
+import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from "../../../../../Utility/utils";
 import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -29,6 +29,11 @@ export class ItemData {
 	nguoiBcao: string;
 	lstCtietLapThamDinhs: any[];
 	checked: boolean;
+}
+export class ItemCongVan {
+	fileName: string;
+	fileSize: number;
+	fileUrl: number;
 }
 @Component({
 	selector: 'app-bao-cao',
@@ -45,7 +50,7 @@ export class BaoCaoComponent implements OnInit {
 	namHienHanh!: number;
 	ngayNhap!: string;
 	nguoiNhap!: string;
-	congVan!: any;
+	congVan!: ItemCongVan;
 	ngayTrinhDuyet!: string;
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
@@ -59,7 +64,7 @@ export class BaoCaoComponent implements OnInit {
 	donVis: any[] = [];
 	tabs: any[] = [];
 	lstDviTrucThuoc: any[] = [];
-	trangThaiBaoCaos: any[] = TRANGTHAIBAOCAO;
+	trangThaiBaoCaos: any[] = TRANG_THAI_TIM_KIEM;
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[] = [
 		{
@@ -75,15 +80,13 @@ export class BaoCaoComponent implements OnInit {
 			fullName: "canbo",
 		}
 	];
+	lstFiles: any[] = []; //show file ra man hinh
 	//file
-	lstFile: any = [];
-	fileToUpload!: File;
-	listFile: File[] = [];
-	fileUrl: any;
+	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
 	fileList: NzUploadFile[] = [];
+	fileDetail: NzUploadFile;
 	//beforeUpload: any;
 	listIdFilesDelete: any = [];                        // id file luc call chi tiet
-	fileDetail: NzUploadFile;
 	//trang thai cac nut
 	status: boolean = false;
 	statusEdit: boolean = false;
@@ -104,6 +107,7 @@ export class BaoCaoComponent implements OnInit {
 	selectedIndex: number = 1;
 	allChecked = false;                         // check all checkbox
 
+	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
 		return false;
@@ -120,17 +124,11 @@ export class BaoCaoComponent implements OnInit {
 		return false;
 	};
 
-	// upload file
-	addFile() {
-		const id = this.fileToUpload?.lastModified.toString();
-		this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
-		this.listFile.push(this.fileToUpload);
-	}
-
+	// them file vao danh sach
 	handleUpload(): void {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
-			this.lstFile.push({ id: id, fileName: file?.name });
+			this.lstFiles.push({ id: id, fileName: file?.name });
 			this.listFile.push(file);
 		});
 		this.fileList = [];
@@ -217,12 +215,20 @@ export class BaoCaoComponent implements OnInit {
 			}
 		);
 		this.getStatusButton();
-		console.log(this.statusBtnFinish);
 		this.spinner.hide();
 	}
 
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
+		if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
+			this.trangThaiBaoCao == Utils.TT_BC_3 ||
+			this.trangThaiBaoCao == Utils.TT_BC_5 ||
+			this.trangThaiBaoCao == Utils.TT_BC_8 ||
+			this.trangThaiBaoCao == Utils.TT_BC_10) {
+			this.status = false;
+		} else {
+			this.status = true;
+		}
 		let checkParent = false;
 		let checkChirld = false;
 		let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
@@ -245,7 +251,7 @@ export class BaoCaoComponent implements OnInit {
 		this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		if ((this.trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent) ||
 			(this.trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld) ||
-			(this.trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld)){
+			(this.trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld)) {
 			this.statusBtnOk = true;
 		} else {
 			this.statusBtnOk = false;
@@ -256,7 +262,7 @@ export class BaoCaoComponent implements OnInit {
 		} else {
 			this.statusBtnFinish = true;
 		}
-		
+
 	}
 
 	//get user info
@@ -274,11 +280,6 @@ export class BaoCaoComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 			}
 		);
-	}
-
-	//
-	selectFile(files: FileList): void {
-		this.fileToUpload = files.item(0);
 	}
 
 	//upload file
@@ -305,10 +306,8 @@ export class BaoCaoComponent implements OnInit {
 
 	// xoa file trong bang file
 	deleteFile(id: string): void {
-		this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
+		this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
 		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-
-		// set list for delete
 		this.listIdFilesDelete.push(id);
 	}
 
@@ -317,7 +316,7 @@ export class BaoCaoComponent implements OnInit {
 		let file!: File;
 		file = this.listFile.find(element => element?.lastModified.toString() == id);
 		if (!file) {
-			let fileAttach = this.lstFile.find(element => element?.id == id);
+			let fileAttach = this.lstFiles.find(element => element?.id == id);
 			if (fileAttach) {
 				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
 					(data) => {
@@ -386,9 +385,15 @@ export class BaoCaoComponent implements OnInit {
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-						this.id = data.data.id;
-						// await this.getDetailReport();
-						this.getStatusButton();
+						if (!this.id) {
+							this.router.navigate([
+								'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + data.data.id,
+							])
+						}
+						else {
+							await this.getDetailReport();
+							this.getStatusButton();
+						}
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
 					}
@@ -402,7 +407,7 @@ export class BaoCaoComponent implements OnInit {
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-						// await this.getDetailReport();
+						await this.getDetailReport();
 						this.getStatusButton();
 					} else {
 						this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -420,7 +425,7 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	// chuc nang check role
-	async onSubmit(mcn: String, lyDoTuChoi: string) {
+	async onSubmit(mcn: string, lyDoTuChoi: string) {
 		if (this.id) {
 			const requestGroupButtons = {
 				id: this.id,
@@ -428,15 +433,16 @@ export class BaoCaoComponent implements OnInit {
 				lyDoTuChoi: lyDoTuChoi,
 			};
 			this.spinner.show();
-			await this.quanLyVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
+			await this.quanLyVonPhiService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
-					await this.getDetailReport();
+					this.trangThaiBaoCao = mcn;
 					this.getStatusButton();
 					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					} else {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
 					}
+					this.tabs = [];
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -475,7 +481,7 @@ export class BaoCaoComponent implements OnInit {
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstLapThamDinhs = data.data.lstLapThamDinhs;
-					this.lstFile = data.data.lstFile;
+					this.lstFiles = data.data.lstFiles;
 					this.listFile = [];
 					// set thong tin chung bao cao
 					this.ngayNhap = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -484,21 +490,11 @@ export class BaoCaoComponent implements OnInit {
 					this.maDviTao = data.data.maDvi;
 					this.namHienHanh = data.data.namHienHanh;
 					this.trangThaiBaoCao = data.data.trangThai;
-					this.ngayTrinhDuyet = data.data.ngayTrinh;
-					this.ngayDuyetTBP = data.data.ngayDuyet;
-					this.ngayDuyetLD = data.data.ngayPheDuyet;
-					this.ngayCapTrenTraKq = data.data.ngayTraKq;
+					this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetTBP = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
-
-					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-						this.trangThaiBaoCao == Utils.TT_BC_3 ||
-						this.trangThaiBaoCao == Utils.TT_BC_5 ||
-						this.trangThaiBaoCao == Utils.TT_BC_8 ||
-						this.trangThaiBaoCao == Utils.TT_BC_10) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -610,23 +606,44 @@ export class BaoCaoComponent implements OnInit {
 
 	newTab(id: any): void {
 		var index: number = this.tabs.findIndex(e => e.id === id);
-		let item = this.lstLapThamDinhs.find(e => e.maBieuMau == id);
-		console.log(item);
-		this.data = {
-			...item,
-			namHienHanh: this.namHienHanh,
-			trangThaiBaoCao: this.trangThaiBaoCao,
-			statusBtnOk: this.statusBtnOk,
-			statusBtnFinish: this.statusBtnFinish,
-			status: this.status,
-		}
-		if (index == -1) {
+		if (index != -1) {
+			this.selectedIndex = index + 1;
+		} else {
+			let item = this.lstLapThamDinhs.find(e => e.maBieuMau == id);
+			this.data = {
+				...item,
+				namHienHanh: this.namHienHanh,
+				trangThaiBaoCao: this.trangThaiBaoCao,
+				statusBtnOk: this.statusBtnOk,
+				statusBtnFinish: this.statusBtnFinish,
+				status: this.status,
+			}
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
 			this.selectedIndex = this.tabs.length + 1;
-		} else {
-			this.selectedIndex = index + 1;
 		}
+	}
+
+	getNewData(trangThai: any) {
+		let index = this.lstLapThamDinhs.findIndex(e => e.maBieuMau == this.tabs[0].id);
+		if (trangThai == '-1') {
+			this.getDetailReport();
+			this.data = {
+				...this.lstLapThamDinhs[index],
+				namHienHanh: this.namHienHanh,
+				trangThaiBaoCao: this.trangThaiBaoCao,
+				statusBtnOk: this.statusBtnOk,
+				statusBtnFinish: this.statusBtnFinish,
+				status: this.status,
+			}
+			this.tabs = [];
+			this.tabs.push(PHU_LUC.find(e => e.id == this.lstLapThamDinhs[index].maBieuMau));
+			this.selectedIndex = this.tabs.length + 1;
+		} else {
+			this.lstLapThamDinhs[index].trangThai = trangThai;
+		}
+
+
 	}
 
 	close() {

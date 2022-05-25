@@ -7,11 +7,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, LA_MA, QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N } from "../../../../../Utility/utils";
 // import { LA_MA } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { LINH_VUC_CHI } from './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.constant';
 
@@ -21,10 +22,10 @@ export class ItemData {
     maLvuc: number;
     lstLvuc: any[];
     status: boolean;
-    mtieuNvu: number;
-    csPhapLyThien: number;
-    hdongChuYeu: number;
-    nguonKphi: number;
+    mtieuNvu: string;
+    csPhapLyThien: string;
+    hdongChuYeu: string;
+    nguonKphi: string;
     ncauChiTongSo: number;
     ncauChiTrongDoChiCs: number;
     ncauChiTrongDoChiMoi: number;
@@ -58,10 +59,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         maLvuc: 0,
         lstLvuc: [],
         status: false,
-        mtieuNvu: 0,
-        csPhapLyThien: 0,
-        hdongChuYeu: 0,
-        nguonKphi: 0,
+        mtieuNvu: "",
+        csPhapLyThien: "",
+        hdongChuYeu: "",
+        nguonKphi: "",
         ncauChiTongSo: 0,
         ncauChiTrongDoChiCs: 0,
         ncauChiTrongDoChiMoi: 0,
@@ -112,9 +113,22 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
-        this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.data?.lstCtietLapThamDinhs.forEach(item => {
+            this.lstCtietBcao.push({
+                ...item,
+                ncauChiTongSo: divMoney(item.ncauChiTongSo, this.maDviTien),
+                ncauChiTrongDoChiCs: divMoney(item.ncauChiTrongDoChiCs, this.maDviTien),
+                ncauChiTrongDoChiMoi: divMoney(item.ncauChiTrongDoChiMoi, this.maDviTien),
+                ncauChiChiaRaDtuPtrien: divMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien),
+                ncauChiChiaRaChiCs1: divMoney(item.ncauChiChiaRaChiCs1, this.maDviTien),
+                ncauChiChiaRaChiMoi1: divMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien),
+                ncauChiChiaRaChiTx: divMoney(item.ncauChiChiaRaChiTx, this.maDviTien),
+                ncauChiChiaRaChiCs2: divMoney(item.ncauChiChiaRaChiCs2, this.maDviTien),
+                ncauChiChiaRaChiMoi2: divMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien),
+            })
+        })
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(
@@ -134,7 +148,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     }
 
     getStatusButton() {
-        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")){
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
             this.statusBtnOk = false;
         } else {
             this.statusBtnOk = true;
@@ -143,8 +157,61 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
     // luu
     async save() {
-        // replace nhung ban ghi dc them moi id thanh null
+        let checkSaveEdit;
+        if (!this.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        //check xem tat ca cac dong du lieu da luu chua?
+        //chua luu thi bao loi, luu roi thi cho di
+        this.lstCtietBcao.forEach(element => {
+            if (this.editCache[element.id].edit === true) {
+                checkSaveEdit = false
+            }
+        });
+        if (checkSaveEdit == false) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        //tinh lai don vi tien va kiem tra gioi han cua chung
+        let lstCtietBcaoTemp: any = [];
+        let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
+            let ncauChiTongSo = mulMoney(item.ncauChiTongSo, this.maDviTien);
+            let ncauChiTrongDoChiCs = mulMoney(item.ncauChiTrongDoChiCs, this.maDviTien);
+            let ncauChiTrongDoChiMoi = mulMoney(item.ncauChiTrongDoChiMoi, this.maDviTien);
+            let ncauChiChiaRaDtuPtrien = mulMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien);
+            let ncauChiChiaRaChiCs1 = mulMoney(item.ncauChiChiaRaChiCs1, this.maDviTien);
+            let ncauChiChiaRaChiMoi1 = mulMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien);
+            let ncauChiChiaRaChiTx = mulMoney(item.ncauChiChiaRaChiTx, this.maDviTien);
+            let ncauChiChiaRaChiCs2 = mulMoney(item.ncauChiChiaRaChiCs2, this.maDviTien);
+            let ncauChiChiaRaChiMoi2 = mulMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien);
+            if (ncauChiTongSo > MONEY_LIMIT || ncauChiTrongDoChiCs > MONEY_LIMIT || ncauChiTrongDoChiMoi > MONEY_LIMIT ||
+                ncauChiChiaRaDtuPtrien > MONEY_LIMIT || ncauChiChiaRaChiCs1 > MONEY_LIMIT || ncauChiChiaRaChiMoi1 > MONEY_LIMIT ||
+                ncauChiChiaRaChiTx > MONEY_LIMIT || ncauChiChiaRaChiCs2 > MONEY_LIMIT || ncauChiChiaRaChiMoi2 > MONEY_LIMIT) {
+                checkMoneyRange = false;
+                return;
+            }
+            lstCtietBcaoTemp.push({
+                ...item,
+                ncauChiTongSo: ncauChiTongSo,
+                ncauChiTrongDoChiCs: ncauChiTrongDoChiCs,
+                ncauChiTrongDoChiMoi: ncauChiTrongDoChiMoi,
+                ncauChiChiaRaDtuPtrien: ncauChiChiaRaDtuPtrien,
+                ncauChiChiaRaChiCs1: ncauChiChiaRaChiCs1,
+                ncauChiChiaRaChiMoi1: ncauChiChiaRaChiMoi1,
+                ncauChiChiaRaChiTx: ncauChiChiaRaChiTx,
+                ncauChiChiaRaChiCs2: ncauChiChiaRaChiCs2,
+                ncauChiChiaRaChiMoi2: ncauChiChiaRaChiMoi2,
+            })
+        })
+
+        if (!checkMoneyRange == true) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        // replace nhung ban ghi dc them moi id thanh null
+        lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -152,7 +219,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
         let request = {
             id: this.id,
-            lstCtietLapThamDinhs: this.lstCtietBcao,
+            lstCtietLapThamDinhs: lstCtietBcaoTemp,
             maBieuMau: this.maBieuMau,
             maDviTien: this.maDviTien,
             nguoiBcao: this.data?.nguoiBcao,
@@ -173,11 +240,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
             },
         );
 
-        this.lstCtietBcao.filter(item => {
-            if (!item.id) {
-                item.id = uuid.v4() + 'FE';
-            }
-        });
         this.spinner.hide();
     }
 
@@ -269,7 +331,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4()+'FE',
+                id: uuid.v4() + 'FE',
                 stt: head + "." + (tail + 1).toString(),
                 lstLvuc: this.lstCtietBcao[index].lstLvuc,
             }
@@ -315,7 +377,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4()+'FE',
+                id: uuid.v4() + 'FE',
                 lstLvuc: this.linhVucChis.filter(e => e.idCha == this.lstCtietBcao[index].maLvuc),
                 stt: this.lstCtietBcao[index].stt + ".1",
             }
@@ -448,7 +510,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         } else {
             let item: ItemData = {
                 ...initItem,
-                id: uuid.v4()+'FE',
+                id: uuid.v4() + 'FE',
                 lstLvuc: this.linhVucChis.filter(e => e.idCha == 0),
                 stt: "0.1",
             }
@@ -516,10 +578,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.addFirst(data);
         lstCTietBCaoTemp = lstCTietBCaoTemp.filter(e => e.id != data.id);
         var lstTemp: ItemData[] = lstCTietBCaoTemp.filter(e => e.lstLvuc[0].level == level);
-        while (lstTemp.length !=0 || level == 0){
+        while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
                 var index: number = this.lstCtietBcao.findIndex(e => e.maLvuc === item.lstLvuc[0].idCha);
-                if (index != -1){
+                if (index != -1) {
                     this.addLow(this.lstCtietBcao[index].id, item);
                 } else {
                     index = this.lstCtietBcao.findIndex(e => e.lstLvuc[0].idCha === item.lstLvuc[0].idCha);
