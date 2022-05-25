@@ -1,61 +1,67 @@
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
 export const MAIN_ROUTE_KE_HOACH = 'kehoach';
+export const CHI_TIEU_KE_HOACH_NAM = 'chi-tieu-ke-hoach-nam';
+export const THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'thong-tin-chi-tieu-ke-hoach-nam';
+export const DE_XUAT_DIEU_CHINH = 'de-xuat-dieu-chinh';
+export const THONG_TIN_DE_XUAT_DIEU_CHINH = 'thong-tin-de-xuat-dieu-chinh';
+export const DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-chi-tieu-ke-hoach-nam';
+export const DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam';
 export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Giao chỉ tiêu kế hoạch đầu năm',
-    url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-`,
+    url: `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`,
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
     children: [
       {
         icon: 'htvbdh_tcdt_chitieukehoachnam',
-        title: 'Giao chỉ tiêu kế hoạch đầu năm Cấp tổng cục',
+        title: 'Giao chỉ tiêu kế hoạch đầu năm',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
-        urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-tong-cuc`,
-        urlCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-cuc`,
-        urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/chi-tieu-ke-hoach-nam-cap-chi-cuc`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`,
+        urlTongCuc: ``,
+        urlCuc: ``,
+        urlChiCuc: ``,
       }
     ]
   },
   {
     icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
     title: 'Đề xuất điều chỉnh',
-    url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-`,
+    url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
     children: [
       {
         icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-        title: 'Đề xuất điều chỉnh Cấp cục',
+        title: 'Đề xuất điều chỉnh',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-cuc`,
-        urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-tong-cuc`,
-        urlCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-cuc`,
-        urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/de-xuat-dieu-chinh-cap-chi-cuc`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
+        urlTongCuc: ``,
+        urlCuc: ``,
+        urlChiCuc: ``,
       }
     ]
   },
   {
     icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
     title: 'Điều chỉnh kế hoạch năm',
-    url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-`,
+    url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
     dropdown: 'dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
     children: [
       {
         icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm Cấp tổng cục giao',
+        title: 'Điều chỉnh kế hoạch năm',
         hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
-        urlTongCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc`,
-        urlCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc`,
-        urlChiCuc: `/${MAIN_ROUTE_KE_HOACH}/dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc`,
+        url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
+        urlTongCuc: ``,
+        urlCuc: ``,
+        urlChiCuc: ``,
       }
     ]
   },

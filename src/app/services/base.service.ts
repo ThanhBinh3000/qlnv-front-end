@@ -7,14 +7,14 @@ export abstract class BaseService {
   table = '';
   _httpClient: HttpClient;
   GATEWAY = ''
-  constructor(httpClient: HttpClient, tableName: string, GATEWAY : string ) {
+  constructor(httpClient: HttpClient, tableName: string, GATEWAY: string) {
     this.table = tableName;
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
 
-  layTatca(): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/LayTatca`;
+  getAll(): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -33,9 +33,9 @@ export abstract class BaseService {
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
-  delete(id): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/${id}`;
-    return this._httpClient.post<OldResponseData>(url, {}).toPromise();
+  delete(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   search(body) {
@@ -44,7 +44,7 @@ export abstract class BaseService {
   }
 
   timTheoMa(ma): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}api/${this.table}/TimTheoMa?ma=${ma}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/TimTheoMa?ma=${ma}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 }

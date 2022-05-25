@@ -594,7 +594,9 @@ app-header {
   z-index: 1;
   position: relative;
 }
-
+.text {
+  display: inline-block;
+}
 .ant-affix {
   z-index: 999;
 
@@ -2008,15 +2010,16 @@ a.disabled {
   height: 80px;
   .tab-item {
     .content-tab-item {
-      height: 52px;
+      min-height: 52px;
       box-shadow: inset -3px -3px 0px rgb(0 0 0 / 10%);
       border-radius: 3px;
       border: 1px solid #eaeaea;
-      margin-left: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
       background: #f8f9fa;
+      padding: 0px 6px;
     }
   }
   .tab-item.active-tab-menu {
@@ -2026,4 +2029,11 @@ a.disabled {
       border: unset;
     }
   }
+}
+// nz-affix.menu-lv3 .tab-menu {padding: 0;}
+.pd-b-16 {
+  padding-bottom: 16px !important;
+}
+.mg-b-60 {
+  margin-bottom: 60px !important;
 }

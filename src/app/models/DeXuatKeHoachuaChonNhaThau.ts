@@ -24,6 +24,14 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   children2?: Array<DanhSachGoiThau> = [];
   children3?: Array<CanCuXacDinh> = [];
   ghiChu: string;
+  tgianNhapHang: string;
+  tenDuAn: string = '';
+  tgianDongThau: string;
+  tgianMoThau: string;
+  tgianTbao: string;
+  tgianThHienHd: string;
+  tongMucDt: number;
+  tuNgayThHien: string;
 }
 export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   id: number;
@@ -87,6 +95,10 @@ export class ThongTinChung {
 }
 
 export class DanhSachGoiThau {
+  maDvi: string;
+  tenDvi: string;
+  maDiemKho: string;
+  tenDiemKho: string;
   diaDiemNhap: string;
   donGia: number;
   goiThau: string;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-kehoach-luachon-nhathau',
@@ -7,10 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KeHoachLuachonNhathauComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private userService: UserService
+  ) { 
+    
+  }
 
+  isTongCuc : boolean = false;
+  isCuc : boolean = false;
   ngOnInit(): void {
-    // console.log("ádasdsads");
+    this.isTongCuc = this.userService.isTongCuc();
+    this.isCuc = this.userService.isCuc();
   }
 
 }

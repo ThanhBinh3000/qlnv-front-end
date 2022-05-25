@@ -43,6 +43,7 @@ export class LuongDauThauGaoComponent implements OnInit {
   userInfo: UserLogin;
 
   selectedTab: string = 'tong-hop';
+  index = 0;
 
   constructor(
     private router: Router,
@@ -102,7 +103,7 @@ export class LuongDauThauGaoComponent implements OnInit {
           ? dayjs(this.startValue).format('YYYY-MM-DD')
           : null,
       }
-      let res = await this.tongHopDeXuatKHLCNTService.timKiem(param);
+      let res = await this.tongHopDeXuatKHLCNTService.search(param);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -226,7 +227,7 @@ export class LuongDauThauGaoComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.xoa(body).then(async () => {
+          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -319,5 +320,8 @@ export class LuongDauThauGaoComponent implements OnInit {
         ]);
       }
     }
+  }
+  onIndexChange(event: number): void {
+    this.index = event;
   }
 }

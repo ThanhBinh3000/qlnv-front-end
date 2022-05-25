@@ -152,7 +152,6 @@ export class QlQuyenComponent implements OnInit {
       this.selectedKeys = event.node.parentNode.key;
 
       this.parentNodeSelected = event?.parentNode?._title
-      debugger
       this.showDetailDonVi(event.keys[0])
     }
 
@@ -338,13 +337,15 @@ export class QlQuyenComponent implements OnInit {
 
   }
 
-  themoi() {
+  themoi(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.helperService.markFormGroupTouched(this.detailQuyen);
     if (this.detailQuyen.invalid) {
       return;
     }
     let body: any = this.detailQuyen.value;
-    debugger
     this.spinner.show();
     try {
       this._qlQuyenService
@@ -353,7 +354,7 @@ export class QlQuyenComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
-              MESSAGE.DELETE_SUCCESS,
+              MESSAGE.ADD_SUCCESS,
             );
             this.search();
           } else {
@@ -367,5 +368,67 @@ export class QlQuyenComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  xoa(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this._modalService.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: `Bạn có chắc chắn muốn xóa?`,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 360,
+      nzOnOk: () => {
+        // this.spinner.show()
+        // this.toTrinhService.delete(data.id).then(res => {
+        //   this.spinner.hide()
+        //   if (res.success) {
+        //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+        //     this.getDsToTrinh();
+        //   } else {
+        //     this.notification.error(MESSAGE.ERROR, res.error);
+        //   }
+        // })
+      }
+    });
+
+  }
+
+  sua(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.helperService.markFormGroupTouched(this.detailQuyen);
+    if (this.detailQuyen.invalid) {
+      return;
+    }
+    let body: any = this.detailQuyen.value;
+    body.id = this.nodeSelected
+    this.spinner.show();
+    try {
+      this._qlQuyenService
+        .update(body)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.UPDATE_SUCCESS,
+            );
+            this.search();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        });
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+
+  }
+
+
 
 }

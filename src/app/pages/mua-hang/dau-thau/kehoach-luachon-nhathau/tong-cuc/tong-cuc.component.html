@@ -1,0 +1,45 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light mr-2">
+          <i class="fa fa-arrow-circle-left"></i>
+        </a>
+        <nz-breadcrumb>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Mua</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Theo phương thức đấu thầu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">{{loaiVthh}}</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Kế hoạch lựa chọn nhà thầu</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item>
+            <a [routerLink]="">Tổng cục</a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item class="last-breadcrumb">{{title}}</nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+<div class="tab-menu row">
+  <div class="tab-item col-6" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu')">
+    <div class="content-tab-item">
+      Tổng hợp kế hoạch lựa chọn nhà thầu
+    </div>
+  </div>
+  <div class="tab-item col-6" [ngClass]="selectedTab == 'phe-duyet' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('phe-duyet','Quyết định phê duyệt kế hoạch lựa chọn nhà thầu')">
+    <div class="content-tab-item">
+      Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

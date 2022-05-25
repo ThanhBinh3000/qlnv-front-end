@@ -20,6 +20,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
     if (body.donViId)
       url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
+    if (body.capDvi)
+      url_ += 'capDvi=' + encodeURIComponent('' + body.capDvi) + '&';
     if (body.ngayKyTuNgay)
       url_ +=
         'ngayKyTuNgay=' + encodeURIComponent('' + body.ngayKyTuNgay) + '&';

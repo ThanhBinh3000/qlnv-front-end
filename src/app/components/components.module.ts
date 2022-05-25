@@ -44,6 +44,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NgxPrintModule } from 'ngx-print';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 
 import { FilterPipe } from '../pipes/filter.pipe';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -95,6 +96,7 @@ import { MultipleTagComponent } from './multiple-tag/multiple-tag.component';
 import { DialogPhieuNhapKhoComponent } from './dialog/dialog-phieu-nhap-kho/dialog-phieu-nhap-kho.component';
 import { DialogGuiDuyetComponent } from './dialog/dialog-gui-duyet/dialog-gui-duyet.component';
 import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [
@@ -181,6 +183,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     NzDescriptionsModule,
     NzCommentModule,
     NzTimePickerModule,
+    NzStepsModule,
     // NzTreeSelectModule,
     NzInputNumberModule,
     NzPopoverModule,
@@ -196,6 +199,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     TecaTreeSelectModule,
     NzAlertModule,
     DragDropModule,
+    NzPopconfirmModule
   ],
   exports: [
     FormsModule,
@@ -240,6 +244,7 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     NzTimePickerModule,
     NzCalendarModule,
     NzSwitchModule,
+    NzStepsModule,
     NzSpinModule,
     DpDatePickerModule,
     PdfViewerModule,
@@ -251,7 +256,8 @@ import { DialogVanBanSanSangBanHanhComponent } from './dialog/dialog-van-ban-san
     FilterPipe,
     NzAlertModule,
     MultipleTagComponent,
+    NzPopconfirmModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

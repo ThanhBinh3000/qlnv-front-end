@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -14,6 +15,11 @@ import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quy
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {
+  DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
+  DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
+  MAIN_ROUTE_KE_HOACH,
+} from '../ke-hoach.constant';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -47,6 +53,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
+  titleCard: string = '';
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -56,18 +64,22 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
+
+      if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CHI_CUC)) {
+        this.titleCard =
+          'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
+      } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
-      } else if (this.router.url.includes(LEVEL.CUC)) {
+      } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
+        this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
       }
       let dayNow = dayjs().get('year');
       // this.namKeHoach = dayjs().get('year');
@@ -77,36 +89,48 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           text: dayNow - i,
         });
       }
-      await Promise.all([
-        this.loadDonVi(),
-        this.search(),
-      ]);
+      await Promise.all([this.loadDonVi(), this.search()]);
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
   async loadDonVi() {
-    if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-      const res = await this.donViService.layTatCaDonVi();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-            this.inputDonVi = res.data[i].tenDvi;
-            this.selectedDonVi = res.data[i];
-            break;
+    if (this.lastBreadcrumb == LEVEL.TONG_CUC_SHOW) {
+      if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
+        const res = await this.donViService.layTatCaDonVi();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
+              this.inputDonVi = res.data[i].tenDvi;
+              this.selectedDonVi = res.data[i];
+              break;
+            }
           }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        const res = await this.donViService.layDonViCon();
+        this.optionsDonVi = [];
+        if (res.msg == MESSAGE.SUCCESS) {
+          for (let i = 0; i < res.data.length; i++) {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsDonVi.push(item);
+          }
+          this.optionsDonViShow = cloneDeep(this.optionsDonVi);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       }
-    }
-    else {
+    } else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
       const res = await this.donViService.layDonViCon();
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
@@ -117,6 +141,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           };
           this.optionsDonVi.push(item);
         }
+        this.optionsDonViShow = cloneDeep(this.optionsDonVi);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -126,7 +151,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   onInputDonVi(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = [];
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -179,7 +204,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
 
   redirectToChiTiet(id) {
     this.router.navigate([
-      '/kehoach/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+      `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}/${DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
       id,
     ]);
   }
@@ -219,8 +244,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       ngayKyTuNgayCT: this.startValue
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
-    }
-    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
+    };
+    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
+      param,
+    );
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -236,9 +263,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -250,9 +276,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -274,13 +299,14 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhDieuChinhChiTieuKeHoachNamService.deleteData(item.id).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
+          this.quyetDinhDieuChinhChiTieuKeHoachNamService
+            .deleteData(item.id)
+            .then(async () => {
+              await this.search();
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -304,14 +330,15 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
           ngayKyTuNgay: this.startValue
             ? dayjs(this.startValue).format('YYYY-MM-DD')
             : null,
-        }
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList(body).subscribe(
-          blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
-        );
+        };
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx'),
+          );
         this.spinner.hide();
-      }
-      catch (e) {
-        console.log('error: ', e)
+      } catch (e) {
+        console.log('error: ', e);
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
