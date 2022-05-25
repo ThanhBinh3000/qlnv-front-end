@@ -10,9 +10,7 @@
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Danh sách chức năng</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
-              </nz-date-picker>
+              <input class="search__input" placeholder="Số đề xuất" nz-input />
             </div>
             <div nz-col nzSpan="6">
               <label class="search__label">Từ ngày</label>

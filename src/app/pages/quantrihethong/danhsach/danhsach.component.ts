@@ -106,7 +106,7 @@ export class DanhSachComponent implements OnInit {
         onClick: (e, data) => {
           e.preventDefault();
           e.stopPropagation();
-          this.xoaItem(data.username)
+          this.xoaItem(data.id)
         },
         visible: false,
         onVisible: (data) => {
@@ -298,7 +298,7 @@ export class DanhSachComponent implements OnInit {
         this.spinner.show();
         try {
           this.
-            qlNSDService.delete({ str: item })
+            qlNSDService.delete({ id: item })
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
