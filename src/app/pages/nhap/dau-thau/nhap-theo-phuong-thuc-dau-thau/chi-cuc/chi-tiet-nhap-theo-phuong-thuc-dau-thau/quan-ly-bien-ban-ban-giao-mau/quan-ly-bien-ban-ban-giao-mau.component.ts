@@ -12,11 +12,11 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
 
 @Component({
-  selector: 'quan-ly-bien-ban-lay-mau',
-  templateUrl: './quan-ly-bien-ban-lay-mau.component.html',
-  styleUrls: ['./quan-ly-bien-ban-lay-mau.component.scss'],
+  selector: 'quan-ly-bien-ban-ban-giao-mau',
+  templateUrl: './quan-ly-bien-ban-ban-giao-mau.component.html',
+  styleUrls: ['./quan-ly-bien-ban-ban-giao-mau.component.scss'],
 })
-export class QuanLyBienBanLayMauComponent implements OnInit {
+export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;

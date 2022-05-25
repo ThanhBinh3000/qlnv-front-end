@@ -4,18 +4,23 @@
       <div class="main-content">
         <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <label class="search__label">Số biên bản</label>
               <input class="search__input" placeholder="Số biên bản" nz-input />
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Ngày lấy mẫu</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày bàn giao</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="6">
               <label class="search__label">Số hợp đồng</label>
               <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số biên bản lấy mẫu</label>
+              <input class="search__input" placeholder="Số biên bản lấy mẫu" nz-input
+                [(ngModel)]="searchFilter.diemkho" />
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Điểm kho</label>
@@ -43,14 +48,15 @@
           </div>
         </nz-card>
         <div class="tab__luong-thuc mt-16">
-          <nz-card nzTitle="DANH SÁCH PHIẾU NHẬP KHO" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+          <nz-card nzTitle="Danh sách biên bản bàn giao mẫu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
             <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
                   <th width="931px">Số biên bản</th>
-                  <th width="161px">Ngày lấy mẫu</th>
+                  <th width="161px">Ngày bàn giao</th>
                   <th width="203px">Số hợp đồng</th>
+                  <th width="203px">Số biên bản lấy mẫu</th>
                   <th width="295px">Điểm kho</th>
                   <th width="295px">Nhà kho</th>
                   <th width="295px">Ngăn/lô</th>
@@ -64,6 +70,7 @@
                   <td>PKM01</td>
                   <td>17/02/2022</td>
                   <td>Số hợp đồng</td>
+                  <td>Số biên bản lấy mẫu</td>
                   <td>Điểm kho</td>
                   <td>Nhà kho</td>
                   <td>Ngăn/lô</td>

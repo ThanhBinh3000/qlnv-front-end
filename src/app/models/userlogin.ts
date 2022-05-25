@@ -3,6 +3,7 @@ export class UserLogin {
   MA_QD: string;
   roles: any;
   MA_DVI: string;
+  TEN_DVI: string;
   CAP_DVI: string;
   MA_KHQLH: string;
   MA_KTBQ: string;
