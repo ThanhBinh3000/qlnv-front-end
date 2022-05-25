@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -23,6 +23,7 @@ import { environment } from 'src/environments/environment';
 import { ChiTietFile } from 'src/app/models/ChiTietFile';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -30,10 +31,11 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./themmoi-quyetdinh-khlcnt.component.scss']
 })
 export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
-  
+
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   formData: FormGroup;
+  formThongTinDX: FormGroup;
   editId: string | null = null;
   chiTiet: ThongTinQuyetDinhPheDuyetKHLCNT = new ThongTinQuyetDinhPheDuyetKHLCNT();
   id: number;
@@ -53,6 +55,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
+  listDanhSachTongHop: any[] = [];
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
 
   lastBreadcrumb: string;
@@ -68,8 +71,22 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private userService: UserService,
-  ) { }
+    private fb: FormBuilder
+  ) {
+    this.formThongTinDX = this.fb.group({
+      hthucLcnt: ['', [Validators.required]],
+      pthucLcnt: ['', [Validators.required]],
+      loaiHdong: ['', [Validators.required]],
+      nguonVon: ['', [Validators.required]],
+      tgianPhatHanh: ['', [Validators.required]],
+      tgianThongBao: ['', [Validators.required]],
+      tgianDongthau: ['', [Validators.required]],
+      tgianMoThau: ['', [Validators.required]],
+      tgianNhapHang: ['', [Validators.required]]
+    })
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -95,6 +112,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
         this.loadChiTiet(this.id),
+        this.danhSachTongHopGetAll(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -283,6 +301,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  async danhSachTongHopGetAll() {
+    this.listDanhSachTongHop = [];
+    let res = await this.tongHopDeXuatKHLCNTService.getAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHopDong = res.data;
+    }
+  }
+
   convertTreeToList(root: VatTu): VatTu[] {
     const stack: VatTu[] = [];
     const array: VatTu[] = [];
@@ -460,15 +486,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  validateGhiChu(e: Event) {
-    if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
-      this.errorGhiChu = false;
-    }
-    else {
-      this.errorGhiChu = true;
-    }
-  }
-
   async trinhDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -496,42 +513,5 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         }
       },
     });
-  }
-
-  selectTabMenu(tab) {
-    if (tab == this.selectedTab) {
-      return;
-    }
-    if (tab == 'tong-hop') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phuong-an') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phe-duyet') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    }
   }
 }

@@ -1,7 +1,7 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content thong-tin-de-xuat-khlcnt">
-      <nz-card nzTitle="Tiêu chí tổng hợp đề xuất kế hoạch lựa chọn nhà thầu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+      <nz-card *ngIf="!isChiTiet" nzTitle="Tiêu chí tổng hợp đề xuất kế hoạch lựa chọn nhà thầu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <form nz-form [formGroup]="formTraCuu" class="mt-16">
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="6">
@@ -63,12 +63,12 @@
             <div nz-col [nzSpan]="6">
               <nz-form-item class="display-block">
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHdongError">
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHdongError2">
                   <nz-select formControlName="loaiHdong" nzPlaceHolder="" >
                     <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
-                  <ng-template #loaiHdongError let-control>
+                  <ng-template #loaiHdongError2 let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
                   </ng-template> 
                 </nz-form-control>
@@ -102,7 +102,7 @@
         </form>
       </nz-card>
       <ng-template #tableCard1>
-        <button *ngIf="isTongHop" type="button" class="btn btn-main" (click)="save()">
+        <button *ngIf="isTongHop && !isChiTiet" type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_dau-cong" ></i>
           <span>Thêm</span>
         </button>
@@ -118,11 +118,11 @@
               <div nz-row [nzGutter]="[16, 6]">
                 <div nz-col [nzSpan]="6">
                   <nz-form-item class="display-block">
-                    <nz-form-label nzRequired [nzNoColon]="true" >
+                    <nz-form-label [nzNoColon]="true" >
                       Ngày tổng hợp
                     </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHdongError">
-                      <nz-date-picker formControlName="ngayTongHop" class="search__input" nzFormat="dd/MM/yyyy" >
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayTongHopError">
+                      <nz-date-picker formControlName="ngayTongHop" class="search__input" nzFormat="dd/MM/yyyy" nzDisabled="true" >
                       </nz-date-picker>
                     </nz-form-control>
                     <ng-template #ngayTongHopError let-control>
@@ -148,7 +148,7 @@
                       Về việc
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="veViecError" >
-                      <textarea formControlName="veViec" nz-input [rows]="3" ></textarea>
+                      <textarea formControlName="veViec" nz-input [rows]="3" [readonly]="isChiTiet" ></textarea>
                     </nz-form-control>
                     <ng-template #veViecError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -216,16 +216,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <!-- <div nz-col [nzSpan]="6">
-                  <nz-form-item class="display-block">
-                    <nz-form-label [nzNoColon]="true">
-                      Đến ngày
-                    </nz-form-label>
-                    <nz-range-picker formControlName="ngayPhDenNgay" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledEndPH"
-                      nzPlaceHolder="Đến ngày" [nzDisabled]="true">
-                    </nz-range-picker>
-                  </nz-form-item>
-                </div> -->
                 <div nz-col [nzSpan]="12">
                   <nz-form-item class="display-block">
                     <nz-form-label [nzNoColon]="true">
@@ -238,16 +228,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <!-- <div nz-col [nzSpan]="6">
-                  <nz-form-item class="display-block">
-                    <nz-form-label [nzNoColon]="true">
-                      Đến ngày
-                    </nz-form-label>
-                    <nz-range-picker formControlName="tdiemDthauDenNgay" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledEndDT"
-                      nzPlaceHolder="Đến ngày" [nzDisabled]="true">
-                    </nz-range-picker>
-                  </nz-form-item>
-                </div> -->
                 <div nz-col [nzSpan]="12">
                   <nz-form-item class="display-block">
                     <nz-form-label [nzNoColon]="true">
@@ -260,16 +240,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <!-- <div nz-col [nzSpan]="6">
-                  <nz-form-item class="display-block">
-                    <nz-form-label [nzNoColon]="true">
-                      Đến ngày
-                    </nz-form-label>
-                    <nz-range-picker formControlName="tgianDongThauTu" class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Đến ngày"
-                      [nzDisabledDate]="disabledEndHS"  [nzDisabled]="true">
-                    </nz-range-picker>
-                  </nz-form-item>
-                </div> -->
                 <div nz-col [nzSpan]="12">
                   <nz-form-item class="display-block">
                     <nz-form-label [nzNoColon]="true">
@@ -282,16 +252,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <!-- <div nz-col [nzSpan]="6">
-                  <nz-form-item class="display-block">
-                    <nz-form-label [nzNoColon]="true">
-                      Đến ngày
-                    </nz-form-label>
-                    <nz-date-picker formControlName="tgianNhapThauDenNgay" class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Đến ngày"
-                      [nzDisabledDate]="disabledEndHTN" [nzDisabled]="true">
-                    </nz-date-picker>
-                  </nz-form-item>
-                </div> -->
               </div>
             </form>
           </nz-tab>

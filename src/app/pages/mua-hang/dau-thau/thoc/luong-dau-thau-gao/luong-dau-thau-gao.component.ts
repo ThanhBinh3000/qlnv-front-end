@@ -227,7 +227,7 @@ export class LuongDauThauGaoComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.xoa(body).then(async () => {
+          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
