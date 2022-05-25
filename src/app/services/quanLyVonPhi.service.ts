@@ -25,9 +25,9 @@ export class QuanLyVonPhiService extends BaseService {
   //search list bao cao
   timBaoCaoLapThamDinh(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/danh-sach',
 
-      // 'http://192.168.1.111:8094/lap-tham-dinh-du-toan/danh-sach',
+      'http://192.168.1.111:8094/lap-tham-dinh/danh-sach',
       request,
     );
   }
@@ -448,6 +448,25 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
       // 'http://192.168.1.120:8094/bao-cao/trang-thai',
+      request,
+    );
+  }
+
+  // call api nút chức năng
+  approveThamDinh(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/trang-thai',
+      'http://192.168.1.111:8094/lap-tham-dinh/trang-thai',
+      request,
+    );
+  }
+
+  
+  // call api nút chức năng
+  approveCtietThamDinh(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/phe-duyet',
+      'http://192.168.1.111:8094/lap-tham-dinh/chi-tiet/phe-duyet',
       request,
     );
   }
