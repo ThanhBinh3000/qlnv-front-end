@@ -11,7 +11,7 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhPheDuyetKeHoachLCNT','');
+    super(httpClient, 'dx-kh/qd-lcnt', '/qlnv-gateway/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {

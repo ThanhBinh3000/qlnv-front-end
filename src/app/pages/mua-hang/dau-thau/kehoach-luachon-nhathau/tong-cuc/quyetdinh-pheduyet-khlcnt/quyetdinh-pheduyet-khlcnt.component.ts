@@ -15,6 +15,7 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhP
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
@@ -25,11 +26,12 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   yearNow = dayjs().get('year');
   searchFilter = {
-    soQD: null,
+    soQd: null,
     namKh: dayjs().get('year'),
     soQdinh: null,
     ngayTongHop: null,
     loaiVthh: null,
+    ngayQd: null
   };
   listVthh: any;
   listNam: any[] = [];
@@ -41,12 +43,10 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   //chưa phê quyệt
-  pageNo: number = 1;
-  pageSizeNo: number = PAGE_SIZE_DEFAULT;
   totalRecordNo: number = 0;
   dataTableNo: any[] = [];
 
-  tabSelected: string = 'phuong-an-phe-duyet';
+  tabSelected: string = 'quyet-dinh';
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   listOfMapData: VatTu[];
@@ -57,7 +57,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
-  selectedTab: string = 'phe-duyet';
+  // selectedTab: string = 'phe-duyet';
 
   constructor(
     private router: Router,
@@ -66,6 +66,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private userService: UserService,
   ) { }
 
@@ -193,12 +194,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.tabSelected = tab;
-      if (tab == 'phuong-an-phe-duyet') {
-        await this.search();
-      }
-      else if (tab == 'phuong-an-chua-phe-duyet') {
-        await this.search();
-      }
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -210,8 +206,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   async search() {
     this.dataTable = [];
-    //phê duyệt
-    let param = {
+    let body = {
       "denNgayQd": this.endValue
         ? dayjs(this.endValue).format('DD/MM/YYYY')
         : null,
@@ -219,31 +214,26 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       "namKhoach": this.searchFilter.namKh,
       "paggingReq": {
         "limit": this.pageSize,
-        "page": this.page
+        "page": this.page - 1
       },
-      "soQd": this.searchFilter.soQD,
-      "str": null,
-      "trangThai": this.tabSelected == 'phuong-an-phe-duyet' ? '00' : '01',
+      "soQd": this.searchFilter.soQd,
       "tuNgayQd": this.startValue
         ? dayjs(this.startValue).format('DD/MM/YYYY')
         : null,
     }
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.timKiem(param);
+    let res;
+    if (this.tabSelected == 'quyet-dinh') {
+      res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    } else {
+      res = await this.tongHopDeXuatKHLCNTService.search(body);
+    }
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
-        if (this.tabSelected == 'phuong-an-phe-duyet') {
+        if (this.tabSelected == 'quyet-dinh') {
           this.dataTable = data.content;
         } else {
           this.dataTableNo = data.content;
-        }
-        for (let i = 0; i < this.dataTable.length; i++) {
-          if (this.dataTable[i].ngayQd) {
-            this.dataTable[i].ngayQdStr = dayjs(this.dataTable[i].ngayQd).format('DD/MM/YYYY');
-          }
-          else {
-            this.dataTable[i].ngayQdStr = "";
-          }
         }
       }
       this.totalRecord = data.totalElements;
@@ -286,34 +276,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   convertDay(ngayTao?) {
 
-  }
-
-  async changePageIndexNo(event) {
-    this.spinner.show();
-    try {
-      this.pageNo = event;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async changePageSizeNo(event) {
-    this.spinner.show();
-    try {
-      this.pageSizeNo = event;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
   }
 
   disabledStartDate = (startValue: Date): boolean => {
@@ -403,9 +365,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
           "loaiVthh": this.selectHang.ma ?? "00",
           "namKhoach": this.searchFilter.namKh,
           "paggingReq": null,
-          "soQd": this.searchFilter.soQD,
+          "soQd": this.searchFilter.soQd,
           "str": null,
-          "trangThai": "01",
           "tuNgayQd": this.startValue
             ? dayjs(this.startValue).format('DD/MM/YYYY')
             : null,

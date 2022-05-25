@@ -2,9 +2,6 @@
     <div class="contentDetail">
       <div class="main-content thong-tin-de-xuat-khlcnt">
         <nz-card nzTitle="Thông tin quản lý quyết định" class="mt16 flex-card p-lr16">
-          <form nz-form [formGroup]="formData" class="mt-16">
-            
-          </form>
           <div nz-row [nzGutter]="[16, 6]">
             <div nz-col [nzSpan]="6">
               <nz-form-item>
@@ -24,6 +21,15 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày quyết định </nz-form-label>
                 <nz-date-picker class="search__input" [(ngModel)]="chiTiet.ngayQd"></nz-date-picker>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Danh sách tổng hợp </nz-form-label>
+                <nz-select formControlName="hthucLcnt">
+                  <nz-option *ngFor="let p of listDanhSachTongHop" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
@@ -57,233 +63,186 @@
               </nz-upload>
             </div>
           </div>
-          <div nz-row [nzGutter]="[16, 6]">
-            
-          </div>
         </nz-card>
         <div class="tab__luong-thuc">
-          <nz-tabset nzType="card" class="tab__container">
+          <nz-tabset nzType="card" class="tab__container" >
             <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
               <div nz-row [nzGutter]="24">
                 <div nz-col [nzSpan]="12">
+                  <form nz-form [formGroup]="formThongTinDX" class="mt-16">
                   <div nz-row [nzGutter]="24" class="bgXam">
-                  <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                      <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
-                        THÔNG TIN ĐỀ XUẤT CỦA CỤC
-                      </nz-form-label>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Hình thức lựa chọn nhà thầu
-                      </nz-form-label>
-                      <nz-select [(ngModel)]="chiTiet.hthucLcnt">
-                        <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                        </nz-option>
-                      </nz-select>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Phương thức đấu thầu
-                      </nz-form-label>
-                      <nz-select [(ngModel)]="chiTiet.pthucLcnt">
-                        <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                        </nz-option>
-                      </nz-select>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Loại hợp đồng
-                      </nz-form-label>
-                      <nz-select [(ngModel)]="chiTiet.loaiHdong">
-                        <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                      </nz-select>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Nguồn vốn
-                      </nz-form-label>
-                      <nz-select [(ngModel)]="chiTiet.nguonVon">
-                        <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                      </nz-select>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item class="display-block">
-                      <nz-form-label [nzNoColon]="true">
-                        Ngày phát hành
-                      </nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <nz-range-picker formControlName="tgianPhatHanh" class="search__input" nzFormat="dd/MM/yyyy" 
-                          [nzDisabled]="true">
-                        </nz-range-picker>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item class="display-block">
-                      <nz-form-label [nzNoColon]="true">
-                        Thời điểm đóng thầu
-                      </nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <nz-range-picker formControlName="tgianDongthau" class="search__input" nzFormat="dd/MM/yyyy"
-                            [nzDisabled]="true">
-                        </nz-range-picker>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item class="display-block">
-                      <nz-form-label [nzNoColon]="true">
-                        Thời điểm mở HSKT
-                      </nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <nz-range-picker formControlName="tgianMoThau" class="search__input" nzFormat="dd/MM/yyyy"
-                           [nzDisabled]="true">
-                        </nz-range-picker>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item class="display-block">
-                      <nz-form-label [nzNoColon]="true">
-                        Hoàn thành nhập
-                      </nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <nz-range-picker formControlName="tgianNhapHang" class="search__input" nzFormat="dd/MM/yyyy" 
-                         [nzDisabled]="true">
-                        </nz-range-picker>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Ngày phát hành HSMT duyệt
-                      </nz-form-label>
-                      <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianTbao"></nz-date-picker>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Thời điểm mở HSKT duyệt
-                      </nz-form-label>
-                      <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianMthau"></nz-date-picker>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Thời điểm đóng thầu duyệt
-                      </nz-form-label>
-                      <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianDthau"></nz-date-picker>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">
-                        Hoàn thành nhập gạo duyệt
-                      </nz-form-label>
-                      <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianNhang"></nz-date-picker>
-                    </nz-form-item>
-                  </div>
-                </div>
-                </div>
-                <div nz-col [nzSpan]="12">
-                  <div nz-row [nzGutter]="24" class="bgTrang">
                     <div nz-col [nzSpan]="24">
-                      <nz-form-item>
-                        <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
-                          THÔNG TIN QUYẾT ĐỊNH
-                        </nz-form-label>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Hình thức lựa chọn nhà thầu
-                        </nz-form-label>
-                        <nz-select [(ngModel)]="chiTiet.hthucLcnt">
-                          <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                          </nz-option>
-                        </nz-select>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Phương thức đấu thầu
-                        </nz-form-label>
-                        <nz-select [(ngModel)]="chiTiet.pthucLcnt">
-                          <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                          </nz-option>
-                        </nz-select>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Loại hợp đồng
-                        </nz-form-label>
-                        <nz-select [(ngModel)]="chiTiet.loaiHdong">
-                          <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                        </nz-select>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Nguồn vốn
-                        </nz-form-label>
-                        <nz-select [(ngModel)]="chiTiet.nguonVon">
-                          <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                        </nz-select>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Ngày phát hành HSMT duyệt
-                        </nz-form-label>
-                        <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianTbao"></nz-date-picker>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Thời điểm mở HSKT duyệt
-                        </nz-form-label>
-                        <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianMthau"></nz-date-picker>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Thời điểm đóng thầu duyệt
-                        </nz-form-label>
-                        <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianDthau"></nz-date-picker>
-                      </nz-form-item>
-                    </div>
-                    <div nz-col [nzSpan]="12">
-                      <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                          Hoàn thành nhập gạo duyệt
-                        </nz-form-label>
-                        <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianNhang"></nz-date-picker>
-                      </nz-form-item>
+                          <nz-form-item class="display-block">
+                            <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
+                              THÔNG TIN ĐỀ XUẤT CỦA CỤC
+                            </nz-form-label>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                          <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                              Hình thức lựa chọn nhà thầu
+                            </nz-form-label>
+                            <nz-select formControlName="hthucLcnt">
+                              <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                              </nz-option>
+                            </nz-select>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                          <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                              Phương thức đấu thầu
+                            </nz-form-label>
+                            <nz-select formControlName="pthucLcnt">
+                              <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                              </nz-option>
+                            </nz-select>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                          <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                              Loại hợp đồng
+                            </nz-form-label>
+                            <nz-select formControlName="loaiHdong">
+                              <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                            </nz-select>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                          <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">
+                              Nguồn vốn
+                            </nz-form-label>
+                            <nz-select formControlName="nguonVon">
+                              <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                            </nz-select>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                          <nz-form-item class="display-block">
+                            <nz-form-label [nzNoColon]="true">
+                              Ngày thông báo
+                            </nz-form-label>
+                              <nz-range-picker formControlName="tgianThongBao" class="search__input" nzFormat="dd/MM/yyyy" 
+                                [nzDisabled]="true">
+                              </nz-range-picker>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                          <nz-form-item class="display-block">
+                            <nz-form-label [nzNoColon]="true">
+                              Ngày phát hành
+                            </nz-form-label>
+                              <nz-range-picker formControlName="tgianPhatHanh" class="search__input" nzFormat="dd/MM/yyyy" 
+                                [nzDisabled]="true">
+                              </nz-range-picker>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                          <nz-form-item class="display-block">
+                            <nz-form-label [nzNoColon]="true">
+                              Thời điểm mở thầu
+                            </nz-form-label>
+                              <nz-range-picker formControlName="tgianDongthau" class="search__input" nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="true">
+                              </nz-range-picker>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                          <nz-form-item class="display-block">
+                            <nz-form-label [nzNoColon]="true">
+                              Thời điểm đóng thầu
+                            </nz-form-label>
+                              <nz-range-picker formControlName="tgianMoThau" class="search__input" nzFormat="dd/MM/yyyy"
+                                [nzDisabled]="true">
+                              </nz-range-picker>
+                          </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
+                          <nz-form-item class="display-block">
+                            <nz-form-label [nzNoColon]="true">
+                              Hoàn thành nhập
+                            </nz-form-label>
+                              <nz-range-picker formControlName="tgianNhapHang" class="search__input" nzFormat="dd/MM/yyyy" 
+                              [nzDisabled]="true">
+                              </nz-range-picker>
+                          </nz-form-item>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div nz-col [nzSpan]="12">
+                    <div nz-row [nzGutter]="24" class="bgTrang">
+                      <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                          <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">
+                            THÔNG TIN QUYẾT ĐỊNH
+                          </nz-form-label>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Hình thức lựa chọn nhà thầu
+                          </nz-form-label>
+                          <nz-select [(ngModel)]="chiTiet.hthucLcnt">
+                            <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Phương thức đấu thầu
+                          </nz-form-label>
+                          <nz-select [(ngModel)]="chiTiet.pthucLcnt">
+                            <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                            </nz-option>
+                          </nz-select>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Loại hợp đồng
+                          </nz-form-label>
+                          <nz-select [(ngModel)]="chiTiet.loaiHdong">
+                            <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                          </nz-select>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Nguồn vốn
+                          </nz-form-label>
+                          <nz-select [(ngModel)]="chiTiet.nguonVon">
+                            <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                          </nz-select>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Ngày phát hành HSMT duyệt
+                          </nz-form-label>
+                          <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianTbao"></nz-date-picker>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Thời điểm mở HSKT duyệt
+                          </nz-form-label>
+                          <nz-date-picker class="search__input" [(ngModel)]="chiTiet.tgianMthau"></nz-date-picker>
+                        </nz-form-item>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
             </nz-tab>
             <nz-tab [nzTitle]="'Thông tin chi tiết đề xuất của CỤC DTNN KV'" class="ds-goi-thau__container">
               <nz-card class="mt16 flex-card p-lr16">
