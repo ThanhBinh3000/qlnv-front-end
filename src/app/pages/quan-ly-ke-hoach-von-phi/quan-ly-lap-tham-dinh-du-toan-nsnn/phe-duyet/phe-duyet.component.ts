@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
@@ -22,27 +22,27 @@ export class PheDuyetComponent implements OnInit {
 	userInfo: any;
 	//thong tin tim kiem
 	searchFilter = {
+		loaiTimKiem: "",
 		nam: null,
 		tuNgay: "",
 		denNgay: "",
 		maBaoCao: "",
 		donViTao: "",
-		loaiBaoCao: "",
 		trangThai: "",
 	};
 	//danh muc
 	danhSachBaoCao: any = [];
-	trangThais: any = TRANGTHAIBAOCAO;
-	donViTaos: any[] = [];
+	trangThais: any[] = [];
 	donVis: any[] = [];
-	baoCaos: any = [];
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                          
+	pages = {
 		size: 10,
 		page: 1,
 	}
+	//trang thai
+	status: boolean;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -59,24 +59,30 @@ export class PheDuyetComponent implements OnInit {
 	async ngOnInit() {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
-        if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
-            this.searchFilter.trangThai = Utils.TT_BC_7;
-        } else  {
-            if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
-                this.searchFilter.trangThai = Utils.TT_BC_2;
-            } else {
-                this.searchFilter.trangThai = Utils.TT_BC_4;
-            }
-        }
-
-		//lay danh sach loai bao cao
-		this.baoCaos = LOAI_BAO_CAO;
+		this.searchFilter.donViTao = this.userInfo?.dvql;
+		if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+			this.status = false;
+			this.searchFilter.trangThai = Utils.TT_BC_7;
+			this.searchFilter.loaiTimKiem = '1';
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_8));
+			this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_9));
+		} else {
+			this.status = true;
+			this.searchFilter.loaiTimKiem = '0';
+			if (this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
+				this.searchFilter.trangThai = Utils.TT_BC_2;
+				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
+			} else {
+				this.searchFilter.trangThai = Utils.TT_BC_4;
+				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
+			}
+		}
 		//lay danh sach danh muc
 		this.danhMuc.dMDonVi().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
-					this.donViTaos = this.donVis.filter(e => e.parent?.maDvi === this.userInfo?.dvql);
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -85,6 +91,7 @@ export class PheDuyetComponent implements OnInit {
 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 			}
 		);
+		this.onSubmit();
 	}
 
 	//get user info
@@ -126,10 +133,22 @@ export class PheDuyetComponent implements OnInit {
 				return;
 			}
 		}
+		let lstTrangThai = [];
+		if (!this.searchFilter.trangThai){
+			if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN){
+				lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
+			} else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
+				lstTrangThai = [Utils.TT_BC_2];
+			} else {
+				lstTrangThai = [Utils.TT_BC_4];
+			}
+		} else {
+			lstTrangThai = [this.searchFilter.trangThai];
+		}
 		let requestReport = {
+			loaiTimKiem: this.searchFilter.loaiTimKiem,
 			maBcao: this.searchFilter.maBaoCao,
 			maDvi: this.searchFilter.donViTao,
-			maLoaiBcao: this.searchFilter.loaiBaoCao,
 			namBcao: this.searchFilter.nam,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
@@ -137,8 +156,7 @@ export class PheDuyetComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			str: "",
-			trangThai: this.searchFilter.trangThai,
+			trangThais: lstTrangThai,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
@@ -147,7 +165,11 @@ export class PheDuyetComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = data.data.content;
 					this.danhSachBaoCao.forEach(e => {
-						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -179,14 +201,7 @@ export class PheDuyetComponent implements OnInit {
 		this.searchFilter.tuNgay = null
 		this.searchFilter.denNgay = null
 		this.searchFilter.maBaoCao = null
-		this.searchFilter.donViTao = null
-		this.searchFilter.loaiBaoCao = null
-	}
-
-	taoMoi() {
-		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-		]);
+		this.searchFilter.trangThai = null
 	}
 
 	xemChiTiet(id: string) {
@@ -197,5 +212,9 @@ export class PheDuyetComponent implements OnInit {
 
 	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
+	}
+
+	getUnitName(maDvi: string){
+		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
 	}
 }

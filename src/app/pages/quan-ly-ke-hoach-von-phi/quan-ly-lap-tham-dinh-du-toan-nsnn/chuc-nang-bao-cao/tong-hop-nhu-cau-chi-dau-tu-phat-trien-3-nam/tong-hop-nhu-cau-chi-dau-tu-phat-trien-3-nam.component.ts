@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
-import { DON_VI_TIEN, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM } from "../../../../../Utility/utils";
+import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney, QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM } from "../../../../../Utility/utils";
 import { Role } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -52,7 +52,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 		checked: false,
 	};
 	id: any;
-	trangThaiPhuLuc: string ;
+	trangThaiPhuLuc: string;
 	namHienHanh: number;
 	maBieuMau: string = "14";
 	maDviTien: any;
@@ -84,14 +84,22 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
 	async ngOnInit() {
 		this.id = this.data?.id;
-        this.maBieuMau = this.data?.maBieuMau;
-        this.maDviTien = this.data?.maDviTien;
-        this.thuyetMinh = this.data?.thuyetMinh;
-        this.trangThaiPhuLuc = this.data?.trangThai;
-        this.namHienHanh = this.data?.namHienHanh;
-        this.lstCtietBcao = this.data?.lstCtietLapThamDinhs;
-        this.status = this.data?.status;
+		this.maBieuMau = this.data?.maBieuMau;
+		this.maDviTien = this.data?.maDviTien;
+		this.thuyetMinh = this.data?.thuyetMinh;
+		this.trangThaiPhuLuc = this.data?.trangThai;
+		this.namHienHanh = this.data?.namHienHanh;
+		this.status = this.data?.status;
 		this.statusBtnFinish = this.data?.statusBtnFinish;
+		this.data?.lstCtietLapThamDinhs.forEach(item => {
+			this.lstCtietBcao.push({
+				...item,
+				thNamHienHanhN1: divMoney(item.thNamHienHanhN1, this.maDviTien),
+				ncauNamDtoanN: divMoney(item.ncauNamDtoanN, this.maDviTien),
+				ncauNamN1: divMoney(item.ncauNamN1, this.maDviTien),
+				ncauNamN2: divMoney(item.ncauNamN2, this.maDviTien),
+			})
+		})
 		this.updateEditCache();
 
 		//lay danh sach danh muc don vi
@@ -112,52 +120,89 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 	}
 
 	getStatusButton() {
-        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")){
-            this.statusBtnOk = false;
-        } else {
-            this.statusBtnOk = true;
-        }
-    }
+		if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
+			this.statusBtnOk = false;
+		} else {
+			this.statusBtnOk = true;
+		}
+	}
 
-    // luu
-    async save() {
-        // replace nhung ban ghi dc them moi id thanh null
-        this.lstCtietBcao.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
-        })
+	// luu
+	async save() {
+		let checkSaveEdit;
+		if (!this.maDviTien) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
+		//check xem tat ca cac dong du lieu da luu chua?
+		//chua luu thi bao loi, luu roi thi cho di
+		this.lstCtietBcao.forEach(element => {
+			if (this.editCache[element.id].edit === true) {
+				checkSaveEdit = false
+			}
+		});
+		if (checkSaveEdit == false) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+			return;
+		}
+		//tinh lai don vi tien va kiem tra gioi han cua chung
+		let lstCtietBcaoTemp: any = [];
+		let checkMoneyRange = true;
+		this.lstCtietBcao.forEach(item => {
+			let thNamHienHanhN1 = mulMoney(item.thNamHienHanhN1, this.maDviTien);
+			let ncauNamDtoanN = mulMoney(item.ncauNamDtoanN, this.maDviTien);
+			let ncauNamN1 = mulMoney(item.ncauNamN1, this.maDviTien);
+			let ncauNamN2 = mulMoney(item.ncauNamN2, this.maDviTien);
+			if (thNamHienHanhN1 > MONEY_LIMIT || ncauNamDtoanN > MONEY_LIMIT ||
+				ncauNamN1 > MONEY_LIMIT || ncauNamN2 > MONEY_LIMIT) {
+				checkMoneyRange = false;
+				return;
+			}
+			lstCtietBcaoTemp.push({
+				...item,
+				thNamHienHanhN1: thNamHienHanhN1,
+				ncauNamDtoanN: ncauNamDtoanN,
+				ncauNamN1: ncauNamN1,
+				ncauNamN2: ncauNamN2,
+			})
+		})
 
-        let request = {
-            id: this.id,
-            lstCtietLapThamDinhs: this.lstCtietBcao,
-            maBieuMau: this.maBieuMau,
-            maDviTien: this.maDviTien,
-            nguoiBcao: this.data?.nguoiBcao,
-            lyDoTuChoi: this.data?.lyDoTuChoi,
-            thuyetMinh: this.thuyetMinh,
-            trangThai: this.trangThaiPhuLuc,
-        };
-        this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
-            async data => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+		if (!checkMoneyRange == true) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+			return;
+		}
+		// replace nhung ban ghi dc them moi id thanh null
+		lstCtietBcaoTemp.forEach(item => {
+			if (item.id?.length == 38) {
+				item.id = null;
+			}
+		})
 
-        this.lstCtietBcao.filter(item => {
-            if (!item.id) {
-                item.id = uuid.v4() + 'FE';
-            }
-        });
-        this.spinner.hide();
-    }
+		let request = {
+			id: this.id,
+			lstCtietLapThamDinhs: lstCtietBcaoTemp,
+			maBieuMau: this.maBieuMau,
+			maDviTien: this.maDviTien,
+			nguoiBcao: this.data?.nguoiBcao,
+			lyDoTuChoi: this.data?.lyDoTuChoi,
+			thuyetMinh: this.thuyetMinh,
+			trangThai: this.trangThaiPhuLuc,
+		};
+		this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
+			async data => {
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		);
+
+		this.spinner.hide();
+	}
 
 	// them dong moi
 	addLine(id: number): void {
