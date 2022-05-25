@@ -277,18 +277,18 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   getNameDanhSachDvi(maDvi: string) {
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
     this.formThongTinChung.patchValue({
-      tenDvi: donVi ? donVi[0].tenDvi : null
+      tenDvi: donVi.length > 0 ? donVi[0].tenDvi : null
     })
   }
 
   getTenDviTable(maDvi: string) {
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
-    return donVi ? donVi[0].tenDvi : null
+    return donVi.length > 0 ? donVi[0].tenDvi : null
   }
 
   getTenDiemKhoTable(maDiemKho: string) {
     let diemKho = this.ktDiemKho?.filter(item => item.maDiemkho == maDiemKho);
-    return diemKho ? diemKho[0].tenDiemkho : null
+    return diemKho.length > 0 ? diemKho[0].tenDiemkho : null
   }
 
   async changeChiCuc(event, index?) {

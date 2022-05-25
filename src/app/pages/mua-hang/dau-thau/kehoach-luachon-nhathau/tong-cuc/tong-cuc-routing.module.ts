@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: '',
     component: TongCucComponent,
-    children : [
+    children: [
       {
         path: '',
         redirectTo: '',
@@ -28,6 +28,10 @@ const routes: Routes = [
       },
       {
         path: 'tong-hop/them-moi',
+        component: ThemmoiTonghopKhlcntComponent,
+      },
+      {
+        path: 'tong-hop/chi-tiet/:id',
         component: ThemmoiTonghopKhlcntComponent,
       },
       {

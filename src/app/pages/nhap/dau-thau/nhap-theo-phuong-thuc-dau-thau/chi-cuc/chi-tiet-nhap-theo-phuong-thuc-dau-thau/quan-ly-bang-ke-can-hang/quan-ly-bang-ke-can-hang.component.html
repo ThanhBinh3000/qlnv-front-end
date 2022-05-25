@@ -4,43 +4,43 @@
       <div class="main-content">
         <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="12">
               <label class="search__label">Số bảng kê</label>
-              <input class="search__input" placeholder="Số bảng kê" nz-input [(ngModel)]="soPhieu" />
+              <input class="search__input" placeholder="Số bảng kê" nz-input [(ngModel)]="searchFilter.soBangKe" />
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Ngày bảng kê Từ ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày bảng kê Từ ngày">
-              </nz-date-picker>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Ngày nhập xuất</label>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayNhapXuat" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Đến ngày</label>
-              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="8">
-              <label class="search__label">Mã hàng DTQG</label>
-              <nz-select nzPlaceHolder="Loại hàng hóa" [(ngModel)]="loaiVTHH">
-                <nz-option nzLabel="Phao áo cứu sinh"></nz-option>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Điểm kho</label>
+              <nz-select [(ngModel)]="searchFilter.maDiemKho">
+                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
+                </nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="16">
-              <label class="search__label">Đơn vị tạo</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
-                  (click)="selectDonVi(option)">
-                  {{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
+            <div nz-col nzSpan="12">
+              <label class="search__label">Nhà kho</label>
+              <nz-select [(ngModel)]="searchFilter.maNhaKho">
+                <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngăn/Lô bảo quản</label>
+              <nz-select [(ngModel)]="searchFilter.maNganKho">
+                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số hợp đồng</label>
+              <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số phiếu nhập</label>
+              <input class="search__input" placeholder="Số phiếu nhập" nz-input
+                [(ngModel)]="searchFilter.soPhieuNhap" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -61,13 +61,15 @@
               <thead>
                 <tr>
                   <th width="60px">STT</th>
-                  <th width="931px">Số bảng kê</th>
-                  <th width="161px">Ngày bảng kê</th>
-                  <th width="203px">Đơn vị tạo BK</th>
-                  <th width="295px">Tên hàng DTQG</th>
-                  <th width="295px">Tên thủ kho</th>
-                  <th width="295px">Phiếu nhập kho tương ứng</th>
-                  <th width="295px"></th>
+                  <th width="161px">Số bảng kê</th>
+                  <th width="161px">Ngày nhập kho</th>
+                  <th>Điểm kho</th>
+                  <th width="295px">Nhà kho</th>
+                  <th width="295px">Ngăn/Lô</th>
+                  <th width="295px">Số hợp đồng</th>
+                  <th width="295px">Số phiếu nhập</th>
+                  <th width="295px">Trạng thái</th>
+                  <th width="140px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -77,13 +79,18 @@
                   <td>{{ data.ngayLap }}</td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
                   <td>{{ data.tenNguoiGiao }}</td>
                   <td>{{ data.soKho }}</td>
                   <td class="text-center">
-                    <a (click)="redirectToChiTiet(data.id)">
+                    <a (click)="redirectToChiTiet(true, data.id)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="redirectToChiTiet(false, data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="xoaItem(data)">
+                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -108,9 +115,13 @@
             </div>
           </nz-card>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub" (click)="export()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
             </button>
           </ng-template>
         </div>

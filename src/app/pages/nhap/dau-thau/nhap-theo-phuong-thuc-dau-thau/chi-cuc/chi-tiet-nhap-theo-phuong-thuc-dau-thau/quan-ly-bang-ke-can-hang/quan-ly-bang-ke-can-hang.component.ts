@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import * as dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { Subject } from 'rxjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 @Component({
   selector: 'quan-ly-bang-ke-can-hang',
@@ -16,38 +16,49 @@ import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang
   styleUrls: ['./quan-ly-bang-ke-can-hang.component.scss'],
 })
 export class QuanLyBangKeCanHangComponent implements OnInit {
-  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  searchFilter = {
+    soBangKe: '',
+    ngayNhapXuat: '',
+    maDiemKho: '',
+    maNhaKho: '',
+    maNganKho: '',
+    soHopDong: '',
+    soPhieuNhap: '',
+  };
 
-  soPhieu: string = null;
-  soHD: string = null;
-  loaiVTHH: string = null;
-  trangThai: string = null;
-  startValue: Date | null = null;
-  endValue: Date | null = null;
+  listDiemKho: any[] = [];
+  listNganKho: any[] = [];
+  listNganLo: any[] = [];
+
+  loaiVthh: string;
+  loaiStr: string;
+  maVthh: string;
+  idVthh: number;
+  routerVthh: string;
+
+  userInfo: UserLogin;
 
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
-  optionsDonVi: any[] = [];
-  inputDonVi: string = '';
-  optionsDonViShow: any[] = [];
-  selectedDonVi: any = {};
-
   constructor(
     private spinner: NgxSpinnerService,
-    private donViService: DonviService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private notification: NzNotificationService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
+    private modal: NzModalService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       await Promise.all([
-        this.loadDonVi(),
+        this.loadDiemKho(),
+        this.loadNganKho(),
+        this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -59,61 +70,15 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  async loadDonVi() {
-    const res = await this.donViService.layTatCaDonVi();
-    this.optionsDonVi = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          ...res.data[i],
-          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-        };
-        this.optionsDonVi.push(item);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  onInputDonVi(e: Event): void {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = [];
-    } else {
-      this.optionsDonViShow = this.optionsDonVi.filter(
-        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  async selectDonVi(donVi) {
-    this.inputDonVi = donVi.tenDvi;
-    this.selectedDonVi = donVi;
-  }
-
-  disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.endValue) {
-      return false;
-    }
-    return startValue.getTime() > this.endValue.getTime();
-  };
-
-  disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.startValue) {
-      return false;
-    }
-    return endValue.getTime() <= this.startValue.getTime();
-  };
-
   async search() {
     let param = {
-      "denNgay": this.endValue ? dayjs(this.endValue).format('YYYY-MM-DD') : null,
-      "maDonVi": this.selectedDonVi.maDvi,
-      "maHang": this.loaiVTHH,
+      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+      "maDonVi": this.userInfo.MA_DVI,
+      "maHang": this.maVthh,
       "pageSize": this.pageSize,
       "pageNumber": this.page,
-      "soBangKe": this.soPhieu,
-      "tuNgay": this.startValue ? dayjs(this.startValue).format('YYYY-MM-DD') : null,
+      "soBangKe": this.searchFilter.soBangKe,
+      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
     }
     let res = await this.quanLyBangKeCanHangService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -128,15 +93,48 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   }
 
   clearFilter() {
-    this.soPhieu = null;
-    this.soHD = null;
-    this.loaiVTHH = null;
-    this.trangThai = null;
-    this.startValue = null;
-    this.endValue = null;
+    this.searchFilter = {
+      soBangKe: '',
+      ngayNhapXuat: '',
+      maDiemKho: '',
+      maNhaKho: '',
+      maNganKho: '',
+      soHopDong: '',
+      soPhieuNhap: '',
+    };
   }
 
   xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   async changePageIndex(event) {
@@ -167,10 +165,99 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number) {
-    this.router.navigate([
-      'nhap/dau-thau/quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/',
-      id,
-    ]);
+  async loadDiemKho() {
+    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadNganKho() {
+    let body = {
+      "maNganKho": null,
+      "nhaKhoId": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNganKho": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNganKho = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadNganLo() {
+    let body = {
+      "maNganLo": null,
+      "nganKhoId": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNganLo": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNganLo = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  getTitleVthh() {
+    if (this.router.url.indexOf("/thoc/")) {
+      this.loaiStr = "Thóc";
+      this.loaiVthh = "01";
+      this.maVthh = "0101";
+      this.idVthh = 2;
+      this.routerVthh = 'thoc';
+    } else if (this.router.url.indexOf("/gao/")) {
+      this.loaiStr = "Gạo";
+      this.loaiVthh = "00";
+      this.maVthh = "0102";
+      this.idVthh = 6;
+      this.routerVthh = 'gao';
+    } else if (this.router.url.indexOf("/muoi/")) {
+      this.loaiStr = "Muối";
+      this.loaiVthh = "02";
+      this.maVthh = "04";
+      this.idVthh = 78;
+      this.routerVthh = 'muoi';
+    } else if (this.router.url.indexOf("/vat-tu/")) {
+      this.loaiStr = "Vật tư";
+      this.loaiVthh = "03";
+      this.routerVthh = 'vat-tu';
+    }
+  }
+
+  redirectToChiTiet(isView: boolean, id: number) {
+    if (!isView) {
+      let urlChiTiet = this.router.url + '/thong-tin'
+      this.router.navigate([urlChiTiet, id,]);
+    }
+    else {
+      let urlChiTiet = this.router.url + '/thong-tin'
+      this.router.navigate([urlChiTiet, id,]);
+    }
+  }
+
+  export() {
+
   }
 }

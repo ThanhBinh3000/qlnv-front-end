@@ -55,7 +55,7 @@
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                   <td class="text-center">{{ data.soDxuat }}</td>
-                  <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                  <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                   <td>{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.namKhoach }}</td>
                   <td class="text-center">{{ convertTrangThai(data.trangThai) }}</td>
