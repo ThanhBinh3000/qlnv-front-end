@@ -39,6 +39,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   formTraCuu: FormGroup;
   formData: FormGroup;
   isTongHop = false;
+  isChiTiet = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
   searchValue = '';
@@ -119,6 +120,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       }
     );
     this.formData = this.fb.group({
+      id: [],
       ngayTongHop: [, [Validators.required]],
       loaiVthh: ['', [Validators.required]],
       veViec: ['', [Validators.required]],
@@ -227,25 +229,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     if (this.id > 0) {
       let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.chiTiet = res.data;
-
-        if (res.data.namKhoach) {
-          this.chiTiet.namKhoach = +res.data.namKhoach;
-        }
-
-        this.idPA = res.data.phuongAnId;
-
-        this.startPH = dayjs(this.chiTiet.tuTgianMthau).toDate();
-        this.endPH = dayjs(this.chiTiet.denTgianMthau).toDate();
-
-        this.startDT = dayjs(this.chiTiet.tuTgianDthau).toDate();
-        this.endDT = dayjs(this.chiTiet.denTgianDthau).toDate();
-
-        this.startHS = dayjs(this.chiTiet.tuTgianTbao).toDate();
-        this.endHS = dayjs(this.chiTiet.denTgianTbao).toDate();
-
-        this.startHTN = dayjs(this.chiTiet.tuTgianNhang).toDate();
-        this.endHTN = dayjs(this.chiTiet.denTgianNhang).toDate();
+        this.isTongHop = true;
+        this.isChiTiet = true;
+        this.initForm(res.data)
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -289,7 +275,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     if (dataDetail) {
       this.dataTableDanhSachDX = dataDetail.children;
       this.formData.patchValue({
-        // maDonVi: donVi.maDvi,
+        id: dataDetail.id,
+        ngayTongHop: dataDetail.ngayTao ? dataDetail.ngayTao : dayjs().format("YYYY-MM-DD"),
+        veViec: dataDetail.veViec,
         loaiVthh: dataDetail.loaiVthh,
         loaiHdong: dataDetail.loaiHdong,
         pthucLcnt: dataDetail.pthucLcnt,

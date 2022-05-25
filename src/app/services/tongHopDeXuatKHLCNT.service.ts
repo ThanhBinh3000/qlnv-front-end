@@ -48,10 +48,10 @@ export class TongHopDeXuatKHLCNTService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  xoa(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/xoa`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
+  // xoa(body: any): Promise<any> {
+  //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/xoa`;
+  //   return this.httpClient.post<any>(url, body).toPromise();
+  // }
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/thop-dlieu/ket-xuat`;

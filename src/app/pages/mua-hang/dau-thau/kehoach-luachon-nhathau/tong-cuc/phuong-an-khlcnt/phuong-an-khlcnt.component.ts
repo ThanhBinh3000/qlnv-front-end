@@ -25,15 +25,16 @@ export class PhuongAnKhlcntComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService : DanhSachDauThauService,
+    private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
-  ) { 
-    router.events.subscribe((val)=>{
+  ) {
+    router.events.subscribe((val) => {
       this.getTitleVthh();
-  })}
+    })
+  }
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
@@ -84,7 +85,7 @@ export class PhuongAnKhlcntComponent implements OnInit {
     }
   }
 
-  getTitleVthh(){
+  getTitleVthh() {
     let loatVthh = this.router.url.split('/')[4]
     this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
@@ -103,17 +104,17 @@ export class PhuongAnKhlcntComponent implements OnInit {
       },
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach : this.searchFilter.namKh
+      namKhoach: this.searchFilter.namKh
     };
     let res = null;
     if (this.tabSelected == 'phuong-an-tong-hop') {
       res = await this.tongHopDeXuatKHLCNTService.search(body);
-    }else if(this.tabSelected == 'danh-sach-tong-hop'){
+    } else if (this.tabSelected == 'danh-sach-tong-hop') {
       // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body,"05")
-    }else {
+      res = await this.searchDanhSachDauThau(body, "05")
+    } else {
       // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body,"10")
+      res = await this.searchDanhSachDauThau(body, "10")
     }
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -126,7 +127,7 @@ export class PhuongAnKhlcntComponent implements OnInit {
     }
   }
 
-  searchDanhSachDauThau(body,trangThai){
+  searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
     return this.danhSachDauThauService.search(body);
   }
@@ -206,7 +207,7 @@ export class PhuongAnKhlcntComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.xoa(body).then(async () => {
+          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -270,7 +271,7 @@ export class PhuongAnKhlcntComponent implements OnInit {
 
   themMoi() {
     let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+loatVthh+'/phuong-an/them-moi']);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phuong-an/them-moi']);
   }
 
 }

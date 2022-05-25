@@ -25,21 +25,22 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService : DanhSachDauThauService,
+    private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
-  ) { 
-    router.events.subscribe((val)=>{
+  ) {
+    router.events.subscribe((val) => {
       this.getTitleVthh();
-  })}
+    })
+  }
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  loaiVthh : string = ''
+  loaiVthh: string = ''
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
@@ -84,7 +85,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  getTitleVthh(){
+  getTitleVthh() {
     this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
     this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
   }
@@ -103,17 +104,17 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
       },
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach : this.searchFilter.namKh
+      namKhoach: this.searchFilter.namKh
     };
     let res = null;
     if (this.tabSelected == 'phuong-an-tong-hop') {
       res = await this.tongHopDeXuatKHLCNTService.search(body);
-    }else if(this.tabSelected == 'danh-sach-tong-hop'){
+    } else if (this.tabSelected == 'danh-sach-tong-hop') {
       // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body,"05")
-    }else {
+      res = await this.searchDanhSachDauThau(body, "05")
+    } else {
       // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body,"10")
+      res = await this.searchDanhSachDauThau(body, "10")
     }
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -126,7 +127,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     }
   }
 
-  searchDanhSachDauThau(body,trangThai){
+  searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
     return this.danhSachDauThauService.search(body);
   }
@@ -210,7 +211,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.xoa(body).then(async () => {
+          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });

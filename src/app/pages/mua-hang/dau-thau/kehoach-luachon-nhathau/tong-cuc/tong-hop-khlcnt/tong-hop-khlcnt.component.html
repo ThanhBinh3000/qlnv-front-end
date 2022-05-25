@@ -53,7 +53,6 @@
                   <th>Hình thức LCNT</th>
                   <th>Phương thức LCNT</th>
                   <th>Loại hợp đồng</th>
-                  <th>Tiêu chuẩn chất lượng</th>
                   <th>Trạng thái</th>
                   <th width="30px">Hành động</th>
                 </tr>
@@ -69,10 +68,9 @@
                   <td>{{ data.pthucLcnt }}</td>
                   <td>{{ data.loaiHdong }}</td>
                   <td></td>
-                  <td></td>
                   <td class="text-center">
                     <a (click)="redirectToChiTiet(data.id)">
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-eye"></i>
                     </a>
                     <a (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
