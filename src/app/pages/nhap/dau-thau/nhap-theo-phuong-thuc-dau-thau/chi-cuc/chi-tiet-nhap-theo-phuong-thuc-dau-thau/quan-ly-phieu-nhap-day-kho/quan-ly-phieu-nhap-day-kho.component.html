@@ -41,7 +41,7 @@
                 </nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="8">
+            <div nz-col nzSpan="24">
               <label class="search__label">Kỹ thuật viên bảo quản</label>
               <input class="search__input" placeholder="Nhập tên" nz-input [(ngModel)]="searchFilter.kyThuatVien" />
             </div>
@@ -72,7 +72,6 @@
                   <th width="295px">Ngăn/Lô</th>
                   <th width="295px">Nội dung</th>
                   <th width="295px">Trạng thái</th>
-                  <th width="140px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -80,7 +79,6 @@
                   <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                   <td>{{ data.soBienBan }}</td>
                   <td>{{ data.ngayNhapDayKho }}</td>
-                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
