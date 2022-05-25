@@ -360,10 +360,10 @@ export class BaoCaoComponent implements OnInit {
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           this.maDonViTao = data.data.maDvi;
-          if ((this.baoCao.trangThai == Utils.TT_BC_1 ||
+          if (this.baoCao.trangThai == Utils.TT_BC_1 ||
             this.baoCao.trangThai == Utils.TT_BC_3 ||
             this.baoCao.trangThai == Utils.TT_BC_5 ||
-            this.baoCao.trangThai == Utils.TT_BC_8) && !this.baoCao?.lstBcaoDviTrucThuocs?.length) {
+            this.baoCao.trangThai == Utils.TT_BC_8) {
             this.status = false;
           } else {
             this.status = true;
@@ -1606,10 +1606,10 @@ export class BaoCaoComponent implements OnInit {
           })
           this.listFile = [];
           this.baoCao.trangThai = "1";
-          if ((this.baoCao.trangThai == Utils.TT_BC_1 ||
+          if (this.baoCao.trangThai == Utils.TT_BC_1 ||
             this.baoCao.trangThai == Utils.TT_BC_3 ||
             this.baoCao.trangThai == Utils.TT_BC_5 ||
-            this.baoCao.trangThai == Utils.TT_BC_8) && !this.baoCao?.lstBcaoDviTrucThuocs?.length) {
+            this.baoCao.trangThai == Utils.TT_BC_8) {
             this.status = false;
           } else {
             this.status = true;
