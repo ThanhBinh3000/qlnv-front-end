@@ -85,7 +85,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         });
       }
       this.loadDanhMucHang();
-      await this.searchData();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -105,6 +105,11 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         });
       }
     });
+  }
+
+  themMoi() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/them-moi']);
   }
 
   convertTreeToList(root: VatTu): VatTu[] {
@@ -189,10 +194,10 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     try {
       this.tabSelected = tab;
       if (tab == 'phuong-an-phe-duyet') {
-        await this.search("00");
+        await this.search();
       }
       else if (tab == 'phuong-an-chua-phe-duyet') {
-        await this.search("01");
+        await this.search();
       }
       this.spinner.hide();
     }
@@ -203,25 +208,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
-  async searchData() {
-    this.spinner.show();
-    try {
-      if (this.tabSelected == 'phuong-an-phe-duyet') {
-        await this.search("00");
-      }
-      else if (this.tabSelected == 'phuong-an-chua-phe-duyet') {
-        await this.search("01");
-      }
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async search(trangThai?) {
+  async search() {
     this.dataTable = [];
     //phê duyệt
     let param = {
@@ -236,7 +223,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       },
       "soQd": this.searchFilter.soQD,
       "str": null,
-      "trangThai": trangThai,
+      "trangThai": this.tabSelected == 'phuong-an-phe-duyet' ? '00' : '01',
       "tuNgayQd": this.startValue
         ? dayjs(this.startValue).format('DD/MM/YYYY')
         : null,
@@ -245,7 +232,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
-        if (trangThai == '00') {
+        if (this.tabSelected == 'phuong-an-phe-duyet') {
           this.dataTable = data.content;
         } else {
           this.dataTableNo = data.content;
@@ -293,10 +280,6 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
-  themMoi() {
-
-  }
-
   redirectToChiTiet(_) {
 
   }
@@ -309,7 +292,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageNo = event;
-      await this.search("01");
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -323,7 +306,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSizeNo = event;
-      await this.search("01");
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {

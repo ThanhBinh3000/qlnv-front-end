@@ -21,7 +21,7 @@
             </div>
             <div nz-col nzSpan="6">
                 <label class="search__label">Số quyết định</label>
-                <input class="search__input" placeholder="Nội dung công văn" nz-input [(ngModel)]="searchFilter.soQdinh" />
+                <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="searchFilter.soQdinh" />
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -152,7 +152,7 @@
             </nz-tab>
           </nz-tabset>
           <div class="action" *ngIf="tabSelected == 'phuong-an-phe-duyet'">
-            <button type="button" class="btn btn-main" (click)="redirectChiTiet(0)">
+            <button type="button" class="btn btn-main" (click)="themMoi()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

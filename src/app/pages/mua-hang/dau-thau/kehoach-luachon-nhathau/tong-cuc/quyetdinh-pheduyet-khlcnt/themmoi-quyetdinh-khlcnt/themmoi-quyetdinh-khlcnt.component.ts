@@ -30,7 +30,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./themmoi-quyetdinh-khlcnt.component.scss']
 })
 export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
-  
+
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
   formData: FormGroup;
@@ -460,15 +460,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  validateGhiChu(e: Event) {
-    if (this.chiTiet.ghiChu && this.chiTiet.ghiChu != '') {
-      this.errorGhiChu = false;
-    }
-    else {
-      this.errorGhiChu = true;
-    }
-  }
-
   async trinhDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -496,42 +487,5 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         }
       },
     });
-  }
-
-  selectTabMenu(tab) {
-    if (tab == this.selectedTab) {
-      return;
-    }
-    if (tab == 'tong-hop') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phuong-an') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/phuong-an-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    } else if (tab == 'phe-duyet') {
-      if (this.router.url.includes(LEVEL.TONG_CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        ]);
-      } else if (this.router.url.includes(LEVEL.CUC)) {
-        this.router.navigate([
-          '/mua-hang/dau-thau/thoc/quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau-cuc',
-        ]);
-      }
-    }
   }
 }
