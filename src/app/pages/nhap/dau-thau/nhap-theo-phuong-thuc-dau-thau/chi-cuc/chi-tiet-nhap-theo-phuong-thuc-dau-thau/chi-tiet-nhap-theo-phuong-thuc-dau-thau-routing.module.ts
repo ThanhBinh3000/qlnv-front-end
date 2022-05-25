@@ -11,6 +11,8 @@ import { QuanLyBienBanLayMauComponent } from './quan-ly-bien-ban-lay-mau/quan-ly
 import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
+import { QuanLyPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
+import { ThemMoiPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
 import { QuanLyPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
 import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
 
@@ -75,6 +77,14 @@ const routes: Routes = [
             {
                 path: 'bien-ban-ban-giao-mau/thong-tin/:id',
                 component: ThemMoiBienBanBanGiaoMauComponent,
+            },
+            {
+                path: 'bien-ban-day-kho',
+                component: QuanLyPhieuNhapDayKhoComponent,
+            },
+            {
+                path: 'bien-ban-day-kho/thong-tin/:id',
+                component: ThemMoiPhieuNhapDayKhoComponent,
             },
         ]
     },

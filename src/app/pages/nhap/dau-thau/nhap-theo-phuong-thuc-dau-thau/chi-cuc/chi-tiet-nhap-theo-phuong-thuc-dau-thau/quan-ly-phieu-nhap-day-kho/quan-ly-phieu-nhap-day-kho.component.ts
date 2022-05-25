@@ -1,30 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import * as dayjs from 'dayjs';
+import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'quan-ly-bang-ke-can-hang',
-  templateUrl: './quan-ly-bang-ke-can-hang.component.html',
-  styleUrls: ['./quan-ly-bang-ke-can-hang.component.scss'],
+  selector: 'quan-ly-phieu-nhap-day-kho',
+  templateUrl: './quan-ly-phieu-nhap-day-kho.component.html',
+  styleUrls: ['./quan-ly-phieu-nhap-day-kho.component.scss'],
 })
-export class QuanLyBangKeCanHangComponent implements OnInit {
+export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   searchFilter = {
-    soBangKe: '',
-    ngayNhapXuat: '',
+    soBienBan: '',
+    ngayNhapDayKho: '',
+    ngayKetThucNhap: '',
     maDiemKho: '',
     maNhaKho: '',
-    maNganKho: '',
-    soHopDong: '',
-    soPhieuNhap: '',
+    maKhoNganLo: '',
+    kyThuatVien: '',
   };
 
   listDiemKho: any[] = [];
@@ -46,7 +48,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
-    private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
+    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private router: Router,
@@ -74,16 +76,34 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   }
 
   async search() {
-    let param = {
-      "denNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 1 ? dayjs(this.searchFilter.ngayNhapXuat[1]).format('YYYY-MM-DD') : null,
+    let param =
+    {
+      "denNgay": null,
+      "kyThuatVien": this.searchFilter.kyThuatVien,
+      "maDiemKho": this.searchFilter.maDiemKho,
       "maDonVi": this.userInfo.MA_DVI,
+      "maDonViLap": null,
       "maHang": this.maVthh,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page,
-      "soBangKe": this.searchFilter.soBangKe,
-      "tuNgay": this.searchFilter.ngayNhapXuat && this.searchFilter.ngayNhapXuat.length > 0 ? dayjs(this.searchFilter.ngayNhapXuat[0]).format('YYYY-MM-DD') : null,
+      "maKhoNganLo": this.searchFilter.maKhoNganLo,
+      "maNhaKho": this.searchFilter.maNhaKho,
+      "ngayBatDauNhap": null,
+      "ngayKetThucNhap": this.searchFilter.ngayKetThucNhap ? dayjs(this.searchFilter.ngayKetThucNhap).format('YYYY-MM-DD') : null,
+      "ngayNhapDayKhoDen": null,
+      "ngayNhapDayKhoTu": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": 20,
+        "orderBy": null,
+        "orderType": null,
+        "page": 0
+      },
+      "soBienBan": this.searchFilter.soBienBan,
+      "str": null,
+      "trangThai": null,
+      "tuNgay": null
     }
-    let res = await this.quanLyBangKeCanHangService.timKiem(param);
+    let res = await this.quanLyPhieuNhapDayKhoService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -97,13 +117,13 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soBangKe: '',
-      ngayNhapXuat: '',
+      soBienBan: '',
+      ngayNhapDayKho: '',
+      ngayKetThucNhap: '',
       maDiemKho: '',
       maNhaKho: '',
-      maNganKho: '',
-      soHopDong: '',
-      soPhieuNhap: '',
+      maKhoNganLo: '',
+      kyThuatVien: '',
     };
   }
 
@@ -119,7 +139,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
+          this.quanLyPhieuNhapDayKhoService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
