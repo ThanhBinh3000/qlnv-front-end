@@ -22,7 +22,7 @@
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
+      <button type="button" class="btn btn-main" (click)="addLine(lstDchinh.length)" [hidden]="status">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
       </button>
@@ -78,7 +78,7 @@
       </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let data of lstCTietBCao; let i = index">
+      <tr *ngFor="let data of lstDchinh; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
               <td> {{i + 1}}</td>
               <td>

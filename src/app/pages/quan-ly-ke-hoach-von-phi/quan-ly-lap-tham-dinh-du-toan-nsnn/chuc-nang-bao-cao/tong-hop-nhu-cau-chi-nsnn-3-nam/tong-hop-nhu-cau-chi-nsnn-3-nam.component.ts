@@ -49,13 +49,13 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     //thong tin chung
     id: any;
     trangThaiPhuLuc: string;
-    namHienHanh: number;       
-    maBieuMau: string = "13";              
+    namHienHanh: number;
+    maBieuMau: string = "13";
     thuyetMinh: string;
-    maDviTien: any;                   
-    listIdDelete: string = "";                  
+    maDviTien: any;
+    listIdDelete: string = "";
     //trang thai cac nut
-    status: boolean = false;   
+    status: boolean = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
 
@@ -273,7 +273,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     //update khi sửa
     saveEdit(id: string): void {
-        if (!this.editCache[id].data.maNdung 
+        if (!this.editCache[id].data.maNdung
             || (!this.editCache[id].data.namHienHanhDtoan && this.editCache[id].data.namHienHanhDtoan !== 0)
             || (!this.editCache[id].data.namHienHanhUocThien && this.editCache[id].data.namHienHanhUocThien !== 0)
             || (!this.editCache[id].data.ncauChiN1 && this.editCache[id].data.ncauChiN1 !== 0)

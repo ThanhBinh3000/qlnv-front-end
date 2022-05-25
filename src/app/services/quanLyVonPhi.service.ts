@@ -111,6 +111,12 @@ export class QuanLyVonPhiService extends BaseService {
       'http://192.168.1.111:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
     );
   }
+  bCDieuChinhDuToanChiTiet(id: any): Observable<any> {
+    return this.httpClient.get(
+      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+    );
+  }
 
 
   // call api chi tiết báo cáo giao dự toán chi nsnn
@@ -232,6 +238,15 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(
       'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/cap-nhat',
       // this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/cap-nhat',
+      request,
+    );
+  }
+
+  // upload phu luc dieu chinh du toan NSNN
+  updatePLDieuChinh(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet',
       request,
     );
   }

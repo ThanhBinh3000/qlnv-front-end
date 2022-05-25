@@ -203,7 +203,7 @@
       <i nz-icon nzType="check" nzTheme="outline"></i>
       <span>Hoàn tất nhập liệu</span>
   </button>
-  <button type="button" class="btn btn-main" [hidden]="status" >
+  <button type="button" class="btn btn-main" [hidden]="status" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
   </button>
