@@ -14,7 +14,7 @@
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Điểm kho</label>
-              <nz-select [(ngModel)]="searchFilter.maDiemKho">
+              <nz-select [(ngModel)]="searchFilter.maDiemKho" (ngModelChange)="changeDiemKho()">
                 <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                 </nz-option>
               </nz-select>
@@ -22,7 +22,7 @@
             <div nz-col nzSpan="12">
               <label class="search__label">Nhà kho</label>
               <nz-select [(ngModel)]="searchFilter.maNhaKho">
-                <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                 </nz-option>
               </nz-select>
             </div>

@@ -34,6 +34,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   id: number = 0;
+  idNhapHang: number = 0;
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -66,6 +68,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.getIdNhap();
+      this.checkIsView();
       this.create.dvt = "Tấn";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
@@ -82,6 +86,29 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
+    }
+  }
+
+  getIdNhap() {
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/chi-tiet/");
+      if (index != -1) {
+        let url = this.router.url.substring(index + 10);
+        let temp = url.split("/");
+        if (temp && temp.length > 0) {
+          this.idNhapHang = +temp[0];
+        }
+      }
     }
   }
 
@@ -490,12 +517,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "lhKho": this.detail?.lhKho,
         "loaiVthh": this.loaiVthh,
         "maDvi": this.detail?.maDvi,
-        "maNganKho": this.detail?.maNgankho,
+        "maNganlo": this.detail?.maNganlo,
         "maVthh": this.maVthh,
         "ngayKthuc": null,
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
         "pthucBquan": this.detail?.pthucBquan,
+        "qdgnvnxId": this.idNhapHang,
         "slThucNhap": this.detail?.slThucNhap,
         "soBb": this.detail?.soBb,
         "thuKho": this.detail?.thuKho,

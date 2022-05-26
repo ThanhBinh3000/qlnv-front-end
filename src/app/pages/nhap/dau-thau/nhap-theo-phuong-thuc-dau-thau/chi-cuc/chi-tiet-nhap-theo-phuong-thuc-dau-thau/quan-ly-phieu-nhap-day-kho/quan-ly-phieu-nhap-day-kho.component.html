@@ -10,15 +10,11 @@
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Ngày nhập đầy kho</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                nzPlaceHolder="Ngày nhập đầy kho" [(ngModel)]="searchFilter.ngayNhapDayKho">
-              </nz-date-picker>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayNhapDayKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Ngày kết thúc nhập</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                nzPlaceHolder="Ngày kết thúc nhập" [(ngModel)]="searchFilter.ngayKetThucNhap">
-              </nz-date-picker>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayKetThucNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Điểm kho</label>
