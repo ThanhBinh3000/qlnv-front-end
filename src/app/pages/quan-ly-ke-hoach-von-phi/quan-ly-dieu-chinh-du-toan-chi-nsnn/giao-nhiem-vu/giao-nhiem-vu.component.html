@@ -66,7 +66,7 @@
 					<thead>
 						<tr>
 							<th width="130px">Mã báo cáo</th>
-							<th width="175px">Báo cáo năm</th>
+							<th width="175px">Năm báo cáo </th>
 							<th width="175px">Đợt báo cáo</th>
 							<th width="175px">Ngày tạo</th>
 							<th width="175px">Người tạo</th>
@@ -102,7 +102,7 @@
 							<td>{{ngayDuyetTBP}}</td>
 							<td>{{ngayDuyetLD}}</td>
 							<td>{{ngayCapTrenTraKq}}</td>
-							<td>{{getStatusName(trangThaiBaoCao)}}</td>
+							<td>{{getStatusName(trangThai)}}</td>
 						</tr>
 					</tbody>
 				</nz-table>
@@ -184,7 +184,7 @@
 
 									<td>
 										<ng-container *ngIf="data?.id?.length != 38">
-											<ng-container *ngIf="data.giaoCho == userInfo?.username">
+											<ng-container *ngIf="data.giaoCho == userInfo?.username  && !status; else xem">
 												<button type="button" class="btn btn-main" (click)="newTab(data.maLoai)">
 													<span>Nhập dữ liệu</span>
 												</button>
@@ -192,6 +192,12 @@
 													<span>Biểu mẫu nhập số liệu</span>
 												</button>
 											</ng-container>
+                      <ng-template #xem>
+												<button type="button" class="btn btn-main"
+                          (click)="newTab(data.maLoai)">
+													<span>Xem</span>
+												</button>
+											</ng-template>
 										</ng-container>
 
 									</td>
@@ -300,7 +306,7 @@
 					</nz-tab>
 					<nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab.tenPl">
             <ng-container *ngIf="tab.id == '1'">
-							<app-phu-luc1 [data]="data">
+							<app-phu-luc1 [data]="data" (dataChange)="getNewData($event)">
 							</app-phu-luc1>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '2'">

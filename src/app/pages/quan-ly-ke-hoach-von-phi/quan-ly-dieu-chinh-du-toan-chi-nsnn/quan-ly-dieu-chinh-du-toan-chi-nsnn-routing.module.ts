@@ -45,10 +45,17 @@ const routes: Routes = [
   {
     path: 'giao-nhiem-vu/:id',
     loadChildren: () =>
-      import(
-        './giao-nhiem-vu/giao-nhiem-vu.module'
+    import(
+      './giao-nhiem-vu/giao-nhiem-vu.module'
       ).then((m) => m.GiaoNhiemVuModule),
-  },
+    },
+    {
+      path: 'phe-duyet-bao-cao-dieu-chinh',
+      loadChildren: () =>
+        import(
+          './phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
+        ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
+    },
 
 ];
 

@@ -378,8 +378,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   timKiemDieuChinh(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach',
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
 
@@ -461,7 +461,7 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  
+
   // call api nút chức năng
   approveCtietThamDinh(request: any): Observable<any> {
     return this.httpClient.put(
@@ -474,12 +474,20 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approveDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
-      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/trang-thai',
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/trang-thai',
       request,
     );
   }
 
+  // call api nút chức năng
+  approveDieuChinhPheDuyet(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/phe-duyet',
+      request,
+    );
+  }
 
 
   // upload bao cao thuc hien du toan chi
@@ -537,6 +545,14 @@ export class QuanLyVonPhiService extends BaseService {
   //xóa báo cáo nút xóa Báo cáo
   xoaBaoCaoLapThamDinh(id: any): Observable<any> {
     return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/xoa/' + id);
+  }
+
+  //xóa báo cáo nút xóa Báo cáo
+  xoaDuToanDieuChinh(id: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
+    );
   }
 
   //download file tu he thong chung

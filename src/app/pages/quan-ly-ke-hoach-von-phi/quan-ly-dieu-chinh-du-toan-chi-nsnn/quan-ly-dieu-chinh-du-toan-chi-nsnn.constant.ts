@@ -53,19 +53,19 @@ export const QUAN_LY_DIEU_CHINH_DU_TOAN_NSNN_LIST: QuanLyDieuChinhDuToanChiNSNN[
 		unRole: [],
 		isDisabled: false,
 	},
-	// {
-	// 	icon: 'htvbdh_tcdt_icon-common',
-	// 	title: 'Phê duyệt',
-	// 	description: 'Phê duyệt dự toán NSNN hàng năm và KHTC 03 năm',
-	// 	url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/phe-duyet`,
-	// 	unRole: [
-	// 		{
-	// 			"unit": CHI_CUC,
-	// 			"role": NHAN_VIEN,
-	// 		},
-	// 	],
-	// 	isDisabled: false,
-	// },
+	{
+		icon: 'htvbdh_tcdt_icon-common',
+		title: 'Phê duyệt báo cáo điều chỉnh dự toán chi NSNN',
+		description: 'Phê duyệt báo cáo điều chỉnh dự toán chi NSNN',
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/phe-duyet-bao-cao-dieu-chinh`,
+		unRole: [
+			{
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+		],
+		isDisabled: false,
+	},
 	// {
 	// 	icon: 'htvbdh_tcdt_icon-common',
 	// 	title: 'Tổng hợp',
