@@ -11,56 +11,41 @@ export class QuanLyPhieuNhapDayKhoService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyPhieuNhapDayKho','');
+    super(httpClient, 'QuanLyPhieuNhapDayKho', '');
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt?`
-    if (body.denNgay)
-      url_ += 'denNgay=' + encodeURIComponent('' + body.denNgay) + '&';
-    if (body.maDonVi)
-      url_ += 'maDonVi=' + encodeURIComponent('' + body.maDonVi) + '&';
-    if (body.maHang)
-      url_ += 'maHang=' + encodeURIComponent('' + body.maHang) + '&';
-    if (body.soBienBan)
-      url_ += 'soBienBan=' + encodeURIComponent('' + body.soBienBan) + '&';
-    if (body.tuNgay)
-      url_ += 'tuNgay=' + encodeURIComponent('' + body.tuNgay) + '&';
-    if (body.pageNumber != null || body.pageNumber != undefined)
-      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
-    if (body.pageSize)
-      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
-    url_ = url_.replace(/[?&]$/, '');
-    return this.httpClient.get<any>(url_).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/tra-cuu`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   chiTiet(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/chi-tiet/${id}`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/cap-nhat`;
-    return this.httpClient.post<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt`;
+    return this.httpClient.put<any>(url, body).toPromise();
   }
 
-  xoa(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/xoa`;
-    return this.httpClient.post<any>(url, body).toPromise();
+  xoa(id: number): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/${id}`;
+    return this.httpClient.delete<any>(url).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/phe-duyet`;
-    return this.httpClient.post<any>(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/status`;
+    return this.httpClient.put<any>(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-nxuat-hang/bban-nhap-day-kho/ket-xuat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bien-ban-nhap-day-kho-lt/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }
