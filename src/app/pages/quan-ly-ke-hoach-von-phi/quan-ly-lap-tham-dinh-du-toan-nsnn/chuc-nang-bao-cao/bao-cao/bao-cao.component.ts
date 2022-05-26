@@ -58,6 +58,7 @@ export class BaoCaoComponent implements OnInit {
 	trangThaiBaoCao: string = '1';
 	maDviTao!: string;
 	thuyetMinh: string;
+	lyDoTuChoi: string;
 	//danh muc
 	lstLapThamDinhs: ItemData[] = [];
 	phuLucs: any[] = PHU_LUC;
@@ -353,10 +354,22 @@ export class BaoCaoComponent implements OnInit {
 
 	// luu
 	async save() {
-		//upload file
+		let checkSave = true;
+		//get list file url
 		let listFile: any = [];
 		for (const iterator of this.listFile) {
 			listFile.push(await this.uploadFile(iterator));
+		}
+
+		this.lstLapThamDinhs.forEach(e => {
+			if (!e.nguoiBcao) {
+				checkSave = false;
+			}
+		})
+
+		if (!checkSave) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
 		}
 
 		// replace nhung ban ghi dc them moi id thanh null
@@ -426,6 +439,29 @@ export class BaoCaoComponent implements OnInit {
 
 	// chuc nang check role
 	async onSubmit(mcn: string, lyDoTuChoi: string) {
+		if (mcn == Utils.TT_BC_2){
+			let check = true;
+			this.lstLapThamDinhs.forEach(item => {
+				if (item.trangThai != '5'){
+					check = false;
+				}
+			})
+			if (!check){
+				this.notification.warning(MESSAGE.ERROR, "Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!");
+				return;
+			}
+		} else {
+			let check = true;
+			this.lstLapThamDinhs.forEach(item => {
+				if (item.trangThai == '2'){
+					check = false;
+				}
+			})
+			if (!check){
+				this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
+				return;
+			}
+		}
 		if (this.id) {
 			const requestGroupButtons = {
 				id: this.id,
@@ -495,6 +531,7 @@ export class BaoCaoComponent implements OnInit {
 					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
+					this.lyDoTuChoi = data.data.lyDoTuChoi;
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -545,7 +582,11 @@ export class BaoCaoComponent implements OnInit {
 
 	// xóa với checkbox
 	deleteSelected() {
-
+		this.lstLapThamDinhs.forEach(item => {
+			if (this.tabs.findIndex(e => e.id == item.maBieuMau) != -1) {
+				this.tabs = [];
+			}
+		})
 		// delete object have checked = true
 		this.lstLapThamDinhs = this.lstLapThamDinhs.filter(item => item.checked != true)
 		this.allChecked = false;
@@ -624,9 +665,9 @@ export class BaoCaoComponent implements OnInit {
 		}
 	}
 
-	getNewData(trangThai: any) {
+	getNewData(obj: any) {
 		let index = this.lstLapThamDinhs.findIndex(e => e.maBieuMau == this.tabs[0].id);
-		if (trangThai == '-1') {
+		if (obj?.trangThai == '-1') {
 			this.getDetailReport();
 			this.data = {
 				...this.lstLapThamDinhs[index],
@@ -640,10 +681,9 @@ export class BaoCaoComponent implements OnInit {
 			this.tabs.push(PHU_LUC.find(e => e.id == this.lstLapThamDinhs[index].maBieuMau));
 			this.selectedIndex = this.tabs.length + 1;
 		} else {
-			this.lstLapThamDinhs[index].trangThai = trangThai;
+			this.lstLapThamDinhs[index].trangThai = obj?.trangThai;
+			this.lstLapThamDinhs[index].lyDoTuChoi = obj?.lyDoTuChoi;
 		}
-
-
 	}
 
 	close() {

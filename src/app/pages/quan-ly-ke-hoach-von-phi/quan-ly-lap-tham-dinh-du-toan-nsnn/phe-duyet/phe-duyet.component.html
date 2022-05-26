@@ -70,13 +70,14 @@
 						<tr>
 							<th nzWidth="50px">STT</th>
 							<th nzWidth="100px">Mã báo cáo</th>
-							<th nzWidth="150px">Ngày lập</th>
-							<th nzWidth="150px">Năm hiện tại (N)</th>
+							<th nzWidth="150px">Ngày tạo</th>
+							<th nzWidth="150px">Năm báo cáo</th>
 							<th nzWidth="150px">Ngày trình duyệt</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
 							<th nzWidth="150px">Ngày cấp trên trả kết quả</th>
 							<th nzWidth="150px" [hidden] = "status">Đơn vị lập</th>
+							<th nzWidth="150px" [hidden] = "status">Trạng thái</th>
 							<th nzWidth="50px" class="text-center"></th>
 						</tr>
 					</thead>
@@ -104,6 +105,9 @@
 							</td>
 							<td [hidden]="status">
 								{{getUnitName(item.maDvi)}}
+							</td>
+							<td [hidden]="status">
+								{{getStatusName(item.trangThai)}}
 							</td>
 							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;"> 
 								<ng-container *ngIf="!item.ngayTraKq; else xem">

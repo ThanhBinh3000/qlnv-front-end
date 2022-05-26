@@ -269,13 +269,18 @@ export class QuanLyVonPhiService extends BaseService {
 
   //tao ma PA
   maPhuongAn(): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/sinh-ma-pa');
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/sinh-ma-pa'
+      'http://192.168.1.111:8094/pa-giao-so-kt/sinh-ma-pa'
+    );
   }
 
   //chi tiet ma phuong an
-  chitietPhuongAn(maPa: any): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + maPa);
-    // return this.httpClient.get('http://192.168.1.103:8094/pa-giao-so-kt/chi-tiet/'+maPa);
+  ctietPhuongAn(maPa: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + maPa
+      'http://192.168.1.111:8094/pa-giao-so-kt/chi-tiet/' + maPa
+    );
   }
 
   //tao ma giao
