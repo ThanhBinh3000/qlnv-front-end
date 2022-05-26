@@ -198,7 +198,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    this.dataChange.emit('-1');
+                    let obj = {
+                        trangThai: '-1',
+                        lyDoTuChoi: null,
+                    };
+                    this.dataChange.emit(obj);
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -224,7 +228,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
 				if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = mcn;
 					this.getStatusButton();
-                    this.dataChange.emit(mcn);
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
 					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					// } else {

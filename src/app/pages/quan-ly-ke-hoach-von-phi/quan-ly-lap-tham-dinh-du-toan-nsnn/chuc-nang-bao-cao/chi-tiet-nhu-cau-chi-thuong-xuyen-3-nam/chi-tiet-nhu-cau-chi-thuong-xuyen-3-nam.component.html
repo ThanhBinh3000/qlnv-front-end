@@ -18,12 +18,12 @@
         </ng-template>
     </div>
     <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
-        <button type="button" class="btn btn-main" (click)="deleteAllChecked()">
+        <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
         </button>
         <ng-container *ngIf="lstCtietBcao.length == 0">
-            <button type="button" class="btn btn-main" (click)="addLine(null)">
+            <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
             </button>
