@@ -1,28 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as dayjs from 'dayjs';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { cloneDeep } from 'lodash';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import * as dayjs from 'dayjs';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { Globals } from 'src/app/shared/globals';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { UserLogin } from 'src/app/models/userlogin';
 
 @Component({
-  selector: 'them-moi-phieu-nhap-kho',
-  templateUrl: './them-moi-phieu-nhap-kho.component.html',
-  styleUrls: ['./them-moi-phieu-nhap-kho.component.scss'],
+  selector: 'them-moi-phieu-nhap-day-kho',
+  templateUrl: './them-moi-phieu-nhap-day-kho.component.html',
+  styleUrls: ['./them-moi-phieu-nhap-day-kho.component.scss'],
 })
-export class ThemMoiPhieuNhapKhoComponent implements OnInit {
+export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   id: number = 0;
@@ -51,7 +55,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
   ) { }
@@ -125,7 +129,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyPhieuNhapKhoService.loadChiTiet(id);
+      let res = await this.quanLyPhieuNhapDayKhoService.chiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -330,7 +334,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyPhieuNhapDayKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -367,7 +371,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyPhieuNhapDayKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -404,7 +408,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyPhieuNhapDayKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -443,7 +447,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyPhieuNhapKhoService.updateStatus(
+            await this.quanLyPhieuNhapDayKhoService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -519,7 +523,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "trangThaiNhap": null
       };
       if (this.id > 0) {
-        let res = await this.quanLyPhieuNhapKhoService.sua(
+        let res = await this.quanLyPhieuNhapDayKhoService.sua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -534,7 +538,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyPhieuNhapKhoService.them(
+        let res = await this.quanLyPhieuNhapDayKhoService.them(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

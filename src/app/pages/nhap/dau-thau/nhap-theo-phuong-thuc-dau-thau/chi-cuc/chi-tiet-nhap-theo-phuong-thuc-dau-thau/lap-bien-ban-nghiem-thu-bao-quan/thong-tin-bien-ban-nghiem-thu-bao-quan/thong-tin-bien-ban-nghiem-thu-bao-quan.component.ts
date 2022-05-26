@@ -41,7 +41,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   routerVthh: string;
 
   listThuKho: any[] = [];
-  listNganKho: any[] = [];
+  listNganLo: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
 
@@ -72,7 +72,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadThuKho(),
-        this.loadNganKho(),
+        this.loadNganLo(),
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
       ]);
@@ -251,22 +251,22 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  async loadNganKho() {
+  async loadNganLo() {
     let body = {
-      "maNganKho": null,
-      "nhaKhoId": null,
+      "maNganLo": null,
+      "nganKhoId": null,
       "paggingReq": {
         "limit": 1000,
         "page": 1
       },
       "str": null,
-      "tenNganKho": null,
+      "tenNganLo": null,
       "trangThai": null
     };
-    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
+    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
-        this.listNganKho = res.data.content;
+        this.listNganLo = res.data.content;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

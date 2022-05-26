@@ -16,6 +16,8 @@ import { QuanLyPhieuKiemNghiemChatLuongThocComponent } from './quan-ly-phieu-kie
 import { ThemMoiPhieuKiemNghiemChatLuongThocComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong-thoc/them-moi-phieu-kiem-nghiem-chat-luong-thoc/them-moi-phieu-kiem-nghiem-chat-luong-thoc.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
+import { QuanLyPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
+import { ThemMoiPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho/them-moi-phieu-nhap-day-kho.component';
 import { QuanLyPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
 import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
 
@@ -36,6 +38,8 @@ import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-
         ThemMoiBienBanLayMauKhoComponent,
         QuanLyBienBanBanGiaoMauComponent,
         ThemMoiBienBanBanGiaoMauComponent,
+        QuanLyPhieuNhapDayKhoComponent,
+        ThemMoiPhieuNhapDayKhoComponent,
         QuanLyPhieuKiemNghiemChatLuongThocComponent,
         ThemMoiPhieuKiemNghiemChatLuongThocComponent
     ],

@@ -136,8 +136,7 @@
                   Ngăn (lô) kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNgankho">
-                  <nz-option *ngFor="let thuKho of listNganKho" [nzValue]="thuKho.maNgankho"
-                    [nzLabel]="thuKho.tenNgankho">
+                  <nz-option *ngFor="let thuKho of listNganLo" [nzValue]="thuKho.maNganlo" [nzLabel]="thuKho.tenNganlo">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
