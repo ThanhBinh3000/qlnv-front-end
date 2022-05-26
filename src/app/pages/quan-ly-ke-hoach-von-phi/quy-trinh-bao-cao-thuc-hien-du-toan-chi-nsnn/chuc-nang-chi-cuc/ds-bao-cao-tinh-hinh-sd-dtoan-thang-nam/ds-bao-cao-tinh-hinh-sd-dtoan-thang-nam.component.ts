@@ -106,7 +106,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   async onSubmit() {
     this.spinner.show();
     this.searchFilter.trangThais= [];
-    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy');
+    debugger
+    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy') || this.searchFilter.ngayTaoTu;
     this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy');
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
@@ -143,7 +144,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.thangBcao ? this.searchFilter.thangBcao : '0') + '/' + this.searchFilter.namBcao])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.maLoaiBcao == '526' ? this.searchFilter.thangBcao : '0') + '/' + this.searchFilter.namBcao])
   }
 
   //doi so trang
