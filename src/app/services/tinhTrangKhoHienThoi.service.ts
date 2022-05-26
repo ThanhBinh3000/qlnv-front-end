@@ -37,4 +37,9 @@ export class TinhTrangKhoHienThoiService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/ngan-lo/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  nhaKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mlk/nha-kho/tra-cuu`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }

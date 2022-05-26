@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -118,7 +119,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       "orderDirection": null,
       "paggingReq": {
         "limit": this.pageSize,
-        "page": this.page
+        "page": this.page - 1
       },
       "soBb": this.soBB,
       "str": null,
@@ -241,7 +242,40 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   export() {
-
+    if (this.totalRecord && this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "denNgayLap": this.ngayTongHop && this.ngayTongHop.length > 1
+            ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
+            : null,
+          "loaiVthh": this.loaiVthh,
+          "maDvi": this.userInfo.MA_DVI,
+          "maNganKho": this.nganLo,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soBb": this.soBB,
+          "str": null,
+          "trangThai": null,
+          "tuNgayLap": this.ngayTongHop && this.ngayTongHop.length > 0
+            ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
+            : null,
+        };
+        this.quanLyNghiemThuKeLotService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   redirectToChiTiet(isView: boolean, id: number) {

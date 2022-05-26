@@ -43,4 +43,9 @@ export class QuanLyNghiemThuKeLotService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/bb-nghiemthu-klst/phe-duyet`;
     return this.httpClient.put(url, body).toPromise();
   }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/bb-nghiemthu-klst/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
