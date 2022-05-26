@@ -6,7 +6,7 @@
         <div class="trai">
           <div class="title-form-chi-tiet">Biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</div>
         </div>
-        <div class="canphai phai">
+        <div class="canphai phai" *ngIf="!viewChiTiet">
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
             *ngIf="detail.trangThai == '00' || id == 0">
             <i class="icon  htvbdh_tcdt_save"></i>
@@ -64,7 +64,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb" />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -73,7 +74,8 @@
                   Ngày nghiệm thu
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  nzPlaceHolder="Ngày nghiệm thu" [(ngModel)]="detail.ngayNghiemThu">
+                  nzPlaceHolder="Ngày nghiệm thu" [(ngModel)]="detail.ngayNghiemThu"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -84,7 +86,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ trưởng đơn vị
                 </nz-form-label>
-                <input placeholder="Nhập tên thủ trưởng" nz-input [(ngModel)]="detail.thuTruong" />
+                <input placeholder="Nhập tên thủ trưởng" nz-input [(ngModel)]="detail.thuTruong"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -92,7 +95,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Kế toán đơn vị
                 </nz-form-label>
-                <input placeholder="Nhập tên kế toán đơn vị" nz-input [(ngModel)]="detail.keToan" />
+                <input placeholder="Nhập tên kế toán đơn vị" nz-input [(ngModel)]="detail.keToan"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -102,7 +106,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Kỹ thuật viên bảo quản
                 </nz-form-label>
-                <input placeholder="Nhập tên kỹ thuật viên" nz-input [(ngModel)]="detail.kyThuatVien" />
+                <input placeholder="Nhập tên kỹ thuật viên" nz-input [(ngModel)]="detail.kyThuatVien"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -110,7 +115,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho">
+                <nz-select [(ngModel)]="detail.thuKho"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet">
                   <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
                   </nz-option>
                 </nz-select>
@@ -135,7 +141,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn (lô) kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganlo">
+                <nz-select [(ngModel)]="detail.maNganlo"
+                  [disabled]="(detail.trangThai == '00' || id == 0) && !viewChiTiet">
                   <nz-option *ngFor="let thuKho of listNganLo" [nzValue]="thuKho.maNganlo" [nzLabel]="thuKho.tenNganlo">
                   </nz-option>
                 </nz-select>

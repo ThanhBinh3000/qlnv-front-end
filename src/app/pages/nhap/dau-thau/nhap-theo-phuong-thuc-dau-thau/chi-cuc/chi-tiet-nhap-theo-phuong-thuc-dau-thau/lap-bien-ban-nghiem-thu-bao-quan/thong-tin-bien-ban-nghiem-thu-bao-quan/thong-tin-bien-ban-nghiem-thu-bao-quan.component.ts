@@ -35,6 +35,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   detail: any = {};
   id: number = 0;
   idNhapHang: number = 0;
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -68,6 +69,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     try {
       this.getTitleVthh();
       this.getIdNhap();
+      this.checkIsView();
       this.create.dvt = "Tấn";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
@@ -84,6 +86,16 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
     }
   }
 

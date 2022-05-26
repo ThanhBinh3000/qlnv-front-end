@@ -11,6 +11,7 @@ import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeL
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 @Component({
   selector: 'app-lap-bien-ban-nghiem-thu-bao-quan',
@@ -44,6 +45,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   userInfo: UserLogin;
 
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganLo: any[] = [];
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -52,6 +57,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     private modal: NzModalService,
     private router: Router,
     private userService: UserService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
   ) { }
 
   async ngOnInit() {
@@ -72,12 +78,80 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      await this.search();
+      await Promise.all([
+        this.loadDiemKho(),
+        this.loadNhaKho(null),
+        this.loadNganLo(),
+        this.search(),
+      ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDiemKho() {
+    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadNhaKho(diemKhoId: any) {
+    let body = {
+      "diemKhoId": diemKhoId,
+      "maNhaKho": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNhaKho": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNhaKho = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.diemKho);
+    this.nhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
+    }
+  }
+
+  async loadNganLo() {
+    let body = {
+      "maNganLo": null,
+      "nganKhoId": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNganLo": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNganLo = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -115,6 +189,8 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       "loaiVthh": this.loaiVthh,
       "maDvi": this.userInfo.MA_DVI,
       "maNganKho": this.nganLo,
+      "maNganlo": this.nganLo,
+      "maDiemkho": this.diemKho,
       "orderBy": null,
       "orderDirection": null,
       "paggingReq": {
@@ -284,7 +360,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.router.navigate([urlChiTiet, id,]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
       this.router.navigate([urlChiTiet, id,]);
     }
   }

@@ -203,6 +203,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
 
   async changeDiemKho() {
     let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
+    this.searchFilter.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
       await this.loadNhaKho(diemKho[0].id);
     }
