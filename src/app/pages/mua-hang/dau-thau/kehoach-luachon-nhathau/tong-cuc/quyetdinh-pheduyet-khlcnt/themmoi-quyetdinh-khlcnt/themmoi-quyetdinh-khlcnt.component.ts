@@ -26,6 +26,8 @@ import { UserService } from 'src/app/services/user.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { R } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -146,6 +148,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
+    let tt = this.formData.get('trangThai').value;
+    if (tt == '01' || tt == '11') {
+      return;
+    }
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
       nzContent: DialogQuyetDinhGiaoChiTieuComponent,
@@ -487,7 +493,40 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   tuChoi() {
-
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDo: text,
+            trangThai: '03',
+          };
+          const res = await this.quyetDinhPheDuyetKeHoachLCNTService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            let loatVthh = this.router.url.split('/')[4]
+            this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet']);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
   }
 
   quayLai() {
@@ -670,6 +709,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       })
       this.danhsachDx = data.children1;
       let dataDX = await this.tongHopDeXuatKHLCNTService.getDetail(data.idThHdr);
+      let obj = this.listDanhSachTongHop.filter(item => item.id === data.idThHdr);
+      console.log(obj);
+      this.listDanhSachTongHop = [
+        ...this.listDanhSachTongHop,
+        dataDX.data
+      ]
       this.formThongTinDX.patchValue({
         loaiHdong: dataDX.data.loaiHdong,
         pthucLcnt: dataDX.data.pthucLcnt,
@@ -681,7 +726,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         tgianMthau: [dataDX.data.tuTgianMthau, dataDX.data.denTgianMthau],
         tgianNhang: [dataDX.data.tuTgianNhang, dataDX.data.denTgianNhang],
       });
-
     };
     this.setTitle();
   }

@@ -4,11 +4,12 @@ import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LEVEL, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
@@ -29,7 +30,8 @@ export class ThongtinDauthauComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
@@ -45,11 +47,17 @@ export class ThongtinDauthauComponent implements OnInit {
     soQdinh: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
-    loaiVthh: ''
+    loaiVthh: '',
+    ngayQd: '',
+    soQd: '',
+    trangThai: '11',
+    namKhoach: 0,
   };
 
+  listVthh: any[] = [];
+
   dataTable: any[] = [];
-  page: number = 0;
+  page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
@@ -65,6 +73,7 @@ export class ThongtinDauthauComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
       this.getTitleVthh();
@@ -86,42 +95,24 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   getTitleVthh() {
-    this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
+    let loatVthh = this.router.url.split('/')[4]
+    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   async search() {
-    let body = {
-      tuNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
-      },
-      soQdinh: this.searchFilter.soQdinh,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh
-    };
-    let res = null;
-    if (this.tabSelected == 'phuong-an-tong-hop') {
-      res = await this.tongHopDeXuatKHLCNTService.search(body);
-    } else if (this.tabSelected == 'danh-sach-tong-hop') {
-      // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body, "05")
-    } else {
-      // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body, "10")
-    }
+    this.dataTable = [];
+    let body = this.searchFilter;
+    body.namKhoach = body.namKh;
+    let res;
+    res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.dataTable = data.content;
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
+      }
       this.totalRecord = data.totalElements;
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }

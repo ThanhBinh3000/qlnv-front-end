@@ -45,11 +45,12 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     soQdinh: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
-    loaiVthh: ''
+    loaiVthh: '',
+    soQd: ''
   };
 
   dataTable: any[] = [];
-  page: number = 0;
+  page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
@@ -89,6 +90,11 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
   }
 
+  themMoi() {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/ketqua-dauthau/them-moi']);
+  }
+
   async search() {
     let body = {
       tuNgayTao: this.searchFilter.ngayTongHop
@@ -99,7 +105,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
         : null,
       paggingReq: {
         limit: this.pageSize,
-        page: this.page,
+        page: this.page - 1,
       },
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.searchFilter.loaiVthh,

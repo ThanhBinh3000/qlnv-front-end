@@ -262,7 +262,7 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    return status == '01' ? "Đã quyết định" : "Chưa quyết định"
   }
 
   exportData() {

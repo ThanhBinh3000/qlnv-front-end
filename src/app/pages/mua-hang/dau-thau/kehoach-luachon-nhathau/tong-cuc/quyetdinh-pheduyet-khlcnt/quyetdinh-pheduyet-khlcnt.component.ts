@@ -33,6 +33,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     loaiVthh: null,
     ngayQd: null,
     namKhoach: null,
+    trangThai: null,
   };
   listVthh: any;
   listNam: any[] = [];
@@ -259,6 +260,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     if (this.tabSelected == 'quyet-dinh') {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     } else {
+      body.trangThai = '00';
       res = await this.tongHopDeXuatKHLCNTService.search(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
