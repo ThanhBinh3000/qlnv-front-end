@@ -13,9 +13,9 @@ export abstract class BaseService {
     this.GATEWAY = GATEWAY;
   }
 
-  getAll(): Promise<OldResponseData> {
+  getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
-    return this._httpClient.get<OldResponseData>(url).toPromise();
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   create(body): Promise<OldResponseData> {

@@ -14,7 +14,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 
 @Component({
@@ -31,7 +31,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     soQdinh: null,
     ngayTongHop: null,
     loaiVthh: null,
-    ngayQd: null
+    ngayQd: null,
+    namKhoach: null,
   };
   listVthh: any;
   listNam: any[] = [];
@@ -108,9 +109,55 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     });
   }
 
-  themMoi() {
+  insert() {
     let loatVthh = this.router.url.split('/')[4]
     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/them-moi']);
+  }
+
+  edit(data) {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/chinh-sua', data.id]);
+  }
+
+  detail(data) {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/phe-duyet/chi-tiet', data.id]);
+  }
+
+  delete(data?) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: MESSAGE.DELETE_CONFIRM,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": data.id,
+            "maDvi": null
+          }
+          this.quyetDinhPheDuyetKeHoachLCNTService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   convertTreeToList(root: VatTu): VatTu[] {
@@ -206,21 +253,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   async search() {
     this.dataTable = [];
-    let body = {
-      "denNgayQd": this.endValue
-        ? dayjs(this.endValue).format('DD/MM/YYYY')
-        : null,
-      "loaiVthh": this.selectHang.ma ?? "00",
-      "namKhoach": this.searchFilter.namKh,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page - 1
-      },
-      "soQd": this.searchFilter.soQd,
-      "tuNgayQd": this.startValue
-        ? dayjs(this.startValue).format('DD/MM/YYYY')
-        : null,
-    }
+    let body = this.searchFilter;
+    body.namKhoach = body.namKh;
     let res;
     if (this.tabSelected == 'quyet-dinh') {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
@@ -309,49 +343,21 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     ]);
   }
 
-  convertTrangThai(status: string) {
-    if (status == '01') {
-      return "Đã duyệt";
-    }
-    else {
-      return "Chưa duyệt";
-    }
+  // convertTrangThai(status: string) {
+  //   if (status == '01') {
+  //     return "Đã duyệt";
+  //   }
+  //   else {
+  //     return "Chưa duyệt";
+  //   }
+  // }
+
+  convertTrangThaiTable(status: string) {
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: MESSAGE.DELETE_CONFIRM,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            "id": item.id,
-            "maDvi": null
-          }
-          this.quyetDinhPheDuyetKeHoachLCNTService.xoa(body).then(async (res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              await this.search();
-              this.notification.error(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            }
-            else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+
   }
 
   exportData() {

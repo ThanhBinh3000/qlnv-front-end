@@ -71,12 +71,15 @@
                     <td>{{ data.nguonVon }}</td>
                     <td>{{ data.nguonVon }}</td>
                     <td>{{ data.nguonVon }}</td>
-                    <td>{{ data.trangThai }}</td>
+                    <td>{{ convertTrangThaiTable(data.trangThai) }}</td>
                     <td class="text-center">
-                      <a (click)="redirectChiTiet(data.id)">
+                      <a *ngIf="data.trangThai != '00'" (click)="detail(data)">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                      <a *ngIf="data.trangThai == '00'" (click)="edit(data)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                      <a *ngIf="data.trangThai == '00'" (click)="delete(data)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -152,7 +155,7 @@
             </nz-tab>
           </nz-tabset>
           <ng-template #tableCard1 >
-            <button type="button" class="btn btn-main" (click)="themMoi()">
+            <button type="button" class="btn btn-main" (click)="insert()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
