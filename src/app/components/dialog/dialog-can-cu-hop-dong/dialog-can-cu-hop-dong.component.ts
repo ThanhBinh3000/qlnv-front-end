@@ -57,23 +57,25 @@ export class DialogCanCuHopDongComponent implements OnInit {
   async search() {
     this.dataTable = [];
     this.totalRecord = 0;
+
     let body = {
-      "denNgayHdong": "",
-      "loaiHdong": "",
+      "denNgayKy": "",
+      "loaiVthh": "00",
       "maDvi": "",
-      "maHhoa": "",
+      "maDviB": "",
       "orderBy": "",
       "orderDirection": "",
       "paggingReq": {
         "limit": this.pageSize,
+        "orderBy": "",
+        "orderType": "",
         "page": this.page
       },
-      "soHdong": this.text,
+      "soHd": this.text,
       "str": "",
-      "trangThai": "02",
-      "tthaiHdong": "",
-      "tuNgayHdong": ""
-    };
+      "trangThai": "",
+      "tuNgayKy": ""
+    }
     let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

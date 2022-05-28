@@ -17,10 +17,10 @@
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-        <td>{{ data.soHdong }}</td>
-        <td>{{ data.tenHdong }}</td>
+        <td>{{ data.soHd }}</td>
+        <td>{{ data.tenHd }}</td>
         <td>{{ data.ngayKy }}</td>
-        <td>{{ data.ngayHluc }}</td>
+        <td>{{ data.tuNgayHluc }} - {{data.denNgayHluc}}</td>
         <td class="text-center">
           <a (click)="handleOk(data)">
             <i class="icon htvbdh_dau-cong"></i>
