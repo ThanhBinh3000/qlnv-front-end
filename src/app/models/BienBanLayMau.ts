@@ -25,7 +25,7 @@ export class BienBanLayMau {
     ngayBgiaoMau: string;
     ngayLapBban: string;
     ngayLayMau: string;
-    pphapLayMau: string;
+    pphapLayMau: number;
     sluongLMau: string;
     soBban: string;
     soHd: string;
@@ -36,4 +36,6 @@ export class BienBanLayMau {
     tphongKthuatBquan: string;
     trangThai: string;
     tenDonVi: string;
+    ngayHd: string;
+    tenDonViCCHang: string;
 }

@@ -17,9 +17,10 @@ export class QuanLyBienBanLayMauService extends BaseService {
   timKiem(body: any): Promise<any> {
 
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/tra-cuu?`
-    if (body.ngayLayMau)
+    if (body.ngayLayMau) {
       url_ += 'ngayLapBbanTuNgay=' + encodeURIComponent('' + body.denNgay) + '&';
-    url_ += 'ngayLapBbanDenNgay=' + encodeURIComponent('' + body.denNgay) + '&';
+      url_ += 'ngayLapBbanDenNgay=' + encodeURIComponent('' + body.denNgay) + '&';
+    }
     if (body.soHopDong)
       url_ += 'soHopDong=' + encodeURIComponent('' + body.soHopDong) + '&';
     if (body.diemkho)
@@ -38,7 +39,7 @@ export class QuanLyBienBanLayMauService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/chi-tiet/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/chi-tiet?id=${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
@@ -49,7 +50,7 @@ export class QuanLyBienBanLayMauService extends BaseService {
 
   sua(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/cap-nhat`;
-    return this.httpClient.post<any>(url, body).toPromise();
+    return this.httpClient.put<any>(url, body).toPromise();
   }
 
   xoa(id: number): Promise<any> {

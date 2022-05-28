@@ -77,11 +77,11 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayLayMau: '',
-      soHopDong: '',
-      diemkho: '',
-      nhaKho: '',
-      nganLoBaoQuan: '',
+      ngayLayMau: null,
+      soHopDong: null,
+      diemkho: null,
+      nhaKho: null,
+      nganLoBaoQuan: null,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
@@ -167,11 +167,11 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   redirectToChiTiet(isView: boolean, id: number) {
     if (!isView) {
       let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
+      this.router.navigate([urlChiTiet, id]);
     }
     else {
       let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
+      this.router.navigate([urlChiTiet, id]);
     }
   }
   async loadDiemKho() {
