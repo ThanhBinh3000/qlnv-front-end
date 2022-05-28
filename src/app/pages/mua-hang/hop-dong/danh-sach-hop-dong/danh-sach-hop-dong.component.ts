@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { convertTenVthh } from 'src/app/shared/commonFunction';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -26,6 +28,11 @@ export class DanhSachHopDongComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
 
+  optionsDonVi: any[] = [];
+  inputDonVi: string = '';
+  optionsDonViShow: any[] = [];
+  selectedDonVi: any = {};
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -33,6 +40,7 @@ export class DanhSachHopDongComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private donViService: DonviService,
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
@@ -41,6 +49,40 @@ export class DanhSachHopDongComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
+    await this.loadDonVi();
+  }
+
+  async loadDonVi() {
+    const res = await this.donViService.layDonViCon();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
+      }
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  onInputDonVi(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
+    } else {
+      this.optionsDonViShow = this.optionsDonVi.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  async selectDonVi(donVi) {
+    this.inputDonVi = donVi.tenDvi;
+    this.selectedDonVi = donVi;
   }
 
   async search() {

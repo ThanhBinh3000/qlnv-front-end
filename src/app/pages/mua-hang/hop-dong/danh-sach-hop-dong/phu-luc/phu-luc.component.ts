@@ -13,6 +13,7 @@ export class PhuLucComponent implements OnInit {
 
   ngOnInit() {
   }
+
   thongTinPhuLuc() {
     const modal = this.modal.create({
       nzTitle: 'Thông tin phụ lục KH LNCT cho các Cục DTNN KV',
