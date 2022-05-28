@@ -206,16 +206,18 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   async getHopDong(id) {
-    let res = await this.thongTinHopDongService.loadChiTiet(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.detailHopDong = res.data;
-      this.detail.ngayHopDong = this.detailHopDong.ngayKy;
-      this.detail.maHangHoa = this.detailHopDong.loaiVthh;
-      this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
-      this.detail.maHangHoa = this.maVthh;
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    if (id) {
+      let res = await this.thongTinHopDongService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailHopDong = res.data;
+        this.detail.ngayHopDong = this.detailHopDong.ngayKy;
+        this.detail.maHangHoa = this.detailHopDong.loaiVthh;
+        this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
+        this.detail.maHangHoa = this.maVthh;
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
