@@ -46,7 +46,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -240,19 +240,32 @@
                   <input type="text" nz-input class="w-300" [(ngModel)]="create.noiDung" />
                 </td>
                 <td>
-                  <input type="text" nz-input class="w-120" [(ngModel)]="create.dvt" disabled />
+                  <nz-select [(ngModel)]="create.dvt" class="w-200">
+                    <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh"
+                      [nzLabel]="item.tenDviTinh">
+                    </nz-option>
+                  </nz-select>
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.soLuongTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.soLuongTn" [nzMin]="0"
+                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.donGiaTn" [nzMin]="0"
+                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                 </td>
                 <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                <td>{{create.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-                <td class="bg-gray">{{create.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongQt"
+                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                </td>
+                <td class="bg-gray">
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    [(ngModel)]="create.thanhTienQt" [nzMin]="create.soLuongQt ?? 0" [nzMax]="globals.prop.MAX_INPUT">
+                  </nz-input-number>
+                </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
                 <td>
                   <a (click)="addRow()"
@@ -287,27 +300,39 @@
                 <ng-template #editTemplate>
                   <td></td>
                   <td>
-                    <input type="text" nz-input class="w-120" [(ngModel)]="editDataCache[data.stt]?.data.noiDung" />
+                    <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.noiDung" />
                   </td>
                   <td>
-                    <input type="text" nz-input class="w-120" [(ngModel)]="editDataCache[data.stt]?.data.dvt"
-                      disabled />
+                    <nz-select class="w-200" [(ngModel)]="editDataCache[data.stt]?.data.dvt">
+                      <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh"
+                        [nzLabel]="item.tenDviTinh">
+                      </nz-option>
+                    </nz-select>
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input [nzSize]="'small'"
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
                       (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
                       [(ngModel)]="editDataCache[data.stt]?.data.soLuongTn" [nzMin]="0"
                       [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input [nzSize]="'small'"
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
                       (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
                       [(ngModel)]="editDataCache[data.stt]?.data.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
                     </nz-input-number>
                   </td>
                   <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                  <td>{{editDataCache[data.stt]?.data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-                  <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongQt" [nzMin]="0"
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  </td>
+                  <td class="bg-gray">
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                      [(ngModel)]="editDataCache[data.stt]?.data.thanhTienQt"
+                      [nzMin]="editDataCache[data.stt]?.data.soLuongQt ?? 0" [nzMax]="globals.prop.MAX_INPUT">
+                    </nz-input-number>
+                  </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
                   <td>
                     <a (click)="saveEdit(data.stt)" class="save"

@@ -12,6 +12,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -27,6 +28,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   detail: any = {};
   id: number = 0;
   idNhapHang: number = 0;
+  detailGiaoNhap: any = {};
 
   loaiVthh: string;
   loaiStr: string;
@@ -34,7 +36,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   routerVthh: string;
 
   listDiemKho: any[] = [];
-  listNganKho: any[] = [];
+  listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
 
@@ -54,6 +56,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) { }
 
   async ngOnInit() {
@@ -66,8 +69,8 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.detail.maDvi = this.userInfo.MA_DVI;
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await Promise.all([
+        this.getIdNhap(),
         this.loadDiemKho(),
-        this.loadNganKho(),
         this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
       ]);
@@ -80,14 +83,22 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  getIdNhap() {
+  async getIdNhap() {
     if (this.router.url && this.router.url != null) {
       let index = this.router.url.indexOf("/chi-tiet/");
       if (index != -1) {
         let url = this.router.url.substring(index + 10);
         let temp = url.split("/");
         if (temp && temp.length > 0) {
-          this.idNhapHang = +temp[0];
+          this.detail.soQdNvuNhang = +temp[0];
+          let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.soQdNvuNhang);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.detailGiaoNhap = res.data;
+            this.detail.ngayQdNvuNhang = this.detailGiaoNhap.ngayQdinh;
+          }
+          else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         }
       }
     }
@@ -244,25 +255,35 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  async loadNganKho() {
-    let body = {
-      "maNganKho": null,
-      "nhaKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganKho = res.data.content;
+  async loadNhaKho(diemKhoId: any) {
+    if (diemKhoId && diemKhoId > 0) {
+      let body = {
+        "diemKhoId": diemKhoId,
+        "maNhaKho": null,
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": null,
+        "tenNhaKho": null,
+        "trangThai": null
+      };
+      let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.content) {
+          this.listNhaKho = res.data.content;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.detail.maDiemKho);
+    this.detail.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
     }
   }
 

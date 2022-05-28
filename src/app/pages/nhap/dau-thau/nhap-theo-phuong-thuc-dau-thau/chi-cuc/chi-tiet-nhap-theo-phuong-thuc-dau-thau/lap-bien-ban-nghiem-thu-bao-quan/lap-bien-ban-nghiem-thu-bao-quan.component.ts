@@ -104,24 +104,26 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
+    if (diemKhoId && diemKhoId > 0) {
+      let body = {
+        "diemKhoId": diemKhoId,
+        "maNhaKho": null,
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": null,
+        "tenNhaKho": null,
+        "trangThai": null
+      };
+      let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.content) {
+          this.listNhaKho = res.data.content;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 

@@ -60,7 +60,6 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNhaKho(null),
         this.loadNganLo(),
         this.search(),
       ]);

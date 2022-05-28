@@ -4,7 +4,7 @@
       <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
         aria-labelledby="banhanh-tab">
         <div class="trai">
-          <div class="title-form-chi-tiet">phiếu kiểm tra chất lượng gạo dự trữ quốc gia</div>
+          <div class="title-form-chi-tiet">phiếu kiểm tra chất lượng hàng dự trữ quốc gia</div>
         </div>
         <div class="canphai phai">
           <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '00' || id == 0"
@@ -41,7 +41,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -65,7 +65,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho()">
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                   </nz-option>
                 </nz-select>
@@ -77,7 +77,7 @@
                   Nhà kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNhaKho">
-                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -106,8 +106,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày hợp đồng
                 </nz-form-label>
-                <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  nzPlaceHolder="Ngày hợp đồng" [(ngModel)]="detail.ngayKiemTra">
+                <nz-date-picker class="search__input" disabled nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hợp đồng"
+                  [(ngModel)]="detail.ngayHopDong">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -132,7 +132,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Khối lượng gạo đề nghị kiểm tra (kg)
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maHangHoa" disabled />
+                <input nz-input [(ngModel)]="detail.khoiLuongKiemTra" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -208,17 +208,17 @@
                   <tr>
                     <td></td>
                     <td>
-                      <input type="text" nz-input class="w-300" [(ngModel)]="create.tenChiTieu" />
+                      <nz-select [(ngModel)]="create.tenChiTieu" class="w-300" (ngModelChange)="changeChiTieu(create)">
+                        <nz-option *ngFor="let item of listTieuChuan" [nzValue]="item.tenTchuan"
+                          [nzLabel]="item.tenTchuan">
+                        </nz-option>
+                      </nz-select>
                     </td>
-                    <td>
-                      <input type="text" nz-input class="w-300" [(ngModel)]="create.tieuChuan" />
-                    </td>
+                    <td>{{create.tieuChuan}}</td>
                     <td>
                       <input type="text" nz-input class="w-300" [(ngModel)]="create.ketQuaKiemTra" />
                     </td>
-                    <td>
-                      <input type="text" nz-input class="w-300" [(ngModel)]="create.phuongPhapXacDinh" />
-                    </td>
+                    <td>{{create.phuongPhapXacDinh}}</td>
                     <td>
                       <a (click)="addRow()" [class.disabled]="!create.tenChiTieu || create.tenChiTieu == ''">
                         <i class="fa fa-plus"></i>
@@ -247,21 +247,19 @@
                     <ng-template #editTemplate>
                       <td></td>
                       <td>
-                        <input type="text" nz-input class="w-300"
-                          [(ngModel)]="editDataCache[data.stt]?.data.tenChiTieu" />
+                        <nz-select [(ngModel)]="editDataCache[data.stt]?.data.tenChiTieu" class="w-300"
+                          (ngModelChange)="changeChiTieu(editDataCache[data.stt]?.data)">
+                          <nz-option *ngFor="let item of listTieuChuan" [nzValue]="item.tenTchuan"
+                            [nzLabel]="item.tenTchuan">
+                          </nz-option>
+                        </nz-select>
                       </td>
-                      <td>
-                        <input type="text" nz-input class="w-300"
-                          [(ngModel)]="editDataCache[data.stt]?.data.tieuChuan" />
-                      </td>
+                      <td>{{editDataCache[data.stt]?.data.tieuChuan}}</td>
                       <td>
                         <input type="text" nz-input class="w-300"
                           [(ngModel)]="editDataCache[data.stt]?.data.ketQuaKiemTra" />
                       </td>
-                      <td>
-                        <input type="text" nz-input class="w-300"
-                          [(ngModel)]="editDataCache[data.stt]?.data.phuongPhapXacDinh" />
-                      </td>
+                      <td>{{editDataCache[data.stt]?.data.phuongPhapXacDinh}}</td>
                       <td>
                         <a (click)="saveEdit(data.stt)" class="save"
                           [class.disabled]="!editDataCache[data.stt]?.data.tenChiTieu || editDataCache[data.stt]?.data.tenChiTieu == ''">
