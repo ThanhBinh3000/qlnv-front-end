@@ -46,7 +46,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -72,7 +72,8 @@
                   Số phiếu kiểm tra chất lượng
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.phieuKtClId">
-                  <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id" [nzLabel]="item.ten">
+                  <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id"
+                    [nzLabel]="item.soPhieu">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -118,7 +119,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số QĐ giao nhiệm vụ nhập hàng
                 </nz-form-label>
-                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="idNhapHang" disabled />
+                <input nz-input placeholder="Số QĐ giao nhiệm vụ nhập hàng" [(ngModel)]="detail.soQdNvuNhang"
+                  disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -126,8 +128,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày quyết định giao nhiệm vụ nhập hàng
                 </nz-form-label>
-                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.ngayQdNvuNhang"
-                  disabled />
+                <input nz-input placeholder="Ngày quyết định giao nhiệm vụ nhập hàng"
+                  [(ngModel)]="detail.ngayQdNvuNhang" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -135,7 +137,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày tạo phiếu
                 </nz-form-label>
-                <input nz-input placeholder="Nhập họ tên người giao hàng" [(ngModel)]="detail.ngayTao" disabled />
+                <input nz-input placeholder="Ngày tạo phiếu" [(ngModel)]="detail.ngayTao" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -153,7 +155,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho()">
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                   </nz-option>
                 </nz-select>
@@ -165,7 +167,7 @@
                   Nhà kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNhaKho">
-                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -208,11 +210,17 @@
               <tr>
                 <td></td>
                 <td>
-                  <input type="text" nz-input class="w-300" [(ngModel)]="create.tenVatTu" />
+                  <nz-select [(ngModel)]="create.tenVatTu" (ngModelChange)="changeDanhMucHang(create)">
+                    <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
+                    </nz-option>
+                  </nz-select>
                 </td>
                 <td>{{create.maVatTu}}</td>
                 <td>{{create.donViTinh}}</td>
-                <td>{{create.soLuongTrenCt ?? 0}}</td>
+                <td>
+                  <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongTrenCt"
+                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                </td>
                 <td>
                   <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
                     [(ngModel)]="create.soLuongThuc" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
@@ -253,11 +261,19 @@
                 <ng-template #editTemplate>
                   <td></td>
                   <td>
-                    <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.tenVatTu" />
+                    <nz-select [(ngModel)]="editDataCache[data.stt]?.data.tenVatTu"
+                      (ngModelChange)="changeDanhMucHang(editDataCache[data.stt]?.data)">
+                      <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
+                      </nz-option>
+                    </nz-select>
                   </td>
                   <td>{{editDataCache[data.stt]?.data.maVatTu}}</td>
                   <td>{{editDataCache[data.stt]?.data.donViTinh}}</td>
-                  <td>{{editDataCache[data.stt]?.data.soLuongTrenCt ?? 0}}</td>
+                  <td>
+                    <nz-input-number type="text" nz-input [nzSize]="'small'"
+                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongTrenCt" [nzMin]="0"
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  </td>
                   <td>
                     <nz-input-number type="text" nz-input [nzSize]="'small'"
                       (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"

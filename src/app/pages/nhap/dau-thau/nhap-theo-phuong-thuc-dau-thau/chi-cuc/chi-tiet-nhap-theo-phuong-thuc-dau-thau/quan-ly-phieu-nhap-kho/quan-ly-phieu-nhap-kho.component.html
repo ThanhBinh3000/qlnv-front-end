@@ -22,7 +22,7 @@
             </div>
             <div nz-col nzSpan="12">
               <label class="search__label">Điểm kho</label>
-              <nz-select [(ngModel)]="searchFilter.maDiemKho">
+              <nz-select [(ngModel)]="searchFilter.maDiemKho" (ngModelChange)="changeDiemKho()">
                 <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                 </nz-option>
               </nz-select>
@@ -30,7 +30,7 @@
             <div nz-col nzSpan="12">
               <label class="search__label">Nhà kho</label>
               <nz-select [(ngModel)]="searchFilter.maNhaKho">
-                <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                 </nz-option>
               </nz-select>
             </div>
@@ -48,11 +48,11 @@
             </div>
           </div>
           <div class="cangiua group-button-search">
-            <button nz-button class="search__button--search">
+            <button nz-button class="search__button--search" (click)="search()">
               <i nz-icon nzType="search"></i>
               Tìm kiếm
             </button>
-            <button nz-button class="search__button--clear">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
               <i nz-icon nzType="close"></i>
               Xóa điều kiện
             </button>
@@ -77,11 +77,11 @@
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                 <td>{{ data.soPhieu }}</td>
-                <td>{{ data.ngayGdinh }}</td>
-                <td>{{ data.ketLuan }}</td>
-                <td>{{ data.ketLuan }}</td>
-                <td>{{ data.ketLuan }}</td>
-                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ data.ngayNhapKho }}</td>
+                <td>{{ data.tenDiemKho }}</td>
+                <td>{{ data.tenNganKho }}</td>
+                <td>{{ data.tenNganLo }}</td>
+                <td>{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>

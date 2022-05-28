@@ -4,9 +4,12 @@
       <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
         aria-labelledby="banhanh-tab">
         <div class="trai">
-          <div class="title-form-chi-tiet">Biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</div>
+          <div class="title-chi-tieu">
+            <span [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span>
+            <span>Biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</span>
+          </div>
         </div>
-        <div class="canphai phai">
+        <div class="canphai phai" *ngIf="!viewChiTiet">
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
             *ngIf="detail.trangThai == '00' || id == 0">
             <i class="icon  htvbdh_tcdt_save"></i>
@@ -17,18 +20,18 @@
             <i class="icon htvbdh_trinh"></i>
             <span>Trình duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '01'"
             (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
             <span>Hoàn thành phiếu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '01'"
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="pheDuyet()">
             <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="detail.trangThai == '01'">
+            *ngIf="detail.trangThai == '04'">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
@@ -46,7 +49,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -64,7 +67,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Số biên bản
                 </nz-form-label>
-                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb" />
+                <input nz-input placeholder="Nhập số biên bản" [(ngModel)]="detail.soBb"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -73,7 +77,8 @@
                   Ngày nghiệm thu
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  nzPlaceHolder="Ngày nghiệm thu" [(ngModel)]="detail.ngayNghiemThu">
+                  nzPlaceHolder="Ngày nghiệm thu" [(ngModel)]="detail.ngayNghiemThu"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -84,7 +89,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ trưởng đơn vị
                 </nz-form-label>
-                <input placeholder="Nhập tên thủ trưởng" nz-input [(ngModel)]="detail.thuTruong" />
+                <input placeholder="Nhập tên thủ trưởng" nz-input [(ngModel)]="detail.thuTruong"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -92,7 +98,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Kế toán đơn vị
                 </nz-form-label>
-                <input placeholder="Nhập tên kế toán đơn vị" nz-input [(ngModel)]="detail.keToan" />
+                <input placeholder="Nhập tên kế toán đơn vị" nz-input [(ngModel)]="detail.keToan"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -102,7 +109,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Kỹ thuật viên bảo quản
                 </nz-form-label>
-                <input placeholder="Nhập tên kỹ thuật viên" nz-input [(ngModel)]="detail.kyThuatVien" />
+                <input placeholder="Nhập tên kỹ thuật viên" nz-input [(ngModel)]="detail.kyThuatVien"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -110,7 +118,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Thủ kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.thuKho">
+                <nz-select [(ngModel)]="detail.thuKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
                   </nz-option>
                 </nz-select>
@@ -135,7 +143,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn (lô) kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNgankho">
+                <nz-select [(ngModel)]="detail.maNganlo" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listNganLo" [nzValue]="thuKho.maNganlo" [nzLabel]="thuKho.tenNganlo">
                   </nz-option>
                 </nz-select>
@@ -148,7 +156,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại hình kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.lhKho">
+                <nz-select [(ngModel)]="detail.lhKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listLoaiKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
                   </nz-option>
                 </nz-select>
@@ -168,7 +176,8 @@
                   Thực nhập
                 </nz-form-label>
                 <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập nội dung"
-                  [(ngModel)]="detail.slThucNhap" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" [(ngModel)]="detail.slThucNhap" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -176,7 +185,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Phương thức bảo quản
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.pthucBquan">
+                <nz-select [(ngModel)]="detail.pthucBquan" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listPTBaoQuan" [nzValue]="thuKho.maPthuc"
                     [nzLabel]="thuKho.tenPthuc">
                   </nz-option>
@@ -188,7 +197,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Hình thức bảo quản lần đầu (Mới/Bổ sung)
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.hthucBquan">
+                <nz-select [(ngModel)]="detail.hthucBquan" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option nzValue="00" nzLabel="Mới"></nz-option>
                   <nz-option nzValue="01" nzLabel="Bổ sung"></nz-option>
                 </nz-select>
@@ -216,7 +225,8 @@
                 <th colSpan="3" class="text-center">Chi phí thực hiện trong năm</th>
                 <th colSpan="2" class="text-center">Chi phí thực hiện đã quyết toán năm trước</th>
                 <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br />(6) = (3) + (5)</th>
-                <th rowSpan="2" width="140px" class="text-center">HÀNH ĐỘNG</th>
+                <th rowSpan="2" width="140px" class="text-center" *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
+                  HÀNH ĐỘNG</th>
               </tr>
               <tr>
                 <th class="text-center">Số lượng<br />(1)</th>
@@ -227,25 +237,39 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
                 <td></td>
                 <td>
                   <input type="text" nz-input class="w-300" [(ngModel)]="create.noiDung" />
                 </td>
                 <td>
-                  <input type="text" nz-input class="w-120" [(ngModel)]="create.dvt" disabled />
+                  <nz-select [(ngModel)]="create.dvt" class="w-200">
+                    <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh"
+                      [nzLabel]="item.tenDviTinh">
+                    </nz-option>
+                  </nz-select>
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.soLuongTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.soLuongTn" [nzMin]="0"
+                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number type="text" nz-input [nzSize]="'small'" (input)="caculatorSoLuong(create)"
-                    [(ngModel)]="create.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.donGiaTn" [nzMin]="0"
+                    [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                 </td>
                 <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                <td>{{create.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-                <td class="bg-gray">{{create.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                <td>
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuongQt"
+                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                </td>
+                <td class="bg-gray">
+                  <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                    (input)="caculatorSoLuong(create)" [(ngModel)]="create.thanhTienQt" [nzMin]="create.soLuongQt ?? 0"
+                    [nzMax]="globals.prop.MAX_INPUT">
+                  </nz-input-number>
+                </td>
                 <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
                 <td>
                   <a (click)="addRow()"
@@ -268,7 +292,7 @@
                   <td>{{data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
                   <td class="bg-gray">{{data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data.tongGtri ?? 0 | number: '1.0-1'}}</td>
-                  <td>
+                  <td *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
                     <a (click)="editRow(data.stt)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -280,27 +304,40 @@
                 <ng-template #editTemplate>
                   <td></td>
                   <td>
-                    <input type="text" nz-input class="w-120" [(ngModel)]="editDataCache[data.stt]?.data.noiDung" />
+                    <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.noiDung" />
                   </td>
                   <td>
-                    <input type="text" nz-input class="w-120" [(ngModel)]="editDataCache[data.stt]?.data.dvt"
-                      disabled />
+                    <nz-select class="w-200" [(ngModel)]="editDataCache[data.stt]?.data.dvt">
+                      <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh"
+                        [nzLabel]="item.tenDviTinh">
+                      </nz-option>
+                    </nz-select>
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input [nzSize]="'small'"
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
                       (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
                       [(ngModel)]="editDataCache[data.stt]?.data.soLuongTn" [nzMin]="0"
                       [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input [nzSize]="'small'"
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
                       (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
                       [(ngModel)]="editDataCache[data.stt]?.data.donGiaTn" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
                     </nz-input-number>
                   </td>
                   <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
-                  <td>{{editDataCache[data.stt]?.data.soLuongQt ?? 0 | number: '1.0-1'}}</td>
-                  <td class="bg-gray">{{editDataCache[data.stt]?.data.thanhTienQt ?? 0 | number: '1.0-1'}}</td>
+                  <td>
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                      [(ngModel)]="editDataCache[data.stt]?.data.soLuongQt" [nzMin]="0"
+                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  </td>
+                  <td class="bg-gray">
+                    <nz-input-number class="w-200" type="text" nz-input [nzSize]="'small'"
+                      (input)="caculatorSoLuong(editDataCache[data.stt]?.data)"
+                      [(ngModel)]="editDataCache[data.stt]?.data.thanhTienQt"
+                      [nzMin]="editDataCache[data.stt]?.data.soLuongQt ?? 0" [nzMax]="globals.prop.MAX_INPUT">
+                    </nz-input-number>
+                  </td>
                   <td>{{editDataCache[data.stt]?.data.tongGtri ?? 0 | number: '1.0-1'}}</td>
                   <td>
                     <a (click)="saveEdit(data.stt)" class="save"

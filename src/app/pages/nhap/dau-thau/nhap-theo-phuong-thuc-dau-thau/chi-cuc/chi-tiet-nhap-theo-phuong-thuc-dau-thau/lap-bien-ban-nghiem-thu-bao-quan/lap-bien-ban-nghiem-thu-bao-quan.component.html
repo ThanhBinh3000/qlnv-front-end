@@ -14,15 +14,27 @@
                         </div>
                         <div nz-col nzSpan="5">
                             <label class="search__label">Điểm kho</label>
-                            <input class="search__input" placeholder="Điểm kho" nz-input [(ngModel)]="diemKho" />
+                            <nz-select [(ngModel)]="diemKho" (ngModelChange)="changeDiemKho()">
+                                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho"
+                                    [nzLabel]="item.tenDiemkho">
+                                </nz-option>
+                            </nz-select>
                         </div>
                         <div nz-col nzSpan="5">
                             <label class="search__label">Nhà kho</label>
-                            <input class="search__input" placeholder="Nhà kho" nz-input [(ngModel)]="nhaKho" />
+                            <nz-select [(ngModel)]="nhaKho">
+                                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho"
+                                    [nzLabel]="item.tenNhakho">
+                                </nz-option>
+                            </nz-select>
                         </div>
                         <div nz-col nzSpan="4">
-                            <label class="search__label">Ngăn lô</label>
-                            <input class="search__input" placeholder="Ngăn lô" nz-input [(ngModel)]="nganLo" />
+                            <label class="search__label">Ngăn/Lô bảo quản</label>
+                            <nz-select [(ngModel)]="nganLo">
+                                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo"
+                                    [nzLabel]="item.tenNganlo">
+                                </nz-option>
+                            </nz-select>
                         </div>
                     </div>
                     <div class="cangiua group-button-search">
@@ -60,13 +72,13 @@
                                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                                 <td>{{ data.soBb }}</td>
                                 <td>{{ data.ngayNghiemThuShow }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ data.tenDiemkho }}</td>
+                                <td>{{ data.tenNhakho }}</td>
+                                <td>{{ data.tenNganlo }}</td>
+                                <td>{{ data.chiPhiThucHienTrongNam | number: '1.0-1' }}</td>
+                                <td>{{ data.chiPhiThucHienNamTruoc | number: '1.0-1' }}</td>
+                                <td>{{ data.tongGiaTri | number: '1.0-1' }}</td>
+                                <td>{{ data.trangThaiDuyet }}</td>
                                 <td>
                                     <a (click)="redirectToChiTiet(true, data.id)">
                                         <i class="fa fa-eye"></i>

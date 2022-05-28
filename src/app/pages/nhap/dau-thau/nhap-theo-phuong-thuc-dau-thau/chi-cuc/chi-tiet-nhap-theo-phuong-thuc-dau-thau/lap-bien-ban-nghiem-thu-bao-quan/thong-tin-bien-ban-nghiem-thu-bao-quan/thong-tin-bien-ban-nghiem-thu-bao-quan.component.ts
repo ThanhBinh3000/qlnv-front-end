@@ -34,6 +34,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   id: number = 0;
+  idNhapHang: number = 0;
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -44,6 +46,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   listNganLo: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
+  listDonViTinh: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -66,7 +69,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.getIdNhap();
+      this.checkIsView();
       this.create.dvt = "Tấn";
+      this.detail.trangThai = "00";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -75,6 +81,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.loadNganLo(),
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
+        this.loadDonViTinh(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -82,6 +89,29 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
+    }
+  }
+
+  getIdNhap() {
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/chi-tiet/");
+      if (index != -1) {
+        let url = this.router.url.substring(index + 10);
+        let temp = url.split("/");
+        if (temp && temp.length > 0) {
+          this.idNhapHang = +temp[0];
+        }
+      }
     }
   }
 
@@ -110,7 +140,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   caculatorThanhTienQT() {
     if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienTn).reduce((prev, next) => prev + next);
+      let sum = this.detail?.detail.map(item => item.thanhTienQt).reduce((prev, next) => prev + next);
       return sum ?? 0;
     }
     return 0;
@@ -184,7 +214,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   caculatorSoLuong(item: any) {
     if (item) {
       item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
-      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0)
+      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0);
     }
   }
 
@@ -273,6 +303,29 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
+  async loadDonViTinh() {
+    try {
+      const res = await this.donViService.loadDonViTinh();
+      this.listDonViTinh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        for (let i = 0; i < res.data.length; i++) {
+          const item = {
+            ...res.data[i],
+            labelDonViTinh: res.data[i].tenDviTinh,
+          };
+          this.listDonViTinh.push(item);
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
   getTitleVthh() {
     if (this.router.url.indexOf("/thoc/")) {
       this.loaiStr = "Thóc";
@@ -312,7 +365,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -349,7 +402,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: '01',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -386,7 +439,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: '02',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -490,12 +543,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "lhKho": this.detail?.lhKho,
         "loaiVthh": this.loaiVthh,
         "maDvi": this.detail?.maDvi,
-        "maNganKho": this.detail?.maNgankho,
+        "maNganlo": this.detail?.maNganlo,
         "maVthh": this.maVthh,
         "ngayKthuc": null,
         "ngayLap": null,
         "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
         "pthucBquan": this.detail?.pthucBquan,
+        "qdgnvnxId": this.idNhapHang,
         "slThucNhap": this.detail?.slThucNhap,
         "soBb": this.detail?.soBb,
         "thuKho": this.detail?.thuKho,
@@ -536,6 +590,19 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
     }
   }
 }

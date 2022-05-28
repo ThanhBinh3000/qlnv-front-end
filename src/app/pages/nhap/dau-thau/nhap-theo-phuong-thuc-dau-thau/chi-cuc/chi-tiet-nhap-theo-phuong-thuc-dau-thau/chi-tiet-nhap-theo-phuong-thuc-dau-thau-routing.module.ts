@@ -41,11 +41,19 @@ const routes: Routes = [
                 component: ThongTinBienBanNghiemThuBaoQuanComponent,
             },
             {
+                path: 'bien-ban/xem-chi-tiet/:id',
+                component: ThongTinBienBanNghiemThuBaoQuanComponent,
+            },
+            {
                 path: 'phieu-kiem-tra',
                 component: QuanLyPhieuKiemTraChatLuongHangComponent,
             },
             {
                 path: 'phieu-kiem-tra/thong-tin/:id',
+                component: ThemMoiPhieuKiemTraChatLuongHangComponent,
+            },
+            {
+                path: 'phieu-kiem-tra/xem-chi-tiet/:id',
                 component: ThemMoiPhieuKiemTraChatLuongHangComponent,
             },
             {

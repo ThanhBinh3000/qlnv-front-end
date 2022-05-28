@@ -28,7 +28,7 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
   };
 
   listDiemKho: any[] = [];
-  listNganKho: any[] = [];
+  listNhaKho: any[] = [];
   listNganLo: any[] = [];
 
   loaiVthh: string;
@@ -60,7 +60,6 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNganKho(),
         this.loadNganLo(),
         this.search(),
       ]);
@@ -179,25 +178,33 @@ export class QuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  async loadNganKho() {
+  async loadNhaKho(diemKhoId: any) {
     let body = {
-      "maNganKho": null,
-      "nhaKhoId": null,
+      "diemKhoId": diemKhoId,
+      "maNhaKho": null,
       "paggingReq": {
         "limit": 1000,
         "page": 1
       },
       "str": null,
-      "tenNganKho": null,
+      "tenNhaKho": null,
       "trangThai": null
     };
-    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
+    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
-        this.listNganKho = res.data.content;
+        this.listNhaKho = res.data.content;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.searchFilter.maDiemKho);
+    this.searchFilter.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
     }
   }
 

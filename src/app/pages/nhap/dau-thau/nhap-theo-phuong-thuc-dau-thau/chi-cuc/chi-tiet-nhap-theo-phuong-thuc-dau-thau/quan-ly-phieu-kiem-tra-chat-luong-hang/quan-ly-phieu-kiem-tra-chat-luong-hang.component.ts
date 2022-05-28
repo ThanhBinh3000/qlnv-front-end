@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -175,18 +176,18 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          // this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
-          //   if (res.msg == MESSAGE.SUCCESS) {
-          //     this.notification.success(
-          //       MESSAGE.SUCCESS,
-          //       MESSAGE.DELETE_SUCCESS,
-          //     );
-          //     this.search();
-          //   } else {
-          //     this.notification.error(MESSAGE.ERROR, res.msg);
-          //   }
-          //   this.spinner.hide();
-          // });
+          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -202,12 +203,47 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.router.navigate([urlChiTiet, id,]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
       this.router.navigate([urlChiTiet, id,]);
     }
   }
 
   export() {
-
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          "maDonVi": this.userInfo.MA_DVI,
+          "maHangHoa": this.maVthh,
+          "maNganKho": null,
+          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
+            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+            : null,
+          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
+            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+            : null,
+          "ngayLapPhieu": null,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": null,
+          "soPhieu": this.searchFilter.soPhieu,
+          "str": null,
+          "tenNguoiGiao": this.searchFilter.tenNguoiGiao,
+          "trangThai": null
+        };
+        this.quanLyPhieuKiemTraChatLuongHangService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }

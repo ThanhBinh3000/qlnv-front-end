@@ -17,6 +17,11 @@ export class DanhMucService extends BaseService {
     return this.httpClient.post<any>(url, null);
   }
 
+  loadDanhMucHangHoaTheoMaCha(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/ma-cha`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   loadDanhMucHangGiaoChiTieu(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/gct-vat-tu`;
     return this.httpClient.post<any>(url, null).toPromise();
@@ -64,6 +69,11 @@ export class DanhMucService extends BaseService {
 
   danhMucPhuongThucBaoQuanGetList(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  traCuuTieuChuanKyThuat(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 }
