@@ -147,10 +147,11 @@ export class QlQuyenComponent implements OnInit {
     */
   parentNodeSelected: any = [];
   nzClickNodeTree(event: any): void {
+    debugger
     if (event.keys.length > 0) {
       this.nodeSelected = event.keys[0];
-      this.selectedKeys = event.node.parentNode.key;
-
+      this.selectedKeys = event?.node?.parentNode?.key ?? null;
+      debugger
       this.parentNodeSelected = event?.parentNode?._title
       this.showDetailDonVi(event.keys[0])
     }
@@ -370,29 +371,31 @@ export class QlQuyenComponent implements OnInit {
   }
 
   xoa(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this._modalService.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: `Bạn có chắc chắn muốn xóa?`,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 360,
-      nzOnOk: () => {
-        // this.spinner.show()
-        // this.toTrinhService.delete(data.id).then(res => {
-        //   this.spinner.hide()
-        //   if (res.success) {
-        //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //     this.getDsToTrinh();
-        //   } else {
-        //     this.notification.error(MESSAGE.ERROR, res.error);
-        //   }
-        // })
-      }
-    });
+    if (this.nodeDetail.name) {
+      this._modalService.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: `Bạn có chắc chắn muốn xóa?`,
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 360,
+        nzOnOk: () => {
+          // this.spinner.show()
+          // this.toTrinhService.delete(data.id).then(res => {
+          //   this.spinner.hide()
+          //   if (res.success) {
+          //     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          //     this.getDsToTrinh();
+          //   } else {
+          //     this.notification.error(MESSAGE.ERROR, res.error);
+          //   }
+          // })
+        }
+      });
+    }
+
+
 
   }
 
@@ -408,7 +411,7 @@ export class QlQuyenComponent implements OnInit {
     this.spinner.show();
     try {
       this._qlQuyenService
-        .update(body)
+        .create(body)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(

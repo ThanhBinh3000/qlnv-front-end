@@ -1,24 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/quanLyPhieuKiemNghiemChatLuongHang.service';
 
 @Component({
-  selector: 'quan-ly-bien-ban-lay-mau',
-  templateUrl: './quan-ly-bien-ban-lay-mau.component.html',
-  styleUrls: ['./quan-ly-bien-ban-lay-mau.component.scss'],
+  selector: 'quan-ly-phieu-kiem-nghiem-chat-luong-thoc',
+  templateUrl: './quan-ly-phieu-kiem-nghiem-chat-luong-thoc.component.html',
+  styleUrls: ['./quan-ly-phieu-kiem-nghiem-chat-luong-thoc.component.scss'],
 })
-export class QuanLyBienBanLayMauComponent implements OnInit {
+export class QuanLyPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -32,27 +27,13 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   };
   routerUrl: string;
 
-  diemKho: string = '';
-  nhaKho: string = '';
-  nganLo: string = '';
-
-  loaiVthh: string;
-  routerVthh: string;
-
-  userInfo: UserLogin;
-
-  listDiemKho: any[] = [];
-  listNhaKho: any[] = [];
-  listNganLo: any[] = [];
-
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private bienBanLayMauService: QuanLyBienBanLayMauService,
+    private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
 
   ) { }
 
@@ -61,12 +42,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.spinner.show();
     try {
       let res = await this.donViService.layTatCaDonVi();
-      await Promise.all([
-        this.loadDiemKho(),
-        this.loadNhaKho(null),
-        this.loadNganLo(),
-        this.search(),
-      ]);
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -77,15 +53,15 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayLayMau: '',
-      soHopDong: '',
-      diemkho: '',
+      soPhieu: '',
+      ngayKnghiemTuNgay: '',
+      ngayKnghiemDenNgay: '',
       nhaKho: '',
       nganLoBaoQuan: '',
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.bienBanLayMauService.timKiem(body);
+    let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -144,7 +120,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanLayMauService.delete(item.id).then((res) => {
+          this.phieuKiemNghiemChatLuongHangService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -172,84 +148,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     else {
       let urlChiTiet = this.router.url + '/thong-tin'
       this.router.navigate([urlChiTiet, id,]);
-    }
-  }
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    let body = {
-      "diemKhoId": diemKhoId,
-      "maNhaKho": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNhaKho": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNhaKho = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async changeDiemKho() {
-    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.diemKho);
-    this.nhaKho = null;
-    if (diemKho && diemKho.length > 0) {
-      await this.loadNhaKho(diemKho[0].id);
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
-      this.loaiVthh = "01";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
-      this.loaiVthh = "00";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
-      this.loaiVthh = "02";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
     }
   }
 }
