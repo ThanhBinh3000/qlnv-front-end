@@ -22,8 +22,8 @@ export class MuaHangComponent implements OnInit, AfterViewInit {
     constructor(
         private userService: UserService,
         private router: Router,
-    ) { 
-        router.events.subscribe((val)=>{
+    ) {
+        router.events.subscribe((val) => {
             if (this.router.url) {
                 this.routerUrl = this.router.url;
             }
@@ -36,14 +36,17 @@ export class MuaHangComponent implements OnInit, AfterViewInit {
         }
     }
 
-    filterRole(url){
-        if(url.includes('/dau-thau/kehoach-luachon-nhathau/') && ( this.userService.isTongCuc() || this.userService.isCuc)){
+    filterRole(url) {
+        if (url.includes('/dau-thau/kehoach-luachon-nhathau/') && (this.userService.isTongCuc() || this.userService.isCuc)) {
             return true;
         }
-        if(url.includes('/dau-thau/trienkhai-luachon-nhathau/') && this.userService.isCuc()){
+        if (url.includes('/dau-thau/trienkhai-luachon-nhathau/') && this.userService.isCuc()) {
             return true;
         }
-        if(url.includes('/dau-thau/dieuchinh-luachon-nhathau/') && this.userService.isTongCuc()){
+        if (url.includes('/dau-thau/dieuchinh-luachon-nhathau/') && this.userService.isTongCuc()) {
+            return true;
+        }
+        if (url.includes('/hop-dong/') && (this.userService.isTongCuc() || this.userService.isCuc)) {
             return true;
         }
         return false;
