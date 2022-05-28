@@ -39,7 +39,7 @@
       </nz-card>
       <div class="tab__container">
         <nz-tabset nzType="card" class="tab__container mt-16" [nzTabBarExtraContent]="tableCard1">
-          <nz-tab [nzTitle]="'Thông tin phương án tổng hợp kế hoạch lựa chọn nhà thầu trình Tổng cục'" class="tt-chung__container"
+          <nz-tab [nzTitle]="'Thông tin tổng hợp kế hoạch lựa chọn nhà thầu trình Tổng cục'" class="tt-chung__container"
             (nzClick)="selectTabData('phuong-an-tong-hop')">
             <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
@@ -61,18 +61,18 @@
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                   <td>{{ data.maDvi }}</td>
-                  <td>{{ data.ngayTao }}</td>
+                  <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                   <td>{{ data.namKhoach }}</td>
                   <td>{{ data.tenHthucLcnt }}</td>
                   <td>{{ data.hthucLcnt }}</td>
                   <td>{{ data.pthucLcnt }}</td>
                   <td>{{ data.loaiHdong }}</td>
-                  <td></td>
+                  <td>{{ convertTrangThai(data.trangThai) }}</td>
                   <td class="text-center">
                     <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <a (click)="xoaItem(data)">
+                    <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -98,7 +98,7 @@
             </div>
           </nz-tab>
           
-          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp phương án'" class="tt-chung__container"
+          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp'" class="tt-chung__container"
             (nzClick)="selectTabData('danh-sach-chua-tong-hop')">
             <nz-table #basicTableNoTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
               [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -145,7 +145,7 @@
               </div>
             </div>
           </nz-tab>
-          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp phương án'" class="tt-chung__container"
+          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp'" class="tt-chung__container"
             (nzClick)="selectTabData('danh-sach-tong-hop')">
             <nz-table #basicTableTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
               [nzFrontPagination]="false" [nzShowPagination]="false">

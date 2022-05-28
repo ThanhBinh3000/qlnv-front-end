@@ -41,11 +41,11 @@ interface ItemData {
   bangChu: string;
 }
 @Component({
-  selector: 'app-themmoi-kehoach-lcnt',
-  templateUrl: './themmoi-kehoach-lcnt.component.html',
-  styleUrls: ['./themmoi-kehoach-lcnt.component.scss']
+  selector: 'app-themmoi-thongtin-dauthau',
+  templateUrl: './themmoi-thongtin-dauthau.component.html',
+  styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
 })
-export class ThemmoiKehoachLcntComponent implements OnInit {
+export class ThemmoiThongtinDauthauComponent implements OnInit {
   searchValue = '';
   searchFilter = {
     soDeXuat: '',

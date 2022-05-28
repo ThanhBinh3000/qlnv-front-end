@@ -17,40 +17,41 @@ export class TongCucComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    router.events.subscribe((val)=>{
+    router.events.subscribe((val) => {
       this.getTitleVthh();
     })
-   }
+  }
   lastBreadcrumb: string;
-  loaiVthh : string;
-  title : string;
-  selectedTab: string ;
+  loaiVthh: string;
+  title: string;
+  selectedTab: string;
   index = 0;
   async ngOnInit() {
     this.getTitleVthh();
-    this.selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu');
+    this.selectTabMenu('tong-hop', 'Tổng hợp kế hoạch lựa chọn nhà thầu');
   }
 
-  getTitleVthh(){
+  getTitleVthh() {
     this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
   }
 
-  selectTabMenu(tab,title) {
+  selectTabMenu(tab, title) {
     this.selectedTab = tab;
     this.title = title
     // let link = '/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+tab;
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+ tab]);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + this.route.snapshot.paramMap.get('type') + '/' + tab]);
   }
+
   onIndexChange(event: number): void {
     this.index = event;
-    if(this.index == 0){
-      this.selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu');
-    } else if(this.index == 1){
-      this.selectTabMenu('phuong-an','Phương án kế hoạch lựa chọn nhà thầu');
-    } else if(this.index == 2){
-      this.selectTabMenu('phe-duyet','Quyết định phê duyệt kế hoạch lựa chọn nhà thầu');
+    if (this.index == 0) {
+      this.selectTabMenu('tong-hop', 'Tổng hợp kế hoạch lựa chọn nhà thầu');
+    } else if (this.index == 1) {
+      this.selectTabMenu('phuong-an', 'Phương án kế hoạch lựa chọn nhà thầu');
+    } else if (this.index == 2) {
+      this.selectTabMenu('phe-duyet', 'Quyết định phê duyệt kế hoạch lựa chọn nhà thầu');
     }
-   
+
   }
   tuchoi(): void {
     this.lydotuchoi = true;

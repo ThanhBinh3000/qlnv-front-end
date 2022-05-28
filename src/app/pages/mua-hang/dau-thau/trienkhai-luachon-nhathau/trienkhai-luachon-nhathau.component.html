@@ -29,22 +29,17 @@
   </div>
 </nz-affix>
 <div class="tab-menu row">
-  <div class="tab-item col-6" [ngClass]="selectedTab == 'thong-tin' ? 'active-tab-menu' : ''"
-    (click)="selectTabMenu('thong-tin','Nhập thông tin đấu thầu')">
+  <div class="tab-item col-6" [ngClass]="selectedTab == 'thongtin-dauthau' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('thongtin-dauthau','Nhập thông tin đấu thầu')">
     <div class="content-tab-item">
       Nhập thông tin đấu thầu
     </div>
   </div>
-  <div class="tab-item col-6" [ngClass]="selectedTab == 'ket-qua' ? 'active-tab-menu' : ''"
-    (click)="selectTabMenu('ket-qua','Nhập quyết định kết quả lựa chọn nhà thầu')">
+  <div class="tab-item col-6" [ngClass]="selectedTab == 'ketqua-dauthau' ? 'active-tab-menu' : ''"
+    (click)="selectTabMenu('ketqua-dauthau','Nhập quyết định kết quả lựa chọn nhà thầu')">
     <div class="content-tab-item">
       Nhập quyết định kết quả lựa chọn nhà thầu
     </div>
   </div>
 </div>
-<div *ngIf="selectedTab == 'thong-tin'">
-  <app-quyetdinh-ketqua-lcnt></app-quyetdinh-ketqua-lcnt>
-</div>
-<div *ngIf="selectedTab == 'ket-qua'">
-  <app-thongtin-dauthau></app-thongtin-dauthau>
-</div>
+<router-outlet></router-outlet>
