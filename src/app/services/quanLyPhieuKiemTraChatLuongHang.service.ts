@@ -21,6 +21,11 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  chiTiet(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   them(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/them-moi`;
     return this.httpClient.post(url, body).toPromise();
@@ -34,5 +39,15 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/phe-duyet`;
     return this.httpClient.put(url, body).toPromise();
+  }
+
+  deleteData(id: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/${id}`;
+    return this.httpClient.delete(url).toPromise();
+  }
+
+  exportList(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/export/list`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }

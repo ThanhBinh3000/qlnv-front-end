@@ -24,6 +24,11 @@ export class ThongTinHopDongService extends BaseService {
     return this.httpClient.get<any>(url_).toPromise();
   }
 
+  loadChiTietSoHopDong(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/chi-tiet/so-hd`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   them(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();

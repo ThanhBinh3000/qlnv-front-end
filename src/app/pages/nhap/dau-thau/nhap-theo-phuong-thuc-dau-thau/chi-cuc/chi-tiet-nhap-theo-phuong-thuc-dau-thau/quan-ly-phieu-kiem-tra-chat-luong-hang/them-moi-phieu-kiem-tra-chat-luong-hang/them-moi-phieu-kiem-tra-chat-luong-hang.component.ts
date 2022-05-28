@@ -62,14 +62,14 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.getTitleVthh();
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
-      this.detail.maDvi = this.userInfo.MA_DVI;
+      this.detail.maDonVi = this.userInfo.MA_DVI;
+      await this.loadChiTiet(this.id);
       await Promise.all([
         this.getIdNhap(),
         this.loadDiemKho(),
         this.loadNganLo(),
         this.loadTieuChuan(),
       ]);
-      await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -151,6 +151,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.detail.maDiemKho);
     this.detail.maNhaKho = null;
     if (diemKho && diemKho.length > 0) {
+      this.detail.diemKhoId = diemKho[0].id;
       await this.loadNhaKho(diemKho[0].id);
     }
   }
@@ -179,8 +180,15 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      this.updateEditCache();
+      let res = await this.quanLyPhieuKiemTraChatLuongHangService.chiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.detail = res.data;
+          this.loadNhaKho(this.detail.diemKhoId);
+        }
+      }
     }
+    this.updateEditCache();
   }
 
   async getIdNhap() {
@@ -194,8 +202,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let res = await this.quyetDinhGiaoNhapHangService.chiTiet(this.detail.quyetDinhNhapId);
           if (res.msg == MESSAGE.SUCCESS) {
             this.detailGiaoNhap = res.data;
-            this.detail.hopDongId = this.detailGiaoNhap.hdId;
-            await this.getHopDong(this.detail.hopDongId);
+            await this.getHopDong(this.detailGiaoNhap.soHd);
           }
           else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -207,9 +214,13 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async getHopDong(id) {
     if (id) {
-      let res = await this.thongTinHopDongService.loadChiTiet(id);
+      let body = {
+        "str": id
+      }
+      let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
+        this.detail.hopDongId = this.detailHopDong.id;
         this.detail.ngayHopDong = this.detailHopDong.ngayKy;
         this.detail.maHangHoa = this.detailHopDong.loaiVthh;
         this.detail.khoiLuongKiemTra = this.detailHopDong.soLuong;
@@ -258,17 +269,18 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         "khoiLuong": this.detail.khoiLuong,
         "lyDoTuChoi": null,
         "maDiemKho": this.detail.maDiemKho,
-        "maDonVi": this.detail.maDvi,
+        "diemKhoId": this.detail.diemKhoId,
+        "maDonVi": this.detail.maDonVi,
         "maHangHoa": this.maVthh,
-        "maNganKho": this.detail.maNganKho,
+        "maNganLo": this.detail.maNganLo,
         "maNhaKho": this.detail.maNhaKho,
-        "maQhns": this.detail.maDvi,
+        "maQhns": this.detail.maDonVi,
         "ngayGdinh": this.detail.ngayGdinh,
         "ngayKiemTra": null,
         "ngayPheDuyet": null,
         "nguoiGiaoHang": this.detail.nguoiGiaoHang,
         "nguoiPheDuyet": null,
-        "quyetDinhNhapId": null,
+        "quyetDinhNhapId": this.detail.quyetDinhNhapId,
         "soChungThuGiamDinh": this.detail.soChungThuGiamDinh,
         "soPhieu": this.detail.soPhieu,
         "soPhieuAnToanThucPham": null,

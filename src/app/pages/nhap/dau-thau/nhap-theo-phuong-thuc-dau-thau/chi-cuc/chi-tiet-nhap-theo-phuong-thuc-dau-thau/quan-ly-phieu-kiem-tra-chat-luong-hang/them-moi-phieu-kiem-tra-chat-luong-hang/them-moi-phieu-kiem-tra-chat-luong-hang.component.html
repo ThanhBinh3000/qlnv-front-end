@@ -49,7 +49,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Mã QHNS
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="detail.maDonVi" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -87,7 +87,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn/Lô bảo quản
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNganKho">
+                <nz-select [(ngModel)]="detail.maNganLo">
                   <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
                   </nz-option>
                 </nz-select>
