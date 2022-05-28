@@ -53,6 +53,10 @@ const routes: Routes = [
                 component: ThemMoiPhieuKiemTraChatLuongHangComponent,
             },
             {
+                path: 'phieu-kiem-tra/xem-chi-tiet/:id',
+                component: ThemMoiPhieuKiemTraChatLuongHangComponent,
+            },
+            {
                 path: 'phieu-nhap-kho',
                 component: QuanLyPhieuNhapKhoComponent,
             },

@@ -472,7 +472,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       dsGoiThauDialog.tenDiemKho = res.value.tenDiemKho;
       dsGoiThauDialog.donGia = +res.value.donGia;
       dsGoiThauDialog.goiThau = res.value.goiThau;
-      dsGoiThauDialog.id = +res.value.id;
+      // dsGoiThauDialog.id = +res.value.id;
       dsGoiThauDialog.soLuong = +res.value.soLuong;
       dsGoiThauDialog.thanhTien = res.value.thanhTien;
       dsGoiThauDialog.idVirtual = new Date().getTime();
@@ -521,7 +521,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     body.children1 = this.formThongTinChung.value;
     body.children2 = this.listOfData;
     body.chidlren3 = this.baoGiaThiTruongList;
-    console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dauThauService.update(body);

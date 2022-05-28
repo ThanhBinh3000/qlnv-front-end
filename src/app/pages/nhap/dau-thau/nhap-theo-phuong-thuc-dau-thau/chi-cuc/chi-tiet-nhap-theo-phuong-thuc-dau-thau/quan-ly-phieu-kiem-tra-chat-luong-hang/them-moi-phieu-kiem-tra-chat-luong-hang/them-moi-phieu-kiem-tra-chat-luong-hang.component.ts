@@ -27,6 +27,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   id: number = 0;
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -60,9 +61,11 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.checkIsView();
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDonVi = this.userInfo.MA_DVI;
+      this.detail.trangThai = "00";
       await this.loadChiTiet(this.id);
       await Promise.all([
         this.getIdNhap(),
@@ -75,6 +78,16 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
     }
   }
 
@@ -341,7 +354,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
@@ -378,7 +391,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: '01',
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
@@ -523,5 +536,18 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.detail?.ketQuaKiemTra.forEach((lt, i) => {
       lt.stt = i + 1;
     });
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
+    }
   }
 }

@@ -44,7 +44,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   listLoaiKho: any[] = [];
   listThuKho: any[] = [];
   listDiemKho: any[] = [];
-  listNganKho: any[] = [];
+  listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
 
@@ -77,7 +77,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNganKho(),
         this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
         this.loadThuKho(),
@@ -308,25 +307,33 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  async loadNganKho() {
+  async loadNhaKho(diemKhoId: any) {
     let body = {
-      "maNganKho": null,
-      "nhaKhoId": null,
+      "diemKhoId": diemKhoId,
+      "maNhaKho": null,
       "paggingReq": {
         "limit": 1000,
         "page": 1
       },
       "str": null,
-      "tenNganKho": null,
+      "tenNhaKho": null,
       "trangThai": null
     };
-    let res = await this.tinhTrangKhoHienThoiService.nganKhoGetList(body);
+    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
-        this.listNganKho = res.data.content;
+        this.listNhaKho = res.data.content;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.detail.maDiemKho);
+    this.detail.maNhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
     }
   }
 

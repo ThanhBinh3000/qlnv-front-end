@@ -37,7 +37,7 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/phe-duyet`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-phieu-kiem-tra-chat-luong-hang-lt/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 

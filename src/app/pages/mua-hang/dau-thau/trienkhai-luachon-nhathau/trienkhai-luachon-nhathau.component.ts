@@ -21,31 +21,32 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService : DanhSachDauThauService,
+    private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
-    router.events.subscribe((val)=>{
+    router.events.subscribe((val) => {
       this.getTitleVthh();
     })
-   }
+  }
   loaiVthh: string = ''
-  selectedTab : string = ''
-  title : string = ''
+  selectedTab: string = ''
+  title: string = ''
   ngOnInit(): void {
-    this.selectTabMenu('thong-tin','Nhập thông tin đấu thầu');
+    this.selectTabMenu('thongtin-dauthau', 'Nhập thông tin đấu thầu');
     this.getTitleVthh();
   }
 
-  getTitleVthh(){
+  getTitleVthh() {
     this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
   }
 
-  selectTabMenu(tab,title) {
+  selectTabMenu(tab, title) {
     this.selectedTab = tab;
     this.title = title
+    // let link = '/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+tab;
+    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + this.route.snapshot.paramMap.get('type') + '/' + tab]);
   }
-
 }

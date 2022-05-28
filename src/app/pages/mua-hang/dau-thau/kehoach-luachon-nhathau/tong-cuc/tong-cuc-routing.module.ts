@@ -49,6 +49,14 @@ const routes: Routes = [
       {
         path: 'phe-duyet/them-moi',
         component: ThemmoiQuyetdinhKhlcntComponent,
+      },
+      {
+        path: 'phe-duyet/chinh-sua/:id',
+        component: ThemmoiQuyetdinhKhlcntComponent,
+      },
+      {
+        path: 'phe-duyet/chi-tiet/:id',
+        component: ThemmoiQuyetdinhKhlcntComponent,
       }
     ]
   },

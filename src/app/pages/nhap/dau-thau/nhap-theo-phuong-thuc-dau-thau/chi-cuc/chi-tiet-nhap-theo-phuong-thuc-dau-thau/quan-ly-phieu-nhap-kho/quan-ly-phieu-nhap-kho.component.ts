@@ -275,7 +275,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         "limit": this.pageSize,
         "orderBy": null,
         "orderType": null,
-        "page": this.page
+        "page": this.page - 1
       },
       "soPhieu": this.searchFilter.soPhieu,
       "str": null,
