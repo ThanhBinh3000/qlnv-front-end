@@ -158,15 +158,6 @@ export class BaoCaoComponent implements OnInit {
   listOfData: any[] = [];
 
   async ngOnInit() {
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`
-      });
-    }
-    this.listOfData = data;
     this.id = this.routerActive.snapshot.paramMap.get('id');
     let lbc = this.routerActive.snapshot.paramMap.get('baoCao');
     let userName = this.userService.getUserName();
@@ -356,6 +347,11 @@ export class BaoCaoComponent implements OnInit {
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
               item.checked = false;
             }
+            this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+            this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+            this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+            this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+            this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
             item?.lstCtietBcaos?.filter(data => {
               switch (item.maLoai) {
                 // phu luc 1
@@ -943,16 +939,6 @@ export class BaoCaoComponent implements OnInit {
     // delete object have checked = true
     this.danhSachChiTietPhuLucTemp = this.danhSachChiTietPhuLucTemp.filter(item => item.checked != true)
     this.allCheckedTemp = false;
-  }
-
-  // luu temp vao bang chinh
-  saveTemp() {
-    this.baoCao?.lstBcaos.forEach(item => {
-      if (item.maLoai == this.tabSelected) {
-        item.lstCtietBcaos = this.danhSachChiTietPhuLucTemp;
-      }
-    });
-    this.tabSelected = null;
   }
 
   // xoa phu luc
