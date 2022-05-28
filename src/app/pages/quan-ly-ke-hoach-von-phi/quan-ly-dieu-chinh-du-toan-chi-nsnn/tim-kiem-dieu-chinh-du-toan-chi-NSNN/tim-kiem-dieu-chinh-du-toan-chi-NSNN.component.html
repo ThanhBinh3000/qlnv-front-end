@@ -10,7 +10,8 @@
           <i nz-icon nzType="stop"></i>
           Đóng
         </button>
-        <button nz-button type="submit" class="search__button--search" (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
+        <button nz-button type="submit" class="search__button--search"
+          (click)="pages.page = 1; pages.size = 10 ;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -25,66 +26,74 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-        <form nz-form [formGroup]="validateForm">
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="12">
-              <label class="search__label">Năm hiện tại (N)</label>
-              <nz-form-item>
-                <nz-form-control nzErrorTip="">
-                  <nz-input-number [nzSize]="'small'"  [(ngModel)]="searchFilter.nam" formControlName="namhientai"></nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Ngày lập từ</label>
-              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đến ngày</label>
-              <nz-date-picker formControlName="temp" class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
-            </div>
-            <!-- <div nz-col nzSpan="12">
-              <label class="search__label">Đơn vị tạo</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tạo" [(ngModel)]="searchFilter.donViTao" formControlName="temp">
-                <nz-option *ngFor="let item of donViTaos" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
-              </nz-select>
-            </div> -->
-            <div nz-col nzSpan="12">
-              <label class="search__label">Mã báo cáo</label>
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" formControlName="temp"/>
-            </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Trạng thái</label>
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai" formControlName="temp">
-                <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
-              </nz-select>
-            </div>
+      <nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
+          <div nz-col nzSpan="12">
+            <label class="search__label">Năm báo cáo</label>
+            <nz-input-number [nzSize]="'small'"
+              [class]="searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999 || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
+              [(ngModel)]="searchFilter.nam"></nz-input-number>
           </div>
-        </form>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Ngày lập từ</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đến ngày</label>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Mã báo cáo</label>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" />
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đợt báo cáo</label>
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="searchFilter.dotBcao"></nz-input-number>
+          </div>
+          <div nz-col nzSpan="12">
+            <label class="search__label">Trạng thái</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
       </nz-card>
       <nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
+        <div class="row">
+          <div class="col-lg-12 form-group">
+            <label>Tổng số bản ghi được tìm thấy: {{totalElements}}</label>
+          </div>
+        </div>
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
               <th width="60px">STT</th>
-              <th width="130px">Mã báo cáo</th>
-              <th width="175px">Ngày lập</th>
-              <th width="175px">Năm hiện tại (N)</th>
-              <th width="175px" class="text-center">Trạng thái</th>
-              <th width="" class="text-center">Đơn vị lập</th>
+              <th width="150px">Mã báo cáo</th>
+              <th width="200px">Ngày tạo</th>
+              <th width="150px">Năm báo cáo</th>
+              <th width="200px" class="text-center">Trạng thái</th>
+              <th colspan="2"></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of danhSachBaoCao; let i = index">
+            <tr *ngFor="let item of danhSachDieuChinh; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td><a (click)="xemChiTiet(item.maLoaiBcao, item.id)" style="color: #1890ff;">{{ item.maBcao }}</a></td>
+              <td>{{ item.maBcao}}</td>
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
-              <td class="text-center">{{item.tenDvi}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}</td>
+              <td><a (click)="xemChiTiet(item.id)" style="color: #1890ff;">Xem</a></td>
+              <!-- <td (click)="xoaDuToanDieuChinh(item.id)"><span class="xoa">Xóa</span></td> -->
+              <td>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa bản ghi này?"
+                      (nzOnConfirm)="xoaDuToanDieuChinh(item.id)" class="xoa">
+                      Xóa
+                  </a>
+              </td>
             </tr>
           </tbody>
         </nz-table>
@@ -111,10 +120,6 @@
         <button type="button" class="btn btn-main" (click)="taoMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
-        </button>
-        <button type="button" class="btn btn-sub">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
         </button>
       </ng-template>
     </div>

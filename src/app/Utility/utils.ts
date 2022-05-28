@@ -622,16 +622,16 @@ export const TRANG_THAI_TIM_KIEM = [
     },
     {
         id: "8",
-        tenDm: 'ĐV cấp trên từ chối'
+        tenDm: 'Từ chối'
     },
     {
         id: "9",
-        tenDm: 'Đv cấp trên duyệt'
+        tenDm: 'Chấp nhận'
     },
-    {
-        id: "10",
-        tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
-    },
+    // {
+    //     id: "10",
+    //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
+    // },
 ]
 
 // trang thai chi tiet bao cao

@@ -99,6 +99,10 @@ export class TimKiemComponent implements OnInit {
 				return;
 			}
 		}
+		let trangThais = [];
+		if (this.searchFilter.trangThai){
+			trangThais = [this.searchFilter.trangThai];
+		}
 		let requestReport = {
 			loaiTimKiem: "0",
 			maBcao: this.searchFilter.maBaoCao,
@@ -110,7 +114,7 @@ export class TimKiemComponent implements OnInit {
 				limit: this.pages.size,
 				page: this.pages.page,
 			},
-			trangThais: [],
+			trangThais: trangThais,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

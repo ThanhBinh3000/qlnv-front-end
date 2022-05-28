@@ -20,19 +20,19 @@
 				</button>
 				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Trưởng BP trả lại</span>
+					<span>Từ chối</span>
 				</a>
 				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Trưởng BP phê duyệt</span>
+					<span>Chấp nhận</span>
 				</button>
 				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Lãnh đạo trả lại</span>
+					<span>Từ chối</span>
 				</button>
 				<a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Lãnh đạo duyệt</span>
+					<span>Chấp nhận</span>
 				</a>
 				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -40,7 +40,7 @@
 				</button>
 				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Đơn vị cấp trên chấp nhận</span>
+					<span>Chấp nhận</span>
 				</a>
 				<a class="btn btn-main" [hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
@@ -66,9 +66,9 @@
 					<thead>
 						<tr>
 							<th width="130px">Mã báo cáo</th>
-							<th width="175px">Năm hiện hành</th>
-							<th width="175px">Ngày lập</th>
-							<th width="175px">Người lập</th>
+							<th width="175px">Năm báo cáo</th>
+							<th width="175px">Ngày tạo</th>
+							<th width="175px">Người tạo</th>
 							<th width="300px">Số công văn</th>
 							<th width="175px">Ngày trình duyệt</th>
 							<th width="175px">Ngày duyệt<br>(Trưởng bộ phận duyệt)</th>
@@ -100,7 +100,15 @@
 							<td>{{ngayDuyetTBP}}</td>
 							<td>{{ngayDuyetLD}}</td>
 							<td>{{ngayCapTrenTraKq}}</td>
-							<td>{{getStatusName(trangThaiBaoCao)}}</td>
+							<td>
+								<ng-container
+									*ngIf="trangThaiBaoCao == '3' || trangThaiBaoCao == '5' || trangThaiBaoCao == '8'; else chapnhan">
+									{{getStatusName(trangThaiBaoCao)}} - {{lyDoTuChoi}}
+								</ng-container>
+								<ng-template #chapnhan>
+									{{getStatusName(trangThaiBaoCao)}}
+								</ng-template>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
@@ -160,13 +168,20 @@
 										</div>
 									</td>
 									<td>
-										{{ getStatusBM(data.trangThai) }}
+										<ng-container *ngIf="data.trangThai == '0'; else ok">
+											{{ getStatusBM(data.trangThai) }} - {{data.lyDoTuChoi}}
+										</ng-container>
+										<ng-template #ok>
+											{{ getStatusBM(data.trangThai) }}
+										</ng-template>
+
 									</td>
 									<td>
 										<ng-container
 											*ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templateNguoiBcao ">
 											<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
-												[(ngModel)]="data.nguoiBcao">
+												[(ngModel)]="data.nguoiBcao"
+												[class]="data.nguoiBcao ?'' : 'input-error-validate'">
 												<nz-option *ngFor="let item of canBos" [nzValue]="item.fullName"
 													[nzLabel]="item.fullName">
 												</nz-option>
@@ -183,7 +198,8 @@
 
 									<td>
 										<ng-container *ngIf="data?.id?.length != 38">
-											<ng-container *ngIf="data.nguoiBcao == userInfo?.username && !status; else xem">
+											<ng-container
+												*ngIf="data.nguoiBcao == userInfo?.username && !status; else xem">
 												<button type="button" class="btn btn-main"
 													(click)="newTab(data.maBieuMau)">
 													<span>Nhập dữ liệu</span>
@@ -317,7 +333,8 @@
 							</app-tong-hop-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '17'">
-							<app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam [data]="data" (dataChange)="getNewData($event)">
+							<app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam [data]="data"
+								(dataChange)="getNewData($event)">
 							</app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '18'">

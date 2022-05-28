@@ -58,7 +58,7 @@
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" 
+			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM"
 				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
@@ -70,14 +70,13 @@
 						<tr>
 							<th nzWidth="50px">STT</th>
 							<th nzWidth="100px">Mã báo cáo</th>
-							<th nzWidth="150px">Ngày tạo</th>
-							<th nzWidth="150px">Năm báo cáo</th>
+							<th nzWidth="150px">Ngày lập</th>
+							<th nzWidth="150px">Năm hiện tại (N)</th>
 							<th nzWidth="150px">Ngày trình duyệt</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
 							<th nzWidth="150px">Ngày cấp trên trả kết quả</th>
 							<th nzWidth="150px" [hidden] = "status">Đơn vị lập</th>
-							<th nzWidth="150px" [hidden] = "status">Trạng thái</th>
 							<th nzWidth="50px" class="text-center"></th>
 						</tr>
 					</thead>
@@ -106,10 +105,7 @@
 							<td [hidden]="status">
 								{{getUnitName(item.maDvi)}}
 							</td>
-							<td [hidden]="status">
-								{{getStatusName(item.trangThai)}}
-							</td>
-							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;"> 
+							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 								<ng-container *ngIf="!item.ngayTraKq; else xem">
 									Phê duyệt
 								</ng-container>
