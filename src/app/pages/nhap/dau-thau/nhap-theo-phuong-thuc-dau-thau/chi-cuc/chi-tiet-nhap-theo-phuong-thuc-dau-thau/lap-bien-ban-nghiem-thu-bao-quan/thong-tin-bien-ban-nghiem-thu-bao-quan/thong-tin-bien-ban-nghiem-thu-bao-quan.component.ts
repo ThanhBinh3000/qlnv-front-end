@@ -46,6 +46,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   listNganLo: any[] = [];
   listLoaiKho: any[] = [];
   listPTBaoQuan: any[] = [];
+  listDonViTinh: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -79,6 +80,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.loadNganLo(),
         this.loadLoaiKho(),
         this.loadPTBaoQuan(),
+        this.loadDonViTinh(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -211,7 +213,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   caculatorSoLuong(item: any) {
     if (item) {
       item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
-      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0)
+      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0);
     }
   }
 
@@ -297,6 +299,29 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadDonViTinh() {
+    try {
+      const res = await this.donViService.loadDonViTinh();
+      this.listDonViTinh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        for (let i = 0; i < res.data.length; i++) {
+          const item = {
+            ...res.data[i],
+            labelDonViTinh: res.data[i].tenDviTinh,
+          };
+          this.listDonViTinh.push(item);
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 

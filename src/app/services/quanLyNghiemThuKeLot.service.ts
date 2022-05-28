@@ -41,7 +41,7 @@ export class QuanLyNghiemThuKeLotService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/bb-nghiemthu-klst/phe-duyet`;
-    return this.httpClient.put(url, body).toPromise();
+    return this.httpClient.post(url, body).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
