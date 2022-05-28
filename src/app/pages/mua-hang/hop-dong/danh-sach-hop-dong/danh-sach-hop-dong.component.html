@@ -33,34 +33,42 @@
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Ngày ký</label>
+            <nz-range-picker placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <!-- <div nz-col nzSpan="4">
-            <label class="search__label">Năm kế hoạch</label>
-            <nz-select [(ngModel)]="searchFilter.namKeHoach">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          <div nz-col nzSpan="6">
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Loại hàng DTQG</label>
+            <nz-select>
+              <nz-option [nzValue]="maVthh" [nzLabel]="loaiStr"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="12">
-            <label class="search__label">Trích yếu</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" placeholder="Trích yếu" />
+          <div nz-col nzSpan="6">
+            <label class="search__label">Căn cứ KQ LCNT</label>
+            <nz-input-group nzAddOnAfterIcon="folder-open">
+              <input nz-input [readonly]="true" />
+            </nz-input-group>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Tìm theo bên B</label>
+            <input class="search__input" nz-input placeholder="Tìm theo bên B" />
           </div>
           <div nz-col nzSpan="24">
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
+              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
                 [nzAutocomplete]="auto" />
             </nz-input-group>
             <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
             </ng-template>
             <nz-autocomplete #auto>
-              <ng-container>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
-                  (click)="selectDonVi(option)">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </ng-container>
+              <nz-auto-option *ngFor="let option of optionsDonViShow" [nzValue]="option.labelDonVi"
+                (click)="selectDonVi(option)">
+                {{ option.labelDonVi }}
+              </nz-auto-option>
             </nz-autocomplete>
-          </div> -->
+          </div>
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--search" (click)="search()">
@@ -79,31 +87,37 @@
           <thead>
             <tr>
               <th width="60px">STT</th>
-              <th width="45px">
-                <label nz-checkbox></label>
-              </th>
-              <th width="130px">Số quyết định</th>
+              <th width="130px">Số HĐ</th>
               <th width="175px">Ngày ký</th>
-              <th width="175px">Năm kế hoạch</th>
-              <th width="" class="text-center">Trích yếu</th>
-              <th width="175px" class="text-center">Trạng thái</th>
+              <th width="175px">Loại hàng DTQG</th>
+              <th width="175px">Tên hợp đồng</th>
+              <th width="">Bên A</th>
+              <th width="300px">Bên B</th>
+              <th width="300px">Giá trị hợp đồng</th>
+              <th width="175px">Trạng thái</th>
               <th width="130px" class="text-center"></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
               <td>{{(page-1)*pageSize+i+1}}</td>
-              <td>
-                <label nz-checkbox></label>
-              </td>
-              <td>{{ data.soQuyetDinh }}</td>
-              <td>{{ data.ngayKy }}</td>
-              <td>{{ data.namKeHoach }}</td>
-              <td class="text-center">{{ data.trichYeu }}</td>
-              <td class="text-center">{{ data.trangThaiDuyet }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td class="text-center">
                 <a (click)="redirectToChiTiet(false, data.id)">
                   <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="redirectToChiTiet(true, data.id)">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a>
+                  <i class="icon htvbdh_da-xu-ly"></i>
                 </a>
                 <a (click)="xoaItem(data)">
                   <i class="fa fa-trash-o do"></i>
