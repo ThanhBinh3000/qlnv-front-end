@@ -19,16 +19,24 @@
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Điểm kho</label>
-              <input class="search__input" placeholder="Điểm kho" nz-input [(ngModel)]="searchFilter.diemkho" />
+              <nz-select [(ngModel)]="diemKho" (ngModelChange)="changeDiemKho()">
+                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
+                </nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Nhà kho</label>
-              <input class="search__input" placeholder="Nhà kho" nz-input [(ngModel)]="searchFilter.nhaKho" />
+              <nz-select [(ngModel)]="nhaKho">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
+                </nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Ngăn/lô bảo quản</label>
-              <input class="search__input" placeholder="Ngăn/lô bảo quản" nz-input
-                [(ngModel)]="searchFilter.nganLoBaoQuan" />
+              <nz-select [(ngModel)]="nganLo">
+                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
+                </nz-option>
+              </nz-select>
             </div>
           </div>
           <div class="cangiua group-button-search">
