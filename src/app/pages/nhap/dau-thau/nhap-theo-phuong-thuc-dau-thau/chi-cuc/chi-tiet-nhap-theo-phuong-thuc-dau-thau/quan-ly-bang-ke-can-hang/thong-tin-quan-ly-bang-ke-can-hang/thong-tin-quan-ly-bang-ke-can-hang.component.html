@@ -104,7 +104,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho()">
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                   </nz-option>
                 </nz-select>
@@ -116,7 +116,7 @@
                   Nhà kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.maNhaKho">
-                  <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maNgankho" [nzLabel]="item.tenNgankho">
+                  <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                   </nz-option>
                 </nz-select>
               </nz-form-item>

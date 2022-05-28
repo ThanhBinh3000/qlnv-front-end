@@ -72,7 +72,8 @@
                   Số phiếu kiểm tra chất lượng
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.phieuKtClId">
-                  <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id" [nzLabel]="item.ten">
+                  <nz-option *ngFor="let item of listPhieuKiemTraChatLuong" [nzValue]="item.id"
+                    [nzLabel]="item.soPhieu">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -209,7 +210,10 @@
               <tr>
                 <td></td>
                 <td>
-                  <input type="text" nz-input class="w-300" [(ngModel)]="create.tenVatTu" />
+                  <nz-select [(ngModel)]="create.tenVatTu" (ngModelChange)="changeDanhMucHang(create)">
+                    <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
+                    </nz-option>
+                  </nz-select>
                 </td>
                 <td>{{create.maVatTu}}</td>
                 <td>{{create.donViTinh}}</td>
@@ -257,7 +261,11 @@
                 <ng-template #editTemplate>
                   <td></td>
                   <td>
-                    <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.tenVatTu" />
+                    <nz-select [(ngModel)]="editDataCache[data.stt]?.data.tenVatTu"
+                      (ngModelChange)="changeDanhMucHang(editDataCache[data.stt]?.data)">
+                      <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
+                      </nz-option>
+                    </nz-select>
                   </td>
                   <td>{{editDataCache[data.stt]?.data.maVatTu}}</td>
                   <td>{{editDataCache[data.stt]?.data.donViTinh}}</td>

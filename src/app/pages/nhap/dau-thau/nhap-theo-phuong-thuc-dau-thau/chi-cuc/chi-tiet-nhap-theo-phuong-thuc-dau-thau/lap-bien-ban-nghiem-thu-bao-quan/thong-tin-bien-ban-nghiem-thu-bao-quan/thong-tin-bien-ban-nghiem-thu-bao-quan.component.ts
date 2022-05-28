@@ -72,6 +72,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.getIdNhap();
       this.checkIsView();
       this.create.dvt = "Tấn";
+      this.detail.trangThai = "00";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -139,7 +140,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   caculatorThanhTienQT() {
     if (this.detail && this.detail?.detail && this.detail?.detail.length > 0) {
-      let sum = this.detail?.detail.map(item => item.thanhTienTn).reduce((prev, next) => prev + next);
+      let sum = this.detail?.detail.map(item => item.thanhTienQt).reduce((prev, next) => prev + next);
       return sum ?? 0;
     }
     return 0;
@@ -364,7 +365,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -401,7 +402,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: '01',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -438,7 +439,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: '02',
           };
           let res =
             await this.quanLyNghiemThuKeLotService.updateStatus(
@@ -589,6 +590,19 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === '00' ||
+      trangThai === '01' ||
+      trangThai === '04' ||
+      trangThai === '03'
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === '02') {
+      return 'da-ban-hanh';
     }
   }
 }

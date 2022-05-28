@@ -39,6 +39,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
+  listDanhMucHang: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -73,6 +74,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         this.loadDiemKho(),
         this.loadNganLo(),
         this.loadPhieuKiemTraChatLuong(),
+        this.loadDanhMucHang(),
       ]);
       await this.loadChiTiet(this.id);
       this.spinner.hide();
@@ -118,7 +120,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "limit": 1000,
         "orderBy": null,
         "orderType": null,
-        "page": 1
+        "page": 0
       },
       "soPhieu": null,
       "str": null,
@@ -131,6 +133,30 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.listPhieuKiemTraChatLuong = data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadDanhMucHang() {
+    let body = {
+      "str": this.maVthh
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDanhMucHang = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDanhMucHang(item) {
+    if (item) {
+      let getHang = this.listDanhMucHang.filter(x => x.ten == this.create.tenVatTu);
+      if (getHang && getHang.length > 0) {
+        item.maVatTu = getHang[0].ma;
+        item.donViTinh = getHang[0].maDviTinh;
+      }
     }
   }
 
@@ -512,32 +538,30 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "detail": this.detail?.detail ?? [],
-        "dinhMuc": this.detail?.dinhMuc,
-        "fileDinhKems": [],
-        "hthucBquan": this.detail?.hthucBquan,
-        "hthucKlot": this.detail?.hthucKlot,
+        "bbNghiemThuKlId": 0,
+        "diaChiGiaoNhan": null,
+        "ghiChu": null,
+        "hangHoaList": this.detail?.hangHoaList,
         "id": this.id,
-        "keToan": this.detail?.keToan,
-        "ketLuan": this.detail?.ketLuan,
-        "kieuKlot": this.detail?.kieuKlot,
-        "kyThuatVien": this.detail?.kyThuatVien,
-        "ldoTuchoi": null,
-        "lhKho": this.detail?.lhKho,
-        "loaiVthh": this.loaiVthh,
-        "maDvi": this.detail?.maDvi,
-        "maNganKho": this.detail?.maNgankho,
-        "maVthh": this.maVthh,
-        "ngayKthuc": null,
+        "loaiHinhNhap": null,
+        "maDiemKho": this.detail?.maDiemKho,
+        "maDvi": this.detail.maDvi,
+        "maNganLo": this.detail.maNganLo,
+        "maNhaKho": this.detail.maNhaKho,
+        "maQhns": this.detail.maDvi,
         "ngayLap": null,
-        "ngayNghiemThu": this.detail?.ngayNghiemThu ? dayjs(this.detail?.ngayNghiemThu).format('YYYY-MM-DD') : null,
-        "pthucBquan": this.detail?.pthucBquan,
-        "slThucNhap": this.detail?.slThucNhap,
-        "soBb": this.detail?.soBb,
-        "thuKho": this.detail?.thuKho,
-        "thuTruong": this.detail?.thuTruong,
-        "tichLuong": this.detail?.tichLuong,
-        "trangThaiNhap": null
+        "ngayNhapKho": this.detail.ngayNhapKho,
+        "ngayQdNvuNhang": this.detail.ngayQdNvuNhang,
+        "ngayTao": this.detail.ngayTao,
+        "nguoiGiaoHang": this.detail.nguoiGiaoHang,
+        "phieuKtClId": this.detail.phieuKtClId,
+        "soPhieu": this.detail.soPhieu,
+        "soQdNvuNhang": this.idNhapHang,
+        "taiKhoanCo": this.detail.taiKhoanCo,
+        "taiKhoanNo": this.detail.taiKhoanNo,
+        "tenNganLo": null,
+        "tenNguoiGiaoNhan": this.detail.nguoiGiaoHang,
+        "thoiGianGiaoNhan": this.detail.thoiGianGiaoNhan
       };
       if (this.id > 0) {
         let res = await this.quanLyPhieuNhapKhoService.sua(
