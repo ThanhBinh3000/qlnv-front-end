@@ -73,6 +73,7 @@
 							<th width="200px">Ngày tạo</th>
 							<th width="150px">Năm báo cáo</th>
 							<th width="200px" class="text-center">Trạng thái</th>
+							<th width="60px"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -86,6 +87,11 @@
 							<td>{{item.ngayTao}}</td>
 							<td>{{item.namHienHanh}}</td>
 							<td class="text-center">{{getStatusName(item.trangThai)}}</td>
+							<td>
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
+								</ng-container>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
