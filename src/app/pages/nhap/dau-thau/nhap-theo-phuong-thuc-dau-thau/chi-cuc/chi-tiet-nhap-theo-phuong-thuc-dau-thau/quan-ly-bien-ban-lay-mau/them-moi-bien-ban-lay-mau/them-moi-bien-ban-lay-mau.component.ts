@@ -35,6 +35,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   detailGiaoNhap: any = {};
   maVthh: string;
   phuongPhapLayMaus: Array<PhuongPhapLayMau>;
+  viewChiTiet: boolean = false;
   constructor(
     private spinner: NgxSpinnerService,
     private bienBanLayMauService: QuanLyBienBanLayMauService,
@@ -55,6 +56,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.id = +this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
     this.newObjectBienBanLayMau();
+    this.checkIsView();
     this.bienBanLayMau.maDonVi = this.userInfo.MA_DVI;
     this.bienBanLayMau.tenDonVi = this.userInfo.TEN_DVI;
     await Promise.all([
@@ -65,16 +67,24 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       this.loadBienbanLayMau();
     }
   }
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
+    }
+  }
   newObjectBienBanLayMau() {
     this.bienBanLayMau = new BienBanLayMau();
   }
   disableBanHanh(): boolean {
-    return true;;
-    // return (
-    //   this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
-    //   this.id === 0 ||
-    //   this.bienBanLayMau.trangThai === this.globals.prop.TU_CHOI
-    // );
+    return (
+      this.bienBanLayMau.trangThai === this.globals.prop.DU_THAO ||
+      this.id === 0 ||
+      this.bienBanLayMau.trangThai === this.globals.prop.TU_CHOI
+    );
   }
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
@@ -113,8 +123,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       "tinhTrang": this.bienBanLayMau.tinhTrang,
       "tphongKthuatBquan": this.bienBanLayMau.tphongKthuatBquan
     }
-    console.log("body: ", body);
-
     if (this.id > 0) {
       this.bienBanLayMauService.sua(
         body,
@@ -123,7 +131,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           if (isGuiDuyet) {
             let body = {
               id: res.data.id,
-              lyDoTuChoi: null,
+              lyDo: null,
               trangThai: this.globals.prop.DU_THAO_TRINH_DUYET,
             };
             this.bienBanLayMauService.updateStatus(body);
@@ -162,7 +170,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           if (isGuiDuyet) {
             let body = {
               id: res.data.id,
-              lyDoTuChoi: null,
+              lyDo: null,
               trangThai: this.globals.prop.LANH_DAO_DUYET,
             };
             this.bienBanLayMauService.updateStatus(body);
@@ -227,7 +235,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: null,
+            lyDo: null,
             trangThai: this.globals.prop.LANH_DAO_DUYET,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
@@ -296,7 +304,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: text,
+            lyDo: text,
             trangThai: this.globals.prop.TU_CHOI,
           };
           const res = await this.bienBanLayMauService.updateStatus(body);
@@ -410,5 +418,17 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       }).catch(err => {
         this.notification.error(MESSAGE.ERROR, err.msg);
       })
+  }
+  thongTinTrangThai(trangThai: string): string {
+    if (
+      trangThai === this.globals.prop.DU_THAO ||
+      trangThai === this.globals.prop.LANH_DAO_DUYET ||
+      trangThai === this.globals.prop.TU_CHOI ||
+      trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+    ) {
+      return 'du-thao-va-lanh-dao-duyet';
+    } else if (trangThai === this.globals.prop.BAN_HANH) {
+      return 'da-ban-hanh';
+    }
   }
 }

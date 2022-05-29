@@ -81,7 +81,8 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       "denNgay": null,
       "kyThuatVien": this.searchFilter.kyThuatVien,
       "maDiemKho": this.searchFilter.maDiemKho,
-      "maDonVi": this.userInfo.MA_DVI,
+      "maDonVi": null,
+      // "maDonVi": this.userInfo.MA_DVI,
       "maDonViLap": null,
       "maHang": this.maVthh,
       "maKhoNganLo": this.searchFilter.maKhoNganLo,
@@ -275,7 +276,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       this.router.navigate([urlChiTiet, id,]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
       this.router.navigate([urlChiTiet, id,]);
     }
   }

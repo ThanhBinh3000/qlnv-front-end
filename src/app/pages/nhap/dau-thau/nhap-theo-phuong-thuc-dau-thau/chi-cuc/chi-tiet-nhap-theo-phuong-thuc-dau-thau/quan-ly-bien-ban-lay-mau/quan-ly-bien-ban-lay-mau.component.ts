@@ -180,7 +180,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       this.router.navigate([urlChiTiet, id]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
       this.router.navigate([urlChiTiet, id]);
     }
   }

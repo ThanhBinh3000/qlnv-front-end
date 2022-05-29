@@ -81,6 +81,10 @@ const routes: Routes = [
                 component: ThemMoiBienBanLayMauKhoComponent,
             },
             {
+                path: 'bien-ban-lay-mau/xem-chi-tiet/:id',
+                component: ThemMoiBienBanLayMauKhoComponent,
+            },
+            {
                 path: 'bien-ban-ban-giao-mau',
                 component: QuanLyBienBanBanGiaoMauComponent,
             },
@@ -97,11 +101,19 @@ const routes: Routes = [
                 component: ThemMoiPhieuNhapDayKhoComponent,
             },
             {
+                path: 'bien-ban-day-kho/xem-chi-tiet/:id',
+                component: ThemMoiPhieuNhapDayKhoComponent,
+            },
+            {
                 path: 'phieu-kiem-nghiem',
                 component: QuanLyPhieuKiemNghiemChatLuongThocComponent,
             },
             {
                 path: 'phieu-kiem-nghiem/thong-tin/:id',
+                component: ThemMoiPhieuKiemNghiemChatLuongThocComponent,
+            },
+            {
+                path: 'phieu-kiem-nghiem/xem-chi-tiet/:id',
                 component: ThemMoiPhieuKiemNghiemChatLuongThocComponent,
             },
         ]

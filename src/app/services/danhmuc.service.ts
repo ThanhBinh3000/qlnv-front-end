@@ -71,6 +71,10 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+  loadDanhMucHinhThucBaoQuan(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-hthuc-bquan/findList`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 
   traCuuTieuChuanKyThuat(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/tra-cuu`;
