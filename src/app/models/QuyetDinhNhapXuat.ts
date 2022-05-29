@@ -15,6 +15,7 @@ export class QuyetDinhNhapXuat {
     detail: Array<DetailQuyetDinhNhapXuat>;
     tenDonVi: string;
     trangThai: string;
+    hopDongId: number;
     constructor(
         fileDinhKemReqs: Array<FileDinhKem> = [],
         details: Array<DetailQuyetDinhNhapXuat> = []
