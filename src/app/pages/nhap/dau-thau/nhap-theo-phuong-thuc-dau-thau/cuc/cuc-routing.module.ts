@@ -22,7 +22,7 @@ const routes: Routes = [
         component: ThemmoiQdinhNhapXuatHangComponent,
       },
       {
-        path: 'chi-tiet/:id',
+        path: 'xem-chi-tiet/:id',
         component: ThemmoiQdinhNhapXuatHangComponent,
       },
     ]

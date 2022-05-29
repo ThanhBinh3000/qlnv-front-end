@@ -65,11 +65,19 @@ const routes: Routes = [
                 component: ThemMoiPhieuNhapKhoComponent,
             },
             {
+                path: 'phieu-nhap-kho/xem-chi-tiet/:id',
+                component: ThemMoiPhieuNhapKhoComponent,
+            },
+            {
                 path: 'bang-ke-hang',
                 component: QuanLyBangKeCanHangComponent,
             },
             {
                 path: 'bang-ke-hang/thong-tin/:id',
+                component: ThongTinQuanLyBangKeCanHangComponent,
+            },
+            {
+                path: 'bang-ke-hang/xem-chi-tiet/:id',
                 component: ThongTinQuanLyBangKeCanHangComponent,
             },
             {

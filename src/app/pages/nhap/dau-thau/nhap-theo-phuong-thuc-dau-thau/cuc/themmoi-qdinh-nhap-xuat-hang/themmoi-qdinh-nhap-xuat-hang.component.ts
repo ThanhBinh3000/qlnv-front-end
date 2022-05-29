@@ -54,6 +54,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   dsQuyetDinhNhapXuatDetailClone: Array<DetailQuyetDinhNhapXuat> = [];
   isAddQdNhapXuat: boolean = false;
   isChiTiet: boolean = false;
+
+  loaiVthh: string;
+  loaiStr: string;
+  maVthh: string;
+  idVthh: number;
+  routerVthh: string;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -72,9 +79,10 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getTitleVthh();
     this.userInfo = this.userService.getUserLogin();
     this.routerUrl = this.router.url;
-    if (this.routerUrl.includes('/chi-tiet/')) {
+    if (this.routerUrl.includes('/xem-chi-tiet/')) {
       this.isChiTiet = true;
     } else {
       this.isChiTiet = false;
@@ -89,6 +97,32 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.loadDonVi("all");
     this.loadDanhMucHang();
     this.newObjectQdNhapXuat();
+  }
+
+  getTitleVthh() {
+    if (this.router.url.indexOf("/thoc/") != -1) {
+      this.loaiStr = "Thóc";
+      this.loaiVthh = "01";
+      this.maVthh = "0101";
+      this.idVthh = 2;
+      this.routerVthh = 'thoc';
+    } else if (this.router.url.indexOf("/gao/") != -1) {
+      this.loaiStr = "Gạo";
+      this.loaiVthh = "00";
+      this.maVthh = "0102";
+      this.idVthh = 6;
+      this.routerVthh = 'gao';
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
+      this.loaiStr = "Muối";
+      this.loaiVthh = "02";
+      this.maVthh = "04";
+      this.idVthh = 78;
+      this.routerVthh = 'muoi';
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
+      this.loaiStr = "Vật tư";
+      this.loaiVthh = "03";
+      this.routerVthh = 'vat-tu';
+    }
   }
 
   redirectToDanhSachDauThau() {
