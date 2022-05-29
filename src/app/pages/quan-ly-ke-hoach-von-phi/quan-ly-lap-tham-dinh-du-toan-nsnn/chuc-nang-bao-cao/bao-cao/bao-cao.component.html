@@ -188,7 +188,7 @@
 											</nz-select>
 										</ng-container>
 										<ng-template #templateNguoiBcao>
-											<div *ngFor="let item of canBos" [hidden]="!id">
+											<div *ngFor="let item of canBos" >
 												<div *ngIf="item.fullName == data.nguoiBcao">
 													{{item.fullName}}
 												</div>
@@ -240,8 +240,7 @@
 												<th nzWidth="150px">Mã báo cáo</th>
 												<th nzWidth="150px">Năm báo cáo</th>
 												<th nzWidth="150px">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới gửi
-													báo
-													cáo)</th>
+													báo cáo)</th>
 												<th nzWidth="150px">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
 													cáo)
 												</th>
@@ -257,10 +256,9 @@
 														{{ data.maBcao}}
 													</a>
 												</td>
-												<td>{{data.ngayTao}}</td>
 												<td>{{data.namHienHanh}}</td>
-												<td>{{data.ngayTrinhDuyet}}</td>
 												<td>{{data.ngayDuyet}}</td>
+												<td>{{data.ngayPheDuyet}}</td>
 												<td>{{getStatusName(data.trangThai)}}</td>
 											</tr>
 										</tbody>
@@ -321,15 +319,17 @@
 					</nz-tab>
 					<nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab.tenPl">
 						<ng-container *ngIf="tab.id == '14'">
-							<app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam [data]="data">
+							<app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam [data]="data"
+								(dataChange)="getNewData($event)">
 							</app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '13'">
-							<app-tong-hop-nhu-cau-chi-nsnn-3-nam [data]="data">
+							<app-tong-hop-nhu-cau-chi-nsnn-3-nam [data]="data" (dataChange)="getNewData($event)">
 							</app-tong-hop-nhu-cau-chi-nsnn-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '16'">
-							<app-tong-hop-nhu-cau-chi-thuong-xuyen-3-nam [data]="data">
+							<app-tong-hop-nhu-cau-chi-thuong-xuyen-3-nam [data]="data"
+								(dataChange)="getNewData($event)">
 							</app-tong-hop-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '17'">
@@ -338,7 +338,8 @@
 							</app-chi-tiet-nhu-cau-chi-thuong-xuyen-3-nam>
 						</ng-container>
 						<ng-container *ngIf="tab.id == '18'">
-							<app-tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam [data]="data">
+							<app-tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam [data]="data"
+								(dataChange)="getNewData($event)">
 							</app-tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam>
 						</ng-container>
 					</nz-tab>

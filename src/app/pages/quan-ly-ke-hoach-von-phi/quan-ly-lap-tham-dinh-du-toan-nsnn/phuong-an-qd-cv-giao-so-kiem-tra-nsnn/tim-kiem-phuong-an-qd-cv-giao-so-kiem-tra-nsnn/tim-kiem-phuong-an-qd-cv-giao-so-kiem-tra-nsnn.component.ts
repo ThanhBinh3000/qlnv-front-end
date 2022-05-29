@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzResultUnauthorizedComponent } from 'ng-zorro-antd/result/partial/unauthorized';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -36,11 +37,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     danhSachBaoCao: any = [];
     loais: any[] = [
         {
-            id: 1,
+            id: '1',
             tenDm: 'QĐ(CV)',
         },
         {
-            id: 2,
+            id: '2',
             tenDm: 'PA',
         }
     ];
@@ -50,7 +51,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //phan trang
     totalElements = 0;
     totalPages = 0;
-    pages = {                  
+    pages = {
         size: 10,
         page: 1,
     }
@@ -185,22 +186,63 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //     this.searchFilter.trangThai = null
     // }
 
-    taoMoi() {
-        if (this.searchFilter.loai == 2){
-            this.router.navigate([
-                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-            ]);
+    async taoMoi() {
+        if (!this.searchFilter.loai || 
+            (this.searchFilter.loai == '2' && !this.searchFilter.maBaoCao) ||
+            (this.searchFilter.loai == '1' && !this.searchFilter.maPa)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        if (this.searchFilter.loai == '2') {
+            if (!this.checkMaBcao()){
+                this.notification.warning(MESSAGE.WARNING, "Không tìm thấy mã báo cáo :" + this.searchFilter.maBaoCao);
+                return;
+            }
+            // this.router.navigate([
+            //     '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/0/'+ this.searchFilter.maBaoCao,
+            // ]);
         } else {
             this.router.navigate([
                 '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/qd-cv-giao-so-kiem-tra-tran-chi-nsnn',
             ]);
         }
-        
+
     }
 
     xemChiTiet(id: string) {
         this.router.navigate([
             '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
         ])
+    }
+
+    checkMaBcao(): boolean {
+        var check: boolean;
+        let requestReport = {
+            loaiTimKiem: "0",
+            maBcao: this.searchFilter.maBaoCao,
+            maDvi: this.searchFilter.donViTao,
+            namBcao: null,
+            ngayTaoDen: "",
+            ngayTaoTu: "",
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThais: [],
+        };
+        this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    check =  !data.data.empty ;
+                } else {
+                    check = false;
+                }
+            },
+            (err) => {
+                check = false;
+            }
+        );
+        return check;
     }
 }

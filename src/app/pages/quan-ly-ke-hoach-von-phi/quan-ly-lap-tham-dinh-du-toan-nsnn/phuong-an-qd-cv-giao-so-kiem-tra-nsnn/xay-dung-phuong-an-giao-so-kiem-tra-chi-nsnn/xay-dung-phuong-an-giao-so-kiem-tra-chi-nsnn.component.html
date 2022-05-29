@@ -8,68 +8,44 @@
 				</a>
 			</div>
 			<div class="canphai phai">
-				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="giaotoanbo()" [hidden]="checknutgiao">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Giao toàn bộ</span>
-          </button> -->
-				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="luu()"
+				<button class="btn btn-main" (click)="save()"
 					[hidden]="statusBtnSave">
 					<i class="icon htvbdh_tcdt_save"></i>
 					<span>Lưu</span>
 				</button>
-				<button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('2')"
+				<button class="btn btn-main" (click)="onSubmit('2',null)"
 					[hidden]="statusBtnApprove">
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Trình duyệt</span>
-				</button> -->
-				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Phê duyệt</span>
-          </button>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Từ chối</span>
-          </a> -->
-				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('3')"
-					[hidden]="statusBtnTBP">
-					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Trưởng BP trả lại</span>
 				</button>
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('4')"
-					[hidden]="statusBtnTBP">
+				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Trưởng BP phê duyệt</span>
+					<span>Từ chối</span>
 				</a>
-				<button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('5')"
-					[hidden]="statusBtnLD">
+				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
 					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Lãnh đạo trả lại</span>
+					<span>Chấp nhận</span>
 				</button>
-				<a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onSubmit('6')"
-					[hidden]="statusBtnLD">
+				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
+					<i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Từ chối</span>
+				</button>
+				<a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
 					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Lãnh đạo duyệt</span>
-				</a> -->
-				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doCopy()" [hidden]="statusBtnCopy">
-            <i nz-icon nzType="copy" nzTheme="outline"></i>
-            <span>Copy</span>
-          </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="doPrint()" [hidden]="statusBtnPrint">
-            <i nz-icon nzType="printer" nzTheme="outline"></i>
-            <span>In</span>
-          </a> -->
-				<!-- <button class="btn btn-outline-grey btn-sm waves-effect waves-light" [hidden]="statusBtnDel">
-					<i class="icon htvbdh_tcdt_delete"></i>
-					<span>Xóa</span>
-				</button>
-				<button class="btn btn-outline-grey btn-sm waves-effect waves-light" >
-					<i class="icon htvbdh_tcdt_dong"></i>
+					<span>Chấp nhận</span>
+				</a>
+				<a class="btn btn-main" [hidden]="statusBtnCopy">
+					<i nz-icon nzType="copy" nzTheme="outline"></i>
+					<span>Copy</span>
+				</a>
+				<a class="btn btn-main" [hidden]="statusBtnPrint">
+					<i nz-icon nzType="printer" nzTheme="outline"></i>
+					<span>In</span>
+				</a>
+				<a class="btn btn-main" (click)="close()" >
+					<i nz-icon nzType="stop" nzTheme="outline"></i>
 					<span>Đóng</span>
-				</button> -->
-				<!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light"  [hidden] = "statusBtnDel">
-            <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Xóa</span>
-          </a> -->
+				</a>
 			</div>
 		</div>
 	</div>
@@ -133,7 +109,7 @@
 							<thead>
 								<tr>
 									<th rowspan="2">STT</th>
-									<th rowspan="2">Nhóm</th>
+									<th rowspan="2" nzWidth="300px">Nhóm</th>
 									<th rowspan="2">Tổng số</th>
 									<th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
 									<th rowspan="2" colspan="3" [hidden]="status"></th>
@@ -143,7 +119,11 @@
 									</th>
 								</tr>
 								<tr>
-									<th *ngFor="let item of lstDvi">{{item.tenDvi}}</th>
+									<th *ngFor="let item of lstDvi" nz-popconfirm
+										nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+										(nzOnConfirm)="deleteCol(item.maDvi)">
+										{{item.tenDvi}}
+									</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -153,7 +133,7 @@
 											{{getChiMuc(data.stt)}}
 										</td>
 										<td>
-											<div *ngFor="let item of noiDungs;">
+											<div *ngFor="let item of noiDungs">
 												<div *ngIf="item.id ==data.maNhom">
 													{{item.tenDm}}
 												</div>
@@ -246,7 +226,11 @@
 					</button>
 					<button type="button" class="btn btn-main" (click)="addLine(null)">
 						<i class="icon htvbdh_dau-cong"></i>
-						<span>Thêm</span>
+						<span>Thêm hàng</span>
+					</button>
+					<button type="button" class="btn btn-main" (click)="addAllCol()">
+						<i class="icon htvbdh_dau-cong"></i>
+						<span>Thêm cột</span>
 					</button>
 					<button type="button" class="btn btn-sub">
 						<i class="icon htvbdh_tcdt_import"></i>

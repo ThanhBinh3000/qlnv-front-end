@@ -36,7 +36,8 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã báo cáo</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"/>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBaoCao"
+						[class]="!searchFilter.maBaoCao && searchFilter.loai == '2' ?'input-error-validate' : ''"/>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
@@ -59,14 +60,16 @@
 					<div nz-col nzSpan="6">
 						<label class="search__label">Loại</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại"
-							[(ngModel)]="searchFilter.loai">
+							[(ngModel)]="searchFilter.loai"
+							[class]="searchFilter.loai ?'' : 'input-error-validate'">
 							<nz-option *ngFor="let item of loais" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Mã PA</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"/>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"
+						[class]="!searchFilter.maPa && searchFilter.loai == '1' ?'input-error-validate' : ''"/>
 					</div>
 					
 					<div nz-col nzSpan="6">

@@ -32,12 +32,16 @@
 							</ng-container>
 						</nz-descriptions-item>
 						<nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
-							{{getStatusName(trangThai)}}
+							<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+								[(ngModel)]="trangThai">
+								<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+								</nz-option>
+							</nz-select>
 						</nz-descriptions-item>
 					</nz-descriptions>
 				</div>
 			</nz-card>
-			<div><br/></div>
+			<div><br /></div>
 			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" [nzExtra]="tableCard1"
 				class="mt16 flex-card p-lr16">
 				<div class="row">
@@ -55,6 +59,7 @@
 							<th nzWidth="20%">Ngày trình duyệt (Ngày đơn vị cấp dưới gửi báo cáo)</th>
 							<th nzWidth="20%">Ngày duyệt (Ngày cấp trên duyệt báo cáo)</th>
 							<th nzWidth="15%">Trạng thái</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -66,11 +71,27 @@
 									{{ item.maBcao}}
 								</a>
 							</td>
-							<td>{{item.ngayTao}}</td>
 							<td>{{item.namHienHanh}}</td>
-							<td>{{item.ngayTrinhDuyet}}</td>
-							<td>{{item.ngayDuyet}}</td>
+							<td>{{item.ngayPheDuyet}}</td>
+							<td>{{item.ngayTraKq}}</td>
 							<td>{{getStatusName(item.trangThai)}}</td>
+							<td>
+								<ng-container *ngIf="item.trangThai == '-1'">
+									<button type="button" class="btn btn-main">
+										<span>Thông báo đến đơn vị cấp dưới</span>
+									</button>
+								</ng-container>
+								<ng-container *ngIf="item.trangThai == '7'">
+									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<span>Phê duyệt</span>
+									</button>
+								</ng-container>
+								<ng-container *ngIf="item.trangThai == '8' || item.trangThai == '9'">
+									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+										<span>Xem</span>
+									</button>
+								</ng-container>
+							</td>
 						</tr>
 					</tbody>
 				</nz-table>
@@ -89,7 +110,7 @@
 									{{ range[0] }}-{{ range[1] }} of {{totalElements}} items
 								</ng-template>
 							</nz-pagination>
-							<!-- end phân trang  -->
+							<!-- end phân trang  --> 
 						</div>
 					</div>
 				</div>
