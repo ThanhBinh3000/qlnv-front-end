@@ -106,9 +106,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   async onSubmit() {
     this.spinner.show();
     this.searchFilter.trangThais= [];
-    debugger
     this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy') || this.searchFilter.ngayTaoTu;
-    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy');
+    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy') || this.searchFilter.ngayTaoDen;
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{

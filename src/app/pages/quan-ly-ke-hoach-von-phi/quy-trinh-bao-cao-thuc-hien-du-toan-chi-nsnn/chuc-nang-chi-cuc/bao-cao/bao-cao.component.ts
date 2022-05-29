@@ -347,11 +347,6 @@ export class BaoCaoComponent implements OnInit {
               item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
               item.checked = false;
             }
-            this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-            this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-            this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-            this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-            this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
             item?.lstCtietBcaos?.filter(data => {
               switch (item.maLoai) {
                 // phu luc 1
@@ -440,6 +435,11 @@ export class BaoCaoComponent implements OnInit {
               }
             });
           })
+          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           this.maDonViTao = data.data.maDvi;
@@ -2157,9 +2157,7 @@ export class BaoCaoComponent implements OnInit {
         lstIndex.push(i);
       }
     }
-
     this.replaceIndex(lstIndex, -1);
-
     this.updateEditCache();
   }
 

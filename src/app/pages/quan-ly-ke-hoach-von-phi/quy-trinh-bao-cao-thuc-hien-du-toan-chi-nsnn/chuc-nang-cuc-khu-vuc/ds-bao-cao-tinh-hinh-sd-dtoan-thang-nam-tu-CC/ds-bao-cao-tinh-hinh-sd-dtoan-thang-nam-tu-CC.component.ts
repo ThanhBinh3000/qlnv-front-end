@@ -21,9 +21,6 @@ import * as fileSaver from 'file-saver';
 export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
@@ -99,11 +96,12 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
-          e.congVan = JSON.parse(e.congVan);
-          console.log(e.congVan);
-          
+          e.congVan = JSON.parse(e.congVan);          
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
           e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
           e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
         this.totalElements = res.data?.totalElements;
         this.totalPages = res.data?.totalPages;
