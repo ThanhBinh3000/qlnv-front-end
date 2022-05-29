@@ -127,7 +127,6 @@ export class TimKiemComponent implements OnInit {
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
-
 				} else {
 					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
 				}
@@ -184,5 +183,32 @@ export class TimKiemComponent implements OnInit {
 
 	getStatusName(trangThai: string){
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
+	}
+
+	xoaBaoCao(id: any){
+		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
+			data => {
+				if (data.statusCode == 0){
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+					this.onSubmit();
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		)
+	}
+
+	checkDeleteReport(item: any): boolean{
+		var check: boolean;
+		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
+		this.userInfo?.username == item.nguoiTao){
+			check = true;
+		} else {
+			check = false;
+		}
+		return check;
 	}
 }

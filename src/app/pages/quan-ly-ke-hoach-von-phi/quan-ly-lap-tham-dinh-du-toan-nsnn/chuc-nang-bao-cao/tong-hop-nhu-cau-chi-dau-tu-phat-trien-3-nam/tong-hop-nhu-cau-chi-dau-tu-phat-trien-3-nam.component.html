@@ -18,20 +18,22 @@
         </ng-template>
     </div>
     <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
-        <button type="button" class="btn btn-main" (click)="deleteSelected()" [hidden]="status">
+        <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)" [hidden]="status">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-        </button>
+        <ng-container *ngIf="lstCtietBcao.length == 0">
+            <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Thêm</span>
+            </button>
+        </ng-container>
     </div>
 </div>
 <nz-table nzBordered class="table__body">
     <thead>
         <tr>
-            <th nzWidth="50px">STT</th>
+            <th nzWidth="75px">STT</th>
             <th nzWidth="400px">Nội dung</th>
             <th nzWidth="200px">Thực hiên năm hiện hành {{namHienHanh -1}}</th>
             <th nzWidth="200px">Nhu cầu năm dự toán {{namHienHanh}}</th>
@@ -47,10 +49,12 @@
     <tbody>
         <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                <td>{{ i + 1 }}</td>
+                <td [nzIndentSize]="data.level * 8"> 
+                    {{getChiMuc(data.stt)}}
+                </td>
 
                 <td>
-                    <div *ngFor="let item of donVis">
+                    <div *ngFor="let item of noiDungs">
                         <div *ngIf="item.id == data.maNdung">
                             {{item.tenDm}}
                         </div>
@@ -66,64 +70,73 @@
                 <td>{{ data.ncauNamN2 }}</td>
 
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
                     <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateSingleChecked()"></label>
+                        (ngModelChange)="updateChecked(data.id)"></label>
                 </td>
 
             </ng-container>
             <ng-template #editTemplate>
-                <td>{{ i + 1 }}</td>
-
-                <td>
-                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị"
-                        [class]="editCache[data.id].data.maNdung ?'' : 'input-error-validate' "
-                        [(ngModel)]="editCache[data.id].data.maNdung">
-                        <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                        </nz-option>
-                    </nz-select>
+                <td [nzIndentSize]="data.level * 8">
+                    {{getChiMuc(editCache[data.id].data.stt)}}
                 </td>
 
                 <td>
-                    {{editCache[data.id].data.thNamHienHanhN1}}
-                </td>
-
-                <td>
-                    {{editCache[data.id].data.ncauNamDtoanN}}
-                </td>
-
-                <td>
-                    {{editCache[data.id].data.ncauNamN1}}
+                    <div *ngFor="let item of noiDungs">
+                        <div *ngIf="item.id == data.maNdung">
+                            {{item.tenDm}}
+                        </div>
+                    </div>
                 </td>
 
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.ncauNamN2">
+                        [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
+                        [class]="editCache[data.id].data.thNamHienHanhN1 || editCache[data.id].data.thNamHienHanhN1 ===0?'' : 'input-error-validate'">
+                    </nz-input-number>
+                </td>
+                <td>
+                    <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
+                        [class]="editCache[data.id].data.ncauNamDtoanN || editCache[data.id].data.ncauNamDtoanN ===0?'' : 'input-error-validate'">
+                    </nz-input-number>
+                </td>
+                <td>
+                    <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ncauNamN1"
+                        [class]="editCache[data.id].data.ncauNamN1 || editCache[data.id].data.ncauNamN1 ===0?'' : 'input-error-validate'">
+                    </nz-input-number>
+                </td>
+                <td>
+                    <nz-input-number class="search__input" nzSize="small"
+                        [(ngModel)]="editCache[data.id].data.ncauNamN2"
+                        [class]="editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0?'' : 'input-error-validate'">
                     </nz-input-number>
                 </td>
 
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
+                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                 </td>
                 <td>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                        (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                        Hủy
+                    </a>
                 </td>
                 <td [hidden]="status">
                     <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateSingleChecked()"></label>
+                        (ngModelChange)="updateChecked(data.id)"></label>
                 </td>
             </ng-template>
         </tr>
@@ -141,19 +154,19 @@
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnFinish">
+    <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()" [hidden]="statusBtnFinish">
+    <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>OK</span>
     </button>
-    <button type="button" class="btn btn-main" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
         <i nz-icon nzType="close" nzTheme="outline"></i>
         <span>Not OK</span>
     </button>
