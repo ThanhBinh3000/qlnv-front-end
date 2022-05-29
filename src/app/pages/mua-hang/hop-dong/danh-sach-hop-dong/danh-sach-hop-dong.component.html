@@ -29,11 +29,11 @@
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
             <label class="search__label">Số hợp đồng</label>
-            <input class="search__input" nz-input placeholder="Số hợp đồng" />
+            <input class="search__input" nz-input [(ngModel)]="soHd" placeholder="Số hợp đồng" />
           </div>
           <div nz-col nzSpan="12">
             <label class="search__label">Ngày ký</label>
-            <nz-range-picker placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="6">
           </div>
@@ -101,14 +101,14 @@
           <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
               <td>{{(page-1)*pageSize+i+1}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{ data.soHd }}</td>
+              <td>{{ data.ngayKy }}</td>
+              <td>Thóc</td>
+              <td>{{ data.tenHd }}</td>
+              <td>{{ data.tenDvi }}</td>
+              <td>{{ data.tenDvi }}</td>
+              <td>{{ data.gtriHdSauVat }}</td>
+              <td>{{ data.trangThai }}</td>
               <td class="text-center">
                 <a (click)="redirectToChiTiet(false, data.id)">
                   <i class="fa fa-pencil"></i>

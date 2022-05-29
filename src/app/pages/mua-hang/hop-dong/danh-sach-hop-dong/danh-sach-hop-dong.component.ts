@@ -10,6 +10,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from 'src/app/services/donvi.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -20,6 +22,8 @@ export class DanhSachHopDongComponent implements OnInit {
   loaiVthh: string;
   loaiStr: string;
   maVthh: string;
+  ngayKy: string;
+  soHd: string;
   routerVthh: string;
   userInfo: UserLogin;
 
@@ -41,6 +45,7 @@ export class DanhSachHopDongComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
+    private thongTinHopDong: ThongTinHopDongService,
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
@@ -48,8 +53,18 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     await this.loadDonVi();
+
+    try {
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async loadDonVi() {
@@ -86,7 +101,44 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   async search() {
+    let maDonVi = null;
+    let tenDvi = null;
+    let donviId = null;
+    if (this.inputDonVi && this.inputDonVi.length > 0) {
+      let getDonVi = this.optionsDonVi.filter(
+        (x) => x.labelDonVi == this.inputDonVi,
+      );
+      if (getDonVi && getDonVi.length > 0) {
+        maDonVi = getDonVi[0].maDvi;
+        tenDvi = getDonVi[0].tenDvi;
+        donviId = getDonVi[0].id;
+      }
+    }
+    let body = {
+      "loaiVthh": "00",
+      maDvi: maDonVi,
+      "paggingReq": {
+        limit: this.pageSize,
+        page: this.page,
+      },
+      soHd: this.soHd,
+      //"trangThai": "string",
+      denNgayKy: this.ngayKy && this.ngayKy.length > 1
+        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      tuNgayKy: this.ngayKy && this.ngayKy.length > 0
+        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
+        : null,
 
+    };
+    let res = await this.thongTinHopDong.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   xoaItem(item: any) {
