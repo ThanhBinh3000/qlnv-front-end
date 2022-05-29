@@ -11,20 +11,20 @@ export const QUY_TRINH_BAO_CAO_KET_QUA_THUC_HIEN_THVP_HANG_DTQG_TAI_TONG_CUC_DTN
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG từ Chi Cục',
-    description: 'Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG từ Chi Cục',
+    title: 'Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG từ đơn vị cấp dưới',
+    description: 'Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG từ đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN}/duyet-bao-cao-thuc-hien-von-phi-hang-dtqg`,
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Kiểm tra tình trang phê duyệt báo cáo từ chi cuc',
-    description: 'Kiểm tra tình trang phê duyệt báo cáo từ chi cuc',
+    title: 'Kiểm tra tình trang phê duyệt báo cáo từ đơn vị cấp dưới',
+    description: 'Kiểm tra tình trang phê duyệt báo cáo từ đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN}/kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc`,
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tổng hợp báo cáo từ chi cục',
-    description: 'Tổng hợp báo cáo từ chi cục',
+    title: 'Tổng hợp báo cáo từ đơn vị cấp dưới',
+    description: 'Tổng hợp báo cáo từ đơn vị cấp dưới',
     url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN}/tong-hop-bao-tu-chi-cuc`,
   },
   {

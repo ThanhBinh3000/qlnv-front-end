@@ -20,9 +20,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class KiemTraComponent implements OnInit {
 
   @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
@@ -87,21 +84,6 @@ export class KiemTraComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
   async onSubmit(){
     this.spinner.show();
     this.searchFilter.trangThais= [];
@@ -115,9 +97,13 @@ export class KiemTraComponent implements OnInit {
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
           e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
-        this.totalElements = res.data.totalElements;
-        this.totalPages = res.data.totalPages;
+        this.totalElements = res.data?.totalElements;
+        this.totalPages = res.data?.totalPages;
       }else{
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
@@ -125,13 +111,6 @@ export class KiemTraComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
-  }
-  themMoi(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
   }
 
   //doi so trang

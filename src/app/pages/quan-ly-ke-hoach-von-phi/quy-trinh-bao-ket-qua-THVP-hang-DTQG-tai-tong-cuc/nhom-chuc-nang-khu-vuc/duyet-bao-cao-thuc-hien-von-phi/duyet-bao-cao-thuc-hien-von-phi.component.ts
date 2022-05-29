@@ -1,14 +1,16 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location} from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import {  LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import * as fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-duyet-bao-cao-thuc-hien-von-phi',
@@ -33,6 +35,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   lenght:any=0;
 
   trangThais: any = TRANG_THAI_GUI_DVCT;                          // danh muc loai bao cao
+  trangThai!: string;
 
   searchFilter = {
     dotBcao:'',
@@ -49,9 +52,10 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     },
     str: '',
     thangBcao: '',
-    trangThai:'',
+    trangThais: [],
     loaiTimKiem:'1',
-  };
+    donVi: '',
+    };
 
 
   pages = {
@@ -65,8 +69,10 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notification:NzNotificationService,
     private nguoiDungSerivce : UserService,
+    private spinner: NgxSpinnerService,
+    private location: Location,
   ) {
   }
 
@@ -80,11 +86,11 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
         } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
 
@@ -106,17 +112,17 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       str: '',
       tenDvi: '',
       trangThai: '01'
-    
   }
+  
   this.danhMuc.dmDonViThuocQuanLy(objectDonViThuocQuanLy).toPromise().then(res =>{
     if(res.statusCode==0){
      this.listDonViTao = res?.data;
      
     }else{
-      this.notifi.error(MESSAGE.ERROR, res?.msg);
+      this.notification.error(MESSAGE.ERROR, res?.msg);
     }
   },err =>{
-    this.notifi.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
   })
   }
 
@@ -132,11 +138,11 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
             this.userInfor = data?.data;
             return data?.data;
           } else {
-            this.notifi.error(MESSAGE.ERROR, data?.msg);
+            this.notification.error(MESSAGE.ERROR, data?.msg);
           }
         },
         (err) => {
-          this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
   }
@@ -145,49 +151,35 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
-  timkiem(){
-    // if(this.searchFilter.maLoaiBcao==''){
-    //   this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
-    //   return;
-    // }
-    this.quanLyVonPhiService.timKiemDuyetBaoCao(this.searchFilter).subscribe(res => {
-      if(res.statusCode==0){
-
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
-        this.listBcaoKqua = res.data.content;
-        if(this.listBcaoKqua.length!=0){
-          this.lenght = this.listBcaoKqua.length;
-          this.listBcaoKqua.forEach(e => {
-            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh,Utils.FORMAT_DATE_STR);
-            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
-          })
-        }
-      }else{
-        this.notifi.error(MESSAGE.ERROR, res?.msg);
+  async onSubmit() {
+    this.spinner.show();
+    this.searchFilter.trangThais = [];
+    if (this.trangThai) {
+      this.searchFilter.trangThais.push(this.trangThai)
+    } else {
+      this.searchFilter.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+    }
+    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listBcaoKqua = res.data?.content;
+        this.listBcaoKqua.forEach(e => {
+          e.congVan = JSON.parse(e.congVan);          
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+        })
+        this.totalElements = res.data?.totalElements;
+        this.totalPages = res.data?.totalPages;
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
-      console.log(res);
-    },err =>{
-      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide();
   }
   themMoi(){
     if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
+      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
       return;
     }
     this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
@@ -217,6 +209,29 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+  }
+
+  close() {
+    this.location.back();
+  }
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
+  }
+
+  //download file về máy tính
+  async downloadFileCv(fileUrl, fileName) {
+    debugger
+    await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
+      (data) => {
+        fileSaver.saveAs(data,fileName);
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
   }
 
 }
