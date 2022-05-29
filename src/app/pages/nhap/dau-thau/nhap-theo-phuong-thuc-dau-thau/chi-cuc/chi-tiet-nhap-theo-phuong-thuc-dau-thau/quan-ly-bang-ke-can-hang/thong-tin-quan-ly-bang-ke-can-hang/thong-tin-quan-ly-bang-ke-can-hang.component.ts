@@ -14,6 +14,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -63,19 +64,18 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private quanLyPhieuSoKhoService: QuanLyPhieuSoKhoService,
     public globals: Globals,
-    // private quanLySoKhoService: QuanLySoKhoService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.getTitleVthh();
-      this.create.dvt = "Tấn";
+      this.userInfo = this.userService.getUserLogin();
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await this.loadChiTiet(this.id);
-      this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([
         this.loadDiemKho(),
@@ -84,7 +84,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         this.loadThuKho(),
         this.loadLoaiKho(),
         this.loadDonViTinh(),
-        // this.loadSoKho(),
+        this.loadSoKho(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -107,36 +107,36 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     }
   }
 
-  // async loadSoKho() {
-  //   let body = {
-  //     "denNgayMoSo": null,
-  //     "maDvi": this.detail.maDvi,
-  //     "maHhoa": null,
-  //     "maLo": null,
-  //     "maNgan": null,
-  //     "nam": NullVisitor,
-  //     "orderBy": null,
-  //     "orderDirection": null,
-  //     "paggingReq": {
-  //       "limit": 1000,
-  //       "orderBy": null,
-  //       "orderType": null,
-  //       "page": 0
-  //     },
-  //     "str": null,
-  //     "tenHhoa": null,
-  //     "trangThai": null,
-  //     "tuNgayMoSo": null
-  //   };
-  //   let res = await this.quanLySoKhoService.getList(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     if (res.data && res.data.content) {
-  //       this.listSoKho = res.data.content;
-  //     }
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, res.msg);
-  //   }
-  // }
+  async loadSoKho() {
+    let body = {
+      "denNgayMoSo": null,
+      "maDvi": null,
+      "maHhoa": null,
+      "maLo": null,
+      "maNgan": null,
+      "nam": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": 1000,
+        "orderBy": null,
+        "orderType": null,
+        "page": 1
+      },
+      "str": null,
+      "tenHhoa": null,
+      "trangThai": null,
+      "tuNgayMoSo": null
+    };
+    let res = await this.quanLyPhieuSoKhoService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listSoKho = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 
   async loadDonViTinh() {
     try {
