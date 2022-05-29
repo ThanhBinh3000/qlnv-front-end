@@ -18,8 +18,8 @@ export class QuanLyBienBanLayMauService extends BaseService {
 
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/tra-cuu?`
     if (body.ngayLayMau) {
-      url_ += 'ngayLapBbanTuNgay=' + encodeURIComponent('' + body.denNgay) + '&';
-      url_ += 'ngayLapBbanDenNgay=' + encodeURIComponent('' + body.denNgay) + '&';
+      url_ += 'ngayLapBbanTuNgay=' + encodeURIComponent('' + body.ngayLapBbanTuNgay) + '&';
+      url_ += 'ngayLapBbanDenNgay=' + encodeURIComponent('' + body.ngayLapBbanDenNgay) + '&';
     }
     if (body.soHopDong)
       url_ += 'soHopDong=' + encodeURIComponent('' + body.soHopDong) + '&';
@@ -54,8 +54,8 @@ export class QuanLyBienBanLayMauService extends BaseService {
   }
 
   xoa(id: number): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/xoa`;
-    return this.httpClient.delete<any>(`${url}/${id}`).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/xoa?id=${id}`;
+    return this.httpClient.delete<any>(url).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {

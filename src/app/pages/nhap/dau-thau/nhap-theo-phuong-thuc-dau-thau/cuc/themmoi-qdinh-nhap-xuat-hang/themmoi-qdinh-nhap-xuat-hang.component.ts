@@ -138,6 +138,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       donVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.tenDonVi : null],
       maDonVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.maDvi : null],
       ghiChu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ghiChu : null],
+      hopDongId: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.hopDongId : null],
     });
   }
 
@@ -164,7 +165,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     modalQD.afterClose.subscribe((data) => {
       if (data) {
         this.formData.patchValue({
-          canCu: data.tenHdong,
+          canCu: data.soHd,
+          hopDongId: data.id
         });
       }
     });
@@ -410,6 +412,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
     this.quyetDinhNhapXuat.ghiChu = this.formData.get('ghiChu').value?.trim();
+    this.quyetDinhNhapXuat.hopDongId = this.formData.get('hopDongId').value;
     this.quyetDinhNhapXuat.detail = cloneDeep(this.dsQuyetDinhNhapXuatDetailClone);
     if (this.quyetDinhNhapXuat.id > 0) {
       const quyetDinhNhapXuatInput = new QuyetDinhNhapXuat();

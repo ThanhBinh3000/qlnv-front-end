@@ -15,27 +15,27 @@ export class QuanLyHopDongNhapXuatService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/ql-hdong-hang/tra-cuu`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   loadChiTiet(id: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/ql-hdong-hang/chi-tiet/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/chi-tiet/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-hdong-hang/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-hdong-hang/cap-nhat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/cap-nhat`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   xoa(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-hdong-hang/xoa`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/xoa`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 }

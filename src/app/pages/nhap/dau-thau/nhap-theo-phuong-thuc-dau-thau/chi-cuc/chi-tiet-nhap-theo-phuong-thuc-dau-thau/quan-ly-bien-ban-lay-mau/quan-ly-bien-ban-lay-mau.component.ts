@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -28,7 +29,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     soHopDong: '',
     diemkho: '',
     nhaKho: '',
-    nganLoBaoQuan: ''
+    nganLoBaoQuan: '',
+    soBiebBan: ''
   };
   routerUrl: string;
 
@@ -63,7 +65,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       let res = await this.donViService.layTatCaDonVi();
       await Promise.all([
         this.loadDiemKho(),
-        this.loadNhaKho(null),
+        // this.loadNhaKho(null),
         this.loadNganLo(),
         this.search(),
       ]);
@@ -77,14 +79,21 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayLayMau: null,
-      soHopDong: null,
-      diemkho: null,
-      nhaKho: null,
-      nganLoBaoQuan: null,
+      ngayLayMau: this.searchFilter.ngayLayMau ?? null,
+      soHopDong: this.searchFilter.soHopDong ?? null,
+      diemkho: this.searchFilter.diemkho ?? null,
+      nhaKho: this.searchFilter.nhaKho ?? null,
+      nganLoBaoQuan: this.searchFilter.nganLoBaoQuan ?? null,
+      soBiebBan: this.searchFilter.soBiebBan ?? null,
+      ngayLapBbanTuNgay: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD')
+        : null,
+      ngayLapBbanDenNgay: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD')
+        : null,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
+    console.log(body);
+
     let res = await this.bienBanLayMauService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -128,7 +137,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       soHopDong: '',
       diemkho: '',
       nhaKho: '',
-      nganLoBaoQuan: ''
+      nganLoBaoQuan: '',
+      soBiebBan: ''
     };
     this.search();
   }
@@ -144,7 +154,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanLayMauService.delete(item.id).then((res) => {
+          this.bienBanLayMauService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
