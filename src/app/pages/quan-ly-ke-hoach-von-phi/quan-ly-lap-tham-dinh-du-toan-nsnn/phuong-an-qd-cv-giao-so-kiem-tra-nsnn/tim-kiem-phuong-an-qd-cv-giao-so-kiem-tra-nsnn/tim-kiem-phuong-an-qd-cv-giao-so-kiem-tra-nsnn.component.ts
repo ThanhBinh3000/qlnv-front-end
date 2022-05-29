@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzResultUnauthorizedComponent } from 'ng-zorro-antd/result/partial/unauthorized';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
@@ -28,7 +29,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         donViTao: "",
         loai: null,
         trangThai: "",
-        soQdCv: "",
         maBaoCao: "",
         maPa: "",
     };
@@ -36,21 +36,21 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     danhSachBaoCao: any = [];
     loais: any[] = [
         {
-            id: 1,
+            id: '1',
             tenDm: 'QĐ(CV)',
         },
         {
-            id: 2,
+            id: '2',
             tenDm: 'PA',
         }
     ];
     donViTaos: any[] = [];
     donVis: any[] = [];
-    trangThais: any = TRANGTHAIBAOCAO;
+    trangThais: any = TRANG_THAI_TIM_KIEM;
     //phan trang
     totalElements = 0;
     totalPages = 0;
-    pages = {                  
+    pages = {
         size: 10,
         page: 1,
     }
@@ -85,6 +85,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+        this.onSubmit();
     }
 
     //get user info
@@ -132,7 +133,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             namPa: this.searchFilter.namPa,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-            soQdCv: this.searchFilter.soQdCv,
             maBaoCao: this.searchFilter.maBaoCao,
             str: null,
             trangThai: this.searchFilter.trangThai,
@@ -142,8 +142,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             }
         };
         this.spinner.show();
-        //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-        await this.quanLyVonPhiService.timkiemphuongan(requestReport).toPromise().then(
+        await this.quanLyVonPhiService.timKiemPhuongAn(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.danhSachBaoCao = data.data.content;
@@ -185,22 +184,94 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //     this.searchFilter.trangThai = null
     // }
 
-    taoMoi() {
-        if (this.searchFilter.loai == 2){
-            this.router.navigate([
-                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-            ]);
+    async taoMoi() {
+        if (!this.searchFilter.loai ||
+            (this.searchFilter.loai == '2' && !this.searchFilter.maBaoCao)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        if (this.searchFilter.loai == '2') {
+            let requestReport = {
+                loaiTimKiem: "0",
+                maBcao: this.searchFilter.maBaoCao,
+                maDvi: this.searchFilter.donViTao,
+                namBcao: null,
+                ngayTaoDen: "",
+                ngayTaoTu: "",
+                paggingReq: {
+                    limit: 10,
+                    page: 1,
+                },
+                trangThais: [],
+            };
+            await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+                (data) => {
+                    if (data.statusCode == 0) {
+                        if (!data.data.empty) {
+                            this.router.navigate([
+                                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/0/'+ this.searchFilter.maBaoCao,
+                            ]);
+                        } else {
+                            this.notification.warning(MESSAGE.WARNING, "Không tìm thấy mã báo cáo :" + this.searchFilter.maBaoCao);
+                        }
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            );
+
         } else {
             this.router.navigate([
                 '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/qd-cv-giao-so-kiem-tra-tran-chi-nsnn',
             ]);
         }
-        
+
     }
 
     xemChiTiet(id: string) {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
+            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + id,
         ])
     }
+
+    async checkMaBcao() {
+        let requestReport = {
+            loaiTimKiem: "0",
+            maBcao: this.searchFilter.maBaoCao,
+            maDvi: this.searchFilter.donViTao,
+            namBcao: null,
+            ngayTaoDen: "",
+            ngayTaoTu: "",
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThais: [],
+        };
+        await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    return !data.data.empty;
+                } else {
+                    return false;
+                }
+            },
+            (err) => {
+                return false;
+            }
+        );
+    }
+
+    getStatusName(trangThai: string){
+        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+    }
+
+    getUnitName(maDvi: string){
+        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    }
+
 }

@@ -12,6 +12,14 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+
+export class ItemCongVan {
+    fileName: string;
+    fileSize: number;
+    fileUrl: number;
+}
 
 @Component({
     selector: 'app-qd-cv-giao-so-kiem-tra-tran-chi-nsnn',
@@ -23,10 +31,9 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     id!: any;
     userInfo: any;
     //thong tin chung bao cao
-    ngayNhap: string;
+    ngayTao: string;
     maDviTao: string;
-    maDviNhan: string;
-    soQdCv: string;
+    soQdCv: ItemCongVan;
     maPa: string;
     namGiao: number;
     newDate = new Date();
@@ -34,33 +41,18 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     donVis: any[] = [];
     phuongAns: any[] = [];
     //file
-    lstFile: any[] = [];
-    listFile: File[] = [];
-    fileUrl: any;
-    fileList: NzUploadFile[] = [];
-    fileToUpload!: File;
-    listIdDeleteFiles: string = "";
-
-    beforeUpload = (file: NzUploadFile): boolean => {
-		this.fileList = this.fileList.concat(file);
-		return false;
-	};
-
-	// upload file
-	addFile() {
-		const id = this.fileToUpload?.lastModified.toString();
-		this.lstFile.push({ id: id, fileName: this.fileToUpload?.name });
-		this.listFile.push(this.fileToUpload);
-	}
-
-	handleUpload(): void {
-		this.fileList.forEach((file: any) => {
-			const id = file?.lastModified.toString();
-			this.lstFile.push({ id: id, fileName: file?.name });
-			this.listFile.push(file);
-		});
-		this.fileList = [];
-	}
+    fileDetail: NzUploadFile;
+    status: boolean = false;
+    // before uploaf file
+    beforeUploadCV = (file: NzUploadFile): boolean => {
+        this.fileDetail = file;
+        this.soQdCv = {
+            fileName: file.name,
+            fileSize: null,
+            fileUrl: null,
+        };
+        return false;
+    };
 
     constructor(
         private userService: UserService,
@@ -72,7 +64,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         private sanitizer: DomSanitizer,
         private notification: NzNotificationService,
         private location: Location,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private spinner: NgxSpinnerService,
     ) {
         // this.namgiao = this.currentYear.getFullYear();
     }
@@ -81,25 +74,15 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
-
-        if (this.id){
-
+        this.maDviTao = this.userInfo?.dvql;
+        if (this.id) {
+            this.getDetailReport();
         } else {
-            this.ngayNhap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            this.namGiao = this.newDate.getFullYear();
         }
 
-        this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        this.getPhuongAn();
 
     }
 
@@ -120,34 +103,84 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         );
     }
 
+    async getPhuongAn(){
+        await this.quanLyVonPhiService.timKiemMaPaDuyet().toPromise().then(
+			(data) => {
+                if (data.statusCode == 0){
+                    this.phuongAns = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
+    }
+
+    //download file về máy tính
+	async downloadFileCv() {
+		if (this.soQdCv?.fileUrl) {
+		  await this.quanLyVonPhiService.downloadFile(this.soQdCv?.fileUrl).toPromise().then(
+			(data) => {
+			  fileSaver.saveAs(data, this.soQdCv?.fileName);
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
+		} else {
+		  let file: any = this.fileDetail;
+		  const blob = new Blob([file], { type: "application/octet-stream" });
+		  fileSaver.saveAs(blob, file.name);
+		}
+	  }
+
     //luu
     async luu() {
-        // lay id file dinh kem (gửi file theo danh sách )
-        let listFileUploaded: any = [];
-        for (const iterator of this.listFile) {
-            listFileUploaded.push(await this.uploadFile(iterator));
+        if (!this.soQdCv.fileName || !this.maPa){
+            this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập đầy số QĐ/CV và mã phương án");
+            return;
         }
         let request = {
-            fileDinhKems: listFileUploaded,
-            listIdFiles: "",
-            maDvi: this.maDviTao,
-            maDviNhan: this.maDviNhan,
-            maPa: this.maPa,
+            id: this.id,
             namGiao: this.namGiao,
+            maPa: this.maPa,
             soQdCv: this.soQdCv,
-            ngayTao: this.ngayNhap,
         }
-
-        this.quanLyVonPhiService.nhapsoqdcv(request).toPromise().then(data => {
-            if (data.statusCode == 0) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            } else {
-                this.notification.error(MESSAGE.ERROR, data?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
-        })
+        if (!this.id){
+            this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            }, err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+            })
+        }
+        
     }
+
+    // call chi tiet bao cao
+	async getDetailReport() {
+		this.spinner.show();
+		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					this.maPa = data.data.maPa;
+                    this.namGiao = data.data.namGiao;
+                    this.soQdCv = data.data.soQdCv;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
+		this.spinner.hide();
+	}
 
 
 
@@ -159,67 +192,6 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     // getUnitName(mdv: any): string {
     //     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
     // }
-
-    //upload file
-	async uploadFile(file: File) {
-		// day file len server
-		const upfile: FormData = new FormData();
-		upfile.append('file', file);
-		upfile.append('folder', this.maPa + '/' + this.maDviTao);
-		let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
-			(data) => {
-				let objfile = {
-					fileName: data.filename,
-					fileSize: data.size,
-					fileUrl: data.url,
-				}
-				return objfile;
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
-		return temp;
-	}
-
-
-    // xoa file trong bang file
-	deleteFile(id: string): void {
-		this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
-		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-		// set list for delete
-		this.listIdDeleteFiles += id + ",";
-	}
-
-
-    //download file về máy tính
-	async downloadFile(id: string) {
-		let file!: File;
-		file = this.listFile.find(element => element?.lastModified.toString() == id);
-		if (!file) {
-			let fileAttach = this.lstFile.find(element => element?.id == id);
-			if (fileAttach) {
-				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-					(data) => {
-						fileSaver.saveAs(data, fileAttach.fileName);
-					},
-					err => {
-						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-					},
-				);
-			}
-		} else {
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
-		}
-	}
-
-    //event ng dung thay doi file
-    selectFile(files: FileList): void {
-        this.fileToUpload = files.item(0);
-    }
-
-
     //
     dong() {
         // this.router.navigate(['/'])

@@ -139,7 +139,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
             }
         };
         this.spinner.show();
-        await this.quanLyVonPhiService.timkiemphuongan(requestReport).toPromise().then(
+        await this.quanLyVonPhiService.timKiemPhuongAn(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.danhSachBaoCao = data.data.content;

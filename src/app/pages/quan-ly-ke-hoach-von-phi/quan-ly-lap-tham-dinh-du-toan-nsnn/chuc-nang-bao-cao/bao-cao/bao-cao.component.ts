@@ -91,7 +91,6 @@ export class BaoCaoComponent implements OnInit {
 	//trang thai cac nut
 	status: boolean = false;
 	statusEdit: boolean = false;
-	statusBtnDel: boolean = true;                       // trang thai an/hien nut xoa
 	statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
 	statusBtnApprove: boolean = true;                   // trang thai an/hien nut trinh duyet
 	statusBtnTBP: boolean = true;                       // trang thai an/hien nut truong bo phan
@@ -118,12 +117,12 @@ export class BaoCaoComponent implements OnInit {
 	beforeUploadCV = (file: NzUploadFile): boolean => {
 		this.fileDetail = file;
 		this.congVan = {
-			fileName: file.name,
-			fileSize: null,
-			fileUrl: null,
+		  fileName: file.name,
+		  fileSize: null,
+		  fileUrl: null,
 		};
 		return false;
-	};
+	  };
 
 	// them file vao danh sach
 	handleUpload(): void {
@@ -161,7 +160,23 @@ export class BaoCaoComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			if (this.maDviTao && nam) {
-
+				this.namHienHanh = parseInt(nam, 10);
+				await this.tongHop();
+				this.trangThaiBaoCao = "1";
+				this.nguoiNhap = this.userInfo?.username;
+				this.quanLyVonPhiService.sinhMaBaoCao().toPromise().then(
+					(data) => {
+						if (data.statusCode == 0) {
+							this.maBaoCao = data.data;
+						} else {
+							this.notification.error(MESSAGE.ERROR, data?.msg);
+						}
+					},
+					(err) => {
+						this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+					}
+				);
+				this.maBaoCao = '';
 			} else {
 				this.phuLucs.forEach(item => {
 					this.lstLapThamDinhs.push({
@@ -241,7 +256,6 @@ export class BaoCaoComponent implements OnInit {
 		}
 		let roleNguoiTao = this.userInfo?.roles[0]?.code;
 		const utils = new Utils();
-		this.statusBtnDel = utils.getRoleDel(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
 		this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
@@ -337,20 +351,20 @@ export class BaoCaoComponent implements OnInit {
 	//download file về máy tính
 	async downloadFileCv() {
 		if (this.congVan?.fileUrl) {
-			await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
-				(data) => {
-					fileSaver.saveAs(data, this.congVan?.fileName);
-				},
-				err => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
+		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+			(data) => {
+			  fileSaver.saveAs(data, this.congVan?.fileName);
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
 		} else {
-			let file: any = this.fileDetail;
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
+		  let file: any = this.fileDetail;
+		  const blob = new Blob([file], { type: "application/octet-stream" });
+		  fileSaver.saveAs(blob, file.name);
 		}
-	}
+	  }
 
 	// luu
 	async save() {
@@ -379,6 +393,11 @@ export class BaoCaoComponent implements OnInit {
 			}
 		})
 
+		let tongHopTuIds = [];
+		this.lstDviTrucThuoc.forEach(item => {
+			tongHopTuIds.push(item.id);
+		})
+
 		let request = {
 			id: this.id,
 			fileDinhKems: listFile,
@@ -388,7 +407,8 @@ export class BaoCaoComponent implements OnInit {
 			maDvi: this.maDviTao,
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
-			tongHopTuIds: [],
+			congVan: this.congVan,
+			tongHopTuIds: tongHopTuIds,
 		};
 
 		//call service them moi
@@ -517,6 +537,7 @@ export class BaoCaoComponent implements OnInit {
 			(data) => {
 				if (data.statusCode == 0) {
 					this.lstLapThamDinhs = data.data.lstLapThamDinhs;
+					this.lstDviTrucThuoc = data.data.lstBcaoDviTrucThuocs;
 					this.lstFiles = data.data.lstFiles;
 					this.listFile = [];
 					// set thong tin chung bao cao
@@ -532,6 +553,40 @@ export class BaoCaoComponent implements OnInit {
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
 					this.lyDoTuChoi = data.data.lyDoTuChoi;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		);
+		this.spinner.hide();
+	}
+
+	// call chi tiet bao cao
+	async tongHop() {
+		let request = {
+			maDvi: this.maDviTao,
+			namHienTai: this.namHienHanh,
+		}
+		this.spinner.show();
+		await this.quanLyVonPhiService.tongHop(request).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					this.lstLapThamDinhs = data.data.lstLapThamDinhs;
+					this.lstDviTrucThuoc = data.data.lstBcaoDviTrucThuocs;
+					this.lstLapThamDinhs.forEach(item => {
+						if (!item.id){
+							item.id = uuid.v4() + 'FE';
+						}
+						item.nguoiBcao = this.userInfo?.username;
+						item.maDviTien = '1';
+					})
+					this.lstDviTrucThuoc.forEach(item => {
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
