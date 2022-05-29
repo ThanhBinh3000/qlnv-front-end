@@ -117,12 +117,12 @@ export class BaoCaoComponent implements OnInit {
 	beforeUploadCV = (file: NzUploadFile): boolean => {
 		this.fileDetail = file;
 		this.congVan = {
-			fileName: file.name,
-			fileSize: null,
-			fileUrl: null,
+		  fileName: file.name,
+		  fileSize: null,
+		  fileUrl: null,
 		};
 		return false;
-	};
+	  };
 
 	// them file vao danh sach
 	handleUpload(): void {
@@ -351,20 +351,20 @@ export class BaoCaoComponent implements OnInit {
 	//download file về máy tính
 	async downloadFileCv() {
 		if (this.congVan?.fileUrl) {
-			await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
-				(data) => {
-					fileSaver.saveAs(data, this.congVan?.fileName);
-				},
-				err => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
+		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+			(data) => {
+			  fileSaver.saveAs(data, this.congVan?.fileName);
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
 		} else {
-			let file: any = this.fileDetail;
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
+		  let file: any = this.fileDetail;
+		  const blob = new Blob([file], { type: "application/octet-stream" });
+		  fileSaver.saveAs(blob, file.name);
 		}
-	}
+	  }
 
 	// luu
 	async save() {
@@ -407,6 +407,7 @@ export class BaoCaoComponent implements OnInit {
 			maDvi: this.maDviTao,
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
+			congVan: this.congVan,
 			tongHopTuIds: tongHopTuIds,
 		};
 

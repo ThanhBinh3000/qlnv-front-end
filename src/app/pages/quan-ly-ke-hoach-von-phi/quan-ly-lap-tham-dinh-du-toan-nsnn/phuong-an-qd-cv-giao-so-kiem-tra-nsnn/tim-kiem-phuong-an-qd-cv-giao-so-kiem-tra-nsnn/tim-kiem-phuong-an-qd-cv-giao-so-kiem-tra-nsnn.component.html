@@ -71,11 +71,6 @@
 						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"
 						[class]="!searchFilter.maPa && searchFilter.loai == '1' ?'input-error-validate' : ''"/>
 					</div>
-					
-					<div nz-col nzSpan="6">
-						<label class="search__label">Số QĐ/CV</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.soQdCv"/>
-					</div>
 				</div>
 			</nz-card>
 			<nz-card nzTitle="DANH SÁCH PHƯƠNG ÁN GIAO SỐ KIỂM TRA NSNN" [nzExtra]="tableCard1"
@@ -91,11 +86,11 @@
 							<th width="60px">STT</th>
 							<th width="150px">Mã phương án</th>
 							<th width="150px">Số QĐ/CV</th>
-							<th width="150px">Mã báo cáo</th>
 							<th width="150px">Ngày lập</th>
+							<th width="150px">Mã báo cáo</th>
 							<th width="150px">Năm phương án</th>
 							<th width="150px">Trạng thái</th>
-							<th width="150px">Đơn vị nhận</th>
+							<th width="150px">Đơn vị tạo</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -107,22 +102,22 @@
 								</a>
 							</td>
 							<td>
-								{{item.soQdCv}}
+								{{item.soQdCv?.fileName}}
 							</td>
 							<td>
-								{{item.maBaoCao}}
+								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.ngayLap}}
+								{{item.maBcao}}
 							</td>
 							<td>
 								{{item.namPa}}
 							</td>
 							<td>
-								{{item.trangThai}}
+								{{getStatusName(item.trangThai)}}
 							</td>
 							<td>
-								{{item.dviNhan}}
+								{{getUnitName(item.maDvi)}}
 							</td>
 						</tr>
 					</tbody>

@@ -15,9 +15,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { ItemDataMau02 } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
+import { ItemCongVan, ItemDataMau02 } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.component';
 
 
 export class ItemData {
@@ -34,6 +34,7 @@ export class ItemDvi {
     id: any;
     maKhuVuc: string;
     soTranChi: number;
+    trangThai: string;
 }
 
 @Component({
@@ -52,10 +53,11 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     maDonViTao: string;
     maPa: string;
     namPa: number;
-    soQdCv: string;
+    soQdCv: ItemCongVan;
     trangThaiBanGhi: string = '1';
     newDate = new Date();
     maDviTien: string;
+    thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
@@ -65,14 +67,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     soLaMa: any[] = LA_MA;
     lstDvi: any[] = [];                                         //danh sach don vi da duoc chon
     lstDviChon: any[] = [];                                     //danh sach don vi chua duoc chon
-    //file
-    lstFile: any[] = [];
-    listIdFiles: string;
-    fileList: NzUploadFile[] = [];
-    listFile: File[] = [];
-    fileUrl: any;
-    fileToUpload!: File;
-    listFileUploaded: any = [];
     //trang thai cac nut
     status: boolean = false;
     statusBtnDel: boolean;
@@ -82,31 +76,14 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     statusBtnLD: boolean;
     statusBtnCopy: boolean;
     statusBtnPrint: boolean;
+    statusBtnGiao: boolean;
     allChecked = false;
     //khac
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {}; // phuc vu nut chinh
     maGiao: any;
     checkGiao: boolean = true;
     listId: string = '';
-
-    beforeUpload = (file: NzUploadFile): boolean => {
-        this.fileList = this.fileList.concat(file);
-        return false;
-    };
-
-    handleUpload(): void {
-        this.fileList.forEach((file: any) => {
-            const id = file?.lastModified.toString();
-            this.lstFile.push({ id: id, fileName: file?.name });
-            this.listFile.push(file);
-        });
-        this.fileList = [];
-    }
-
-    //event ng dung thay doi file
-    selectFile(files: FileList): void {
-        this.fileToUpload = files.item(0);
-    }
+    fileDetail: NzUploadFile;
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -207,62 +184,30 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
         this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
-    }
-
-    //download file về máy tính
-    async downloadFile(id: string) {
-        let file!: File;
-        file = this.listFile.find(element => element?.lastModified.toString() == id);
-        if (!file) {
-            let fileAttach = this.lstFile.find(element => element?.id == id);
-            if (fileAttach) {
-                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-                    (data) => {
-                        fileSaver.saveAs(data, fileAttach.fileName);
-                    },
-                    err => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
-            }
+        if (this.userInfo?.roles[0]?.code == '3' && this.soQdCv){
+            this.statusBtnGiao = false;
         } else {
-            const blob = new Blob([file], { type: "application/octet-stream" });
-            fileSaver.saveAs(blob, file.name);
+            this.statusBtnGiao = true;
         }
     }
 
-    // xoa file trong bang file
-    deleteFile(id: string): void {
-        this.lstFile = this.lstFile.filter((a: any) => a.id !== id);
-        this.listFile = this.listFile.filter(
-            (a: any) => a?.lastModified.toString() !== id,
-        );
-    }
-
-    //upload file
-    async uploadFile(file: File) {
-        // day file len server
-        const upfile: FormData = new FormData();
-        upfile.append('file', file);
-        upfile.append('folder', this.maPa + '/' + this.maDonViTao + '/');
-        let temp = await this.quanLyVonPhiService
-            .uploadFile(upfile)
-            .toPromise()
-            .then(
-                (data) => {
-                    let objfile = {
-                        fileName: data.filename,
-                        fileSize: data.size,
-                        fileUrl: data.url,
-                    };
-                    return objfile;
-                },
-                (err) => {
-                    console.log('false :', err);
-                },
-            );
-        return temp;
-    }
+    //download file về máy tính
+	async downloadFileCv() {
+		if (this.soQdCv?.fileUrl) {
+		  await this.quanLyVonPhiService.downloadFile(this.soQdCv?.fileUrl).toPromise().then(
+			(data) => {
+			  fileSaver.saveAs(data, this.soQdCv?.fileName);
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
+		} else {
+		  let file: any = this.fileDetail;
+		  const blob = new Blob([file], { type: "application/octet-stream" });
+		  fileSaver.saveAs(blob, file.name);
+		}
+	  }
 
     // call chi tiet bao cao
     async getDetailReport() {
@@ -272,18 +217,25 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;
                     this.lstCtietBcao = data.data.listCtiet;
+                    this.maDviTien = data.data.maDviTien;
+                    this.lstDvi = [];
                     this.lstCtietBcao[0]?.listCtietDvi.forEach(item => {
                         this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maKhuVuc));
                     })
                     this.sortByIndex();
                     this.maDviTien = data.data.maDviTien;
-                    //this.divMoneyTotal();
-                    // this.maBaoCao = this.chiTietBcaos?.maBcao;
+                    this.lstCtietBcao.forEach(item => {
+                        item.tongSo = divMoney(item.tongSo, this.maDviTien);
+                        item.listCtietDvi.forEach(e => {
+                            e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
+                        })
+                    })
+                    this.maBaoCao = data.data.maBcao;
                     this.namPa = data.data.namPa;
-                    this.lstFile = data.data.lstFile;
                     this.trangThaiBanGhi = data.data.trangThai;
                     this.maPa = data.data.maPa;
                     this.maDonViTao = data.data.maDvi;
+                    this.thuyetMinh = data.data.thuyetMinh;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.soQdCv = data.data.soQdCv;
                     if (
@@ -293,6 +245,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                         this.trangThaiBanGhi == Utils.TT_BC_8
                     ) {
                         this.status = false;
+                        this.lstDviChon = [];
                         this.donVis.forEach(item => {
                             if ((this.lstDvi.findIndex(e => e.maDvi == item.maDvi) == -1) && (item.parent?.maDvi === this.maDonViTao)) {
                                 this.lstDviChon.push(item);
@@ -406,12 +359,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             return;
         }
 
-        // lay id file dinh kem (gửi file theo danh sách )
-        let listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
-
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
@@ -425,7 +372,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
-            fileDinhKems: listFile,
+            fileDinhKems: [],
             listCtiet: lstCtietBcaoTemp,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
@@ -433,6 +380,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             namPa: this.namPa,
             maBcao: this.maBaoCao,
             trangThai: this.trangThaiBanGhi,
+            thuyetMinh: this.thuyetMinh,
         };
         this.spinner.show();
         if (!this.id) {
@@ -486,6 +434,10 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     getStatusName() {
         const utils = new Utils();
         return utils.getStatusName(this.trangThaiBanGhi);
+    }
+
+    getStatusGiao(trangThai: string){
+        return (!this.statusBtnGiao && (trangThai == '0'));
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
@@ -569,11 +521,13 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             let mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             data.push(mm);
             data1.push(mm1);
@@ -612,6 +566,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     id: e.id,
                     maKhuVuc: e.maKhuVuc,
                     soTranChi: e.soTranChi,
+                    trangThai: e.trangThai,
                 });
             })
             this.editCache[item.id] = {
@@ -652,11 +607,13 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             let mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             obj.push(mm);
             obj1.push(mm1);
@@ -718,6 +675,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: item.id,
                 maKhuVuc: item.maKhuVuc,
                 soTranChi: item.soTranChi,
+                trangThai: item.trangThai,
             })
         })
         this.editCache[id] = {
@@ -739,6 +697,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: item.id,
                 maKhuVuc: item.maKhuVuc,
                 soTranChi: item.soTranChi,
+                trangThai: item.trangThai,
             })
         })
         this.lstCtietBcao[index] = {
@@ -816,11 +775,13 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: item.maDvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             let mm1: ItemDvi = {
                 id: mm.id,
                 maKhuVuc: item.Dvi,
                 soTranChi: 0,
+                trangThai: "0",
             }
             data.push(mm);
             data1.push(mm1);
@@ -943,6 +904,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                 id: uuid.v4() + 'FE',
                 maKhuVuc: maDvi,
                 soTranChi: 0,
+                trangThai: "0",
             })
         })
     }
@@ -985,5 +947,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     close() {
 		this.location.back();
 	}
+
+    
 
 }
