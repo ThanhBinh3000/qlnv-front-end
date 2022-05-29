@@ -1,295 +1,202 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { UserService } from 'src/app/services/user.service';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
+import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { TRANGTHAIBAOCAO } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 @Component({
-  selector: 'app-tim-kiem-dieu-chinh-du-toan-chi-NSNN',
-  templateUrl: './tim-kiem-dieu-chinh-du-toan-chi-NSNN.component.html',
-  styleUrls: ['./tim-kiem-dieu-chinh-du-toan-chi-NSNN.component.scss']
+	selector: 'app-tim-kiem-dieu-chinh-du-toan-chi-NSNN',
+	templateUrl: './tim-kiem-dieu-chinh-du-toan-chi-NSNN.component.html',
+	styleUrls: ['./tim-kiem-dieu-chinh-du-toan-chi-NSNN.component.scss'],
 })
 export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
+	//thong tin dang nhap
+	userInfo: any;
+	//thong tin tim kiem
+	searchFilter = {
+    dotBcao: null,
+		nam: null,
+		tuNgay: "",
+		denNgay: "",
+		maBaoCao: "",
+		donViTao: "",
+		trangThai: "",
+	};
+	//danh muc
+	danhSachDieuChinh: any[] = [];
+	trangThais: any[] = TRANG_THAI_TIM_KIEM;
+	//phan trang
+	totalElements = 0;
+	totalPages = 0;
+	pages = {
+		size: 10,
+		page: 1,
+	}
 
-  danhSachBaoCao: any = [];
-  totalElements = 0;
-  totalPages = 0;
-  errorMessage = "";
-  url: string = 'giao-nhiem-vu';
-  messageValidate:any = MESSAGEVALIDATE
+	constructor(
+		private quanLyVonPhiService: QuanLyVonPhiService,
+		private danhMuc: DanhMucHDVService,
+		private router: Router,
+		private datePipe: DatePipe,
+		private notification: NzNotificationService,
+		private fb: FormBuilder,
+		private spinner: NgxSpinnerService,
+		private userService: UserService,
+	) {
+	}
 
-  trangThais: any = TRANG_THAI_TIM_KIEM;
-  searchFilter = {
-    nam: null,
-    tuNgay: "",
-    denNgay: "",
-    maBaoCao: "",
-    donViTao: "",
-    LOAI_BAO_CAO: "",
-    trangThai: "",
-  };
-  pages = {                           // page
-    size: 10,
-    page: 1,
-  }
-  donViTaos: any = [];
-  baoCaos: any = [];
+	async ngOnInit() {
+		let userName = this.userService.getUserName();
+		await this.getUserInfo(userName); //get user info
 
-  validateForm!: FormGroup;           // form
+		this.searchFilter.donViTao = this.userInfo?.dvql;
+		this.onSubmit();
+	}
 
-  // submitForm(){
+	//get user info
+	async getUserInfo(username: string) {
+		await this.userService.getUserInfo(username).toPromise().then(
+			(data) => {
+				if (data?.statusCode == 0) {
+					this.userInfo = data?.data
+					return data?.data;
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+	}
 
-  //   if (this.validateForm.valid) {
-  //     return true;
-  //   } else {
-  //     Object.values(this.validateForm.controls).forEach(control => {
-  //       if (control.invalid) {
-  //         control.markAsDirty();
-  //         control.updateValueAndValidity({ onlySelf: true });
-  //       }
-  //     });
-  //     if(!this.searchFilter.nam || !this.searchFilter.LOAI_BAO_CAO){
-  //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-  //     }
-  //     if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000){
-  //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-  //     }
-  //     return false;
-  //   }
-  // }
-  constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
-    private danhMuc: DanhMucHDVService,
-    private router: Router,
-    private datePipe: DatePipe,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
-    private spinner: NgxSpinnerService,
-  ) {
-  }
+	redirectThongTinTimKiem() {
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn',
+			0,
+		]);
+	}
 
-  ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      namhientai: [null, [Validators.pattern('^[12][0-9]{3}$')]],
-      LOAI_BAO_CAO: [null, [Validators.required]],
-      temp: [null],
-    });
+	redirectSuaThongTinTimKiem(id) {
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn',
+			id,
+		]);
+	}
 
-    //lay danh sach loai bao cao
-    this.baoCaos = LOAI_BAO_CAO;
-    //lay danh sach danh muc
-    this.danhMuc.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donViTaos = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-  }
+	//search list bao cao theo tieu chi
+	async onSubmit() {
+		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
+			if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
+				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+				return;
+			}
+		}
+		let requestReport = {
+      dotBcao: this.searchFilter.dotBcao,
+			loaiTimKiem: "0",
+			maBcao: this.searchFilter.maBaoCao,
+			maDvi: this.searchFilter.donViTao,
+			namBcao: this.searchFilter.nam,
+			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+			paggingReq: {
+				limit: this.pages.size,
+				page: this.pages.page,
+			},
+			trangThais: [],
+		};
+		this.spinner.show();
+		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
+		await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
+			(data) => {
+				if (data.statusCode == 0) {
+					this.danhSachDieuChinh = data.data.content;
+					this.danhSachDieuChinh.forEach(e => {
+						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+					})
+					this.totalElements = data.data.totalElements;
+					this.totalPages = data.data.totalPages;
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+		this.spinner.hide();
+	}
 
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
+	//doi so trang
+	onPageIndexChange(page) {
+		this.pages.page = page;
+		this.onSubmit();
+	}
 
-  //search list bao cao theo tieu chi
-  async onSubmit() {
+	//doi so luong phan tu tren 1 trang
+	onPageSizeChange(size) {
+		this.pages.size = size;
+		this.onSubmit();
+	}
+	xoaDieuKien() {
+		this.searchFilter.nam = null
+		this.searchFilter.tuNgay = null
+		this.searchFilter.denNgay = null
+		this.searchFilter.maBaoCao = null
+		this.searchFilter.trangThai = null
+	}
 
-    let requestReport = {
-      maBcao: this.searchFilter.maBaoCao,
-      maDvi: this.searchFilter.donViTao,
-      maLoaiBcao: this.searchFilter.LOAI_BAO_CAO,
-      namBcao: this.searchFilter.nam,
-      ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, 'dd/MM/yyyy'),
-      ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, 'dd/MM/yyyy'),
-      paggingReq: {
-        limit: this.pages.size,
-        page: this.pages.page,
-      },
-      str: "",
-      trangThai: this.searchFilter.trangThai,
-    };
-    this.spinner.show();
-    //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+	taoMoi() {
+		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
+			if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
+				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+				return;
+			}
+		}
+		if (!this.searchFilter.nam){
+			this.router.navigate([
+				'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu',
+			]);
+		} else {
+			this.router.navigate([
+				'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/0/' + this.searchFilter.nam,
+			]);
+		}
+	}
+
+	xemChiTiet(id: string) {
+		this.router.navigate([
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/' + id,
+		])
+	}
+
+  async xoaDuToanDieuChinh(id: string){
+    await this.quanLyVonPhiService.xoaDuToanDieuChinh(id).toPromise().then(
       (data) => {
-        if (data.statusCode == 0) {
-          this.danhSachBaoCao = data.data.content;
-          this.danhSachBaoCao.forEach( e=>{
-            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
-          })
-          this.totalElements = data.data.totalElements;
-          this.totalPages = data.data.totalPages;
-
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-    this.spinner.hide();
+				if (data.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS)
+          this.onSubmit()
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+    )
   }
 
-  //doi so trang
-  onPageIndexChange(page) {
-    this.pages.page = page;
-    this.onSubmit();
-  }
-
-  //doi so luong phan tu tren 1 trang
-  onPageSizeChange(size) {
-    this.pages.size = size;
-    this.onSubmit();
-  }
-  xoaDieuKien() {
-    this.searchFilter.nam = null
-    this.searchFilter.tuNgay = null
-    this.searchFilter.denNgay = null
-    this.searchFilter.maBaoCao = null
-    this.searchFilter.donViTao = null
-    this.searchFilter.LOAI_BAO_CAO = null
-    this.searchFilter.trangThai = null
-  }
-
-  taoMoi() {
-    // if (!this.submitForm()) {
-    //   return;
-    // }
-    this.router.navigate([
-      '/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/' + this.url,
-    ]);
-  }
-
-  xemChiTiet(maLOAI_BAO_CAO: string, id: string) {
-    let url: string;
-    switch (maLOAI_BAO_CAO) {
-      case '12':
-        url = '/chi-thuong-xuyen-3-nam/'
-        break;
-      case '01':
-        url = '/xay-dung-ke-hoach-von-dau-tu/'
-        break;
-      case '02':
-        url = '/xay-dung-nhu-cau-nhap-xuat-hang-nam/'
-        break;
-      case '03':
-        url = '/xay-dung-ke-hoach-bao-quan-hang-nam/'
-        break;
-      case '04':
-        url = '/nhu-cau-xuat-hang-vien-tro/'
-        break;
-      case '05':
-        url = '/xay-dung-ke-hoach-quy-tien-luong3-nam/'
-        break;
-      case '06':
-        url = '/xay-dung-ke-hoach-quy-tien-luong-hang-nam/'
-        break;
-      case '07':
-        url = '/thuyet-minh-chi-de-tai-du-an-nghien-cuu-kh/'
-        break;
-      case '08':
-        url = '/ke-hoach-xay-dung-van-ban-qppl-dtqg-3-nam/'
-        break;
-      case '09':
-        url = '/du-toan-chi-ung-dung-cntt-3-nam/'
-        break;
-      case '10':
-        url = '/chi-mua-sam-thiet-bi-chuyen-dung-3-nam/'
-        break;
-      case '11':
-        url = '/chi-ngan-sach-nha-nuoc-3-nam/'
-        break;
-      case '13':
-        url = '/nhu-cau-phi-nhap-xuat-3-nam/'
-        break;
-      case '14':
-        url = '/ke-hoach-cai-tao-va-sua-chua-lon-3-nam/'
-        break;
-      case '15':
-        url = '/ke-hoach-dao-tao-boi-duong-3-nam/'
-        break;
-      case '16':
-        url = '/nhu-cau-ke-hoach-dtxd3-nam/'
-        break;
-      case '17':
-        url = '/tong-hop-du-toan-chi-thuong-xuyen-hang-nam/'
-        break;
-      case '18':
-        url = '/du-toan-xuat-nhap-hang-dtqg-hang-nam/'
-        break;
-      case '19':
-        url = '/ke-hoach-bao-quan-hang-nam/'
-        break;
-      case '20':
-        url = '/du-toan-phi-xuat-hang-dtqg-hang-nam-vtct/'
-        break;
-      case '21':
-        url = '/ke-hoach-du-toan-cai-tao-sua-chua-ht-kt3-nam/'
-        break;
-      case '22':
-        url = '/ke-hoach-quy-tien-luong-nam-n1/'
-        break;
-      case '23':
-        url = '/du-toan-chi-du-tru-quoc-gia-gd3-nam/'
-        break;
-      case '24':
-        url = '/thuyet-minh-chi-cac-de-tai-du-an-nghien-cuu-khoa-hoc-giai-doan-3nam/'
-        break;
-      case '25':
-        url = '/ke-hoach-xay-dung-van-ban-quy-pham-phap-luat-dtqg-giai-doan-3nam/'
-        break;
-      case '26':
-        url = '/du-toan-chi-ung-dung-cntt-giai-doan-3nam/'
-        break;
-      case '27':
-        url = '/du-toan-chi-mua-sam-may-moc-thiet-chi-chuyen-dung-3nam/'
-        break;
-      case '28':
-        url = '/tong-hop-nhu-cau-chi-ngan-sach-nha-nuoc-giai-doan-3nam/'
-        break;
-      case '29':
-        url = '/tong-hop-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/'
-        break;
-      case '30':
-        url = '/chi-tiet-nhu-cau-chi-thuong-xuyen-giai-doan-3nam/'
-        break;
-      case '31':
-        url = '/tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-giai-doan-3nam/'
-        break;
-      case '32':
-        url = '/ke-hoach-dao-tao-boi-duong-3-nam-tc/'
-        break;
-      default:
-        url = null;
-        break;
-    }
-    if(url != null){
-      this.router.navigate([
-        '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/' + url + id
-      ]);
-    }
-  }
+	getStatusName(trangThai: string){
+		return this.trangThais.find(e => e.id == trangThai).tenDm;
+	}
 }
