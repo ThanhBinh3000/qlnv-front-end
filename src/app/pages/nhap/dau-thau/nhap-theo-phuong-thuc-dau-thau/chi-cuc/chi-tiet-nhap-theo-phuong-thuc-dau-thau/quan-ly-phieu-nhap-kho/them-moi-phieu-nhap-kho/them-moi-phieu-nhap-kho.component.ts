@@ -29,6 +29,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   id: number = 0;
   idNhapHang: number = 0;
   detailGiaoNhap: any = {};
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -64,7 +65,9 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.checkIsView();
       this.create.dvt = "Tấn";
+      this.detail.trangThai = "00";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       await this.loadChiTiet(this.id);
@@ -81,6 +84,16 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
     }
   }
 

@@ -34,6 +34,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   detail: any = {};
   id: number = 0;
   idNhapHang: number = 0;
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -72,6 +73,9 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.getIdNhap();
+      this.checkIsView();
+      this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
@@ -91,6 +95,16 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
     }
   }
 
@@ -242,6 +256,10 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           if (this.detail.children) {
             this.detail.detail = this.detail.children;
           }
+          if (this.detail.soKho) {
+            this.detail.soKho = +this.detail.soKho;
+          }
+          this.loadNhaKho(this.detail.diemKhoId);
         }
       }
     }
@@ -431,7 +449,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: '04',
           };
           let res =
             await this.quanLyBangKeCanHangService.updateStatus(
@@ -468,7 +486,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: '01',
           };
           let res =
             await this.quanLyBangKeCanHangService.updateStatus(
@@ -505,7 +523,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: '02',
           };
           let res =
             await this.quanLyBangKeCanHangService.updateStatus(
@@ -603,13 +621,14 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         "maDiemKho": this.detail.maDiemKho,
         "maDonVi": this.detail.maDvi,
         "maHang": this.maVthh,
-        "maKhoNganLo": this.detail.maKhoNganLo,
+        "maNganLo": this.detail.maNganLo,
         "maLhKho": this.detail.maLhKho,
         "maNhaKho": this.detail.maNhaKho,
         "maQhns": this.detail.maDvi,
         "maThuKho": this.detail.maThuKho,
         "ngayNhapXuat": this.detail?.ngayNhapXuat ? dayjs(this.detail?.ngayNhapXuat).format('YYYY-MM-DD') : null,
-        "qlPhieuNhapKhoLtId": this.idNhapHang,
+        "qlPhieuNhapKhoLtId": 0,
+        "qdgnvnxId": this.idNhapHang,
         "soBangKe": this.detail.soBangKe,
         "soHd": this.detail.soHd,
         "soKho": this.detail.soKho,
