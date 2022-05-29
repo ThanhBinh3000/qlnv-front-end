@@ -94,7 +94,7 @@
                   Sổ kho
                 </nz-form-label>
                 <nz-select [(ngModel)]="detail.soKho">
-                  <nz-option *ngFor="let thuKho of listLoaiKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
+                  <nz-option *ngFor="let thuKho of listSoKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
                   </nz-option>
                 </nz-select>
               </nz-form-item>

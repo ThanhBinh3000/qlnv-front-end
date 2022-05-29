@@ -18,9 +18,6 @@ export class ChiTietNhapTheoPhuongThucDauThauComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    });
   }
 
   ngOnInit() {
@@ -29,16 +26,16 @@ export class ChiTietNhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
+    if (this.router.url.indexOf("/thoc/") != -1) {
       this.loaiVthh = "Thóc";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
+    } else if (this.router.url.indexOf("/gao/") != -1) {
       this.loaiVthh = "Gạo";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
       this.loaiVthh = "Muối";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiVthh = "Vật tư";
       this.routerVthh = 'vat-tu';
     }

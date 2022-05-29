@@ -14,7 +14,6 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
@@ -47,6 +46,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
+  listSoKho: any[] = [];
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -64,6 +64,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
+    // private quanLySoKhoService: QuanLySoKhoService,
   ) { }
 
   async ngOnInit() {
@@ -72,9 +73,10 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.getTitleVthh();
       this.create.dvt = "Tấn";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
+      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
+      await this.loadChiTiet(this.id);
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
-      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await Promise.all([
         this.loadDiemKho(),
         this.loadNganLo(),
@@ -82,8 +84,8 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
         this.loadThuKho(),
         this.loadLoaiKho(),
         this.loadDonViTinh(),
+        // this.loadSoKho(),
       ]);
-      await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -104,6 +106,37 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       }
     }
   }
+
+  // async loadSoKho() {
+  //   let body = {
+  //     "denNgayMoSo": null,
+  //     "maDvi": this.detail.maDvi,
+  //     "maHhoa": null,
+  //     "maLo": null,
+  //     "maNgan": null,
+  //     "nam": NullVisitor,
+  //     "orderBy": null,
+  //     "orderDirection": null,
+  //     "paggingReq": {
+  //       "limit": 1000,
+  //       "orderBy": null,
+  //       "orderType": null,
+  //       "page": 0
+  //     },
+  //     "str": null,
+  //     "tenHhoa": null,
+  //     "trangThai": null,
+  //     "tuNgayMoSo": null
+  //   };
+  //   let res = await this.quanLySoKhoService.getList(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     if (res.data && res.data.content) {
+  //       this.listSoKho = res.data.content;
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   async loadDonViTinh() {
     try {
@@ -360,22 +393,22 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
+    if (this.router.url.indexOf("/thoc/") != -1) {
       this.loaiStr = "Thóc";
       this.loaiVthh = "01";
       this.maVthh = "0101";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
+    } else if (this.router.url.indexOf("/gao/") != -1) {
       this.loaiStr = "Gạo";
       this.loaiVthh = "00";
       this.maVthh = "0102";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
       this.loaiStr = "Muối";
       this.loaiVthh = "02";
       this.maVthh = "04";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiStr = "Vật tư";
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';

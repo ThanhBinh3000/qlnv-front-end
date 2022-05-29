@@ -260,13 +260,7 @@
                 </ng-container>
                 <ng-template #editTemplate>
                   <td></td>
-                  <td>
-                    <nz-select [(ngModel)]="editDataCache[data.stt]?.data.tenVatTu"
-                      (ngModelChange)="changeDanhMucHang(editDataCache[data.stt]?.data)">
-                      <nz-option *ngFor="let item of listDanhMucHang" [nzValue]="item.ten" [nzLabel]="item.ten">
-                      </nz-option>
-                    </nz-select>
-                  </td>
+                  <td>{{editDataCache[data.stt]?.data.tenVatTu}}</td>
                   <td>{{editDataCache[data.stt]?.data.maVatTu}}</td>
                   <td>{{editDataCache[data.stt]?.data.donViTinh}}</td>
                   <td>

@@ -67,6 +67,9 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   loaiVthh: string = '';
   routerUrl: string;
 
+  maVthh: string;
+  routerVthh: string;
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -76,13 +79,14 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     private modal: NzModalService,
     private route: ActivatedRoute,
     public userService: UserService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.routerUrl = this.router.url;
+    this.getTitleVthh();
     this.spinner.show();
     try {
-      this.getTitleVthh();
       let dayNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -118,6 +122,19 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
       '/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' +
       this.route.snapshot.paramMap.get('type'),
     ]);
+    if (this.router.url.indexOf("/thoc") != -1) {
+      this.maVthh = "0101";
+      this.routerVthh = 'thoc';
+    } else if (this.router.url.indexOf("/gao") != -1) {
+      this.maVthh = "0102";
+      this.routerVthh = 'gao';
+    } else if (this.router.url.indexOf("/muoi") != -1) {
+      this.maVthh = "04";
+      this.routerVthh = 'muoi';
+    } else if (this.router.url.indexOf("/vat-tu") != -1) {
+      this.maVthh = null;
+      this.routerVthh = 'vat-tu';
+    }
   }
 
   openDialogHopDong() {
@@ -149,22 +166,10 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   redirectToThongTin(id: number) {
-    if (this.routerUrl.includes("thoc")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/thong-tin`, id]);
-    } else if (this.routerUrl.includes("gao")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}/thong-tin`, id]);
-    } else if (this.routerUrl.includes("muoi")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}/thong-tin`, id]);
-    }
+    this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${this.routerVthh}/thong-tin`, id]);
   }
   redirectToChiTiet(id: number) {
-    if (this.routerUrl.includes("thoc")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${THOC}/chi-tiet`, id]);
-    } else if (this.routerUrl.includes("gao")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${GAO}/chi-tiet`, id]);
-    } else if (this.routerUrl.includes("muoi")) {
-      this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${MUOI}/chi-tiet`, id]);
-    }
+    this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${this.routerVthh}/xem-chi-tiet`, id]);
   }
 
   clearFilter() {
@@ -185,7 +190,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
         : null,
       "loaiQd": "",
       "maDvi": "",
-      "maVthh": "",
+      "maVthh": this.maVthh,
       "namNhap": this.searchFilter.namNhap,
       "ngayQd": "",
       "orderBy": "",
@@ -361,7 +366,7 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
 
   chiTietQuyetDinh(isView: boolean, id: number) {
     this.router.navigate([
-      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/thoc/chi-tiet/${id}/bien-ban`,
+      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/${this.routerVthh}/chi-tiet/${id}/bien-ban`,
     ]);
   }
 

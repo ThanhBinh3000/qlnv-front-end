@@ -39,22 +39,22 @@ export class ThongTinComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
+    if (this.router.url.indexOf("/thoc/") != -1) {
       this.loaiStr = "Thóc";
       this.loaiVthh = "01";
       this.maVthh = "0101";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
+    } else if (this.router.url.indexOf("/gao/") != -1) {
       this.loaiStr = "Gạo";
       this.loaiVthh = "00";
       this.maVthh = "0102";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
       this.loaiStr = "Muối";
       this.loaiVthh = "02";
       this.maVthh = "04";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiStr = "Vật tư";
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';
