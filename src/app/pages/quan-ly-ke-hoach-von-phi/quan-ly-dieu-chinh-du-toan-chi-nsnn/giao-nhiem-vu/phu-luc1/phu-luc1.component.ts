@@ -81,7 +81,7 @@ export class PhuLuc1Component implements OnInit {
   statusBtnOk: boolean;
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
+  idItem: any
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -564,7 +564,7 @@ export class PhuLuc1Component implements OnInit {
     // this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.ncauChiN3 - this.editCache[id].data.tranChiN3;
   }
 
-  idItem: any
+
   // luu
   async save(trangThai: string) {
 

@@ -50,6 +50,13 @@ const routes: Routes = [
       ).then((m) => m.GiaoNhiemVuModule),
     },
     {
+      path: 'giao-nhiem-vu/:dotBcao/:namBcao',
+      loadChildren: () =>
+        import(
+          './giao-nhiem-vu/giao-nhiem-vu.module'
+        ).then((m) => m.GiaoNhiemVuModule),
+    },
+    {
       path: 'phe-duyet-bao-cao-dieu-chinh',
       loadChildren: () =>
         import(

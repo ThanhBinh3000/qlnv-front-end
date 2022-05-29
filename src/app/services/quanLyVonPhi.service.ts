@@ -251,6 +251,15 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  // tong hop dieu chinh du toan
+  tongHopDieuChinhDuToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/tong-hop',
+      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/tong-hop',
+      request,
+    );
+  }
+
   //get list don vi tao
   dMDonVi(): Observable<any> {
     return this.httpClient.get(

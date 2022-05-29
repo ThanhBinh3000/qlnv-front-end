@@ -658,4 +658,52 @@ async getDetailReport() {
 	close() {
 		this.location.back();
 	}
+
+// call chi tiet bao cao
+async callSynthetic() {
+  this.spinner.show();
+  let request = {
+    maLoaiBcao: this.routerActive.snapshot.paramMap.get('loaiBaoCao'),
+    namBcao: Number(this.routerActive.snapshot.paramMap.get('nam')),
+    thangBcao: Number(this.routerActive.snapshot.paramMap.get('thang')) == 0 ? null : Number(this.routerActive.snapshot.paramMap.get('thang')),
+    dotBcao: null,
+    maPhanBcao: '0',
+  }
+  // await this.quanLyVonPhiService.tongHopDieuChinhDuToan(request).toPromise().then(
+  //   async (data) => {
+  //     if (data.statusCode == 0) {
+  //       this.baoCao = data.data;
+  //       await this.baoCao?.lstBcaos?.forEach(item => {
+  //         item.maDviTien = '1';   // set defaul ma don vi tien la Dong
+  //         item.checked = false;
+  //         item.trangThai = '5';
+  //         let index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
+  //         if (index !== -1) {
+  //           item.tieuDe = PHULUCLIST[index].tieuDe;
+  //           item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+  //           item.trangThai = '3';
+  //           item.nguoiBcao = this.userInfo.username;
+  //         }
+  //       })
+  //       this.listFile = [];
+  //       this.baoCao.trangThai = "1";
+  //       if (this.baoCao.trangThai == Utils.TT_BC_1 ||
+  //         this.baoCao.trangThai == Utils.TT_BC_3 ||
+  //         this.baoCao.trangThai == Utils.TT_BC_5 ||
+  //         this.baoCao.trangThai == Utils.TT_BC_8) {
+  //         this.status = false;
+  //       } else {
+  //         this.status = true;
+  //       }
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, data?.msg);
+  //     }
+  //   },
+  //   (err) => {
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+  //   }
+  // );
+  this.spinner.hide();
+}
+
 }
