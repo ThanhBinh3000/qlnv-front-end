@@ -595,7 +595,11 @@ export class PhuLuc5Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.dataChange.emit('-1');
+          let obj = {
+            trangThai: '-1',
+            lyDoTuChoi: null,
+          };
+          this.dataChange.emit(obj);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

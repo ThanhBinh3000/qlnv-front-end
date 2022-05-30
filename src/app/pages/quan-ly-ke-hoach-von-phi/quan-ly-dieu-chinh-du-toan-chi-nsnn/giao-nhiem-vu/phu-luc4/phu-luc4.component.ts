@@ -135,7 +135,7 @@ export class PhuLuc4Component implements OnInit {
         ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
       })
     })
-    if (!this.lstCtietBcao[0]?.stt){
+    if (!this.lstCtietBcao && !this.lstCtietBcao[0]?.stt){
       this.sortWithoutIndex();
     } else {
         this.sortByIndex();
@@ -662,7 +662,11 @@ export class PhuLuc4Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.dataChange.emit('-1');
+          let obj = {
+            trangThai: '-1',
+            lyDoTuChoi: null,
+          };
+          this.dataChange.emit(obj);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
