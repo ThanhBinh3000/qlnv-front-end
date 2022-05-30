@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI } from 'src/app/Utility/utils';
+import { TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 
 
 
@@ -23,12 +23,12 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	userInfo: any;
 	//thong tin tim kiem
 	namHienTai: number;
-	trangThai: string = '8';
+	trangThai: string = Utils.TT_BC_9;
 	maDviTao: string;
   dotBcao: number;
 	//danh muc
 	danhSachDieuChinh: any[] = [];
-	trangThais: any[] = TRANG_THAI;
+	trangThais: any[] = TRANG_THAI_KIEM_TRA_BAO_CAO;
 	donVis: any[] = [];
 	//phan trang
 	totalElements = 0;
@@ -93,21 +93,12 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
 		}
+		let trangThais = [];
+		if (this.trangThai){
+			trangThais = [this.trangThai];
+		}
 		let requestReport = {
-			// maBcao: "",
-			// maDvi: this.maDviTao,
-			// maLoaiBcao: "",
-			// namBcao: this.namHienTai,
-			// ngayTaoDen: "",
-			// ngayTaoTu: "",
-			// paggingReq: {
-			// 	limit: this.pages.size,
-			// 	page: this.pages.page,
-			// },
-			// str: "",
-			// trangThai: this.trangThai,
-
-      dotBcao: null,
+			dotBcao: null,
       loaiTimKiem: "0",
       maBcao: "",
       maDvi:this.maDviTao,
@@ -121,7 +112,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
       str: "",
       thangBcao: null,
       trangThai: this.trangThai,
-      trangThais: [],
+			trangThais: trangThais,
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
@@ -130,7 +121,8 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachDieuChinh = data.data.content;
 					this.danhSachDieuChinh.forEach(e => {
-						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+						e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -147,6 +139,8 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
 	tongHop() {
+    console.log(this.dotBcao);
+
 		if (!this.namHienTai) {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
 			return;
@@ -156,13 +150,13 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 			return;
 		}
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/0/' + this.dotBcao + '/' + this.namHienTai,
+			'/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/0/' + this.dotBcao + '/' + this.namHienTai + '/' +this.maDviTao,
 		])
 	}
 
 
 	dong() {
-		// this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn'])
+		// this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn'])
 		this.location.back();
 	}
 
@@ -187,7 +181,7 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
 	}
 
 	getStatusName(trangThai: string){
-		return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+		return this.trangThais.find(e => e.id == trangThai)?.ten;
 	}
 
 	getUnitName(maDvi: string){

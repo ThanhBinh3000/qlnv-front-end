@@ -109,10 +109,10 @@ export class PhuLuc2Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
-    // this.lstCtietBcao = this.data?.lstCtiet;
+    // this.lstCtietBcao = this.data?.lstCtietDchinh;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.data?.lstCtiet.forEach(item => {
+    this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
         thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
@@ -125,7 +125,11 @@ export class PhuLuc2Component implements OnInit {
         ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
       })
     })
-    this.sortByIndex();
+    if (!this.lstCtietBcao[0]?.stt){
+      this.sortWithoutIndex();
+    } else {
+        this.sortByIndex();
+    }
     this.updateEditCache();
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -156,14 +160,14 @@ export class PhuLuc2Component implements OnInit {
   }
 
   getStatusButton() {
-    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") || (this.trangThaiPhuLuc == "4" || this.trangThaiPhuLucGetDeTail == "7")) {
+    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") ) {
         this.statusBtnOk = false;
     } else {
         this.statusBtnOk = true;
     }
   }
 
-  // chuc nang check role
+    // chuc nang check role
 	async onSubmit(mcn: string, lyDoTuChoi: string) {
 		if (this.id) {
 			const requestGroupButtons = {
@@ -174,9 +178,13 @@ export class PhuLuc2Component implements OnInit {
 			this.spinner.show();
 			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
-          this.trangThaiPhuLuc = mcn;
-          this.getStatusButton();
-          this.dataChange.emit(mcn);
+                    this.trangThaiPhuLuc = mcn;
+					this.getStatusButton();
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
 					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					// } else {
@@ -564,8 +572,8 @@ export class PhuLuc2Component implements OnInit {
   //gia tri cac o input thay doi thi tinh toan lai
   changeModel(id: string): void {
     this.editCache[id].data.thienCong = this.editCache[id].data.thienSluongTteThien + this.editCache[id].data.thienSluongUocThien;
-    // this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.ncauChiN2 - this.editCache[id].data.tranChiN2;
-    // this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.ncauChiN3 - this.editCache[id].data.tranChiN3;
+    this.editCache[id].data.thienThanhTien = this.editCache[id].data.thienCong + this.editCache[id].data.thienDinhMuc;
+    this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
   }
 
 

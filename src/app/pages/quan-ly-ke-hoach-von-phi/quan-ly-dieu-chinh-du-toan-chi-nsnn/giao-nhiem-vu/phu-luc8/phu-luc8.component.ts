@@ -35,6 +35,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc8',
   templateUrl: './phu-luc8.component.html',
+  styleUrls: ['./phu-luc8.component.scss'],
 })
 export class PhuLuc8Component implements OnInit {
   @Input() data;
@@ -43,7 +44,7 @@ export class PhuLuc8Component implements OnInit {
   donVis: any = [];
   congTrinhs: any[] = [];
   nhomChis: any[] = [];
-  lstDchinh: ItemData[];
+  lstDchinh: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   //thong tin chung
   id: any;
@@ -104,7 +105,7 @@ export class PhuLuc8Component implements OnInit {
     // this.lstDchinh = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.data?.lstCtiet.forEach(item => {
+    this.data?.lstCtietDchinh.forEach(item => {
       this.lstDchinh.push({
         ...item,
         thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
@@ -170,35 +171,39 @@ export class PhuLuc8Component implements OnInit {
   }
 
   // chuc nang check role
-  async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (this.id) {
-      const requestGroupButtons = {
-        id: this.id,
-        trangThai: mcn,
-        lyDoTuChoi: lyDoTuChoi,
-      };
-      this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
-        if (data.statusCode == 0) {
-          this.trangThaiPhuLuc = mcn;
-          this.getStatusButton();
-          this.dataChange.emit(mcn);
-          // if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-          // 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-          // } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-          // }
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      }, err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      });
-      this.spinner.hide();
-    } else {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-    }
-  }
+	async onSubmit(mcn: string, lyDoTuChoi: string) {
+		if (this.id) {
+			const requestGroupButtons = {
+				id: this.id,
+				trangThai: mcn,
+				lyDoTuChoi: lyDoTuChoi,
+			};
+			this.spinner.show();
+			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+				if (data.statusCode == 0) {
+                    this.trangThaiPhuLuc = mcn;
+					this.getStatusButton();
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
+					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+					// } else {
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+					// }
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			});
+			this.spinner.hide();
+		} else {
+			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+		}
+	}
 
   //show popup tu choi
   tuChoi(mcn: string) {
@@ -220,6 +225,7 @@ export class PhuLuc8Component implements OnInit {
 
   // them dong moi
   addLine(id: number): void {
+    debugger
     let item: ItemData = {
       id: uuid.v4(),
       stt: 0,

@@ -42,6 +42,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc7',
   templateUrl: './phu-luc7.component.html',
+  styleUrls: ['./phu-luc7.component.scss'],
 })
 export class PhuLuc7Component implements OnInit {
   @Input() data;
@@ -119,7 +120,7 @@ export class PhuLuc7Component implements OnInit {
     // this.lstCtietBcao = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.data?.lstCtiet.forEach(item => {
+    this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
         kphiBqDmuc: divMoney(item.kphiBqDmuc, this.maDviTien),
@@ -135,7 +136,11 @@ export class PhuLuc7Component implements OnInit {
         soChuaQtoan: divMoney(item.soChuaQtoan, this.maDviTien),
       })
     })
-    this.sortByIndex();
+    if (!this.lstCtietBcao[0]?.stt){
+      this.sortWithoutIndex();
+    } else {
+        this.sortByIndex();
+    }
     this.updateEditCache();
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -184,9 +189,13 @@ export class PhuLuc7Component implements OnInit {
 			this.spinner.show();
 			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
-          this.trangThaiPhuLuc = mcn;
-          this.getStatusButton();
-          this.dataChange.emit(mcn);
+                    this.trangThaiPhuLuc = mcn;
+					this.getStatusButton();
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
 					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					// } else {

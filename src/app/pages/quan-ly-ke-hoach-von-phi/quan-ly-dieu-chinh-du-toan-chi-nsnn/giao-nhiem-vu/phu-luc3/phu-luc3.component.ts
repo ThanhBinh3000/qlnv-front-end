@@ -38,6 +38,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc3',
   templateUrl: './phu-luc3.component.html',
+  styleUrls: ['./phu-luc3.component.scss'],
 })
 export class PhuLuc3Component implements OnInit {
     @Input() data;
@@ -113,7 +114,7 @@ export class PhuLuc3Component implements OnInit {
       // this.lstDchinh = this.data?.lstCtiet;
       this.status = this.data?.status;
       this.statusBtnFinish = this.data?.statusBtnFinish;
-      this.data?.lstCtiet.forEach(item => {
+      this.data?.lstCtietDchinh.forEach(item => {
         this.lstDchinh.push({
           ...item,
           thienSluongKhoachDgiao: divMoney(item.thienSluongKhoachDgiao, this.maDviTien),
@@ -171,43 +172,47 @@ export class PhuLuc3Component implements OnInit {
     }
 
     getStatusButton() {
-      if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") || (this.trangThaiPhuLuc == "4" || this.trangThaiPhuLucGetDeTail == "7")) {
+      if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") ) {
           this.statusBtnOk = false;
       } else {
           this.statusBtnOk = true;
       }
     }
 
-    // chuc nang check role
-    async onSubmit(mcn: string, lyDoTuChoi: string) {
-      if (this.id) {
-        const requestGroupButtons = {
-          id: this.id,
-          trangThai: mcn,
-          lyDoTuChoi: lyDoTuChoi,
-        };
-        this.spinner.show();
-        await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
-          if (data.statusCode == 0) {
-            this.trangThaiPhuLuc = mcn;
-            this.getStatusButton();
-            this.dataChange.emit(mcn);
-            // if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-            // 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-            // } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            // }
-          } else {
-            this.notification.error(MESSAGE.ERROR, data?.msg);
-          }
-        }, err => {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
-        this.spinner.hide();
-      } else {
-        this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-      }
-    }
+     // chuc nang check role
+	async onSubmit(mcn: string, lyDoTuChoi: string) {
+		if (this.id) {
+			const requestGroupButtons = {
+				id: this.id,
+				trangThai: mcn,
+				lyDoTuChoi: lyDoTuChoi,
+			};
+			this.spinner.show();
+			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+				if (data.statusCode == 0) {
+                    this.trangThaiPhuLuc = mcn;
+					this.getStatusButton();
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
+					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+					// } else {
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+					// }
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			});
+			this.spinner.hide();
+		} else {
+			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+		}
+	}
 
     //show popup tu choi
     tuChoi(mcn: string) {

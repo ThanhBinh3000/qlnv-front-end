@@ -29,13 +29,6 @@ const routes: Routes = [
       ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
   },
   {
-    path: 'tong-hop-dieu-chinh-du-toan-chi-NSNN/:id',
-    loadChildren: () =>
-      import(
-        './tong-hop-dieu-chinh-du-toan-chi-NSNN/tong-hop-dieu-chinh-du-toan-chi-NSNN.module'
-      ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
-  },
-  {
     path: 'giao-nhiem-vu',
     loadChildren: () =>
       import(
@@ -50,7 +43,14 @@ const routes: Routes = [
       ).then((m) => m.GiaoNhiemVuModule),
     },
     {
-      path: 'giao-nhiem-vu/:dotBcao/:namBcao',
+      path: 'giao-nhiem-vu/0/:dotBcao/:namHienHanh/:maDvi',
+      loadChildren: () =>
+        import(
+          './giao-nhiem-vu/giao-nhiem-vu.module'
+        ).then((m) => m.GiaoNhiemVuModule),
+    },
+    {
+      path: 'giao-nhiem-vu/0/:namHienHanh',
       loadChildren: () =>
         import(
           './giao-nhiem-vu/giao-nhiem-vu.module'
