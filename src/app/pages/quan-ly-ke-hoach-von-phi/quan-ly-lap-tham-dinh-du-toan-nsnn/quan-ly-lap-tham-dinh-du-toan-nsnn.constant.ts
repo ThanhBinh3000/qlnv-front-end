@@ -129,7 +129,9 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 		title: 'Tìm kiếm số kiểm tra chi NSNN tại các đơn vị',
 		description: 'Tìm kiếm số kiểm tra chi NSNN tại các đơn vị',
 		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-so-kiem-tra-chi-nsnn`,
-		unRole: [],
+		unRole: [
+			
+		],
 		isDisabled: false,
 	},
 ];

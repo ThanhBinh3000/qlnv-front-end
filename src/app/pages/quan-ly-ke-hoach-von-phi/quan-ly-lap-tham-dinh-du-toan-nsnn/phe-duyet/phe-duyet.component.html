@@ -56,9 +56,19 @@
 							</nz-option>
 						</nz-select>
 					</div>
+					<div nz-col nzSpan="6">
+						<ng-container *ngIf="userRole == '3'">
+							<label class="search__label">Đơn vị lập</label>
+							<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị lập"
+								[(ngModel)]="searchFilter.donViTao">
+								<nz-option *ngFor="let item of donVis" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+								</nz-option>
+							</nz-select>
+						</ng-container>
+					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM" 
+			<nz-card nzTitle="DANH SÁCH BÁO CÁO KHTC NS 3 NĂM VÀ DỰ TOÁN NGÂN SÁCH HÀNG NĂM"
 				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
@@ -76,8 +86,8 @@
 							<th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
 							<th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
 							<th nzWidth="150px">Ngày cấp trên trả kết quả</th>
-							<th nzWidth="150px" [hidden] = "status">Đơn vị lập</th>
-							<th nzWidth="150px" [hidden] = "status">Trạng thái</th>
+							<th nzWidth="150px" [hidden]="status">Đơn vị lập</th>
+							<th nzWidth="150px" [hidden]="status">Trạng thái</th>
 							<th nzWidth="50px" class="text-center"></th>
 						</tr>
 					</thead>
@@ -109,7 +119,7 @@
 							<td [hidden]="status">
 								{{getStatusName(item.trangThai)}}
 							</td>
-							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;"> 
+							<td (click)="xemChiTiet(item.id)" style="color: #1890ff;">
 								<ng-container *ngIf="!item.ngayTraKq; else xem">
 									Phê duyệt
 								</ng-container>

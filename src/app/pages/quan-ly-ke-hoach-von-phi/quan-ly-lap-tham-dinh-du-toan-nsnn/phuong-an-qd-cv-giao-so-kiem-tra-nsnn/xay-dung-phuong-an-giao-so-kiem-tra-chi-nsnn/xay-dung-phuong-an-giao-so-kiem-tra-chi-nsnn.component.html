@@ -206,22 +206,25 @@
 										</td>
 									</ng-template>
 								</tr>
-								<tr [hidden]="statusBtnGiao">
-									<td></td>
-									<td></td>
-									<td></td>
-									<td *ngFor="let item of lstDvi">
-										<div *ngFor="let e of lstCtietBcao[0].listCtietDvi">
-											<div *ngIf="e.maKhuVuc == item.maDvi">
-												<ng-container *ngIf="getStatusGiao(e.trangThai)">
-													<a>Giao
-													</a>
-												</ng-container>
+								<ng-container *ngIf="lstCtietBcao.length > 0">
+									<tr [hidden]="statusBtnGiao">
+										<td></td>
+										<td></td>
+										<td></td>
+										<td *ngFor="let item of lstDvi">
+											<div *ngFor="let e of lstCtietBcao[0].listCtietDvi">
+												<div *ngIf="e.maKhuVuc == item.maDvi">
+													<ng-container *ngIf="getStatusGiao(e.trangThai)">
+														<a (click)="giaoSoTranChi(e.maKhuVuc)">Giao
+														</a>
+													</ng-container>
+												</div>
 											</div>
-										</div>
 
-									</td>
-								</tr>
+										</td>
+									</tr>
+								</ng-container>
+
 							</tbody>
 						</nz-table>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -237,11 +240,15 @@
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
-					<button type="button" class="btn btn-main" (click)="addLine(null)">
+					<button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm hàng</span>
 					</button>
-					<button type="button" class="btn btn-main" (click)="addAllCol()">
+					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiao">
+						<!-- <i class="icon htvbdh_dau-cong"></i> -->
+						<span>Giao toàn bộ</span>
+					</button>
+					<button type="button" class="btn btn-main" (click)="addAllCol()" [hidden]="status">
 						<i class="icon htvbdh_dau-cong"></i>
 						<span>Thêm cột</span>
 					</button>
