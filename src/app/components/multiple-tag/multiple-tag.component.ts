@@ -25,8 +25,6 @@ export class MultipleTagComponent implements OnInit {
   constructor(public globals: Globals) { }
 
   ngOnInit(): void {
-    console.log("disable: ", this.disable);
-
   }
 
   removeData(item: any) {

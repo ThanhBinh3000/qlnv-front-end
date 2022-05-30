@@ -28,13 +28,10 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   routerUrl: string = '';
   defaultUrl: string = '/ke-hoach/';
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    console.log('userLogin: ', this.userLogin);
-    console.log('this.router.urlthis.router.url: ', this.router.url);
-
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }

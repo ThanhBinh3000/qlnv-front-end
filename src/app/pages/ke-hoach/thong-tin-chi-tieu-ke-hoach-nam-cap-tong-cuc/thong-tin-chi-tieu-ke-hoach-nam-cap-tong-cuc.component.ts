@@ -1347,6 +1347,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   save(isGuiDuyet?: boolean) {
+    if (!this.formData.valid) {
+      return;
+    }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = `${this.formData.get('soQD').value
       }${this.qdTCDT}`;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value;
@@ -2497,8 +2500,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   disableBanHanh(): boolean {
     return (
       this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0 ||
-      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.TU_CHOI
+      this.id === 0
     );
   }
   selectDonViKeyDown(event, type) {

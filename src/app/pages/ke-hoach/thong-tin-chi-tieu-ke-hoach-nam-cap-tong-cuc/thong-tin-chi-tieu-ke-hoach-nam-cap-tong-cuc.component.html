@@ -50,10 +50,8 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()" *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 
-          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.TU_CHOI 
-          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.DU_THAO_TRINH_DUYET
-          || thongTinChiTieuKeHoachNam.trangThai == globals.prop.LANH_DAO_DUYET">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()"
+          *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0">
           <i class="icon htvbdh_tcdt_delete"></i>
           <span>Hủy bỏ</span>
         </a>
@@ -87,10 +85,12 @@
                   <nz-form-item>
                     <nz-form-control [nzErrorTip]="soQDError">
                       <nz-input-group nzAddOnAfter="/{{userInfo.MA_QD}}">
-                        <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                        <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
+                          [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly />
+                        <!-- <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                           nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
                           [nzDisabled]="disableBanHanhLanhDaoDuyet()">
-                        </nz-input-number>
+                        </nz-input-number> -->
                       </nz-input-group>
                       <ng-template #soQDError let-control>
                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -133,7 +133,7 @@
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="18" [nzErrorTip]="namKeHoachError">
                       <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
-                        [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                        [nzDisabled]="disableBanHanhLanhDaoDuyet()" nzAllowClear>
                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                       </nz-select>
                       <ng-template #namKeHoachError let-control>
@@ -314,42 +314,45 @@
                 <td class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong}}</td>
                 <td class="text-right">{{calculatorntnTongQuyThocCreate()}}</td>
                 <td class="text-right">
-                  <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input name="goiThau"
-                    class="w-120" [nzSize]="'small'" [(ngModel)]="keHoachLuongThucCreate.ntnThoc">
-                  </nz-input-number>
+                  <input class="w-120" nz-input nzSize="small" appNumberOnly
+                    [(ngModel)]="keHoachLuongThucCreate.ntnThoc" />
                 </td>
                 <td class="text-right">
-                  <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                    [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'" [(ngModel)]="keHoachLuongThucCreate.ntnGao">
-                  </nz-input-number>
+                  <input class="w-120" nz-input nzSize="small" appNumberOnly
+                    [(ngModel)]="keHoachLuongThucCreate.ntnGao" />
                 </td>
                 <td class="text-right">{{calculatorxtnTongSoQuyThocCreate()}}</td>
                 <td class="text-right">{{calculatorxtnTongThocCreate()}}</td>
                 <td class="text-right">
+                  <!-- <input nz-input nzSize="small" placeholder="Nhập số quyết định" type="number"
+                    [max]="keHoachLuongThucCreate.tkdnThoc[0].soLuong"
+                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong" class="w-120" [min]="0"
+                    [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly /> -->
+
                   <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
                     [nzMax]="keHoachLuongThucCreate.tkdnThoc[0].soLuong" [nzSize]="'small'"
-                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"></nz-input-number>
+                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong" appNumberOnly></nz-input-number>
                 </td>
                 <td class="text-right">
                   <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
                     [nzMax]="keHoachLuongThucCreate.tkdnThoc[1].soLuong" [nzSize]="'small'"
-                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"></nz-input-number>
+                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong" appNumberOnly></nz-input-number>
                 </td>
                 <td class="text-right">
                   <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
                     [nzMax]="keHoachLuongThucCreate.tkdnThoc[2].soLuong" [nzSize]="'small'"
-                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"></nz-input-number>
+                    [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong" appNumberOnly></nz-input-number>
                 </td>
                 <td class="text-right">{{calculatorxtnTongGaoCreate()}}</td>
                 <td class="text-right">
                   <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
                     [nzMax]="keHoachLuongThucCreate.tkdnGao[0].soLuong" [nzSize]="'small'"
-                    [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"></nz-input-number>
+                    [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong" appNumberOnly></nz-input-number>
                 </td>
                 <td class="text-right">
                   <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
                     [nzMax]="keHoachLuongThucCreate.tkdnGao[1].soLuong" [nzSize]="'small'"
-                    [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"></nz-input-number>
+                    [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong" appNumberOnly></nz-input-number>
                 </td>
                 <td class="text-right">{{calculatortkcnTongSoQuyThocCreate()}}</td>
                 <td class="text-right">{{calculatortkcnTongThocCreate()}}</td>
@@ -461,13 +464,12 @@
                     {{calculatorntnTongSoQuyThoc(i)}}
                   </td>
                   <td class="text-right">
-                    <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" type="text" nz-input
-                      [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc" name="goiThau" class="w-200" [nzSize]="'small'">
-                    </nz-input-number>
+                    <input class="w-200" nz-input nzSize="small" appNumberOnly
+                      [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc" />
                   </td>
                   <td class="text-right">
-                    <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao" name="goiThau"
-                      class="w-200" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'"></nz-input-number>
+                    <input class="w-200" nz-input nzSize="small" appNumberOnly
+                      [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao" />
                   </td>
                   <td class="text-right">
                     {{calculatorxtnTongSoQuyThoc(i)}}
@@ -713,9 +715,8 @@
                 <td class="text-right">{{keHoachMuoiCreate.tkdnMuoi[1].soLuong}}</td>
                 <td class="text-right">{{keHoachMuoiCreate.tkdnMuoi[2].soLuong}}</td>
                 <td class="text-right">
-                  <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                    [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'" [(ngModel)]="keHoachMuoiCreate.ntnTongSoMuoi">
-                  </nz-input-number>
+                  <input class="w-120" nz-input nzSize="small" appNumberOnly
+                    [(ngModel)]="keHoachMuoiCreate.ntnTongSoMuoi" />
                 </td>
                 <td class="text-right">{{calculatorxtnTongMuoiCreate()}}</td>
                 <td class="text-right">
@@ -800,9 +801,8 @@
                     <td class="text-right">0</td>
                   </ng-container>
                   <td class="text-right">
-                    <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'" [(ngModel)]="dsMuoiClone[i].ntnTongSoMuoi">
-                    </nz-input-number>
+                    <input class="w-120" nz-input nzSize="small" appNumberOnly
+                      [(ngModel)]="dsMuoiClone[i].ntnTongSoMuoi" />
                   </td>
                   <td class="text-right">{{calculatorxtnTongSoMuoi(i)}}</td>
                   <td class="text-right">
@@ -1026,10 +1026,9 @@
                   {{keHoachVatTuCreate.vatTuThietBi[0]?.cacNamTruoc[2]?.soLuong | number: '1.0-1'}}
                 </td>
                 <td class="text-right">
-                  <nz-input-number type="text" nz-input name="khNamHienTai" class="w-120" [nzMin]="0"
-                    [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'"
-                    [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam" (input)="calculatorTongChiTieuNtn()">
-                  </nz-input-number>
+                  <input class="w-120" nz-input nzSize="small" appNumberOnly
+                    [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam"
+                    (input)="calculatorTongChiTieuNtn()" />
                 </td>
                 <td *ngIf="disableBanHanh()">
                   <a class="save" (click)="themMoiVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
@@ -1081,10 +1080,8 @@
                   <td class="text-right">{{dsVatTuClone[i].vatTuThietBi[0]?.cacNamTruoc[2]?.soLuong | number: '1.0-1'}}
                   </td>
                   <td class="text-right">
-                    <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT" [nzSize]="'small'"
-                      [(ngModel)]="dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam">
-                    </nz-input-number>
+                    <input class="w-120" nz-input nzSize="small" appNumberOnly
+                      [(ngModel)]="dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam" />
                   </td>
                   <td *ngIf="disableBanHanh()">
                     <a (click)="saveEditVatTu(i)" class="save">
