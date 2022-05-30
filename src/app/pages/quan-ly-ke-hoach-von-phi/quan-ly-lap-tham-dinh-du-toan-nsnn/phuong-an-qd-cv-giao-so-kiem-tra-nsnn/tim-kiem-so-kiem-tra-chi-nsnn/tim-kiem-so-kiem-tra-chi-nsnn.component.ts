@@ -7,9 +7,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
+import { MAIN_ROUTE_QUY_BAO_CAO_KET_QUA_THUC_HIEN_VON_PHI_HANG_DTQG_TAI_TONG_CUC_DTNN } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc.constant';
 
 @Component({
     selector: 'app-tim-kiem-so-kiem-tra-chi-nsnn',
@@ -27,24 +28,13 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         maDviTao: "",
         maDviNhan: "",
         trangThai: "",
-        maGiao: "",
         maPa: "",
-        soQdCv: "",
-        maBaoCao: "",
+        maBcao: "",
     };
     //danh muc
     danhSachBaoCao: any = [];
     donVis: any[] = [];
-    trangThais: any[] = [
-        {
-            id: 1,
-            tenDm: 'Đã giao',
-        },
-        {
-            id: 2,
-            tenDm: 'Giao lại',
-        }
-    ];
+    trangThais: any[] = TRANG_THAI_GIAO;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -68,12 +58,14 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
     async ngOnInit() {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
-
+        this.searchFilter.maDviTao = this.userInfo?.dvql;
         //lay danh sach danh muc
         this.danhMuc.dMDonVi().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
+                    this.donVis = this.donVis.filter(e => e?.parent?.maDvi == this.userInfo?.dvql);
+                    console.log(this.donVis);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -82,6 +74,8 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+
+        this.onSubmit();
     }
 
     //get user info
@@ -126,12 +120,12 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         let requestReport = {
             maDviNhan: this.searchFilter.maDviNhan,
             maDviTao: this.searchFilter.maDviTao,
-            maGiao: this.searchFilter.maGiao,
             maPa: this.searchFilter.maPa,
             namGiao: this.searchFilter.namGiao,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             str: null,
+            maBcao: this.searchFilter.maBcao,
             trangThai: this.searchFilter.trangThai,
             paggingReq: {
                 limit: this.pages.size,
@@ -139,7 +133,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
             }
         };
         this.spinner.show();
-        await this.quanLyVonPhiService.timKiemPhuongAn(requestReport).toPromise().then(
+        await this.quanLyVonPhiService.timKiemSoKiemTraTranChi(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.danhSachBaoCao = data.data.content;
@@ -188,7 +182,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
 
     xemChiTiet(id: string) {
         this.router.navigate([
-            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
+            '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn/' + id,
         ])
     }
 

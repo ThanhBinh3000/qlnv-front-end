@@ -26,7 +26,7 @@
 							<th width="175px">Số QĐ/CV</th>
 							<th width="175px">Mã phương án</th>
 							<th width="175px">Mã giao</th>
-							<th width="175px">Năm phương án</th>
+							<th width="175px">Năm giao</th>
 							<th width="175px">Ngày tạo</th>
 							<th width="175px">Nơi tạo</th>
 							<th width="175px">Trạng thái</th>
@@ -35,10 +35,10 @@
 					<tbody>
 						<tr>
 							<td>{{maBaoCao}}</td>
-							<td>{{soQdCv}}</td>
+							<td>{{soQdCv?.fileName}}</td>
 							<td>{{maPa}}</td>
 							<td>{{maGiao}}</td>
-							<td>{{namPa}}</td>
+							<td>{{namGiao}}</td>
 							<td>{{ngayNhap}}</td>
 							<td>{{getUnitName()}}</td>
 							<td>{{getStatusName()}}</td>
@@ -69,9 +69,17 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let item of lstCtietBcao; let i = index">
-									<td>{{i+1}}</td>
-									<td>{{item.tenNoiDung}}</td>
-									<td>{{item.soDuocGiao}}</td>
+									<td [nzIndentSize]="item.level * 8">
+										{{getChiMuc(item.stt)}}
+									</td>
+									<td>
+										<div *ngFor="let e of noiDungs">
+											<div *ngIf="e.id == item.maNoiDung">
+												{{e.tenDm}}
+											</div>
+										</div>
+									</td>
+									<td>{{item.soTien}}</td>
 								</tr>
 							</tbody>
 						</nz-table>

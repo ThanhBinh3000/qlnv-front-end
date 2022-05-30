@@ -1,4 +1,4 @@
-<!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
 	<div class="tab-content tab-menu" id="myTabContent">
 		<div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
 			aria-labelledby="banhanh-tab">
@@ -57,11 +57,11 @@
 			</div>
 		</div>
 	</div>
-</nz-affix> -->
+</nz-affix>
 <div class="contentBor chi-tieu__body">
 	<div class="contentDetail">
 		<div class="main-content">
-			<nz-card nzTitle="Thông tin chung báo cáo" [nzExtra]="tableCard0" class="mt16 flex-card p-lr16">
+			<nz-card nzTitle="Thông tin chung báo cáo" class="mt16 flex-card p-lr16">
 				<nz-table #basicTable class="nowrap">
 					<thead>
 						<tr>
@@ -113,55 +113,7 @@
 					</tbody>
 				</nz-table>
 			</nz-card>
-			<ng-template #tableCard0>
-				<button class="btn btn-main" (click)="save()"
-					[hidden]="statusBtnSave || userInfo?.username != nguoiNhap">
-					<i class="icon htvbdh_tcdt_save"></i>
-					<span>Lưu</span>
-				</button>
-				<button class="btn btn-main" (click)="onSubmit('2',null)"
-					[hidden]="statusBtnApprove || userInfo?.username != nguoiNhap">
-					<i class="icon htvbdh_tcdt_guiduyet"></i>
-					<span>Trình duyệt</span>
-				</button>
-				<a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
-					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Từ chối</span>
-				</a>
-				<button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
-					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Chấp nhận</span>
-				</button>
-				<button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
-					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Từ chối</span>
-				</button>
-				<a class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnLD">
-					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Chấp nhận</span>
-				</a>
-				<button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
-					<i class="icon htvbdh_tcdt_pheduyet"></i>
-					<span>Từ chối</span>
-				</button>
-				<a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
-					<i class="icon htvbdh_tcdt_tuchoi"></i>
-					<span>Chấp nhận</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
-					<i nz-icon nzType="copy" nzTheme="outline"></i>
-					<span>Copy</span>
-				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
-					<i nz-icon nzType="printer" nzTheme="outline"></i>
-					<span>In</span>
-				</a>
-				<a class="btn btn-main" (click)="close()" [hidden]="statusBtnClose">
-					<i nz-icon nzType="stop" nzTheme="outline"></i>
-					<span>Đóng</span>
-				</a>
-			</ng-template>
-			<div class="tab__container">
+			<div class="tab__container" style="margin-top: 12px;">
 				<nz-tabset class="tab__container" [(nzSelectedIndex)]="selectedIndex" nzType="editable-card"
 					(nzClose)="closeTab($event)" nzHideAdd>
 					<nz-tab [nzTitle]="'DANH SÁCH BIỂU MẪU'">

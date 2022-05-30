@@ -36,6 +36,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     soQdCv: ItemCongVan;
     maPa: string;
     namGiao: number;
+    maGiao: string;
     newDate = new Date();
     //cac danh muc
     donVis: any[] = [];
@@ -75,12 +76,21 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
         this.maDviTao = this.userInfo?.dvql;
-        if (this.id) {
-            this.getDetailReport();
-        } else {
-            this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.namGiao = this.newDate.getFullYear();
-        }
+
+        this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+        this.namGiao = this.newDate.getFullYear();
+        this.quanLyVonPhiService.maGiao().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.maGiao = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
 
         this.getPhuongAn();
 
@@ -103,42 +113,42 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         );
     }
 
-    async getPhuongAn(){
+    async getPhuongAn() {
         await this.quanLyVonPhiService.timKiemMaPaDuyet().toPromise().then(
-			(data) => {
-                if (data.statusCode == 0){
+            (data) => {
+                if (data.statusCode == 0) {
                     this.phuongAns = data.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
-			},
-			err => {
-			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		  );
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
     //download file về máy tính
-	async downloadFileCv() {
-		if (this.soQdCv?.fileUrl) {
-		  await this.quanLyVonPhiService.downloadFile(this.soQdCv?.fileUrl).toPromise().then(
-			(data) => {
-			  fileSaver.saveAs(data, this.soQdCv?.fileName);
-			},
-			err => {
-			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		  );
-		} else {
-		  let file: any = this.fileDetail;
-		  const blob = new Blob([file], { type: "application/octet-stream" });
-		  fileSaver.saveAs(blob, file.name);
-		}
-	  }
+    async downloadFileCv() {
+        if (this.soQdCv?.fileUrl) {
+            await this.quanLyVonPhiService.downloadFile(this.soQdCv?.fileUrl).toPromise().then(
+                (data) => {
+                    fileSaver.saveAs(data, this.soQdCv?.fileName);
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            let file: any = this.fileDetail;
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    }
 
     //luu
     async luu() {
-        if (!this.soQdCv.fileName || !this.maPa){
+        if (!this.soQdCv.fileName || !this.maPa) {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập đầy số QĐ/CV và mã phương án");
             return;
         }
@@ -147,8 +157,9 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             namGiao: this.namGiao,
             maPa: this.maPa,
             soQdCv: this.soQdCv,
+            maGiao: this.maGiao,
         }
-        if (!this.id){
+        if (!this.id) {
             this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -159,28 +170,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
             })
         }
-        
-    }
 
-    // call chi tiet bao cao
-	async getDetailReport() {
-		this.spinner.show();
-		await this.quanLyVonPhiService.bCLapThamDinhDuToanChiTiet(this.id).toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-					this.maPa = data.data.maPa;
-                    this.namGiao = data.data.namGiao;
-                    this.soQdCv = data.data.soQdCv;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		);
-		this.spinner.hide();
-	}
+    }
 
 
 
