@@ -20,10 +20,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
 
 export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
@@ -88,27 +84,11 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
   async onSubmit() {
     this.spinner.show();
     this.searchFilter.trangThais= [];
-    debugger
     this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy') || this.searchFilter.ngayTaoTu;
-    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy');
+    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy') || this.searchFilter.ngayTaoDen;
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{
