@@ -16,7 +16,7 @@ import { MESSAGE } from '../../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from "../../../../../Utility/utils";
-import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+import { PHU_LUC } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
 export class ItemData {
@@ -117,12 +117,12 @@ export class BaoCaoComponent implements OnInit {
 	beforeUploadCV = (file: NzUploadFile): boolean => {
 		this.fileDetail = file;
 		this.congVan = {
-		  fileName: file.name,
-		  fileSize: null,
-		  fileUrl: null,
+			fileName: file.name,
+			fileSize: null,
+			fileUrl: null,
 		};
 		return false;
-	  };
+	};
 
 	// them file vao danh sach
 	handleUpload(): void {
@@ -351,20 +351,20 @@ export class BaoCaoComponent implements OnInit {
 	//download file về máy tính
 	async downloadFileCv() {
 		if (this.congVan?.fileUrl) {
-		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
-			(data) => {
-			  fileSaver.saveAs(data, this.congVan?.fileName);
-			},
-			err => {
-			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		  );
+			await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+				(data) => {
+					fileSaver.saveAs(data, this.congVan?.fileName);
+				},
+				err => {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+				},
+			);
 		} else {
-		  let file: any = this.fileDetail;
-		  const blob = new Blob([file], { type: "application/octet-stream" });
-		  fileSaver.saveAs(blob, file.name);
+			let file: any = this.fileDetail;
+			const blob = new Blob([file], { type: "application/octet-stream" });
+			fileSaver.saveAs(blob, file.name);
 		}
-	  }
+	}
 
 	// luu
 	async save() {
@@ -459,25 +459,25 @@ export class BaoCaoComponent implements OnInit {
 
 	// chuc nang check role
 	async onSubmit(mcn: string, lyDoTuChoi: string) {
-		if (mcn == Utils.TT_BC_2){
+		if (mcn == Utils.TT_BC_2) {
 			let check = true;
 			this.lstLapThamDinhs.forEach(item => {
-				if (item.trangThai != '5'){
+				if (item.trangThai != '5') {
 					check = false;
 				}
 			})
-			if (!check){
+			if (!check) {
 				this.notification.warning(MESSAGE.ERROR, "Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!");
 				return;
 			}
 		} else {
 			let check = true;
 			this.lstLapThamDinhs.forEach(item => {
-				if (item.trangThai == '2'){
+				if (item.trangThai == '2') {
 					check = false;
 				}
 			})
-			if (!check){
+			if (!check) {
 				this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
 				return;
 			}
@@ -553,6 +553,18 @@ export class BaoCaoComponent implements OnInit {
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
 					this.lyDoTuChoi = data.data.lyDoTuChoi;
+					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
+						this.trangThaiBaoCao == Utils.TT_BC_3 ||
+						this.trangThaiBaoCao == Utils.TT_BC_5 ||
+						this.trangThaiBaoCao == Utils.TT_BC_8) {
+						this.status = false;
+					} else {
+						this.status = true;
+					}
+					this.lstDviTrucThuoc.forEach(item => {
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -577,7 +589,7 @@ export class BaoCaoComponent implements OnInit {
 					this.lstLapThamDinhs = data.data.lstLapThamDinhs;
 					this.lstDviTrucThuoc = data.data.lstBcaoDviTrucThuocs;
 					this.lstLapThamDinhs.forEach(item => {
-						if (!item.id){
+						if (!item.id) {
 							item.id = uuid.v4() + 'FE';
 						}
 						item.nguoiBcao = this.userInfo?.username;

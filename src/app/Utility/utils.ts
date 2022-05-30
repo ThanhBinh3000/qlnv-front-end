@@ -847,6 +847,21 @@ export const TRANG_THAI_PHAN_BO = [
         ten: 'Chờ tiếp nhận',
     },
 ]
+
+export const TRANG_THAI_GIAO = [
+    {
+        id: '0',
+        tenDm: "Chưa giao",
+    },
+    {
+        id: '1',
+        tenDm: "Giao",
+    },
+    {
+        id: '2',
+        tenDm: "Đã nhận",
+    },
+]
 export const MONEY_LIMIT = 9000000000000000000;
 
 export const KHOAN_MUC: any[] = [

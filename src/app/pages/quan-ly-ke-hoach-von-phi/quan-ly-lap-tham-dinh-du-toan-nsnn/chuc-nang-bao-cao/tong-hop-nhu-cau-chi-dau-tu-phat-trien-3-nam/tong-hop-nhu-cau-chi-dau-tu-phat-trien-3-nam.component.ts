@@ -118,11 +118,14 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 				ncauNamN2: divMoney(item.ncauNamN2, this.maDviTien),
 			})
 		})
-        if (!this.lstCtietBcao[0]?.stt){
-            this.sortWithoutIndex();
-        } else {
-            this.sortByIndex();
+        if (this.lstCtietBcao.length > 0){
+            if (!this.lstCtietBcao[0].stt){
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
         }
+        
 		this.updateEditCache();
 
 		//lay danh sach danh muc don vi

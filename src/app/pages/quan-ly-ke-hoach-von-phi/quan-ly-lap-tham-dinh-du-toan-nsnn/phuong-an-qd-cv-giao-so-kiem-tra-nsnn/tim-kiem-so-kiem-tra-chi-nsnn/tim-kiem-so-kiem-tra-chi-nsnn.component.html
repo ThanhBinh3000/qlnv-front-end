@@ -52,7 +52,7 @@
 							</nz-option>
 						</nz-select>
 					</div>
-                    <div nz-col nzSpan="6">
+					<div nz-col nzSpan="6">
 						<label class="search__label">Đơn vị nhận</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận"
 							[(ngModel)]="searchFilter.maDviNhan">
@@ -61,20 +61,12 @@
 						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Số QĐ/CV</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.soQdCv"/>
+						<label class="search__label">Mã phương án</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa" />
 					</div>
-                    <div nz-col nzSpan="6">
-						<label class="search__label">Mã giao</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maGiao"/>
-					</div>
-					<div nz-col nzSpan="3">
-						<label class="search__label">Mã PA</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"/>
-					</div>
-					<div nz-col nzSpan="3">
-						<label class="search__label">Mã giao</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBaoCao"/>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Mã báo cáo</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBcao" />
 					</div>
 				</div>
 			</nz-card>
@@ -89,36 +81,25 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
-							<th width="100px">Mã phương án</th>
-							<th width="100px">Số QĐ</th>
-							<th width="100px">Số CV</th>
-                            <th width="150px">Mã giao</th>
-                            <th width="150px">Ngày giao</th>
-                            <th width="150px">Năm giao</th>
-                            <th width="150px">Trạng thái</th>
-                            <th width="200px">Đơn vị tạo</th>
-                            <th width="200px">Đơn vị nhận</th>
+							<th>Mã phương án</th>
+							<th>Mã báo cáo</th>
+							<th>Ngày lập</th>
+							<th>Năm giao</th>
+							<th>Trạng thái</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
-								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maPa}}
-								</a>
+								{{ item.maPa}}
 							</td>
 							<td>
-								{{item.soQd}}
+								{{item.maBcao}}
 							</td>
 							<td>
-								{{item.soCv}}
-							</td>
-							<td>
-								{{item.maGiao}}
-							</td>
-							<td>
-								{{item.ngayGiao}}
+								{{item.ngayTao}}
 							</td>
 							<td>
 								{{item.namGiao}}
@@ -127,10 +108,9 @@
 								{{getStatusName(item.trangThai)}}
 							</td>
 							<td>
-								{{getUnitName(item.maDviTao)}}
-							</td>
-                            <td>
-								{{getUnitName(item.maDviNhan)}}
+								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
+									Xem
+								</a>
 							</td>
 						</tr>
 					</tbody>
