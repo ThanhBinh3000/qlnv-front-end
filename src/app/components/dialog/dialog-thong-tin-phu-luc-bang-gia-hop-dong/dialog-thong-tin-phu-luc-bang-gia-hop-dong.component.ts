@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { Globals } from 'src/app/shared/globals';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 @Component({
   selector: 'dialog-thong-tin-phu-luc-bang-gia-hop-dong',
@@ -20,10 +21,9 @@ export class DialogThongTinPhuLucBangGiaHopDongComponent implements OnInit {
   tableExist: boolean = false;
   itemRow: any = {};
 
-  optionsDonVi: any[] = [];
-  inputDonVi: string = '';
-  optionsDonViShow: any[] = [];
-  selectedDonVi: any = {};
+  listDonVi: any[] = [];
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
 
   isEdit: boolean = false;
 
@@ -36,12 +36,13 @@ export class DialogThongTinPhuLucBangGiaHopDongComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public globals: Globals,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.data && this.data.detail) {
+      if (this.data) {
         this.isEdit = true;
         this.dataTable = this.data.detail;
         if (this.dataTable && this.dataTable.length > 0) {
@@ -53,6 +54,10 @@ export class DialogThongTinPhuLucBangGiaHopDongComponent implements OnInit {
       else {
         this.data = { id: null, stt: 0 };
       }
+      await Promise.all([
+        this.loadDonVi(),
+        this.loadDiemKho(),
+      ]);
       this.updateEditCache();
       this.spinner.hide();
     }
@@ -61,6 +66,72 @@ export class DialogThongTinPhuLucBangGiaHopDongComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async loadDonVi() {
+    const res = await this.donViService.layDonViCon();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  changeDonVi(item) {
+    if (item) {
+      let getDvi = this.listDonVi.filter(x => x.maDvi == item.maDvi);
+      if (getDvi && getDvi.length > 0) {
+        item.chiCuc = getDvi[0].tenDvi;
+      }
+    }
+  }
+
+  async loadDiemKho() {
+    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadNhaKho(diemKhoId: any) {
+    if (diemKhoId && diemKhoId > 0) {
+      let body = {
+        "diemKhoId": diemKhoId,
+        "maNhaKho": null,
+        "paggingReq": {
+          "limit": 1000,
+          "page": 1
+        },
+        "str": null,
+        "tenNhaKho": null,
+        "trangThai": null
+      };
+      let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.content) {
+          this.listNhaKho = res.data.content;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.tenDiemkho == this.itemRow.diemKho);
+    this.data.nhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
+    }
+  }
+
+  caculatorSauVAT() {
+    this.data.giaTruocVat = ((this.data?.donGia ?? 0) * (this.data?.soLuong ?? 0)).toFixed();
+    this.data.giaSauVat = ((this.data?.giaTruocVat ?? 0) * (1 + (this.data?.vat ?? 0) / 100)).toFixed();
   }
 
   ngAfterViewChecked(): void {
@@ -157,6 +228,7 @@ export class DialogThongTinPhuLucBangGiaHopDongComponent implements OnInit {
   }
 
   handleOk() {
+    this.data.detail = this.dataTable;
     this._modalRef.close(this.data);
   }
 

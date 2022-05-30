@@ -65,11 +65,19 @@ const routes: Routes = [
                 component: ThemMoiPhieuNhapKhoComponent,
             },
             {
+                path: 'phieu-nhap-kho/xem-chi-tiet/:id',
+                component: ThemMoiPhieuNhapKhoComponent,
+            },
+            {
                 path: 'bang-ke-hang',
                 component: QuanLyBangKeCanHangComponent,
             },
             {
                 path: 'bang-ke-hang/thong-tin/:id',
+                component: ThongTinQuanLyBangKeCanHangComponent,
+            },
+            {
+                path: 'bang-ke-hang/xem-chi-tiet/:id',
                 component: ThongTinQuanLyBangKeCanHangComponent,
             },
             {
@@ -81,11 +89,19 @@ const routes: Routes = [
                 component: ThemMoiBienBanLayMauKhoComponent,
             },
             {
+                path: 'bien-ban-lay-mau/xem-chi-tiet/:id',
+                component: ThemMoiBienBanLayMauKhoComponent,
+            },
+            {
                 path: 'bien-ban-ban-giao-mau',
                 component: QuanLyBienBanBanGiaoMauComponent,
             },
             {
                 path: 'bien-ban-ban-giao-mau/thong-tin/:id',
+                component: ThemMoiBienBanBanGiaoMauComponent,
+            },
+            {
+                path: 'bien-ban-ban-giao-mau/xem-chi-tiet/:id',
                 component: ThemMoiBienBanBanGiaoMauComponent,
             },
             {
@@ -97,11 +113,19 @@ const routes: Routes = [
                 component: ThemMoiPhieuNhapDayKhoComponent,
             },
             {
+                path: 'bien-ban-day-kho/xem-chi-tiet/:id',
+                component: ThemMoiPhieuNhapDayKhoComponent,
+            },
+            {
                 path: 'phieu-kiem-nghiem',
                 component: QuanLyPhieuKiemNghiemChatLuongThocComponent,
             },
             {
                 path: 'phieu-kiem-nghiem/thong-tin/:id',
+                component: ThemMoiPhieuKiemNghiemChatLuongThocComponent,
+            },
+            {
+                path: 'phieu-kiem-nghiem/xem-chi-tiet/:id',
                 component: ThemMoiPhieuKiemNghiemChatLuongThocComponent,
             },
         ]

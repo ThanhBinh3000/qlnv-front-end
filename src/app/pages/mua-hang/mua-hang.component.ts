@@ -46,7 +46,7 @@ export class MuaHangComponent implements OnInit, AfterViewInit {
         if (url.includes('/dau-thau/dieuchinh-luachon-nhathau/') && this.userService.isTongCuc()) {
             return true;
         }
-        if (url.includes('/hop-dong/') && (this.userService.isTongCuc() || this.userService.isCuc)) {
+        if (url.includes('/hop-dong/') && this.userService.isCuc()) {
             return true;
         }
         return false;

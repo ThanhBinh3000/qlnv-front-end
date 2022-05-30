@@ -59,8 +59,15 @@ export class QuanLyBienBanLayMauService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/phe-duyet`;
-    return this.httpClient.put(url, body).toPromise();
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/bban-lay-mau/phe-duyet?`;
+    if (body.id)
+      url_ += 'id=' + encodeURIComponent('' + body.id) + '&';
+    if (body.lyDo)
+      url_ += 'lyDo=' + encodeURIComponent('' + body.lyDo) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+    return this.httpClient.put<any>(url_, null).toPromise();
   }
 
 }

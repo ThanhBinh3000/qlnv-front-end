@@ -68,25 +68,27 @@
                   <th width="295px">Ngăn/Lô</th>
                   <th width="295px">Nội dung</th>
                   <th width="295px">Trạng thái</th>
+                  <th width="295px">Hành động</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                   <td>{{ data.soBienBan }}</td>
-                  <td>{{ data.ngayNhapDayKho }}</td>
+                  <td>{{ data.ngayBatDauNhap }} - {{ data.ngayKetThucNhap }}</td>
+                  <td>{{ data.tenDiemKho }}</td>
+                  <td>{{ data.tenNhaKho }}</td>
+                  <td>{{ data.tenNganLo }}</td>
                   <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{{ data.tenTrangThai }}</td>
                   <td class="text-center">
+                    <a (click)="redirectToChiTiet(false, data.id)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="redirectToChiTiet(false, data.id)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a *ngIf="data.trangThai=='00' || data.trangThai=='03'" (click)="xoaItem(data)">
+                    <a (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

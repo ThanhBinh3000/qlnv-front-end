@@ -11,7 +11,7 @@ export class QuanLyBangKeCanHangService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyBangKeCanHang','');
+    super(httpClient, 'QuanLyBangKeCanHang', '');
   }
 
   timKiem(body: any): Promise<any> {
@@ -40,7 +40,7 @@ export class QuanLyBangKeCanHangService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/ql-bang-ke-can-hang-lt/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

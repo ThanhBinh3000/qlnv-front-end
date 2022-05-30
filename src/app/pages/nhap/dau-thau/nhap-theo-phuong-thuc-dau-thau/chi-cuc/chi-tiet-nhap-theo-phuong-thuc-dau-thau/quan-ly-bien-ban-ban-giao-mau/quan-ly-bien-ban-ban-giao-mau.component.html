@@ -4,36 +4,39 @@
       <div class="main-content">
         <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="8">
               <label class="search__label">Số biên bản</label>
-              <input class="search__input" placeholder="Số biên bản" nz-input />
+              <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBiebBan" />
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Ngày bàn giao</label>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngày lấy mẫu</label>
               <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="8">
               <label class="search__label">Số hợp đồng</label>
               <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
             </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Số biên bản lấy mẫu</label>
-              <input class="search__input" placeholder="Số biên bản lấy mẫu" nz-input
-                [(ngModel)]="searchFilter.diemkho" />
-            </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Điểm kho</label>
-              <input class="search__input" placeholder="Điểm kho" nz-input [(ngModel)]="searchFilter.diemkho" />
+              <nz-select [(ngModel)]="diemKho" (ngModelChange)="changeDiemKho()">
+                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.diemkho">
+                </nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Nhà kho</label>
-              <input class="search__input" placeholder="Nhà kho" nz-input [(ngModel)]="searchFilter.nhaKho" />
+              <nz-select [(ngModel)]="nhaKho">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.nhaKho">
+                </nz-option>
+              </nz-select>
             </div>
             <div nz-col nzSpan="8">
               <label class="search__label">Ngăn/lô bảo quản</label>
-              <input class="search__input" placeholder="Ngăn/lô bảo quản" nz-input
-                [(ngModel)]="searchFilter.nganLoBaoQuan" />
+              <nz-select [(ngModel)]="nganLo">
+                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.nganLoBaoQuan">
+                </nz-option>
+              </nz-select>
             </div>
           </div>
           <div class="cangiua group-button-search">
@@ -48,15 +51,15 @@
           </div>
         </nz-card>
         <div class="tab__luong-thuc mt-16">
-          <nz-card nzTitle="Danh sách biên bản bàn giao mẫu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
-            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+          <nz-card nzTitle="DANH SÁCH PHIẾU NHẬP KHO" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
                   <th width="931px">Số biên bản</th>
-                  <th width="161px">Ngày bàn giao</th>
+                  <th width="161px">Ngày lấy mẫu</th>
                   <th width="203px">Số hợp đồng</th>
-                  <th width="203px">Số biên bản lấy mẫu</th>
                   <th width="295px">Điểm kho</th>
                   <th width="295px">Nhà kho</th>
                   <th width="295px">Ngăn/lô</th>
@@ -65,21 +68,23 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>PKM01</td>
-                  <td>17/02/2022</td>
-                  <td>Số hợp đồng</td>
-                  <td>Số biên bản lấy mẫu</td>
-                  <td>Điểm kho</td>
-                  <td>Nhà kho</td>
-                  <td>Ngăn/lô</td>
-                  <td>Dự thảo</td>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                  <td>{{data.soBban}}</td>
+                  <td>{{data.ngayLayMau}}</td>
+                  <td>{{data.soHd}}</td>
+                  <td>{{data.maKho}}</td>
+                  <td>{{data.maKho}}</td>
+                  <td>{{data.maLo}}</td>
+                  <td>{{data.tenTrangThai}}</td>
                   <td>
-                    <a>
+                    <a (click)="redirectToChiTiet(false,data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a>
+                    <a (click)="redirectToChiTiet(true, data.id)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <a (click)="xoaItem(data)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 
 @Component({
   selector: 'quan-ly-bien-ban-ban-giao-mau',
@@ -26,9 +26,23 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     soHopDong: '',
     diemkho: '',
     nhaKho: '',
-    nganLoBaoQuan: ''
+    nganLoBaoQuan: '',
+    soBiebBan: ''
   };
   routerUrl: string;
+
+  diemKho: string = '';
+  nhaKho: string = '';
+  nganLo: string = '';
+
+  loaiVthh: string;
+  routerVthh: string;
+
+  userInfo: UserLogin;
+
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganLo: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -37,6 +51,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
 
   ) { }
 
@@ -45,7 +60,12 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     this.spinner.show();
     try {
       let res = await this.donViService.layTatCaDonVi();
-      await this.search();
+      await Promise.all([
+        this.loadDiemKho(),
+        // this.loadNhaKho(null),
+        this.loadNganLo(),
+        this.search(),
+      ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -56,14 +76,21 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayLayMau: '',
-      soHopDong: '',
-      diemkho: '',
-      nhaKho: '',
-      nganLoBaoQuan: '',
+      ngayLayMau: this.searchFilter.ngayLayMau ?? null,
+      soHopDong: this.searchFilter.soHopDong ?? null,
+      diemkho: this.searchFilter.diemkho ?? null,
+      nhaKho: this.searchFilter.nhaKho ?? null,
+      nganLoBaoQuan: this.searchFilter.nganLoBaoQuan ?? null,
+      soBiebBan: this.searchFilter.soBiebBan ?? null,
+      ngayLapBbanTuNgay: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD')
+        : null,
+      ngayLapBbanDenNgay: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD')
+        : null,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
+    console.log(body);
+
     let res = await this.bienBanLayMauService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -107,7 +134,8 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
       soHopDong: '',
       diemkho: '',
       nhaKho: '',
-      nganLoBaoQuan: ''
+      nganLoBaoQuan: '',
+      soBiebBan: ''
     };
     this.search();
   }
@@ -123,7 +151,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanLayMauService.delete(item.id).then((res) => {
+          this.bienBanLayMauService.xoa(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -146,11 +174,89 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   redirectToChiTiet(isView: boolean, id: number) {
     if (!isView) {
       let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
+      this.router.navigate([urlChiTiet, id]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
+      this.router.navigate([urlChiTiet, id]);
+    }
+  }
+  async loadDiemKho() {
+    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listDiemKho = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async loadNhaKho(diemKhoId: any) {
+    let body = {
+      "diemKhoId": diemKhoId,
+      "maNhaKho": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNhaKho": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNhaKho = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async changeDiemKho() {
+    let diemKho = this.listDiemKho.filter(x => x.maDiemkho == this.diemKho);
+    this.nhaKho = null;
+    if (diemKho && diemKho.length > 0) {
+      await this.loadNhaKho(diemKho[0].id);
+    }
+  }
+
+  async loadNganLo() {
+    let body = {
+      "maNganLo": null,
+      "nganKhoId": null,
+      "paggingReq": {
+        "limit": 1000,
+        "page": 1
+      },
+      "str": null,
+      "tenNganLo": null,
+      "trangThai": null
+    };
+    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content) {
+        this.listNganLo = res.data.content;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  getTitleVthh() {
+    if (this.router.url.indexOf("/thoc/") != -1) {
+      this.loaiVthh = "01";
+      this.routerVthh = 'thoc';
+    } else if (this.router.url.indexOf("/gao/") != -1) {
+      this.loaiVthh = "00";
+      this.routerVthh = 'gao';
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
+      this.loaiVthh = "02";
+      this.routerVthh = 'muoi';
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
+      this.loaiVthh = "03";
+      this.routerVthh = 'vat-tu';
     }
   }
 }

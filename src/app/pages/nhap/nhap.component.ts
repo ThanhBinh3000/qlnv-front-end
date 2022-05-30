@@ -19,8 +19,8 @@ export class NhapComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-  ) { 
-    
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -82,6 +82,6 @@ export class NhapComponent implements OnInit, AfterViewInit {
 
   redirect(url: string) {
     this.routerUrl = url;
-    this.router.navigate([url]);
+    window.location.href = url;
   }
 }

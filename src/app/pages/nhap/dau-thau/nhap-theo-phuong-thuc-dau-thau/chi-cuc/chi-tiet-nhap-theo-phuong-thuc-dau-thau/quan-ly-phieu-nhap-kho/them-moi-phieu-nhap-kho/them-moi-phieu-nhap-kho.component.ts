@@ -29,6 +29,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   id: number = 0;
   idNhapHang: number = 0;
   detailGiaoNhap: any = {};
+  viewChiTiet: boolean = false;
 
   loaiVthh: string;
   loaiStr: string;
@@ -64,11 +65,13 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.getTitleVthh();
+      this.checkIsView();
       this.create.dvt = "Tấn";
+      this.detail.trangThai = "00";
       this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
+      await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
-      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await Promise.all([
         this.getIdNhap(),
         this.loadDiemKho(),
@@ -76,12 +79,21 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         this.loadPhieuKiemTraChatLuong(),
         this.loadDanhMucHang(),
       ]);
-      await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkIsView() {
+    this.viewChiTiet = false;
+    if (this.router.url && this.router.url != null) {
+      let index = this.router.url.indexOf("/xem-chi-tiet/");
+      if (index != -1) {
+        this.viewChiTiet = true;
+      }
     }
   }
 
@@ -166,11 +178,15 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
-          if (this.detail.children) {
-            this.detail.detail = this.detail.children;
+          await this.loadNhaKho(this.detail.diemKhoId);
+          if (this.detail.hangHoaRes) {
+            this.detail.hangHoaList = this.detail.hangHoaRes;
           }
         }
       }
+    }
+    else {
+      this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
     }
     this.updateEditCache();
   }
@@ -226,12 +242,25 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     this.sortTableId();
     let item = cloneDeep(this.create);
     item.stt = this.detail?.hangHoaList.length + 1;
-    this.detail.hangHoaList = [
-      ...this.detail?.hangHoaList,
-      item,
-    ]
-    this.updateEditCache();
+    this.checkDataExist(item);
     this.clearItemRow();
+  }
+
+  checkDataExist(data) {
+    if (this.detail?.hangHoaList && this.detail?.hangHoaList.length > 0) {
+      let index = this.detail?.hangHoaList.findIndex(x => x.maVatTu == data.maVatTu);
+      if (index != -1) {
+        this.detail.hangHoaList.splice(index, 1);
+      }
+    }
+    else {
+      this.detail.hangHoaList = [];
+    }
+    this.detail.hangHoaList = [
+      ...this.detail.hangHoaList,
+      data,
+    ];
+    this.updateEditCache();
   }
 
   clearItemRow() {
@@ -336,22 +365,22 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
+    if (this.router.url.indexOf("/thoc/") != -1) {
       this.loaiStr = "Thóc";
       this.loaiVthh = "01";
       this.maVthh = "0101";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
+    } else if (this.router.url.indexOf("/gao/") != -1) {
       this.loaiStr = "Gạo";
       this.loaiVthh = "00";
       this.maVthh = "0102";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
       this.loaiStr = "Muối";
       this.loaiVthh = "02";
       this.maVthh = "04";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiStr = "Vật tư";
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';
@@ -538,7 +567,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "bbNghiemThuKlId": 0,
+        "bbNghiemThuKlId": this.detail.soQdNvuNhang,
         "diaChiGiaoNhan": null,
         "ghiChu": null,
         "hangHoaList": this.detail?.hangHoaList,
@@ -556,7 +585,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
         "nguoiGiaoHang": this.detail.nguoiGiaoHang,
         "phieuKtClId": this.detail.phieuKtClId,
         "soPhieu": this.detail.soPhieu,
-        "soQdNvuNhang": this.idNhapHang,
+        "soQdNvuNhang": this.detail.soQdNvuNhang,
         "taiKhoanCo": this.detail.taiKhoanCo,
         "taiKhoanNo": this.detail.taiKhoanNo,
         "tenNganLo": null,

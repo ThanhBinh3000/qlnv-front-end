@@ -6,7 +6,7 @@
         <div class="trai">
           <div class="title-form-chi-tiet">bảng kê cân hàng</div>
         </div>
-        <div class="canphai phai">
+        <div class="canphai phai" *ngIf="!viewChiTiet">
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
             *ngIf="detail.trangThai == '00' || id == 0">
             <i class="icon  htvbdh_tcdt_save"></i>
@@ -17,18 +17,18 @@
             <i class="icon htvbdh_trinh"></i>
             <span>Trình duyệt</span>
           </button>
-          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
+          <button class="btn btn-outline-grey btn-sub btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '01'"
             (click)="hoanThanh()">
             <i class="icon  htvbdh_da-xu-ly"></i>
             <span>Hoàn thành phiếu</span>
           </button>
-          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '01'"
+          <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="detail.trangThai == '04'"
             (click)="pheDuyet()">
             <i class="icon htvbdh_dakyduyet"></i>
             <span>Duyệt</span>
           </button>
           <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-            *ngIf="detail.trangThai == '01'">
+            *ngIf="detail.trangThai == '04'">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
@@ -46,7 +46,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị
                 </nz-form-label>
-                <input nz-input [(ngModel)]="detail.maDvi" disabled />
+                <input nz-input [(ngModel)]="userInfo.TEN_DVI" disabled />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -63,7 +63,8 @@
                   Số bảng kê
                 </nz-form-label>
                 <nz-input-number type="text" nz-input [nzSize]="'small'" placeholder="Nhập số bảng kê"
-                  [(ngModel)]="detail.soBangKe" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" [(ngModel)]="detail.soBangKe" [nzMin]="0"
+                  [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -71,7 +72,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Họ tên thủ kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maThuKho">
+                <nz-select [(ngModel)]="detail.maThuKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listThuKho" [nzValue]="thuKho.maThukho" [nzLabel]="thuKho.tenThukho">
                   </nz-option>
                 </nz-select>
@@ -82,7 +83,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maLhKho">
+                <nz-select [(ngModel)]="detail.maLhKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let thuKho of listLoaiKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
                   </nz-option>
                 </nz-select>
@@ -93,8 +94,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Sổ kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.soKho">
-                  <nz-option *ngFor="let thuKho of listLoaiKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
+                <nz-select [(ngModel)]="detail.soKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
+                  <nz-option *ngFor="let item of listSoKho" [nzValue]="item.id" [nzLabel]="item.id">
                   </nz-option>
                 </nz-select>
               </nz-form-item>
@@ -104,7 +105,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Điểm kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho()">
+                <nz-select [(ngModel)]="detail.maDiemKho" (ngModelChange)="changeDiemKho()"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.tenDiemkho">
                   </nz-option>
                 </nz-select>
@@ -115,7 +117,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Nhà kho
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maNhaKho">
+                <nz-select [(ngModel)]="detail.maNhaKho" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.tenNhakho">
                   </nz-option>
                 </nz-select>
@@ -126,7 +128,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngăn/Lô bảo quản
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.maKhoNganLo">
+                <nz-select [(ngModel)]="detail.maNganLo" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.tenNganlo">
                   </nz-option>
                 </nz-select>
@@ -137,7 +139,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa điểm
                 </nz-form-label>
-                <input nz-input placeholder="Nhập địa điểm" [(ngModel)]="detail.diaChi" />
+                <input nz-input placeholder="Nhập địa điểm" [(ngModel)]="detail.diaChi"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -153,7 +156,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị tính
                 </nz-form-label>
-                <nz-select [(ngModel)]="detail.donViTinh">
+                <nz-select [(ngModel)]="detail.donViTinh" [disabled]="detail.trangThai != '00' || viewChiTiet">
                   <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh" [nzLabel]="item.tenDviTinh">
                   </nz-option>
                 </nz-select>
@@ -164,7 +167,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Tên người giao (Người nhận)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập" [(ngModel)]="detail.tenNguoiGiaoHang" />
+                <input nz-input placeholder="Nhập" [(ngModel)]="detail.tenNguoiGiaoHang"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -172,7 +176,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Địa chỉ người giao (người nhận)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập" [(ngModel)]="detail.diaChiNguoiGiao" />
+                <input nz-input placeholder="Nhập" [(ngModel)]="detail.diaChiNguoiGiao"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -180,7 +185,8 @@
                 <nz-form-label [nzNoColon]="true">
                   Theo hợp đồng (nếu có)
                 </nz-form-label>
-                <input nz-input placeholder="Nhập" [(ngModel)]="detail.soHd" />
+                <input nz-input placeholder="Nhập" [(ngModel)]="detail.soHd"
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" />
               </nz-form-item>
             </div>
             <div nz-col nzSpan="8">
@@ -189,7 +195,8 @@
                   Ngày nhập xuất
                 </nz-form-label>
                 <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd"
-                  nzPlaceHolder="Ngày nhập xuất" [(ngModel)]="detail.ngayNhapXuat">
+                  [disabled]="detail.trangThai != '00' || viewChiTiet" nzPlaceHolder="Ngày nhập xuất"
+                  [(ngModel)]="detail.ngayNhapXuat">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -203,11 +210,11 @@
                 <th width="60px" class="text-center">STT<br />(A)</th>
                 <th class="text-center">SỐ BAO BÌ<br />(1)</th>
                 <th class="text-center">Trọng lượng cả BÌ<br />(2)</th>
-                <th width="140px" class="text-center">HÀNH ĐỘNG</th>
+                <th width="140px" class="text-center" *ngIf="!(detail.trangThai != '00' || viewChiTiet)">HÀNH ĐỘNG</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
                 <td></td>
                 <td>
                   <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soBaoBi" [nzMin]="0"
@@ -231,7 +238,7 @@
                   <td class="text-center">{{i+1}}</td>
                   <td>{{data.soBaoBi ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data.trongLuongCaBi ?? 0 | number: '1.0-1'}}</td>
-                  <td>
+                  <td *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
                     <a (click)="editRow(data.stt)">
                       <i class="fa fa-pencil"></i>
                     </a>

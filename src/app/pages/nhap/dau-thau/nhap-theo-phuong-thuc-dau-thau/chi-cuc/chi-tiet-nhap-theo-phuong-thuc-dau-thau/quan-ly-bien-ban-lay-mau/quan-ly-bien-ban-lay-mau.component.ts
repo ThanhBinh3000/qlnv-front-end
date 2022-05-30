@@ -180,7 +180,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       this.router.navigate([urlChiTiet, id]);
     }
     else {
-      let urlChiTiet = this.router.url + '/thong-tin'
+      let urlChiTiet = this.router.url + '/xem-chi-tiet'
       this.router.navigate([urlChiTiet, id]);
     }
   }
@@ -248,16 +248,16 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
 
   getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/")) {
+    if (this.router.url.indexOf("/thoc/") != -1) {
       this.loaiVthh = "01";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/")) {
+    } else if (this.router.url.indexOf("/gao/") != -1) {
       this.loaiVthh = "00";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/")) {
+    } else if (this.router.url.indexOf("/muoi/") != -1) {
       this.loaiVthh = "02";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/")) {
+    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
       this.loaiVthh = "03";
       this.routerVthh = 'vat-tu';
     }

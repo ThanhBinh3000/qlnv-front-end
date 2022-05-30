@@ -38,14 +38,14 @@
     }
   }
   .text-summary {
-    font-family: "Roboto";
+    font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     color: #000000;
   }
   .text-money {
-    font-family: "Roboto";
+    font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 13px;
@@ -57,6 +57,11 @@
     .file-dinh-kem {
       width: auto;
       color: #2196f3;
+    }
+  }
+  .bien-ban-day-kho {
+    .ant-table-thead {
+      height: 162px;
     }
   }
 }

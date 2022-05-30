@@ -32,6 +32,7 @@ export class DetailQuyetDinhNhapXuat {
     loaiNx: string;
     maDvi: string;
     tenDonVi: string;
+    tenDvi: string;
     maVthh: string;
     soLuong: number;
     tenVthh: string;

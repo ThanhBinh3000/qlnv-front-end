@@ -10,8 +10,8 @@
           <nz-breadcrumb-item> Nhập </nz-breadcrumb-item>
           <nz-breadcrumb-item> Nhập theo kế hoạch </nz-breadcrumb-item>
           <nz-breadcrumb-item> Nhập theo phương thức đấu thầu</nz-breadcrumb-item>
-          <nz-breadcrumb-item>Thóc </nz-breadcrumb-item>
-          <nz-breadcrumb-item>Cục </nz-breadcrumb-item>
+          <nz-breadcrumb-item> {{loaiStr}} </nz-breadcrumb-item>
+          <nz-breadcrumb-item> Cục </nz-breadcrumb-item>
           <nz-breadcrumb-item class="last-breadcrumb">{{ isChiTiet ? 'Chi tiết' : 'Dự thảo'}} </nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
@@ -219,7 +219,7 @@
           <tr *ngFor="let dataNhapXuat of quyetDinhNhapXuatDetail.data, let i = index">
             <ng-container *ngIf="!dsQuyetDinhNhapXuatDetailClone[i].isEdit; else editTemplate">
               <td>{{dataNhapXuat.stt }}</td>
-              <td>{{dataNhapXuat.tenDonVi}}</td>
+              <td>{{dataNhapXuat.tenDvi}}</td>
               <td>{{dataNhapXuat.maVthh}}</td>
               <td>{{dataNhapXuat.tenVthh}}</td>
               <td>{{dataNhapXuat.donViTinh}}</td>
