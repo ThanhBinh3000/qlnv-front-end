@@ -19,15 +19,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 
 export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
-  errorMessage = "";
-  url!: string;
 
   listBcaoKqua:any []=[];
 
@@ -98,6 +91,10 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {
           e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
@@ -109,13 +106,6 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
     this.spinner.hide();
-  }
-  themMoi(){
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notification.error('Thêm mới','Bạn chưa chọn loại báo cáo!');
-      return;
-    }
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/"+this.url])
   }
 
   //doi so trang
@@ -149,7 +139,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
         return;
       }
   
-      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.thangBcao ? this.searchFilter.thangBcao : '0')+'/'+this.searchFilter.namBcao])
+      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.maLoaiBcao == '526' ? this.searchFilter.thangBcao : '0')+'/'+this.searchFilter.namBcao])
   }
 
   // lay ten trang thai ban ghi

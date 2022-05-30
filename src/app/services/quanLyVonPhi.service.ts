@@ -113,8 +113,8 @@ export class QuanLyVonPhiService extends BaseService {
   }
   bCDieuChinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/' + id,
     );
   }
 
@@ -159,8 +159,8 @@ export class QuanLyVonPhiService extends BaseService {
   //sinh ma bao cao dieu chinh du toan
   sinhMaBaoCaoDieuChinh(): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/sinh-ma',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/sinh-ma',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/sinh-ma',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/sinh-ma',
     );
   }
 
@@ -176,8 +176,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet dieu chinh du toan NSNN
   trinhDuyetDieuChinhService(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/them-moi',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/them-moi',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/them-moi',
       request,
     );
   }
@@ -245,8 +245,17 @@ export class QuanLyVonPhiService extends BaseService {
   // upload phu luc dieu chinh du toan NSNN
   updatePLDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet',
+      request,
+    );
+  }
+
+  // tong hop dieu chinh du toan
+  tongHopDieuChinhDuToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/tong-hop',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/tong-hop',
       request,
     );
   }
@@ -407,8 +416,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   timKiemDieuChinh(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/danh-sach',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/danh-sach',
       request);
   }
 
@@ -503,8 +512,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approveDieuChinh(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/trang-thai',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/trang-thai',
       request,
     );
   }
@@ -512,8 +521,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api nút chức năng
   approveDieuChinhPheDuyet(request: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/trang-thai',
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/phe-duyet',
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/phe-duyet',
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/chi-tiet/phe-duyet',
       request,
     );
   }
@@ -584,8 +593,8 @@ export class QuanLyVonPhiService extends BaseService {
   //xóa báo cáo nút xóa Báo cáo
   xoaDuToanDieuChinh(id: any): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
-      'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
+      this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/xoa/' + id
+      // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/xoa/' + id
     );
   }
 

@@ -66,6 +66,43 @@ export const QUAN_LY_DIEU_CHINH_DU_TOAN_NSNN_LIST: QuanLyDieuChinhDuToanChiNSNN[
 		],
 		isDisabled: false,
 	},
+  {
+		icon: 'htvbdh_tcdt_icon-common',
+		title: 'Tổng hợp số liệu Điều chỉnh dự toán chi NSNN',
+		description: 'Tổng hợp số liệu Điều chỉnh dự toán chi NSNN',
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN}/tong-hop-dieu-chinh-du-toan-chi-NSNN`,
+		unRole: [
+			{
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+			{
+				"unit": CHI_CUC,
+				"role": TRUONG_BP,
+			},
+			{
+				"unit": CHI_CUC,
+				"role": LANH_DAO,
+			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": TRUONG_BP,
+			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": LANH_DAO,
+			},
+			{
+				"unit": LANH_DAO,
+				"role": TRUONG_BP,
+			},
+			{
+				"unit": LANH_DAO,
+				"role": LANH_DAO,
+			},
+		],
+		isDisabled: false,
+	},
 	// {
 	// 	icon: 'htvbdh_tcdt_icon-common',
 	// 	title: 'Tổng hợp',

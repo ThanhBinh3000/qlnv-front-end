@@ -53,7 +53,6 @@ export class PhuLuc1Component implements OnInit {
   namHienHanh: number;
   maBieuMau: string;
   trangThaiPhuLuc: string = '1';
-  trangThaiPhuLucGetDeTail!: string;
   initItem: ItemData = {
     id: null,
     stt: "0",
@@ -81,7 +80,7 @@ export class PhuLuc1Component implements OnInit {
   statusBtnOk: boolean;
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
+  idItem: any
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -99,17 +98,17 @@ export class PhuLuc1Component implements OnInit {
 
 
   async ngOnInit() {
+    debugger
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = this.data?.maDviTien;
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
-    this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
     // this.lstCtietBcao = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.data?.lstCtiet.forEach(item => {
+    this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
         tongNcauDtoanKphi: divMoney(item.tongNcauDtoanKphi, this.maDviTien),
@@ -121,7 +120,11 @@ export class PhuLuc1Component implements OnInit {
         kphiDchinhGiam: divMoney(item.kphiDchinhGiam, this.maDviTien),
       })
     })
-    this.sortByIndex();
+    if (!this.lstCtietBcao[0]?.stt){
+      this.sortWithoutIndex();
+    } else {
+        this.sortByIndex();
+    }
     this.updateEditCache();
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -152,7 +155,7 @@ export class PhuLuc1Component implements OnInit {
   }
 
   getStatusButton() {
-    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") || (this.trangThaiPhuLuc == "4" || this.trangThaiPhuLucGetDeTail == "7")) {
+    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") ) {
         this.statusBtnOk = false;
     } else {
         this.statusBtnOk = true;
@@ -170,9 +173,13 @@ export class PhuLuc1Component implements OnInit {
 			this.spinner.show();
 			await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
 				if (data.statusCode == 0) {
-          this.trangThaiPhuLuc = mcn;
-          this.getStatusButton();
-          this.dataChange.emit(mcn);
+                    this.trangThaiPhuLuc = mcn;
+					this.getStatusButton();
+                    let obj = {
+                        trangThai : mcn,
+                        lyDoTuChoi: lyDoTuChoi,
+                    }
+                    this.dataChange.emit(obj);
 					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					// } else {
@@ -210,6 +217,7 @@ export class PhuLuc1Component implements OnInit {
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
   getChiMuc(str: string): string {
+
     str = str.substring(str.indexOf('.') + 1, str.length);
     var xau: string = "";
     let chiSo: any = str.split('.');
@@ -564,7 +572,7 @@ export class PhuLuc1Component implements OnInit {
     // this.editCache[id].data.clechTranChiVsNcauChiN3 = this.editCache[id].data.ncauChiN3 - this.editCache[id].data.tranChiN3;
   }
 
-  idItem: any
+
   // luu
   async save(trangThai: string) {
 
