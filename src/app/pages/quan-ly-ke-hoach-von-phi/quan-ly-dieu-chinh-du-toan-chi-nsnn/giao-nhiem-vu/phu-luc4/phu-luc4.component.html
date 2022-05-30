@@ -22,7 +22,7 @@
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
       </button>
-      <ng-container *ngIf="lstDchinh.length == 0">
+      <ng-container *ngIf="lstCtietBcao.length == 0">
           <button type="button" class="btn btn-main" (click)="addFirst(initItem)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
@@ -34,7 +34,7 @@
   <thead>
     <tr>
         <th nzWidth="100px" rowspan="2">STT</th>
-        <th nzWidth="500px" rowspan="2">Mặt hàng</th>
+        <th nzWidth="200px" rowspan="2">Mặt hàng</th>
         <th nzWidth="200px" rowspan="2">ĐVT</th>
         <th nzWidth="200px" rowspan="2">Số lượng bảo quản theo KH được giao</th>
         <th colspan="3">Lượng hàng thực hiện</th>
@@ -83,7 +83,7 @@
     </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let data of lstDchinh; let i = index">
+      <tr *ngFor="let data of lstCtietBcao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
               <td [nzIndentSize]="data.lstMatHang[0].level * 8">
                   {{getChiMuc(data.stt)}}
@@ -96,7 +96,7 @@
                   </div>
               </td>
               <td>
-                  <div *ngFor="let item of donVis">
+                  <div *ngFor="let item of donViTinhs">
                       <div *ngIf="item.id == data.maDviTinh">
                           {{item.tenDm}}
                       </div>
@@ -155,7 +155,7 @@
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại nội dung"
                       [(ngModel)]="editCache[data.id].data.maDviTinh"
                       [class]="editCache[data.id].data.maDviTinh ?'' : 'input-error-validate'">
-                      <nz-option *ngFor="let item of donVis" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                      <nz-option *ngFor="let item of donViTinhs" [nzValue]="item.id" [nzLabel]="item.tenDm">
                       </nz-option>
                   </nz-select>
               </td>
@@ -265,15 +265,23 @@
 </div>
 <div class="action">
   <button type="button" class="btn btn-main" [hidden]="status">
-      <i nz-icon nzType="printer" nzTheme="outline"></i>
-      <span>In</span>
+    <i nz-icon nzType="printer" nzTheme="outline"></i>
+    <span>In</span>
   </button>
-  <button type="button" class="btn btn-main" [hidden]="status">
+  <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
       <i nz-icon nzType="check" nzTheme="outline"></i>
       <span>Hoàn tất nhập liệu</span>
   </button>
-  <button type="button" class="btn btn-main" [hidden]="status">
+  <button type="button" class="btn btn-main" [hidden]="statusBtnFinish" (click)="save('4')">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
+  </button>
+  <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+    <i nz-icon nzType="check" nzTheme="outline"></i>
+    <span>OK</span>
+  </button>
+  <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+      <i nz-icon nzType="close" nzTheme="outline"></i>
+      <span>Not OK</span>
   </button>
 </div>
