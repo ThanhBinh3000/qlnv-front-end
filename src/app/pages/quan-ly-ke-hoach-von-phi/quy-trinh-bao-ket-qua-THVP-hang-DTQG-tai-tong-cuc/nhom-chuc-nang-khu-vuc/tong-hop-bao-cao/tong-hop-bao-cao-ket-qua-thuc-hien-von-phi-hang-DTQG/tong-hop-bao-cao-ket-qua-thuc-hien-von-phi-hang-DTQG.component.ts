@@ -125,7 +125,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
         return;
       }
   
-      this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.maLoaiBcao == '1' ? this.searchFilter.dotBcao : '0')+'/'+this.searchFilter.namBcao])
+      this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/tong-hop/" + this.searchFilter.maLoaiBcao +'/' +(this.searchFilter.maLoaiBcao == '1' ? this.searchFilter.dotBcao : '0')+'/'+this.searchFilter.namBcao])
   }
 
   // lay ten trang thai ban ghi
