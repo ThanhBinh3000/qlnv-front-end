@@ -8,20 +8,6 @@ const routes: Routes = [
     component: QuytrinhbaocaoketquaTHVPhangDTQGtaitongtucComponent,
   },
   {
-    path: 'lap-bao-cao/:loai',
-    loadChildren: () =>
-      import(
-        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
-      ).then((m) => m.BaoCaoModule),
-  },
-  {
-    path: 'lap-bao-cao-chi-tiet/:id',
-    loadChildren: () =>
-      import(
-        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
-      ).then((m) => m.BaoCaoModule),
-  },
-  {
     path: 'tim-kiem-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg',
     loadChildren: () =>
       import(

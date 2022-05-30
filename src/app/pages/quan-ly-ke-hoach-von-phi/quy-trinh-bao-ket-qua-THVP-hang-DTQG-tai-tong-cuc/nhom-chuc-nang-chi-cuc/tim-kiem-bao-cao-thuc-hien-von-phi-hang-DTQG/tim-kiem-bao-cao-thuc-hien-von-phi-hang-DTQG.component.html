@@ -5,15 +5,11 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;onSubmit()">
+        <button nz-button class="search__button--search" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
-        <button nz-button class="search__button--search" (click)="themMoi();submitForm()">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Tạo mới</span>
-        </button>
-        <button nz-button class="search__button--search" routerLink="../">
+        <button nz-button class="search__button--search" (click)="close()">
           <i nz-icon nzType="stop"></i>
           Đóng
         </button>
@@ -24,83 +20,53 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG" class="mt16 flex-card p-lr16">
-        <form nz-form  [formGroup]="validateForm" class="login-form" style="margin-bottom:12px">
-        <div class="search__body" nz-row [nzGutter]="[24]">
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán tháng/lũy kế/năm" class="mt16 flex-card p-lr16">
+        <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
             <label class="search__label">Mã báo cáo</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-                <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao"/>
-              </nz-form-control>
-            </nz-form-item>
+            <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Năm báo cáo</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.namBcao" formControlName="namBaoCao" />
-            </nz-form-control>
-          </nz-form-item>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="searchFilter.namBcao"
+              [class]="searchFilter.namBcao && searchFilter.namBcao < 3000 && searchFilter.namBcao > 999 ?'' : 'input-error-validate' ">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Đợt báo cáo</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
-              </nz-form-control>
-            </nz-form-item>
+            <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
+              [(ngModel)]="searchFilter.thangBcao" 
+              [class]="(!searchFilter.dotBcao && searchFilter.maLoaiBcao == '1') ?'input-error-validate' : '' ">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày lập từ</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-                <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" formControlName="temp"></nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Đến ngày</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" formControlName="temp"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
+            <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen"></nz-date-picker>
           </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-form-item>
-              <nz-form-control nzErrorTip="">
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" formControlName="temp" [(ngModel)]="trangThai">
-              <nz-option *ngFor="let t of listTrangThai" [nzValue]="t.id" [nzLabel]="t.tenDm"></nz-option>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
-            </nz-form-control>
-          </nz-form-item>
           </div>
-          <div nz-col nzSpan="12"></div>
-          <!-- <div nz-col nzSpan="6">
-            <label class="search__label">Đợt báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
-          </div> -->
+          <div nz-col nzSpan="13"></div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Loại báo cáo</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
+              [class]="searchFilter.maLoaiBcao ?'' : 'input-error-validate' ">
+              <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
+            </nz-select>
+          </div>
         </div>
-          <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="6">
-              <label class="search__label">Loại báo cáo</label>
-              <nz-form-item>
-              <nz-form-control nzErrorTip="">
-              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" formControlName="loaiBaocao" [(ngModel)]="searchFilter.maLoaiBcao" >
-                <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
-              </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-            </div>
-          </div>
-        </form>
       </nz-card>
-      <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng DTQG" [nzExtra]="tableCard1"
+      <nz-card nzTitle="Danh sách báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
-          
+
         </div>
         <nz-table #basicTable class="nowrap">
           <thead>
@@ -112,16 +78,16 @@
               <th nzWidth="175px">Ngày lập</th>
               <th nzWidth="175px">Ngày trình duyệt</th>
               <th nzWidth="230px">Ngày duyệt <br> <span>(Ngày trưởng bộ phận kế toán duyệt)</span></th>
-              <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo chi cục phê duyệt)</span></th>
+              <th nzWidth="200px">Ngày phê duyệt <br> <span>(Lãnh đạo đơn vị cấp dưới phê duyệt)</span></th>
               <th nzWidth="175px">Ngày cấp trên trả kết quả</th>
               <th nzWidth="100px" class="text-center">Trạng thái</th>
-              <th >Hành động</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
-              <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td><a routerLink="../{{urlChiTiet}}/{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
               <td>{{item.ngayTao}}</td>
@@ -129,16 +95,21 @@
               <td>{{item.ngayDuyet}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>{{item.ngayTraKq}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}} 
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              </td>
               <td>
-                <button type="button" class="btn btn-main" routerLink="../{{urlChiTiet}}/{{ item.id }}">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5'">Nhập/Sửa dữ liệu</span>
+                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
                   <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
+                  
                 </button>
-                <button type="button" class="btn btn-main"[hidden]="btnCanBo">
+                <button type="button" class="btn btn-main" (click)="deleteReport(item.id)"
+                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
                   <span>Xóa</span>
                 </button>
+                
               </td>
             </tr>
           </tbody>
@@ -150,8 +121,9 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="pages.size"
-                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
+                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>
@@ -162,13 +134,11 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <!-- <button type="button" class="btn btn-main" routerLink="../{{url}}">
-          <i class="icon htvbdh_tcdt_guiduyet"></i>
-          <span>Tổng hợp báo cáo từ chi cục trực thuộc</span>
-        </button> -->
-        
+        <button type="button" class="btn btn-main" (click)="themMoi()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tạo mới</span>
+        </button>
       </ng-template>
     </div>
   </div>
 </div>
-
