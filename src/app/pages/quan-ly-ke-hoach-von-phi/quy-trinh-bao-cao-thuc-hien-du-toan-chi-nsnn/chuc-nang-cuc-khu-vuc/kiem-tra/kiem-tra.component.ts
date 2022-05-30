@@ -18,15 +18,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 
 export class KiemTraComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false })
   totalElements = 0;
   totalPages = 0;
-  errorMessage = "";
-  url!: string;
-
   listBcaoKqua:any []=[];
-
   trangThais: any = TRANG_THAI_KIEM_TRA_BAO_CAO;                          // danh muc loai bao cao
   trangThai!:string;
   searchFilter = {

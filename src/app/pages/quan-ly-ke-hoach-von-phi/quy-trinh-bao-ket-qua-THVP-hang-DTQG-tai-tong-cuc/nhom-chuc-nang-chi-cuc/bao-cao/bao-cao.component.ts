@@ -485,12 +485,20 @@ export class BaoCaoComponent implements OnInit {
           switch (item.maLoai) {
             // bm 02
             case BAO_CAO_NHAP_HANG_DTQG:
-              // nhan tien va validate
+              data.khTtien = divMoney(data.khTtien, item.maDviTien);
+              data.khGiaMuaTd = divMoney(data.khGiaMuaTd, item.maDviTien);
+              data.thTtien = divMoney(data.thTtien, item.maDviTien);
+              data.thGiaMuaTd = divMoney(data.thGiaMuaTd, item.maDviTien);
               break;
             // bm 03
 
             case BAO_CAO_XUAT_HANG_DTQG:
-              // nhan tien va validate
+              data.dgGiaKhoach = divMoney(data.dgGiaKhoach, item.maDviTien);
+              data.dgGiaBanTthieu = divMoney(data.dgGiaBanTthieu, item.maDviTien);
+              data.dgGiaBanTte = divMoney(data.dgGiaBanTte, item.maDviTien);
+              data.ttGiaHtoan = divMoney(data.ttGiaHtoan, item.maDviTien);
+              data.ttGiaBanTte = divMoney(data.ttGiaBanTte, item.maDviTien);
+              data.ttClechGiaTteVaGiaHtoan = divMoney(data.ttClechGiaTteVaGiaHtoan, item.maDviTien);
               break;
 
             // 04a/BCPN-X_x
@@ -1021,11 +1029,11 @@ export class BaoCaoComponent implements OnInit {
 
   //luu chi tiet phu luc
   async saveAppendix(maChucNang: string) {
-    debugger
+
     if (this.tabSelected == BAO_CAO_NHAP_HANG_DTQG) {
-      this.saveMau02();
+      await this.saveMau02();
     } else if (this.tabSelected == BAO_CAO_XUAT_HANG_DTQG) {
-      this.saveMau03();
+      await this.saveMau03();
     }
     let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
@@ -1061,12 +1069,19 @@ export class BaoCaoComponent implements OnInit {
           if (data.id?.length == 38) {
             data.id = null;
           }
-          //nhan chia tinh toan cho nay
-          //...
+          // nhan tien va validate
+          data.khTtien = mulMoney(data.khTtien, baoCaoChiTietTemp.maDviTien);
+          data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, baoCaoChiTietTemp.maDviTien);
+          data.thTtien = mulMoney(data.thTtien, baoCaoChiTietTemp.maDviTien);
+          data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, baoCaoChiTietTemp.maDviTien);
+          if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
         })
         break;
-      // bm 03
 
+      // bm 03
       case BAO_CAO_XUAT_HANG_DTQG:
         baoCaoChiTietTemp?.lstCtietBcaos.filter(data => {
           if (this.editCache[data.id].edit == true) {
@@ -1076,8 +1091,18 @@ export class BaoCaoComponent implements OnInit {
           if (data.id?.length == 38) {
             data.id = null;
           }
-          //nhan chia tinh toan cho nay
-          //...
+          // nhan tien va validate
+          data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, baoCaoChiTietTemp.maDviTien);
+          data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, baoCaoChiTietTemp.maDviTien);
+          data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, baoCaoChiTietTemp.maDviTien);
+          data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, baoCaoChiTietTemp.maDviTien);
+          data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, baoCaoChiTietTemp.maDviTien);
+          data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, baoCaoChiTietTemp.maDviTien);
+          if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+            || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
         })
         break;
 
@@ -1225,11 +1250,30 @@ export class BaoCaoComponent implements OnInit {
           // bm 02
           case BAO_CAO_NHAP_HANG_DTQG:
             // nhan tien va validate
+            data.khTtien = mulMoney(data.khTtien, item.maDviTien);
+            data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, item.maDviTien);
+            data.thTtien = mulMoney(data.thTtien, item.maDviTien);
+            data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, item.maDviTien);
+            if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
           // bm 03
 
           case BAO_CAO_XUAT_HANG_DTQG:
             // nhan tien va validate
+            data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, item.maDviTien);
+            data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, item.maDviTien);
+            data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, item.maDviTien);
+            data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, item.maDviTien);
+            data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, item.maDviTien);
+            data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+            if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+              || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
 
           // 04a/BCPN-X_x
@@ -1467,35 +1511,26 @@ export class BaoCaoComponent implements OnInit {
           await this.baoCao?.lstBcaos?.forEach(item => {
             item.maDviTien = '1';   // set defaul ma don vi tien la Dong
             item.checked = false;
-            item.trangThai = '5';
+            item.trangThai = '3';
             this.baoCao.maLoaiBcao = maLoaiBcao;
             this.baoCao.namBcao = namBcao;
             this.baoCao.dotBcao = dotBcao;
+            item.lyDoTuChoi = null;
+            item.qlnvKhvonphiBcaoId = null;
+            item.thuyetMinh = null;
             if (maLoaiBcao == BAO_CAO_DOT) {
               let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == item.maLoai);
               if (index !== -1) {
-                item.checked = false;
                 item.tieuDe = LISTBIEUMAUDOT[index].tieuDe + this.baoCao.dotBcao;
                 item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
                 item.nguoiBcao = this.userInfor.username;
-                item.lyDoTuChoi= null;
-                item.maDviTien= null;
-                item.qlnvKhvonphiBcaoId= null;
-                item.thuyetMinh= null;
-                item.trangThai= null
               }
             } else {
               let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == item.maLoai);
               if (index !== -1) {
-                item.checked = false;
                 item.tieuDe = LISTBIEUMAUNAM[index].tieuDe + this.baoCao.namBcao;
                 item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
                 item.nguoiBcao = this.userInfor.username;
-                item.lyDoTuChoi= null;
-                item.maDviTien= null;
-                item.qlnvKhvonphiBcaoId= null;
-                item.thuyetMinh= null;
-                item.trangThai= null
               }
             }
           })
@@ -1554,15 +1589,34 @@ export class BaoCaoComponent implements OnInit {
       item?.lstCtietBcaos.filter(data => {
         data.id = null;
         switch (item.maLoai) {
-          // bm 02
-          case BAO_CAO_NHAP_HANG_DTQG:
-            // nhan tien va validate
-            break;
-          // bm 03
-
-          case BAO_CAO_XUAT_HANG_DTQG:
-            // nhan tien va validate
-            break;
+         // bm 02
+         case BAO_CAO_NHAP_HANG_DTQG:
+          // nhan tien va validate
+          data.khTtien = mulMoney(data.khTtien, item.maDviTien);
+          data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, item.maDviTien);
+          data.thTtien = mulMoney(data.thTtien, item.maDviTien);
+          data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, item.maDviTien);
+          if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
+          break;
+          
+        // bm 03
+        case BAO_CAO_XUAT_HANG_DTQG:
+          // nhan tien va validate
+          data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, item.maDviTien);
+          data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, item.maDviTien);
+          data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, item.maDviTien);
+          data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, item.maDviTien);
+          data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, item.maDviTien);
+          data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+          if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+            || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
+          break;
 
           // 04a/BCPN-X_x
           case BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG:
@@ -1761,6 +1815,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async saveMau02() {
+
     this.lstCTietBaoCaoTemp = [];
     await this.lstCtietBcao021.forEach(e => {
       this.lstCTietBaoCaoTemp.push(e);
@@ -3094,7 +3149,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   sortByIndex() {
-    debugger
+
     this.lstCTietBaoCaoTemp.forEach(item => {
       this.setDetail(item.id);
     })
@@ -3129,7 +3184,7 @@ export class BaoCaoComponent implements OnInit {
   setDetail(id: any) {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id);
     var parentId: number = this.listKhoanMuc.find(e => e.id == this.lstCTietBaoCaoTemp[index].maNdungChi)?.idCha;
-    debugger
+
     this.lstCTietBaoCaoTemp[index].lstKm = this.listKhoanMuc.filter(e => e.idCha == parentId);
     if (this.listKhoanMuc.findIndex(e => e.idCha === this.lstCTietBaoCaoTemp[index].maNdungChi) == -1) {
       this.lstCTietBaoCaoTemp[index].status = false;
