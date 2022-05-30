@@ -98,7 +98,6 @@ export class PhuLuc1Component implements OnInit {
 
 
   async ngOnInit() {
-    debugger
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = this.data?.maDviTien;
@@ -120,7 +119,7 @@ export class PhuLuc1Component implements OnInit {
         kphiDchinhGiam: divMoney(item.kphiDchinhGiam, this.maDviTien),
       })
     })
-    if (!this.lstCtietBcao[0]?.stt){
+    if (!this.lstCtietBcao && !this.lstCtietBcao[0]?.stt){
       this.sortWithoutIndex();
     } else {
         this.sortByIndex();
@@ -142,6 +141,8 @@ export class PhuLuc1Component implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.loaiKhoans = data.data?.content;
+          console.log(this.loaiKhoans);
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -596,6 +597,7 @@ export class PhuLuc1Component implements OnInit {
     let lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
+      let tongNcauDtoanKphi = mulMoney(item.tongNcauDtoanKphi, this.maDviTien);
       let dtoanKphiCong = mulMoney(item.dtoanKphiCong, this.maDviTien);
       let dtoanKphiDaGiao = mulMoney(item.dtoanKphiDaGiao, this.maDviTien);
       let dtoanKphiNtruoc = mulMoney(item.dtoanKphiNtruoc, this.maDviTien);
@@ -603,13 +605,14 @@ export class PhuLuc1Component implements OnInit {
       let kphiDchinhTang = mulMoney(item.kphiDchinhTang, this.maDviTien);
       let kphiUocThien = mulMoney(item.kphiUocThien, this.maDviTien);
       if (dtoanKphiCong > MONEY_LIMIT || dtoanKphiDaGiao > MONEY_LIMIT ||
-        dtoanKphiNtruoc > MONEY_LIMIT || kphiDchinhGiam > MONEY_LIMIT || kphiDchinhTang > MONEY_LIMIT || kphiUocThien > MONEY_LIMIT
+        dtoanKphiNtruoc > MONEY_LIMIT || kphiDchinhGiam > MONEY_LIMIT || kphiDchinhTang > MONEY_LIMIT || kphiUocThien > MONEY_LIMIT || tongNcauDtoanKphi > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
+        tongNcauDtoanKphi: tongNcauDtoanKphi,
         dtoanKphiCong: dtoanKphiCong,
         dtoanKphiDaGiao: dtoanKphiDaGiao,
         dtoanKphiNtruoc: dtoanKphiNtruoc,
@@ -644,7 +647,11 @@ export class PhuLuc1Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.dataChange.emit('-1');
+          let obj = {
+            trangThai: '-1',
+            lyDoTuChoi: null,
+          };
+          this.dataChange.emit(obj);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
