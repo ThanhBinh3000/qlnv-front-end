@@ -124,11 +124,14 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 clechTranChiVsNcauChiN2: divMoney(item.clechTranChiVsNcauChiN2, this.maDviTien),
             })
         })
-        if (!this.lstCtietBcao[0]?.stt){
-            this.sortWithoutIndex();
-        } else {
-            this.sortByIndex();
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt){
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
         }
+        
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(

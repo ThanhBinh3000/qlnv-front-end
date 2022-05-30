@@ -127,10 +127,12 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
                 clechTranChiVsNcauChiN2: divMoney(item.clechTranChiVsNcauChiN2, this.maDviTien),
             })
         })
-        if (!this.lstCtietBcao[0]?.stt){
-            this.sortWithoutIndex();
-        } else {
-            this.sortByIndex();
+        if (this.lstCtietBcao.length > 0){
+            if (!this.lstCtietBcao[0].stt){
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
         }
         this.updateEditCache();
 
@@ -561,7 +563,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
     }
     //thêm phần tử đầu tiên khi bảng rỗng
     addFirst(initItem: ItemData) {
-        if (initItem.id) {
+        if (initItem?.id) {
             let item: ItemData = {
                 ...initItem,
                 stt: "0.1",

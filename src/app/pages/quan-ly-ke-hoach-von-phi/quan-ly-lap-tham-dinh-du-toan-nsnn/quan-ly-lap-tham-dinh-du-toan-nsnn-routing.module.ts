@@ -108,7 +108,7 @@ const routes: Routes = [
   },
   //so kiem tra chi nsnn
   {
-    path: 'so-kiem-tra-chi-nsnn',
+    path: 'so-kiem-tra-chi-nsnn/:id',
     loadChildren: () =>
       import(
         './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/so-kiem-tra-chi-nsnn/so-kiem-tra-chi-nsnn.module'

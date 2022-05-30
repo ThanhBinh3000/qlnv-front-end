@@ -130,11 +130,14 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 ncauChiChiaRaChiMoi2: divMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien),
             })
         })
-        if (!this.lstCtietBcao[0]?.stt){
-            this.sortWithoutIndex();
-        } else {
-            this.sortByIndex();
+        if (this.lstCtietBcao.length > 0){
+            if (!this.lstCtietBcao[0]?.stt){
+                this.sortWithoutIndex();
+            } else {
+                this.sortByIndex();
+            }
         }
+        
         this.updateEditCache();
         //lay danh sach danh muc don vi
         await this.danhMucService.dMDonVi().toPromise().then(
