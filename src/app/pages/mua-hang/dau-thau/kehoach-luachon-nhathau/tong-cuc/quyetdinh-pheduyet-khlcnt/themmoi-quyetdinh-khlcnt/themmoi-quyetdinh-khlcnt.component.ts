@@ -28,6 +28,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { R } from '@angular/cdk/keycodes';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -83,7 +84,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private userService: UserService,
     private fb: FormBuilder,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private dauThauService: DanhSachDauThauService
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -346,6 +348,25 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  async openDialogDeXuat(index) {
+    let data = this.danhsachDx[index]
+    this.modal.create({
+      nzTitle: 'Thông tin phụ lục KH LNCT cho các Cục DTNN KV',
+      nzContent: DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '90%',
+      nzFooter: null,
+      nzComponentParams: {
+        data: data
+      },
+    });
+  }
+
+  deleteItem(data) {
+
+  }
+
   convertTreeToList(root: VatTu): VatTu[] {
     const stack: VatTu[] = [];
     const array: VatTu[] = [];
@@ -468,7 +489,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
-    console.log(this.formData.value);
     if (this.formData.invalid) {
       return;
     }
@@ -624,7 +644,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  bindingData(data) {
+  async bindingData(data) {
+    console.log(data);
     this.formThongTinDX.patchValue({
       loaiHdong: data.loaiHdong,
       pthucLcnt: data.pthucLcnt,
@@ -650,6 +671,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       namKhoach: data.namKhoach
     })
     this.danhsachDx = data.children;
+    this.danhsachDx.forEach(async (item, index) => {
+      await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          item.children = res.data.children2;
+        }
+      })
+    })
   }
 
   collapse(array: VatTu[], data: VatTu, $event: boolean): void {
@@ -710,7 +738,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.danhsachDx = data.children1;
       let dataDX = await this.tongHopDeXuatKHLCNTService.getDetail(data.idThHdr);
       let obj = this.listDanhSachTongHop.filter(item => item.id === data.idThHdr);
-      console.log(obj);
       this.listDanhSachTongHop = [
         ...this.listDanhSachTongHop,
         dataDX.data

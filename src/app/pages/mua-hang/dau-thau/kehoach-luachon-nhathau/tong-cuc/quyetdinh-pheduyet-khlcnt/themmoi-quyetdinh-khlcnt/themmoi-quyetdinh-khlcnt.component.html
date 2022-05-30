@@ -396,8 +396,11 @@
                     <td>{{ data.soLuong | number: '1.0-1' }}</td>
                     <td>{{ data.tongTien | number: '1.0-1' }}</td>
                     <td class="text-center">
-                      <a>
-                        <i class="fa fa-eye"></i>
+                      <a (click)="openDialogDeXuat(i)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a (click)="deleteItem(i)">
+                        <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
                   </tr>

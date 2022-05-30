@@ -29,6 +29,8 @@ import { HelperService } from 'src/app/services/helper.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { ObservableService } from 'src/app/services/observable.service';
+import { environment } from 'src/environments/environment';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 
 interface ItemData {
   id: string;
@@ -61,12 +63,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   userLogin: UserLogin
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
+  listPheDuyetKhlcnt: any[] = [];
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
   danhMucDonVi: any;
   ktDiemKho: any;
-
+  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+  fileList: any[] = [];
   id: number;
 
   isVisibleChangeTab$ = new Subject();
@@ -120,6 +124,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private observableService: ObservableService,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService
   ) {
     this.formData = this.fb.group(
       {
@@ -187,6 +192,29 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     // }
   }
 
+  xoaFile(any?) {
+
+  }
+
+  handleChange(event) {
+
+  }
+
+  async getListPheDuyetLcnt() {
+    let body = {
+      trangThai: '11',
+      namKhoach: '2022',
+      loaiVthh: '01'
+    }
+    let res;
+    res = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPheDuyetKhlcnt = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
     // this.listOfData = this.listOfData.filter(d => d.idVirtual !== idVirtual);
@@ -208,7 +236,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     }
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     this.loadDonVi();
-
+    this.getListPheDuyetLcnt();
     if (this.id > 0) {
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.id);
     } else {

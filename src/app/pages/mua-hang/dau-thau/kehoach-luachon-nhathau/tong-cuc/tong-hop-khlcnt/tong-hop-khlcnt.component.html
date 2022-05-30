@@ -4,26 +4,26 @@
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
-              <label class="search__label">Loại hàng </label>
-              <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
-                <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
+            <label class="search__label">Loại hàng </label>
+            <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
+              <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="6">
-              <label class="search__label"> Năm kế hoạch </label>
-              <nz-select [(ngModel)]="searchFilter.namKh">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </div>
+            <label class="search__label"> Năm kế hoạch </label>
+            <nz-select [(ngModel)]="searchFilter.namKh">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </div>
           <div nz-col nzSpan="6">
             <label class="search__label">Ngày tổng hợp</label>
-              <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="6">
-              <label class="search__label">QĐ giao chỉ tiêu/điều chỉnh giao chỉ tiêu</label>
-              <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" >
-                
-              </nz-select>
+            <label class="search__label">QĐ giao chỉ tiêu/điều chỉnh giao chỉ tiêu</label>
+            <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh">
+
+            </nz-select>
           </div>
         </div>
         <div class="cangiua group-button-search">
@@ -97,7 +97,7 @@
               </div>
             </div>
           </nz-tab>
-          
+
           <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp'" class="tt-chung__container"
             (nzClick)="selectTabData('danh-sach-chua-tong-hop')">
             <nz-table #basicTableNoTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
@@ -121,7 +121,7 @@
                   <td>{{ data.children2.length }}</td>
                   <td>{{ data.soDxuat }}</td>
                   <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{ data.children1 ? data.children1.tenDuAn : ''  }}</td>
+                  <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
                   <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
                   <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
                 </tr>
@@ -168,7 +168,7 @@
                   <td>{{ data.children2.length }}</td>
                   <td>{{ data.soDxuat }}</td>
                   <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{ data.children1 ? data.children1.tenDuAn : ''  }}</td>
+                  <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
                   <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
                   <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
                 </tr>

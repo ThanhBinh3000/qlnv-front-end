@@ -42,16 +42,13 @@
             [nzShowPagination]="false">
             <thead>
               <tr>
-                <th width="60px">STT</th>
-                <th width="130px">Số quyết định</th>
-                <th width="130px">Ngày quyết định</th>
-                <th width="175px">Năm kế hoạch</th>
-                <th width="175px">Hình thức LCNT</th>
-                <th width="175px" class="text-center">Phương thức LCNT</th>
-                <th width="175px" class="text-center">Loại hợp đồng</th>
-                <th width="175px" class="text-center">Nguồn vốn</th>
-                <th width="175px" class="text-center">Trạng thái</th>
-                <th width="130px" class="text-center"></th>
+                <th width="30px">STT</th>
+                <th>Số quyết định</th>
+                <th>Ngày quyết định</th>
+                <th>Về việc</th>
+                <th>Số gói thầu</th>
+                <th>Tổng giá trị</th>
+                <th width="30px" class="text-center"></th>
               </tr>
             </thead>
             <tbody>
@@ -59,15 +56,12 @@
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                 <td>{{ data.soQd }}</td>
                 <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-                <td>{{ data.namKhoach }}</td>
-                <td>{{ data.hthucLcnt }}</td>
-                <td>{{ data.pthucLcnt }}</td>
-                <td>{{ data.loaiHdong }}</td>
-                <td>{{ data.nguonVon }}</td>
-                <td>{{ convertTrangThai(data.trangThai) }}</td>
+                <td>{{ data.veViec }}</td>
+                <td>{{ data.children1.length }}</td>
+                <td>{{ data.children1.length }}</td>
                 <td class="text-center">
                   <a (click)="redirectToChiTiet(data.id)">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-eye"></i>
                   </a>
                 </td>
               </tr>

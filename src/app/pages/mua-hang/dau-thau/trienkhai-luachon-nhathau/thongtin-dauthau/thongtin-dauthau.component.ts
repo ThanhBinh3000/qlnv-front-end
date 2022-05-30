@@ -84,7 +84,7 @@ export class ThongtinDauthauComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      // await this.search();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -161,17 +161,19 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    if (this.router.url.includes(LEVEL.TONG_CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
-        id,
-      ]);
-    } else if (this.router.url.includes(LEVEL.CUC)) {
-      this.router.navigate([
-        '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
-        id,
-      ]);
-    }
+    // if (this.router.url.includes(LEVEL.TONG_CUC)) {
+    //   this.router.navigate([
+    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-tong-cuc',
+    //     id,
+    //   ]);
+    // } else if (this.router.url.includes(LEVEL.CUC)) {
+    //   this.router.navigate([
+    //     '/mua-hang/dau-thau/thoc/tong-hop-ke-hoach-lua-chon-nha-thau-cuc/thong-tin-tong-hop-ke-hoach-lua-chon-nha-thau-cuc',
+    //     id,
+    //   ]);
+    // }
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/thongtin-dauthau/chinh-sua', id]);
   }
 
   clearFilter() {

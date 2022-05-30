@@ -303,11 +303,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.listDiemKho.push(item);
       }
     }
-
-    // if (index > -1) {
-    //   this.editCache[index].data.maDiemKho = "";
-    //   this.editCache[index].data.diaDiemNhap = "";
-    // };
   }
 
   changeDiemKho(index) {

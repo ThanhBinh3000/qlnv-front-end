@@ -76,7 +76,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      // await this.search();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
