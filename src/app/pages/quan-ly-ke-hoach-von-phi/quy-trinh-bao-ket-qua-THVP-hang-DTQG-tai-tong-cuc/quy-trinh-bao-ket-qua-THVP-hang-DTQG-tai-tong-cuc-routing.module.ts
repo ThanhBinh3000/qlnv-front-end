@@ -50,26 +50,33 @@ const routes: Routes = [
       ).then((m) => m.BaoCaoModule),
   },
   {
-    path: 'bao-cao/:namBcao/:maLoaiBcao/:dotBcao',
-    loadChildren: () =>
-      import(
-        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
-      ).then((m) => m.BaoCaoRoutingModule),
-  },
-  {
-    path: 'bao-cao/:namBcao/:maLoaiBcao',
-    loadChildren: () =>
-      import(
-        './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
-      ).then((m) => m.BaoCaoRoutingModule),
-  },
-  {
-    path: 'bao-cao-/:loai/:namBaoCao',
+    path: ':baoCao/:loaiBaoCao/:dot/:nam',
     loadChildren: () =>
       import(
         './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
       ).then((m) => m.BaoCaoModule),
   },
+  // {
+  //   path: 'bao-cao/:namBcao/:maLoaiBcao/:dotBcao',
+  //   loadChildren: () =>
+  //     import(
+  //       './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
+  //     ).then((m) => m.BaoCaoRoutingModule),
+  // },
+  // {
+  //   path: 'bao-cao/:namBcao/:maLoaiBcao',
+  //   loadChildren: () =>
+  //     import(
+  //       './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao-routing.module'
+  //     ).then((m) => m.BaoCaoRoutingModule),
+  // },
+  // {
+  //   path: 'bao-cao-/:loai/:namBaoCao',
+  //   loadChildren: () =>
+  //     import(
+  //       './nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.module'
+  //     ).then((m) => m.BaoCaoModule),
+  // },
   
 ];
 
