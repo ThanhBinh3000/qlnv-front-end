@@ -101,6 +101,10 @@ const routes: Routes = [
                 component: ThemMoiBienBanBanGiaoMauComponent,
             },
             {
+                path: 'bien-ban-ban-giao-mau/xem-chi-tiet/:id',
+                component: ThemMoiBienBanBanGiaoMauComponent,
+            },
+            {
                 path: 'bien-ban-day-kho',
                 component: QuanLyPhieuNhapDayKhoComponent,
             },
