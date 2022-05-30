@@ -18,11 +18,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG.component.scss']
 })
 export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false })
-  
-  url: string ='/bao-cao-/';
- 
   listBcaoKqua:any []=[];
 
   searchFilter = {
@@ -127,8 +122,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
-
-    this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.dotBcao == '1' ? this.searchFilter.thangBcao : '0') + '/' + this.searchFilter.namBcao])
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-tong-cuc-dtnn/bao-cao/" + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.maLoaiBcao == '1' ? this.searchFilter.dotBcao : '0') + '/' + this.searchFilter.namBcao])
   }
 
   //doi so trang

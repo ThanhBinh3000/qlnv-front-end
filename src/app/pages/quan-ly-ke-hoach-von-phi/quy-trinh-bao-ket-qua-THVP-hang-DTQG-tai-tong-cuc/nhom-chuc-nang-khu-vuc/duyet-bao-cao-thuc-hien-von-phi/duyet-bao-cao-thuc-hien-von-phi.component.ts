@@ -106,7 +106,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       maQuan: null,
       maTinh: null,
       paggingReq: {
-        limit: 20,
+        limit: 10,
         page: 1
       },
       str: '',
