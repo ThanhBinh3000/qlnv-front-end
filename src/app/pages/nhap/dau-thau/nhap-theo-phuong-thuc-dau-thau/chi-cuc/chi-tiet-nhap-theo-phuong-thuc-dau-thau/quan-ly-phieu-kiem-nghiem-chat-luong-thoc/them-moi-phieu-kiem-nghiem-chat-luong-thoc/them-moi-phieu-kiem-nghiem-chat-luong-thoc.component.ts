@@ -112,7 +112,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
     let body = {
-      "ketQuaKiemNghiem": this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem ?? [],
+      "kquaKnghiem": this.phieuKiemNghiemChatLuongHang.kquaKnghiem ?? [],
       "chiSoChatLuong": this.phieuKiemNghiemChatLuongHang.chiSoChatLuong ?? null,
       "ddiemBquan": this.phieuKiemNghiemChatLuongHang.ddiemBquan ?? null,
       "diemKhoId": this.phieuKiemNghiemChatLuongHang.diemKhoId ?? null,
@@ -140,6 +140,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       "thuKho": this.phieuKiemNghiemChatLuongHang.thuKho ?? null,
       "trangThai": this.phieuKiemNghiemChatLuongHang.trangThai ?? null,
       "qdgnvnxId": this.idNhapHang,
+      "ketLuan": this.phieuKiemNghiemChatLuongHang.ketLuan ?? null,
+      "ketQuaDanhGia": this.phieuKiemNghiemChatLuongHang.ketQuaDanhGia ?? null,
     }
     if (this.id > 0) {
       this.phieuKiemNghiemChatLuongHangService.sua(
@@ -517,16 +519,35 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
     kqKiemNghiemChatLuongHangTemp.tenCtieu = this.ketQuaKiemNghiemHangCreate.tenCtieu;
     kqKiemNghiemChatLuongHangTemp.kquaKtra = this.ketQuaKiemNghiemHangCreate.kquaKtra;
     kqKiemNghiemChatLuongHangTemp.pphapXdinh = this.ketQuaKiemNghiemHangCreate.pphapXdinh;
-    this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem = [
-      ...this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem,
-      kqKiemNghiemChatLuongHangTemp,
+    this.checkDataExistKqKiemNghiemChatLuong(kqKiemNghiemChatLuongHangTemp);
+    this.newObjectPhieuKiemNghiem();
+    this.dsKetQuaKiemNghiemHangClone = cloneDeep(this.phieuKiemNghiemChatLuongHang.kquaKnghiem);
+  }
+
+  checkDataExistKqKiemNghiemChatLuong(kqKiemNghiemChatLuong: KetQuaKiemNghiemChatLuongHang) {
+    console.log(this.phieuKiemNghiemChatLuongHang.kquaKnghiem);
+    console.log(kqKiemNghiemChatLuong);
+
+    if (this.phieuKiemNghiemChatLuongHang.kquaKnghiem) {
+      let indexExist = this.phieuKiemNghiemChatLuongHang.kquaKnghiem.findIndex(
+        (x) => x.tenCtieu == kqKiemNghiemChatLuong.tenCtieu,
+      );
+      if (indexExist != -1) {
+        this.phieuKiemNghiemChatLuongHang.kquaKnghiem.splice(indexExist, 1);
+      }
+    } else {
+      this.phieuKiemNghiemChatLuongHang.kquaKnghiem = [];
+    }
+    this.phieuKiemNghiemChatLuongHang.kquaKnghiem = [
+      ...this.phieuKiemNghiemChatLuongHang.kquaKnghiem,
+      kqKiemNghiemChatLuong,
     ];
-    this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem.forEach((lt, i) => {
+    this.phieuKiemNghiemChatLuongHang.kquaKnghiem.forEach((lt, i) => {
       lt.stt = i + 1;
     });
-    this.newObjectPhieuKiemNghiem();
-    this.dsKetQuaKiemNghiemHangClone = cloneDeep(this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem);
+
   }
+
   clearNew() {
     this.newObjectPhieuKiemNghiem();
   }
@@ -578,17 +599,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem =
-          this.phieuKiemNghiemChatLuongHang?.ketQuaKiemNghiem.filter(
+        this.phieuKiemNghiemChatLuongHang.kquaKnghiem =
+          this.phieuKiemNghiemChatLuongHang?.kquaKnghiem.filter(
             (khlt) => khlt.stt !== stt,
           );
-        this.phieuKiemNghiemChatLuongHang?.ketQuaKiemNghiem.forEach((lt, i) => {
+        this.phieuKiemNghiemChatLuongHang?.kquaKnghiem.forEach((lt, i) => {
           if (i >= stt - 1) {
             lt.stt = i + 1;
           }
         });
         this.dsKetQuaKiemNghiemHangClone = cloneDeep(
-          this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem,
+          this.phieuKiemNghiemChatLuongHang.kquaKnghiem,
         );
         // this.loadData();
       },
@@ -597,12 +618,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   saveEditPhieuKiemNghiem(i: number): void {
     this.dsKetQuaKiemNghiemHangClone[i].isEdit = false;
     Object.assign(
-      this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem[i],
+      this.phieuKiemNghiemChatLuongHang.kquaKnghiem[i],
       this.dsKetQuaKiemNghiemHangClone[i],
     );
   }
   cancelEditPhieuKiemNghiem(index: number) {
-    this.dsKetQuaKiemNghiemHangClone = cloneDeep(this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem);
+    this.dsKetQuaKiemNghiemHangClone = cloneDeep(this.phieuKiemNghiemChatLuongHang.kquaKnghiem);
     this.dsKetQuaKiemNghiemHangClone[index].isEdit = false;
   }
   loadPhieuKiemNghiemChatLuong() {
@@ -610,12 +631,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
       .chiTiet(this.id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.phieuKiemNghiemChatLuongHang.ketQuaKiemNghiem = [];
+          this.phieuKiemNghiemChatLuongHang.kquaKnghiem = [];
           this.phieuKiemNghiemChatLuongHang = res.data;
           this.phieuKiemNghiemChatLuongHang.maDonVi = this.userInfo.MA_DVI;
           this.phieuKiemNghiemChatLuongHang.tenDonVi = this.userInfo.TEN_DVI;
 
-          this.dsKetQuaKiemNghiemHangClone = this.phieuKiemNghiemChatLuongHang?.ketQuaKiemNghiem ?? [];
+          this.dsKetQuaKiemNghiemHangClone = this.phieuKiemNghiemChatLuongHang?.kquaKnghiem ?? [];
           this.changeDiemKho();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);

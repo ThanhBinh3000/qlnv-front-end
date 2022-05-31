@@ -37,7 +37,7 @@
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Năm kế hoạch</label>
-            <nz-select [(ngModel)]="searchFilter.namKeHoach">
+            <nz-select [(ngModel)]="searchFilter.namKeHoach" nzAllowClear>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>

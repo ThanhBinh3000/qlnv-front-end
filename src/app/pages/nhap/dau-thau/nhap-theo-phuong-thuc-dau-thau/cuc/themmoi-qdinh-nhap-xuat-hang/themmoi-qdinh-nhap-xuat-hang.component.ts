@@ -1,34 +1,31 @@
-import { cloneDeep } from 'lodash';
-import { DetailQuyetDinhNhapXuat } from './../../../../../../models/QuyetDinhNhapXuat';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+  FormBuilder, FormGroup,
+  Validators
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import moment from 'moment';
+import { differenceInCalendarDays } from 'date-fns';
+import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
+import { DisabledTimeFn } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
+import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import dayjs from 'dayjs';
+import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { DetailQuyetDinhNhapXuat } from './../../../../../../models/QuyetDinhNhapXuat';
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
@@ -60,7 +57,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   maVthh: string;
   idVthh: number;
   routerVthh: string;
-
+  today = new Date();
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -132,7 +129,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       soQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soQd : null, [Validators.required]],
-      ngayQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ngayKy : null, [Validators.required]],
+      // ngayQdinh: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.ngayKy : null, [Validators.required]],
+      ngayQdinh: [dayjs(), [Validators.required]],
       canCu: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.soHd : null, [Validators.required]],
       veViec: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.veViec : null],
       donVi: [this.quyetDinhNhapXuat ? this.quyetDinhNhapXuat.tenDonVi : null],
@@ -404,10 +402,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.dsQuyetDinhNhapXuatDetailClone[index].isEdit = false;
   }
   save(isGuiDuyet?: boolean) {
+    if (!this.formData.valid) {
+      return;
+    }
     this.spinner.show();
     this.quyetDinhNhapXuat.soQd = this.formData.get('soQdinh').value;
     this.quyetDinhNhapXuat.loaiQd = "00";
-    this.quyetDinhNhapXuat.ngayKy = dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD');
+    this.quyetDinhNhapXuat.ngayKy = this.formData.get('ngayQdinh').value ? dayjs(this.formData.get('ngayQdinh').value).format('YYYY-MM-DD') : dayjs().toString();
     this.quyetDinhNhapXuat.soHd = this.formData.get('canCu').value;
     this.quyetDinhNhapXuat.veViec = this.formData.get('veViec').value;
     this.quyetDinhNhapXuat.maDvi = this.formData.get('maDonVi').value;
@@ -550,6 +551,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     );
   }
   guiDuyet() {
+    if (!this.formData.valid) {
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -686,5 +690,21 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         this.redirectQdNhapXuat();
       },
     });
+  }
+  disabledDate = (current: Date): boolean =>
+    differenceInCalendarDays(current, this.today) > 0;
+
+  disabledDateTime: DisabledTimeFn = () => ({
+    nzDisabledHours: () => this.range(0, 24).splice(4, 20),
+    nzDisabledMinutes: () => this.range(30, 60),
+    nzDisabledSeconds: () => [55, 56],
+  });
+
+  range(start: number, end: number): number[] {
+    const result: number[] = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
   }
 }

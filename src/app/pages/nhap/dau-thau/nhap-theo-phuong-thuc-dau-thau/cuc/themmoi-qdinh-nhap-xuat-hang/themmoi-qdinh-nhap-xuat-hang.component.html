@@ -16,12 +16,13 @@
         </nz-breadcrumb>
       </div>
       <div class="canphai phai" *ngIf="!isChiTiet">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="disableBanHanh()">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="disableBanHanh()"
+          [disabled]="!formData.valid">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="disableBanHanh()"
-          (click)="guiDuyet()">
+          [disabled]="!formData.valid" (click)="guiDuyet()">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
@@ -59,10 +60,17 @@
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="12">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label [nzNoColon]="true" nzRequired>
                   Số quyết định
                 </nz-form-label>
-                <input nz-input formControlName="soQdinh" [readonly]="isChiTiet" />
+                <!-- <nz-form-control [nzErrorTip]="soQDError"> -->
+                <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isChiTiet">
+                </nz-input-number>
+                <!-- <ng-template let-control> -->
+                <ng-container *ngIf="formData.hasError('required')">{{errorInputRequired}}</ng-container>
+                <!-- </ng-template> -->
+                <!-- </nz-form-control> -->
               </nz-form-item>
             </div>
             <div nz-col nzSpan="12">
@@ -77,7 +85,7 @@
             </div>
             <div nz-col [nzSpan]="12">
               <nz-form-item class="display-block">
-                <nz-form-label [nzNoColon]="true"> Căn cứ trên hợp đồng </nz-form-label>
+                <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên hợp đồng </nz-form-label>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQuyetDinhGiaoChiTieu()">
                   <input class="search__input" [readonly]="true" nz-input formControlName="canCu" readonly />
                 </nz-input-group>

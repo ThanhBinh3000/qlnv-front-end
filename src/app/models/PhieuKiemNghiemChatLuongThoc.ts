@@ -28,9 +28,11 @@ export class PhieuKiemNghiemChatLuongHang {
     tenDonVi: string;
     maDonVi: string;
     thuKho: string;
-    ketQuaKiemNghiem: Array<KetQuaKiemNghiemChatLuongHang>;
+    ketLuan: string;
+    ketQuaDanhGia: string;
+    kquaKnghiem: Array<KetQuaKiemNghiemChatLuongHang>;
     constructor(ketQuaKiemNghiem: Array<KetQuaKiemNghiemChatLuongHang> = []) {
-        this.ketQuaKiemNghiem = ketQuaKiemNghiem;
+        this.kquaKnghiem = ketQuaKiemNghiem;
     }
 }
 
