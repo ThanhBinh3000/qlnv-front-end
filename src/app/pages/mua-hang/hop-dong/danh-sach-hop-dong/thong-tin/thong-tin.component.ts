@@ -59,8 +59,8 @@ export class ThongTinComponent implements OnInit {
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
     this.getTitleVthh();
     this.detail.trangThai = "00";
-    this.detailChuDauTu.type = '01';
-    this.detailDviCungCap.type = '02';
+    this.detailChuDauTu.type = 'A';
+    this.detailDviCungCap.type = 'B';
     this.detail.bangGia = [];
     this.userInfo = this.userService.getUserLogin();
     this.id = +this.routerActive.snapshot.paramMap.get('id');
@@ -94,10 +94,10 @@ export class ThongTinComponent implements OnInit {
           }
           if (this.detail.children1 && this.detail.children1.length > 0) {
             this.detail.children1.forEach(element => {
-              if (element.type == '01') {
+              if (element.type == 'A') {
                 this.detailChuDauTu = element;
               }
-              else if (element.type == '02') {
+              else if (element.type == 'B') {
                 this.detailDviCungCap = element;
               }
             });
