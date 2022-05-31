@@ -113,7 +113,7 @@ export class ItemDataMau03 {
 export class ItemDataMau04a1 {
   id: any;
   stt: string;
-  listKhoanMuc: any[];
+  lstKm: any[];
   maNdungChi: string;
   maNdungChiParent: string;
   trongDotTcong: number;
@@ -250,7 +250,7 @@ export class BaoCaoComponent implements OnInit {
   initItem: ItemDataMau04a1 = {
     id: null,
     stt: '0',
-    listKhoanMuc: [],
+    lstKm: [],
     maNdungChi: '',
     maNdungChiParent: '',
     trongDotTcong: 0,
@@ -280,7 +280,7 @@ export class BaoCaoComponent implements OnInit {
   listColTemp: any[] = [];
   cols: number = 0;
   lstIdDeleteCols: string = '';
-  listKhoanMuc: any[] = KHOAN_MUC;
+  lstKm: any[] = KHOAN_MUC;
   lstIdDeleteMau04ax: string = '';
   lstIdDeleteMau04an: string = '';
   lstIdDeleteMau04bx: string = '';
@@ -485,12 +485,24 @@ export class BaoCaoComponent implements OnInit {
           switch (item.maLoai) {
             // bm 02
             case BAO_CAO_NHAP_HANG_DTQG:
-              // nhan tien va validate
+              item?.lstCtietBcaos.filter(el => {
+                el.khTtien = divMoney(el.khTtien, item.maDviTien);
+                el.khGiaMuaTd = divMoney(el.khGiaMuaTd, item.maDviTien);
+                el.thTtien = divMoney(el.thTtien, item.maDviTien);
+                el.thGiaMuaTd = divMoney(el.thGiaMuaTd, item.maDviTien);
+              })
               break;
             // bm 03
 
             case BAO_CAO_XUAT_HANG_DTQG:
-              // nhan tien va validate
+              item?.lstCtietBcaos.filter(el => {
+                el.dgGiaKhoach = divMoney(el.dgGiaKhoach, item.maDviTien);
+                el.dgGiaBanTthieu = divMoney(el.dgGiaBanTthieu, item.maDviTien);
+                el.dgGiaBanTte = divMoney(el.dgGiaBanTte, item.maDviTien);
+                el.ttGiaHtoan = divMoney(el.ttGiaHtoan, item.maDviTien);
+                el.ttGiaBanTte = divMoney(el.ttGiaBanTte, item.maDviTien);
+                el.ttClechGiaTteVaGiaHtoan = divMoney(el.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+              })
               break;
 
             // 04a/BCPN-X_x
@@ -833,7 +845,7 @@ export class BaoCaoComponent implements OnInit {
       default:
         break;
     }
-
+    debugger
     if (maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG ||
       maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG ||
       maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO ||
@@ -857,7 +869,6 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.parent?.maDvi == this.userInfor.dvql) {
       checkParent = true;
     }
-
     let roleNguoiTao = this.userInfor?.roles[0]?.code;
     let trangThaiBaoCao = this.baoCao?.trangThai;
     if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
@@ -1021,11 +1032,11 @@ export class BaoCaoComponent implements OnInit {
 
   //luu chi tiet phu luc
   async saveAppendix(maChucNang: string) {
-    debugger
+
     if (this.tabSelected == BAO_CAO_NHAP_HANG_DTQG) {
-      this.saveMau02();
+      await this.saveMau02();
     } else if (this.tabSelected == BAO_CAO_XUAT_HANG_DTQG) {
-      this.saveMau03();
+      await this.saveMau03();
     }
     let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
@@ -1061,12 +1072,19 @@ export class BaoCaoComponent implements OnInit {
           if (data.id?.length == 38) {
             data.id = null;
           }
-          //nhan chia tinh toan cho nay
-          //...
+          // nhan tien va validate
+          data.khTtien = mulMoney(data.khTtien, baoCaoChiTietTemp.maDviTien);
+          data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, baoCaoChiTietTemp.maDviTien);
+          data.thTtien = mulMoney(data.thTtien, baoCaoChiTietTemp.maDviTien);
+          data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, baoCaoChiTietTemp.maDviTien);
+          if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
         })
         break;
-      // bm 03
 
+      // bm 03
       case BAO_CAO_XUAT_HANG_DTQG:
         baoCaoChiTietTemp?.lstCtietBcaos.filter(data => {
           if (this.editCache[data.id].edit == true) {
@@ -1076,8 +1094,18 @@ export class BaoCaoComponent implements OnInit {
           if (data.id?.length == 38) {
             data.id = null;
           }
-          //nhan chia tinh toan cho nay
-          //...
+          // nhan tien va validate
+          data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, baoCaoChiTietTemp.maDviTien);
+          data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, baoCaoChiTietTemp.maDviTien);
+          data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, baoCaoChiTietTemp.maDviTien);
+          data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, baoCaoChiTietTemp.maDviTien);
+          data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, baoCaoChiTietTemp.maDviTien);
+          data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, baoCaoChiTietTemp.maDviTien);
+          if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+            || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+            checkMoneyRange = false;
+            return;
+          }
         })
         break;
 
@@ -1225,11 +1253,30 @@ export class BaoCaoComponent implements OnInit {
           // bm 02
           case BAO_CAO_NHAP_HANG_DTQG:
             // nhan tien va validate
+            data.khTtien = mulMoney(data.khTtien, item.maDviTien);
+            data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, item.maDviTien);
+            data.thTtien = mulMoney(data.thTtien, item.maDviTien);
+            data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, item.maDviTien);
+            if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
           // bm 03
 
           case BAO_CAO_XUAT_HANG_DTQG:
             // nhan tien va validate
+            data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, item.maDviTien);
+            data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, item.maDviTien);
+            data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, item.maDviTien);
+            data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, item.maDviTien);
+            data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, item.maDviTien);
+            data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+            if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+              || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
 
           // 04a/BCPN-X_x
@@ -1415,6 +1462,7 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao?.lstBcaos?.filter(item => {
           if (item.maLoai == maLoai) {
             item.trangThai = trangThai;
+            item.lyDoTuChoi = lyDo;
           }
         })
         this.getStatusButtonOk();
@@ -1467,35 +1515,26 @@ export class BaoCaoComponent implements OnInit {
           await this.baoCao?.lstBcaos?.forEach(item => {
             item.maDviTien = '1';   // set defaul ma don vi tien la Dong
             item.checked = false;
-            item.trangThai = '5';
+            item.trangThai = '3';
             this.baoCao.maLoaiBcao = maLoaiBcao;
             this.baoCao.namBcao = namBcao;
             this.baoCao.dotBcao = dotBcao;
+            item.lyDoTuChoi = null;
+            item.qlnvKhvonphiBcaoId = null;
+            item.thuyetMinh = null;
             if (maLoaiBcao == BAO_CAO_DOT) {
               let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == item.maLoai);
               if (index !== -1) {
-                item.checked = false;
                 item.tieuDe = LISTBIEUMAUDOT[index].tieuDe + this.baoCao.dotBcao;
                 item.tenPhuLuc = LISTBIEUMAUDOT[index].tenPhuLuc;
                 item.nguoiBcao = this.userInfor.username;
-                item.lyDoTuChoi= null;
-                item.maDviTien= null;
-                item.qlnvKhvonphiBcaoId= null;
-                item.thuyetMinh= null;
-                item.trangThai= null
               }
             } else {
               let index = LISTBIEUMAUNAM.findIndex(data => data.maPhuLuc == item.maLoai);
               if (index !== -1) {
-                item.checked = false;
                 item.tieuDe = LISTBIEUMAUNAM[index].tieuDe + this.baoCao.namBcao;
                 item.tenPhuLuc = LISTBIEUMAUNAM[index].tenPhuLuc;
                 item.nguoiBcao = this.userInfor.username;
-                item.lyDoTuChoi= null;
-                item.maDviTien= null;
-                item.qlnvKhvonphiBcaoId= null;
-                item.thuyetMinh= null;
-                item.trangThai= null
               }
             }
           })
@@ -1557,11 +1596,30 @@ export class BaoCaoComponent implements OnInit {
           // bm 02
           case BAO_CAO_NHAP_HANG_DTQG:
             // nhan tien va validate
+            data.khTtien = mulMoney(data.khTtien, item.maDviTien);
+            data.khGiaMuaTd = mulMoney(data.khGiaMuaTd, item.maDviTien);
+            data.thTtien = mulMoney(data.thTtien, item.maDviTien);
+            data.thGiaMuaTd = mulMoney(data.thGiaMuaTd, item.maDviTien);
+            if (data.khTtien > MONEY_LIMIT || data.khGiaMuaTd > MONEY_LIMIT || data.thTtien > MONEY_LIMIT || data.thGiaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
-          // bm 03
 
+          // bm 03
           case BAO_CAO_XUAT_HANG_DTQG:
             // nhan tien va validate
+            data.dgGiaKhoach = mulMoney(data.dgGiaKhoach, item.maDviTien);
+            data.dgGiaBanTthieu = mulMoney(data.dgGiaBanTthieu, item.maDviTien);
+            data.dgGiaBanTte = mulMoney(data.dgGiaBanTte, item.maDviTien);
+            data.ttGiaHtoan = mulMoney(data.ttGiaHtoan, item.maDviTien);
+            data.ttGiaBanTte = mulMoney(data.ttGiaBanTte, item.maDviTien);
+            data.ttClechGiaTteVaGiaHtoan = mulMoney(data.ttClechGiaTteVaGiaHtoan, item.maDviTien);
+            if (data.dgGiaKhoach > MONEY_LIMIT || data.dgGiaBanTthieu > MONEY_LIMIT || data.dgGiaBanTte > MONEY_LIMIT
+              || data.ttGiaHtoan > MONEY_LIMIT || data.ttGiaBanTte > MONEY_LIMIT || data.thGittClechGiaTteVaGiaHtoanaMuaTd > MONEY_LIMIT) {
+              checkMoneyRange = false;
+              return;
+            }
             break;
 
           // 04a/BCPN-X_x
@@ -1724,8 +1782,8 @@ export class BaoCaoComponent implements OnInit {
 
   //tinh toan tong so
   changeModel02(id: string, loaiList: any) {
-    this.editCache[id].data.khTtien = this.editCache[id].data.khSoLuong * this.editCache[id].data.khGiaMuaTd;
-    this.editCache[id].data.thTtien = this.editCache[id].data.thSoLuong * this.editCache[id].data.thGiaMuaTd;
+    this.editCache[id].data.khTtien = Number(this.editCache[id].data.khSoLuong) * Number(this.editCache[id].data.khGiaMuaTd);
+    this.editCache[id].data.thTtien = Number(this.editCache[id].data.thSoLuong) * Number(this.editCache[id].data.thGiaMuaTd);
   }
 
   //update khi sửa
@@ -1747,12 +1805,22 @@ export class BaoCaoComponent implements OnInit {
   cancelEdit02(id: string, loaiList: any): void {
     if (loaiList == '1') {
       const index = this.lstCtietBcao021.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      // xoa dong neu truoc do chua co du lieu
+      if (!this.lstCtietBcao021[index].maVtu) {
+        this.deleteLine(id);
+        return;
+      }
       this.editCache[id] = {
         data: { ...this.lstCtietBcao021[index] },
         edit: false,
       };
     } else {
       const index = this.lstCtietBcao022.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      // xoa dong neu truoc do chua co du lieu
+      if (!this.lstCtietBcao022[index].maVtu) {
+        this.deleteLine(id);
+        return;
+      }
       this.editCache[id] = {
         data: { ...this.lstCtietBcao022[index] },
         edit: false,
@@ -1761,6 +1829,7 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async saveMau02() {
+
     this.lstCTietBaoCaoTemp = [];
     await this.lstCtietBcao021.forEach(e => {
       this.lstCTietBaoCaoTemp.push(e);
@@ -1892,9 +1961,9 @@ export class BaoCaoComponent implements OnInit {
 
   //tinh tong
   changeModel03(id: any, loaiList: any) {
-    this.editCache[id].data.ttGiaHtoan = this.editCache[id].data.soLuongTte * this.editCache[id].data.dgGiaKhoach;
-    this.editCache[id].data.ttGiaBanTte = this.editCache[id].data.soLuongTte * this.editCache[id].data.dgGiaBanTte;
-    this.editCache[id].data.ttClechGiaTteVaGiaHtoan = this.editCache[id].data.ttGiaBanTte - this.editCache[id].data.ttGiaHtoan;
+    this.editCache[id].data.ttGiaHtoan = Number(this.editCache[id].data.soLuongTte) * Number(this.editCache[id].data.dgGiaKhoach);
+    this.editCache[id].data.ttGiaBanTte = Number(this.editCache[id].data.soLuongTte) * Number(this.editCache[id].data.dgGiaBanTte);
+    this.editCache[id].data.ttClechGiaTteVaGiaHtoan = Number(this.editCache[id].data.ttGiaBanTte) - Number(this.editCache[id].data.ttGiaHtoan);
   }
 
   saveEdit03(id: string, loaiList: any): void {
@@ -1920,18 +1989,33 @@ export class BaoCaoComponent implements OnInit {
   cancelEdit03(id: string, loaiList: any): void {
     if (loaiList == '1') {
       const index = this.lstCtietBcao031.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      // xoa dong neu truoc do chua co du lieu
+      if (!this.lstCtietBcao031[index].maVtu) {
+        this.deleteLine(id);
+        return;
+      }
       this.editCache[id] = {
         data: { ...this.lstCtietBcao031[index] },
         edit: false,
       };
     } else if (loaiList == '2') {
       const index = this.lstCtietBcao032.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      // xoa dong neu truoc do chua co du lieu
+      if (!this.lstCtietBcao032[index].maVtu) {
+        this.deleteLine(id);
+        return;
+      }
       this.editCache[id] = {
         data: { ...this.lstCtietBcao032[index] },
         edit: false,
       };
     } else {
       const index = this.lstCtietBcao033.findIndex((item) => item.id === id); // lay vi tri hang minh sua
+      // xoa dong neu truoc do chua co du lieu
+      if (!this.lstCtietBcao033[index].maVtu) {
+        this.deleteLine(id);
+        return;
+      }
       this.editCache[id] = {
         data: { ...this.lstCtietBcao033[index] },
         edit: false,
@@ -2578,7 +2662,7 @@ export class BaoCaoComponent implements OnInit {
         ...initItem,
         id: uuid.v4() + 'FE',
         stt: head + "." + (tail + 1),
-        listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
+        lstKm: this.lstCTietBaoCaoTemp[index].lstKm,
         listCtiet: listVtu,
         maLoai: loai,
       }
@@ -2591,7 +2675,7 @@ export class BaoCaoComponent implements OnInit {
     // let item: ItemDataMau04a1 = {
     //     id: uuid.v4()+'FE',
     //     stt: head + "." + (tail + 1),
-    //     listKhoanMuc: this.lstCTietBaoCaoTemp[index].listKhoanMuc,
+    //     lstKm: this.lstCTietBaoCaoTemp[index].lstKm,
     //     maNdungChi: '',
     //     maNdungChiParent: '',
     //     trongDotTcong: 0,
@@ -2744,7 +2828,7 @@ export class BaoCaoComponent implements OnInit {
       let item: ItemDataMau04a1 = {
         ...initItem,
         id: uuid.v4() + 'FE',
-        listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
+        lstKm: this.lstKm.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
         stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
         listCtiet: listVtu,
         maLoai: loai,
@@ -2759,7 +2843,7 @@ export class BaoCaoComponent implements OnInit {
     //   let item: ItemDataMau04a1 = {
     //     id: uuid.v4()+'FE',
     //     stt: this.lstCTietBaoCaoTemp[index].stt + ".1",
-    //     listKhoanMuc:this.listKhoanMuc.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
+    //     lstKm:this.lstKm.filter(e => e.idCha == Number(this.lstCTietBaoCaoTemp[index].maNdungChi)),
     //     maNdungChi:'',
     //     maNdungChiParent: '',
     //     trongDotTcong: 0,
@@ -2891,7 +2975,7 @@ export class BaoCaoComponent implements OnInit {
   // luu thay doi
   saveEdit(id: string): void {
     this.editCache[id].data.checked = this.lstCTietBaoCaoTemp.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcaos
-    if (this.listKhoanMuc.findIndex(e => e.idCha == this.editCache[id].data.maNdungChi) != -1) {
+    if (this.lstKm.findIndex(e => e.idCha == this.editCache[id].data.maNdungChi) != -1) {
       this.editCache[id].data.status = true;
     }
     const index = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id); // lay vi tri hang minh sua
@@ -2939,9 +3023,10 @@ export class BaoCaoComponent implements OnInit {
 
 
   updateAllChecked() {
-    this.lstCTietBaoCaoTemp.forEach(item => {
-      item.checked = this.allChecked1;
-    })
+    this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
+    this.baoCao?.lstBcaos.filter(item =>
+      item.checked = this.allChecked
+    );
   }
 
   deleteAllChecked() {
@@ -3068,7 +3153,7 @@ export class BaoCaoComponent implements OnInit {
       let item: ItemDataMau04a1 = {
         id: uuid.v4() + 'FE',
         stt: "0.1",
-        listKhoanMuc: this.listKhoanMuc.filter(e => e.idCha == 0),
+        lstKm: this.lstKm.filter(e => e.idCha == 0),
         maNdungChi: '',
         maNdungChiParent: '',
         trongDotTcong: 0,
@@ -3094,10 +3179,10 @@ export class BaoCaoComponent implements OnInit {
   }
 
   sortByIndex() {
-    debugger
     this.lstCTietBaoCaoTemp.forEach(item => {
       this.setDetail(item.id);
     })
+    debugger
     this.lstCTietBaoCaoTemp.sort((item1, item2) => {
       if (item1.lstKm[0].level > item2.lstKm[0].level) {
         return 1;
@@ -3128,10 +3213,10 @@ export class BaoCaoComponent implements OnInit {
 
   setDetail(id: any) {
     var index: number = this.lstCTietBaoCaoTemp.findIndex(item => item.id === id);
-    var parentId: number = this.listKhoanMuc.find(e => e.id == this.lstCTietBaoCaoTemp[index].maNdungChi)?.idCha;
-    debugger
-    this.lstCTietBaoCaoTemp[index].lstKm = this.listKhoanMuc.filter(e => e.idCha == parentId);
-    if (this.listKhoanMuc.findIndex(e => e.idCha === this.lstCTietBaoCaoTemp[index].maNdungChi) == -1) {
+    var parentId: number = this.lstKm.find(e => e.id == this.lstCTietBaoCaoTemp[index].maNdungChi)?.idCha;
+
+    this.lstCTietBaoCaoTemp[index].lstKm = this.lstKm.filter(e => e.idCha == parentId);
+    if (this.lstKm.findIndex(e => e.idCha === this.lstCTietBaoCaoTemp[index].maNdungChi) == -1) {
       this.lstCTietBaoCaoTemp[index].status = false;
     } else {
       this.lstCTietBaoCaoTemp[index].status = true;
@@ -3145,22 +3230,22 @@ export class BaoCaoComponent implements OnInit {
     var level = 0;
     var lstCtietBcaoTemp: ItemDataMau04a1[] = this.lstCTietBaoCaoTemp;
     this.lstCTietBaoCaoTemp = [];
-    var data: ItemDataMau04a1 = lstCtietBcaoTemp.find(e => e.listKhoanMuc[0].level == 0);
+    var data: ItemDataMau04a1 = lstCtietBcaoTemp.find(e => e.lstKm[0].level == 0);
     this.addFirst(data);
     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
-    var lstTemp: ItemDataMau04a1[] = lstCtietBcaoTemp.filter(e => e.listKhoanMuc[0].level == level);
+    var lstTemp: ItemDataMau04a1[] = lstCtietBcaoTemp.filter(e => e.lstKm[0].level == level);
     while (lstTemp.length != 0 || level == 0) {
       lstTemp.forEach(item => {
-        var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.maNdungChi === item.listKhoanMuc[0].idCha);
+        var index: number = this.lstCTietBaoCaoTemp.findIndex(e => e.maNdungChi === item.lstKm[0].idCha);
         if (index != -1) {
           this.addLow(this.lstCTietBaoCaoTemp[index].id, item);
         } else {
-          index = this.lstCTietBaoCaoTemp.findIndex(e => e.lstKm[0].idCha === item.listKhoanMuc[0].idCha);
+          index = this.lstCTietBaoCaoTemp.findIndex(e => e.lstKm[0].idCha === item.lstKm[0].idCha);
           this.addSame(this.lstCTietBaoCaoTemp[index].id, item);
         }
       })
       level += 1;
-      lstTemp = lstCtietBcaoTemp.filter(e => e.listKhoanMuc[0].level == level);
+      lstTemp = lstCtietBcaoTemp.filter(e => e.lstKm[0].level == level);
     }
   }
 

@@ -5,7 +5,8 @@
       <div class="trai">
       </div>
       <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
+        <button nz-button class="search__button--search"
+          (click)="searchFilter.paggingReq.page = 1; searchFilter.paggingReq.limit = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -35,7 +36,7 @@
           <div nz-col nzSpan="3">
             <label class="search__label">Tháng báo cáo</label>
             <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
-              [(ngModel)]="searchFilter.thangBcao" 
+              [(ngModel)]="searchFilter.thangBcao"
               [class]="((searchFilter.thangBcao && searchFilter.maLoaiBcao == '526') || searchFilter.maLoaiBcao == '527')?'' : 'input-error-validate' ">
             </nz-input-number>
           </div>
@@ -95,21 +96,24 @@
               <td>{{item.ngayDuyet}}</td>
               <td>{{item.ngayPheDuyet}}</td>
               <td>{{item.ngayTraKq}}</td>
-              <td class="text-center">{{getStatusName(item.trangThai)}} 
-                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do: {{item.lyDoTuChoi}}</ng-template>
+              <td class="text-center">{{getStatusName(item.trangThai)}}
+                <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do:
+                  {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
                 <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
                   <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Phê duyệt</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
-                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span>
-                  
+                  <span
+                    *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa
+                    dữ liệu</span>
+                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'">Xem</span>
+
                 </button>
                 <button type="button" class="btn btn-main" (click)="deleteReport(item.id)"
                   *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
                   <span>Xóa</span>
                 </button>
-                
+
               </td>
             </tr>
           </tbody>
@@ -121,9 +125,10 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
-                (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page"
+                [nzTotal]="totalElements" nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit"
+                [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
+                (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
                 </ng-template>

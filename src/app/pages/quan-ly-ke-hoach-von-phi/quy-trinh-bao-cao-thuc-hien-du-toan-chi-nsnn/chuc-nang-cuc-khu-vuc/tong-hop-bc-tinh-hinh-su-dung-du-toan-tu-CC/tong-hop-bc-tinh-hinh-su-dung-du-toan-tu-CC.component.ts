@@ -44,11 +44,6 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
     loaiTimKiem:'1',
   };
 
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
   donViTaos: any = [];
   baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
   constructor(

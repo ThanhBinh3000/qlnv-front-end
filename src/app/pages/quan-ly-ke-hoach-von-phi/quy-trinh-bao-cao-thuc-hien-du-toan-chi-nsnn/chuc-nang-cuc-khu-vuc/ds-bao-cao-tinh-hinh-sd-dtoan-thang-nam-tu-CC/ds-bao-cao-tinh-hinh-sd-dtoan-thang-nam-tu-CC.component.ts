@@ -19,15 +19,10 @@ import * as fileSaver from 'file-saver';
 })
 
 export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false })
   totalElements = 0;
   totalPages = 0;
-  errorMessage = "";
-  url!: string;
 
   listBcaoKqua: any[] = [];
-  lenght: any = 0;
 
   trangThais: any = TRANG_THAI_GUI_DVCT;                          // danh muc loai bao cao
   trangThai!: string;
@@ -103,8 +98,9 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
           e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
           e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
-        this.totalElements = res.data?.totalElements;
-        this.totalPages = res.data?.totalPages;
+        debugger
+        this.totalElements = res.data.totalElements;
+        this.totalPages = res.data.totalPages;
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
