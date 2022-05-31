@@ -17,9 +17,6 @@ import { TRANG_THAI_GUI_DVCT, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, Utils, TRANG_THAI
   styleUrls: ['./kiem-tra-tinh-trang-phe-duyet-bao-cao-tu-chi-cuc.component.scss']
 })
 export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
-
-  @ViewChild('nzTreeComponent', { static: false })
-  
   totalElements = 0;
   totalPages = 0;
 

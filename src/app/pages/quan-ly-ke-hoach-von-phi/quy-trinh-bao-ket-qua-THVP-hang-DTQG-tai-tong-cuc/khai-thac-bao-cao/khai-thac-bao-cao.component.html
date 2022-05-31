@@ -1,36 +1,7 @@
-<!-- <nz-affix class="menu-lv3" [nzOffsetTop]="43">
-  <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
-      <div class="trai">
-      </div>
-      <div class="canphai phai action-top">
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-        <button nz-button class="search__button--search" routerLink="../">
-          <i nz-icon nzType="stop"></i>
-          Đóng
-        </button>
-      </div>
-    </div>
-  </div>
-</nz-affix> -->
-<!-- <ng-template #tableCard1>
-  <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-    <i nz-icon nzType="search"></i>
-    Tìm kiếm
-  </button>
-  <button nz-button class="search__button--search" routerLink="../">
-    <i nz-icon nzType="stop"></i>
-    Đóng
-  </button>
-</ng-template> -->
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Danh sách báo cáo kết quả "
+      <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng dtqg tại tổng cục"
         class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="6">
@@ -57,26 +28,20 @@
           <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
               <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="18"></div>
           <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao"
-              (ngModelChange)="setUrl($event)">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo" [(ngModel)]="searchFilter.maLoaiBcao">
               <nz-option *ngFor="let bc of baoCaos" [nzValue]="bc.id" [nzLabel]="bc.tenDm"></nz-option>
             </nz-select>
           </div>
-
-          <!-- <div nz-col nzSpan="6">
-            <label class="search__label">Đợt báo cáo</label>
-            <input class="search__input" nz-input [(ngModel)]="searchFilter.dotBcao" />
-          </div> -->
         </div>
       </nz-card>
-      <nz-card nzTitle="" class="mt16 flex-card p-lr16">
+      <nz-card nzTitle="Danh sách báo cáo kết quả thực hiện vốn phí hàng dtqg tại tổng cục" class="mt16 flex-card p-lr16">
         <div style="margin: 15px;">
           
         </div>
@@ -98,16 +63,17 @@
           <tbody>
             <tr *ngFor="let item of listBcaoKqua; let i = index">
               <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
-              <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a routerLink="../{{url}}{{ item.id }}">{{ item.maBcao }}</a></td>
+              <td><a routerLink="../bao-cao/{{ item.id }}">{{ item.maBcao }}</a></td>
               <td>{{item.namBcao}}</td>
               <td>{{item.dotBcao}}</td>
+              <td>{{item.ngayTao}}</td>
               <td>{{item.ngayTrinh}}</td>
               <td>{{item.ngayDuyet}}</td>
-              <td class="text-center">{{item.tenTrangThai}}</td>
+              <td>{{item.ngayPheDuyet}}</td>
+              <td class="text-center">{{getStatusName(item.trangThai)}}</td>
               <td>
                 <button type="button" class="btn btn-main">
-                  <span>Phê duyệt</span>
+                  <span>Xuất BC</span>
                 </button>
               </td>
             </tr>
@@ -120,8 +86,8 @@
             </div>
             <div class="canphai">
               <!-- begin phân trang  -->
-              <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements"
-                nzShowSizeChanger [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate"
+              <nz-pagination class="pagination-card" [nzPageIndex]="searchFilter.paggingReq.page" [nzTotal]="totalElements"
+                nzShowSizeChanger [nzPageSize]="searchFilter.paggingReq.limit" [nzShowTotal]="rangeTemplate"
                 (nzPageIndexChange)="onPageIndexChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
@@ -133,7 +99,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;timkiem()">
+        <button type="button" class="btn btn-main" (click)="pages.page = 1; pages.size = 10;onSubmit()">
           <i nz-icon nzType="search"></i>
           <span>Tìm kiếm</span>
         </button>
@@ -142,16 +108,6 @@
           <span>Đóng</span>
         </button>
       </ng-template>
-      <!-- <ng-template #tableCard2>
-        <button nz-button class="search__button--search" (click)="pages.page = 1; pages.size = 10;timkiem()">
-          <i nz-icon nzType="search"></i>
-          Tìm kiếm
-        </button>
-        <button nz-button class="search__button--search" routerLink="../">
-          <i nz-icon nzType="stop"></i>
-          Đóng
-        </button>
-      </ng-template> -->
     </div>
   </div>
 </div>
