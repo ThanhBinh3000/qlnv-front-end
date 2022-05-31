@@ -102,6 +102,8 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnClose: boolean = false;
 	statusBtnOk: boolean;
 	statusBtnFinish: boolean;
+	statusBtnUser: boolean;
+	statusBtnNhap: boolean;
 	//khac
 	data: any;
 	selectedIndex: number = 1;
@@ -468,7 +470,7 @@ export class BaoCaoComponent implements OnInit {
 				}
 			})
 			if (!check) {
-				this.notification.warning(MESSAGE.ERROR, "Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!");
+				this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
 				return;
 			}
 		} else {
@@ -479,7 +481,7 @@ export class BaoCaoComponent implements OnInit {
 				}
 			})
 			if (!check) {
-				this.notification.warning(MESSAGE.ERROR, "Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!");
+				this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
 				return;
 			}
 		}
@@ -495,7 +497,7 @@ export class BaoCaoComponent implements OnInit {
 					this.trangThaiBaoCao = mcn;
 					this.getStatusButton();
 					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
 					} else {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
 					}

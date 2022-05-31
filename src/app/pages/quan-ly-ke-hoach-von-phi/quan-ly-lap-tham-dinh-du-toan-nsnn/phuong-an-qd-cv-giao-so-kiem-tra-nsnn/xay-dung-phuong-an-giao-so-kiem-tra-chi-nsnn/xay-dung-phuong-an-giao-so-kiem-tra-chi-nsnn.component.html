@@ -240,10 +240,12 @@
 						<i class="fa fa-trash-o"></i>
 						<span>Xóa</span>
 					</button>
-					<button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-						<i class="icon htvbdh_dau-cong"></i>
-						<span>Thêm hàng</span>
-					</button>
+					<ng-container *ngIf="lstCtietBcao.length == 0">
+						<button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+							<i class="icon htvbdh_dau-cong"></i>
+							<span>Thêm hàng</span>
+						</button>
+					</ng-container>
 					<button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusBtnGiao">
 						<!-- <i class="icon htvbdh_dau-cong"></i> -->
 						<span>Giao toàn bộ</span>
