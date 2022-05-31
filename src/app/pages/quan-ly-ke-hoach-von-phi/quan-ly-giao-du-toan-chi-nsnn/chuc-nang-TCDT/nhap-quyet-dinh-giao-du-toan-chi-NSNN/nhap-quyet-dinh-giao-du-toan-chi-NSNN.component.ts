@@ -33,7 +33,6 @@ export class ItemSoQuyetDinh {
 	fileName: string;
 	fileSize: number;
 	fileUrl: number;
-  id: number;
 }
 @Component({
   selector: 'app-nhap-quyet-dinh-giao-du-toan-chi-NSNN',
@@ -107,7 +106,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
 			fileName: file.name,
 			fileSize: null,
 			fileUrl: null,
-      id: null,
 		};
 		return false;
 	};
@@ -274,11 +272,18 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       return;
     }
     let checkSaveEdit;
+
     //get list file url
     let listFile: any = [];
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
+
+    // //get file cong van url
+    // let file: any = this.fileDetail;
+    // if (file) {
+    //   this.lstCtietBcao.soQd = await this.uploadFile(file);
+    // }
 
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
@@ -345,7 +350,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              await this.getDetailReport();
+            if (!this.id) {
+							this.router.navigate([
+								'qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + data.data.id,
+							])
+						}
+						else {
+							await this.getDetailReport();
+						}
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -367,6 +379,11 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
     }
+    this.lstCtietBcao.filter(item => {
+			if (!item.id) {
+				item.id = uuid.v4() + 'FE';
+			}
+		});
     this.spinner.hide();
   }
 
@@ -377,25 +394,26 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           debugger
+          console.log(data.data);
+
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           // set thong tin chung bao cao
           this.maDviTien = data.data?.maDviTien;
           this.maPhanGiao = data.data?.maPhanGiao;
           this.nam = data.data?.nam;
-          this.ngayQd = data.data?.ngayQD;
           this.maDonViTao = data.data?.maDvi;
           this.thuyetMinh = data.data?.thuyetMinh;
           this.soQd = data.data?.soQd;
           this.trangThaiBanGhi = data.data?.trangThai;
-          this.ngayQd = this.datePipe.transform(data.data.ngayQd, Utils.FORMAT_DATE_STR);
+          this.ngayQd = data.data.ngayQd;
           this.noiQd = data.data?.noiQd;
-          data.data?.lstCtiets.forEach(item => {
+          data.data?.lstCtiets[0].forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                tongCong: divMoney(item.thNamHienHanhN1, this.maDviTien),
-                nguonKhac: divMoney(item.ncauNamDtoanN, this.maDviTien),
-                nguonNsnn: divMoney(item.ncauNamN1, this.maDviTien),
+                tongCong: divMoney(item.tongCong, this.maDviTien),
+                nguonKhac: divMoney(item.nguonKhac, this.maDviTien),
+                nguonNsnn: divMoney(item.nguonNsnn, this.maDviTien),
             })
           })
           this.sortByIndex();

@@ -19,7 +19,6 @@ export class DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent impl
     ) { }
 
     async ngOnInit() {
-      debugger
         this.maKhoanMuc = this.obj.maKhoanMuc;
         this.obj.lstKhoanMuc.forEach(item => {
             this.lstKhoanMuc.push({
