@@ -12,7 +12,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { KHOAN_MUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "../../../../../Utility/utils";
@@ -43,7 +43,7 @@ export class ItemSoQuyetDinh {
 export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   //danh muc
   donVis: any = [];
-  noiDungs: any[] = NOI_DUNG;
+  noiDungs: any[] = KHOAN_MUC;
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   soLaMa: any[] = LA_MA;
