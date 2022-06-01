@@ -93,19 +93,27 @@ const routes: Routes = [
       ).then((m) => m.BaoCaoModule),
   },
   {
-    path: 'bao-cao/0/:maDvi/:namHienHanh',
+    path: 'bao-cao-/:maDvi/:namHienHanh',
     loadChildren: () =>
       import(
         './chuc-nang-bao-cao/bao-cao/bao-cao.module'
       ).then((m) => m.BaoCaoModule),
   },
   {
-    path: 'bao-cao/0/:namHienHanh',
+    path: 'bao-cao-/:namHienHanh',
     loadChildren: () =>
       import(
         './chuc-nang-bao-cao/bao-cao/bao-cao.module'
       ).then((m) => m.BaoCaoModule),
   },
+  {
+    path: 'bao-cao/:loai/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-bao-cao/bao-cao/bao-cao.module'
+      ).then((m) => m.BaoCaoModule),
+  },
+  
   //so kiem tra chi nsnn
   {
     path: 'so-kiem-tra-chi-nsnn/:id',

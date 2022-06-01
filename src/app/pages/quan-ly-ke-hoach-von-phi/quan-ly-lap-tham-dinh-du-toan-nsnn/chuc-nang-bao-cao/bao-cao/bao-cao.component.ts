@@ -44,13 +44,14 @@ export class ItemCongVan {
 export class BaoCaoComponent implements OnInit {
 	//thong tin dang nhap
 	id!: any;
+	loai!: string;
 	userInfo: any;
 	//thong tin chung bao cao
 	maBaoCao!: string;
 	namHienHanh!: number;
 	ngayNhap!: string;
 	nguoiNhap!: string;
-	congVan!: ItemCongVan;
+	congVan: ItemCongVan = new ItemCongVan();
 	ngayTrinhDuyet!: string;
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
@@ -153,6 +154,7 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
 		var nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
@@ -162,6 +164,7 @@ export class BaoCaoComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			if (this.maDviTao && nam) {
+				this.loai = "1";
 				this.namHienHanh = parseInt(nam, 10);
 				await this.tongHop();
 				this.trangThaiBaoCao = "1";
@@ -180,6 +183,7 @@ export class BaoCaoComponent implements OnInit {
 				);
 				this.maBaoCao = '';
 			} else {
+				this.loai = "0";
 				this.phuLucs.forEach(item => {
 					this.lstLapThamDinhs.push({
 						id: uuid.v4() + 'FE',
@@ -305,7 +309,7 @@ export class BaoCaoComponent implements OnInit {
 		// day file len server
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
-		upfile.append('folder', this.maBaoCao + '/' + this.maDviTao);
+		upfile.append('folder', this.maDviTao + '/' + this.maBaoCao);
 		let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
 			(data) => {
 				let objfile = {
@@ -354,30 +358,24 @@ export class BaoCaoComponent implements OnInit {
 	//download file về máy tính
 	async downloadFileCv() {
 		if (this.congVan?.fileUrl) {
-			await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
-				(data) => {
-					fileSaver.saveAs(data, this.congVan?.fileName);
-				},
-				err => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
+		  await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+			(data) => {
+			  fileSaver.saveAs(data, this.congVan?.fileName);
+			},
+			err => {
+			  this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			},
+		  );
 		} else {
-			let file: any = this.fileDetail;
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
+		  let file: any = this.fileDetail;
+		  const blob = new Blob([file], { type: "application/octet-stream" });
+		  fileSaver.saveAs(blob, file.name);
 		}
-	}
+	  }
 
 	// luu
 	async save() {
 		let checkSave = true;
-		//get list file url
-		let listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
-
 		this.lstLapThamDinhs.forEach(e => {
 			if (!e.nguoiBcao) {
 				checkSave = false;
@@ -401,9 +399,14 @@ export class BaoCaoComponent implements OnInit {
 			tongHopTuIds.push(item.id);
 		})
 
-		let request = {
+		//get list file url
+		let listFile: any = [];
+		for (const iterator of this.listFile) {
+			listFile.push(await this.uploadFile(iterator));
+		}
+		let request = JSON.parse(JSON.stringify({
 			id: this.id,
-			fileDinhKems: listFile,
+			fileDinhKems: this.lstFiles,
 			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstLapThamDinhs: this.lstLapThamDinhs,
 			maBcao: this.maBaoCao,
@@ -412,7 +415,12 @@ export class BaoCaoComponent implements OnInit {
 			namHienHanh: this.namHienHanh,
 			congVan: this.congVan,
 			tongHopTuIds: tongHopTuIds,
-		};
+		})) ;
+		//get file cong van url
+		let file: any = this.fileDetail;
+		if (file) {
+		  request.congVan = await this.uploadFile(file);
+		}
 
 		//call service them moi
 		this.spinner.show();
@@ -423,7 +431,7 @@ export class BaoCaoComponent implements OnInit {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
 						if (!this.id) {
 							this.router.navigate([
-								'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + data.data.id,
+								'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/'+ this.loai+ "/" + data.data.id,
 							])
 						}
 						else {
@@ -692,10 +700,11 @@ export class BaoCaoComponent implements OnInit {
 
 	}
 
-	xemChiTiet(id: string) {
+	xemChiTiet(id: any) {
 		this.router.navigate([
 			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
 		])
+		// window.location.reload();
 	}
 
 	getStatusName(trangThai: string) {
@@ -757,6 +766,15 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		if (this.loai == "0") {
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem']);
+		} else {
+			if (this.loai == "1"){
+				this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tong-hop']);
+			} else {
+				this.location.back();
+			}
+		}
+		
 	}
 }

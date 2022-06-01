@@ -91,8 +91,6 @@ import { DialogLuaChonThemPhuLucComponent } from './dialog/dialog-lua-chon-them-
 import { DialogChonThemBieuMauBaoCaoComponent } from './dialog/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG/dialog-chon-them-bieu-mau-bao-cao-kqth-von-phi-hang-DTQG.component';
 import {DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent} from './dialog/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN/dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component'
 import { DialogChonKeHoachPhanBoGiaoDuToanChoChiCucVanPhongCucComponent } from './dialog/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc/dialog-chon-ke-hoach-phan-bo-giao-du-toan-cho-chi-cuc-van-phong-cuc.component';
-import { DialogDanhSachMuaTbiVtuComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-tbi-vtu/dialog-danh-sach-mua-tbi-vtu.component';
-import { DialogDanhSachMuaLuongThucMuoiComponent } from './dialog/dialog-quan-ly-ke-hoach-cap-von-phi-hang/dialog-quan-ly-cap-nguon-von-chi/dialog-danh-sach-mua-luong-thuc-muoi/dialog-danh-sach-mua-luong-thuc-muoi.component';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { DialogCopyComponent } from './dialog/dialog-copy/dialog-copy.component';
 import { DialogChonThemBieuMauComponent } from './dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
@@ -140,9 +138,6 @@ import { DialogLuaChonThemDonViComponent } from './dialog/dialog-lua-chon-them-d
     DialogLuaChonThemPhuLucComponent,
     DialogChonThemBieuMauBaoCaoComponent,
     DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent,
-    //
-    DialogDanhSachMuaTbiVtuComponent,
-    DialogDanhSachMuaLuongThucMuoiComponent,
     //
     DialogCopyComponent,
     DialogChonThemBieuMauComponent,
