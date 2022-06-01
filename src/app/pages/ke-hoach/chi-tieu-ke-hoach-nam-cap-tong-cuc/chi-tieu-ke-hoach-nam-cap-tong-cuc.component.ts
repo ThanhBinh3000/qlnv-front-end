@@ -26,6 +26,15 @@ import {
   styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
 })
 export class ChiTieuKeHoachNamComponent implements OnInit {
+  listRouter: any[] = [
+    { title: "Kế hoạch và vốn DTQG", url: "", isCheckRole: false, isLast: false },
+    { title: "Cục", url: "", isCheckRole: true, isLast: false },
+    { title: "Giao kế hoạch và dự toán", url: "", isCheckRole: false, isLast: false },
+    { title: "Giao kế hoạch và vốn đầu năm", url: "", isCheckRole: false, isLast: false },
+    { title: "Quyết định", url: "", isCheckRole: false, isLast: false },
+    { title: "Chi thường xuyên của BTC giao TCDT", url: "", isCheckRole: false, isLast: true },
+  ]
+
   searchValue = '';
   searchFilter = {
     soQD: '',
@@ -34,6 +43,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: '',
     namKeHoach: '',
   };
+
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
@@ -50,6 +60,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   donViIdSearch: number;
   maDonViSearch: string;
   labelDonViSearch: string;
+
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -57,7 +68,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private notification: NzNotificationService,
     private donViService: DonviService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     public globals: Globals,
   ) { }
 

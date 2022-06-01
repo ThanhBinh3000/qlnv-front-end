@@ -6,15 +6,15 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { SUA_CHUA_ROUTE_LIST } from './sua-chua.constant';
+import { XUAT_KHAC_ROUTE_LIST } from './xuat-khac.constant';
 @Component({
-    selector: 'app-sua-chua',
-    templateUrl: './sua-chua.component.html',
-    styleUrls: ['./sua-chua.component.scss'],
+    selector: 'app-xuat-khac',
+    templateUrl: './xuat-khac.component.html',
+    styleUrls: ['./xuat-khac.component.scss'],
 })
-export class SuaChuaComponent implements OnInit, AfterViewInit {
+export class XuatKhacComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = SUA_CHUA_ROUTE_LIST;
+    routes = XUAT_KHAC_ROUTE_LIST;
     routerUrl: string = "";
 
     constructor(

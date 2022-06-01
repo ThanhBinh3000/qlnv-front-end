@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/default.scss";
+@import '../../../../assets/scss/default.scss';
 
 @mixin background($imgpath, $position: 0 0, $repeat: no-repeat) {
   background: {
@@ -16,7 +16,7 @@
   width: 46px;
 }
 .logo {
-  @include background("#{$img-path}logo-tcdt.svg");
+  @include background('#{$img-path}logo-tcdt.svg');
   width: 40px;
   padding: 0;
   margin: 0px 0px 0px 10px;
@@ -28,7 +28,7 @@
 }
 @media (max-width: 767px) {
   .logo {
-    @include background("#{$img-path}logo-tcdt.svg");
+    @include background('#{$img-path}logo-tcdt.svg');
     // background-size: auto 38px !important;
     background-position: 0px 4px;
     background-repeat: no-repeat;
@@ -153,4 +153,37 @@ nz-header.ant-layout-header {
 .ant-scroll-number-only,
 .ant-scroll-number-only > p.ant-scroll-number-only-unit {
   height: 18px;
+}
+
+.navbar.navbar-expand-lg.navbar-light {
+  padding: 0;
+}
+
+::ng-deep {
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item {
+    max-width: 160px;
+    white-space: pre-wrap;
+    text-align: center;
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item a {
+    height: 46px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item a:hover {
+    background-color: #4e5484 !important;
+  }
+
+  .ant-menu-dark.ant-menu-horizontal > .ant-menu-item.active a {
+    background-color: #4e5484 !important;
+    color: #fff;
+    border-radius: 0px;
+    padding-top: 0;
+    padding-bottom: 2px;
+  }
 }

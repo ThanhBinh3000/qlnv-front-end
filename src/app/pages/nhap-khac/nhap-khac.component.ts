@@ -6,15 +6,15 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { DIEU_CHUYEN_NOI_BO_ROUTE_LIST } from './dieu-chuyen-noi-bo.constant';
+import { NHAP_KHAC_ROUTE_LIST } from './nhap-khac.constant';
 @Component({
-    selector: 'app-dieu-chuyen-noi-bo',
-    templateUrl: './dieu-chuyen-noi-bo.component.html',
-    styleUrls: ['./dieu-chuyen-noi-bo.component.scss'],
+    selector: 'app-nhap-khac',
+    templateUrl: './nhap-khac.component.html',
+    styleUrls: ['./nhap-khac.component.scss'],
 })
-export class DieuChuyenNoiBoComponent implements OnInit, AfterViewInit {
+export class NhapKhacComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = DIEU_CHUYEN_NOI_BO_ROUTE_LIST;
+    routes = NHAP_KHAC_ROUTE_LIST;
     routerUrl: string = "";
 
     constructor(

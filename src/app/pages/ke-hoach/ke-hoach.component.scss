@@ -1,5 +1,5 @@
-@import "../../../assets/scss/default.scss";
-@import "../../../assets/scss/common/tab.scss";
+@import '../../../assets/scss/default.scss';
+@import '../../../assets/scss/common/tab.scss';
 ::ng-deep {
   .display-tab {
     width: 100%;
@@ -30,7 +30,7 @@
     }
     .icon {
       font-size: 42px;
-      color: #19797b;
+      color: #4e5484;
     }
     .card-tree {
       padding-top: 24px;
@@ -141,6 +141,6 @@
   }
   .card-tree .icon {
     font-size: 42px;
-    color: #19797b;
+    color: #4e5484;
   }
 }

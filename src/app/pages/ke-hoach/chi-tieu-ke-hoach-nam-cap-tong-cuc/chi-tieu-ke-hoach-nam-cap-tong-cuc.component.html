@@ -7,10 +7,12 @@
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
-          <nz-breadcrumb-item>
-            <a [routerLink]="">Giao chỉ tiêu kế hoạch đầu năm</a>
+          <nz-breadcrumb-item *ngFor="let item of listRouter" [ngClass]="item.isLast ? 'last-breadcrumb' : ''">
+            <a [routerLink]="item.url">
+              {{!item.isCheckRole ? item.title : (userService.isTongCuc() ? 'Tổng Cục' : (userService.isCuc() ? 'Cục'
+              : (userService.isChiCuc() ? 'Chi cục' : '' ) ) )}}
+            </a>
           </nz-breadcrumb-item>
-          <nz-breadcrumb-item class="last-breadcrumb">{{lastBreadcrumb}}</nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
     </div>

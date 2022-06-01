@@ -10,60 +10,35 @@ export const DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-thong-tin-
 export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Giao chỉ tiêu kế hoạch đầu năm',
+    title: 'Giao kế hoạch và dự toán',
     url: `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`,
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    children: [
-      {
-        icon: 'htvbdh_tcdt_chitieukehoachnam',
-        title: 'Giao chỉ tiêu kế hoạch đầu năm',
-        hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`,
-        urlTongCuc: ``,
-        urlCuc: ``,
-        urlChiCuc: ``,
-      }
-    ]
   },
   {
     icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-    title: 'Đề xuất điều chỉnh',
+    title: 'Lập kế hoạch và thẩm định dự toán ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    children: [
-      {
-        icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
-        title: 'Đề xuất điều chỉnh',
-        hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
-        urlTongCuc: ``,
-        urlCuc: ``,
-        urlChiCuc: ``,
-      }
-    ]
+  },
+  {
+    icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
+    title: 'Tình hình cấp vốn, phí hàng ',
+    url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
+    dropdown: 'de-xuat-dieu-chinh-chi-tieu',
+    idHover: 'giao-chi-tieu',
+    hasTab: false,
   },
   {
     icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-    title: 'Điều chỉnh kế hoạch năm',
+    title: 'Phương án giá',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
     dropdown: 'dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    children: [
-      {
-        icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
-        title: 'Điều chỉnh kế hoạch năm',
-        hasChild: false,
-        url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
-        urlTongCuc: ``,
-        urlCuc: ``,
-        urlChiCuc: ``,
-      }
-    ]
   },
   {
     icon: 'htvbdh_tcdt_baocao2',

@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MainModule } from 'src/app/layout/main/main.module';
-import { SuaChuaRoutingModule } from './sua-chua-routing.module';
-import { SuaChuaComponent } from './sua-chua.component';
+import { XuatKhacRoutingModule } from './xuat-khac-routing.module';
+import { XuatKhacComponent } from './xuat-khac.component';
 
 
 @NgModule({
     declarations: [
-        SuaChuaComponent,
+        XuatKhacComponent,
     ],
-    imports: [CommonModule, SuaChuaRoutingModule, ComponentsModule, MainModule],
+    imports: [CommonModule, XuatKhacRoutingModule, ComponentsModule, MainModule],
 })
-export class SuaChuaModule { }
+export class XuatKhacModule { }

@@ -4,14 +4,12 @@ export const MAIN_ROUTES = {
   kehoach: 'kehoach',
   muaHang: 'mua-hang',
   nhap: 'nhap',
+  nhapKhac: 'nhap-khac',
   luuKho: 'luu-kho',
   banHang: 'ban-hang',
   xuat: 'xuat',
-  dieuChuyenNoiBo: 'dieu-chuyen-noi-bo',
-  kiemTraChatLuong: 'kiem-tra-chat-luong',
-  suaChua: 'sua-chua',
-  thanhLyTieuHuy: 'thanh-ly-tieu-huy',
-  quanLyChatLuong: 'quan-ly-chat-luong',
+  xuatKhac: 'xuat-khac',
+  dinhMucNhapXuat: 'dinh-muc-nhap-xuat',
   khknBaoQuan: 'khkn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
@@ -20,48 +18,40 @@ export const MAIN_ROUTES = {
 
 export const LIST_PAGES: RouteInfo[] = [
   {
-    title: 'Kế hoạch',
+    title: 'Kế hoạch và vốn DTQG',
     route: `${MAIN_ROUTES.kehoach}`,
   },
   {
-    title: 'Mua',
+    title: 'Lựa chọn nhà cung cấp & ký hợp đồng',
     route: `${MAIN_ROUTES.muaHang}`,
   },
   {
-    title: 'Nhập',
+    title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
   },
   {
-    title: 'Lưu kho',
+    title: 'Nhập khác',
+    route: `${MAIN_ROUTES.nhapKhac}`,
+  },
+  {
+    title: 'Lưu kho & QL chất lượng',
     route: MAIN_ROUTES.luuKho,
   },
   {
-    title: 'Bán',
+    title: 'Bán hàng DTQG',
     route: MAIN_ROUTES.banHang,
   },
   {
-    title: 'Xuất',
+    title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
   },
   {
-    title: 'Điều chuyển nội bộ',
-    route: MAIN_ROUTES.dieuChuyenNoiBo,
+    title: 'Xuất khác',
+    route: MAIN_ROUTES.xuatKhac,
   },
   {
-    title: 'Kiểm tra chất lượng',
-    route: MAIN_ROUTES.kiemTraChatLuong,
-  },
-  {
-    title: 'Sửa chữa',
-    route: MAIN_ROUTES.suaChua,
-  },
-  {
-    title: 'Thanh lý, Tiêu hủy',
-    route: MAIN_ROUTES.thanhLyTieuHuy,
-  },
-  {
-    title: 'Quản lý chất lượng',
-    route: MAIN_ROUTES.quanLyChatLuong,
+    title: 'QL Định mức nhập, xuất, bảo quản',
+    route: MAIN_ROUTES.dinhMucNhapXuat,
   },
   {
     title: 'KH&KN bảo quản',
