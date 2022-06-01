@@ -391,7 +391,7 @@ input.form-control {
 }
 
 .ant-tabs .ant-tabs-nav-wrap {
-  padding-left: 15px;
+  // padding-left: 15px;
 }
 
 button.btn.btn-create.btn-timkiem.ant-dropdown-trigger {
@@ -866,7 +866,7 @@ cdk-virtual-scroll-viewport {
 
 .tab-content > .tab-pane,
 .tab-menu.tab-content {
-  height: 100%;
+  // height: 100%;
 }
 
 .ant-badge-count {
@@ -3244,7 +3244,8 @@ td {
 }
 
 .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
-  background-color: darken($bg-nhat, 2%) $i; //$bg-nhat;
+  // background-color: darken($bg-nhat, 2%) $i; //$bg-nhat;
+  background-color: #4e5484;
   border-color: $border-nhat2 $i;
 
   &:before {
@@ -3461,9 +3462,9 @@ nz-upload {
 }
 
 .ant-tabs-tabpane > .ant-table-wrapper {
-  margin-right: -15px;
-  margin-left: -15px;
-  max-width: unset;
+  // margin-right: -15px;
+  // margin-left: -15px;
+  // max-width: unset;
 
   table {
     border-right: none;

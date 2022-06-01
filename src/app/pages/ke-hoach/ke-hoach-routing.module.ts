@@ -13,8 +13,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'chi-tieu-ke-hoach-nam',
+        redirectTo: 'giao-ke-hoach-va-du-toan',
         pathMatch: 'full'
+      },
+      {
+        path: 'giao-ke-hoach-va-du-toan',
+        loadChildren: () =>
+          import(
+            '../ke-hoach/giao-ke-hoach-va-du-toan/giao-ke-hoach-va-du-toan.module'
+          ).then((m) => m.GiaoKeHoachVaDuToanModule),
       },
       {
         path: 'chi-tieu-ke-hoach-nam',

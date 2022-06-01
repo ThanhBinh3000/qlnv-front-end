@@ -6,7 +6,7 @@ import { ChiTieuKeHoachNamComponent } from './chi-tieu-ke-hoach-nam-cap-tong-cuc
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
-  declarations: [ChiTieuKeHoachNamComponent],
+  declarations: [],
   imports: [CommonModule, ChiTieuKeHoachNamRoutingModule, ComponentsModule],
 })
-export class ChiTieuKeHoachNamModule {}
+export class ChiTieuKeHoachNamModule { }

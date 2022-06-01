@@ -2,6 +2,7 @@ import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
 export const MAIN_ROUTE_KE_HOACH = 'kehoach';
 export const CHI_TIEU_KE_HOACH_NAM = 'chi-tieu-ke-hoach-nam';
+export const GIAO_KE_HOACH_VA_DU_TOAN = 'giao-ke-hoach-va-du-toan';
 export const THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'thong-tin-chi-tieu-ke-hoach-nam';
 export const DE_XUAT_DIEU_CHINH = 'de-xuat-dieu-chinh';
 export const THONG_TIN_DE_XUAT_DIEU_CHINH = 'thong-tin-de-xuat-dieu-chinh';
@@ -11,7 +12,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Giao kế hoạch và dự toán',
-    url: `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`,
+    url: `/${MAIN_ROUTE_KE_HOACH}/${GIAO_KE_HOACH_VA_DU_TOAN}`,
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
