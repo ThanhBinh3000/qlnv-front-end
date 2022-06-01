@@ -325,8 +325,8 @@ export class QuanLyVonPhiService extends BaseService {
   //cap nhat phuong an
   capnhatPhuongAn(requestUpdate: any): Observable<any> {
     return this.httpClient.put(
-      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/cap-nhat'
-      'http://192.168.1.111:8094/pa-giao-so-kt/cap-nhat'
+      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/cap-nhat'
+      // 'http://192.168.1.111:8094/pa-giao-so-kt/cap-nhat'
       , requestUpdate);
   }
 
@@ -584,8 +584,8 @@ export class QuanLyVonPhiService extends BaseService {
   //xóa báo cáo nút xóa Báo cáo
   xoaBaoCaoLapThamDinh(id: any): Observable<any> {
     return this.httpClient.delete(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/xoa/' + id
-      'http://192.168.1.111:8094/lap-tham-dinh/xoa/' + id
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/xoa/' + id
+      // 'http://192.168.1.111:8094/lap-tham-dinh/xoa/' + id
     );
   }
 

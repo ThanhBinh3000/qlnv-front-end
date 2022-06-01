@@ -43,5 +43,7 @@ export const MESSAGE = {
   COPY_SUCCESS_HDV: 'Sao chép thành công dữ liệu sang mã báo cáo ',
   ALERT:'Thông báo',
   REJECT_SUCCESS:'Từ chối thành công',
-  NO_REPORT:''
+  NO_REPORT:'',
+  RATE_FORM: 'Vui lòng đánh giá biểu mẫu trước khi thực hiện thao tác!',
+  FINISH_FORM: 'Vui lòng hoàn tất nhập liệu các biểu mẫu trước khi thực hiện thao tác!',
 };

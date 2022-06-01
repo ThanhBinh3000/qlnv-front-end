@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DanhSachCongVanDeNghiCapVonComponent } from './danh-sach-cong-can-de-nghi-cap-von.component';
+import { TimKiemComponent } from './tim-kiem.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DanhSachCongVanDeNghiCapVonComponent,
+    component: TimKiemComponent,
   },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DanhSachCongVanDeNghiCapVonComponentRoutingModule {}
+export class TimKiemRoutingModule {}
