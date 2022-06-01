@@ -36,6 +36,11 @@ const routes: Routes = [
           import('../../pages/xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
       },
       {
+        path: MAIN_ROUTES.dinhMucNhapXuat,
+        loadChildren: () =>
+          import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
+      },
+      {
         path: MAIN_ROUTES.muaHang,
         loadChildren: () =>
           import('../../pages/mua-hang/mua-hang.module').then((m) => m.MuaHangModule),

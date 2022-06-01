@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?j4i673');
-  src:  url('fonts/htvbdh.eot?j4i673#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?j4i673') format('truetype'),
-    url('fonts/htvbdh.woff?j4i673') format('woff'),
-    url('fonts/htvbdh.svg?j4i673#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?uq1s7a');
+  src:  url('fonts/htvbdh.eot?uq1s7a#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?uq1s7a') format('truetype'),
+    url('fonts/htvbdh.woff?uq1s7a') format('woff'),
+    url('fonts/htvbdh.svg?uq1s7a#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_vien_tro:before {
+  content: "\eb20";
+}
+.htvbdh_tcdt_het_han:before {
+  content: "\eb1f";
+}
+.htvbdh_tcdt_kiem_tra_chat_luong:before {
+  content: "\eb1e";
+}
+.htvbdh_tcdt_dieu_chuyen:before {
+  content: "\eb1c";
+}
+.htvbdh_tcdt_tat_ca:before {
+  content: "\eb1d";
+}
+.htvbdh_tcdt_kehoachvonphi:before {
+  content: "\eb1a";
+}
+.htvbdh_tcdt_quanlychitieu:before {
+  content: "\eb1b";
+}
 .htvbdh_tcdt_bienbangiaonhan:before {
   content: "\eb18";
 }

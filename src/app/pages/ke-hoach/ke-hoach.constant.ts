@@ -17,7 +17,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
+    icon: 'htvbdh_tcdt_tochucthuchien',
     title: 'Lập kế hoạch và thẩm định dự toán ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
@@ -25,7 +25,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_de_xuat_dieu_chinh',
+    icon: 'htvbdh_tcdt_kehoachvonphi',
     title: 'Tình hình cấp vốn, phí hàng ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}`,
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
@@ -33,7 +33,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_dieuchinhkehoachnam',
+    icon: 'htvbdh_tcdt_quanlychitieu',
     title: 'Phương án giá',
     url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
     dropdown: 'dieu-chinh-chi-tieu',

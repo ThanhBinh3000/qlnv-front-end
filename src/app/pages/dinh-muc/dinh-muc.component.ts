@@ -6,16 +6,17 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NHAP_KHAC_ROUTE_LIST } from './nhap-khac.constant';
+import { DINH_MUC_ROUTE_LIST } from './dinh-muc.constant';
 @Component({
-    selector: 'app-nhap-khac',
-    templateUrl: './nhap-khac.component.html',
-    styleUrls: ['./nhap-khac.component.scss'],
+    selector: 'app-dinh-muc',
+    templateUrl: './dinh-muc.component.html',
+    styleUrls: ['./dinh-muc.component.scss'],
 })
-export class NhapKhacComponent implements OnInit, AfterViewInit {
+export class DinhMucComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = NHAP_KHAC_ROUTE_LIST;
+    routes = DINH_MUC_ROUTE_LIST;
     routerUrl: string = "";
+    defaultUrl: string = '/dinh-muc-nhap-xuat'
 
     constructor(
         private router: Router,
@@ -79,7 +80,6 @@ export class NhapKhacComponent implements OnInit, AfterViewInit {
     }
 
     redirect(url: string) {
-        this.routerUrl = url;
-        this.router.navigate([url]);
+        this.router.navigate([this.defaultUrl + url]);
     }
 }
