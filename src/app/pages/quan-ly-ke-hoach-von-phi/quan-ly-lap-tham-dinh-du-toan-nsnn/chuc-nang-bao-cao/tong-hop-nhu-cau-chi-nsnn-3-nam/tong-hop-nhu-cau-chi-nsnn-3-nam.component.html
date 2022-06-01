@@ -1,3 +1,4 @@
+<div id="tablePrint">
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
     <div nz-col [nzSpan]="3">
         <ng-container *ngIf="status;else templateName">
@@ -202,6 +203,7 @@
         </tr>
     </tbody>
 </nz-table>
+</div>
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
     <div nz-col nzSpan="24">
         <label class="search__label">Thuyết minh</label>
@@ -209,7 +211,7 @@
     </div>
 </div>
 <div class="action">
-    <button type="button" class="btn btn-main" [hidden]="status">
+    <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
     </button>

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import * as fileSaver from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -52,6 +54,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     trangThais: any[] = TRANG_THAI_GIAO;
     noiDungs: any[] = KHOAN_MUC;
     soLaMa: any[] = LA_MA;
+    //file
+    fileDetail: NzUploadFile;
 
     constructor(
         private userService: UserService,
@@ -106,6 +110,24 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
+    }
+
+    //download file về máy tính
+    async downloadFileCv() {
+        if (this.soQdCv?.fileUrl) {
+            await this.quanLyVonPhiService.downloadFile(this.soQdCv?.fileUrl).toPromise().then(
+                (data) => {
+                    fileSaver.saveAs(data, this.soQdCv?.fileName);
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            let file: any = this.fileDetail;
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
     }
 
     // call chi tiet bao cao

@@ -217,7 +217,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 		this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
 			async data => {
 				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 					let obj = {
                         trangThai: '-1',
                         lyDoTuChoi: null,
@@ -253,11 +253,11 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                         lyDoTuChoi: lyDoTuChoi,
                     }
                     this.dataChange.emit(obj);
-					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-					// } else {
+					if (mcn == '0') {
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+					} else {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-					// }
+					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -683,5 +683,23 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 		this.tong.ncauNamN1 += heSo * item.ncauNamN1;
 		this.tong.ncauNamN2 += heSo * item.ncauNamN2;
 	}
+
+    doPrint() {
+        let WindowPrt = window.open(
+             '',
+             '',
+             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        printContent = printContent + '<div>';
+        printContent =
+             printContent + document.getElementById('tablePrint').innerHTML;
+        printContent = printContent + '</div>';
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
+   }
 
 }

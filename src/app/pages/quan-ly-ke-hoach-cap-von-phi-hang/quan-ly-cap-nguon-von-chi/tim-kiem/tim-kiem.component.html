@@ -15,10 +15,10 @@
 					<i nz-icon nzType="search"></i>
 					Tìm kiếm
 				</button>
-				<!-- <button nz-button class="search__button--clear" (click)="xoaDieuKien()">
+				<button nz-button class="search__button--clear" (click)="xoaDieuKien()">
 					<i nz-icon nzType="close"></i>
 					Xóa điều kiện
-				</button> -->
+				</button>
 			</div>
 		</div>
 	</div>
@@ -29,15 +29,16 @@
 			<nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
-						<label class="search__label">Năm Phương án</label>
-						<nz-input-number [nzSize]="'small'"
-							[class]="searchFilter.namPa >= 1000 &&  searchFilter.namPa <= 2999 || !searchFilter.namPa && this.searchFilter.namPa !== 0 ?'' : 'input-error-validate'"
-							[(ngModel)]="searchFilter.namPa"></nz-input-number>
+						<label class="search__label">Mã</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.maDn" />
 					</div>
-					<div nz-col nzSpan="6">
-						<label class="search__label">Mã báo cáo</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maBaoCao"
-						[class]="!searchFilter.maBaoCao && searchFilter.loai == '2' ?'input-error-validate' : ''"/>
+                    <div nz-col nzSpan="6">
+						<label class="search__label">Trạng thái</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+							[(ngModel)]="searchFilter.trangThai">
+							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							</nz-option>
+						</nz-select>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
@@ -50,29 +51,28 @@
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-							[(ngModel)]="searchFilter.trangThai">
-							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+						<label class="search__label">Quyết định chỉ tiêu</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdChiTieu" />
+					</div>
+					<div nz-col nzSpan="6">
+						<label class="search__label">Loại đề nghị</label>
+						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị"
+							[(ngModel)]="searchFilter.loaiDn">
+							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>
 					</div>
-					<div nz-col nzSpan="6">
-						<label class="search__label">Loại</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại"
-							[(ngModel)]="searchFilter.loai"
-							[class]="searchFilter.loai ?'' : 'input-error-validate'">
-							<nz-option *ngFor="let item of loais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-							</nz-option>
-						</nz-select>
+                    <div nz-col nzSpan="6">
+						<label class="search__label">Quyết định trúng thầu</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdTrungThau" />
 					</div>
-					<div nz-col nzSpan="6">
-						<label class="search__label">Mã PA</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"/>
+                    <div nz-col nzSpan="6">
+						<label class="search__label">Quyết định đơn giá mua</label>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.qdDonGiaMua" />
 					</div>
 				</div>
 			</nz-card>
-			<nz-card nzTitle="DANH SÁCH PHƯƠNG ÁN GIAO SỐ KIỂM TRA NSNN" [nzExtra]="tableCard1"
+			<nz-card nzTitle="Danh sách đề nghị cấp vốn" [nzExtra]="tableCard1"
 				class="mt16 flex-card p-lr16">
 				<div class="row">
 					<div class="col-lg-12 form-group">
@@ -83,44 +83,56 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
-							<th width="150px">Mã phương án</th>
-							<th width="150px">Số QĐ/CV</th>
-							<th width="150px">Ngày lập</th>
-							<th width="150px">Mã báo cáo</th>
-							<th width="150px">Năm phương án</th>
-							<th width="150px">Trạng thái</th>
-							<th width="150px">Đơn vị tạo</th>
+							<th>Mã đề nghị</th>
+							<th>Quyết định chỉ tiêu</th>
+							<th>Quyết định trúng thầu</th>
+							<th>Quyết định đơn giá mua</th>
+							<th>Loại đề nghị</th>
+                            <th>Ngày lập</th>
+                            <th>Ngày trình duyệt</th>
+                            <th>Ngày phê duyệt</th>
+                            <th>Trạng thái</th>
+                            <th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let item of danhSachBaoCao; let i = index">
-							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+							<td>
+                                {{ (i + 1) + (pages.page - 1)*pages.size }}
+                            </td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.maPa}}
+									{{ item.maDn}}
 								</a>
 							</td>
 							<td>
-								<ng-container *ngIf="item.fileSoQdCv">
-									<div class="tep" (click)="downloadFileCv(item.fileSoQdCv)">
-										<span style="color: #1890ff;">{{item.fileSoQdCv?.fileName}}</span>
-									</div>
+                                {{item.qdChiTieu}}
+                            </td>
+							<td>
+                                {{item.qdTrungThau}}
+                            </td>
+							<td>
+                                {{item.qdDonGiaMua}}
+                            </td>
+                            <td>
+                                {{item.loaiDn}}
+                            </td>
+                            <td>
+                                {{item.ngayTao}}
+                            </td>
+                            <td>
+                                {{item.ngayTrinhDuyet}}
+                            </td>
+                            <td>
+                                {{item.ngayPheDuyet}}
+                            </td>
+                            <td>
+                                {{item.trangThai}}
+                            </td>
+							<td>
+								<ng-container *ngIf="checkDeleteReport(item)">
+									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>
 								</ng-container>
-							</td>
-							<td>
-								{{item.ngayTao}}
-							</td>
-							<td>
-								{{item.maBcao}}
-							</td>
-							<td>
-								{{item.namPa}}
-							</td>
-							<td>
-								{{getStatusName(item.trangThai)}}
-							</td>
-							<td>
-								{{getUnitName(item.maDvi)}}
 							</td>
 						</tr>
 					</tbody>

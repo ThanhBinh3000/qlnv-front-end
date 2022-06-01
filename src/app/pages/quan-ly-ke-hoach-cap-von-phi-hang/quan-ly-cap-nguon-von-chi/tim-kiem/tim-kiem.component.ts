@@ -10,7 +10,6 @@ import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
-import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 @Component({
 	selector: 'app-tim-kiem',
@@ -22,16 +21,21 @@ export class TimKiemComponent implements OnInit {
 	userInfo: any;
 	//thong tin tim kiem
 	searchFilter = {
-		nam: null,
-		tuNgay: "",
-		denNgay: "",
-		maBaoCao: "",
-		donViTao: "",
-		trangThai: "",
+		maDn: null,
+        trangThai: "",
+        tuNgay: "",
+        denNgay: "",
+        qdChiTieu: "",
+        qdTrungThau: "",
+        qdDonGiaMua: "",
+        loaiDn: "",
+        maDviTao: "",
+        loaiTimKiem: "0",
 	};
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = TRANG_THAI_TIM_KIEM;
+	loaiDns: any[] = [];
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -56,7 +60,7 @@ export class TimKiemComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		this.searchFilter.donViTao = this.userInfo?.dvql;	
+		this.searchFilter.maDviTao = this.userInfo?.dvql;	
 		this.onSubmit();	
 	}
 
@@ -93,23 +97,19 @@ export class TimKiemComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-			if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-				return;
-			}
-		}
 		let trangThais = [];
 		if (this.searchFilter.trangThai){
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
-			loaiTimKiem: "0",
-			maBcao: this.searchFilter.maBaoCao,
-			maDvi: this.searchFilter.donViTao,
-			namBcao: this.searchFilter.nam,
+			loaiTimKiem: this.searchFilter.loaiTimKiem,
+			maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            qdChiTieu: this.searchFilter.qdChiTieu,
+            qdTrungThau: this.searchFilter.qdTrungThau,
+            qdDonGiaMua: this.searchFilter.qdDonGiaMua,
+            loaiDn: this.searchFilter.loaiDn,
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
@@ -117,13 +117,14 @@ export class TimKiemComponent implements OnInit {
 			trangThais: trangThais,
 		};
 		this.spinner.show();
-		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
 		await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = data.data.content;
 					this.danhSachBaoCao.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+						e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+						e.ngayTrinhDuyet = this.datePipe.transform(e.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -150,34 +151,23 @@ export class TimKiemComponent implements OnInit {
 		this.onSubmit();
 	}
 	xoaDieuKien() {
-		this.searchFilter.nam = null
-		this.searchFilter.tuNgay = null
-		this.searchFilter.denNgay = null
-		this.searchFilter.maBaoCao = null
-		this.searchFilter.trangThai = null
+		this.searchFilter.maDn =  null
+        this.searchFilter.trangThai = null
+        this.searchFilter.tuNgay = null
+        this.searchFilter.denNgay = null
+        this.searchFilter.qdChiTieu = null
+        this.searchFilter.qdTrungThau = null
+        this.searchFilter.qdDonGiaMua = null
+        this.searchFilter.loaiDn = null
 	}
 
 	taoMoi() {
-		if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-			if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
-				this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-				return;
-			}
-		}
-		if (!this.searchFilter.nam){
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao',
-			]);
-		} else {
-			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
-			]);
-		}
+		
 	}
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + id,
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
 		])
 	}
 

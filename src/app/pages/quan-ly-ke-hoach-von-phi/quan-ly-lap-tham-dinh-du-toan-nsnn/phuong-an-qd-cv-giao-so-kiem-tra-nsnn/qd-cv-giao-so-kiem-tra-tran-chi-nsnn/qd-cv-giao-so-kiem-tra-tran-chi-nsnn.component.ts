@@ -128,6 +128,28 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         );
     }
 
+    //upload file
+    async uploadFile(file: File) {
+        // day file len server
+        const upfile: FormData = new FormData();
+        upfile.append('file', file);
+        upfile.append('folder', this.maDviTao + '/' + this.maPa);
+        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+            (data) => {
+                let objfile = {
+                    fileName: data.filename,
+                    fileSize: data.size,
+                    fileUrl: data.url,
+                }
+                return objfile;
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        return temp;
+    }
+
     //download file về máy tính
     async downloadFileCv() {
         if (this.soQdCv?.fileUrl) {
@@ -152,13 +174,23 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập đầy số QĐ/CV và mã phương án");
             return;
         }
-        let request = {
-            id: this.id,
-            namGiao: this.namGiao,
-            maPa: this.maPa,
-            soQdCv: this.soQdCv,
-            maGiao: this.maGiao,
-        }
+
+        let request = JSON.parse(JSON.stringify(
+            {
+                id: this.id,
+                namGiao: this.namGiao,
+                maPa: this.maPa,
+                soQdCv: this.soQdCv,
+                maGiao: this.maGiao,
+            }
+        ))
+
+        //get file cong van url
+		let file: any = this.fileDetail;
+		if (file) {
+		  request.soQdCv = await this.uploadFile(file);
+		}
+
         if (!this.id) {
             this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
                 if (data.statusCode == 0) {
@@ -175,15 +207,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
 
 
-    // //xem thong tin PA
-    // xemphuongan() {
-    //     this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-tran-chi-nsnn-cho-cac-don-vi/' + this.mapa])
-    // }
-    // //lay ten don vi tạo
-    // getUnitName(mdv: any): string {
-    //     return this.donviTaos.find((item) => item.maDvi == this.donvitao)?.tenDvi;
-    // }
-    //
+
     dong() {
         // this.router.navigate(['/'])
         this.location.back()

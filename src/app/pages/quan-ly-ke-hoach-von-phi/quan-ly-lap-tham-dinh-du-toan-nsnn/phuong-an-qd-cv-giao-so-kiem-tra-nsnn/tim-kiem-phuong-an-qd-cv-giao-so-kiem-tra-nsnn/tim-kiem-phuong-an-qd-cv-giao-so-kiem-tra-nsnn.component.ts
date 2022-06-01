@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzResultUnauthorizedComponent } from 'ng-zorro-antd/result/partial/unauthorized';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import * as fileSaver from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -13,6 +15,11 @@ import { DanhMucHDVService } from '../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../services/quanLyVonPhi.service';
 import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
+export class ItemCongVan {
+    fileName: string;
+    fileSize: number;
+    fileUrl: number;
+}
 @Component({
     selector: 'app-tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn',
     templateUrl: './tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn.component.html',
@@ -54,6 +61,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         size: 10,
         page: 1,
     }
+
+    fileDetail: NzUploadFile;
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -117,6 +126,24 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
             id,
         ]);
+    }
+
+    //download file về máy tính
+    async downloadFileCv(soQdCv: ItemCongVan) {
+        if (soQdCv?.fileUrl) {
+            await this.quanLyVonPhiService.downloadFile(soQdCv?.fileUrl).toPromise().then(
+                (data) => {
+                    fileSaver.saveAs(data, soQdCv?.fileName);
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            let file: any = this.fileDetail;
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
     }
 
     //search list bao cao theo tieu chi
