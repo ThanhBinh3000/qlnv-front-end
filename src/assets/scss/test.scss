@@ -1727,12 +1727,12 @@ table tr {
   border-bottom-color: $color-fa;
 }
 
-.ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active,
-.ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab-active {
-  background-color: $color-tab;
-  border-color: $color-f0;
-  border-bottom-color: $color-tab;
-}
+// .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active,
+// .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab-active {
+//   background-color: $color-tab;
+//   border-color: $color-f0;
+//   border-bottom-color: $color-tab;
+// }
 
 .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
   background: $color-fb;
@@ -1750,7 +1750,8 @@ table tr {
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: $color-text;
+  // color: $color-text;
+  color: #ffffff;
 }
 
 .dot {
@@ -1949,13 +1950,13 @@ i.icon.htvbdh_luu1 {
 
 .cangiua {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
 }
 
 .group-button-search {
-  padding-bottom: 24px;
-  padding-top: 12px;
+  padding-bottom: 12px;
+  // padding-top: 12px;
 }
 
 .first-last-row-table {

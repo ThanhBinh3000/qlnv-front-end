@@ -1,0 +1,156 @@
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-tabset nzType="card" class="tab-cap-1">
+        <nz-tab [nzTitle]="'Giao kế hoạch và vốn đầu năm'">
+          <nz-tabset nzType="card" class="mt-16 tab-cap-2">
+            <nz-tab [nzTitle]="'Quyết định (10)'">
+              <nz-tabset nzType="card" class="mt-16">
+                <nz-tab [nzTitle]="'TTCP'">
+                  <nz-card class="mt16 flex-card p-lr16">
+                    <div class="search__body" nz-row [nzGutter]="[18, 12]" (keydown)="keyDownFunction($event)">
+                      <div nz-col nzSpan="4">
+                        <label class="search__label">Số QĐ</label>
+                        <input class="search__input" nz-input />
+                      </div>
+                      <div nz-col nzSpan="2">
+                        <label class="search__label">Năm QĐ</label>
+                        <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký từ ngày">
+                        </nz-date-picker>
+                      </div>
+                      <div nz-col nzSpan="4">
+                        <label class="search__label">Ngày QĐ</label>
+                        <nz-range-picker nzFormat="dd/MM/yyyy">
+                        </nz-range-picker>
+                      </div>
+                      <div nz-col nzSpan="14">
+                        <label class="search__label">Trích yếu</label>
+                        <input class="search__input" nz-input />
+                      </div>
+                    </div>
+                    <div class="cangiua group-button-search">
+                      <button nz-button class="search__button--clear" (click)="clearFilter()">
+                        <i nz-icon nzType="close"></i>
+                        Xóa điều kiện
+                      </button>
+                      <button nz-button class="search__button--search" (click)="search()">
+                        <i nz-icon nzType="search"></i>
+                        Tìm kiếm
+                      </button>
+                    </div>
+                  </nz-card>
+
+                  <nz-tabset nzType="card" class="tab-cap-4 mt-16">
+                    <nz-tab [nzTitle]="'Danh sách quyết định của Thủ tướng'">
+                      <nz-table #basicTable class="nowrap mt-16 table__container-tt" [nzData]="dataTable"
+                        [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                        <thead>
+                          <tr>
+                            <th width="60px">STT</th>
+                            <th width="130px">Số quyết định</th>
+                            <th width="175px">Năm QĐ</th>
+                            <th width="175px">Ngày QĐ</th>
+                            <th width="" class="text-center">Trích yếu</th>
+                            <th width="175px" class="text-center">Tài liệu đính kèm</th>
+                            <th width="130px" class="text-center"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td></td>
+                            <td>
+                              <input class="search__input" nz-input nzSize="small" />
+                            </td>
+                            <td>
+                              <input class="search__input" nz-input nzSize="small" />
+                            </td>
+                            <td>
+                              <input class="search__input" nz-input nzSize="small" />
+                            </td>
+                            <td>
+                              <input class="search__input" nz-input nzSize="small" />
+                            </td>
+                            <td>
+                              <input class="search__input" nz-input nzSize="small" />
+                            </td>
+                            <td>
+                              <a>
+                                <i class="fa fa-pencil"></i>
+                              </a>
+                              <a>
+                                <i class="fa fa-trash-o do"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr *ngFor="let data of basicTable.data; let i = index">
+                            <td>{{(page-1)*pageSize+i+1}}</td>
+                            <td>111</td>
+                            <td>2021</td>
+                            <td>17/02/2022</td>
+                            <td>Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</td>
+                            <td>Tài liệu đính kèm</td>
+                            <td>
+                              <a>
+                                <i class="icon htvbdh_tcdt_import"></i>
+                              </a>
+                              <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
+                                <i class="fa fa-pencil"></i>
+                              </a>
+                              <a (click)="xoaItem(data)">
+                                <i class="fa fa-trash-o do"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </nz-table>
+                      <div class="tab-content tab-menu" id="myTabContent">
+                        <div class="tab-pane fade show active justify-content-between">
+                          <div class="trai">
+
+                          </div>
+                          <div class="canphai">
+                            <!-- begin phân trang  -->
+                            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                              nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                              (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                              <ng-template #rangeTemplate let-range="range" let-total>
+                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                              </ng-template>
+                            </nz-pagination>
+                            <!-- end phân trang  -->
+                          </div>
+                        </div>
+                      </div>
+                    </nz-tab>
+                  </nz-tabset>
+                </nz-tab>
+                <nz-tab [nzTitle]="'BTC'">
+
+                </nz-tab>
+                <nz-tab [nzTitle]="'Chi thường xuyên của BTC giao TCDT'" class="vat-tu__container">
+
+                </nz-tab>
+                <nz-tab [nzTitle]="'Chi mua hàng DTQG của BTC giao TCDT'" class="vat-tu__container">
+
+                </nz-tab>
+              </nz-tabset>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Chỉ tiêu kế hoạch (3)'">
+              <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Điều chỉnh chỉ tiêu KH (3)'" class="vat-tu__container">
+              <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+            </nz-tab>
+            <nz-tab [nzTitle]="'Dự toán NSNN (4)'" class="vat-tu__container">
+
+            </nz-tab>
+          </nz-tabset>
+        </nz-tab>
+        <nz-tab [nzTitle]="'Giao kế hoạch vốn mua bù, bổ sung'"></nz-tab>
+        <nz-tab [nzTitle]="'Giao kế hoạch xuất giảm. xuất bán, xuất luân phiên đổi hàng'" class="vat-tu__container">
+        </nz-tab>
+      </nz-tabset>
+
+    </div>
+  </div>
+</div>

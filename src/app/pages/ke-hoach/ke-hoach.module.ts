@@ -17,7 +17,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
   declarations: [
     KeHoachComponent,
     DieuChinhThongTinChiTieuKeHoachNamComponent,
-    DieuChinhChiTieuKeHoachNamComponent,
+    // DieuChinhChiTieuKeHoachNamComponent,
     ThongTinChiTieuKeHoachNamComponent,
     DeXuatDieuChinhComponent,
     ThongTinDeXuatDieuChinhComponent,
