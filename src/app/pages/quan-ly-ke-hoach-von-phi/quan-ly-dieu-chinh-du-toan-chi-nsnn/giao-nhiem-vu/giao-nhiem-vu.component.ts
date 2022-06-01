@@ -1,3 +1,4 @@
+import { OK, NOT_OK } from 'src/app/Utility/utils';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -291,8 +292,39 @@ export class GiaoNhiemVuComponent implements OnInit {
 		} else {
 			this.statusBtnFinish = true;
 		}
-
 	}
+
+  // getStatusButtonOk() {
+  //   const utils = new Utils();
+  //   let checkParent = false;
+  //   let checkChirld = false;
+  //   let dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
+  //   if (dVi && dVi.maDvi == this.userInfo.dvql) {
+  //     checkChirld = true;
+  //   }
+  //   if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
+  //     checkParent = true;
+  //   }
+
+  //   let roleNguoiTao = this.userInfo?.roles[0]?.code;
+  //   let trangThaiBaoCao = this.trangThaiBaoCao;
+  //   if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else if (trangThaiBaoCao == Utils.TT_BC_2 && roleNguoiTao == '2' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else if (trangThaiBaoCao == Utils.TT_BC_4 && roleNguoiTao == '1' && checkChirld && (Number(this.trangThaiBaoCao) == 5 || Number(this.trangThaiBaoCao) == 2)) {
+  //     this.statusBtnOk = false;
+  //   } else {
+  //     this.statusBtnOk = true;
+  //   }
+
+  //   if ((trangThaiBaoCao == Utils.TT_BC_1 || trangThaiBaoCao == Utils.TT_BC_3 || trangThaiBaoCao == Utils.TT_BC_5 || trangThaiBaoCao == Utils.TT_BC_8)
+  //     && roleNguoiTao == '3' && checkChirld) {
+  //     this.statusBtnFinish = false;
+  //   } else {
+  //     this.statusBtnFinish = true;
+  //   }
+  // }
 
 	//get user info
 	async getUserInfo(username: string) {
@@ -450,7 +482,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				},
 			);
 		} else {
-			this.quanLyVonPhiService.updateBieuMau(request).toPromise().then(
+			this.quanLyVonPhiService.updateDieuChinh(request).toPromise().then(
 				async data => {
 					if (data.statusCode == 0) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -507,6 +539,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.trangThaiBaoCao = mcn;
 					this.getStatusButton();
+          // this.getStatusButtonOk();
 					if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
 					} else {
@@ -542,6 +575,63 @@ export class GiaoNhiemVuComponent implements OnInit {
 			}
 		});
 	}
+
+  // //show popup tu choi dùng cho nut ok - not ok
+  // async pheDuyetChiTiet(mcn: string, maLoai: any) {
+  //   this.spinner.show();
+  //   if (mcn == OK) {
+  //     await this.pheDuyetBieuMau(mcn, maLoai, null);
+  //   } else if (mcn == NOT_OK) {
+  //     const modalTuChoi = this.modal.create({
+  //       nzTitle: 'Not OK',
+  //       nzContent: DialogTuChoiComponent,
+  //       nzMaskClosable: false,
+  //       nzClosable: false,
+  //       nzWidth: '900px',
+  //       nzFooter: null,
+  //       nzComponentParams: {},
+  //     });
+  //     modalTuChoi.afterClose.toPromise().then(async (text) => {
+  //       if (text) {
+  //         await this.pheDuyetBieuMau(mcn, maLoai, text);
+  //       }
+  //     });
+  //   }
+  //   this.spinner.hide();
+  // }
+
+  // //call api duyet bieu mau
+  // async pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
+  //   var idBieuMau: any = this.lstDieuChinhs.find((item) => item.maLoai == maLoai).id;
+  //   const requestPheDuyetBieuMau = {
+  //     id: idBieuMau,
+  //     trangThai: trangThai,
+  //     lyDoTuChoi: lyDo,
+  //   };
+  //   this.spinner.show();
+
+  //   await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestPheDuyetBieuMau).toPromise().then(async res => {
+  //     if (res.statusCode == 0) {
+  //       if (trangThai == NOT_OK) {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+  //       } else {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+  //       }
+  //       this.trangThaiBaoCao = trangThai;
+  //       this.lstDieuChinhs?.filter(item => {
+  //         if (item.maLoai == maLoai) {
+  //           item.trangThai = trangThai;
+  //         }
+  //       })
+  //       this.getStatusButton();
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, res?.msg);
+  //     }
+  //   }, err => {
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   })
+  //   this.spinner.hide();
+  // }
 
 
 	// call chi tiet bao cao
