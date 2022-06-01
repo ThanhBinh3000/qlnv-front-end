@@ -660,7 +660,6 @@ export class BaoCaoComponent implements OnInit {
     if (dVi && dVi.parent?.maDvi == this.userInfo.dvql) {
       checkParent = true;
     }
-
     let roleNguoiTao = this.userInfo?.roles[0]?.code;
     let trangThaiBaoCao = this.baoCao?.trangThai;
     if (trangThaiBaoCao == Utils.TT_BC_7 && roleNguoiTao == '3' && checkParent && (this.trangThaiChiTiet == 5 || this.trangThaiChiTiet == 2)) {
@@ -685,32 +684,32 @@ export class BaoCaoComponent implements OnInit {
 
   }
   changeModelPL1(id) {
-    this.editCache[id].data.kphiSdungDtoan = this.editCache[id].data.kphiChuyenSangDtoan + this.editCache[id].data.dtoanGiaoDtoan;
-    this.editCache[id].data.kphiSdungNguonKhac = this.editCache[id].data.kphiChuyenSangNguonKhac + this.editCache[id].data.dtoanGiaoNguonKhac;
-    this.editCache[id].data.kphiSdungNguonQuy = this.editCache[id].data.kphiChuyenSangNguonQuy + this.editCache[id].data.dtoanGiaoNguonQuy;
-    this.editCache[id].data.kphiSdungNstt = this.editCache[id].data.kphiChuyenSangNstt + this.editCache[id].data.dtoanGiaoNstt;
-    this.editCache[id].data.kphiSdungCk = this.editCache[id].data.kphiChuyenSangCk + this.editCache[id].data.dtoanGiaoCk;
+    this.editCache[id].data.kphiSdungDtoan = Number(this.editCache[id].data.kphiChuyenSangDtoan) + Number(this.editCache[id].data.dtoanGiaoDtoan);
+    this.editCache[id].data.kphiSdungNguonKhac = Number(this.editCache[id].data.kphiChuyenSangNguonKhac) + Number(this.editCache[id].data.dtoanGiaoNguonKhac);
+    this.editCache[id].data.kphiSdungNguonQuy = Number(this.editCache[id].data.kphiChuyenSangNguonQuy) + Number(this.editCache[id].data.dtoanGiaoNguonQuy);
+    this.editCache[id].data.kphiSdungNstt = Number(this.editCache[id].data.kphiChuyenSangNstt) + Number(this.editCache[id].data.dtoanGiaoNstt);
+    this.editCache[id].data.kphiSdungCk = Number(this.editCache[id].data.kphiChuyenSangCk) + Number(this.editCache[id].data.dtoanGiaoCk);
 
-    this.editCache[id].data.kphiSdungTcong = this.editCache[id].data.kphiSdungDtoan + this.editCache[id].data.kphiSdungNguonKhac + this.editCache[id].data.kphiSdungNguonQuy
-      + this.editCache[id].data.kphiSdungNstt + this.editCache[id].data.kphiSdungCk;
+    this.editCache[id].data.kphiSdungTcong = Number(this.editCache[id].data.kphiSdungDtoan) + Number(this.editCache[id].data.kphiSdungNguonKhac) + Number(this.editCache[id].data.kphiSdungNguonQuy)
+      + Number(this.editCache[id].data.kphiSdungNstt) + Number(this.editCache[id].data.kphiSdungCk);
 
-    this.editCache[id].data.kphiChuyenSangTcong = this.editCache[id].data.kphiChuyenSangDtoan + this.editCache[id].data.kphiChuyenSangNguonKhac + this.editCache[id].data.kphiChuyenSangNguonQuy
-      + this.editCache[id].data.kphiChuyenSangNstt + this.editCache[id].data.kphiChuyenSangCk;
+    this.editCache[id].data.kphiChuyenSangTcong = Number(this.editCache[id].data.kphiChuyenSangDtoan) + Number(this.editCache[id].data.kphiChuyenSangNguonKhac) + Number(this.editCache[id].data.kphiChuyenSangNguonQuy)
+      + Number(this.editCache[id].data.kphiChuyenSangNstt) + Number(this.editCache[id].data.kphiChuyenSangCk);
 
-    this.editCache[id].data.dtoanGiaoTcong = this.editCache[id].data.dtoanGiaoDtoan + this.editCache[id].data.dtoanGiaoNguonKhac + this.editCache[id].data.dtoanGiaoNguonQuy
-      + this.editCache[id].data.dtoanGiaoNstt + this.editCache[id].data.dtoanGiaoCk;
+    this.editCache[id].data.dtoanGiaoTcong = Number(this.editCache[id].data.dtoanGiaoDtoan) + Number(this.editCache[id].data.dtoanGiaoNguonKhac) + Number(this.editCache[id].data.dtoanGiaoNguonQuy)
+      + Number(this.editCache[id].data.dtoanGiaoNstt) + Number(this.editCache[id].data.dtoanGiaoCk);
 
-    this.editCache[id].data.giaiNganThangBcaoTcong = this.editCache[id].data.giaiNganThangBcaoDtoan + this.editCache[id].data.giaiNganThangBcaoNguonKhac + this.editCache[id].data.giaiNganThangBcaoNguonQuy
-      + this.editCache[id].data.giaiNganThangBcaoNstt + this.editCache[id].data.giaiNganThangBcaoCk;
+    this.editCache[id].data.giaiNganThangBcaoTcong = Number(this.editCache[id].data.giaiNganThangBcaoDtoan) + Number(this.editCache[id].data.giaiNganThangBcaoNguonKhac) + Number(this.editCache[id].data.giaiNganThangBcaoNguonQuy)
+      + Number(this.editCache[id].data.giaiNganThangBcaoNstt) + Number(this.editCache[id].data.giaiNganThangBcaoCk);
 
-    this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganDtoan + this.editCache[id].data.luyKeGiaiNganNguonKhac + this.editCache[id].data.luyKeGiaiNganNguonQuy
-      + this.editCache[id].data.luyKeGiaiNganNstt + this.editCache[id].data.luyKeGiaiNganCk;
+    this.editCache[id].data.luyKeGiaiNganTcong = Number(this.editCache[id].data.luyKeGiaiNganDtoan) + Number(this.editCache[id].data.luyKeGiaiNganNguonKhac) + Number(this.editCache[id].data.luyKeGiaiNganNguonQuy)
+      + Number(this.editCache[id].data.luyKeGiaiNganNstt) + Number(this.editCache[id].data.luyKeGiaiNganCk);
   }
 
   changeModelPL2(id) {
-    this.editCache[id].data.dtoanSdungNamTcong = this.editCache[id].data.dtoanSdungNamNguonNsnn + this.editCache[id].data.dtoanSdungNamNguonSn;
-    this.editCache[id].data.giaiNganThangTcong = this.editCache[id].data.giaiNganThangNguonNsnn + this.editCache[id].data.giaiNganThangNguonSn + this.editCache[id].data.giaiNganThangNguonQuy;
-    this.editCache[id].data.luyKeGiaiNganTcong = this.editCache[id].data.luyKeGiaiNganNguonNsnn + this.editCache[id].data.luyKeGiaiNganNguonSn + this.editCache[id].data.luyKeGiaiNganNguonQuy;
+    this.editCache[id].data.dtoanSdungNamTcong = Number(this.editCache[id].data.dtoanSdungNamNguonNsnn) + Number(this.editCache[id].data.dtoanSdungNamNguonSn);
+    this.editCache[id].data.giaiNganThangTcong = Number(this.editCache[id].data.giaiNganThangNguonNsnn) + Number(this.editCache[id].data.giaiNganThangNguonSn) + Number(this.editCache[id].data.giaiNganThangNguonQuy);
+    this.editCache[id].data.luyKeGiaiNganTcong = Number(this.editCache[id].data.luyKeGiaiNganNguonNsnn) + Number(this.editCache[id].data.luyKeGiaiNganNguonSn) + Number(this.editCache[id].data.luyKeGiaiNganNguonQuy);
   }
 
   changeModelPL3(id) {
@@ -1500,6 +1499,7 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao?.lstBcaos?.filter(item => {
           if (item.maLoai == maLoai) {
             item.trangThai = trangThai;
+            item.lyDoTuChoi = lyDo;
           }
         })
         this.getStatusButtonOk();
