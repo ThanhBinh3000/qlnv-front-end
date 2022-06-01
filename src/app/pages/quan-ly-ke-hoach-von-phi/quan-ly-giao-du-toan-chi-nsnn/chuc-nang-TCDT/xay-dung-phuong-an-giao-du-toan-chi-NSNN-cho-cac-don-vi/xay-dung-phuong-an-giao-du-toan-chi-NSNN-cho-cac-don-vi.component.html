@@ -88,7 +88,7 @@
 			</nz-card>
 			<div class="tab__container" id="tablePrint">
 				<nz-tabset nzType="card" class="tab__container">
-					<nz-tab [nzTitle]="'Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị'">
+					<nz-tab [nzTitle]="'Xây dựng phương án giao dự toán chi NSNN cho các đơn vị'">
 						<ng-container *ngIf="status;else templateName">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="3">
@@ -210,15 +210,6 @@
 										</td>
 									</ng-template>
 								</tr>
-                <!-- <tr>
-                  <td *ngFor="let item of lstMaNganSach"></td>
-                </tr>
-                <tr>
-
-                </tr>
-                <tr>
-
-                </tr> -->
 								<ng-container *ngIf="lstCtietBcao.length > 0">
 									<tr [hidden]="statusBtnGiao">
 										<td></td>
@@ -236,7 +227,6 @@
 										</td>
 									</tr>
 								</ng-container>
-
 							</tbody>
 						</nz-table>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
