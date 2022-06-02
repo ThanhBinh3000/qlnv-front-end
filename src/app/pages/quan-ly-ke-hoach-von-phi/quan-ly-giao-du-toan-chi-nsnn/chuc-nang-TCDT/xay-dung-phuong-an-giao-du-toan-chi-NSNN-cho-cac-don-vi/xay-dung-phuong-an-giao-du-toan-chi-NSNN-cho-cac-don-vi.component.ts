@@ -82,6 +82,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   statusBtnCopy: boolean;
   statusBtnPrint: boolean;
   statusBtnGiao: boolean;
+  statusBtnGiaoToanBo: boolean = false;
   statusAn: boolean = true;
   allChecked = false;
   lstDviTrucThuoc: any[] = [];
@@ -320,6 +321,12 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             item.lstCtietDvis.forEach(e => {
               e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
             })
+          })
+          debugger
+          this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+            if(item.trangThai == "1"){
+              this.statusBtnGiaoToanBo = true;
+            }
           })
           this.namPa = data.data.namPa;
           this.trangThaiBanGhi = data.data.trangThai;
@@ -585,7 +592,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
               maGiao: this.maGiao,
               maPa: this.maPa,
               maDvi: this.maDonViTao,
-              maDviNhan: maDvi,
+              maDviNhan: item.maDviNhan,
               trangThai: '1',
               maDviTien: this.maDviTien,
               soQd: this.soQd,
@@ -613,6 +620,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           //     let index = this.lstCtietBcao[0].lstCtietDvis.findIndex(e => e.maDviNhan == item);
           //     this.lstCtietBcao[0].lstCtietDvis[index].trangThai = '1';
           // })
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

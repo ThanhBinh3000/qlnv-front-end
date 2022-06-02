@@ -229,6 +229,48 @@
 								</ng-container>
 							</tbody>
 						</nz-table>
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col class="gutter-row" [nzSpan]="3">
+                Danh sách văn bản đính kèm
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                  <button nz-button>
+                    <i nz-icon nzType="upload"></i>
+                    Select File
+                  </button>
+                </nz-upload>
+                <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+                  [hidden]="status" style="margin-top: 16px">
+                  Thêm vào danh sách
+                </button>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <nz-table nzBordered class="table__body">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên file</th>
+                      <th></th>
+                      <th class="th" [hidden]="status"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of lstFiles; let i = index">
+                      <td>{{ i + 1 }} </td>
+                      <td>{{ data.fileName }}</td>
+                      <td>
+                        <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
+                      </td>
+                      <td [hidden]="status">
+                        <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+
+              </div>
+            </div>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 							<div nz-col nzSpan="24">
 								<label class="search__label">Thuyết minh</label>
