@@ -31,7 +31,7 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
     maDviCha: '',
     maLoaiBcao:'',
     maPhanBcao:'1',
-    namBcao:'',
+    namBcao:null,
     ngayTaoDen:'',
     ngayTaoTu:'',
     paggingReq: {
@@ -57,7 +57,10 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
+    let date = new Date();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.searchFilter.maLoaiBcao='1';
+    this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -125,7 +128,6 @@ export class KiemTraTinhTrangPheDuyetBaoCaoTuChiCucComponent implements OnInit {
 
   // lay ten trang thai ban ghi
   getStatusName(id) {
-    const utils = new Utils();
-    return utils.getStatusName(id);
+    return TRANG_THAI_KIEM_TRA_BAO_CAO.find(item => item.id == id)?.ten
   }
 }

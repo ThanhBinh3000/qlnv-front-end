@@ -69,6 +69,8 @@ export class ItemData {
   lstIdDeletes!: [];
   nguoiBcao!: string;
   qlnvKhvonphiBcaoId!: string;
+  tuNgay:string;
+  denNgay:string;
 }
 
 export class ItemDataMau02 {
@@ -180,7 +182,8 @@ export class BaoCaoComponent implements OnInit {
   trangThaiChiTiet!: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
   donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
-
+  tuNgay:any;
+  denNgay:any;
 
 
   donVis: any[] = [];
@@ -366,6 +369,8 @@ export class BaoCaoComponent implements OnInit {
               lstIdDeletes: [],
               nguoiBcao: null,
               qlnvKhvonphiBcaoId: this.id,
+              tuNgay:'',
+              denNgay:'',
             }
           )
         })
@@ -387,6 +392,8 @@ export class BaoCaoComponent implements OnInit {
               lstIdDeletes: [],
               nguoiBcao: null,
               qlnvKhvonphiBcaoId: this.id,
+              tuNgay:'',
+              denNgay:'',
             }
           )
         })
@@ -676,7 +683,7 @@ export class BaoCaoComponent implements OnInit {
     this.baoCao?.lstBcaos.find(item => {
       if (item.maLoai == this.tabSelected) {
         item.lstCtietBcaos = Object.assign([], this.lstCTietBaoCaoTemp),
-          item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete
+          item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete, item.tuNgay = this.tuNgay, item.denNgay = this.denNgay
       }
     });
     this.tabSelected = maPhuLuc;
@@ -685,7 +692,9 @@ export class BaoCaoComponent implements OnInit {
     this.lstCTietBaoCaoTemp = lstBcaosTemp?.lstCtietBcaos || [];
     this.maDviTien = lstBcaosTemp?.maDviTien;
     this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
-    this.listIdDelete = []
+    this.tuNgay = lstBcaosTemp?.tuNgay;
+    this.denNgay = lstBcaosTemp?.denNgay;
+    this.listIdDelete = [];
     this.trangThaiChiTiet = trangThaiChiTiet;
     ////////////////////////////////////////
     this.resetList();
@@ -845,7 +854,6 @@ export class BaoCaoComponent implements OnInit {
       default:
         break;
     }
-    debugger
     if (maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG ||
       maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NhAP_HANG_DTQG ||
       maPhuLuc == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO ||
@@ -940,6 +948,8 @@ export class BaoCaoComponent implements OnInit {
               lstIdDeletes: [],
               nguoiBcao: null,
               qlnvKhvonphiBcaoId: this.id,
+              tuNgay:'',
+              denNgay:'',
             });
           }
         })
@@ -1042,7 +1052,10 @@ export class BaoCaoComponent implements OnInit {
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
 
     baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.lstCTietBaoCaoTemp));
-    baoCaoChiTietTemp.maDviTien = this.maDviTien, baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
+    baoCaoChiTietTemp.maDviTien = this.maDviTien; 
+    baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
+    baoCaoChiTietTemp.tuNgay = this.tuNgay;
+    baoCaoChiTietTemp.denNgay = this.denNgay;
     baoCaoChiTietTemp.lstIdDeletes = this.listIdDelete;
 
     let checkMoneyRange = true;
@@ -1208,7 +1221,9 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async save() {
-    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.lstCTietBaoCaoTemp), item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.lstCtietBcaos = Object.assign([], this.lstCTietBaoCaoTemp), 
+      item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.lstIdDeletes = this.listIdDelete,
+      item.tuNgay = this.tuNgay, item.denNgay = this.denNgay }});
     let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
     //get list file url
     let listFile: any = [];
@@ -1522,6 +1537,8 @@ export class BaoCaoComponent implements OnInit {
             item.lyDoTuChoi = null;
             item.qlnvKhvonphiBcaoId = null;
             item.thuyetMinh = null;
+            item.tuNgay = '';
+            item.denNgay = '';
             if (maLoaiBcao == BAO_CAO_DOT) {
               let index = LISTBIEUMAUDOT.findIndex(data => data.maPhuLuc == item.maLoai);
               if (index !== -1) {
@@ -1581,7 +1598,8 @@ export class BaoCaoComponent implements OnInit {
     }
 
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
-    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh } });
+    this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { 
+      item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh, item.tuNgay = this.tuNgay, item.denNgay = this.denNgay }});
     let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
 
     let checkMoneyRange = true;
@@ -3182,7 +3200,6 @@ export class BaoCaoComponent implements OnInit {
     this.lstCTietBaoCaoTemp.forEach(item => {
       this.setDetail(item.id);
     })
-    debugger
     this.lstCTietBaoCaoTemp.sort((item1, item2) => {
       if (item1.lstKm[0].level > item2.lstKm[0].level) {
         return 1;
@@ -3255,5 +3272,12 @@ export class BaoCaoComponent implements OnInit {
 
   doPrint() {
 
+  }
+
+  date = null;
+
+  onChange(result: Date[]): void {
+    console.log('onChange: ', result);
+    console.log(this.date);
   }
 }

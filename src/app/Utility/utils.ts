@@ -478,11 +478,11 @@ export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N: string = "32";
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
     {
-        id: 526,
+        id: '526',
         tenDm: 'Báo cáo giải ngân định kỳ tháng'
     },
     {
-        id: 527,
+        id: '527',
         tenDm: 'Báo cáo giải ngân cả năm'
     },
 ]
@@ -490,11 +490,11 @@ export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
 // loai bao cao ket qua thuc hien hang du tru quoc gia
 export const LBC_KET_QUA_THUC_HIEN_HANG_DTQG = [
     {
-        id: 1,
+        id: '1',
         tenDm: 'Đợt'
     },
     {
-        id: 2,
+        id: '2',
         tenDm: 'Năm'
     },
 ]
@@ -646,15 +646,15 @@ export const HOAN_TAT_NHAP_LIEU = "5";
 export const TRANG_THAI_GUI_DVCT = [
     {
         id: '9',
-        ten: 'Chấp nhận'
+        ten: 'Tiếp nhận'
     },
     {
         id: '8',
-        ten: 'Không chấp nhận'
+        ten: 'Từ chối'
     },
     {
         id: '7',
-        ten: 'Chưa đánh giá (để trống)'
+        ten: 'Mới'
     },
 ]
 
@@ -662,15 +662,15 @@ export const TRANG_THAI_GUI_DVCT = [
 export const TRANG_THAI_KIEM_TRA_BAO_CAO = [
     {
         id: '9',
-        ten: 'Chấp nhận'
+        ten: 'Tiếp nhận'
     },
     {
         id: '8',
-        ten: 'Không chấp nhận'
+        ten: 'Từ chối'
     },
     {
         id: '7',
-        ten: 'Chưa đánh giá (để trống)'
+        ten: 'Mới'
     },
     {
         id: '-1',
