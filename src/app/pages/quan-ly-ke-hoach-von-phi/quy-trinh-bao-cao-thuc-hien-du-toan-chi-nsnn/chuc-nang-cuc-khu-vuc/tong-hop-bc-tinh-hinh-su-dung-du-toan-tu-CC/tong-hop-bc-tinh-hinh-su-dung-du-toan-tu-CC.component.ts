@@ -58,6 +58,11 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let date = new Date();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.searchFilter.thangBcao = date.getMonth()+1;
+    this.searchFilter.maLoaiBcao='526';
+    this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -139,8 +144,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 
   // lay ten trang thai ban ghi
   getStatusName(id) {
-    const utils = new Utils();
-    return utils.getStatusName(id);
+    return TRANG_THAI_GUI_DVCT.find(item => item.id == id)?.ten
   }
 
   close() {
