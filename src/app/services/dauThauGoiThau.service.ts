@@ -24,6 +24,11 @@ export class dauThauGoiThauService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  chiTietByGoiThauId(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/chi-tiet/goi-thau/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   updateStatus(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/ttin-dthau-gthau/phe-duyet`
     return this.httpClient.post<any>(url, body).toPromise();

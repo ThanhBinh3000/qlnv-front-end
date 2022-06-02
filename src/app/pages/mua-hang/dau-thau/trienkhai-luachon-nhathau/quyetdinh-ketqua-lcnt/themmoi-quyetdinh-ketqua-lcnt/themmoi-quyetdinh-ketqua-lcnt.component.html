@@ -1,16 +1,17 @@
 <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
         <div class="main-content thong-tin-de-xuat-khlcnt">
-            <nz-card nzTitle="NHẬP ĐỀ XUẤT" class="mt16 flex-card p-lr16 mb16" [nzExtra]="tableCard1">
+            <nz-card nzTitle="NHẬP QUYẾT ĐỊNH" class="mt16 flex-card p-lr16 mb16" [nzExtra]="tableCard1">
                 <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="mt-16">
                     <div nz-row [nzGutter]="[16, 12]">
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kết quả LCNT
+                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kết quả lựa chọn
+                                    nhà thầu
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
                                     <nz-input-group nzAddOnAfter="/DX-TCDT">
-                                        <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzMax]="9999999"
+                                        <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
                                             [nzStep]="1" [nzSize]="'small'"
                                             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                         </nz-input-number>
@@ -26,33 +27,15 @@
                             <nz-form-item class="display-block">
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kết quả LCNT
                                 </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
                                     <nz-input-group>
                                         <nz-date-picker class="search__input"
                                             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
-                                            formControlName="ngayKy" nzFormat="dd/MM/yyyy"
+                                            formControlName="ngayQd" nzFormat="dd/MM/yyyy"
                                             [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
                                         </nz-date-picker>
                                     </nz-input-group>
-                                    <ng-template #ngayKyError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
-                                    <nz-input-group>
-                                        <nz-date-picker class="search__input"
-                                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
-                                            formControlName="ngayKy" nzFormat="dd/MM/yyyy"
-                                            [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
-                                        </nz-date-picker>
-                                    </nz-input-group>
-                                    <ng-template #ngayKyError let-control>
+                                    <ng-template #ngayQdErr let-control>
                                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
                                         </ng-container>
                                     </ng-template>
@@ -63,7 +46,7 @@
                             <nz-form-item class="display-block">
                                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                                    <nz-select formControlName="namKhoach"
+                                    <nz-select formControlName="namKhoach" (ngModelChange)="getListPheDuyetLcnt()"
                                         [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                         </nz-option>
@@ -92,24 +75,25 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Về việc </nz-form-label>
-                                <textarea nz-input [rows]="3" formControlName="trichYeu" name="trichYeu"
+                                <nz-form-label nzRequired [nzNoColon]="true"> Về việc </nz-form-label>
+                                <textarea nz-input [rows]="3" formControlName="veViec"
                                     [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
                                     [ngClass]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' ? 'disable' : ''"></textarea>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kết quả LCNT
+                                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định phê duyệt kế hoạch lựa chọn
+                                    nhà thầu
                                 </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soDeXuatError">
-                                    <nz-select formControlName="namKhoach"
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
+                                    <nz-select (ngModelChange)="onChangeSoQdKh($event)" formControlName="canCu"
                                         [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                         <nz-option *ngFor="let p of listPheDuyetKhlcnt" [nzValue]="p.soQd"
                                             [nzLabel]="p.soQd">
                                         </nz-option>
                                     </nz-select>
-                                    <ng-template #soDeXuatError let-control>
+                                    <ng-template #canCuErr let-control>
                                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
                                         </ng-container>
                                     </ng-template>
@@ -118,35 +102,32 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kết quả LCNT
+                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định phê duyệt kế hoạch lựa
+                                    chọn nhà thầu
                                 </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
+                                <nz-form-control nz-col [nzSpan]="24">
                                     <nz-input-group>
                                         <nz-date-picker class="search__input"
                                             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
-                                            formControlName="ngayKy" nzFormat="dd/MM/yyyy"
-                                            [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
+                                            formControlName="ngayQdPd" nzFormat="dd/MM/yyyy" [nzDisabled]="true">
                                         </nz-date-picker>
                                     </nz-input-group>
-                                    <ng-template #ngayKyError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayKyError">
+                                <nz-form-label nzRequired [nzNoColon]="true">Tên gói thầu</nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                     <nz-input-group>
-                                        <nz-date-picker class="search__input"
-                                            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
-                                            formControlName="ngayKy" nzFormat="dd/MM/yyyy"
-                                            [nzDisabled]="chiTietThongTinDXKHLCNT.trangThai === '02' || chiTietThongTinDXKHLCNT.trangThai === '01'">
-                                        </nz-date-picker>
+                                        <nz-select (ngModelChange)="onChangeGoiThau($event)"
+                                            formControlName="idGoiThau">
+                                            <nz-option *ngFor="let p of listGoiThau" [nzValue]="p.id"
+                                                [nzLabel]="p.tenDuAn">
+                                            </nz-option>
+                                        </nz-select>
                                     </nz-input-group>
-                                    <ng-template #ngayKyError let-control>
+                                    <ng-template #error let-control>
                                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
                                         </ng-container>
                                     </ng-template>
@@ -185,7 +166,7 @@
                         <div nz-col [nzSpan]="8">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Trúng / Hủy thầu </nz-form-label>
-                                <nz-radio-group>
+                                <nz-radio-group formControlName="trungThau">
                                     <label nz-radio nzValue="trung">Xác định được đơn vị trúng thầu</label>
                                     <label nz-radio nzValue="huy">Hủy thầu</label>
                                 </nz-radio-group>
@@ -195,63 +176,34 @@
                     <div nz-row [nzGutter]="[24]">
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                                    <nz-select formControlName="namKhoach"
-                                        [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                    <ng-template #namKhoachError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Tên nhà thầu trúng thầu </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24">
+                                    <input [readonly]="true" nz-input readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                                    <nz-select nzPlaceHolder="Loại hàng DTQG" formControlName="loaiVthh" nzDisabled>
-                                        <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                    <ng-template #loaiVthhError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Giá trúng thầu (Đồng) </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24">
+                                    <input [readonly]="true" nz-input readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="namKhoachError">
-                                    <nz-select formControlName="namKhoach"
-                                        [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
-                                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                    <ng-template #namKhoachError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24">
+                                    <input [readonly]="true" nz-input readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="display-block">
-                                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
-                                    <nz-select nzPlaceHolder="Loại hàng DTQG" formControlName="loaiVthh" nzDisabled>
-                                        <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                    <ng-template #loaiVthhError let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                        </ng-container>
-                                    </ng-template>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (Ngày)
+                                </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24">
+                                    <input [readonly]="true" nz-input readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

@@ -176,7 +176,8 @@
                                 <nz-form-label [nzNoColon]="true"> Đơn giá </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <input [readonly]="true" nz-input formControlName="donGia" readonly="true" />
+                                        <input [readonly]="true" nz-input formControlName="donGiaGthau"
+                                            readonly="true" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -356,10 +357,10 @@
                                     <tr *ngFor="let data of editRowTable.data, let i = index">
                                         <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
                                             <td class="text-center">{{i+1}}</td>
-                                            <td>{{ data.tenGthau }}</td>
-                                            <td>{{ data.maSoThue }}</td>
+                                            <td>{{ data.ten }}</td>
+                                            <td>{{ data.soThue }}</td>
                                             <td>{{ data.diaChi }}</td>
-                                            <td>{{ data.sdt }}</td>
+                                            <td>{{ data.soDt }}</td>
                                             <td class="text-center">
                                                 <a (click)="startEdit(i)">
                                                     <i class=" fa fa-pencil"></i>
@@ -371,13 +372,13 @@
                                         </ng-container>
                                         <ng-template #editTemplate>
                                             <td class="text-center">{{i+1}}</td>
-                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.tenGthau" />
+                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.ten" />
                                             </td>
-                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.maSoThue" />
+                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.soThue" />
                                             </td>
                                             <td><input type="text" nz-input [(ngModel)]="editCache[i].data.diaChi" />
                                             </td>
-                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.sdt" />
+                                            <td><input type="text" nz-input [(ngModel)]="editCache[i].data.soDt" />
                                             </td>
                                             <td class="text-center">
                                                 <a (click)="saveEdit(i)" class="save">
@@ -403,8 +404,8 @@
                                                 thương thảo
                                             </nz-form-label>
                                             <nz-form-control>
-                                                <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd"
-                                                    nzPlaceHolder="Ngày ký biên bản thương thảo">
+                                                <nz-date-picker formControlName="ngayKy" class="search__input"
+                                                    nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký biên bản thương thảo">
                                                 </nz-date-picker>
                                             </nz-form-control>
                                         </nz-form-item>
@@ -415,9 +416,9 @@
                                                 thảo
                                             </nz-form-label>
                                             <nz-form-control>
-                                                <nz-select>
-                                                    <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.tenGthau"
-                                                        [nzLabel]="p.tenGthau">
+                                                <nz-select formControlName="nhaThauTthao">
+                                                    <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.ten"
+                                                        [nzLabel]="p.ten">
                                                     </nz-option>
                                                 </nz-select>
                                             </nz-form-control>
@@ -431,8 +432,9 @@
                                                 trước thuế
                                             </nz-form-label>
                                             <nz-form-control>
-                                                <nz-input-number formControlName="dgiaHdong" nz-input [nzMin]="1"
-                                                    [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+                                                <nz-input-number (change)="calendarGia()" formControlName="donGia"
+                                                    nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
+                                                    [nzSize]="'small'">
                                                 </nz-input-number>
                                             </nz-form-control>
                                         </nz-form-item>
@@ -443,8 +445,9 @@
                                             </nz-form-label>
                                             <nz-form-control>
                                                 <nz-input-group nzAddOnAfter="%">
-                                                    <nz-input-number formControlName="VAT" nz-input [nzMin]="1"
-                                                        [nzMax]="100" [nzStep]="1" [nzSize]="'small'">
+                                                    <nz-input-number (change)="calendarGia()" formControlName="VAT"
+                                                        nz-input [nzMin]="1" [nzMax]="100" [nzStep]="1"
+                                                        [nzSize]="'small'">
                                                     </nz-input-number>
                                                 </nz-input-group>
                                             </nz-form-control>
@@ -504,32 +507,64 @@
                             </form>
                         </nz-card>
                     </nz-tab>
-                    <nz-tab [nzTitle]="'Danh sách nhà thầu nộp hồ sơ dự thầu'" class="tt-chung__container">
+                    <nz-tab [nzTitle]="'Danh sách địa điểm nhập hàng'" class="tt-chung__container">
                         <nz-card class="mt16 flex-card p-lr16">
-                            <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+                            <nz-table #groupingTable #editRowTable nzBordered class="nowrap" [nzFrontPagination]="false"
+                                [nzShowPagination]="false" [nzData]="listDiaDiemNhapHang">
                                 <thead>
                                     <tr>
-                                        <th width="60px">STT</th>
-                                        <th>Tên nhà thầu</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số ĐT</th>
-                                        <th></th>
+                                        <th rowspan="2" width="30px">STT</th>
+                                        <th colspan="3">Địa điểm nhập kho</th>
+                                        <th rowspan="2" width="60px" class="text-center">
+                                            <button type="button" class="btn btn-main" (click)="addRow()">
+                                                <i class="icon htvbdh_dau-cong"></i>
+                                                <span>Thêm</span>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>Tên chi cục</th>
+                                        <th>Tên điểm kho</th>
+                                        <th>Tên kho</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Công ty CP SX và KD phụ liệu ngành may Hà Nội</td>
-                                        <td>Số 41, ngõ 208, đường Nguyễn Văn Cừ, Gia Lâm, Hà Nội</td>
-                                        <td>024.37260664</td>
-                                        <td>
-                                            <a>
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a>
-                                                <i class="fa fa-trash-o do"></i>
-                                            </a>
-                                        </td>
+                                    <tr *ngFor="let data of editRowTable.data, let i = index">
+                                        <ng-container *ngIf="!editDiaDiemCache[i]?.edit; else editTemplate">
+                                            <td>1</td>
+                                            <td>Công ty CP SX và KD phụ liệu ngành may Hà Nội</td>
+                                            <td>Số 41, ngõ 208, đường Nguyễn Văn Cừ, Gia Lâm, Hà Nội</td>
+                                            <td>024.37260664</td>
+                                            <td>
+                                                <a>
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a>
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </ng-container>
+                                        <ng-template #editTemplate>
+                                            <td class="text-center">{{i+1}}</td>
+                                            <td><input type="text" nz-input
+                                                    [(ngModel)]="editDiaDiemCache[i].data.ten" />
+                                            </td>
+                                            <td><input type="text" nz-input
+                                                    [(ngModel)]="editDiaDiemCache[i].data.soThue" />
+                                            </td>
+                                            <td><input type="text" nz-input
+                                                    [(ngModel)]="editDiaDiemCache[i].data.diaChi" />
+                                            </td>
+                                            <td class="text-center">
+                                                <a (click)="saveEdit(i)" class="save">
+                                                    <i class="icon htvbdh_tcdt_save"></i>
+                                                </a>
+                                                <a (click)="cancelEdit(i)">
+                                                    <i class="fa fa-ban do"></i>
+                                                </a>
+                                            </td>
+                                        </ng-template>
+
                                     </tr>
                                 </tbody>
                             </nz-table>

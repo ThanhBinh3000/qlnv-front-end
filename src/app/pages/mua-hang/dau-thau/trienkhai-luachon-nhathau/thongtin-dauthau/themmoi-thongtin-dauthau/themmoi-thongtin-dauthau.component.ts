@@ -73,7 +73,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       VAT: [''],
       dgianHdongSauThue: [''],
       giaHdongSauThue: [''],
-      giaHdongTruocThue: ['']
+      giaHdongTruocThue: [''],
+      ngayKy: [''],
+      nhaThauTthao: ['']
     });
     this.formDauThau = this.fb.group({
       tenDvi: [''],
@@ -89,7 +91,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   yearNow: number = 0;
   id: number;
   listNthauNopHs: any[] = [];
+  listDiaDiemNhapHang: any[] = [];
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editDiaDiemCache: { [key: string]: { edit: boolean; data: any } } = {};
   i = 0;
   listNguonVon: any[] = []
   listPhuongThucDauThau: any[] = []
@@ -180,10 +184,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       tongTien: data.tongTien,
     });
     this.listNthauNopHs = [{
-      tenNhaThau: '',
-      maSoThue: '',
+      ten: '',
+      soThue: '',
       diaChi: '',
       soDt: ''
+    }]
+    this.listDiaDiemNhapHang = [{
+      maDvi: '',
+      maDiemKho: '',
+      maKho: '',
     }]
     this.updateEditCache();
   }
@@ -260,6 +269,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
         data: { ...item }
       };
     });
+    this.listDiaDiemNhapHang.forEach((item, index) => {
+      this.editDiaDiemCache[index] = {
+        edit: true,
+        data: { ...item }
+      };
+    });
   }
 
   startEdit(index: number): void {
@@ -290,9 +305,22 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   async saveDthauGthau() {
     let body = this.formGoiThau.value;
     console.log(body)
-    body.detail = this.listNthauNopHs;
+    body.children = this.listNthauNopHs;
     let res = await this.dauThauGoiThauService.create(body);
     console.log(res);
+  }
+
+  calendarGia() {
+    let donGia = this.formGoiThau.get('donGia').value;
+    let VAT = this.formGoiThau.get('VAT').value;
+    let soLuong = this.formGoiThau.get('soLuong').value;
+    if (donGia >= 0 && VAT >= 0) {
+      this.formGoiThau.patchValue({
+        dgianHdongSauThue: (donGia + (donGia * VAT / 100)),
+        giaHdongTruocThue: donGia * soLuong,
+        giaHdongSauThue: (donGia + (donGia * VAT / 100)) * soLuong,
+      })
+    }
   }
 
 }

@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
@@ -29,13 +30,13 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     private modal: NzModalService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
     router.events.subscribe((val) => {
       this.getTitleVthh();
     })
   }
-  tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
@@ -62,8 +63,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
 
-
-
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -87,7 +86,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   getTitleVthh() {
-    this.searchFilter.loaiVthh = convertVthhToId(this.route.snapshot.paramMap.get('type'));
+    let loatVthh = this.router.url.split('/')[4]
+    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   themMoi() {
@@ -111,16 +111,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKh
     };
-    let res = null;
-    if (this.tabSelected == 'phuong-an-tong-hop') {
-      res = await this.tongHopDeXuatKHLCNTService.search(body);
-    } else if (this.tabSelected == 'danh-sach-tong-hop') {
-      // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body, "05")
-    } else {
-      // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body, "10")
-    }
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -137,19 +128,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     return this.danhSachDauThauService.search(body);
   }
 
-  async selectTabData(tab: string) {
-    this.spinner.show();
-    try {
-      this.tabSelected = tab;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -173,6 +151,11 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  edit(id) {
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/trienkhai-luachon-nhathau/' + loatVthh + '/ketqua-dauthau/chinh-sua', id]);
   }
 
   redirectToChiTiet(id) {
@@ -226,13 +209,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     });
   }
 
-  convertDay(day: string) {
-    if (day && day.length > 0) {
-      return dayjs(day).format('DD/MM/YYYY');
-    }
-    return '';
-  }
-
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
@@ -268,11 +244,6 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     // } else {
     //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     // }
-  }
-
-
-  dateChange() {
-    this.helperService.formatDate()
   }
 
 }
