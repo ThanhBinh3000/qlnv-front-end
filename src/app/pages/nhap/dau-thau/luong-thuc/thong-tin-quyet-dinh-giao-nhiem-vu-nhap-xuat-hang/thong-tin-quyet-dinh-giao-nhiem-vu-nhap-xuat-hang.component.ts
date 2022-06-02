@@ -14,7 +14,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ChiTietGiaoNhiemVuNhapXuat } from 'src/app/models/ChiTietGiaoNhiemVuNhapXuat';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { TAB_SELECTED } from './../../../../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam.constant';
+import { TAB_SELECTED } from '../../../../ke-hoach/giao-ke-hoach-va-du-toan/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam.constant';
 import * as dayjs from 'dayjs';
 import { DialogThongTinDonViThucHienQuyetDinhComponent } from 'src/app/components/dialog/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh.component';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';

@@ -19,7 +19,7 @@ import {
   DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
   DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
   MAIN_ROUTE_KE_HOACH,
-} from '../ke-hoach.constant';
+} from './../../ke-hoach.constant';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -64,7 +64,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     private donViService: DonviService,
     private userService: UserService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();

@@ -1,11 +1,11 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
-    <div class="main-content">
-      <nz-tabset nzType="card" class="tab-cap-1">
+    <div class="main-content tab-menu-new">
+      <nz-tabset nzType="card" class="tab-level-0">
         <nz-tab [nzTitle]="'Giao kế hoạch và vốn đầu năm'">
-          <nz-tabset nzType="card" class="mt-16 tab-cap-2">
+          <nz-tabset nzType="card" class="mt-16 tab-level-1">
             <nz-tab [nzTitle]="'Quyết định (10)'">
-              <nz-tabset nzType="card" class="mt-16">
+              <nz-tabset nzType="card" class="tab-level-2">
                 <nz-tab [nzTitle]="'TTCP'">
                   <nz-card class="mt16 flex-card p-lr16">
                     <div class="search__body" nz-row [nzGutter]="[18, 12]" (keydown)="keyDownFunction($event)">
@@ -40,7 +40,7 @@
                     </div>
                   </nz-card>
 
-                  <nz-tabset nzType="card" class="tab-cap-4 mt-16">
+                  <nz-tabset nzType="card" class="tab-level-3">
                     <nz-tab [nzTitle]="'Danh sách quyết định của Thủ tướng'">
                       <nz-table #basicTable class="nowrap mt-16 table__container-tt" [nzData]="dataTable"
                         [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
@@ -56,7 +56,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
+                          <tr class="first-row">
                             <td></td>
                             <td>
                               <input class="search__input" nz-input nzSize="small" />

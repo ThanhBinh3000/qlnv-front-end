@@ -2061,3 +2061,6 @@ a.disabled {
 .ant-layout {
   overflow: hidden;
 }
+.fix.collapse .nav-tabs {
+  padding-top: 0 !important;
+}

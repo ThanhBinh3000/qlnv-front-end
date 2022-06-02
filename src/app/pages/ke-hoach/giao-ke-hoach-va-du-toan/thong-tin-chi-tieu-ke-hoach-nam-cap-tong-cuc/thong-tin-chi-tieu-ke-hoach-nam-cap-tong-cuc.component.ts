@@ -1,22 +1,14 @@
-import { LEVEL_USER, PAGE_SIZE_DEFAULT } from './../../../constants/config';
-import { FileDinhKem } from './../../../models/FileDinhKem';
-import { UploadFileService } from './../../../services/uploaFile.service';
-import { DialogVanBanSanSangBanHanhComponent } from './../../../components/dialog/dialog-van-ban-san-sang-ban-hanh/dialog-van-ban-san-sang-ban-hanh.component';
-import { DialogGuiDuyetComponent } from './../../../components/dialog/dialog-gui-duyet/dialog-gui-duyet.component';
-import { LEVEL } from 'src/app/constants/config';
-import { DanhMucService } from './../../../services/danhmuc.service';
-import { DialogQuyetDinhGiaoChiTieuComponent } from './../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { Globals } from './../../../shared/globals';
-import { DonviService } from 'src/app/services/donvi.service';
-import { saveAs } from 'file-saver';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -24,25 +16,30 @@ import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-c
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { LEVEL } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { ItemDetail } from 'src/app/models/ItemDetail';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import * as XLSX from 'xlsx';
-import { DialogThongTinLuongThucComponent } from './../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
-import { KeHoachVatTu, VatTuThietBi } from './../../../models/KeHoachVatTu';
-import { ThongTinChiTieuKeHoachNam } from './../../../models/ThongTinChiTieuKHNam';
-import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
-import { cloneDeep } from 'lodash';
-import * as dayjs from 'dayjs';
-import { ItemDetail } from 'src/app/models/ItemDetail';
 import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
+import * as XLSX from 'xlsx';
+import { DialogThongTinLuongThucComponent } from '../../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
+import { LEVEL_USER, PAGE_SIZE_DEFAULT } from '../../../../constants/config';
+import { FileDinhKem } from '../../../../models/FileDinhKem';
+import { KeHoachVatTu, VatTuThietBi } from '../../../../models/KeHoachVatTu';
+import { ThongTinChiTieuKeHoachNam } from '../../../../models/ThongTinChiTieuKHNam';
+import { DanhMucService } from '../../../../services/danhmuc.service';
+import { UploadFileService } from '../../../../services/uploaFile.service';
+import { Globals } from '../../../../shared/globals';
 import {
   CHI_TIEU_KE_HOACH_NAM,
-  MAIN_ROUTE_KE_HOACH,
-} from '../ke-hoach.constant';
+  MAIN_ROUTE_KE_HOACH
+} from '../../ke-hoach.constant';
+import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',

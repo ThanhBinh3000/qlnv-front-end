@@ -13,7 +13,7 @@
   width: 100%;
 }
 .logo-tcdt {
-  width: 46px;
+  width: 30px;
 }
 .logo {
   @include background('#{$img-path}logo-tcdt.svg');
@@ -168,16 +168,16 @@ nz-header.ant-layout-header {
 
 ::ng-deep {
   .ant-menu-dark.ant-menu-horizontal > .ant-menu-item {
-    max-width: 160px;
+    max-width: 170px;
     white-space: pre-wrap;
     text-align: center;
-    height: 36px;
+    height: 32px;
     display: flex;
     align-items: center;
   }
 
   .ant-menu-dark.ant-menu-horizontal > .ant-menu-item a {
-    height: 46px;
+    height: 32px;
     display: flex;
     align-items: center;
   }
@@ -194,6 +194,7 @@ nz-header.ant-layout-header {
     padding-bottom: 2px;
   }
   .header-style {
+    height: 30px;
     .menuphai {
       display: flex;
       align-items: center;
