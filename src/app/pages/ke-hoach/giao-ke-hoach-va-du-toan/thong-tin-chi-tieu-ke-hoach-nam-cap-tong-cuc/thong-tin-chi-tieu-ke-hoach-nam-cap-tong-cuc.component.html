@@ -1,12 +1,11 @@
 <nz-affix class="menu-lv3" [nzOffsetTop]="43">
   <div class="tab-content tab-menu" id="myTabContent">
-    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
-      aria-labelledby="banhanh-tab">
+    <div class="d-flex justify-content-between header-tab" id="banhanh">
       <div class="trai">
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
-        <nz-breadcrumb>
+        <!-- <nz-breadcrumb>
           <nz-breadcrumb-item>
             <a routerLink="kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc">Giao chỉ tiêu kế hoạch đầu năm</a>
           </nz-breadcrumb-item>
@@ -22,7 +21,7 @@
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH ? 'last-breadcrumb' : ''"
             *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH">Ban hành
           </nz-breadcrumb-item>
-        </nz-breadcrumb>
+        </nz-breadcrumb> -->
       </div>
       <div class="canphai phai">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
@@ -75,11 +74,102 @@
         <form nz-form [formGroup]="formData" class="mt-16">
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col nzSpan="2">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
-              </nz-form-item>
+              <!-- <nz-form-item> -->
+              <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
+                <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                  [nzDisabled]="disableBanHanhLanhDaoDuyet()" nzAllowClear>
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+                <ng-template #namKeHoachError let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                </ng-template>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
             </div>
-            <div nz-col nzSpan="22">
+            <div nz-col nzSpan="4">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số QĐ </nz-form-label>
+              <nz-form-control [nzErrorTip]="soQDError">
+                <nz-input-group nzAddOnAfter="/{{userInfo.MA_QD}}">
+                  <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
+                    [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly />
+                  <!-- <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                      nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
+                      [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                    </nz-input-number> -->
+                </nz-input-group>
+                <ng-template #soQDError let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                </ng-template>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <div nz-col nzSpan="4">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày ký
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="ngayKyError">
+                <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                  formControlName="ngayKy" nzPlaceHolder="Ngày ký" [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                </nz-date-picker>
+                <ng-template #ngayKyError let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                </ng-template>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <div nz-col nzSpan="4">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
+                <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                  formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
+                  [nzDisabled]="disableBanHanhLanhDaoDuyet()">
+                </nz-date-picker>
+                <ng-template #ngayHieuLucError let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+                </ng-template>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <div nz-col nzSpan="24">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="namKeHoachError">
+                <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input nzSize="small"
+                  placeholder="Nhập text" [readonly]="disableBanHanhLanhDaoDuyet()"></textarea>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <div nz-col nzSpan="24">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="namKeHoachError">
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
+                  [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
+                  (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
+                </multiple-tag>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <div nz-col nzSpan="24">
+              <!-- <nz-form-item> -->
+              <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Tài liệu đính kèm
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="namKeHoachError">
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                  [data]="taiLieuDinhKemList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
+                  (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
+                </multiple-tag>
+              </nz-form-control>
+              <!-- </nz-form-item> -->
+            </div>
+            <!-- <div nz-col nzSpan="22">
               <div nz-row [nzGutter]="[16, 12]">
                 <div nz-col nzSpan="4">
                   <nz-form-item>
@@ -87,10 +177,6 @@
                       <nz-input-group nzAddOnAfter="/{{userInfo.MA_QD}}">
                         <input formControlName="soQD" nz-input nzSize="small" placeholder="Nhập số quyết định"
                           [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly />
-                        <!-- <nz-input-number formControlName="soQD" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                          nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'"
-                          [nzDisabled]="disableBanHanhLanhDaoDuyet()">
-                        </nz-input-number> -->
                       </nz-input-group>
                       <ng-template #soQDError let-control>
                         <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -143,47 +229,43 @@
                   </nz-form-item>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div nz-col nzSpan="2">
+            <!-- <div nz-col nzSpan="2">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu </nz-form-label>
               </nz-form-item>
-            </div>
-            <div nz-col nzSpan="22">
+            </div> -->
+            <!-- <div nz-col nzSpan="22">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="namKeHoachError">
                   <input formControlName="trichYeu" class="search__input" nz-input nzSize="small"
                     placeholder="Nhập chỉ tiêu" [readonly]="disableBanHanhLanhDaoDuyet()" />
                 </nz-form-control>
-                <!-- <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input
-                    [readonly]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET"
-                    [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET ? 'disable' : ''"></textarea> -->
               </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="2">
+            </div> -->
+            <!-- <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ </nz-form-label>
               </nz-form-item>
-            </div>
-            <div nz-col nzSpan="22">
-              <!-- <input nz-input formControlName="canCu" placeHolder="Chọn căn cứ" /> -->
+            </div> -->
+            <!-- <div nz-col nzSpan="22">
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
                 [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
                 (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
               </multiple-tag>
-            </div>
-            <div nz-col [nzSpan]="2">
+            </div> -->
+            <!-- <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" class="text-left"> Tài liệu đính kèm </nz-form-label>
               </nz-form-item>
-            </div>
-            <div nz-col nzSpan="22">
+            </div> -->
+            <!-- <div nz-col nzSpan="22">
               <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
                 [data]="taiLieuDinhKemList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
                 (selectDataEvent)="openFile($event)" (removeDataEvent)="deleteTaiLieuDinhKemTag($event)">
               </multiple-tag>
-            </div>
+            </div> -->
 
 
             <!-- <div nz-col nzSpan="6" class="tai-lieu-dinh-kem">
@@ -199,7 +281,7 @@
       </div>
       <!-- </nz-card> -->
       <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container">
+        <nz-tabset nzType="card" class="tab__container tab-tt-chi-tieu-level-0">
           <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)">
