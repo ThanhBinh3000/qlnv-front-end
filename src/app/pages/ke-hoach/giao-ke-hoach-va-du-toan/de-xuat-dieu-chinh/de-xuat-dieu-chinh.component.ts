@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import {
   DE_XUAT_DIEU_CHINH, MAIN_ROUTE_KE_HOACH, THONG_TIN_DE_XUAT_DIEU_CHINH
-} from './../ke-hoach.constant';
+} from './../../ke-hoach.constant';
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',

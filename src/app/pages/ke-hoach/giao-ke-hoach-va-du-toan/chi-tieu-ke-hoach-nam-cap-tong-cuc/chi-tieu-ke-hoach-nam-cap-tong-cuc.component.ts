@@ -1,4 +1,4 @@
-import { UserService } from './../../../services/user.service';
+import { UserService } from '../../../../services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { cloneDeep } from 'lodash';
 import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -19,7 +19,7 @@ import {
   CHI_TIEU_KE_HOACH_NAM,
   MAIN_ROUTE_KE_HOACH,
   THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
-} from '../ke-hoach.constant';
+} from '../../ke-hoach.constant';
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
