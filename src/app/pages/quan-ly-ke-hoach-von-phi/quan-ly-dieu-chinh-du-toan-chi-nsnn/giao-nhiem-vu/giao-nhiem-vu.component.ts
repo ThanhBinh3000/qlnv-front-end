@@ -63,7 +63,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 	namHienHanh!: number;
 	ngayNhap!: string;
 	nguoiNhap!: string;
-	congVan!: ItemCongVan;
+	congVan: ItemCongVan = new ItemCongVan();
 	ngayTrinhDuyet!: string;
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
@@ -760,7 +760,27 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.tabs.splice(index - 1, 1);
 	}
 
-	newTab(id: any): void {
+	// newTab(id: any): void {
+	// 	var index: number = this.tabs.findIndex(e => e.id === id);
+	// 	if (index != -1) {
+	// 		this.selectedIndex = index + 1;
+	// 	} else {
+	// 		let item = this.lstDieuChinhs.find(e => e.maLoai == id);
+	// 		this.data = {
+	// 			...item,
+	// 			namHienHanh: this.namHienHanh,
+	// 			trangThaiBaoCao: this.trangThaiBaoCao,
+	// 			statusBtnOk: this.statusBtnOk,
+	// 			statusBtnFinish: this.statusBtnFinish,
+	// 			status: this.status,
+	// 		}
+	// 		this.tabs = [];
+	// 		this.tabs.push(PHU_LUC.find(e => e.id === id));
+	// 		this.selectedIndex = this.tabs.length + 1;
+	// 	}
+	// }
+
+  newTab(id: any): void {
 		var index: number = this.tabs.findIndex(e => e.id === id);
 		if (index != -1) {
 			this.selectedIndex = index + 1;
@@ -777,7 +797,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
 			this.selectedIndex = this.tabs.length + 1;
+      console.log(this.data);
 		}
+
 	}
 
 	getNewData(obj: any) {

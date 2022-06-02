@@ -220,7 +220,7 @@ export class BaoCaoComponent implements OnInit {
 					this.namHienHanh = new Date().getFullYear();
 				}
 			}
-			
+
 
 		}
 
@@ -775,6 +775,6 @@ export class BaoCaoComponent implements OnInit {
 				this.location.back();
 			}
 		}
-		
+
 	}
 }

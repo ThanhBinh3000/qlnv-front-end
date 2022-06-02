@@ -58,9 +58,8 @@
 					<thead>
 						<tr>
 							<th width="175px">Số QĐ</th>
-							<th width="175px">Quyết định giao dự toán của BTC</th>
+							<th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th>
 							<th width="175px">Mã phương án</th>
-							<th width="175px">Mã giao</th>
 							<th width="175px">Năm phương án</th>
 							<th width="175px">Ngày tạo</th>
 							<th width="175px">Nơi tạo</th>
@@ -72,15 +71,16 @@
 							<td>
 								<div class="tep" (click)="downloadFileCv()">
 									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
-									<span>{{soQdCv?.fileName}}</span>
+									<span>{{soQd?.fileName}}</span>
 								</div>
 							</td>
-							<td>{{qdGiaoDuToan}}</td>
+              <td>
+                {{maPaBTC}}
+              </td>
 							<td>{{maPa}}</td>
-							<td>{{maGiao}}</td>
 							<td>{{namPa}}</td>
 							<td>{{ngayTao}}</td>
-							<td>{{maDonViTao}}</td>
+							<td>{{getUnitName()}}</td>
 							<td>{{getStatusName()}}</td>
 						</tr>
 					</tbody>
@@ -88,7 +88,7 @@
 			</nz-card>
 			<div class="tab__container" id="tablePrint">
 				<nz-tabset nzType="card" class="tab__container">
-					<nz-tab [nzTitle]="'Xây dựng phương án giao điều chỉnh dự toán chi NSNN cho các đơn vị'">
+					<nz-tab [nzTitle]="'Xây dựng phương án giao dự toán chi NSNN cho các đơn vị'">
 						<ng-container *ngIf="status;else templateName">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="3">
@@ -115,7 +115,7 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th rowspan="2" nzWidth="75px">STT</th>
+									<th rowspan="2" nzWidth="100px">STT</th>
 									<th rowspan="2" nzWidth="300px">Nhóm</th>
 									<th rowspan="2">Tổng số</th>
 									<th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
@@ -141,15 +141,15 @@
 										</td>
 										<td>
 											<div *ngFor="let item of noiDungs">
-												<div *ngIf="item.id ==data.maNhom">
+												<div *ngIf="item.id ==data.maNdung">
 													{{item.tenDm}}
 												</div>
 											</div>
 										</td>
 										<td>{{data.tongSo}}</td>
 										<td *ngFor="let item of lstDvi">
-											<div *ngFor="let e of data.listCtietDvi;">
-												<div *ngIf="e.maKhuVuc == item.maDvi">
+											<div *ngFor="let e of data.lstCtietDvis;">
+												<div *ngIf="e.maDviNhan == item.maDvi">
 													{{e.soTranChi}}
 												</div>
 											</div>
@@ -174,7 +174,7 @@
 										</td>
 										<td>
 											<div *ngFor="let item of noiDungs;">
-												<div *ngIf="item.id ==data.maNhom">
+												<div *ngIf="item.id ==data.maNdung">
 													{{item.tenDm}}
 												</div>
 											</div>
@@ -183,8 +183,8 @@
 											{{data.tongSo}}
 										</td>
 										<td *ngFor="let item of lstDvi">
-											<div *ngFor="let e of editCache[data.id].data.listCtietDvi">
-												<div *ngIf="e.maKhuVuc == item.maDvi">
+											<div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
+												<div *ngIf="e.maDviNhan == item.maDvi">
 													<nz-input-number class="search__input" nzSize="small"
 														[(ngModel)]="e.soTranChi"
 														[class]="e.soTranChi || e.soTranChi === 0 ?'' : 'input-error-validate'">
@@ -210,25 +210,16 @@
 										</td>
 									</ng-template>
 								</tr>
-                <!-- <tr>
-                  <td *ngFor="let item of lstMaNganSach"></td>
-                </tr>
-                <tr>
-
-                </tr>
-                <tr>
-
-                </tr> -->
 								<ng-container *ngIf="lstCtietBcao.length > 0">
 									<tr [hidden]="statusBtnGiao">
 										<td></td>
 										<td></td>
 										<td></td>
 										<td *ngFor="let item of lstDvi">
-											<div *ngFor="let e of lstCtietBcao[0].listCtietDvi">
-												<div *ngIf="e.maKhuVuc == item.maDvi">
+											<div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
+												<div *ngIf="e.maDviNhan == item.maDvi">
 													<ng-container *ngIf="getStatusGiao(e.trangThai)">
-														<a (click)="giaoSoTranChi(e.maKhuVuc)">Giao
+														<a (click)="giaoSoTranChi(e.maDviNhan)">Giao
 														</a>
 													</ng-container>
 												</div>
@@ -236,7 +227,6 @@
 										</td>
 									</tr>
 								</ng-container>
-
 							</tbody>
 						</nz-table>
 						<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

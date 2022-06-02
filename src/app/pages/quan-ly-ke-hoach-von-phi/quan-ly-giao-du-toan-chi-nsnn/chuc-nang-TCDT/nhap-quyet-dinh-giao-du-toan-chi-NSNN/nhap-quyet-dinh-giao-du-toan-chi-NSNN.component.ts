@@ -201,7 +201,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', 'Giao-du-toan-BTC' + '/' +this.maPhanGiao + '/' + this.maDonViTao);
+    upfile.append('folder', 'Giao-du-toan-BTC' + '/' + this.maPhanGiao + '/' + this.maDonViTao);
     let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         let objfile = {
@@ -393,7 +393,6 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          debugger
           console.log(data.data);
 
           this.lstFiles = data.data.lstFiles;
