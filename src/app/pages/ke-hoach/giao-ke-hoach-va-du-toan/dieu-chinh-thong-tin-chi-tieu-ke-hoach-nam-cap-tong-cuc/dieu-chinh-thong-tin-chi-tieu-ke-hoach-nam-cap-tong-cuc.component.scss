@@ -107,7 +107,7 @@
   .dieu-chinh__body {
     .table-dieu-chinh .ant-table-content .ant-table-thead > tr > th {
       background: #e3f9f9;
-      border: 0.5px solid #b8f0f1 !important;
+      border: 0.5px solid #4e5484 !important;
     }
   }
   .tai-lieu-dinh-kem {
@@ -186,5 +186,11 @@
   }
   .green-value-dc {
     color: #8bc34c !important;
+  }
+  .contentBor {
+    padding-top: 16px;
+    .tab-menu.tab-content {
+      margin: 0 !important;
+    }
   }
 }

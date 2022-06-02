@@ -55,6 +55,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
 
   titleCard: string = '';
 
+  isDetail: boolean = false;
+  selectedId: number = 0;
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -203,10 +206,12 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    this.router.navigate([
-      `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}/${DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
-      id,
-    ]);
+    this.selectedId = id;
+    this.isDetail = true;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   clearFilter() {
