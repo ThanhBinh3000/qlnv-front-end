@@ -2,6 +2,9 @@
   .action-top {
     padding-right: 50px;
   }
+  .giao-ke-hoach {
+    padding: 16px 50px;
+  }
   .chi-tieu__body {
     .flex-card.ant-card {
       border: 1px solid #ececec !important;
@@ -26,13 +29,18 @@
     padding-right: 0px !important;
   }
   .tab-menu-new {
+    .main-content {
+      padding: 0;
+    }
     .ant-tabs-content-holder {
-      // border: 0;
+      border: 0;
       border-radius: 0;
     }
     .tab-level-0 {
       .ant-tabs-content-holder {
         background: #f8f8f8;
+        overflow: hidden;
+        max-height: calc(100vh - 180px);
         .ant-card {
           margin: 0px 16px;
           border-radius: 0;
@@ -48,6 +56,8 @@
           background: #fff;
           padding-left: 0;
           padding-right: 0;
+          overflow: hidden;
+          max-height: calc(100vh - 230px);
           .ant-tabs {
             margin-top: 0;
             margin-left: 0;
@@ -84,10 +94,15 @@
           .ant-tabs-content-holder {
             background: #fff;
             padding-left: 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 280px);
             .ant-tabs {
               margin-top: 16px;
               margin-left: 16px;
               margin-right: 16px;
+            }
+            .tab-content {
+              margin: 0 -16px;
             }
           }
           .ant-tabs-nav {
@@ -115,6 +130,8 @@
           }
           .tab-level-3 {
             .ant-tabs-content-holder {
+              overflow-y: auto;
+              max-height: calc(100vh - 330px);
               .ant-tabs {
                 margin-top: 16px;
               }

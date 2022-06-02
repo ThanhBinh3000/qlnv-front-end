@@ -373,6 +373,13 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.router.navigate([`/nhap/dau-thau/luong-dau-thau-gao/thong-tin-chung-phuong-an-trinh-tong-cuc/`, this.idPA], { queryParams: { idHdr: this.id } });
   }
 
+
+  chiTietDxCuc(data?) {
+    console.log(data);
+    let loatVthh = this.router.url.split('/')[4]
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/chi-tiet', data]);
+  }
+
   async save2(isPhuongAn) {
     this.spinner.show();
     try {

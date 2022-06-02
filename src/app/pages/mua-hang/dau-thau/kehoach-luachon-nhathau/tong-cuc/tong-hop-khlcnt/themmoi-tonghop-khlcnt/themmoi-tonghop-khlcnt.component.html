@@ -1,7 +1,8 @@
 <div class="contentBor chi-tieu__body">
   <div class="contentDetail">
     <div class="main-content thong-tin-de-xuat-khlcnt">
-      <nz-card *ngIf="!isChiTiet" nzTitle="Tiêu chí tổng hợp đề xuất kế hoạch lựa chọn nhà thầu" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+      <nz-card *ngIf="!isChiTiet" nzTitle="Tiêu chí tổng hợp đề xuất kế hoạch lựa chọn nhà thầu"
+        class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
         <form nzLayout="vertical" nz-form [formGroup]="formTraCuu" class="mt-16">
           <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="6">
@@ -26,7 +27,7 @@
                   </nz-select>
                   <ng-template #namKhError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template> 
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -34,13 +35,13 @@
               <nz-form-item class="display-block">
                 <nz-form-label nzRequired [nzNoColon]="true"> Hình thức đấu thầu </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="hthucLcntError">
-                  <nz-select formControlName="hthucLcnt" nzPlaceHolder="" >
+                  <nz-select formControlName="hthucLcnt" nzPlaceHolder="">
                     <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
                   <ng-template #hthucLcntError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template> 
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -48,13 +49,13 @@
               <nz-form-item class="display-block">
                 <nz-form-label nzRequired [nzNoColon]="true"> Phương thức đấu thầu </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="pthucDauThauError">
-                  <nz-select formControlName="pthucLcnt" nzPlaceHolder="" >
+                  <nz-select formControlName="pthucLcnt" nzPlaceHolder="">
                     <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
                   <ng-template #pthucDauThauError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template> 
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -64,13 +65,13 @@
               <nz-form-item class="display-block">
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiHdongError2">
-                  <nz-select formControlName="loaiHdong" nzPlaceHolder="" >
+                  <nz-select formControlName="loaiHdong" nzPlaceHolder="">
                     <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
                   <ng-template #loaiHdongError2 let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template> 
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -78,12 +79,12 @@
               <nz-form-item class="display-block">
                 <nz-form-label nzRequired [nzNoColon]="true"> Nguồn vốn </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="nguonVonError">
-                  <nz-select formControlName="nguonVon" nzPlaceHolder="" >
+                  <nz-select formControlName="nguonVon" nzPlaceHolder="">
                     <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                   </nz-select>
                   <ng-template #nguonVonError let-control>
                     <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                  </ng-template> 
+                  </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -103,10 +104,10 @@
       </nz-card>
       <ng-template #tableCard1>
         <button *ngIf="isTongHop && !isChiTiet" type="button" class="btn btn-main" (click)="save()">
-          <i class="icon htvbdh_dau-cong" ></i>
+          <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
-        <button type="button" class="btn btn-sub" (click) = "quayLai()" >
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
@@ -118,25 +119,26 @@
               <div nz-row [nzGutter]="[16, 6]">
                 <div nz-col [nzSpan]="6">
                   <nz-form-item class="display-block">
-                    <nz-form-label [nzNoColon]="true" >
+                    <nz-form-label [nzNoColon]="true">
                       Ngày tổng hợp
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayTongHopError">
-                      <nz-date-picker formControlName="ngayTongHop" class="search__input" nzFormat="dd/MM/yyyy" nzDisabled="true" >
+                      <nz-date-picker formControlName="ngayTongHop" class="search__input" nzFormat="dd/MM/yyyy"
+                        nzDisabled="true">
                       </nz-date-picker>
                     </nz-form-control>
                     <ng-template #ngayTongHopError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                    </ng-template> 
+                    </ng-template>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
                   <nz-form-item class="display-block">
                     <nz-form-label [nzNoColon]="true">
-                      Loại hàng 
+                      Loại hàng
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-select formControlName="loaiVthh" nzPlaceHolder="Loại hàng" nzDisabled="true" >
+                      <nz-select formControlName="loaiVthh" nzPlaceHolder="Loại hàng" nzDisabled="true">
                         <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                       </nz-select>
                     </nz-form-control>
@@ -147,12 +149,12 @@
                     <nz-form-label nzRequired="true" [nzNoColon]="true">
                       Về việc
                     </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="veViecError" >
-                      <textarea formControlName="veViec" nz-input [rows]="3" [readonly]="isChiTiet" ></textarea>
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="veViecError">
+                      <textarea formControlName="veViec" nz-input [rows]="3" [readonly]="isChiTiet"></textarea>
                     </nz-form-control>
                     <ng-template #veViecError let-control>
                       <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-                    </ng-template> 
+                    </ng-template>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -161,7 +163,8 @@
                       Hình thức lựa chọn nhà thầu
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-select formControlName="hthucLcnt"  nzPlaceHolder="Hình thức lựa chọn nhà thầu" nzDisabled="true" >
+                      <nz-select formControlName="hthucLcnt" nzPlaceHolder="Hình thức lựa chọn nhà thầu"
+                        nzDisabled="true">
                         <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                         </nz-option>
                       </nz-select>
@@ -172,7 +175,7 @@
                   <nz-form-item class="display-block">
                     <nz-form-label [nzNoColon]="true"> Phương thức đấu thầu </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-select formControlName="pthucLcnt"  nzPlaceHolder="Phương thức đấu thầu"  nzDisabled="true" >
+                      <nz-select formControlName="pthucLcnt" nzPlaceHolder="Phương thức đấu thầu" nzDisabled="true">
                         <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                         </nz-option>
                       </nz-select>
@@ -185,7 +188,7 @@
                       Loại hợp đồng
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-select formControlName="loaiHdong" nzPlaceHolder="Loại hợp đồng" nzDisabled="true" >
+                      <nz-select formControlName="loaiHdong" nzPlaceHolder="Loại hợp đồng" nzDisabled="true">
                         <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                         </nz-option>
                       </nz-select>
@@ -198,7 +201,7 @@
                       Nguồn vốn
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-select formControlName="nguonVon" nzPlaceHolder="Nguồn vốn" nzDisabled="true" >
+                      <nz-select formControlName="nguonVon" nzPlaceHolder="Nguồn vốn" nzDisabled="true">
                         <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                       </nz-select>
                     </nz-form-control>
@@ -210,8 +213,8 @@
                       Ngày phát hành
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-range-picker formControlName="tgianPhatHanh" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledStartPH"
-                        [nzDisabled]="true">
+                      <nz-range-picker formControlName="tgianPhatHanh" class="search__input" nzFormat="dd/MM/yyyy"
+                        [nzDisabledDate]="disabledStartPH" [nzDisabled]="true">
                       </nz-range-picker>
                     </nz-form-control>
                   </nz-form-item>
@@ -222,8 +225,8 @@
                       Thời điểm đóng thầu
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-range-picker formControlName="tgianDongthau" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledStartDT"
-                          [nzDisabled]="true">
+                      <nz-range-picker formControlName="tgianDongthau" class="search__input" nzFormat="dd/MM/yyyy"
+                        [nzDisabledDate]="disabledStartDT" [nzDisabled]="true">
                       </nz-range-picker>
                     </nz-form-control>
                   </nz-form-item>
@@ -234,8 +237,8 @@
                       Thời điểm mở HSKT
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-range-picker formControlName="tgianMoThau" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledStartHS"
-                         [nzDisabled]="true">
+                      <nz-range-picker formControlName="tgianMoThau" class="search__input" nzFormat="dd/MM/yyyy"
+                        [nzDisabledDate]="disabledStartHS" [nzDisabled]="true">
                       </nz-range-picker>
                     </nz-form-control>
                   </nz-form-item>
@@ -246,8 +249,8 @@
                       Hoàn thành nhập
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <nz-range-picker formControlName="tgianNhapHang" class="search__input" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledStartHTN"
-                       [nzDisabled]="true">
+                      <nz-range-picker formControlName="tgianNhapHang" class="search__input" nzFormat="dd/MM/yyyy"
+                        [nzDisabledDate]="disabledStartHTN" [nzDisabled]="true">
                       </nz-range-picker>
                     </nz-form-control>
                   </nz-form-item>
@@ -257,7 +260,7 @@
           </nz-tab>
           <nz-tab [nzTitle]="'Thông tin chi tiết đề xuất của CỤC DTNN KV'" class="ds-goi-thau__container">
             <nz-card class="mt16 flex-card p-lr16">
-              <nz-table #editRowTable nzBordered  [nzData]="dataTableDanhSachDX" [nzFrontPagination]="false"
+              <nz-table #editRowTable nzBordered [nzData]="dataTableDanhSachDX" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
                 <thead>
                   <tr>
@@ -283,7 +286,7 @@
                     <td>{{ data.soLuong | number: '1.0-1' }}</td>
                     <td>{{ data.tongTien | number: '1.0-1' }}</td>
                     <td class="text-center">
-                      <a >
+                      <a (click)="chiTietDxCuc(data.idDxHdr)">
                         <i class="fa fa-eye"></i>
                       </a>
                     </td>

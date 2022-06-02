@@ -11,7 +11,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
   GATEWAY = '/qlnv-gateway/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuyetDinhPheDuyetKetQuaLCNT','');
+    super(httpClient, 'dx-kh/qd-pduyet-kqlcnt', '/qlnv-gateway/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {
@@ -35,7 +35,7 @@ export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
   }
 
   create(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-pduyet-kqlcnt/them-moi`;
+    let url = `http://localhost:8099/dx-kh/qd-pduyet-kqlcnt/them-moi`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

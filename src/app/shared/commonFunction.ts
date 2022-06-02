@@ -60,6 +60,25 @@ export function convertTenVthh(ten: string) {
   return nameConvert;
 }
 
+export function convertIdToLoaiVthh(id: string) {
+  let tenConvert = "";
+  switch (id) {
+    case LOAI_HANG_DTQG.GAO:
+      tenConvert = TEN_HANG_DTQG.GAO;
+      break;
+    case LOAI_HANG_DTQG.THOC:
+      tenConvert = TEN_HANG_DTQG.THOC;
+      break;
+    case LOAI_HANG_DTQG.MUOI:
+      tenConvert = TEN_HANG_DTQG.MUOI;
+      break;
+    case LOAI_HANG_DTQG.VAT_TU:
+      tenConvert = TEN_HANG_DTQG.VAT_TU;
+      break;
+  }
+  return tenConvert;
+}
+
 export function convertVthhToId(ten: string) {
   let idConvert = "";
   switch (ten) {

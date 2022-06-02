@@ -47,7 +47,6 @@
                 <th width="60px">STT</th>
                 <th width="130px">Số quyết định</th>
                 <th width="130px">Ngày quyết định</th>
-                <th width="175px">Về việc</th>
                 <th width="">Tên gói thầu</th>
                 <th width="175px">Trúng/Huỷ thầu</th>
                 <th width="175px" class="text-center">Tên đơn vị trúng thầu</th>
@@ -62,9 +61,8 @@
             <tbody>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                <td>{{ data.ngayTao }}</td>
-                <td>{{ data.ngayTao }}</td>
-                <td>{{ data.namKhoach }}</td>
+                <td>{{ data.soQd }}</td>
+                <td>{{ data.ngayQd | date : 'dd/MM/yyyy' }}</td>
                 <td></td>
                 <td>{{ data.tenHthucLcnt }}</td>
                 <td>{{ data.tenPthucLcnt }}</td>
@@ -74,7 +72,7 @@
                 <td></td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
                 <td class="text-center">
-                  <a (click)="redirectToChiTiet(data.id)">
+                  <a (click)="edit(data.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="xoaItem(data)">

@@ -2,14 +2,6 @@ import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
 export const MUA_HANG_ROUTE_LIST: Array<ChiTietMenu> = [
     {
-        icon: 'htvbdh_tcdt_tat_ca',
-        title: 'Tất cả',
-        url: `/all`,
-        dropdown: 'dau-thau',
-        idHover: 'dauthau',
-        hasTab: true,
-    },
-    {
         icon: 'htvbdh_tcdt_dauthau',
         title: 'Theo phương thức đấu thầu',
         url: `/dau-thau`,
