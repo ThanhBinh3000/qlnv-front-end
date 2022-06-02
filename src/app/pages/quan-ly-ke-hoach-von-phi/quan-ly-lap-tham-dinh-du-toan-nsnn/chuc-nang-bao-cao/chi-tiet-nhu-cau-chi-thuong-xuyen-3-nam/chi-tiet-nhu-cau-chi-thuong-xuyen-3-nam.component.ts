@@ -122,7 +122,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
             },
             (err) => {
@@ -240,11 +240,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
                         lyDoTuChoi: lyDoTuChoi,
                     }
                     this.dataChange.emit(obj);
-					// if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-					// 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-					// } else {
+					if (mcn == '0') {
+						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+					} else {
 						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-					// }
+					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -694,5 +694,24 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     //     this.editCache[id].data.tongSo = Number(this.editCache[id].data.ccvc0101n1Cong) + Number(this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1) + Number(this.editCache[id].data.bcheChuaSdungCong);
     //     this.editCache[id].data.tongQuyLuongPcapCkdgTheoLuongCcvcHdld = Number(this.editCache[id].data.tongSo) + Number(this.editCache[id].data.ccvc0101n1Ckdg) + Number(this.editCache[id].data.quyLuongTangThemDoNangBacLuongCcvc0101n1) + Number(this.editCache[id].data.bcheChuaSdungCkdg);
     // }
+
+    // action print
+    doPrint() {
+        let WindowPrt = window.open(
+             '',
+             '',
+             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        printContent = printContent + '<div>';
+        printContent =
+             printContent + document.getElementById('tablePrint').innerHTML;
+        printContent = printContent + '</div>';
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
+   }
 
 }

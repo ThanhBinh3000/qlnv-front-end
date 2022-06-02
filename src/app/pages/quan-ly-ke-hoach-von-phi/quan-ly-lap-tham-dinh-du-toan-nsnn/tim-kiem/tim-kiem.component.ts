@@ -123,7 +123,7 @@ export class TimKiemComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.danhSachBaoCao = data.data.content;
 					this.danhSachBaoCao.forEach(e => {
-						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+						e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
 					})
 					this.totalElements = data.data.totalElements;
 					this.totalPages = data.data.totalPages;
@@ -170,14 +170,14 @@ export class TimKiemComponent implements OnInit {
 			]);
 		} else {
 			this.router.navigate([
-				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + this.searchFilter.nam,
+				'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao-/' + this.searchFilter.nam,
 			]);
 		}
 	}
 
 	xemChiTiet(id: string) {
 		this.router.navigate([
-			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
+			'/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/0/' + id,
 		])
 	}
 

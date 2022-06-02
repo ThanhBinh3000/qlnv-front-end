@@ -35,7 +35,12 @@
 					<tbody>
 						<tr>
 							<td>{{maBaoCao}}</td>
-							<td>{{soQdCv?.fileName}}</td>
+							<td>
+								<div class="tep" (click)="downloadFileCv()">
+									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+									<span>{{soQdCv?.fileName}}</span>
+								</div>
+							</td>
 							<td>{{maPa}}</td>
 							<td>{{maGiao}}</td>
 							<td>{{namGiao}}</td>

@@ -235,7 +235,7 @@ export class TongHopNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     let obj = {
                         trangThai: '-1',
                         lyDoTuChoi: null,
@@ -270,11 +270,11 @@ async onSubmit(mcn: string, lyDoTuChoi: string) {
                     lyDoTuChoi: lyDoTuChoi,
                 }
                 this.dataChange.emit(obj);
-                // if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                // 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
-                // } else {
+                if (mcn == "0") {
+                	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+                } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                // }
+                }
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -701,5 +701,23 @@ addLine(id: any) {
         this.editCache[id].data.clechTranChiVsNcauChiN1 = this.editCache[id].data.ncauChiN1 - this.editCache[id].data.tranChiN1;
         this.editCache[id].data.clechTranChiVsNcauChiN2 = this.editCache[id].data.ncauChiN2 - this.editCache[id].data.tranChiN2;
     }
+
+    doPrint() {
+        let WindowPrt = window.open(
+             '',
+             '',
+             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+        );
+        let printContent = '';
+        printContent = printContent + '<div>';
+        printContent =
+             printContent + document.getElementById('tablePrint').innerHTML;
+        printContent = printContent + '</div>';
+        WindowPrt.document.write(printContent);
+        WindowPrt.document.close();
+        WindowPrt.focus();
+        WindowPrt.print();
+        WindowPrt.close();
+   }
 
 }

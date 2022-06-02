@@ -101,7 +101,11 @@
 								</a>
 							</td>
 							<td>
-								{{item.fileSoQdCv?.fileName}}
+								<ng-container *ngIf="item.fileSoQdCv">
+									<div class="tep" (click)="downloadFileCv(item.fileSoQdCv)">
+										<span style="color: #1890ff;">{{item.fileSoQdCv?.fileName}}</span>
+									</div>
+								</ng-container>
 							</td>
 							<td>
 								{{item.ngayTao}}
