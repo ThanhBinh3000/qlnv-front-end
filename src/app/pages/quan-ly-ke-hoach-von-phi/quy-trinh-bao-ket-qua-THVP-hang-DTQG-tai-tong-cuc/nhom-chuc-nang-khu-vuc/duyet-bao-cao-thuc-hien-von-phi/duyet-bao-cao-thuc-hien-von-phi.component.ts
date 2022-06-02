@@ -43,7 +43,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
     maDvi:'',
     maLoaiBcao:'',
     maPhanBcao:'1',
-    namBcao:'',
+    namBcao:null,
     ngayTaoDen:'',
     ngayTaoTu:'',
     paggingReq: {
@@ -51,7 +51,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
       page: 1
     },
     str: '',
-    thangBcao: '',
+    thangBcao:null,
     trangThais: [],
     loaiTimKiem:'1',
     donVi: '',
@@ -77,7 +77,11 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
+    let date = new Date();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.trangThai = '7';
+    this.searchFilter.maLoaiBcao='1';
+    this.onSubmit();
     let userName = this.nguoiDungSerivce.getUserName();
     await this.getUserInfo(userName); //get user info
     //lay danh sach danh muc
@@ -153,19 +157,25 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
-    this.searchFilter.trangThais = [];
+    let searchFilterTemp = Object.assign({},this.searchFilter);
+    searchFilterTemp.trangThais= [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {
-      this.searchFilter.trangThais.push(this.trangThai)
+      searchFilterTemp.trangThais.push(this.trangThai)
     } else {
-      this.searchFilter.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
-    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+    await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
           e.congVan = JSON.parse(e.congVan);          
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
           e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
           e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
         this.totalElements = res.data?.totalElements;
         this.totalPages = res.data?.totalPages;
@@ -217,8 +227,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 
   // lay ten trang thai ban ghi
   getStatusName(id) {
-    const utils = new Utils();
-    return utils.getStatusName(id);
+    return TRANG_THAI_GUI_DVCT.find(item => item.id == id)?.ten
   }
 
   //download file về máy tính

@@ -59,10 +59,10 @@
                 <button type="button" class="btn btn-main" *ngIf="item.trangThai == '-1'">
                   <span>Thông báo đến đơn vị cấp dưới</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '7'">
                   <span>Phê duyệt</span>
                 </button>
-                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}">
+                <button type="button" class="btn btn-main" routerLink="../bao-cao/{{ item.id }}" *ngIf="item.trangThai == '8' || item.trangThai == '9'">
                   <span>Xem</span>
                 </button>
               </td>
