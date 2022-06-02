@@ -108,7 +108,7 @@ export class PhuLuc1Component implements OnInit {
     // this.lstCtietBcao = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
-    this.data?.lstCtietDchinh.forEach(item => {
+    this.data.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
         tongNcauDtoanKphi: divMoney(item.tongNcauDtoanKphi, this.maDviTien),
@@ -120,10 +120,12 @@ export class PhuLuc1Component implements OnInit {
         kphiDchinhGiam: divMoney(item.kphiDchinhGiam, this.maDviTien),
       })
     })
-    if (!this.lstCtietBcao && !this.lstCtietBcao[0]?.stt){
-      this.sortWithoutIndex();
-    } else {
-        this.sortByIndex();
+    if (this.lstCtietBcao.length > 0){
+      if (!this.lstCtietBcao[0].stt){
+          this.sortWithoutIndex();
+      } else {
+          this.sortByIndex();
+      }
     }
     this.updateEditCache();
     await this.danhMucService.dMDonVi().toPromise().then(
@@ -219,7 +221,6 @@ export class PhuLuc1Component implements OnInit {
 
   // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
   getChiMuc(str: string): string {
-
     str = str.substring(str.indexOf('.') + 1, str.length);
     var xau: string = "";
     let chiSo: any = str.split('.');

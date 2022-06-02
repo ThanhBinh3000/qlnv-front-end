@@ -98,6 +98,13 @@ const routes: Routes = [
         './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
       ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
   },
+  {
+    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
+  },
 
 
 
