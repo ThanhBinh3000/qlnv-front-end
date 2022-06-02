@@ -1,4 +1,40 @@
 ::ng-deep {
+  .header-tab {
+    background: #ffffff !important;
+    margin: 8px 36px 0px 36px !important;
+  }
+  .tab-tt-chi-tieu-level-0 {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px !important;
+    .pagination-card li:first-child {
+      left: 10px;
+    }
+    .ant-tabs-nav {
+      background: #fff !important;
+      padding-bottom: 0px !important;
+      .ant-tabs-nav-wrap {
+        background: #fff !important;
+        margin-left: 16px;
+        .ant-tabs-tab {
+          background-color: #fff !important;
+          border-width: 1px 1px 0px 1px;
+          // border-color: #fff;
+        }
+        .ant-tabs-tab-active::before {
+          height: 0;
+        }
+        .ant-tabs-tab.ant-tabs-tab-active {
+          background-color: #fff !important;
+          border: 1px solid #f3f3f3 !important;
+          border-bottom: 0px !important;
+          .ant-tabs-tab-btn {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
   .chi-tieu__body {
     .flex-card.ant-card {
       border: 1px solid #ececec !important;
@@ -66,11 +102,12 @@
     position: absolute;
     top: 4px;
     height: 20px;
-    left: 695px;
-    color: #2196f3;
+    left: 600px;
+    color: #7a8eff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 13px;
     span {
       margin-left: 5px;
     }
@@ -132,6 +169,10 @@
   }
 }
 .thong-tin-chi-tieu {
+  .ant-form-item-label.ant-col,
+  .ant-form-item-control {
+    padding: 0px !important;
+  }
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 16px;

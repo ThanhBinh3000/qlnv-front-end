@@ -1,13 +1,40 @@
-.action-top {
-  padding-right: 50px;
-}
-.chi-tieu__body {
-  .flex-card.ant-card {
-    border: 1px solid #ececec !important;
-    background: transparent;
-    box-shadow: unset;
-    margin-bottom: 0px !important;
-    margin-top: 11px !important;
-    border-radius: 6px;
+::ng-deep {
+  .tab-chi-tieu-level-0 {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px !important;
+    .pagination-card li:first-child {
+      left: 10px;
+    }
+    .ant-tabs-nav {
+      background: #fff;
+      .ant-tabs-nav-wrap {
+        background: #fff !important;
+        margin-left: 16px;
+        .ant-tabs-tab {
+          background-color: #fff;
+          border-width: 1px 1px 0px 1px;
+          border-style: solid;
+          border-color: #f3f3f3;
+        }
+        .ant-tabs-tab-active::before {
+          height: 0;
+        }
+        .ant-tabs-tab.ant-tabs-tab-active {
+          background-color: #fff !important;
+          .ant-tabs-tab-btn {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  .tab-giao-chi-tieu {
+    position: relative;
+  }
+  .action-giao-chi-tieu {
+    position: absolute;
+    top: 0px;
+    right: 0px;
   }
 }
