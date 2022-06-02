@@ -124,7 +124,7 @@
     align-items: center;
   }
   .last-breadcrumb {
-    color: #19797b !important;
+    color: #4e5484 !important;
     font-weight: 400;
     font-size: 12px;
   }
@@ -180,5 +180,11 @@
         padding: 4px;
       }
     }
+  }
+  .red-value-dc {
+    color: #ff4d4f !important;
+  }
+  .green-value-dc {
+    color: #8bc34c !important;
   }
 }

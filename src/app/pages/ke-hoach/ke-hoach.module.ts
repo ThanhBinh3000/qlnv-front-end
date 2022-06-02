@@ -11,12 +11,13 @@ import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-
 import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
 import { DeXuatDieuChinhComponent } from './de-xuat-dieu-chinh/de-xuat-dieu-chinh.component';
 import { ThongTinDeXuatDieuChinhComponent } from './thong-tin-de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh.component';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 @NgModule({
   declarations: [
     KeHoachComponent,
     DieuChinhThongTinChiTieuKeHoachNamComponent,
-    DieuChinhChiTieuKeHoachNamComponent,
+    // DieuChinhChiTieuKeHoachNamComponent,
     ThongTinChiTieuKeHoachNamComponent,
     DeXuatDieuChinhComponent,
     ThongTinDeXuatDieuChinhComponent,
@@ -27,6 +28,7 @@ import { ThongTinDeXuatDieuChinhComponent } from './thong-tin-de-xuat-dieu-chinh
     ComponentsModule,
     MainModule,
     NzAffixModule,
+    DirectivesModule
   ],
 })
 export class KeHoachModule { }

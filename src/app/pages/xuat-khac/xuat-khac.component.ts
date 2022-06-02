@@ -6,16 +6,17 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { QUAN_LY_CHAT_LUONG_ROUTE_LIST } from './quan-ly-chat-luong.constant';
+import { XUAT_KHAC_ROUTE_LIST } from './xuat-khac.constant';
 @Component({
-    selector: 'app-quan-ly-chat-luong',
-    templateUrl: './quan-ly-chat-luong.component.html',
-    styleUrls: ['./quan-ly-chat-luong.component.scss'],
+    selector: 'app-xuat-khac',
+    templateUrl: './xuat-khac.component.html',
+    styleUrls: ['./xuat-khac.component.scss'],
 })
-export class QuanLyChatLuongComponent implements OnInit, AfterViewInit {
+export class XuatKhacComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = QUAN_LY_CHAT_LUONG_ROUTE_LIST;
+    routes = XUAT_KHAC_ROUTE_LIST;
     routerUrl: string = "";
+    defaultUrl: string = '/xuat-khac'
 
     constructor(
         private router: Router,
@@ -76,5 +77,9 @@ export class QuanLyChatLuongComponent implements OnInit, AfterViewInit {
             this.myTab.nativeElement.className =
                 'nav nav-tabs expand-sidebar next-an';
         }
+    }
+
+    redirect(url: string) {
+        this.router.navigate([this.defaultUrl + url]);
     }
 }

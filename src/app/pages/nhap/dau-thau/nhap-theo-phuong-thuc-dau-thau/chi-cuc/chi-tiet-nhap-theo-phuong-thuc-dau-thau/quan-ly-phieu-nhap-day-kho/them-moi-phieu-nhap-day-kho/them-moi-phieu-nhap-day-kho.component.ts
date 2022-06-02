@@ -641,6 +641,9 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
           this.dsBienBanNhapDayKhoDetailClone = this.bienBanNhapDayKho?.chiTiets ?? [];
           this.changeDiemKho();
           this.bienBanNhapDayKho.maNhaKho = this.bienBanNhapDayKho.maDiemKho;
+          if (this.bienBanNhapDayKho.trangThai === this.globals.prop.BAN_HANH) {
+            this.viewChiTiet = true;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }

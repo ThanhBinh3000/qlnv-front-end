@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DieuChuyenNoiBoComponent } from './dieu-chuyen-noi-bo.component';
+import { DinhMucComponent } from './dinh-muc.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: DieuChuyenNoiBoComponent,
+        component: DinhMucComponent,
         children: [
 
         ],
@@ -16,4 +16,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class DieuChuyenNoiBoRoutingModule { }
+export class DinhMucRoutingModule { }

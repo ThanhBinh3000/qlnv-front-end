@@ -182,7 +182,8 @@
                   1. Kết quả đánh giá cảm quan: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)
                 </nz-form-label>
                 <textarea rows="3" class="search__input" nz-input placeholder="Nhập nội dung" [readonly]="viewChiTiet"
-                  [ngClass]="viewChiTiet ? 'disable' : ''"></textarea>
+                  [ngClass]="viewChiTiet ? 'disable' : ''"
+                  [(ngModel)]="phieuKiemNghiemChatLuongHang.ketQuaDanhGia"></textarea>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -286,7 +287,8 @@
                   Nhận xét kết luận
                 </nz-form-label>
                 <textarea rows="3" class="search__input" nz-input placeholder="Nhập nội dung" [readonly]="viewChiTiet"
-                  [ngClass]="viewChiTiet ? 'disable' : ''"></textarea>
+                  [ngClass]="viewChiTiet ? 'disable' : ''"
+                  [(ngModel)]="phieuKiemNghiemChatLuongHang.ketLuan"></textarea>
               </nz-form-item>
             </div>
           </div>

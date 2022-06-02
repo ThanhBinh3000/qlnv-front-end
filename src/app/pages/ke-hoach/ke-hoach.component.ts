@@ -27,25 +27,17 @@ export class KeHoachComponent implements OnInit, AfterViewInit {
   routes = ROUTE_LIST_KE_HOACH;
   routerUrl: string = '';
   defaultUrl: string = '/ke-hoach/';
+  listRouter: any[] = [];
+  lastRouter: any = {};
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(public userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    console.log('userLogin: ', this.userLogin);
-    console.log('this.router.urlthis.router.url: ', this.router.url);
-
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
   }
-
-  // filterRole(url) {
-  //   if ((url.includes(LEVEL.TONG_CUC) && this.userService.isTongCuc()) || (url.includes(LEVEL.CHI_CUC)) || (url.includes(LEVEL.CUC) && this.userService.isCuc() && !url.includes(LEVEL.TONG_CUC))) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   filterRole(url) {
     if (

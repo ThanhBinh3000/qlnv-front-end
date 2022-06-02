@@ -6,16 +6,17 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { DIEU_CHUYEN_NOI_BO_ROUTE_LIST } from './dieu-chuyen-noi-bo.constant';
+import { DINH_MUC_ROUTE_LIST } from './dinh-muc.constant';
 @Component({
-    selector: 'app-dieu-chuyen-noi-bo',
-    templateUrl: './dieu-chuyen-noi-bo.component.html',
-    styleUrls: ['./dieu-chuyen-noi-bo.component.scss'],
+    selector: 'app-dinh-muc',
+    templateUrl: './dinh-muc.component.html',
+    styleUrls: ['./dinh-muc.component.scss'],
 })
-export class DieuChuyenNoiBoComponent implements OnInit, AfterViewInit {
+export class DinhMucComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = DIEU_CHUYEN_NOI_BO_ROUTE_LIST;
+    routes = DINH_MUC_ROUTE_LIST;
     routerUrl: string = "";
+    defaultUrl: string = '/dinh-muc-nhap-xuat'
 
     constructor(
         private router: Router,
@@ -76,5 +77,9 @@ export class DieuChuyenNoiBoComponent implements OnInit, AfterViewInit {
             this.myTab.nativeElement.className =
                 'nav nav-tabs expand-sidebar next-an';
         }
+    }
+
+    redirect(url: string) {
+        this.router.navigate([this.defaultUrl + url]);
     }
 }

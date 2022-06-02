@@ -72,7 +72,8 @@ $bgmenu-active: $maincolorhover;
 
 /*menu lv2.......................*/
 /*gộp 2 màu header */
-$bg-header2: lighten($bg-header, 10%); //#ffe7e7;
+// $bg-header2: lighten($bg-header, 10%); //#ffe7e7;
+$bg-header2: #4e5484;
 /*gộp 2 màu header */
 
 $border-header2: lighten($bg-header2, 5%);

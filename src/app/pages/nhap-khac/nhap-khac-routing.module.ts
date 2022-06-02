@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SuaChuaComponent } from './sua-chua.component';
+import { NhapKhacComponent } from './nhap-khac.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: SuaChuaComponent,
+        component: NhapKhacComponent,
         children: [
 
         ],
@@ -16,4 +16,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class SuaChuaRoutingModule { }
+export class NhapKhacRoutingModule { }

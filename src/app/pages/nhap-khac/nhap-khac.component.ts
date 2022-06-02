@@ -6,15 +6,15 @@ import {
     ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { SUA_CHUA_ROUTE_LIST } from './sua-chua.constant';
+import { NHAP_KHAC_ROUTE_LIST } from './nhap-khac.constant';
 @Component({
-    selector: 'app-sua-chua',
-    templateUrl: './sua-chua.component.html',
-    styleUrls: ['./sua-chua.component.scss'],
+    selector: 'app-nhap-khac',
+    templateUrl: './nhap-khac.component.html',
+    styleUrls: ['./nhap-khac.component.scss'],
 })
-export class SuaChuaComponent implements OnInit, AfterViewInit {
+export class NhapKhacComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
-    routes = SUA_CHUA_ROUTE_LIST;
+    routes = NHAP_KHAC_ROUTE_LIST;
     routerUrl: string = "";
 
     constructor(
@@ -76,5 +76,10 @@ export class SuaChuaComponent implements OnInit, AfterViewInit {
             this.myTab.nativeElement.className =
                 'nav nav-tabs expand-sidebar next-an';
         }
+    }
+
+    redirect(url: string) {
+        this.routerUrl = url;
+        this.router.navigate([url]);
     }
 }

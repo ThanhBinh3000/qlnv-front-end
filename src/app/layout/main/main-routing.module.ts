@@ -21,9 +21,24 @@ const routes: Routes = [
           import('../../pages/nhap/nhap.module').then((m) => m.NhapModule),
       },
       {
+        path: MAIN_ROUTES.nhapKhac,
+        loadChildren: () =>
+          import('../../pages/nhap-khac/nhap-khac.module').then((m) => m.NhapKhacModule),
+      },
+      {
         path: MAIN_ROUTES.xuat,
         loadChildren: () =>
           import('../../pages/xuat/xuat.module').then((m) => m.XuatModule),
+      },
+      {
+        path: MAIN_ROUTES.xuatKhac,
+        loadChildren: () =>
+          import('../../pages/xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
+      },
+      {
+        path: MAIN_ROUTES.dinhMucNhapXuat,
+        loadChildren: () =>
+          import('../../pages/dinh-muc/dinh-muc.module').then((m) => m.DinhMucModule),
       },
       {
         path: MAIN_ROUTES.muaHang,
@@ -39,31 +54,6 @@ const routes: Routes = [
         path: MAIN_ROUTES.banHang,
         loadChildren: () =>
           import('../../pages/ban-hang/ban-hang.module').then((m) => m.BanHangModule),
-      },
-      {
-        path: MAIN_ROUTES.dieuChuyenNoiBo,
-        loadChildren: () =>
-          import('../../pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module').then((m) => m.DieuChuyenNoiBoModule),
-      },
-      {
-        path: MAIN_ROUTES.kiemTraChatLuong,
-        loadChildren: () =>
-          import('../../pages/kiem-tra-chat-luong/kiem-tra-chat-luong.module').then((m) => m.KiemTraChatLuongModule),
-      },
-      {
-        path: MAIN_ROUTES.suaChua,
-        loadChildren: () =>
-          import('../../pages/sua-chua/sua-chua.module').then((m) => m.SuaChuaModule),
-      },
-      {
-        path: MAIN_ROUTES.thanhLyTieuHuy,
-        loadChildren: () =>
-          import('../../pages/thanh-ly-tieu-huy/thanh-ly-tieu-huy.module').then((m) => m.ThanhLyTieuHuyModule),
-      },
-      {
-        path: MAIN_ROUTES.quanLyChatLuong,
-        loadChildren: () =>
-          import('../../pages/quan-ly-chat-luong/quan-ly-chat-luong.module').then((m) => m.QuanLyChatLuongModule),
       },
       {
         path: MAIN_ROUTES.khknBaoQuan,

@@ -31,7 +31,7 @@
         <div class="contentBor chi-tieu__body">
             <div class="contentDetail">
                 <div class="main-content">
-                    <nz-card nzTitle="THÔNG TIN CHUNG" class="mt16 flex-card p-lr16">
+                    <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
                         <div class="search__body" nz-row [nzGutter]="[18, 12]">
                             <div nz-col nzSpan="12">
                                 <label class="search__label">Số quyết định</label>
@@ -45,17 +45,17 @@
                             </div>
                             <div nz-col nzSpan="6">
                                 <label class="search__label">Năm nhập</label>
-                                <nz-select [(ngModel)]="searchFilter.namNhap">
+                                <nz-select [(ngModel)]="searchFilter.namNhap" nzAllowClear>
                                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                     </nz-option>
                                 </nz-select>
                             </div>
                             <div nz-col nzSpan="24">
                                 <label class="search__label">Nội dung công văn</label>
-                                <nz-input-group nzAddOnAfterIcon="folder-open">
-                                    <input nz-input [(ngModel)]="searchFilter.noiDungCongVan"
-                                        placeholder="Nội dung công văn" />
-                                </nz-input-group>
+                                <!-- <nz-input-group nzAddOnAfterIcon="folder-open"> -->
+                                <input nz-input [(ngModel)]="searchFilter.noiDungCongVan"
+                                    placeholder="Nội dung công văn" />
+                                <!-- </nz-input-group> -->
                             </div>
                         </div>
                         <div class="cangiua group-button-search">

@@ -115,7 +115,7 @@ export class DanhSachHopDongComponent implements OnInit {
       }
     }
     let body = {
-      "loaiVthh": "00",
+      "loaiVthh": this.loaiVthh,
       maDvi: maDonVi,
       "paggingReq": {
         limit: this.pageSize,

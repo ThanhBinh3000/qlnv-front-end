@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
+import { GiaoKeHoachVaDuToanComponent } from './giao-ke-hoach-va-du-toan.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: KiemTraChatLuongComponent,
-    children: [
-    ],
+    component: GiaoKeHoachVaDuToanComponent,
   },
 ];
 
@@ -15,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class KiemTraChatLuongRoutingModule { }
+export class GiaoKeHoachVaDuToanRoutingModule { }

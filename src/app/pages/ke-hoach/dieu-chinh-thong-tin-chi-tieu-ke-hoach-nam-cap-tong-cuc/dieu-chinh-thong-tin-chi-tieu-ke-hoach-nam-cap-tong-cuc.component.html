@@ -17,15 +17,14 @@
           <nz-breadcrumb-item class="last-breadcrumb">{{trangThai}}</nz-breadcrumb-item>
         </nz-breadcrumb>
       </div>
-      <div class="canphai phai">
+      <div class="canphai phai" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)" [disabled]="!formData.valid"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          [disabled]="!formData.valid"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03'">
+          [disabled]="!formData.valid" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Gửi duyệt</span>
         </button>
@@ -40,7 +39,7 @@
           <span>Ban hành</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '02'">
+          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04'">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -89,7 +88,7 @@
                   </nz-form-label>
                 </div>
                 <div nz-col [nzSpan]="5" class="mg-t-10">
-                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                  <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
                     formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
                     (nzOnOpenChange)="handleEndOpenChange($event)"
                     [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
@@ -304,16 +303,18 @@
                       [readonly]="true" class="w-120" />
                     <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="keHoachLuongThucCreate.dcNtnThoc"
-                      (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                      (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
+                      [nzMin]="0 - (keHoachLuongThucCreate?.tdcNtnThoc ?? 0)" [nzMax]="globals.prop.MAX_INPUT">
+                    </nz-input-number>
                   </td>
                   <td>
                     <input *ngIf="!isAddLuongThuc" nz-input [(ngModel)]="keHoachLuongThucCreate.dcNtnGao"
                       [readonly]="true" class="w-120" />
                     <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="keHoachLuongThucCreate.dcNtnGao"
-                      (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)" [nzMin]="0"
-                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
+                      (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
+                      [nzMin]="0 - (keHoachLuongThucCreate?.tdcNtnGao ?? 0)" [nzMax]="globals.prop.MAX_INPUT">
+                    </nz-input-number>
                   </td>
                   <td>{{keHoachLuongThucCreate?.sdcNtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{keHoachLuongThucCreate?.sdcNtnThoc ?? 0 | number: '1.0-1'}}</td>
@@ -430,11 +431,16 @@
                     </td>
                     <td>{{data?.tdcNtnThoc ?? 0 | number: '1.0-1'}}</td>
                     <td>{{data?.tdcNtnGao ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{data?.dcNtnThoc ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{data?.dcNtnGao ?? 0 | number: '1.0-1'}}</td>
+                    <td [ngClass]="(data?.dcNtnThoc ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">({{(data?.dcNtnThoc
+                      ?? 0) < 0 ? '' : '+' }} {{data?.dcNtnThoc ?? 0 | number: '1.0-1' }})</td>
+                    <td [ngClass]="(data?.dcNtnGao ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">({{(data?.dcNtnGao ??
+                      0) < 0 ? '' : '+' }} {{data?.dcNtnGao ?? 0 | number: '1.0-1' }})</td>
                     <td>{{data?.sdcNtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{data?.sdcNtnThoc ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{data?.sdcNtnGao ?? 0 | number: '1.0-1'}}</td>
+                    <td
+                      [ngClass]="(data?.sdcNtnThoc ?? 0) < (data?.tdcNtnThoc ?? 0) ? 'red-value-dc' : 'green-value-dc'">
+                      {{data?.sdcNtnThoc ?? 0 | number: '1.0-1'}}</td>
+                    <td [ngClass]="(data?.sdcNtnGao ?? 0) < (data?.tdcNtnGao ?? 0) ? 'red-value-dc' : 'green-value-dc'">
+                      {{data?.sdcNtnGao ?? 0 | number: '1.0-1'}}</td>
                     <td>{{data?.tdcXtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                     <td>{{data?.tdcXtnTongThoc ?? 0 | number: '1.0-1'}}</td>
                     <ng-container *ngIf="data?.tdcXtnThoc?.length == 0">
@@ -460,14 +466,18 @@
                       <td> 0 </td>
                     </ng-container>
                     <ng-container *ngIf="data?.dcXtnThoc?.length > 0">
-                      <td *ngFor="let item of data.dcXtnThoc">{{item.soLuong ?? 0 | number: '1.0-1'}}</td>
+                      <td *ngFor="let item of data.dcXtnThoc"
+                        [ngClass]="(item.soLuong ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">({{(item.soLuong ?? 0) <
+                          0 ? '' : '+' }} {{item.soLuong ?? 0 | number: '1.0-1' }})</td>
                     </ng-container>
                     <ng-container *ngIf="data?.dcXtnGao?.length == 0">
                       <td> 0 </td>
                       <td> 0 </td>
                     </ng-container>
                     <ng-container *ngIf="data?.dcXtnGao?.length > 0">
-                      <td *ngFor="let item of data.dcXtnGao">{{item.soLuong ?? 0 | number: '1.0-1'}}</td>
+                      <td *ngFor="let item of data.dcXtnGao"
+                        [ngClass]="(item.soLuong ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">({{(item.soLuong ?? 0) <
+                          0 ? '' : '+' }} {{item.soLuong ?? 0 | number: '1.0-1' }})</td>
                     </ng-container>
                     <td>{{data?.sdcXtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                     <td>{{data?.sdcXtnTongThoc ?? 0 | number: '1.0-1'}}</td>
@@ -553,13 +563,15 @@
                     <td>
                       <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                         [(ngModel)]="editLuongThucCache[data.donViId].data.dcNtnThoc"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)" [nzMin]="0"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)"
+                        [nzMin]="0 - (editLuongThucCache[data.donViId].data?.tdcNtnThoc ?? 0)"
                         [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                     </td>
                     <td>
                       <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                         [(ngModel)]="editLuongThucCache[data.donViId].data.dcNtnGao"
-                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)" [nzMin]="0"
+                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)"
+                        [nzMin]="0 - (editLuongThucCache[data.donViId].data?.tdcNtnGao ?? 0)"
                         [nzMax]="globals.prop.MAX_INPUT">
                       </nz-input-number>
                     </td>
@@ -904,7 +916,8 @@
                       class="w-120" />
                     <nz-input-number *ngIf="isAddMuoi" type="text" nz-input class="w-120" [nzSize]="'small'"
                       [(ngModel)]="keHoachMuoiCreate.dcNtnTongSoMuoi"
-                      (input)="caculatorDieuChinhMuoi(keHoachMuoiCreate)" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT">
+                      (input)="caculatorDieuChinhMuoi(keHoachMuoiCreate)"
+                      [nzMin]="0 - (keHoachMuoiCreate.tdcNtnTongSoMuoi ?? 0)" [nzMax]="globals.prop.MAX_INPUT">
                     </nz-input-number>
                   </td>
                   <td>{{keHoachMuoiCreate.sdcNtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
@@ -969,8 +982,12 @@
                       <td>0</td>
                     </ng-container>
                     <td>{{dataMuoi.tdcNtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{dataMuoi.dcNtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{dataMuoi.sdcNtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
+                    <td [ngClass]="(dataMuoi.dcNtnTongSoMuoi ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">
+                      ({{(dataMuoi.dcNtnTongSoMuoi ?? 0) < 0 ? '' : '+' }} {{dataMuoi.dcNtnTongSoMuoi ?? 0 |
+                        number: '1.0-1' }})</td>
+                    <td
+                      [ngClass]="(dataMuoi.sdcNtnTongSoMuoi ?? 0) < (dataMuoi.tdcNtnTongSoMuoi ?? 0) ? 'red-value-dc' : 'green-value-dc'">
+                      {{dataMuoi.sdcNtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                     <td>{{dataMuoi.tdcXtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                     <ng-container *ngIf="dataMuoi.tdcXtnMuoi.length > 0">
                       <td *ngFor="let itemMuoi of dataMuoi.tdcXtnMuoi">{{itemMuoi.soLuong ?? 0 | number: '1.0-1'}}</td>
@@ -986,7 +1003,9 @@
                       <td>0</td>
                     </ng-container>
                     <ng-container *ngIf="dataMuoi.dcXtnMuoi.length > 0">
-                      <td *ngFor="let itemMuoi of dataMuoi.dcXtnMuoi">{{itemMuoi.soLuong ?? 0 | number: '1.0-1'}}</td>
+                      <td *ngFor="let item of dataMuoi.dcXtnMuoi"
+                        [ngClass]="(item.soLuong ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">({{(item.soLuong ?? 0) <
+                          0 ? '' : '+' }} {{item.soLuong ?? 0 | number: '1.0-1' }})</td>
                     </ng-container>
                     <td>{{dataMuoi.sdcXtnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                     <ng-container *ngIf="dataMuoi.sdcXtnMuoi.length > 0">
@@ -1043,7 +1062,8 @@
                     <td>
                       <nz-input-number type="text" nz-input class="w-120" [nzSize]="'small'"
                         [(ngModel)]="editMuoiCache[dataMuoi.donViId].data.dcNtnTongSoMuoi"
-                        (input)="caculatorDieuChinhMuoi(editMuoiCache[dataMuoi.donViId].data)" [nzMin]="0"
+                        (input)="caculatorDieuChinhMuoi(editMuoiCache[dataMuoi.donViId].data)"
+                        [nzMin]="0 - (editMuoiCache[dataMuoi.donViId].data.tdcNtnTongSoMuoi ?? 0)"
                         [nzMax]="globals.prop.MAX_INPUT">
                       </nz-input-number>
                     </td>
@@ -1332,7 +1352,10 @@
                       <td>0</td>
                     </ng-container>
                     <td>{{itemVatTu.vatTuThietBi[0].tdcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
-                    <td>{{itemVatTu.vatTuThietBi[0].dcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
+                    <td
+                      [ngClass]="(itemVatTu.vatTuThietBi[0].dcNhapTrongNam ?? 0) < 0 ? 'red-value-dc' : 'green-value-dc'">
+                      ({{(itemVatTu.vatTuThietBi[0].dcNhapTrongNam ?? 0) < 0 ? '' : '+' }}
+                        {{itemVatTu.vatTuThietBi[0].dcNhapTrongNam ?? 0 | number: '1.0-1' }})</td>
                     <td>{{itemVatTu.vatTuThietBi[0].sdcTongNhap ?? 0 | number: '1.0-1'}}</td>
                     <td>{{itemVatTu.vatTuThietBi[0].sdcTongCacNamTruoc ?? 0 | number: '1.0-1'}}</td>
                     <ng-container *ngIf="itemVatTu?.vatTuThietBi[0]?.sdcCacNamTruoc?.length > 0">
