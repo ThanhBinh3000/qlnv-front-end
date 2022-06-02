@@ -3,51 +3,33 @@
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="3">
             <label class="search__label">Năm kế hoạch</label>
             <nz-select [(ngModel)]="namKeHoach">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="18"></div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="5">
             <label class="search__label">Số QĐ giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ký từ ngày</label>
-            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
-            </nz-date-picker>
+            <label class="search__label">Ngày ký</label>
+            <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
-            </nz-date-picker>
-          </div>
-          <div nz-col nzSpan="24">
+          <div nz-col nzSpan="10">
             <label class="search__label">Trích yếu QĐ giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
-
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="5">
             <label class="search__label">Số QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="soQDDieuChinh" />
           </div>
           <div nz-col nzSpan="6">
-            <label class="search__label">Ngày ký từ ngày</label>
-            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDateDc" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="startValueDc" nzPlaceHolder="Ngày ký từ ngày">
-            </nz-date-picker>
+            <label class="search__label">Ngày ký</label>
+            <nz-range-picker [(ngModel)]="ngayKyDc" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDateDc" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="endValueDc" nzPlaceHolder="Đến ngày">
-            </nz-date-picker>
-          </div>
-          <div nz-col nzSpan="24">
+          <div nz-col nzSpan="13">
             <label class="search__label">Trích yếu QĐ điều chỉnh giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
           </div>
@@ -70,13 +52,13 @@
           </div>
         </div>
         <div class="cangiua group-button-search">
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i class="fa fa-trash-o do"></i>
+            Xóa điều kiện
+          </button>
           <button nz-button class="search__button--search" (click)="search()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
-          </button>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
-            <i nz-icon nzType="close"></i>
-            Xóa điều kiện
           </button>
         </div>
       </nz-card>

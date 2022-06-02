@@ -1,4 +1,17 @@
 ::ng-deep {
+  .de-xuat-dieu-chinh {
+    position: absolute;
+    top: 81px;
+    right: 110px;
+    border: 0;
+    background: #f8f8f8;
+    .tab-pane {
+      background: #f8f8f8 !important;
+    }
+  }
+  .main-ke-hoach {
+    padding: 16px !important;
+  }
   .chi-tieu__body {
     .flex-card.ant-card {
       border: 1px solid #ececec !important;
@@ -187,5 +200,15 @@
   .isDisabled {
     opacity: 0.5;
     pointer-events: none;
+  }
+  .label-color-kh {
+    padding: 0 !important;
+    height: 30px;
+    label {
+      color: #444444;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+    }
   }
 }

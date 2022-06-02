@@ -39,6 +39,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   startValueDc: Date | null = null;
   endValueDc: Date | null = null;
 
+  ngayKy: any;
+  ngayKyDc: any;
+
   listNam: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;

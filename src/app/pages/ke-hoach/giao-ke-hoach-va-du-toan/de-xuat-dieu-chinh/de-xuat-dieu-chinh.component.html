@@ -1,49 +1,48 @@
-<div class="contentBor chi-tieu__body">
+<div class="contentBor chi-tieu__body" *ngIf="!isDetail">
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="3">
             <label class="search__label">Năm kế hoạch</label>
             <nz-select [(ngModel)]="namKeHoach">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="18"></div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="5">
             <label class="search__label">Số QĐ giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="6">
             <label class="search__label">Ngày ký</label>
             <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <div nz-col nzSpan="24">
+          <div nz-col nzSpan="10">
             <label class="search__label">Trích yếu QĐ giao chỉ tiêu kế hoạch năm</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
 
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="5">
             <label class="search__label">Số văn bản đề xuất</label>
             <input class="search__input" nz-input [(ngModel)]="soQDDieuChinh" />
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="6">
             <label class="search__label">Ngày ký</label>
             <nz-range-picker [(ngModel)]="ngayKyDC" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <div nz-col nzSpan="24">
+          <div nz-col nzSpan="13">
             <label class="search__label">Trích yếu văn bản đề xuất</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh" />
           </div>
         </div>
         <div class="cangiua group-button-search">
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
+            <i class="fa fa-trash-o do"></i>
+            Xóa điều kiện
+          </button>
           <button nz-button class="search__button--search" (click)="search()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
-          </button>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
-            <i nz-icon nzType="close"></i>
-            Xóa điều kiện
           </button>
         </div>
       </nz-card>
@@ -51,36 +50,6 @@
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" nzBordered
           [nzShowPagination]="false">
           <thead>
-            <!-- <tr>
-              <th rowspan="3" class="text-center">STT</th>
-              <th rowspan="3" class="text-center">Số văn <br />bản đề xuất</th>
-              <th rowspan="3" class="text-center">Ngày đề xuất</th>
-              <th rowspan="3" class="text-center">Số QĐ giao chỉ <br />tiêu kế hoạch <br />năm</th>
-              <th rowspan="3" class="text-center">Năm kế hoạch</th>
-              <th colSpan="13" class="text-center">khối lượng đề xuất điều chỉnh</th>
-              <th rowspan="3" width="130px" class="text-center">Hành động</th>
-            </tr>
-            <tr>
-              <th colSpan="2">Gạo (tấn)</th>
-              <th colSpan="2">Thóc (tấn)</th>
-              <th colSpan="2">Muối (tấn)</th>
-              <th colSpan="7">Nhập vật tư, thiết bị</th>
-            </tr>
-            <tr>
-              <th>Nhập</th>
-              <th>Xuất</th>
-              <th>Nhập</th>
-              <th>Xuất</th>
-              <th>Nhập</th>
-              <th>Xuất</th>
-              <th>Mã hàng</th>
-              <th>Ký hiệu</th>
-              <th>Tên hàng</th>
-              <th>Chủng loại</th>
-              <th>Đơn vị tính</th>
-              <th>Nhập</th>
-              <th>Xuất</th>
-            </tr> -->
             <tr>
               <th>STT</th>
               <th>Số văn bản</th>
@@ -148,4 +117,7 @@
       </ng-template>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-de-xuat-dieu-chinh [id]="selectedId" (showListEvent)="showList()"></app-thong-tin-de-xuat-dieu-chinh>
 </div>
