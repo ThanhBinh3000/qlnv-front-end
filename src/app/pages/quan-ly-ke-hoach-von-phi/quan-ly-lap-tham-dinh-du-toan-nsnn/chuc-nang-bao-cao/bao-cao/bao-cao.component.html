@@ -65,6 +65,14 @@
 				<nz-table #basicTable class="nowrap">
 					<thead>
 						<tr>
+							<ng-container *ngIf="giaoSoTranChiId">
+								<ng-container *ngIf="capDvi == '1'; else tranChi">
+									<th>Phương án <br/> giao từ BTC</th>
+								</ng-container>
+								<ng-template #tranChi>
+									<th>Số kiểm tra <br /> trần chi</th>
+								</ng-template>
+							</ng-container>
 							<th>Mã báo cáo</th>
 							<th>Năm báo cáo</th>
 							<th>Ngày tạo</th>
@@ -80,6 +88,9 @@
 					</thead>
 					<tbody>
 						<tr>
+							<ng-container *ngIf="giaoSoTranChiId">
+								<a (click)="xemSoKiemTra()">Xem</a>
+							</ng-container>
 							<td>{{maBaoCao}}</td>
 							<td>{{namHienHanh}}</td>
 							<td>{{ngayNhap}}</td>
@@ -101,13 +112,7 @@
 							<td>{{ngayDuyetLD}}</td>
 							<td>{{ngayCapTrenTraKq}}</td>
 							<td>
-								<ng-container
-									*ngIf="trangThaiBaoCao == '3' || trangThaiBaoCao == '5' || trangThaiBaoCao == '8'; else chapnhan">
-									{{getStatusName(trangThaiBaoCao)}} - {{lyDoTuChoi}}
-								</ng-container>
-								<ng-template #chapnhan>
-									{{getStatusName(trangThaiBaoCao)}}
-								</ng-template>
+								{{getStatusName(trangThaiBaoCao)}}
 							</td>
 						</tr>
 					</tbody>
@@ -169,7 +174,8 @@
 									</td>
 									<td>
 										<ng-container *ngIf="data.trangThai == '0'; else ok">
-											{{ getStatusBM(data.trangThai) }} - {{data.lyDoTuChoi}}
+											{{ getStatusBM(data.trangThai) }}<br>
+											Lý do: {{data.lyDoTuChoi}}
 										</ng-container>
 										<ng-template #ok>
 											{{ getStatusBM(data.trangThai) }}
@@ -344,12 +350,6 @@
 						</ng-container>
 					</nz-tab>
 				</nz-tabset>
-				<!-- <div class="action">
-					<button type="button" class="btn btn-main" >
-						<i class="fa fa-trash-o"></i>
-						<span>Xóa</span>
-					</button>
-				</div> -->
 			</div>
 			<div class="ghi-chu">
 				<nz-form-label nzRequired [nzNoColon]="true">

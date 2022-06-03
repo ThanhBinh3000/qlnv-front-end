@@ -42,7 +42,13 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     donVis: any[] = [];
     phuongAns: any[] = [];
     //file
+    lstFiles: any[] = []; //show file ra man hinh
+    //file
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
+    //beforeUpload: any;
+    listIdFilesDelete: any = [];                        // id file luc call chi tiet
     status: boolean = false;
     // before uploaf file
     beforeUploadCV = (file: NzUploadFile): boolean => {
@@ -54,6 +60,23 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         };
         return false;
     };
+
+    // before uploaf file
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        return false;
+    };
+
+    // them file vao danh sach
+    handleUpload(): void {
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    }
+
 
     constructor(
         private userService: UserService,
@@ -150,6 +173,35 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         return temp;
     }
 
+    // xoa file trong bang file
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdFilesDelete.push(id);
+    }
+
+    //download file về máy tính
+    async downloadFile(id: string) {
+        let file!: File;
+        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    }
+
     //download file về máy tính
     async downloadFileCv() {
         if (this.soQdCv?.fileUrl) {
@@ -175,9 +227,17 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
             return;
         }
 
+        //get list file url
+        let listFile: any = [];
+        for (const iterator of this.listFile) {
+            listFile.push(await this.uploadFile(iterator));
+        }
+
         let request = JSON.parse(JSON.stringify(
             {
                 id: this.id,
+                fileDinhKems: this.lstFiles,
+                listIdDeleteFiles: this.listIdFilesDelete,
                 namGiao: this.namGiao,
                 maPa: this.maPa,
                 soQdCv: this.soQdCv,
@@ -186,10 +246,10 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         ))
 
         //get file cong van url
-		let file: any = this.fileDetail;
-		if (file) {
-		  request.soQdCv = await this.uploadFile(file);
-		}
+        let file: any = this.fileDetail;
+        if (file) {
+            request.soQdCv = await this.uploadFile(file);
+        }
 
         if (!this.id) {
             this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {

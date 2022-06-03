@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   //tim kiem phuong an, quyet dinh, cong van giao so kiem tra nsnn
   {
-    path: 'tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn',
+    path: 'tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/:loai',
     loadChildren: () =>
       import(
         './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn.module'
@@ -41,25 +41,26 @@ const routes: Routes = [
   },
   //xay dung phuong an giao so kiem tra chi nsnn
   {
-    path: 'xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-    loadChildren: () =>
-      import(
-        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn.module'
-      ).then((m) => m.XayDungPhuongAnGiaoSoKiemTraChiNsnnModule),
-  },
-  {
     path: 'xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/:id',
     loadChildren: () =>
       import(
         './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn.module'
       ).then((m) => m.XayDungPhuongAnGiaoSoKiemTraChiNsnnModule),
   },
+  //nhan so kiem tra tran chi tu bo tai chinh
   {
-    path: 'xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/0/:maBaoCao',
+    path: 'so-kiem-tra-tran-chi-tu-btc/0/:maBcao',
     loadChildren: () =>
       import(
-        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn.module'
-      ).then((m) => m.XayDungPhuongAnGiaoSoKiemTraChiNsnnModule),
+        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/so-kiem-tra-tran-chi-tu-btc/so-kiem-tra-tran-chi-tu-btc.module'
+      ).then((m) => m.SoKiemTraTranChiTuBtcModule),
+  },
+  {
+    path: 'so-kiem-tra-tran-chi-tu-btc/:id',
+    loadChildren: () =>
+      import(
+        './phuong-an-qd-cv-giao-so-kiem-tra-nsnn/so-kiem-tra-tran-chi-tu-btc/so-kiem-tra-tran-chi-tu-btc.module'
+      ).then((m) => m.SoKiemTraTranChiTuBtcModule),
   },
   //nhap so quyet dinh, cong van
   {
