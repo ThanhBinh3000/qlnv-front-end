@@ -1,4 +1,14 @@
 ::ng-deep {
+  .dieu-chinh-button {
+    position: absolute;
+    top: 65px;
+    right: 35px;
+    border: 0;
+    background: #f8f8f8;
+    .tab-pane {
+      background: #f8f8f8 !important;
+    }
+  }
   .chi-tieu__body {
     .flex-card.ant-card {
       border: 1px solid #ececec !important;
@@ -107,7 +117,7 @@
   .dieu-chinh__body {
     .table-dieu-chinh .ant-table-content .ant-table-thead > tr > th {
       background: #e3f9f9;
-      border: 0.5px solid #b8f0f1 !important;
+      border: 0.5px solid #4e5484 !important;
     }
   }
   .tai-lieu-dinh-kem {
@@ -159,7 +169,7 @@
         border: 1px solid #eaeaea;
         text-transform: uppercase;
         margin-right: 8px;
-        background: #fff;
+        background: #fff1f1;
       }
       .da-ban-hanh {
         color: #24e837;
@@ -186,5 +196,21 @@
   }
   .green-value-dc {
     color: #8bc34c !important;
+  }
+  .contentBor {
+    padding-top: 16px;
+    .tab-menu.tab-content {
+      margin: 0 !important;
+    }
+  }
+  .label-color-kh {
+    padding: 0 !important;
+    height: 30px;
+    label {
+      color: #444444;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+    }
   }
 }

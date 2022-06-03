@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -25,7 +25,10 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./thong-tin-de-xuat-dieu-chinh.component.scss']
 })
 export class ThongTinDeXuatDieuChinhComponent implements OnInit {
-  id: number = 0;
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   deXuatDieuChinh: any = {};
   tabSelected: string = 'luongThuc';
 
@@ -93,7 +96,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
       await this.loadDanhMucHang();
       this.spinner.hide();
@@ -412,7 +414,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/kehoach/de-xuat-dieu-chinh',]);
+    this.showListEvent.emit();
   }
 
   async save(isGuiDuyet: boolean) {

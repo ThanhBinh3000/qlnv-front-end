@@ -49,6 +49,9 @@ export class DeXuatDieuChinhComponent implements OnInit {
 
   lastBreadcrumb: string;
 
+  isDetail: boolean = false;
+  selectedId: number = 0;
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -156,10 +159,12 @@ export class DeXuatDieuChinhComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    this.router.navigate([
-      `/${MAIN_ROUTE_KE_HOACH}/${DE_XUAT_DIEU_CHINH}/${THONG_TIN_DE_XUAT_DIEU_CHINH}`,
-      id,
-    ]);
+    this.selectedId = id;
+    this.isDetail = true;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   clearFilter() {
