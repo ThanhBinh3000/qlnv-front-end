@@ -894,6 +894,7 @@ button.btn.btn-create {
 
       .ant-tabs-tab-active::before {
         background-color: #4e5484 !important;
+        bottom: 0px;
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
@@ -905,8 +906,15 @@ button.btn.btn-create {
   }
 }
 
-.tab-menu-new .tab-level-0 .ant-tabs-content-holder,
-.tab-level-1 .ant-tabs-content-holder {
+.tab-level-0 .ant-tabs-content-holder,
+.tab-level-1 .ant-tabs-content-holder,
+.tab-level-2 .ant-tabs-content-holder {
+  border: none;
+}
+
+.tab-level-0 .ant-tabs-content-holder,
+.tab-level-1 .ant-tabs-content-holder,
+.tab-level-2 .ant-tabs-content-holder {
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -918,12 +926,21 @@ button.btn.btn-create {
 
 .tab-level-1 .ant-tabs-nav .ant-tabs-nav-wrap,
 .tab-level-2 .ant-tabs-nav .ant-tabs-nav-wrap {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.ant-tabs.tab-level-1,
+.ant-tabs.tab-level-2 {
+  padding: 0 15px;
 }
 
 .padding-15 {
-  padding: 15px;
+  padding: 0px 15px;
+}
+
+.padding-30 {
+  padding: 0px 30px;
 }
 
 .tab-level-2 {
@@ -963,7 +980,7 @@ button.btn.btn-create {
         background-color: #fff !important;
 
         .ant-tabs-tab-btn {
-          font-weight: 500;
+          font-weight: 400;
         }
       }
     }
