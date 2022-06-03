@@ -58,7 +58,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 		await this.getUserInfo(userName); //get user info
 
 		this.searchFilter.donViTao = this.userInfo?.dvql;
-		this.onSubmit();
+		// this.onSubmit();
 	}
 
 	//get user info
@@ -113,12 +113,14 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
 				page: this.pages.page,
 			},
 			trangThais: [],
+      trangThai: this.searchFilter.trangThai
 		};
 		this.spinner.show();
 		//let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
 		await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
 			(data) => {
 				if (data.statusCode == 0) {
+          this.danhSachDieuChinh = []
 					this.danhSachDieuChinh = data.data.content;
 					this.danhSachDieuChinh.forEach(e => {
 						e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');

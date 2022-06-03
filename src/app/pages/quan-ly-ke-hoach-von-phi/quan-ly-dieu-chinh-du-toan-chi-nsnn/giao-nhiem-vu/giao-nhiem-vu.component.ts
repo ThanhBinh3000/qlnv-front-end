@@ -1,4 +1,3 @@
-import { OK, NOT_OK } from 'src/app/Utility/utils';
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,7 +16,7 @@ import { MESSAGE } from '../../../../constants/message';
 import { MESSAGEVALIDATE } from '../../../../constants/messageValidate';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from "../../../../Utility/utils";
-import { PHU_LUC, Role, TRANGTHAIBAOCAO, TRANGTHAIPHULUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+import { PHU_LUC } from '../quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 
 
 // export class ItemData {
@@ -57,13 +56,14 @@ export class ItemCongVan {
 export class GiaoNhiemVuComponent implements OnInit {
 	//thong tin dang nhap
 	id!: any;
+  loai!: string;
 	userInfo: any;
 	//thong tin chung bao cao
 	maBaoCao!: string;
 	namHienHanh!: number;
 	ngayNhap!: string;
 	nguoiNhap!: string;
-	congVan!: ItemCongVan;
+	congVan: ItemCongVan = new ItemCongVan();
 	ngayTrinhDuyet!: string;
 	ngayDuyetTBP!: string;
 	ngayDuyetLD!: string;
@@ -443,8 +443,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.lstDviTrucThuoc.forEach(item => {
 			tongHopTuIds.push(item.id);
 		})
-
-		let request = {
+		let request = JSON.parse(JSON.stringify({
 			id: this.id,
 			fileDinhKems: listFile,
 			listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
@@ -454,9 +453,14 @@ export class GiaoNhiemVuComponent implements OnInit {
 			namBcao: this.namHienHanh,
 			namHienHanh: this.namHienHanh,
       dotBcao: this.dotBcao,
+      congVan: this.congVan,
 			tongHopTuIds: tongHopTuIds,
-		};
-
+		}));
+    //get file cong van url
+		let file: any = this.fileDetail;
+		if (file) {
+		  request.congVan = await this.uploadFile(file);
+		}
 		//call service them moi
 		this.spinner.show();
 		if (this.id == null) {
@@ -575,65 +579,6 @@ export class GiaoNhiemVuComponent implements OnInit {
 			}
 		});
 	}
-
-  // //show popup tu choi dùng cho nut ok - not ok
-  // async pheDuyetChiTiet(mcn: string, maLoai: any) {
-  //   this.spinner.show();
-  //   if (mcn == OK) {
-  //     await this.pheDuyetBieuMau(mcn, maLoai, null);
-  //   } else if (mcn == NOT_OK) {
-  //     const modalTuChoi = this.modal.create({
-  //       nzTitle: 'Not OK',
-  //       nzContent: DialogTuChoiComponent,
-  //       nzMaskClosable: false,
-  //       nzClosable: false,
-  //       nzWidth: '900px',
-  //       nzFooter: null,
-  //       nzComponentParams: {},
-  //     });
-  //     modalTuChoi.afterClose.toPromise().then(async (text) => {
-  //       if (text) {
-  //         await this.pheDuyetBieuMau(mcn, maLoai, text);
-  //       }
-  //     });
-  //   }
-  //   this.spinner.hide();
-  // }
-
-  // //call api duyet bieu mau
-  // async pheDuyetBieuMau(trangThai: any, maLoai: any, lyDo: string) {
-  //   var idBieuMau: any = this.lstDieuChinhs.find((item) => item.maLoai == maLoai).id;
-  //   const requestPheDuyetBieuMau = {
-  //     id: idBieuMau,
-  //     trangThai: trangThai,
-  //     lyDoTuChoi: lyDo,
-  //   };
-  //   this.spinner.show();
-
-  //   await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestPheDuyetBieuMau).toPromise().then(async res => {
-  //     if (res.statusCode == 0) {
-  //       if (trangThai == NOT_OK) {
-  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-  //       } else {
-  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-  //       }
-  //       this.trangThaiBaoCao = trangThai;
-  //       this.lstDieuChinhs?.filter(item => {
-  //         if (item.maLoai == maLoai) {
-  //           item.trangThai = trangThai;
-  //         }
-  //       })
-  //       this.getStatusButton();
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, res?.msg);
-  //     }
-  //   }, err => {
-  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //   })
-  //   this.spinner.hide();
-  // }
-
-
 	// call chi tiet bao cao
 	async getDetailReport() {
 		this.spinner.show();
@@ -656,7 +601,18 @@ export class GiaoNhiemVuComponent implements OnInit {
 					this.ngayDuyetLD = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
-					this.lyDoTuChoi = data.data.lyDoTuChoi;
+					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
+						this.trangThaiBaoCao == Utils.TT_BC_3 ||
+						this.trangThaiBaoCao == Utils.TT_BC_5 ||
+						this.trangThaiBaoCao == Utils.TT_BC_8) {
+						this.status = false;
+					} else {
+						this.status = true;
+					}
+					this.lstDviTrucThuoc.forEach(item => {
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -804,7 +760,27 @@ export class GiaoNhiemVuComponent implements OnInit {
 		this.tabs.splice(index - 1, 1);
 	}
 
-	newTab(id: any): void {
+	// newTab(id: any): void {
+	// 	var index: number = this.tabs.findIndex(e => e.id === id);
+	// 	if (index != -1) {
+	// 		this.selectedIndex = index + 1;
+	// 	} else {
+	// 		let item = this.lstDieuChinhs.find(e => e.maLoai == id);
+	// 		this.data = {
+	// 			...item,
+	// 			namHienHanh: this.namHienHanh,
+	// 			trangThaiBaoCao: this.trangThaiBaoCao,
+	// 			statusBtnOk: this.statusBtnOk,
+	// 			statusBtnFinish: this.statusBtnFinish,
+	// 			status: this.status,
+	// 		}
+	// 		this.tabs = [];
+	// 		this.tabs.push(PHU_LUC.find(e => e.id === id));
+	// 		this.selectedIndex = this.tabs.length + 1;
+	// 	}
+	// }
+
+  newTab(id: any): void {
 		var index: number = this.tabs.findIndex(e => e.id === id);
 		if (index != -1) {
 			this.selectedIndex = index + 1;
@@ -821,7 +797,9 @@ export class GiaoNhiemVuComponent implements OnInit {
 			this.tabs = [];
 			this.tabs.push(PHU_LUC.find(e => e.id === id));
 			this.selectedIndex = this.tabs.length + 1;
+      console.log(this.data);
 		}
+
 	}
 
 	getNewData(obj: any) {
@@ -846,6 +824,15 @@ export class GiaoNhiemVuComponent implements OnInit {
 	}
 
 	close() {
-		this.location.back();
+		if (this.loai == "0") {
+			this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN']);
+		} else {
+			if (this.loai == "1"){
+				this.router.navigate(['/qlkh-von-phi/quan-ly-dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN']);
+			} else {
+				this.location.back();
+			}
+		}
+
 	}
 }

@@ -220,7 +220,9 @@ export class PhuLuc5Component implements OnInit {
           (data) => {
               if (data.statusCode == 0) {
                   this.donVis = data.data;
-                  this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '3')
+                  this.maCucDtnnKvucs = this.donVis.filter(item => item.capDvi === '2')
+                  console.log(this.maCucDtnnKvucs);
+
               } else {
                   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
               }

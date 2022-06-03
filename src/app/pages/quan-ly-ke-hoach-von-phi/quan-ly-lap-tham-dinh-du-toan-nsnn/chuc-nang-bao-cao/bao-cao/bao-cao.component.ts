@@ -222,7 +222,7 @@ export class BaoCaoComponent implements OnInit {
 					this.namHienHanh = new Date().getFullYear();
 				}
 			}
-			
+
 
 		}
 

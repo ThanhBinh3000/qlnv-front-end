@@ -18,7 +18,7 @@ import { divMoney, DON_VI_TIEN, KHOAN_MUC, MONEY_LIMIT, mulMoney, NOT_OK, OK, Ut
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 // import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
-import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG-tai-chi-cuc-mau04a/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-DTQG.constant';
+import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
 import { LISTCANBO, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
   id!: any;
@@ -810,8 +810,14 @@ export class BaoCaoComponent implements OnInit {
     // lay vi tri hang minh sua
     const index = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id == id);
     // xoa dong neu truoc do chua co du lieu
-    if (!this.danhSachChiTietPhuLucTemp[index].maNdung) {
+    if (this.tabSelected == TAB_SELECTED.phuLuc1 && !this.danhSachChiTietPhuLucTemp[index].maNdung) {
       this.deleteLine(id);
+      return;
+    }else if(this.tabSelected == TAB_SELECTED.phuLuc2 && !this.danhSachChiTietPhuLucTemp[index].maNdung){
+      this.deleteById(id);
+      return;
+    }else if(this.tabSelected == TAB_SELECTED.phuLuc3 && !this.danhSachChiTietPhuLucTemp[index].maDan){
+      this.deleteById(id);
       return;
     }
     //return du lieu

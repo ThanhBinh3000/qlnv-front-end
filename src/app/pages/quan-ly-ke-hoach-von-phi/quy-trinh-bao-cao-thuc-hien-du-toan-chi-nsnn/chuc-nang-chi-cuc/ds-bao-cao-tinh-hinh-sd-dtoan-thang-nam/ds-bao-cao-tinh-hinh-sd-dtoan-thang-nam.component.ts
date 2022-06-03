@@ -64,6 +64,15 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let date = new Date();
+    this.searchFilter.ngayTaoDen = date.toDateString();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.searchFilter.thangBcao = date.getMonth()+1;
+    date.setMonth(date.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = date.toDateString();
+    this.trangThai = '1';
+    this.searchFilter.maLoaiBcao='526';
+    this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -86,15 +95,16 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
-    this.searchFilter.trangThais= [];
-    this.searchFilter.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, 'dd/MM/yyyy') || this.searchFilter.ngayTaoTu;
-    this.searchFilter.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, 'dd/MM/yyyy') || this.searchFilter.ngayTaoDen;
+    let searchFilterTemp = Object.assign({},this.searchFilter);
+    searchFilterTemp.trangThais= [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if(this.trangThai){
-      this.searchFilter.trangThais.push(this.trangThai)
+      searchFilterTemp.trangThais.push(this.trangThai)
     }else{
-      this.searchFilter.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
     }
-    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+    await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data.content;
         this.listBcaoKqua.forEach(e => {

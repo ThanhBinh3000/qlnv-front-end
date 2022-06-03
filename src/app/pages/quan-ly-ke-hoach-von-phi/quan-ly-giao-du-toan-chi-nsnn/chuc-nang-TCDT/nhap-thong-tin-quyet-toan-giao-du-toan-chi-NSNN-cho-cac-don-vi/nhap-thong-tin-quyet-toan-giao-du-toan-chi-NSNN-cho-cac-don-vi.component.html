@@ -1,3 +1,131 @@
-<p>
-  nhap-thong-tin-quyet-toan-giao-du-toan-chi-NSNN-cho-cac-don-vi works!
-</p>
+<div class="contentBor chi-tieu__body">
+	<div class="contentDetail">
+		<div class="main-content">
+			<nz-card nzTitle="NHẬP QĐ GIAO DỰ TOÁN CHI NSNN CHO CÁC ĐƠN VỊ" [nzExtra]="tableCard0" class="mt16 flex-card p-lr16">
+				<nz-table #basicTable class="nowrap">
+					<thead>
+            <tr>
+							<th nzWidth="20%">Ngày tạo QĐ</th>
+							<th nzWidth="20%">Năm dự toán</th>
+							<th nzWidth="30%">Số QĐ</th>
+							<th nzWidth="30%">Mã PA</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ngayTao}}</td>
+							<td>{{namGiao}}</td>
+							<td>
+								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+									<button nz-button>
+										<i nz-icon nzType="upload"></i>
+										Select File
+									</button>
+								</nz-upload>
+								<div class="tep" (click)="downloadFileCv()">
+									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+									<span>{{soQd?.fileName}}</span>
+								</div>
+							</td>
+							<td>
+								<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn phương án" [(ngModel)]="maPa"
+								[class]="maPa ?'' : 'input-error-validate'" nzWidth="200px">
+									<nz-option *ngFor="let item of phuongAns" [nzValue]="item" [nzLabel]="item">
+									</nz-option>
+								</nz-select>
+								<!-- <button class="btn btn-function" (click)="xemphuongan()">Xem phương án</button> -->
+							</td>
+						</tr>
+					</tbody>
+				</nz-table>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+          <div nz-col class="gutter-row" [nzSpan]="3">
+            Danh sách văn bản đính kèm
+            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+              <button nz-button>
+                <i nz-icon nzType="upload"></i>
+                Select File
+              </button>
+            </nz-upload>
+            <button nz-button [nzType]="'primary'" (click)="handleUpload()" [disabled]="fileList.length === 0"
+              [hidden]="status" style="margin-top: 16px">
+              Thêm vào danh sách
+            </button>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+          <div nz-col class="gutter-row" [nzSpan]="12">
+            <nz-table nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên file</th>
+                  <th></th>
+                  <th class="th" [hidden]="status"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstFiles; let i = index">
+                  <td>{{ i + 1 }} </td>
+                  <td>{{ data.fileName }}</td>
+                  <td>
+                    <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
+                  </td>
+                  <td [hidden]="status">
+                    <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+
+          </div>
+        </div>
+			</nz-card>
+			<ng-template #tableCard0>
+				<button type="button" class="btn btn-main">
+					<i class="fa fa-trash-o"></i>
+					<span>Xóa</span>
+				</button>
+				<button type="button" class="btn btn-main" (click)="luu()">
+					<i class="icon htvbdh_dau-cong"></i>
+					<span>Lưu</span>
+				</button>
+				<button type="button" class="btn btn-sub" (click)="dong()">
+					<i class="icon htvbdh_tcdt_close"></i>
+					<span>Đóng</span>
+				</button>
+			</ng-template>
+
+			<div class="ghi-chu">
+				<nz-form-label nzRequired [nzNoColon]="true">
+					Ghi chú
+				</nz-form-label>
+				<ul>
+					<li class="ghi-chu__item">
+						Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+						CSDL về Tài
+						chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+						dựng CSDL về
+						Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát
+						xây dựng CSDL
+						về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo
+						sát xây dựng
+						CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến
+						khảo sát xây
+						dựng CSDL về Tài chính
+					</li>
+					<li class="ghi-chu__item">
+						Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+						hoạch năm
+						2022
+					</li>
+					<li class="ghi-chu__item">
+						Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+						hoạch năm
+						2022
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

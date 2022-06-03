@@ -32,8 +32,8 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
     trangThais: [],
     maBcao: '',
     maLoaiBcao: '',
-    namBcao: '',
-    thangBcao: '',
+    namBcao: null,
+    thangBcao: null,
     dotBcao: '',
     paggingReq: {
       limit: 10,
@@ -59,6 +59,13 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let date = new Date();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.searchFilter.thangBcao = date.getMonth()+1;
+    this.trangThai = '7';
+    this.searchFilter.maLoaiBcao='526';
+    this.onSubmit();
+
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -81,13 +88,16 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   async onSubmit() {
     this.spinner.show();
-    this.searchFilter.trangThais = [];
+    let searchFilterTemp = Object.assign({},this.searchFilter);
+    searchFilterTemp.trangThais= [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     if (this.trangThai) {
-      this.searchFilter.trangThais.push(this.trangThai)
+      searchFilterTemp.trangThais.push(this.trangThai)
     } else {
-      this.searchFilter.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
-    await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+    await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.listBcaoKqua = res.data?.content;
         this.listBcaoKqua.forEach(e => {
@@ -98,7 +108,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
           e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
           e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
         })
-        debugger
         this.totalElements = res.data.totalElements;
         this.totalPages = res.data.totalPages;
       } else {
@@ -128,8 +137,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 
   // lay ten trang thai ban ghi
   getStatusName(id) {
-    const utils = new Utils();
-    return utils.getStatusName(id);
+    return TRANG_THAI_GUI_DVCT.find(item => item.id == id)?.ten
   }
 
   //download file về máy tính
