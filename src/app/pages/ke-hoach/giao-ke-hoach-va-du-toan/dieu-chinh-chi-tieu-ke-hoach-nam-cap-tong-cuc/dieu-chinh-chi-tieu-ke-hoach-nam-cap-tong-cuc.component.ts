@@ -60,6 +60,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  isView: boolean = false;
 
   constructor(
     private router: Router,
@@ -208,9 +209,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id) {
+  redirectToChiTiet(isView, id) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isView = isView;
   }
 
   showList() {
@@ -351,5 +353,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
+  }
+
+  deleteSelect() {
+
   }
 }

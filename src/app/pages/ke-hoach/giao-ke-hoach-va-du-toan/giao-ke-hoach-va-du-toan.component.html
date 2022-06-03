@@ -42,7 +42,7 @@
 
                   <nz-tabset nzType="card" class="tab-level-3">
                     <nz-tab [nzTitle]="'Danh sách quyết định của Thủ tướng'">
-                      <nz-table #basicTable class="nowrap mt-16 table__container-tt" [nzData]="dataTable"
+                      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable"
                         [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                         <thead>
                           <tr>
@@ -105,9 +105,7 @@
                       </nz-table>
                       <div class="tab-content tab-menu" id="myTabContent">
                         <div class="tab-pane fade show active justify-content-between">
-                          <div class="trai">
-
-                          </div>
+                          <div class="trai"></div>
                           <div class="canphai">
                             <!-- begin phân trang  -->
                             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
