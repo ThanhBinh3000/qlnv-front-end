@@ -52,6 +52,8 @@ export class ThongtinDauthauComponent implements OnInit {
     soQd: '',
     trangThai: '11',
     namKhoach: 0,
+    tuNgayQd: '',
+    denNgayQd: ''
   };
 
   listVthh: any[] = [];
@@ -103,6 +105,8 @@ export class ThongtinDauthauComponent implements OnInit {
     this.dataTable = [];
     let body = this.searchFilter;
     body.namKhoach = body.namKh;
+    body.tuNgayQd = body.ngayQd[0];
+    body.denNgayQd = body.ngayQd[1];
     let res;
     res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
 

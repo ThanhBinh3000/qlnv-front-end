@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LEVEL } from 'src/app/constants/config';
-import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
+import { LEVEL, LIST_VAT_TU_HANG_HOA } from 'src/app/constants/config';
+import { convertIdToLoaiVthh, convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
 
 
 @Component({
@@ -17,57 +17,34 @@ export class TongCucComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
   }
-  lastBreadcrumb: string;
   loaiVthh: string;
-  title: string;
-  selectedTab: string;
-  index = 0;
+  selectedTab: string = 'tong-hop';
   async ngOnInit() {
-    this.getTitleVthh();
-    this.selectTabMenu('tong-hop', 'Tổng hợp kế hoạch lựa chọn nhà thầu');
+    this.referTabLv1(LIST_VAT_TU_HANG_HOA[0]);
+
   }
 
-  getTitleVthh() {
-    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
-  }
-
-  selectTabMenu(tab, title) {
-    this.selectedTab = tab;
-    this.title = title
-    // let link = '/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/'+tab;
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + this.route.snapshot.paramMap.get('type') + '/' + tab]);
-  }
-
-  onIndexChange(event: number): void {
-    this.index = event;
-    if (this.index == 0) {
-      this.selectTabMenu('tong-hop', 'Tổng hợp kế hoạch lựa chọn nhà thầu');
-    } else if (this.index == 1) {
-      this.selectTabMenu('phuong-an', 'Phương án kế hoạch lựa chọn nhà thầu');
-    } else if (this.index == 2) {
-      this.selectTabMenu('phe-duyet', 'Quyết định phê duyệt kế hoạch lựa chọn nhà thầu');
+  listVthh: any = LIST_VAT_TU_HANG_HOA;
+  tabMenu = [
+    {
+      text: 'Tổng hợp kế hoạch lựa chọn nhà thầu',
+      value: 'tong-hop'
+    },
+    {
+      text: 'Quyết định phê duyệt kế hoạch lựa chọn nhà thầu',
+      value: 'phe-duyet'
     }
+  ];
 
-  }
-  tuchoi(): void {
-    this.lydotuchoi = true;
-  }
-  filedinhkem(): void {
-    this.dinhkem = true;
-  }
-  handleOk(): void {
-    console.log('Button ok clicked!');
-    this.lydotuchoi = false;
-    this.dinhkem = false;
+  referTabLv1(event) {
+    this.loaiVthh = convertIdToLoaiVthh(event.value);
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + convertIdToLoaiVthh(event.value) + '/' + this.selectedTab]);
   }
 
-  handleCancel(): void {
-    console.log('Button cancel clicked!');
-    this.lydotuchoi = false;
-    this.dinhkem = false;
+  referTabLv2(event) {
+    this.selectedTab = event.value;
+    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + this.loaiVthh + '/' + event.value]);
   }
+
 }

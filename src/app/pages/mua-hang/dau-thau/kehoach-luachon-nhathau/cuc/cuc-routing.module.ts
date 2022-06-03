@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: CucComponent,
-    children : [
+    children: [
       {
         path: '',
         redirectTo: '',

@@ -1,209 +1,204 @@
-<div class="contentBor luong-dau-thau-gao__body">
-  <div class="contentDetail">
-    <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-        <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6">
-            <label class="search__label">Loại hàng </label>
-            <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
-              <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label"> Năm kế hoạch </label>
-            <nz-select [(ngModel)]="searchFilter.namKh">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-            </nz-select>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">Ngày tổng hợp</label>
-            <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </div>
-          <div nz-col nzSpan="6">
-            <label class="search__label">QĐ giao chỉ tiêu/điều chỉnh giao chỉ tiêu</label>
-            <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh">
+<div class="content-tab padding-30">
+  <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+      <div nz-col nzSpan="6">
+        <label class="search__label">Loại hàng </label>
+        <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh" nzDisabled>
+          <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label"> Năm kế hoạch </label>
+        <nz-select [(ngModel)]="searchFilter.namKh">
+          <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">Ngày tổng hợp</label>
+        <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">QĐ giao chỉ tiêu/điều chỉnh giao chỉ tiêu</label>
+        <nz-select nzPlaceHolder="Loại hàng DTQG" [(ngModel)]="searchFilter.loaiVthh">
 
-            </nz-select>
-          </div>
-        </div>
-        <div class="cangiua group-button-search">
-          <button nz-button class="search__button--search" (click)="search()">
-            <i nz-icon nzType="search"></i>
-            Tìm kiếm
-          </button>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
-            <i nz-icon nzType="close"></i>
-            Xóa điều kiện
-          </button>
-        </div>
-      </nz-card>
-      <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container mt-16" [nzTabBarExtraContent]="tableCard1">
-          <nz-tab [nzTitle]="'Thông tin tổng hợp kế hoạch lựa chọn nhà thầu trình Tổng cục'" class="tt-chung__container"
-            (nzClick)="selectTabData('phuong-an-tong-hop')">
-            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false">
-              <thead>
-                <tr>
-                  <th width="30px">STT</th>
-                  <th>Tên đơn vị</th>
-                  <th>Ngày tổng hợp</th>
-                  <th>Năm kế hoạch</th>
-                  <th>QĐ giao CTKH/điều chỉnh giao CTKH</th>
-                  <th>Hình thức LCNT</th>
-                  <th>Phương thức LCNT</th>
-                  <th>Loại hợp đồng</th>
-                  <th>Trạng thái</th>
-                  <th width="30px">Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of basicTable.data; let i = index">
-                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                  <td>{{ data.maDvi }}</td>
-                  <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{ data.namKhoach }}</td>
-                  <td>{{ data.tenHthucLcnt }}</td>
-                  <td>{{ data.hthucLcnt }}</td>
-                  <td>{{ data.pthucLcnt }}</td>
-                  <td>{{ data.loaiHdong }}</td>
-                  <td>{{ convertTrangThai(data.trangThai) }}</td>
-                  <td class="text-center">
-                    <a (click)="redirectToChiTiet(data.id)">
-                      <i class="fa fa-eye"></i>
-                    </a>
-                    <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <div class="tab-content tab-menu" id="myTabContent">
-              <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                  <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                    (nzPageSizeChange)="changePageSize($event)">
-                    <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                    </ng-template>
-                  </nz-pagination>
-                  <!-- end phân trang  -->
-                </div>
-              </div>
-            </div>
-          </nz-tab>
-
-          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp'" class="tt-chung__container"
-            (nzClick)="selectTabData('danh-sach-chua-tong-hop')">
-            <nz-table #basicTableNoTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
-              [nzFrontPagination]="false" [nzShowPagination]="false">
-              <thead>
-                <tr>
-                  <th width="30px">STT</th>
-                  <th>Cục DTNN KV</th>
-                  <th>Số gói thầu</th>
-                  <th>Số đề xuất</th>
-                  <th>Ngày đề xuất</th>
-                  <th>Tên dự án </th>
-                  <th>Số lượng (Tấn)</th>
-                  <th>Tổng tiền (Gồm thuế)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of basicTableNoTH.data; let i = index">
-                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                  <td>{{ getTenDviTable(data.maDvi) }}</td>
-                  <td>{{ data.children2.length }}</td>
-                  <td>{{ data.soDxuat }}</td>
-                  <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
-                  <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
-                  <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <div class="tab-content tab-menu" id="myTabContent">
-              <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                  <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                    (nzPageSizeChange)="changePageSize($event)">
-                    <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                    </ng-template>
-                  </nz-pagination>
-                  <!-- end phân trang  -->
-                </div>
-              </div>
-            </div>
-          </nz-tab>
-          <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp'" class="tt-chung__container"
-            (nzClick)="selectTabData('danh-sach-tong-hop')">
-            <nz-table #basicTableTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
-              [nzFrontPagination]="false" [nzShowPagination]="false">
-              <thead>
-                <tr>
-                  <th width="30px">STT</th>
-                  <th>Cục DTNN KV</th>
-                  <th>Số gói thầu</th>
-                  <th>Số đề xuất</th>
-                  <th>Ngày đề xuất</th>
-                  <th>Tên dự án </th>
-                  <th>Số lượng (Tấn)</th>
-                  <th>Tổng tiền (Gồm thuế)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of basicTableTH.data; let i = index">
-                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                  <td>{{ getTenDviTable(data.maDvi) }}</td>
-                  <td>{{ data.children2.length }}</td>
-                  <td>{{ data.soDxuat }}</td>
-                  <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
-                  <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
-                  <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <div class="tab-content tab-menu" id="myTabContent">
-              <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                  <!-- begin phân trang  -->
-                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                    (nzPageSizeChange)="changePageSize($event)">
-                    <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                    </ng-template>
-                  </nz-pagination>
-                  <!-- end phân trang  -->
-                </div>
-              </div>
-            </div>
-          </nz-tab>
-        </nz-tabset>
-        <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="themMoi()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-          <button type="button" class="btn btn-sub" (click)="exportData()">
-            <i class="icon htvbdh_chuyen-xu-ly"></i>
-            <span>Export</span>
-          </button>
-        </ng-template>
+        </nz-select>
       </div>
     </div>
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--search" (click)="search()">
+        <i nz-icon nzType="search"></i>
+        Tìm kiếm
+      </button>
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i nz-icon nzType="close"></i>
+        Xóa điều kiện
+      </button>
+    </div>
+  </nz-card>
+  <div class="tab__luong-thuc mt-16">
+    <nz-tabset nzType="card" class="tab__container" [nzTabBarExtraContent]="tableCard1">
+      <nz-tab class="tt-chung__container" [nzTitle]="'Thông tin tổng hợp kế hoạch lựa chọn nhà thầu trình Tổng cục'"
+        class="tt-chung__container" (nzClick)="selectTabData('phuong-an-tong-hop')">
+        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th width="30px">STT</th>
+              <th>Tên đơn vị</th>
+              <th>Ngày tổng hợp</th>
+              <th>Năm kế hoạch</th>
+              <th>QĐ giao CTKH/điều chỉnh giao CTKH</th>
+              <th>Hình thức LCNT</th>
+              <th>Phương thức LCNT</th>
+              <th>Loại hợp đồng</th>
+              <th>Trạng thái</th>
+              <th width="30px">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+              <td>{{ data.maDvi }}</td>
+              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.namKhoach }}</td>
+              <td>{{ data.tenHthucLcnt }}</td>
+              <td>{{ data.hthucLcnt }}</td>
+              <td>{{ data.pthucLcnt }}</td>
+              <td>{{ data.loaiHdong }}</td>
+              <td>{{ convertTrangThai(data.trangThai) }}</td>
+              <td class="text-center">
+                <a (click)="redirectToChiTiet(data.id)">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'Danh sách đề xuất của Cục chưa tổng hợp'" class="tt-chung__container"
+        (nzClick)="selectTabData('danh-sach-chua-tong-hop')">
+        <nz-table #basicTableNoTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
+          [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th width="30px">STT</th>
+              <th>Cục DTNN KV</th>
+              <th>Số gói thầu</th>
+              <th>Số đề xuất</th>
+              <th>Ngày đề xuất</th>
+              <th>Tên dự án </th>
+              <th>Số lượng (Tấn)</th>
+              <th>Tổng tiền (Gồm thuế)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTableNoTH.data; let i = index">
+              <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+              <td>{{ getTenDviTable(data.maDvi) }}</td>
+              <td>{{ data.children2.length }}</td>
+              <td>{{ data.soDxuat }}</td>
+              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
+              <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
+              <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab [nzTitle]="'Danh sách đề xuất của Cục đã tổng hợp'" class="tt-chung__container"
+        (nzClick)="selectTabData('danh-sach-tong-hop')">
+        <nz-table #basicTableTH class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableDanhSachDX"
+          [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th width="30px">STT</th>
+              <th>Cục DTNN KV</th>
+              <th>Số gói thầu</th>
+              <th>Số đề xuất</th>
+              <th>Ngày đề xuất</th>
+              <th>Tên dự án </th>
+              <th>Số lượng (Tấn)</th>
+              <th>Tổng tiền (Gồm thuế)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTableTH.data; let i = index">
+              <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+              <td>{{ getTenDviTable(data.maDvi) }}</td>
+              <td>{{ data.children2.length }}</td>
+              <td>{{ data.soDxuat }}</td>
+              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.children1 ? data.children1.tenDuAn : '' }}</td>
+              <td>{{ calendarData(data.children2,'so-luong') | number: '1.0-1' }}</td>
+              <td>{{ calendarData(data.children2,'tong-tien') | number: '1.0-1' }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang  -->
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+    <ng-template #tableCard1>
+      <button type="button" class="btn btn-main" (click)="themMoi()">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
+      <button type="button" class="btn btn-sub" (click)="exportData()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Export</span>
+      </button>
+    </ng-template>
   </div>
-</div>
