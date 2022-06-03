@@ -86,7 +86,12 @@
 							</td>
 							<td>{{item.ngayTao}}</td>
 							<td>{{item.namHienHanh}}</td>
-							<td class="text-center">{{getStatusName(item.trangThai)}}</td>
+							<td class="text-center">
+								{{getStatusName(item.trangThai)}}
+								<ng-container *ngIf="item.lyDoTuChoi">
+									<br>Lý do: {{item.lyDoTuChoi}}
+								</ng-container>
+							</td>
 							<td>
 								<ng-container *ngIf="checkDeleteReport(item)">
 									<i class="fa fa-trash-o do" (click)="xoaBaoCao(item.id)"></i>

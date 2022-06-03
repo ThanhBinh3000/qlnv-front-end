@@ -105,9 +105,42 @@ export const QUAN_LY_THAM_DINH_DU_TOAN_NSNN_LIST: QuanLyLapThamDinhDuToanNSNN[] 
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
+		title: 'Tìm kiếm số kiểm tra trần chi giao từ Bộ tài chính',
+		description: 'Tìm kiếm số kiểm tra trần chi giao từ Bộ tài chính',
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/0`,
+		unRole: [
+			{
+				"unit": CHI_CUC,
+				"role": NHAN_VIEN,
+			},
+			{
+				"unit": CHI_CUC,
+				"role": TRUONG_BP,
+			},
+			{
+				"unit": CHI_CUC,
+				"role": LANH_DAO,
+			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": NHAN_VIEN,
+			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": TRUONG_BP,
+			},
+			{
+				"unit": CUC_KHU_VUC,
+				"role": LANH_DAO,
+			},
+		],
+		isDisabled: false,
+	},
+	{
+		icon: 'htvbdh_tcdt_icon-common',
 		title: 'Tìm kiếm phương án/QĐ/CV giao số kiểm tra NSNN tại các đơn vị',
 		description: 'Tìm kiếm phương án/QĐ/CV giao số kiểm tra NSNN tại các đơn vị',
-		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn`,
+		url: `/${MAIN_ROUTE_QUAN_LY_KE_HOACH_VON_PHI}/${MAIN_ROUTE_QUAN_LY_LAP_THAM_DINH_DU_TOAN_NSNN}/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1`,
 		unRole: [
 			{
 				"unit": CHI_CUC,

@@ -78,7 +78,7 @@ export const NOI_DUNG = [
         idCha: 200,
     },
     {
-        id: 200,
+        id: 300,
         tenDm: "NHU CẦU CHI CÒN LẠI, SAU KHI TRỪ ĐI SỐ CHI TỪ NGUỒN THU ĐỂ LẠI CHO ĐƠN VỊ SỬ DỤNG (A-B)",
         level: 0,
         idCha: 0,

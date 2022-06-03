@@ -75,10 +75,10 @@
             <th>10</th>
             <th>11</th>
             <th>12=10-11</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
         </tr>
     </thead>
     <tbody>
@@ -110,7 +110,9 @@
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    <ng-container *ngIf="!getLowStatus(data.stt)">
+                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -133,23 +135,28 @@
                     </div>
                 </td>
                 <td>
-                    <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
+                    <nz-input-number class="search__input" nzSize="small" 
+                    [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
+                    (ngModelChange)="changeModel(data.id)"
                         [class]="editCache[data.id].data.namHienHanhDtoan || editCache[data.id].data.namHienHanhDtoan ===0?'' : 'input-error-validate'">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.namHienHanhUocThien"
+                        (ngModelChange)="changeModel(data.id)"
                         [class]="editCache[data.id].data.namHienHanhUocThien || editCache[data.id].data.namHienHanhUocThien ===0?'' : 'input-error-validate'">
                     </nz-input-number>
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.tranChiN"></nz-input-number>
+                        [(ngModel)]="editCache[data.id].data.tranChiN"
+                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.ncauChiN"
+                        (ngModelChange)="changeModel(data.id)"
                         [class]="editCache[data.id].data.ncauChiN || editCache[data.id].data.ncauChiN ===0?'' : 'input-error-validate'">
                     </nz-input-number>
                 </td>
@@ -161,11 +168,13 @@
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.tranChiN1"></nz-input-number>
+                        [(ngModel)]="editCache[data.id].data.tranChiN1"
+                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
                         [(ngModel)]="editCache[data.id].data.ncauChiN1"
+                        (ngModelChange)="changeModel(data.id)"
                         [class]="editCache[data.id].data.ncauChiN1 || editCache[data.id].data.ncauChiN1 ===0?'' : 'input-error-validate'">
                     </nz-input-number>
                 </td>
@@ -174,11 +183,13 @@
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.tranChiN2"></nz-input-number>
+                        [(ngModel)]="editCache[data.id].data.tranChiN2"
+                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
                 </td>
                 <td>
                     <nz-input-number class="search__input" nzSize="small"
-                        [(ngModel)]="editCache[data.id].data.ncauChiN2"></nz-input-number>
+                        [(ngModel)]="editCache[data.id].data.ncauChiN2"
+                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
                 </td>
                 <td>
                     {{editCache[data.id].data.clechTranChiVsNcauChiN2}}

@@ -100,8 +100,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/' + id,
-      // 'http://192.168.1.111:8094/lap-tham-dinh/chi-tiet/' + id,
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/' + id,
+      'http://192.168.1.111:8094/lap-tham-dinh/chi-tiet/' + id,
     );
   }
 
@@ -283,6 +283,13 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  //danh sach bao cao tong hop nen bao cao to
+  danhSachBaoCaoTongHop(maBcao: string): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach/bao-cao/' + maBcao
+      'http://192.168.1.111:8094/pa-giao-so-kt/danh-sach/bao-cao/' + maBcao
+    )
+  }
   //tao ma PA giao du toan chi NSNN
   maPhuongAnGiao(maLoai: string): Observable<any> {
     return this.httpClient.get(
@@ -316,8 +323,8 @@ export class QuanLyVonPhiService extends BaseService {
   //chi tiet ma phuong an
   ctietPhuongAn(id: any): Observable<any> {
     return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + id
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/chi-tiet/' + id
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/chi-tiet/' + id
+      'http://192.168.1.111:8094/pa-giao-so-kt/chi-tiet/' + id
     );
   }
 
@@ -332,8 +339,8 @@ export class QuanLyVonPhiService extends BaseService {
   //giao so tran chi
   giaoSoTranChi(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/giao-so'
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/giao-so'
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/giao-so'
+      'http://192.168.1.111:8094/pa-giao-so-kt/giao-so'
       , request);
   }
 
@@ -348,8 +355,16 @@ export class QuanLyVonPhiService extends BaseService {
   //them moi phuong an
   themMoiPhuongAn(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/them-moi',
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/them-moi',
+      'http://192.168.1.111:8094/pa-giao-so-kt/them-moi',
+      request);
+  }
+
+  //sua bao cao theo so giao tran chi
+  suaBcao(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/cap-nhat/bao-cao',
+      'http://192.168.1.111:8094/pa-giao-so-kt/cap-nhat/bao-cao',
       request);
   }
 
@@ -377,8 +392,8 @@ export class QuanLyVonPhiService extends BaseService {
   //tim kiem so giao tran chi
   timKiemPhuongAn(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach'
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/danh-sach'
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach'
+      'http://192.168.1.111:8094/pa-giao-so-kt/danh-sach'
       , request)
   }
 
@@ -405,8 +420,8 @@ export class QuanLyVonPhiService extends BaseService {
   //nhap so QD-CV
   themMoiQdCv(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv'
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/nhap-qd-cv'
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/nhap-qd-cv'
+      'http://192.168.1.111:8094/pa-giao-so-kt/nhap-qd-cv'
       , request);
   }
 
@@ -615,8 +630,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   trinhDuyetPhuongAn(request: any): Observable<any> {
     return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/trang-thai',
-      // 'http://192.168.1.111:8094/pa-giao-so-kt/trang-thai',
+      // this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/trang-thai',
+      'http://192.168.1.111:8094/pa-giao-so-kt/trang-thai',
       request);
   }
 
