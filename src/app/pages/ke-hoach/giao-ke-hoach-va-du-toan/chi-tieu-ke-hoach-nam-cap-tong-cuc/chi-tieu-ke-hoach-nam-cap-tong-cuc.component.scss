@@ -1,18 +1,24 @@
 ::ng-deep {
   .tab-chi-tieu-level-0 {
+    margin: 0px 16px !important;
+    .tab-content {
+      margin: 0px 16px;
+    }
+    .nowrap.ant-table-wrapper {
+      margin: 16px 16px 0px 16px !important;
+    }
     margin-left: 16px;
     margin-right: 16px;
     margin-top: 16px !important;
     .pagination-card li:first-child {
-      left: 10px;
+      left: 44px;
     }
     .ant-tabs-nav {
       background: #fff;
       .ant-tabs-nav-wrap {
         background: #fff !important;
-        margin-left: 16px;
         .ant-tabs-tab {
-          background-color: #fff;
+          background-color: #fff !important;
           border-width: 1px 1px 0px 1px;
           border-style: solid;
           border-color: #f3f3f3;
@@ -31,10 +37,16 @@
   }
   .tab-giao-chi-tieu {
     position: relative;
+    .ant-tabs-content-holder {
+      border: 1px solid #f3f3f3 !important;
+    }
+    .tab-menu.tab-content {
+      margin: 0px 16px;
+    }
   }
   .action-giao-chi-tieu {
     position: absolute;
     top: 0px;
-    right: 0px;
+    right: 16px;
   }
 }

@@ -3,9 +3,21 @@
   border-radius: 3px;
 
   .input-multiple {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: #fff;
     border-right: 1px solid #c4c9cc;
-
+    .download-file {
+      background: #f8f9fa;
+      padding: 2px 13px;
+      border-left: 1px solid #c4c9cc;
+      cursor: pointer;
+      color: #828282;
+      span {
+        margin-left: 10px;
+      }
+    }
     .placegolder-multi-tag {
       color: #b0b0b0;
       font-weight: 400;
@@ -45,7 +57,7 @@
   .select-tag {
     padding-left: 6px;
     border-left: 0px;
-    background: #eaeaea;
+    background: #f8f9fa;
     font-size: 13px;
     color: #828282;
     text-align: center;

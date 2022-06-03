@@ -48,7 +48,7 @@
     </div>
     <div class="cangiua group-button-search">
       <button nz-button class="search__button--clear" (click)="clearFilter()">
-        <i nz-icon nzType="close"></i>
+        <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>
       <button nz-button class="search__button--search" (click)="search()">
@@ -59,7 +59,11 @@
   </nz-card>
   <div class="tab-giao-chi-tieu">
     <nz-tabset nzType="card" class="tab-chi-tieu-level-0">
-      <nz-tab [nzTitle]="'Tất cả (125)'">
+      <nz-tab [nzTitle]="title_1">
+        <ng-template #title_1>
+          Tất cả
+          (<span class="number-title-tab">125</span>)
+        </ng-template>
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
           nzBordered>
           <thead>
@@ -128,7 +132,11 @@
           </div>
         </div>
       </nz-tab>
-      <nz-tab [nzTitle]="'QĐ giao chỉ tiêu của Tổng Cục (100)'">
+      <nz-tab [nzTitle]="title_2">
+        <ng-template #title_2>
+          QĐ giao chỉ tiêu của Tổng Cục
+          (<span class="number-title-tab">100</span>)
+        </ng-template>
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
           nzBordered>
           <thead>
@@ -197,7 +205,11 @@
           </div>
         </div>
       </nz-tab>
-      <nz-tab [nzTitle]="'QĐ giao chỉ tiêu của các Cục (25)'">
+      <nz-tab [nzTitle]="title_3">
+        <ng-template #title_3>
+          QĐ giao chỉ tiêu của các Cục
+          (<span class="number-title-tab">25</span>)
+        </ng-template>
         <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
           nzBordered>
           <thead>

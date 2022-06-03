@@ -1,16 +1,31 @@
 ::ng-deep {
+  .menu-lv3 {
+    position: absolute;
+    top: 35px;
+    right: 14px;
+    .tab-menu.tab-content {
+      background-color: transparent !important;
+      border-bottom: none !important;
+    }
+  }
   .header-tab {
-    background: #ffffff !important;
-    margin: 8px 36px 0px 36px !important;
+    // background: #ffffff !important;
+    // margin: 8px 36px 0px 36px !important;
   }
   .tab-tt-chi-tieu-level-0 {
     margin-left: 16px;
     margin-right: 16px;
     margin-top: 16px !important;
+    .ant-tabs-content-holder {
+      display: none !important;
+    }
     .pagination-card li:first-child {
       left: 10px;
     }
     .ant-tabs-nav {
+      .ant-tabs-top > .ant-tabs-nav::before {
+        border-bottom: 0 !important;
+      }
       background: #fff !important;
       padding-bottom: 0px !important;
       .ant-tabs-nav-wrap {
@@ -48,7 +63,7 @@
       overflow: scroll;
     }
     .tab__container {
-      margin-top: 12px;
+      margin: 16px 16px;
     }
     .ghi-chu {
       .ant-form-item-no-colon {
@@ -102,7 +117,7 @@
     position: absolute;
     top: 4px;
     height: 20px;
-    left: 600px;
+    left: 616px;
     color: #7a8eff;
     white-space: nowrap;
     overflow: hidden;
@@ -121,14 +136,15 @@
   .table-out-tab {
     margin-top: 0px !important;
     padding: 10px;
-    border: solid 1px #f0f0f0;
-    border-top: 0;
+    border: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0;
     background: #fff;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
   }
   .ant-tabs-content-holder {
     border-bottom: 0;
+    border: 1 !important;
   }
   .file-not-show {
     display: none !important;
@@ -168,7 +184,9 @@
     }
   }
 }
+
 .thong-tin-chi-tieu {
+  margin: 16px;
   .ant-form-item-label.ant-col,
   .ant-form-item-control {
     padding: 0px !important;
