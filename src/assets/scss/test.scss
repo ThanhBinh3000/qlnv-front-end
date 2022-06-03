@@ -9,7 +9,7 @@ $f14: $font-size14;
     line-height: 1;
     border: solid 2px #ccc;
     background: #fff;
-    color: $color-text !important;
+    color: $color-text  !important;
     cursor: auto;
 
     &.choxuly {
@@ -189,21 +189,22 @@ $f14: $font-size14;
 
 body,
 .tree-modal2 .btn.btn-create.full,
-.ant-checkbox + span,
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
+.ant-checkbox+span,
+.ant-table-thead>tr>th,
+.ant-table-tbody>tr>td {
   font-size: $font-size;
 }
 
 .nut .btn,
 .nut,
 .btn {
+
   i,
   .icon {
     font-size: $f14;
     display: inline-flex;
 
-    & + span {
+    &+span {
       padding-left: 5px;
     }
   }
@@ -211,6 +212,7 @@ body,
 
 .nut,
 th {
+
   i,
   .icon {
     font-size: $f14 $i;
@@ -247,23 +249,27 @@ th {
   border-radius: 0;
   color: $color-text;
 }
+
 .m-footer .canphai a {
   border-left: solid 1px $bg-nhat2;
 }
+
 .m-footer .canphai a {
+
   &.active,
   &:hover {
     border-left-color: #146264;
   }
 }
+
 .nut .btn.active,
 .nut .btn:hover {
   color: #fff;
   background-color: $maincolorhover;
 }
 
-.nut .btn i + span,
-.nut .btn .icon + span {
+.nut .btn i+span,
+.nut .btn .icon+span {
   padding-left: 5px;
 }
 
@@ -287,6 +293,7 @@ th {
 
 .nav-tabs {
   .nav-link {
+
     i,
     .icon {
       display: block;
@@ -325,7 +332,7 @@ th {
   }
 }
 
-.checkbox_contain > .item > span {
+.checkbox_contain>.item>span {
   min-height: 20px;
   display: block;
 }
@@ -356,7 +363,7 @@ th {
 
 .ant-checkbox-input {
   &:focus {
-    & + .ant-checkbox-inner {
+    &+.ant-checkbox-inner {
       @extend %main-color-border;
     }
   }
@@ -381,7 +388,7 @@ th {
 
 .ant-radio-input {
   &:focus {
-    & + .ant-radio-inner {
+    &+.ant-radio-inner {
       @extend %main-color-border;
     }
   }
@@ -454,7 +461,7 @@ button.btn.btn-primary.collapsnav {
 }
 
 .ant-input-group-addon .ant-btn,
-.ant-input-group > .ant-input {
+.ant-input-group>.ant-input {
   padding: 0px 10px;
   height: $input-h;
   min-height: $input-h;
@@ -518,8 +525,8 @@ button.btn.btn-primary.collapsnav {
     background: #ffffff;
     border-radius: 3px;
 
-    & > i,
-    & > .icon {
+    &>i,
+    &>.icon {
       padding: 0 5px 0 5px;
       margin-left: -10px;
     }
@@ -551,10 +558,10 @@ button.btn.btn-primary.collapsnav {
 
 /*nz affix..................................................................*/
 nz-affix {
-  & + router-outlet {
-    & + .ng-star-inserted {
-      & > .contentDetail {
-        & > .title {
+  &+router-outlet {
+    &+.ng-star-inserted {
+      &>.contentDetail {
+        &>.title {
           background: $color-f9;
           margin-bottom: 0;
           padding-top: 10px;
@@ -587,16 +594,20 @@ nz-affix {
   outline: none;
   box-shadow: none;
 }
+
 .ant-input-number {
   width: 100% !important;
 }
+
 app-header {
   z-index: 1;
   position: relative;
 }
+
 .text {
   display: inline-block;
 }
+
 .ant-affix {
   z-index: 999;
 
@@ -620,6 +631,7 @@ app-header {
     position: relative;
 
     &:hover {
+
       i,
       .icon {
         color: $maincolor;
@@ -705,8 +717,9 @@ app-header {
 }
 
 @media (max-width: 1366px) {
+
   .group-btn .btn,
-  .group-btn .btn + span {
+  .group-btn .btn+span {
     float: left;
   }
 }
@@ -753,6 +766,7 @@ app-header {
 
 .menuphai a,
 .ant-badge {
+
   &:active,
   &:focus,
   &:hover {
@@ -827,7 +841,7 @@ app-header {
 /*tab-menu .......................................................*/
 
 .tab-menu {
-  & > div > div {
+  &>div>div {
     padding-top: 5px;
     padding-bottom: 5px;
 
@@ -837,6 +851,7 @@ app-header {
   }
 
   &.tab-content {
+
     // background-color: $color-f9;
     .trai {
       .btn.btn-create {
@@ -883,7 +898,7 @@ app-header {
 
       .icon,
       i {
-        & + span {
+        &+span {
           padding-left: 8px;
         }
       }
@@ -905,7 +920,7 @@ app-header {
     background-color: $color-fb;
   }
 
-  & > .form-control {
+  &>.form-control {
     padding-left: 25px;
   }
 }
@@ -1017,8 +1032,7 @@ input.form-control {
   border-radius: 3px;
 }
 
-.ant-select-show-search.ant-select:not(.ant-select-customize-input)
-  .ant-select-selector,
+.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector,
 .ant-form-item-control-input-content {
   min-height: 23px;
   // overflow: hidden;
@@ -1028,8 +1042,7 @@ input.form-control {
   height: 23px;
 }
 
-.ant-select-show-search.ant-select:not(.ant-select-customize-input)
-  .ant-select-selector {
+.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
   height: 24px;
 }
 
@@ -1052,6 +1065,7 @@ input.form-control {
 }
 
 .ant-select-single.ant-select-show-arrow {
+
   .ant-select-selection-item,
   .ant-select-selection-placeholder {
     float: left;
@@ -1065,6 +1079,7 @@ $cxl-h: 31px;
 .cxl-2 {
   .ant-select-show-search.ant-select {
     &:not(.ant-select-customize-input) {
+
       .ant-select-selector input,
       .ant-select-selector {
         min-height: $cxl-h;
@@ -1091,7 +1106,7 @@ $cxl-h: 31px;
   }
 
   td .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border: solid 1px $borderinput !important;
+    border: solid 1px $borderinput  !important;
     border-radius: 3px;
   }
 
@@ -1110,6 +1125,7 @@ $cxl-h: 31px;
   }
 
   .ant-select-single.ant-select-show-arrow {
+
     .ant-select-selection-item,
     .ant-select-selection-placeholder {
       height: $input-h -2;
@@ -1119,7 +1135,7 @@ $cxl-h: 31px;
 
 /*select.....................................................................*/
 /*tungaydenngay............................................................*/
-.tungaydenngay.input-group > .ant-picker + span {
+.tungaydenngay.input-group>.ant-picker+span {
   padding-left: 10px;
 }
 
@@ -1127,7 +1143,7 @@ $cxl-h: 31px;
   &.input-group {
     flex-wrap: nowrap;
 
-    & > span {
+    &>span {
       // white-space: nowrap;
       // padding-right: 5px;
       white-space: nowrap;
@@ -1135,7 +1151,7 @@ $cxl-h: 31px;
       align-items: center;
       display: flex;
 
-      & + div + span {
+      &+div+span {
         padding-left: 10px;
       }
     }
@@ -1168,10 +1184,7 @@ $cxl-h: 31px;
   // padding: 10px 15px;
 }
 
-.ant-pagination
-  .ant-select-single:not(.ant-select-customize-input)
-  .ant-select-selector
-  .ant-select-selection-search-input {
+.ant-pagination .ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
   height: auto;
 }
 
@@ -1179,15 +1192,11 @@ $cxl-h: 31px;
   margin-right: 10px;
 }
 
-.ant-pagination
-  .ant-select-single.ant-select-show-arrow
-  .ant-select-selection-item {
+.ant-pagination .ant-select-single.ant-select-show-arrow .ant-select-selection-item {
   align-items: center;
 }
 
-.ant-pagination
-  .ant-select:not(.ant-select-customize-input)
-  .ant-select-selector {
+.ant-pagination .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   background: $color-f2;
   border: solid 1px $color-f2;
   height: 26px;
@@ -1199,7 +1208,7 @@ $cxl-h: 31px;
 
 .pagination-card li:first-child {
   position: absolute;
-  left: 10px;
+  left: 2%;
   color: #000000;
   font-size: 13px;
 }
@@ -1259,7 +1268,7 @@ $cxl-h: 31px;
   }
 
   &.ant-table-column-sort {
-    background-color: $color-f2 !important;
+    background-color: $color-f2  !important;
 
     .ant-table-column-sorter-up {
       &:before {
@@ -1327,7 +1336,7 @@ $cxl-h: 31px;
 /*pagination..........................*/
 /*collapse...............................................*/
 .ant-collapse-header,
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header {
   color: $color-textB;
   padding-left: 30px !important;
   padding-right: 15px;
@@ -1353,9 +1362,9 @@ $cxl-h: 31px;
   // }
 }
 
-.ant-collapse > .ant-collapse-item {
+.ant-collapse>.ant-collapse-item {
   &.ant-collapse-item-active {
-    & > .ant-collapse-header {
+    &>.ant-collapse-header {
       &:before {
         transform: rotate(90deg);
         top: 20px;
@@ -1373,12 +1382,12 @@ $cxl-h: 31px;
   border-top-color: $color-f0;
 }
 
-.ant-collapse-item:last-child > .ant-collapse-content,
-.ant-collapse > .ant-collapse-item {
+.ant-collapse-item:last-child>.ant-collapse-content,
+.ant-collapse>.ant-collapse-item {
   border: none;
 }
 
-.ant-collapse-content > .ant-collapse-content-box .group-btn {
+.ant-collapse-content>.ant-collapse-content-box .group-btn {
   padding-top: 0px;
 }
 
@@ -1434,7 +1443,7 @@ span.ant-descriptions-item-content {
       position: relative;
       bottom: -1px;
 
-      & + span {
+      &+span {
         padding-left: 5px;
       }
     }
@@ -1537,6 +1546,7 @@ span.ant-descriptions-item-content {
   padding-bottom: 10px;
   margin-top: 15px;
   border: none;
+
   .nut {
     margin: 0;
     width: 100%;
@@ -1581,6 +1591,7 @@ span.ant-descriptions-item-content {
 }
 
 .ant-modal-body {
+
   // .ant-collapse {
   //     margin-left: -20px;
   //     margin-right: -20px;
@@ -1596,13 +1607,16 @@ span.ant-descriptions-item-content {
   margin-left: 20px;
   margin-right: 20px;
 }
+
 .ant-modal-header {
   padding-top: 20px;
 }
+
 .ant-modal-close {
   top: 15px;
   right: 25px;
 }
+
 .ant-modal-content .nut {
   z-index: 9999;
   border-top: solid 1px $bg-nhat2;
@@ -1643,14 +1657,17 @@ span.ant-descriptions-item-content {
 }
 
 .ant-table {
+
   // border-top: solid 1px $color-f0;
   table {
+
     tfoot,
     tfoot,
     .ant-table-tbody,
     .ant-table-thead {
-      & > tr > td,
-      & > tr > th {
+
+      &>tr>td,
+      &>tr>th {
         padding: 3px 10px;
       }
     }
@@ -1667,7 +1684,7 @@ span.ant-descriptions-item-content {
   }
 
   .ant-table-tbody {
-    > tr {
+    >tr {
       &:nth-child(even) {
         background: $color-fb;
       }
@@ -1676,7 +1693,8 @@ span.ant-descriptions-item-content {
         background: #fff;
       }
 
-      & > td {
+      &>td {
+
         i:not(.anticon):not(.ant-spin-dot-item),
         .icon {
           font-size: $font-size12;
@@ -1709,7 +1727,7 @@ table tr {
 }
 
 .nz-table-hide-scrollbar .ant-table-fixed .ant-table-thead tr th {
-  background: $color-f2 !important;
+  background: $color-f2  !important;
 }
 
 .ant-row.ant-row-center .ant-radio-group {
@@ -1718,12 +1736,12 @@ table tr {
 
 /*table.............................................................*/
 /*tabs card.......................................................*/
-.ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
+.ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab {
   border-radius: 3px;
 }
 
-.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab,
-.ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab {
+.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab,
+.ant-tabs-card>div>.ant-tabs-nav .ant-tabs-tab {
   border-bottom-color: $color-fa;
 }
 
@@ -1734,12 +1752,12 @@ table tr {
 //   border-bottom-color: $color-tab;
 // }
 
-.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
+.ant-tabs>.ant-tabs-nav .ant-tabs-nav-wrap {
   background: $color-fb;
   // overflow: visible;
 }
 
-.ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active:before {
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active:before {
   content: '';
   position: absolute;
   height: 2px;
@@ -1760,8 +1778,8 @@ table tr {
   padding: 5px 15px;
 }
 
-.ant-tabs > .ant-tabs-nav,
-.ant-tabs > div > .ant-tabs-nav {
+.ant-tabs>.ant-tabs-nav,
+.ant-tabs>div>.ant-tabs-nav {
   margin: 0;
 }
 
@@ -1783,9 +1801,7 @@ table tr {
   margin-top: 12px $i;
 }
 
-.ant-collapse
-  > .ant-collapse-item.ant-collapse-no-arrow
-  > .ant-collapse-header {
+.ant-collapse>.ant-collapse-item.ant-collapse-no-arrow>.ant-collapse-header {
   background: $color-fb;
   border-bottom: none $i;
   align-items: center;
@@ -1798,26 +1814,20 @@ table tr {
   border-top-right-radius: 4px;
 }
 
-.ant-collapse
-  > .ant-collapse-item.ant-collapse-no-arrow
-  > .ant-collapse-header[aria-expanded='false'] {
+.ant-collapse>.ant-collapse-item.ant-collapse-no-arrow>.ant-collapse-header[aria-expanded='false'] {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom: solid 1px $border-bnt $i;
 }
 
-.ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header
-  .ant-collapse-extra
-  button {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-extra button {
   background: transparent; //$bg-nhat2
   padding: 0 10px;
   border-radius: 3px;
   border-color: $bg-nhat2 $i; //$border-bnt
   margin-left: 8px;
 
-  & + .ant-radio-group {
+  &+.ant-radio-group {
     margin-left: 4px;
   }
 }
@@ -1843,7 +1853,7 @@ table tr {
   }
 }
 
-.ant-collapse-content > .ant-collapse-content-box {
+.ant-collapse-content>.ant-collapse-content-box {
   // background: $color-fb;
   // border-left: solid 1px $borderconten;
   // border-right: solid 1px $borderconten;
@@ -1856,19 +1866,15 @@ table tr {
 //   margin-right: 6px;
 // }
 
-.ant-collapse-item:last-child > .ant-collapse-content {
+.ant-collapse-item:last-child>.ant-collapse-content {
   margin-bottom: $mb;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header::after {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header::after {
   display: none;
 }
 
-.ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header
-  .ant-collapse-extra
-  button:hover {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-extra button:hover {
   color: $maincolor;
   background: #fff;
   border-color: $border-nhat2 $i;
@@ -1886,7 +1892,7 @@ table tr {
 .hanhdong.ant-dropdown-menu .ant-dropdown-menu-item a {
   padding: 5px 20px 5px 16px;
 
-  & > span + span {
+  &>span+span {
     padding-left: 8px;
   }
 
@@ -1969,42 +1975,54 @@ i.icon.htvbdh_luu1 {
   font-size: 13px;
   font-weight: bold;
 }
+
 .autocomplete__input {
   height: 24px;
 }
-.autocomplete__input.ant-input-affix-wrapper > input.ant-input {
+
+.autocomplete__input.ant-input-affix-wrapper>input.ant-input {
   height: 22px !important;
 }
+
 .icon-cancel {
   color: #444444;
 }
+
 a.disabled {
   cursor: not-allowed;
   pointer-events: none;
+
   i {
     color: gray;
   }
 }
+
 .pd-r-6 {
   padding-right: 6px !important;
 }
+
 .pd-l-6 {
   padding-left: 6px !important;
 }
+
 .pd-r-46 {
   padding-right: 46px !important;
 }
+
 .search-advanced {
   .ant-collapse-header {
     text-align: center !important;
   }
 }
+
 .mg-l-40 {
   margin-left: 40px !important;
 }
+
 .mg-t-10 {
   margin-top: 10px !important;
 }
+
 .status-ke-hoach {
   position: absolute;
   z-index: 9;
@@ -2019,16 +2037,20 @@ a.disabled {
   top: 54px;
   left: 64px;
 }
+
 .w-300 {
   width: 300px !important;
 }
+
 .w-120 {
   width: 120px !important;
 }
+
 .tab-menu {
   padding-top: 16px;
   padding-left: 50px;
   padding-right: 60px;
+
   .tab-item {
     .content-tab-item {
       min-height: 52px;
@@ -2043,6 +2065,7 @@ a.disabled {
       padding: 0px 6px;
     }
   }
+
   .tab-item.active-tab-menu {
     .content-tab-item {
       background: #4e5484;
@@ -2051,16 +2074,20 @@ a.disabled {
     }
   }
 }
+
 // nz-affix.menu-lv3 .tab-menu {padding: 0;}
 .pd-b-16 {
   padding-bottom: 16px !important;
 }
+
 .mg-b-60 {
   margin-bottom: 60px !important;
 }
+
 .ant-layout {
   overflow: hidden;
 }
+
 .fix.collapse .nav-tabs {
   padding-top: 0 !important;
 }

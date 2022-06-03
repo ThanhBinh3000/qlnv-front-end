@@ -87,6 +87,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   getTitleVthh() {
     let loatVthh = this.router.url.split('/')[4]
     this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
+    this.search();
   }
 
   async search() {
