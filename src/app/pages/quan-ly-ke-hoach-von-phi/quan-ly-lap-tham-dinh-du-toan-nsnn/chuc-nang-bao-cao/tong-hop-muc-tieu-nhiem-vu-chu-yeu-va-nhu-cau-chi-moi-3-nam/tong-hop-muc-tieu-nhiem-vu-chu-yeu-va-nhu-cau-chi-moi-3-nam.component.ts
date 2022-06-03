@@ -43,7 +43,7 @@ export class ItemData {
 @Component({
     selector: 'app-tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam',
     templateUrl: './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.component.html',
-    styleUrls: ['../bao-cao/bao-cao.component.scss']
+    styleUrls: ['./tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.component.scss']
 })
 export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements OnInit {
     @Input() data;
@@ -433,7 +433,10 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
                 }
             }
         }
-
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt);
+            this.updateEditCache();
+        }
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -464,6 +467,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         var nho: string = this.lstCtietBcao[index].stt;
         var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        var stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
@@ -475,7 +479,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         }
 
         this.replaceIndex(lstIndex, -1);
-
+        this.sum(stt);
         this.updateEditCache();
     }
 
@@ -500,6 +504,8 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtietBcao[index].stt);
+        this.updateEditCache();
     }
 
 
@@ -701,11 +707,49 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     changeModel(id: string): void {
-        this.editCache[id].data.ncauChiTongSo = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
-        this.editCache[id].data.ncauChiTrongDoChiCs = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2);
-        this.editCache[id].data.ncauChiTrongDoChiMoi = Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
         this.editCache[id].data.ncauChiChiaRaDtuPtrien = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1);
         this.editCache[id].data.ncauChiChiaRaChiTx = Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
+        this.editCache[id].data.ncauChiTrongDoChiCs = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2);
+        this.editCache[id].data.ncauChiTrongDoChiMoi = Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
+        this.editCache[id].data.ncauChiTongSo = Number(this.editCache[id].data.ncauChiTrongDoChiCs) + Number(this.editCache[id].data.ncauChiTrongDoChiMoi);
+    }
+
+    getLowStatus(str: string) {
+        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
+            return false;
+        }
+        return true;
+    }
+
+    sum(stt: string) {
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            let data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                ...this.initItem,
+                id: data.id,
+                stt: data.stt,
+                maLvuc: data.maLvuc,
+                checked: data.checked,
+                level: data.level,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].ncauChiTongSo += item.ncauChiTongSo;
+                    this.lstCtietBcao[index].ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
+                    this.lstCtietBcao[index].ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
+                    this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
+                    this.lstCtietBcao[index].ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+                }
+            })
+            stt = this.getHead(stt);
+        }
     }
 
     doPrint() {

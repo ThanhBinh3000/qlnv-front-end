@@ -118,7 +118,9 @@
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
                     <td [hidden]="status">
-                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                        <ng-container *ngIf="!getLowStatus(data.stt)">
+                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                        </ng-container>
                     </td>
                     <td [hidden]="status">
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -182,7 +184,7 @@
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
                             [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs2"
-                            (ngModelChange)="changeModel(data.id)" style="width:100px !important"></nz-input-number>
+                            (ngModelChange)="changeModel(data.id)" ></nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
@@ -208,28 +210,6 @@
                     </td>
                 </ng-template>
             </tr>
-            <!-- <tr>
-            <td></td>
-            <td>Tổng cộng</td>
-            <td></td>
-            <td>{{tong1}}</td>
-            <td>{{tong2}}</td>
-            <td>{{tong3}}</td>
-            <td>{{tong4}}</td>
-            <td>{{tong5}}</td>
-            <td>{{tong6}}</td>
-            <td>{{tong7}}</td>
-            <td>{{tong8}}</td>
-            <td>{{tong9}}</td>
-            <td>{{tong10}}</td>
-            <td>{{tong11}}</td>
-            <td>{{tong12}}</td>
-            <td>{{tong13}}</td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
-        </tr> -->
         </tbody>
     </nz-table>
 </div>

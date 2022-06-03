@@ -60,6 +60,8 @@ export class BaoCaoComponent implements OnInit {
 	maDviTao!: string;
 	thuyetMinh: string;
 	lyDoTuChoi: string;
+	giaoSoTranChiId: any;
+	capDvi: string;
 	//danh muc
 	lstLapThamDinhs: ItemData[] = [];
 	phuLucs: any[] = PHU_LUC;
@@ -229,6 +231,11 @@ export class BaoCaoComponent implements OnInit {
 			(data) => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
+					this.donVis.forEach(e => {
+						if (e.maDvi == this.userInfo?.dvql){
+							this.capDvi = e.capDvi;
+						}
+					})
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -564,14 +571,7 @@ export class BaoCaoComponent implements OnInit {
 					this.ngayCapTrenTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
 					this.congVan = data.data.congVan;
 					this.lyDoTuChoi = data.data.lyDoTuChoi;
-					if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-						this.trangThaiBaoCao == Utils.TT_BC_3 ||
-						this.trangThaiBaoCao == Utils.TT_BC_5 ||
-						this.trangThaiBaoCao == Utils.TT_BC_8) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
+					this.giaoSoTranChiId = data.data.giaoSoTranChiId;
 					this.lstDviTrucThuoc.forEach(item => {
 						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
 						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -775,6 +775,13 @@ export class BaoCaoComponent implements OnInit {
 				this.location.back();
 			}
 		}
-		
+	}
+
+	xemSoKiemTra(){
+		if (this.capDvi == Utils.TONG_CUC){
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc' + this.giaoSoTranChiId]);
+		} else {
+			this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-chi-nsnn' + this.giaoSoTranChiId]);
+		}
 	}
 }

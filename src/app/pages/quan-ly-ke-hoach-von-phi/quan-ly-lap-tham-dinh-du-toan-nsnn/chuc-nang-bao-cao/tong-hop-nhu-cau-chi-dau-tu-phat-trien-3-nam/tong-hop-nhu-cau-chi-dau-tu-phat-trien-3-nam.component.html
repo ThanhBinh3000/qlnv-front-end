@@ -34,12 +34,12 @@
     <nz-table nzBordered class="table__body">
         <thead>
             <tr>
-                <th nzWidth="75px">STT</th>
-                <th nzWidth="400px">Nội dung</th>
-                <th nzWidth="200px">Thực hiên năm hiện hành {{namHienHanh -1}}</th>
-                <th nzWidth="200px">Nhu cầu năm dự toán {{namHienHanh}}</th>
-                <th nzWidth="200px">Nhu cầu năm {{namHienHanh + 1}}</th>
-                <th nzWidth="200px">Nhu cầu năm {{namHienHanh + 2}}</th>
+                <th>STT</th>
+                <th nzWidth="500px">Nội dung</th>
+                <th>Thực hiên năm hiện hành {{namHienHanh -1}}</th>
+                <th>Nhu cầu năm dự toán {{namHienHanh}}</th>
+                <th>Nhu cầu năm {{namHienHanh + 1}}</th>
+                <th>Nhu cầu năm {{namHienHanh + 2}}</th>
                 <th colspan="3" [hidden]="status"></th>
                 <th [hidden]="status">
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
@@ -74,7 +74,9 @@
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
                     <td [hidden]="status">
-                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                        <ng-container *ngIf="!getLowStatus(data.stt)">
+                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                        </ng-container>
                     </td>
                     <td [hidden]="status">
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
@@ -100,26 +102,22 @@
 
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
-                            [class]="editCache[data.id].data.thNamHienHanhN1 || editCache[data.id].data.thNamHienHanhN1 ===0?'' : 'input-error-validate'">
+                            [(ngModel)]="editCache[data.id].data.thNamHienHanhN1">
                         </nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
-                            [class]="editCache[data.id].data.ncauNamDtoanN || editCache[data.id].data.ncauNamDtoanN ===0?'' : 'input-error-validate'">
+                            [(ngModel)]="editCache[data.id].data.ncauNamDtoanN">
                         </nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[data.id].data.ncauNamN1"
-                            [class]="editCache[data.id].data.ncauNamN1 || editCache[data.id].data.ncauNamN1 ===0?'' : 'input-error-validate'">
+                            [(ngModel)]="editCache[data.id].data.ncauNamN1">
                         </nz-input-number>
                     </td>
                     <td>
                         <nz-input-number class="search__input" nzSize="small"
-                            [(ngModel)]="editCache[data.id].data.ncauNamN2"
-                            [class]="editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0?'' : 'input-error-validate'">
+                            [(ngModel)]="editCache[data.id].data.ncauNamN2">
                         </nz-input-number>
                     </td>
 

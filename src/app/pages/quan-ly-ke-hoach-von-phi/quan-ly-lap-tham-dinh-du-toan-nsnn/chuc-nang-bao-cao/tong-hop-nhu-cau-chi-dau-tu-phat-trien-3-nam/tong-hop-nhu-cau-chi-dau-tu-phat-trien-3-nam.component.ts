@@ -21,272 +21,284 @@ import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constan
 
 
 export class ItemData {
-	id: any;
-	stt!: string;
-	level: number;
-	maNdung: string;
-	thNamHienHanhN1: number;
-	ncauNamDtoanN: number;
-	ncauNamN1: number;
-	ncauNamN2: number;
-	checked!: boolean;
+    id: any;
+    stt!: string;
+    level: number;
+    maNdung: string;
+    thNamHienHanhN1: number;
+    ncauNamDtoanN: number;
+    ncauNamN1: number;
+    ncauNamN2: number;
+    checked!: boolean;
 }
 
 @Component({
-	selector: 'app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam',
-	templateUrl: './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.component.html',
-	styleUrls: ['../bao-cao/bao-cao.component.scss']
+    selector: 'app-tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam',
+    templateUrl: './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.component.html',
+    styleUrls: ['../bao-cao/bao-cao.component.scss']
 })
 export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
-	@Input() data;
-	@Output() dataChange = new EventEmitter();
-	//danh muc
-	donVis: any = [];
-	lstCtietBcao: ItemData[] = [];
-	donViTiens: any[] = DON_VI_TIEN;
-	noiDungs: any[] = NOI_DUNG;
-	soLaMa: any[] = LA_MA;
-	//thong tin chung
-	initItem: ItemData = {
-		id: null,
-		stt: "0",
-		level: 0,
-		maNdung: "",
-		thNamHienHanhN1: 0,
-		ncauNamDtoanN: 0,
-		ncauNamN1: 0,
-		ncauNamN2: 0,
-		checked: false,
-	};
-	tong: ItemData = {
-		id: "",
-		stt: "",
-		level: 0,
-		maNdung: "",
-		thNamHienHanhN1: 0,
-		ncauNamDtoanN: 0,
-		ncauNamN1: 0,
-		ncauNamN2: 0,
-		checked: false,
-	};
-	id: any;
-	trangThaiPhuLuc: string;
-	namHienHanh: number;
-	maBieuMau: string = "14";
-	maDviTien: any;
-	listIdDelete: string = "";
-	thuyetMinh: string;
-	//trang thai cac nut
-	status: boolean = false;
-	statusBtnFinish: boolean;
-	statusBtnOk: boolean;
+    @Input() data;
+    @Output() dataChange = new EventEmitter();
+    //danh muc
+    donVis: any = [];
+    lstCtietBcao: ItemData[] = [];
+    donViTiens: any[] = DON_VI_TIEN;
+    noiDungs: any[] = NOI_DUNG;
+    soLaMa: any[] = LA_MA;
+    //thong tin chung
+    initItem: ItemData = {
+        id: null,
+        stt: "0",
+        level: 0,
+        maNdung: "",
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
+        checked: false,
+    };
+    tong: ItemData = {
+        id: "",
+        stt: "",
+        level: 0,
+        maNdung: "",
+        thNamHienHanhN1: 0,
+        ncauNamDtoanN: 0,
+        ncauNamN1: 0,
+        ncauNamN2: 0,
+        checked: false,
+    };
+    id: any;
+    trangThaiPhuLuc: string;
+    namHienHanh: number;
+    maBieuMau: string = "14";
+    maDviTien: any;
+    listIdDelete: string = "";
+    thuyetMinh: string;
+    //trang thai cac nut
+    status: boolean = false;
+    statusBtnFinish: boolean;
+    statusBtnOk: boolean;
 
-	allChecked = false;
-	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    allChecked = false;
+    editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
-	constructor(private router: Router,
-		private routerActive: ActivatedRoute,
-		private spinner: NgxSpinnerService,
-		private quanLyVonPhiService: QuanLyVonPhiService,
-		private datePipe: DatePipe,
-		private sanitizer: DomSanitizer,
-		private userService: UserService,
-		private danhMucService: DanhMucHDVService,
-		private notification: NzNotificationService,
-		private location: Location,
-		private fb: FormBuilder,
-		private modal: NzModalService,
-	) {
-	}
+    constructor(private router: Router,
+        private routerActive: ActivatedRoute,
+        private spinner: NgxSpinnerService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
+        private datePipe: DatePipe,
+        private sanitizer: DomSanitizer,
+        private userService: UserService,
+        private danhMucService: DanhMucHDVService,
+        private notification: NzNotificationService,
+        private location: Location,
+        private fb: FormBuilder,
+        private modal: NzModalService,
+    ) {
+    }
 
 
-	async ngOnInit() {
-		this.id = this.data?.id;
-		this.maBieuMau = this.data?.maBieuMau;
-		this.maDviTien = this.data?.maDviTien;
-		this.thuyetMinh = this.data?.thuyetMinh;
-		this.trangThaiPhuLuc = this.data?.trangThai;
-		this.namHienHanh = this.data?.namHienHanh;
-		this.status = this.data?.status;
-		this.statusBtnFinish = this.data?.statusBtnFinish;
-		this.data?.lstCtietLapThamDinhs.forEach(item => {
-			this.lstCtietBcao.push({
-				...item,
-				thNamHienHanhN1: divMoney(item.thNamHienHanhN1, this.maDviTien),
-				ncauNamDtoanN: divMoney(item.ncauNamDtoanN, this.maDviTien),
-				ncauNamN1: divMoney(item.ncauNamN1, this.maDviTien),
-				ncauNamN2: divMoney(item.ncauNamN2, this.maDviTien),
-			})
-		})
-        if (this.lstCtietBcao.length > 0){
-            if (!this.lstCtietBcao[0].stt){
+    async ngOnInit() {
+        this.id = this.data?.id;
+        this.maBieuMau = this.data?.maBieuMau;
+        this.maDviTien = this.data?.maDviTien;
+        this.thuyetMinh = this.data?.thuyetMinh;
+        this.trangThaiPhuLuc = this.data?.trangThai;
+        this.namHienHanh = this.data?.namHienHanh;
+        this.status = this.data?.status;
+        this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.data?.lstCtietLapThamDinhs.forEach(item => {
+            this.lstCtietBcao.push({
+                ...item,
+                thNamHienHanhN1: divMoney(item.thNamHienHanhN1, this.maDviTien),
+                ncauNamDtoanN: divMoney(item.ncauNamDtoanN, this.maDviTien),
+                ncauNamN1: divMoney(item.ncauNamN1, this.maDviTien),
+                ncauNamN2: divMoney(item.ncauNamN2, this.maDviTien),
+            })
+        })
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
                 this.sortWithoutIndex();
             } else {
                 this.sortByIndex();
             }
         }
-        
-		this.updateEditCache();
 
-		//lay danh sach danh muc don vi
-		await this.danhMucService.dMDonVi().toPromise().then(
-			(data) => {
-				if (data.statusCode == 0) {
-					this.donVis = data.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
-		this.getStatusButton();
-		this.spinner.hide();
-	}
+        this.updateEditCache();
 
-	getStatusButton() {
-		if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
-			this.statusBtnOk = false;
-		} else {
-			this.statusBtnOk = true;
-		}
-	}
+        //lay danh sach danh muc don vi
+        await this.danhMucService.dMDonVi().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.donVis = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+        this.getStatusButton();
+        this.spinner.hide();
+    }
 
-	// luu
-	async save(trangThai: string) {
-		let checkSaveEdit;
-		if (!this.maDviTien) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
-		//check xem tat ca cac dong du lieu da luu chua?
-		//chua luu thi bao loi, luu roi thi cho di
-		this.lstCtietBcao.forEach(element => {
-			if (this.editCache[element.id].edit === true) {
-				checkSaveEdit = false
-			}
-		});
-		if (checkSaveEdit == false) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-			return;
-		}
-		//tinh lai don vi tien va kiem tra gioi han cua chung
-		let lstCtietBcaoTemp: any = [];
-		let checkMoneyRange = true;
-		this.lstCtietBcao.forEach(item => {
-			let thNamHienHanhN1 = mulMoney(item.thNamHienHanhN1, this.maDviTien);
-			let ncauNamDtoanN = mulMoney(item.ncauNamDtoanN, this.maDviTien);
-			let ncauNamN1 = mulMoney(item.ncauNamN1, this.maDviTien);
-			let ncauNamN2 = mulMoney(item.ncauNamN2, this.maDviTien);
-			if (thNamHienHanhN1 > MONEY_LIMIT || ncauNamDtoanN > MONEY_LIMIT ||
-				ncauNamN1 > MONEY_LIMIT || ncauNamN2 > MONEY_LIMIT) {
-				checkMoneyRange = false;
-				return;
-			}
-			lstCtietBcaoTemp.push({
-				...item,
-				thNamHienHanhN1: thNamHienHanhN1,
-				ncauNamDtoanN: ncauNamDtoanN,
-				ncauNamN1: ncauNamN1,
-				ncauNamN2: ncauNamN2,
-			})
-		})
+    getStatusButton() {
+        if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
+            this.statusBtnOk = false;
+        } else {
+            this.statusBtnOk = true;
+        }
+    }
 
-		if (!checkMoneyRange == true) {
-			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
-			return;
-		}
-		// replace nhung ban ghi dc them moi id thanh null
-		lstCtietBcaoTemp.forEach(item => {
-			if (item.id?.length == 38) {
-				item.id = null;
-			}
-		})
+    // luu
+    async save(trangThai: string) {
+        var data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == "100");
+        var data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == "200");
+        var data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == "300");
+        if (data1 && data2 && data3) {
+            if (data1.thNamHienHanhN1 - data2.thNamHienHanhN1 != data3.thNamHienHanhN1 ||
+                data1.ncauNamDtoanN - data2.ncauNamDtoanN != data3.ncauNamDtoanN ||
+                data1.ncauNamN1 - data2.ncauNamN1 != data3.ncauNamN1 ||
+                data1.ncauNamN2 - data2.ncauNamN2 != data3.ncauNamN2) {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA);
+                    return;
+            }
+        }
+        let checkSaveEdit;
+        if (!this.maDviTien) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        //check xem tat ca cac dong du lieu da luu chua?
+        //chua luu thi bao loi, luu roi thi cho di
+        this.lstCtietBcao.forEach(element => {
+            if (this.editCache[element.id].edit === true) {
+                checkSaveEdit = false
+            }
+        });
+        if (checkSaveEdit == false) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+        //tinh lai don vi tien va kiem tra gioi han cua chung
+        let lstCtietBcaoTemp: any = [];
+        let checkMoneyRange = true;
+        this.lstCtietBcao.forEach(item => {
+            let thNamHienHanhN1 = mulMoney(item.thNamHienHanhN1, this.maDviTien);
+            let ncauNamDtoanN = mulMoney(item.ncauNamDtoanN, this.maDviTien);
+            let ncauNamN1 = mulMoney(item.ncauNamN1, this.maDviTien);
+            let ncauNamN2 = mulMoney(item.ncauNamN2, this.maDviTien);
+            if (thNamHienHanhN1 > MONEY_LIMIT || ncauNamDtoanN > MONEY_LIMIT ||
+                ncauNamN1 > MONEY_LIMIT || ncauNamN2 > MONEY_LIMIT) {
+                checkMoneyRange = false;
+                return;
+            }
+            lstCtietBcaoTemp.push({
+                ...item,
+                thNamHienHanhN1: thNamHienHanhN1,
+                ncauNamDtoanN: ncauNamDtoanN,
+                ncauNamN1: ncauNamN1,
+                ncauNamN2: ncauNamN2,
+            })
+        })
 
-		let request = {
-			id: this.id,
-			lstCtietLapThamDinhs: lstCtietBcaoTemp,
-			maBieuMau: this.maBieuMau,
-			maDviTien: this.maDviTien,
-			nguoiBcao: this.data?.nguoiBcao,
-			lyDoTuChoi: this.data?.lyDoTuChoi,
-			thuyetMinh: this.thuyetMinh,
-			trangThai: trangThai,
-		};
-		this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
-			async data => {
-				if (data.statusCode == 0) {
-					this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-					let obj = {
+        if (!checkMoneyRange == true) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+        // replace nhung ban ghi dc them moi id thanh null
+        lstCtietBcaoTemp.forEach(item => {
+            if (item.id?.length == 38) {
+                item.id = null;
+            }
+        })
+
+        let request = {
+            id: this.id,
+            lstCtietLapThamDinhs: lstCtietBcaoTemp,
+            maBieuMau: this.maBieuMau,
+            maDviTien: this.maDviTien,
+            nguoiBcao: this.data?.nguoiBcao,
+            lyDoTuChoi: this.data?.lyDoTuChoi,
+            thuyetMinh: this.thuyetMinh,
+            trangThai: trangThai,
+        };
+        this.quanLyVonPhiService.updateLapThamDinh(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    let obj = {
                         trangThai: '-1',
                         lyDoTuChoi: null,
                     };
                     this.dataChange.emit(obj);
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
 
-		this.spinner.hide();
-	}
+        this.spinner.hide();
+    }
 
-	// chuc nang check role
-	async onSubmit(mcn: string, lyDoTuChoi: string) {
-		if (this.id) {
-			const requestGroupButtons = {
-				id: this.id,
-				trangThai: mcn,
-				lyDoTuChoi: lyDoTuChoi,
-			};
-			this.spinner.show();
-			await this.quanLyVonPhiService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-				if (data.statusCode == 0) {
+    // chuc nang check role
+    async onSubmit(mcn: string, lyDoTuChoi: string) {
+        if (this.id) {
+            const requestGroupButtons = {
+                id: this.id,
+                trangThai: mcn,
+                lyDoTuChoi: lyDoTuChoi,
+            };
+            this.spinner.show();
+            await this.quanLyVonPhiService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+                if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = mcn;
-					this.getStatusButton();
+                    this.getStatusButton();
                     let obj = {
-                        trangThai : mcn,
+                        trangThai: mcn,
                         lyDoTuChoi: lyDoTuChoi,
                     }
                     this.dataChange.emit(obj);
-					if (mcn == '0') {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-					} else {
-						this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-					}
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			}, err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			});
-			this.spinner.hide();
-		} else {
-			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-		}
-	}
+                    if (mcn == '0') {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+                    } else {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            }, err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            });
+            this.spinner.hide();
+        } else {
+            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+        }
+    }
 
-	//show popup tu choi
-	tuChoi(mcn: string) {
-		const modalTuChoi = this.modal.create({
-			nzTitle: 'Từ chối',
-			nzContent: DialogTuChoiComponent,
-			nzMaskClosable: false,
-			nzClosable: false,
-			nzWidth: '900px',
-			nzFooter: null,
-			nzComponentParams: {},
-		});
-		modalTuChoi.afterClose.subscribe(async (text) => {
-			if (text) {
-				this.onSubmit(mcn, text);
-			}
-		});
-	}
+    //show popup tu choi
+    tuChoi(mcn: string) {
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Từ chối',
+            nzContent: DialogTuChoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {},
+        });
+        modalTuChoi.afterClose.subscribe(async (text) => {
+            if (text) {
+                this.onSubmit(mcn, text);
+            }
+        });
+    }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
     getChiMuc(str: string): string {
@@ -411,7 +423,10 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
                 }
             }
         }
-
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
+            this.sum(stt);
+            this.updateEditCache();
+        }
         // them moi phan tu
         if (initItem.id) {
             let item: ItemData = {
@@ -442,6 +457,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         var index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         var nho: string = this.lstCtietBcao[index].stt;
         var head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        var stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
@@ -453,7 +469,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         }
 
         this.replaceIndex(lstIndex, -1);
-
+        this.sum(stt);
         this.updateEditCache();
     }
 
@@ -478,6 +494,8 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        this.sum(this.lstCtietBcao[index].stt);
+        this.updateEditCache();
     }
 
 
@@ -676,30 +694,55 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         });
 
     }
+    getLowStatus(str: string) {
+        var index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+        if (index == -1) {
+            return false;
+        }
+        return true;
+    }
 
-	tinhTong(heSo: number, item: ItemData) {
-		this.tong.thNamHienHanhN1 += heSo * item.thNamHienHanhN1;
-		this.tong.ncauNamDtoanN += heSo * item.ncauNamDtoanN;
-		this.tong.ncauNamN1 += heSo * item.ncauNamN1;
-		this.tong.ncauNamN2 += heSo * item.ncauNamN2;
-	}
+    sum(stt: string) {
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            var index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            let data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                ...this.initItem,
+                id: data.id,
+                stt: data.stt,
+                maNdung: data.maNdung,
+                checked: data.checked,
+                level: data.level,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].thNamHienHanhN1 += item.thNamHienHanhN1;
+                    this.lstCtietBcao[index].ncauNamDtoanN += item.ncauNamDtoanN;
+                    this.lstCtietBcao[index].ncauNamN1 += item.ncauNamN1;
+                    this.lstCtietBcao[index].ncauNamN2 += item.ncauNamN2;
+                }
+            })
+            stt = this.getHead(stt);
+        }
+    }
 
     doPrint() {
         let WindowPrt = window.open(
-             '',
-             '',
-             'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
+            '',
+            '',
+            'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
         );
         let printContent = '';
         printContent = printContent + '<div>';
         printContent =
-             printContent + document.getElementById('tablePrint').innerHTML;
+            printContent + document.getElementById('tablePrint').innerHTML;
         printContent = printContent + '</div>';
         WindowPrt.document.write(printContent);
         WindowPrt.document.close();
         WindowPrt.focus();
         WindowPrt.print();
         WindowPrt.close();
-   }
+    }
 
 }

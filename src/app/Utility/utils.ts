@@ -46,6 +46,14 @@ export class Utils {
     public static CUC_KHU_VUC = "2";
     public static TONG_CUC = "1";
 
+    //loai de nghi
+    public static MUA_THOC = "0";
+    public static MUA_GAO = "1";
+    public static MUA_LTHUC = "2";
+    public static MUA_VTU = "3";
+    public static THOP_TU_CUC_KV = "4";
+    public static THOP_TAI_TC = "5";
+
     //role xoa
     public static btnRoleDel = {
         "status": ['1', '3', '5', '8', '10'],
@@ -1027,6 +1035,8 @@ export const KHOAN_MUC: any[] = [
 	},
 ];
 
+
+
 export const LA_MA: any[] = [
 	{
 		kyTu: "M",
@@ -1081,3 +1091,33 @@ export const LA_MA: any[] = [
 		gTri: 1,
 	},
 ];
+
+export const LOAI_DE_NGHI = [
+    {
+        id: Utils.MUA_GAO,
+        tenDm: "Mua gạo",
+    },
+    {
+        id: Utils.MUA_THOC,
+        tenDm: "Mua thóc",
+    },
+    {
+        id: Utils.MUA_LTHUC,
+        tenDm: "Mua lương thực",
+    },
+    {
+        id: Utils.MUA_VTU,
+        tenDm: "Mua vật tư",
+    },
+]
+
+export const NGUON_BAO_CAO = [
+        {
+            id: Utils.THOP_TU_CUC_KV,
+            tenDm: "Tổng hợp từ cục khu vực",
+        },
+        {
+            id: Utils.THOP_TAI_TC,
+            tenDm: "Tổng hợp tại tổng cục",
+        },
+]

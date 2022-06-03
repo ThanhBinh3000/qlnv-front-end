@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzResultUnauthorizedComponent } from 'ng-zorro-antd/result/partial/unauthorized';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -28,6 +28,7 @@ export class ItemCongVan {
 export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //thong tin dang nhap
     userInfo: any;
+    loai: any;
     //thong tin tim kiem
     searchFilter = {
         namPa: null,
@@ -41,16 +42,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     };
     //danh muc
     danhSachBaoCao: any = [];
-    loais: any[] = [
-        {
-            id: '1',
-            tenDm: 'QĐ(CV)',
-        },
-        {
-            id: '2',
-            tenDm: 'PA',
-        }
-    ];
     donViTaos: any[] = [];
     donVis: any[] = [];
     trangThais: any = TRANG_THAI_TIM_KIEM;
@@ -60,7 +51,9 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     pages = {
         size: 10,
         page: 1,
-    }
+    }//
+    status: boolean;
+    statusBtnBcao: boolean = true;
 
     fileDetail: NzUploadFile;
 
@@ -68,6 +61,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         private quanLyVonPhiService: QuanLyVonPhiService,
         private danhMuc: DanhMucHDVService,
         private router: Router,
+        private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
         private fb: FormBuilder,
@@ -77,6 +71,12 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.loai = this.routerActive.snapshot.paramMap.get('loai');
+        if (this.loai == "0") {
+            this.status = true;
+        } else {
+            this.status = false;
+        }
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName); //get user info
         this.searchFilter.donViTao = this.userInfo?.dvql;
@@ -148,6 +148,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
 
     //search list bao cao theo tieu chi
     async onSubmit() {
+        this.statusBtnBcao = true;
         if (this.searchFilter.namPa || this.searchFilter.namPa === 0) {
             if (this.searchFilter.namPa >= 3000 || this.searchFilter.namPa < 1000) {
                 this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
@@ -201,62 +202,22 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.pages.size = size;
         this.onSubmit();
     }
-    // xoaDieuKien() {
-    //     this.searchFilter.nam = null
-    //     this.searchFilter.tuNgay = null
-    //     this.searchFilter.denNgay = null
-    //     this.searchFilter.maBaoCao = null
-    //     this.searchFilter.donViTao = null
-    //     this.searchFilter.loaiBaoCao = null
-    //     this.searchFilter.trangThai = null
-    // }
 
     async taoMoi() {
-        if (!this.searchFilter.loai ||
-            (this.searchFilter.loai == '2' && !this.searchFilter.maBaoCao)) {
+        this.statusBtnBcao = false;
+        if (this.loai == "0" && !this.searchFilter.maBaoCao){
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-
-        if (this.searchFilter.loai == '2') {
-            let requestReport = {
-                loaiTimKiem: "0",
-                maBcao: this.searchFilter.maBaoCao,
-                maDvi: this.searchFilter.donViTao,
-                namBcao: null,
-                ngayTaoDen: "",
-                ngayTaoTu: "",
-                paggingReq: {
-                    limit: 10,
-                    page: 1,
-                },
-                trangThais: [],
-            };
-            await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-                (data) => {
-                    if (data.statusCode == 0) {
-                        if (!data.data.empty) {
-                            this.router.navigate([
-                                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/0/'+ this.searchFilter.maBaoCao,
-                            ]);
-                        } else {
-                            this.notification.warning(MESSAGE.WARNING, "Không tìm thấy mã báo cáo :" + this.searchFilter.maBaoCao);
-                        }
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            );
-
+        if (this.loai == "0"){
+            this.router.navigate([
+                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/so-kiem-tra-tran-chi-tu-btc/0/' +this.searchFilter.maBaoCao,
+            ]);
         } else {
             this.router.navigate([
                 '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/qd-cv-giao-so-kiem-tra-tran-chi-nsnn',
             ]);
         }
-
     }
 
     xemChiTiet(id: string) {
@@ -293,11 +254,11 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         );
     }
 
-    getStatusName(trangThai: string){
+    getStatusName(trangThai: string) {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    getUnitName(maDvi: string){
+    getUnitName(maDvi: string) {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
