@@ -683,6 +683,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     if (table == 'can-cu-khac') {
       this.canCuKhacList = this.canCuKhacList.filter((item, i) => i !== index)
     }
+    if (table == 'file-dinhkem') {
+      this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index)
+    }
   }
 
   quayLai() {

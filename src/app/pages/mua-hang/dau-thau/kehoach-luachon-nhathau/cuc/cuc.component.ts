@@ -15,21 +15,15 @@ export class CucComponent implements OnInit {
   ) {
   }
 
-  loaiVthh: string = '';
   listVthh: any = LIST_VAT_TU_HANG_HOA;
 
   ngOnInit() {
-    // this.getTitleVthh();
+    this.referTabLv1(LIST_VAT_TU_HANG_HOA[0]);
   }
 
   referTabLv1(event) {
+    console.log(event);
     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + convertIdToLoaiVthh(event.value) + '/danh-sach']);
   }
-
-
-  // getTitleVthh(){
-  //   this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
-  //   this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/'+this.route.snapshot.paramMap.get('type')+'/danh-sach']);
-  // }
 
 }

@@ -840,6 +840,25 @@ button.btn.btn-create {
   }
 }
 
+.tab-level-0 {
+  .ant-tabs-content-holder {
+    background: #f8f8f8;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .ant-card {
+      margin: 0px 0px;
+      border-radius: 0;
+    }
+
+    .ant-tabs {
+      margin: 0 0px;
+      margin-top: 0px;
+      border-radius: 0;
+    }
+  }
+}
+
 .tab-level-1 {
   .ant-tabs-content-holder {
     background: #fff;
@@ -854,7 +873,7 @@ button.btn.btn-create {
   }
 
   .ant-tabs-nav {
-    padding-bottom: 2px;
+    padding-bottom: 0px;
     background: #f8f8f8;
 
     .ant-tabs-nav-wrap {
@@ -892,13 +911,122 @@ button.btn.btn-create {
   padding-bottom: 0;
 }
 
-.tab-level-1 .ant-tabs-nav .ant-tabs-nav-wrap {
+.tab-level-0 .ant-tabs-nav .ant-tabs-nav-wrap {
   padding-left: 15px;
   padding-right: 15px;
 }
 
+.tab-level-1 .ant-tabs-nav .ant-tabs-nav-wrap,
+.tab-level-2 .ant-tabs-nav .ant-tabs-nav-wrap {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
 .padding-15 {
   padding: 15px;
+}
+
+.tab-level-2 {
+  .ant-tabs-content-holder {
+    background: #fff;
+    padding-left: 0;
+
+    .ant-tabs {
+      margin-top: 0px;
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+  }
+
+  .ant-tabs-nav {
+    .ant-tabs-nav-wrap {
+      background: #f8f8f8;
+
+      .ant-tabs-tab {
+        border: 0;
+        border-radius: 0;
+        background-color: #f8f8f8 !important;
+
+        .ant-tabs-tab-btn {
+          color: #444444;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 11px;
+        }
+      }
+
+      .ant-tabs-tab-active::before {
+        height: 0;
+      }
+
+      .ant-tabs-tab.ant-tabs-tab-active {
+        background-color: #fff !important;
+
+        .ant-tabs-tab-btn {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+.tab-level-3 {
+  .ant-tabs-content-holder {
+    .ant-tabs {
+      margin-top: 16px;
+    }
+
+    .ant-tabs-tabpane {
+      border: 1px solid #f3f3f3;
+
+      .table__container-tt {
+        margin-left: 16px;
+        margin-right: 16px;
+
+        .first-row {
+          background: #f3f3f3;
+        }
+      }
+
+      .tab-content {
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-bottom: 12px;
+
+        .pagination-card li:first-child {
+          left: 142px !important;
+        }
+      }
+    }
+  }
+
+  .ant-tabs-nav {
+    background: #fff;
+
+    .ant-tabs-nav-wrap {
+      background: #fff;
+      margin-left: 16px;
+
+      .ant-tabs-tab {
+        background-color: #fff;
+        border-width: 1px 1px 0px 1px;
+        border-style: solid;
+        border-color: #f3f3f3;
+      }
+
+      .ant-tabs-tab-active::before {
+        height: 0;
+      }
+
+      .ant-tabs-tab.ant-tabs-tab-active {
+        background-color: #fff;
+
+        .ant-tabs-tab-btn {
+          font-weight: 500;
+        }
+      }
+    }
+  }
 }
 
 
@@ -5012,7 +5140,7 @@ td nz-upload .upload-content .card-content {
 body,
 .ant-input-affix-wrapper>input.ant-input,
 .ant-table-tbody>tr.ant-table-row>td {
-  font-weight: 400;
+  font-weight: 300;
 }
 
 // .nav-tabs .nav-item:hover {
