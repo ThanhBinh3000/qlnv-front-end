@@ -137,20 +137,20 @@
               }
               .ant-tabs-tabpane {
                 border: 1px solid #f3f3f3;
+                padding: 16px;
+                .ant-table-container {
+                  border: 1px solid #d9d9d9;
+                }
                 .table__container-tt {
-                  margin-left: 16px;
-                  margin-right: 16px;
                   .first-row {
                     background: #f3f3f3;
                   }
                 }
                 .tab-content {
-                  margin-left: 15px;
-                  margin-right: 15px;
-                  margin-bottom: 12px;
-
+                  margin: 0;
+                  position: relative;
                   .pagination-card li:first-child {
-                    left: 142px !important;
+                    left: 16px !important;
                   }
                 }
               }
