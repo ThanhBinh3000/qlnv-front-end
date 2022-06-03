@@ -32,11 +32,15 @@
   color: white;
 }
 .search__body {
-  padding: 12px 0px;
+  padding: 6px 0px 12px 0px;
 }
 .search__label {
-  font-weight: 500;
   margin-bottom: 2px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #444444;
 }
 .search__input {
   border-radius: 0px;
