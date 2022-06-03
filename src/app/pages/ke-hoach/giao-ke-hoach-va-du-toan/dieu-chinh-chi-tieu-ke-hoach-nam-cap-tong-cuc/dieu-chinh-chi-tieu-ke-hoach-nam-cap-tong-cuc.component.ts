@@ -39,6 +39,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   startValueDc: Date | null = null;
   endValueDc: Date | null = null;
 
+  ngayKy: any;
+  ngayKyDc: any;
+
   listNam: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -54,6 +57,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
 
   titleCard: string = '';
+
+  isDetail: boolean = false;
+  selectedId: number = 0;
 
   constructor(
     private router: Router,
@@ -203,10 +209,12 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectToChiTiet(id) {
-    this.router.navigate([
-      `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}/${DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
-      id,
-    ]);
+    this.selectedId = id;
+    this.isDetail = true;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   clearFilter() {

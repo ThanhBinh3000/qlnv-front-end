@@ -2,7 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,6 +50,9 @@ import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   listThoc: any[] = [];
   listMuoi: any[] = [];
   listVatTu = [];
@@ -58,7 +64,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     thongTinVatTuTrongNam: false,
   };
   xuongCaoTocCacLoais = new Array(4);
-  id: number;
+  // id: number;
   tabSelected: string = TAB_SELECTED.luongThuc;
   detail = {
     soQD: null,
@@ -110,6 +116,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   userInfo: UserLogin;
   levelCuc: any = LEVEL_USER;
   tenDonViCuc: string;
+
   constructor(
     private router: Router,
     private routerActive: ActivatedRoute,
@@ -141,7 +148,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.newObjectVatTu();
     this.loadDanhMucHang();
     this.yearNow = dayjs().get('year');
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    // this.id = +this.routerActive.snapshot.paramMap.get('id');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: this.yearNow - i,
@@ -646,7 +653,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate([`/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`]);
+    // this.router.navigate([`/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`]);
+    this.showListEvent.emit();
   }
 
   loadThongTinChiTieuKeHoachNam(id: number) {

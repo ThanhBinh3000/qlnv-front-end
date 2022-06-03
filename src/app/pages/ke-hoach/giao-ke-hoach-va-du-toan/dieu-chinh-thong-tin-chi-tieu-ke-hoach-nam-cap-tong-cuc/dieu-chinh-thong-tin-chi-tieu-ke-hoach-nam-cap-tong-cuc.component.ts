@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -48,6 +48,10 @@ import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.const
   ],
 })
 export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   listThoc: KeHoachLuongThuc[] = [];
   listMuoi: KeHoachMuoi[] = [];
@@ -58,7 +62,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     thongTinVatTuTrongNam: false,
     thongTinMuoi: false,
   };
-  id: number;
   tabSelected: string = TAB_SELECTED.luongThuc;
   detail = {
     soQD: null,
@@ -169,7 +172,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
+      // this.id = +this.routerActive.snapshot.paramMap.get('id');
       await this.loadDataChiTiet(this.id);
       await this.loadDanhMucHang();
       this.loadDefaultLuongThucNew();
@@ -1551,9 +1554,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    this.router.navigate([
-      `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
-    ]);
+    this.showListEvent.emit();
   }
 
   disabledStartDate = (startValue: Date): boolean => {

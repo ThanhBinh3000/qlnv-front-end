@@ -60,7 +60,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   donViIdSearch: number;
   maDonViSearch: string;
   labelDonViSearch: string;
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -115,12 +116,16 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectThongTinChiTieuKeHoachNam(id: number) {
-    this.router.navigate([
-      `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}/${THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
-      id,
-    ]);
+    // this.router.navigate([
+    //   `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}/${THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
+    //   id,
+    // ]);
+    this.selectedId = id;
+    this.isDetail = true;
   }
-
+  showList() {
+    this.isDetail = false;
+  }
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value.trim();
     if (value !== this.labelDonViSearch) {

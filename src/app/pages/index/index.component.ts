@@ -136,7 +136,7 @@ export class IndexComponent implements OnInit {
     this.baoCaoTinhTrangclcv = {
       series: [
         {
-          color: '#187779',
+          color: '#353a64',
           name: 'Tổng công việc',
           type: 'column',
           data: [118, 109, 90, 97, 72, 108, 63, 107, 108, 106],
@@ -254,7 +254,7 @@ export class IndexComponent implements OnInit {
       series: [
         {
           name: 'Tổng công việc',
-          color: '#187779',
+          color: '#353a64',
           type: 'area',
           data: [90, 55, 41, 67, 77, 99, 64, 88, 68, 66, 55],
         },
@@ -378,7 +378,7 @@ export class IndexComponent implements OnInit {
         },
         {
           name: 'Văn bản nội bộ',
-          color: '#187779',
+          color: '#353a64',
           type: 'area',
           data: [3, 8, 9, 12, 14, 9, 6, 4, 6, 5, 7],
         },
@@ -466,7 +466,7 @@ export class IndexComponent implements OnInit {
       },
     };
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   choYkien() {
     this.anchoykien = !this.anchoykien;

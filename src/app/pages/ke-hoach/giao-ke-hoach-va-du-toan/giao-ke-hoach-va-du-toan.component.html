@@ -1,4 +1,4 @@
-<div class="contentBor chi-tieu__body">
+<div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <div class="main-content tab-menu-new">
       <nz-tabset nzType="card" class="tab-level-0">
@@ -139,7 +139,15 @@
               <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
             </nz-tab>
             <nz-tab [nzTitle]="'Điều chỉnh chỉ tiêu KH (3)'" class="vat-tu__container">
-              <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+              <nz-tabset nzType="card" class="tab-level-2">
+                <nz-tab [nzTitle]="'Đề xuất điều chỉnh chỉ tiêu KH'">
+                  <app-de-xuat-dieu-chinh></app-de-xuat-dieu-chinh>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Quyết định điều chỉnh chỉ tiêu KH'">
+                  <app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+                  </app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+                </nz-tab>
+              </nz-tabset>
             </nz-tab>
             <nz-tab [nzTitle]="'Dự toán NSNN (4)'" class="vat-tu__container">
 
