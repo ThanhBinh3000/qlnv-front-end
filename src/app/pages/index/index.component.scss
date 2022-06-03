@@ -22,7 +22,7 @@
 
     .item {
       border: solid 1px #eee;
-      border-radius: 4px;
+      border-radius: 0px;
       padding: 10px 20px;
       background: #fff;
       box-shadow: 1px 1px 6px -3px #00000038;
@@ -79,7 +79,7 @@
     height: 12px;
     display: inline-block;
     margin-right: 6px;
-    border-radius: 12px;
+    border-radius: 0px;
   }
 }
 
@@ -162,19 +162,19 @@
   display: flex;
   height: 14px;
   // overflow: hidden;
-  border-radius: 3px;
+  border-radius: 0px;
   outline: 1px solid transparent;
   width: 100%;
 
   & > div {
     &:first-child {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
     }
 
     &:last-child {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
     }
   }
 
@@ -506,7 +506,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 30px;
+    border-radius: 0px;
     border: none;
     background: $maincolor;
 

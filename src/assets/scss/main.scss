@@ -10,7 +10,7 @@
 
 %status {
   padding: 2px 8px;
-  border-radius: 3px;
+  border-radius: 0px;
   min-width: 80px;
   display: inline-block;
   line-height: 1;
@@ -154,7 +154,7 @@ textarea.ant-input {
 
 .ant-picker {
   padding: 0 10px;
-  border-radius: 3px;
+  border-radius: 0px;
   min-width: 200px;
   display: flex;
   width: 100%;
@@ -276,7 +276,7 @@ button.ant-btn {
   padding: 6px 10px;
   height: auto;
   line-height: 1;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 button.ant-btn i + span {
@@ -294,7 +294,7 @@ input.form-control {
 }
 
 .tab-pane .form-control {
-  border-radius: 3px $i;
+  border-radius: 0px;
 }
 
 .ant-form-vertical {
@@ -356,27 +356,27 @@ input.form-control {
 
 .ant-tabs-content-holder {
   border: solid 1px $color-f0;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px !important;
-  border-top-left-radius: 3px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px;
 }
 
 .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
 .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
-  border-top-right-radius: 3px !important;
-  border-top-left-radius: 3px !important;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
 }
 
 .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab,
 .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
-  border-top-left-radius: 3px !important;
-  border-top-right-radius: 3px !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
 }
 
 .dot {
-  border-top-right-radius: 3px !important;
-  border-top-left-radius: 3px !important;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important;
   border-top: solid 1px $color-f0;
   border-left: solid 1px $color-f0;
   border-right: solid 1px $color-f0;
@@ -397,7 +397,7 @@ input.form-control {
 button.btn.btn-create.btn-timkiem.ant-dropdown-trigger {
   padding: 3px 5px;
   margin: 0 !important;
-  border-radius: 3px;
+  border-radius: 0px;
   height: 23px;
   line-height: 1;
 }
@@ -471,7 +471,7 @@ nz-upload .upload-content .card-content {
   padding: 6px 10px;
   height: auto;
   line-height: 1;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 button.btn.btn-create {
@@ -558,7 +558,7 @@ button.btn.btn-create {
     // background: $color-fb;
     padding: 5px 10px;
     margin-right: 20px;
-    border-radius: 3px;
+    border-radius: 0px;
     // box-shadow: 1px 1px 5px -2px rgb(0 0 0 / 10%);
     border: solid 1px $borderconten;
   }
@@ -709,7 +709,7 @@ button.btn.btn-outline-grey {
   padding-top: 5px;
   padding-bottom: 5px;
   border: solid 1px $border-nhat2 !important;
-  border-radius: 3px;
+  border-radius: 0px;
   background-color: $bordercolor;
   line-height: 1;
   margin-top: 10px;
@@ -742,7 +742,7 @@ button.btn.btn-outline-grey {
 }
 
 .nav-item .ant-badge-count {
-  border-radius: 6px !important;
+  border-radius: 0px;
   line-height: 13px;
   height: 14px;
   padding: 0 5px;
@@ -752,7 +752,7 @@ button.btn.btn-outline-grey {
 .ant-menu-dark.ant-menu-horizontal > .ant-menu-item > a {
   margin: 0 2px;
   padding: 3px 8px 2px 8px !important;
-  border-radius: 3px;
+  border-radius: 0px;
   // padding-top: 0 !important;
   // padding-bottom: 2px !important;
 }
@@ -873,7 +873,7 @@ cdk-virtual-scroll-viewport {
   height: 16px;
   padding: 0 6px;
   line-height: 15px;
-  border-radius: 6px;
+  border-radius: 0px;
   z-index: 1;
 }
 
@@ -891,7 +891,7 @@ cdk-virtual-scroll-viewport {
   top: 3px;
   bottom: 3px;
   right: 5px;
-  border-radius: 3px;
+  border-radius: 0px;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -1324,7 +1324,7 @@ body {
     margin: 16px auto $i;
     border: solid 1px $borderconten;
     padding: 16px 32px;
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: #fff;
     max-width: 1200px;
   }
@@ -1341,7 +1341,7 @@ body {
     margin: 16px auto $i;
     border: solid 1px $borderconten;
     padding: 16px 32px;
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: #fff;
     max-width: 1200px;
   }
@@ -1351,7 +1351,7 @@ body {
     margin: 16px auto $i;
     border: solid 1px $borderconten;
     padding: 16px 32px;
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: #fff;
     max-width: 1600px;
   }
@@ -1414,13 +1414,13 @@ body {
 
   #myTab::-webkit-scrollbar {
     height: 3px;
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: $bg-header2;
   }
 
   #myTab::-webkit-scrollbar-thumb {
     height: 3px;
-    border-radius: 2px !important;
+    border-radius: 0px;
     background-color: $bg-header;
   }
 
@@ -1928,7 +1928,7 @@ li.nav-item.prev {
     font-weight: 500;
     color: #fff;
     text-transform: uppercase;
-    border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 0px;
   }
 }
 
@@ -1936,7 +1936,7 @@ li.nav-item.prev {
   border: dashed 1px $borderinput;
   padding: 8px 8px 12px 8px;
   margin-bottom: 16px;
-  border-radius: 3px;
+  border-radius: 0px;
 
   // background: $bg-nhat;
   // .bgxam {
@@ -2006,7 +2006,7 @@ li.nav-item.prev {
     // background: #f2f2f2;
     display: inline-flex;
     align-items: center;
-    border-radius: 6px;
+    border-radius: 0px;
 
     i {
       margin-right: 4px;
@@ -2071,7 +2071,7 @@ li.nav-item.prev {
   .btn.btn-create.xam {
     background: $bg-nhat2;
     padding: 0 8px 0 4px;
-    border-radius: 3px;
+    border-radius: 0px;
     border-color: $border-nhat2 $i;
     align-items: center;
     display: inline-flex;
@@ -2095,7 +2095,7 @@ li.nav-item.prev {
 
   .secondary.bgxam.text-sm {
     color: $color-icon-xam;
-    border-radius: 6px;
+    border-radius: 0px;
     padding: 2px 8px;
     line-height: 1;
   }
@@ -2126,7 +2126,7 @@ span.ant-descriptions-item-content {
   background: #f9f9f9;
   padding-left: 4px;
   margin-right: 12px;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 .xulychinh {
@@ -2298,7 +2298,7 @@ span.ant-descriptions-item-content {
       padding: 0;
 
       .ant-select:not(.ant-select-disabled) .ant-select-selector {
-        border-radius: 3px;
+        border-radius: 0px;
       }
 
       .ant-select:not(.ant-select-disabled) .ant-select-selector,
@@ -2461,17 +2461,17 @@ span.ant-descriptions-item-content {
           .ant-picker-calendar-date-content ul li {
             padding: 4px 8px 8px 8px;
             margin-bottom: 8px;
-            border-radius: 3px;
+            border-radius: 0px;
             width: 250px;
 
             &:first-child {
-              border-top-left-radius: 3px;
-              border-top-right-radius: 3px;
+              border-top-left-radius: 0px;
+              border-top-right-radius: 0px;
             }
 
             &:last-child {
-              border-bottom-left-radius: 3px;
-              border-bottom-right-radius: 3px;
+              border-bottom-left-radius: 0px;
+              border-bottom-right-radius: 0px;
             }
 
             .b {
@@ -2779,7 +2779,7 @@ span.ant-descriptions-item-content {
     margin-left: 8px;
 
     .ant-checkbox-inner {
-      border-radius: 2px;
+      border-radius: 0px;
       padding: 0;
       width: 16px;
       height: 16px;
@@ -2949,7 +2949,7 @@ td .secondary.text-sm {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9px;
+  border-radius: 0px;
 }
 
 .ant-input-affix-wrapper .ant-input-suffix {
@@ -3067,7 +3067,7 @@ td .secondary.text-sm {
   margin-bottom: 8px;
   line-height: 1.5715;
   border: 1px solid $borderinput $i;
-  border-radius: 3px;
+  border-radius: 0px;
 
   &:not(.ant-input-affix-wrapper-disabled):hover {
     border-color: $borderinput $i;
@@ -3109,7 +3109,7 @@ td .secondary.text-sm {
   margin: 0px 0px 0px 0px;
   padding: 0 16px 16px 16px;
   border: solid 1px $color-f1;
-  border-radius: 3px;
+  border-radius: 0px;
 
   &.xam {
     background: $color-fb;
@@ -3127,7 +3127,7 @@ td .secondary.text-sm {
   .btn.btn-create {
     background: #e3f9f9;
     padding: 0 10px;
-    border-radius: 3px;
+    border-radius: 0px;
     border-color: #e3f9f9 !important;
     margin-left: 6px;
 
@@ -3153,7 +3153,7 @@ td .secondary.text-sm {
 
   &.ant-tree-node-selected {
     background-color: $bg-nhat2; //$color-f2
-    border-radius: 3px;
+    border-radius: 0px;
     color: $maincolor;
   }
 }
@@ -3161,7 +3161,7 @@ td .secondary.text-sm {
 .ant-select-tree
   .ant-select-tree-node-content-wrapper.ant-select-tree-node-selected {
   background-color: $bg-nhat2; //$color-f2
-  border-radius: 3px;
+  border-radius: 0px;
   color: $maincolor;
 }
 
@@ -3216,8 +3216,8 @@ td {
   margin-left: -15px;
   margin-right: -15px;
   // margin-top: -15px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   color: $maincolor;
   min-height: 38px;
   display: flex;
@@ -3227,7 +3227,7 @@ td {
   .btn.btn-create {
     background: $bg-nhat2;
     padding: 0 10px;
-    border-radius: 3px;
+    border-radius: 0px;
     border-color: $bg-nhat2 $i;
     margin-left: 8px;
 
@@ -3311,7 +3311,7 @@ td {
     border: dotted 1px #e4e4e4;
     padding: 4px 8px 6px 8px;
     margin-top: 8px;
-    border-radius: 3px;
+    border-radius: 0px;
     background: #fff;
     min-height: 18px;
     position: relative;
@@ -3596,7 +3596,7 @@ td {
 // .noidungtrong {
 //   min-height: 18px;
 //   min-width: 60px;
-//   border-radius: 3px;
+//   border-radius: 0px;
 // }
 .flex-card.ant-card .sokyhieu {
   min-height: 36px;
@@ -3632,7 +3632,7 @@ td textarea:focus.ant-input {
 
 .ant-modal .ant-card-extra.ng-star-inserted {
   border: solid 1px $border-nhat2;
-  border-radius: 3px;
+  border-radius: 0px;
   padding: 0px 4px;
   height: $input-h;
   align-items: center;
@@ -3892,7 +3892,7 @@ hr {
   height: auto;
   line-height: 1;
   padding: 1px 8px 1px 1px;
-  border-radius: 8px;
+  border-radius: 0px;
 
   span {
     font-size: 11px;
@@ -4050,7 +4050,7 @@ td nz-upload .upload-content .card-content {
       small {
         background: $bg-nhat2;
         padding: 2px 8px;
-        border-radius: 6px;
+        border-radius: 0px;
         line-height: 1;
       }
     }
@@ -4473,8 +4473,8 @@ td nz-upload .upload-content .card-content {
 // }
 
 // .flex-card.ant-card .ant-card-head {
-//   border-top-left-radius: 8px;
-//   border-top-right-radius: 8px;
+//   border-top-left-radius: 0px;
+//   border-top-right-radius: 0px;
 //   margin-bottom: 0;
 // }
 
@@ -4693,11 +4693,11 @@ body,
 //   background: #fafafa;
 //   line-height: 1;
 //   padding: 1px 9px;
-//   border-radius: 9px;
+//   border-radius: 0px;
 //   border: solid 1px #f1f1f1;
 // }
 
-// /* .ant-steps-navigation .ant-steps-item.ant-steps-item-active::before {height: 100%;background-color: #f8fefe;bottom: 1px;border-radius: 10px;left: 24px !important;} */
+// /* .ant-steps-navigation .ant-steps-item.ant-steps-item-active::before {height: 100%;background-color: #f8fefe;bottom: 1px;border-radius: 0px;left: 24px !important;} */
 // .ant-steps-navigation .ant-steps-item::before,
 // .ant-steps-navigation .ant-steps-item.ant-steps-item-active::before {
 //   background-color: #dcdcdc;
