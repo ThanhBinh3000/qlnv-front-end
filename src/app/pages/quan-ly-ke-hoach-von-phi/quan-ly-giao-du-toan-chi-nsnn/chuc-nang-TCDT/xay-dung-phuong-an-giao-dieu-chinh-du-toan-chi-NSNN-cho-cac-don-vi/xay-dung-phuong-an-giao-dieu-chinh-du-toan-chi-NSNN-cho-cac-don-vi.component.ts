@@ -51,11 +51,12 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   //thong tin dang nhap
   id: any;
   userInfo: any;
+  idPa: any;
   //thong tin chung bao cao
   ngayTao: string;
   maDonViTao: string;
   maPa: string;
-  maPaBTC: string = "PABTC-1";
+  maPaBTC: string;
   namPa: number;
   soQd: ItemFile;
   qdGiaoDuToan: ItemFile;
@@ -98,7 +99,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   fileList: NzUploadFile[] = [];
   //beforeUpload: any;
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
-
+  maLoai: string = '2';
   // before uploaf file
   beforeUploadQdGiaoDuToan = (file: NzUploadFile): boolean => {
     this.fileDetail = file;
@@ -142,6 +143,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   async ngOnInit() {
     //lay id cua ban ghi
     this.id = this.routerActive.snapshot.paramMap.get('id');
+    //lay idPa cua ban ghi
+    this.idPa = this.routerActive.snapshot.paramMap.get('idPa');
+    console.log(this.idPa);
+
     //lay thong tin user
     let userName = this.userService.getUserName();
     await this.getUserInfo(userName);
@@ -169,7 +174,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao().toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -181,8 +186,36 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
+      await this.quanLyVonPhiService.QDGiaoChiTiet1(this.idPa, this.maLoai).toPromise().then(
+        (data) => {
+          if (data.statusCode == 0) {
+            debugger
+            this.maPaBTC = data.data?.maPa
+            this.lstCtietBcao = data.data.lstCtiets;
+            this.maDviTien = data.data.maDviTien;
+            // this.lstDvi = [];
+            // this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+            //   this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan));
+            // })
+            this.sortByIndex();
+            this.lstCtietBcao.forEach(item => {
+              item.tongSo = divMoney(item.tongSo, this.maDviTien);
+            })
+            console.log(this.lstCtietBcao);
+
+            this.updateEditCache();
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      );
       this.namPa = this.newDate.getFullYear();
     }
+
+
     this.getStatusButton();
     this.spinner.hide();
 
@@ -304,7 +337,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -322,7 +355,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
               e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
             })
           })
-          debugger
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
             if(item.trangThai == "1"){
               this.statusBtnGiaoToanBo = true;
@@ -766,29 +798,38 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   // gan editCache.data == lstCtietBcao
   updateEditCache(): void {
-    this.lstCtietBcao.forEach(item => {
-      let data: ItemDvi[] = [];
-      item.lstCtietDvis.forEach(e => {
-        data.push({
-          id: e.id,
-          maDviNhan: e.maDviNhan,
-          soTranChi: e.soTranChi,
-          trangThai: e.trangThai,
-        });
-      })
-      this.editCache[item.id] = {
-        edit: false,
-        data: {
-          id: item.id,
-          stt: item.stt,
-          level: item.level,
-          maNdung: item.maNdung,
-          tongSo: item.tongSo,
-          lstCtietDvis: data,
-          checked: false,
-        }
-      }
-    })
+    // this.lstCtietBcao.forEach(item => {
+    //   let data: ItemDvi[] = [];
+    //   item.lstCtietDvis.forEach(e => {
+    //     data.push({
+    //       id: e.id,
+    //       maDviNhan: e.maDviNhan,
+    //       soTranChi: e.soTranChi,
+    //       trangThai: e.trangThai,
+    //     });
+    //   })
+    //   this.editCache[item.id] = {
+    //     edit: false,
+    //     data: {
+    //       id: item.id,
+    //       stt: item.stt,
+    //       level: item.level,
+    //       maNdung: item.maNdung,
+    //       tongSo: item.tongSo,
+    //       lstCtietDvis: data,
+    //       checked: false,
+    //     }
+    //   }
+    // })
+
+
+      this.lstCtietBcao.forEach(item => {
+        this.editCache[item.id] = {
+          edit: false,
+          data: { ...item }
+        };
+      });
+
   }
   //thêm cấp thấp hơn
   addLow(id: any, khoanMuc: any) {

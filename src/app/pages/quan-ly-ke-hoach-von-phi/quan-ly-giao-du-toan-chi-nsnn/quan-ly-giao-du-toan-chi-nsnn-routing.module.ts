@@ -92,7 +92,21 @@ const routes: Routes = [
       ).then((m) => m.XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViModule),
   },
   {
+    path: 'xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/:idPa',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViModule),
+  },
+  {
     path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
+  },
+  {
+    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:idPa',
     loadChildren: () =>
       import(
         './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'

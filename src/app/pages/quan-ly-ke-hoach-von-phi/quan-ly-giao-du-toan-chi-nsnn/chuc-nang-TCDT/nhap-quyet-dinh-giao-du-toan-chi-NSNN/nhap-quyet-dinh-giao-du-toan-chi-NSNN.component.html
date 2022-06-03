@@ -8,6 +8,20 @@
         </a>
       </div>
       <div class="canphai phai">
+        <!-- <button class="btn btn-main" >
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Tạo phương án</span>
+        </button> -->
+        <ng-template #contentTemplate>
+          <div class="contentTemplate_chonpa">
+            <a (click)="linkToPaPbo()">1. Phương án phân bổ giao dự toán chi</a>
+            <a (click)="linkToPaGiaoDC()">2. Phương án giao, điều chỉnh dự toán chi</a>
+          </div>
+        </ng-template>
+        <button  class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnTPA">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Tạo phương án</span>
+        </button>
         <button class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -37,9 +51,9 @@
           <thead>
             <tr>
               <th nzWidth="500px">Số QĐ</th>
-              <th>Nơi quyết định</th>
-              <th>Năm</th>
-              <th>Ngày quyết định</th>
+              <th>Mã phương án</th>
+              <th>Năm phương án</th>
+              <th>Ngày tạo</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +71,7 @@
 								</div>
 							</td>
               <td>
-                {{noiQd}}
+                {{maPa}}
               </td>
               <td>
                 <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="nam"

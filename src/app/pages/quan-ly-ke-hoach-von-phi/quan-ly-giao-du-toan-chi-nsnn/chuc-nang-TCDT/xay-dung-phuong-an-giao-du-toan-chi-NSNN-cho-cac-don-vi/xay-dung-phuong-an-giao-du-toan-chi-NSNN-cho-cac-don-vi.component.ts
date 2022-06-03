@@ -92,6 +92,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   listId: string = '';
   fileDetail: NzUploadFile;
   maGiao: any;
+  maLoai: string = '2';
   //file
   lstFiles: any[] = []; //show file ra man hinh
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -169,7 +170,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao().toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -304,7 +305,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;

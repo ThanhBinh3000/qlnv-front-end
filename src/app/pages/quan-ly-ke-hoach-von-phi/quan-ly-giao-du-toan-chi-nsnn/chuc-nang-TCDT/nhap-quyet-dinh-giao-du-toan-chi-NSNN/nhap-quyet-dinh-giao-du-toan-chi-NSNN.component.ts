@@ -73,6 +73,8 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     nguonKhac: 0,
     checked: false,
   };
+  maLoai: string = '2';
+  maPa: string;
   validateForm!: FormGroup;
   //trang thai cac nut
   status: boolean = false;
@@ -80,6 +82,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   statusBtnSave: boolean = true;                      // trang thai an/hien nut luu
   statusBtnCopy: boolean = true;                      // trang thai copy
   statusBtnPrint: boolean = true;                     // trang thai print
+  statusBtnTPA: boolean = true;
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -156,6 +159,20 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         (err) => {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
+      );
+      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maPa = res.data;
+            let sub = "BTC";
+            this.maPa = this.maPa.slice(0, 2 )  + sub + this.maPa.slice(2);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
       );
 
       // await this.danhMucService.dMKhoanMuc().toPromise().then(
@@ -342,6 +359,8 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       soQd: this.soQd,
       maDviTien: this.maDviTien,
       thuyetMinh: this.thuyetMinh,
+      maDvi: this.maDonViTao,
+      maPa: this.maPa,
     };
     //call service them moi
     this.spinner.show();
@@ -390,7 +409,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data.data);
@@ -407,6 +426,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.trangThaiBanGhi = data.data?.trangThai;
           this.ngayQd = data.data.ngayQd;
           this.noiQd = data.data?.noiQd;
+          this.maPa = data.data?.maPa;
           data.data?.lstCtiets[0].forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -419,6 +439,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
           this.updateEditCache();
           this.statusBtnCopy = false
           this.statusBtnPrint = false
+          this.statusBtnTPA = false
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -854,5 +875,21 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   }
   redirectkehoachvonphi() {
     this.location.back();
+  }
+
+  linkToPaPbo(){
+    let idPa = this.id
+    console.log(idPa);
+
+    this.router.navigate([
+      'qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + idPa,
+    ]);
+  }
+
+  linkToPaGiaoDC(){
+    let idPa = this.id
+    this.router.navigate([
+      'qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + idPa,
+    ]);
   }
 }
