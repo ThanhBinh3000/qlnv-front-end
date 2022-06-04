@@ -24,7 +24,7 @@ export class ItemData {
   stt: any;
   level: number;
   maNdung: number;
-  tongSo: any;
+  tongCong: any;
   lstCtietDvis: ItemDvi[] = [];
   checked!: boolean;
 }
@@ -52,10 +52,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   id: any;
   userInfo: any;
   //thong tin chung bao cao
-  ngayTao: string;
+  ngayTao: any;
   maDonViTao: string;
   maPa: string;
-  maPaBTC: string = "PABTC-1";
+  maPaCha: string;
   namPa: number;
   soQd: ItemFile;
   qdGiaoDuToan: ItemFile;
@@ -92,6 +92,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   listId: string = '';
   fileDetail: NzUploadFile;
   maGiao: any;
+  maLoai: string = '2';
   //file
   lstFiles: any[] = []; //show file ra man hinh
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -167,12 +168,24 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.dvql;
       this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDonViTao);
-      this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+      this.ngayTao = this.newDate;
       this.spinner.show();
-      this.quanLyVonPhiService.maPhuongAnGiao().toPromise().then(
+      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, res?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+      this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
+        (res) => {
+          if (res.statusCode == 0) {
+            this.maGiao = res.data;
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
           }
@@ -304,7 +317,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id).toPromise().then(
+    await this.quanLyVonPhiService.QDGiaoChiTiet1(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -317,12 +330,11 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.sortByIndex();
           this.maDviTien = data.data.maDviTien;
           this.lstCtietBcao.forEach(item => {
-            item.tongSo = divMoney(item.tongSo, this.maDviTien);
+            item.tongCong = divMoney(item.tongCong, this.maDviTien);
             item.lstCtietDvis.forEach(e => {
               e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
             })
           })
-          debugger
           this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
             if(item.trangThai == "1"){
               this.statusBtnGiaoToanBo = true;
@@ -331,9 +343,10 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           this.namPa = data.data.namPa;
           this.trangThaiBanGhi = data.data.trangThai;
           this.maPa = data.data.maPa;
+          this.maPaCha = data.data.maPaCha;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
-          this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+          this.ngayTao = data.data.ngayTao;
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
@@ -374,6 +387,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         id: this.id,
         maChucNang: mcn,
         lyDoTuChoi: lyDoTuChoi,
+        maLoai: this.maLoai,
       };
       this.spinner.show();
       await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
@@ -438,7 +452,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongSo, this.maDviTien) > MONEY_LIMIT) {
+      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -451,7 +465,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       })
       lstCtietBcaoTemp.push({
         ...item,
-        tongSo: mulMoney(item.tongSo, this.maDviTien),
+        tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
       })
     })
@@ -496,7 +510,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       ngayTao: this.ngayTao,
-      maLoaiDan: "1",
+      maLoaiDan: "2",
       maGiao: this.maGiao,
     }));
     this.spinner.show();
@@ -523,7 +537,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         },
       );
     } else {
-      this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
+      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan1(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -554,7 +568,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       this.lstCtietBcao.forEach(item => {
         lstCtiet.push({
           stt: item.stt,
-          maNoiDung: item.maNdung,
+          maNdung: item.maNdung,
           soTien: item.lstCtietDvis.find(e => e.maDviNhan == maDvi).soTranChi,
         })
       })
@@ -567,7 +581,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
         maDviTien: this.maDviTien,
         soQd: this.soQd,
         listCtiet: lstCtiet,
-        maLoaiDan: "1",
+        maLoaiDan: "2",
         namDtoan: this.namPa,
         ngayGiao: this.ngayTao,
         ngayTao: this.ngayTao,
@@ -576,14 +590,14 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       console.log(this.lstCtietBcao[0]);
       if (this.lstCtietBcao.length > 0) {
         this.lstCtietBcao[0].lstCtietDvis.forEach(item => {
-          if (item.trangThai == "0") {
+          if (item.trangThai == null) {
             let lstCtiet: any[] = [];
 
             this.lstCtietBcao.forEach(data => {
               let soTien = data.lstCtietDvis.find(e => e.maDviNhan !== maDvi).soTranChi
               lstCtiet.push({
                 stt: data.stt,
-                maNhom: data.maNdung,
+                maNdung: data.maNdung,
                 soTien: soTien,
               })
             })
@@ -597,7 +611,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
               maDviTien: this.maDviTien,
               soQd: this.soQd,
               listCtiet: lstCtiet,
-              maLoaiDan: "1",
+              maLoaiDan: "2",
               namDtoan: this.namPa,
               ngayGiao: this.ngayTao,
               ngayTao: this.ngayTao,
@@ -744,7 +758,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: head + "." + (tail + 1).toString(),
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: data,
       checked: false,
     };
@@ -753,7 +767,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: data1,
       checked: false,
     };
@@ -783,7 +797,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
           stt: item.stt,
           level: item.level,
           maNdung: item.maNdung,
-          tongSo: item.tongSo,
+          tongCong: item.tongCong,
           lstCtietDvis: data,
           checked: false,
         }
@@ -830,7 +844,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: obj,
       checked: false,
     };
@@ -839,7 +853,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: obj1,
       checked: false,
     };
@@ -998,7 +1012,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: '0.1',
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: data,
       checked: false,
     };
@@ -1007,7 +1021,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
       stt: item.stt,
       maNdung: khoanMuc.id,
       level: khoanMuc.level,
-      tongSo: 0,
+      tongCong: 0,
       lstCtietDvis: data1,
       checked: false,
     };
@@ -1050,14 +1064,14 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   setDetail() {
     this.lstCtietBcao.forEach(item => {
-      item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
+        item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
     })
-  }
+}
 
   addLine(id: any) {
-    var maNhom: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+    var maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
     let obj = {
-      maKhoanMuc: maNhom,
+      maKhoanMuc: maNdung,
       lstKhoanMuc: this.noiDungs,
     }
 
@@ -1145,9 +1159,9 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   total(id: any) {
     var index: number = this.lstCtietBcao.findIndex(e => e.id == id);
-    this.lstCtietBcao[index].tongSo = 0;
+    this.lstCtietBcao[index].tongCong = 0;
     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-      this.lstCtietBcao[index].tongSo += item.soTranChi;
+      this.lstCtietBcao[index].tongCong += item.soTranChi;
     })
   }
 

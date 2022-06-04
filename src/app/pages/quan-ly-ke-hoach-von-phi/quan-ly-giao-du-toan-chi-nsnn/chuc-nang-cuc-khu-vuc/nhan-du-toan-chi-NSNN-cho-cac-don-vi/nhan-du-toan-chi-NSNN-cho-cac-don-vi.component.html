@@ -5,10 +5,24 @@
 			<div class="trai">
 			</div>
 			<div class="canphai phai action-top">
-				<button nz-button type="button" class="search__button--clear" (click)="redirectkehoachvonphi()">
-					<i nz-icon nzType="close"></i>
-					<span>Đóng</span>
+        <button nz-button type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+					<span>Tiếp nhận</span>
 				</button>
+				<ng-template #contentTemplate>
+          <div class="contentTemplate_chonpa">
+            <a (click)="linkToPaPbo()" style="color: #1890ff;">1. Phương án phân bổ giao dự toán chi</a>
+            <a (click)="linkToPaGiaoDC()" style="color: #1890ff;">2. Phương án giao, điều chỉnh dự toán chi</a>
+          </div>
+        </ng-template>
+        <button  class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click" [hidden]="statusBtnNew">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Tạo phương án</span>
+        </button>
+        <a class="btn btn-main" (click)="redirectkehoachvonphi()">
+					<i nz-icon nzType="stop" nzTheme="outline"></i>
+					<span>Đóng</span>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -25,7 +39,7 @@
 							<th width="175px">Số QĐ/CV</th>
 							<th width="175px">Mã phương án</th>
 							<th width="175px">Mã giao</th>
-							<th width="175px">Năm giao</th>
+							<th width="175px">Năm dự toán</th>
 							<th width="175px">Ngày tạo</th>
 							<th width="175px">Nơi tạo</th>
 							<th width="175px">Trạng thái</th>
@@ -43,7 +57,7 @@
 							<td>{{maGiao}}</td>
 							<td>{{namDtoan}}</td>
 							<td>{{ngayNhap}}</td>
-							<td>{{getUnitName()}}</td>
+							<td>{{tenDvi}}</td>
 							<td>{{trangThai}}</td>
 						</tr>
 					</tbody>
@@ -89,7 +103,6 @@
 					</nz-tab>
 				</nz-tabset>
 				<div class="action">
-
 				</div>
 			</div>
 			<div class="ghi-chu">

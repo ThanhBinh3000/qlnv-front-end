@@ -69,13 +69,13 @@
 					<tbody>
 						<tr>
 							<td>
-								<div class="tep" (click)="downloadFileCv()">
+								<div class="tep_sqd" (click)="downloadFileCv()">
 									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
 									<span>{{soQd?.fileName}}</span>
 								</div>
 							</td>
               <td>
-                {{maPaBTC}}
+                {{maPaCha}}
               </td>
 							<td>{{maPa}}</td>
 							<td>{{namPa}}</td>
@@ -88,7 +88,7 @@
 			</nz-card>
 			<div class="tab__container" id="tablePrint">
 				<nz-tabset nzType="card" class="tab__container">
-					<nz-tab [nzTitle]="'Xây dựng phương án giao dự toán chi NSNN cho các đơn vị'">
+					<nz-tab [nzTitle]="'Xây dựng phương án giao, điều chỉnh dự toán chi NSNN cho các đơn vị'">
 						<ng-container *ngIf="status;else templateName">
 							<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 								<div nz-col class="gutter-row" [nzSpan]="3">
@@ -146,7 +146,7 @@
 												</div>
 											</div>
 										</td>
-										<td>{{data.tongSo}}</td>
+										<td>{{data.tongCong}}</td>
 										<td *ngFor="let item of lstDvi">
 											<div *ngFor="let e of data.lstCtietDvis;">
 												<div *ngIf="e.maDviNhan == item.maDvi">
@@ -180,7 +180,7 @@
 											</div>
 										</td>
 										<td>
-											{{data.tongSo}}
+											{{data.tongCong}}
 										</td>
 										<td *ngFor="let item of lstDvi">
 											<div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
@@ -215,16 +215,18 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td *ngFor="let item of lstDvi">
-											<div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
-												<div *ngIf="e.maDviNhan == item.maDvi">
-													<ng-container *ngIf="getStatusGiao(e.trangThai)">
-														<a (click)="giaoSoTranChi(e.maDviNhan)">Giao
-														</a>
-													</ng-container>
-												</div>
-											</div>
-										</td>
+                    <td *ngFor="let item of lstDvi">
+                      <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
+                        <div *ngIf="e.maDviNhan == item.maDvi">
+                          <ng-container *ngIf="e.trangThai == null">
+                            <a (click)="giaoSoTranChi(e.maDviNhan)">
+                              Giao
+                            </a>
+                          </ng-container>
+                        </div>
+                      </div>
+
+                    </td>
 									</tr>
 								</ng-container>
 							</tbody>
