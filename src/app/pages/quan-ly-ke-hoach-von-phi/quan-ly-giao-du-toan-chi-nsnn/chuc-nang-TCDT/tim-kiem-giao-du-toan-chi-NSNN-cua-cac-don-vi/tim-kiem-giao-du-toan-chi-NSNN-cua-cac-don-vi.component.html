@@ -36,12 +36,12 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày giao từ</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
@@ -54,13 +54,11 @@
             </nz-select>
           </div>
 					<div nz-col nzSpan="6">
-						<label class="search__label">Trạng thái</label>
-						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
-							[(ngModel)]="searchFilter.trangThai">
-							<nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
-							</nz-option>
-						</nz-select>
-					</div>
+            <label class="search__label">Trạng thái</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
+            </nz-select>
+          </div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đơn vị nhận</label>
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị nhận"
@@ -87,7 +85,6 @@
 						<tr>
 							<th width="60px">STT</th>
 							<th>Mã phương án</th>
-							<th>Mã báo cáo</th>
 							<th>Ngày lập</th>
 							<th>Năm giao</th>
 							<th>Trạng thái</th>
@@ -101,13 +98,10 @@
 								{{ item.maPa}}
 							</td>
 							<td>
-								{{item.maBcao}}
-							</td>
-							<td>
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.namGiao}}
+								{{item.namPa}}
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}

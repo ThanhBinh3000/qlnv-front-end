@@ -10,14 +10,17 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, KHOAN_MUC, LA_MA, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { DON_VI_TIEN, KHOAN_MUC, LA_MA, TRANG_THAI_GIAO, Utils, mulMoney } from 'src/app/Utility/utils';
 
 export class ItemData {
-    id: any;
-    stt: string;
-    level: number;
-    maNdung: string;
-    soTien: number;
+  id!: any;
+  stt: any;
+  level: number;
+  maNdung: number;
+  soTien: number;
+  nguonNsnn: number;
+  nguonKhac: number;
+  checked!: boolean;
 }
 
 export class ItemCongVan {
@@ -33,7 +36,7 @@ export const TRANG_THAI_GIAO_DU_TOAN = [
   },
   {
       id: '1',
-      tenDm: "Đã giao",
+      tenDm: "Mới",
   },
   {
       id: '2',
@@ -41,11 +44,11 @@ export const TRANG_THAI_GIAO_DU_TOAN = [
   },
 ]
 @Component({
-  selector: 'app-giao-du-toan-chi-NSNN-cho-cac-don-vi',
-  templateUrl: './giao-du-toan-chi-NSNN-cho-cac-don-vi.component.html',
-  styleUrls: ['./giao-du-toan-chi-NSNN-cho-cac-don-vi.component.scss']
+  selector: 'app-nhan-du-toan-chi-NSNN-cho-cac-don-vi',
+  templateUrl: './nhan-du-toan-chi-NSNN-cho-cac-don-vi.component.html',
+  styleUrls: ['./nhan-du-toan-chi-NSNN-cho-cac-don-vi.component.scss']
 })
-export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
+export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     //thong tin dang nhap
     id!: any;
     userInfo: any;
@@ -58,10 +61,11 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     maGiao: string;
     trangThai: string;
     namDtoan: number;
-    maDviTien: any;
+    maDviTien: any = "1";
     newDate = new Date();
     tenDvi: string;
     //danh muc
+    lstDvi: any[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
@@ -70,7 +74,8 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     soLaMa: any[] = LA_MA;
     //file
     fileDetail: NzUploadFile;
-
+    // khac
+    statusBtnNew: boolean;
     constructor(
         private userService: UserService,
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -90,10 +95,11 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
         await this.getUserInfo(userName); //get user info
 
         //lay danh sach danh muc
-        this.danhMucService.dMDonVi().toPromise().then(
+        await this.danhMucService.dMDonVi().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
+                    // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -157,10 +163,12 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
                     this.maGiao = data.data.maGiao;
                     this.namDtoan = data.data.namDtoan;
                     this.ngayNhap =this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-                    this.maDviTao = data.data.maDvi;
+                    this.maDviTao = data.data.maDviNhan;
                     // this.trangThai = data.data.trangThai;
 
-                    this.tenDvi =  this.donVis.find((item) => item.maDvi == data.data.maDvi)?.tenDvi;
+                    this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
+                    this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
+                    console.log(this.lstDvi);
 
                     this.trangThai = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
 
@@ -268,4 +276,192 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     }
 
 
+
+    // luu
+  async save() {
+    let request = {
+      id:  this.id,
+      lyDoTuChoi: null,
+      maChucNang: "2",
+      maLoai: "1"
+    };
+    this.spinner.show();
+      this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
+        async (data) => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            await this.getDetailReport();
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    this.spinner.hide();
+  }
+
+  // tao moi giao dieu chinh
+  async linkToPaGiaoDC() {
+    let listCtietDvi: any[] = [];
+    let maPaCha = this.maPa
+    await this.quanLyVonPhiService.maPhuongAnGiao('2').toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+          this.maPa = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+          return;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        return;
+      },
+    );
+
+    this.lstDvi.forEach(item => {
+      listCtietDvi.push({
+          id: null,
+          maDviNhan: item.maDvi,
+          soTranChi: 0,
+      })
+    })
+
+    let lstCtietBcaoTemp: any[] = [];
+    // gui du lieu trinh duyet len server
+    this.lstCtietBcao.forEach(item => {
+      lstCtietBcaoTemp.push({
+        ...item,
+        tongCong: mulMoney(item.soTien, this.maDviTien),
+        nguonNsnn: mulMoney(item.nguonNsnn, this.maDviTien),
+        nguonKhac: mulMoney(item.nguonKhac, this.maDviTien),
+        lstCtietDvis: listCtietDvi,
+        id: null,
+      })
+    })
+
+    lstCtietBcaoTemp.forEach(item => {
+      if (item.id?.length == 38) {
+        item.id = null;
+      }
+    });
+
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDviTao,
+      maDviTien: this.maDviTien,
+      maPa: this.maPa,
+      maPaCha: maPaCha,
+      namPa: this.namDtoan,
+      maPhanGiao: "2",
+      maLoaiDan: '2',
+      trangThai: "1",
+      thuyetMinh: "",
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
+      async (data) => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.router.navigate([
+            '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+          ])
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    this.spinner.hide();
+  }
+
+
+  // tao moi giao
+  async linkToPaPbo() {
+    let listCtietDvi: any[] = [];
+    let maPaCha = this.maPa
+    await this.quanLyVonPhiService.maPhuongAnGiao('2').toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+          this.maPa = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+          return;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        return;
+      },
+    );
+
+    this.lstDvi.forEach(item => {
+      listCtietDvi.push({
+          id: null,
+          maDviNhan: item.maDvi,
+          soTranChi: 0,
+      })
+    })
+
+    let lstCtietBcaoTemp: any[] = [];
+    // gui du lieu trinh duyet len server
+    this.lstCtietBcao.forEach(item => {
+      lstCtietBcaoTemp.push({
+        ...item,
+        tongCong :mulMoney(item.soTien, this.maDviTien),
+        nguonNsnn: mulMoney(item.nguonNsnn, this.maDviTien),
+        nguonKhac: mulMoney(item.nguonKhac, this.maDviTien),
+        lstCtietDvis: listCtietDvi,
+        id: null,
+      })
+    })
+
+    lstCtietBcaoTemp.forEach(item => {
+      if (item.id?.length == 38) {
+        item.id = null;
+      }
+    });
+
+    // gui du lieu trinh duyet len server
+    let request = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDviTao,
+      maDviTien: this.maDviTien,
+      maPa: this.maPa,
+      maPaCha: maPaCha,
+      namPa: this.namDtoan,
+      maPhanGiao: "2",
+      maLoaiDan: '1',
+      trangThai: "1",
+      thuyetMinh: "",
+    };
+    this.spinner.show();
+    this.quanLyVonPhiService.giaoDuToan1(request).toPromise().then(
+      async (data) => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.router.navigate([
+            '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
+          ])
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    this.spinner.hide();
+  }
 }

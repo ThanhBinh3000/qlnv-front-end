@@ -43,6 +43,27 @@ const routes: Routes = [
       ).then((m) => m.GiaoDuToanChiNSNNChoCacDonViModule),
   },
   {
+    path: 'giao-du-toan-chi-NSNN-cho-cac-don-vi/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/giao-du-toan-chi-NSNN-cho-cac-don-vi/giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.GiaoDuToanChiNSNNChoCacDonViModule),
+  },
+  {
+    path: 'nhan-du-toan-chi-NSNN-cho-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/nhan-du-toan-chi-NSNN-cho-cac-don-vi/nhan-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.NhanDuToanChiNSNNChoCacDonViModule),
+  },
+  {
+    path: 'nhan-du-toan-chi-NSNN-cho-cac-don-vi/:id',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/nhan-du-toan-chi-NSNN-cho-cac-don-vi/nhan-du-toan-chi-NSNN-cho-cac-don-vi.module'
+      ).then((m) => m.NhanDuToanChiNSNNChoCacDonViModule),
+  },
+  {
     path: 'kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc',
     loadChildren: () =>
       import(
@@ -71,6 +92,13 @@ const routes: Routes = [
       ).then((m) => m.TimKiemGiaoDuToanChiNSNNCuaCacDonViModule),
   },
   {
+    path: 'tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi',
+    loadChildren: () =>
+      import(
+        './chuc-nang-cuc-khu-vuc/tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi/tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi.module'
+      ).then((m) => m.TimKiemNhanDuToanChiNSNNCuaCacDonViModule),
+  },
+  {
     path: 'tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi',
     loadChildren: () =>
       import(
@@ -78,21 +106,7 @@ const routes: Routes = [
       ).then((m) => m.TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViModule),
   },
   {
-    path: 'tong-hop-lap-ke-hoach-phan-bo-du-toan-cua-don-vi',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/tong-hop-lap-ke-hoach-phan-bo-du-toan-cua-don-vi/tong-hop-lap-ke-hoach-phan-bo-du-toan-cua-don-vi.module'
-      ).then((m) => m.TongHopLapKeHoachPhanBoDuToanCuaDonViModule),
-  },
-  {
     path: 'xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi',
-    loadChildren: () =>
-      import(
-        './chuc-nang-TCDT/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.module'
-      ).then((m) => m.XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViModule),
-  },
-  {
-    path: 'xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/:idPa',
     loadChildren: () =>
       import(
         './chuc-nang-TCDT/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi.module'
@@ -106,18 +120,25 @@ const routes: Routes = [
       ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
   },
   {
-    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:idPa',
+    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:id',
     loadChildren: () =>
       import(
         './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
       ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
   },
   {
-    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:id',
+    path: 'xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/:id/:namDtoan',
     loadChildren: () =>
       import(
         './chuc-nang-TCDT/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.module'
       ).then((m) => m.XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViModule),
+  },
+  {
+    path: 'danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan',
+    loadChildren: () =>
+      import(
+        './chuc-nang-TCDT/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan.module'
+      ).then((m) => m.DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanModule),
   },
 
 
