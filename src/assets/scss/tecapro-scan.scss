@@ -24,7 +24,7 @@
 #scan-msg-box {
   padding: 8px 16px;
   background: #efefef;
-  border-radius: 3px;
+  border-radius: 0px;
   margin-top: 13px;
   color: #585858;
   font-size: 14px;
@@ -173,7 +173,7 @@
 #scan-control-box .form-group label + span {
   background: #efefef;
   padding: 2px 8px 3px 8px;
-  border-radius: 4px;
+  border-radius: 0px;
   line-height: 1;
   align-items: center;
   margin-left: 5px;
@@ -189,7 +189,7 @@
 #scan-control-box select {
   margin-left: 8px;
   border-color: #ccc;
-  border-radius: 3px;
+  border-radius: 0px;
   width: 100%;
   max-width: unset;
   display: flex;

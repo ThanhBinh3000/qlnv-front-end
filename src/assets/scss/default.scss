@@ -549,7 +549,7 @@ app-danh-sach-file.hidecard,
   height: $input-h $i; //($input-h - 4px) $i;
   background: $bg-nhat2;
   border: solid 1px $border-nhat2 $i;
-  border-radius: 3px;
+  border-radius: 0px;
   outline: unset;
   box-shadow: unset;
 }
@@ -697,7 +697,7 @@ app-danh-sach-file.hidecard,
     border: solid 1px $borderconten;
     padding: 8px 8px 12px 8px;
     margin-bottom: 8px;
-    border-radius: 3px;
+    border-radius: 0px;
     background: #fefefe;
     margin-top: 24px;
 
@@ -792,7 +792,7 @@ app-danh-sach-file.hidecard,
     // padding: 1px 8px;
     display: inline-flex;
     align-items: center;
-    border-radius: 6px;
+    border-radius: 0px;
 
     i {
       margin-right: 4px;
@@ -899,7 +899,7 @@ app-danh-sach-file.hidecard,
   .btn.btn-create.xam {
     background: $bg-nhat2;
     padding: 0 8px 0 4px;
-    border-radius: 3px;
+    border-radius: 0px;
     border-color: $bg-nhat2 $i; //$border-nhat2
     align-items: center;
     display: inline-flex;
@@ -918,7 +918,7 @@ app-danh-sach-file.hidecard,
       color: $maincolor;
       font-weight: 500;
       margin-right: 8px;
-      border-radius: 3px;
+      border-radius: 0px;
     }
   }
 }
@@ -1066,12 +1066,12 @@ app-danh-sach-file.hidecard,
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top-left-radius: 8px;
+    border-top-left-radius: 0px;
     font-size: $font-size12;
     color: #fff;
     line-height: 1;
     padding: 0 4px;
-    border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 0px;
   }
 }
 
@@ -1198,7 +1198,7 @@ app-danh-sach-file.hidecard,
 // }
 
 .flex-card.p-lr16.ant-card .ant-card-body {
-  padding: 0px 16px;
+  padding: 0px 10px;
 }
 
 .checkall-card {
@@ -1207,7 +1207,7 @@ app-danh-sach-file.hidecard,
   align-items: center;
   background: #e3f9f9;
   border: solid 1px #4e5484 !important;
-  border-radius: 3px;
+  border-radius: 0px;
   margin-right: 4px;
   white-space: nowrap;
 
@@ -1283,7 +1283,7 @@ app-danh-sach-file.hidecard,
       font-size: $font-size13;
       color: $maincolor;
       padding: 0 8px;
-      border-radius: 3px;
+      border-radius: 0px;
       border: dashed 1px transparent;
       font-weight: normal;
 
@@ -1338,11 +1338,11 @@ app-danh-sach-file.hidecard,
     flex: auto;
 
     &:first-child {
-      border-radius: 3px 0 0 3px;
+      border-radius: 0px;
     }
 
     &:last-child {
-      border-radius: 0 3px 3px 0;
+      border-radius: 0px;
     }
   }
 
@@ -1379,7 +1379,7 @@ app-danh-sach-file.hidecard,
   width: 100%;
   height: 24px;
   border: solid 1px $borderinput;
-  border-radius: 3px;
+  border-radius: 0px;
   padding-left: 10px;
   padding-right: 30px;
   outline: none;
@@ -1792,7 +1792,7 @@ td .date-picker-custom dp-date-picker.dp-material {
   bottom: 2px;
   background: #20a1a4;
   padding: 3px 8px;
-  border-radius: 3px;
+  border-radius: 0px;
   left: 16px;
   line-height: 1;
   color: #fff !important;
@@ -1911,7 +1911,7 @@ td.action.ant-table-cell {
     font-weight: 500;
     font-size: 13px;
     padding: 4px;
-    border-radius: 5px;
+    border-radius: 0px;
     border: 1px solid #eaeaea;
     text-transform: uppercase;
     margin-right: 8px;
@@ -1923,7 +1923,7 @@ td.action.ant-table-cell {
     font-weight: 500;
     font-size: 13px;
     padding: 4px;
-    border-radius: 5px;
+    border-radius: 0px;
     border: 1px solid #24e837;
     text-transform: uppercase;
     margin-right: 8px;
@@ -1936,5 +1936,21 @@ td.action.ant-table-cell {
     font-weight: 500;
     font-size: 16px;
     padding: 4px;
+  }
+}
+
+.ant-tabs-tab-active {
+  .number-title-tab {
+    color: #3da3f5;
+  }
+}
+
+::ng-deep {
+  .ant-checkbox-inner {
+    border-radius: 0 !important;
+  }
+
+  input {
+    border-radius: 0 !important;
   }
 }

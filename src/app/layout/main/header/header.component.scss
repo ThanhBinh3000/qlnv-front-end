@@ -66,7 +66,7 @@
   a.ant-dropdown-link.ant-dropdown-trigger.user {
     border: solid 1px rgb(255 255 255 / 30%);
     padding: 1px 4px;
-    border-radius: 2px;
+    border-radius: 0px;
   }
 
   .menuphai .ant-dropdown-link {
@@ -105,7 +105,7 @@
 
   .ant-menu-dark.ant-menu-horizontal > .ant-menu-item,
   .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
-    border-radius: 4px;
+    border-radius: 0px;
     padding: 1px 0px;
     font-size: $font-size14;
     //   @media(max-width: 1366px){
@@ -131,7 +131,7 @@
   .ant-menu-dark.ant-menu-horizontal > .ant-menu-item.active a {
     background-color: $maincolor;
     color: #fff;
-    border-radius: 3px;
+    border-radius: 0px;
     padding-top: 0;
     padding-bottom: 2px;
   }
@@ -204,7 +204,7 @@ nz-header.ant-layout-header {
           position: absolute;
           background: #ff4d4f;
           border: 1px solid #ffffff;
-          border-radius: 6px;
+          border-radius: 0px;
           color: #ffffff;
           font-size: 12px;
           padding: 1px 6px;

@@ -53,6 +53,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
   @Output()
   showListEvent = new EventEmitter<any>();
+
   listThoc: any[] = [];
   listMuoi: any[] = [];
   listVatTu = [];
@@ -148,7 +149,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.newObjectVatTu();
     this.loadDanhMucHang();
     this.yearNow = dayjs().get('year');
-    // this.id = +this.routerActive.snapshot.paramMap.get('id');
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: this.yearNow - i,
@@ -164,6 +164,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadThongTinChiTieuKeHoachNam(this.id);
     }
   }
+
   newObjectLuongThuc() {
     this.keHoachLuongThucCreate = new KeHoachLuongThuc();
     this.keHoachLuongThucCreate.xtnThoc = [
@@ -653,7 +654,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectChiTieuKeHoachNam() {
-    // this.router.navigate([`/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}`]);
     this.showListEvent.emit();
   }
 

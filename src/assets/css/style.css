@@ -391,7 +391,7 @@ a:hover {
   z-index: 99;
   width: 172px;
   right: 0;
-  border-radius: 5px;
+  border-radius: 0px;
   box-shadow: 2px 2px 7px #888484a3;
   opacity: 0;
   transition: all 0.3s ease-in-out;
@@ -498,7 +498,7 @@ a:hover {
   display: block;
   background: #c11616;
   height: 16px;
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 0 5px;
   font-size: 9px;
   color: #fff;
@@ -685,7 +685,7 @@ a:hover {
   width: 224px;
   right: 0;
   left: 0;
-  border-radius: 5px;
+  border-radius: 0px;
   box-shadow: 2px 2px 7px #888484a3;
   opacity: 0;
   transition: all 0.3s ease-in-out;
@@ -1460,7 +1460,7 @@ body.hc-nav-open {
   max-width: 500px;
   width: 100%;
   background: rgba(255, 255, 255, 0.85);
-  border-radius: 30px;
+  border-radius: 0px;
   height: max-content;
   box-shadow: 0 5px 11px 3px #00000040;
 }
@@ -1504,7 +1504,7 @@ body.hc-nav-open {
 }
 .main-login .login-box .content .form .btn-login {
   background: #730404;
-  border-radius: 20px;
+  border-radius: 0px;
   transition: all 0.3s ease-in-out;
   margin: 30px 0;
 }
@@ -1591,7 +1591,7 @@ body.hc-nav-open {
   width: 15px;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 @media (max-width: 767px) {
   .main-login .login-box .content .form .remember-forgot .checkmark {
@@ -1966,7 +1966,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .contentBlog {
   border: 0.5px solid #ccc;
-  border-radius: 10px;
+  border-radius: 0px;
   padding: 10px 15px;
 }
 .main-content .contentDetail .contentBlog h4.name,
@@ -2057,7 +2057,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .contentBlog .sliders .item {
   padding: 11px 0 5px;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 .main-content .contentDetail .contentBlog .sliders .item h4 {
   color: #fff;
@@ -2272,7 +2272,7 @@ body.hc-nav-open {
   button {
   background: #fff;
   border: 1px solid #707070;
-  border-radius: 5px;
+  border-radius: 0px;
   height: 30px;
   width: 32px;
 }
@@ -2347,7 +2347,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .contentBlog .btnSearch button {
   background: #cbbfc1;
-  border-radius: 15px;
+  border-radius: 0px;
   height: 35px;
   padding: 0 30px 0 45px;
   margin: 10px;
@@ -2425,8 +2425,8 @@ body.hc-nav-open {
   .pagination
   li:first-child
   a {
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 .main-content
   .contentDetail
@@ -2494,7 +2494,7 @@ body.hc-nav-open {
   vertical-align: middle;
   width: 19px;
   height: 19px;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #707070;
   margin-right: 5px;
 }
@@ -2527,7 +2527,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .daumoi button {
   height: 30px;
-  border-radius: 5px;
+  border-radius: 0px;
   outline: none;
 }
 @media (max-width: 1600px) {
@@ -2550,7 +2550,7 @@ body.hc-nav-open {
   height: 30px;
   padding: 0 6px;
   border: 1px solid #707070;
-  border-radius: 5px;
+  border-radius: 0px;
 }
 @media (max-width: 1600px) {
   .main-content .contentDetail .form-control {
@@ -2611,7 +2611,7 @@ body.hc-nav-open {
   transition: all 0.3s ease-in-out;
 }
 .main-content .contentDetail .action-bar ul li:first-child {
-  border-top-left-radius: 10px;
+  border-top-left-radius: 0px;
 }
 .main-content .contentDetail .action-bar ul li:hover {
   background: #815864;
@@ -2687,7 +2687,7 @@ body.hc-nav-open {
 .main-content .contentDetail .group-btn button {
   background: #cbbfc1;
   border: 0;
-  border-radius: 15px;
+  border-radius: 0px;
   padding: 5px 20px 5px 45px;
   color: #333;
   margin: 8px 5px;
@@ -2871,7 +2871,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .nav-tabs {
   background: #e4dedf;
-  border-top-left-radius: 10px;
+  border-top-left-radius: 0px;
 }
 @media (max-width: 767px) {
   .main-content .contentDetail .nav-tabs {
@@ -2889,10 +2889,10 @@ body.hc-nav-open {
   }
 }
 .main-content .contentDetail .nav-tabs li:nth-child(1) {
-  border-top-left-radius: 10px;
+  border-top-left-radius: 0px;
 }
 .main-content .contentDetail .nav-tabs li:nth-child(1) a {
-  border-top-left-radius: 10px;
+  border-top-left-radius: 0px;
 }
 @media (max-width: 1600px) {
   .main-content .contentDetail .nav-tabs li a {
@@ -2917,7 +2917,7 @@ body.hc-nav-open {
 }
 .main-content .contentDetail .inputFile .uploadfile span {
   background: #7982b7;
-  border-radius: 5px;
+  border-radius: 0px;
   color: #fff;
   font-size: 16px;
   margin: 1.25em auto;
@@ -3005,7 +3005,7 @@ body.hc-nav-open {
   width: 19px;
   background-color: #fff;
   border: 1px solid #707070;
-  border-radius: 4px;
+  border-radius: 0px;
   right: 0;
   margin: auto;
 }
@@ -3057,7 +3057,7 @@ body.hc-nav-open {
   float: right;
   color: #fff;
   background: #7982b7;
-  border-radius: 15px;
+  border-radius: 0px;
   height: 25px;
   line-height: 25px;
   width: 94px;
@@ -3345,7 +3345,7 @@ body.hc-nav-open {
   }
 }
 .main-content .table-content table tbody tr td .status {
-  border-radius: 12px;
+  border-radius: 0px;
   height: 25px;
   color: #fff;
   padding: 0 10px;
@@ -3372,7 +3372,7 @@ body.hc-nav-open {
 }
 .main-content .table-content table tbody tr td .chucvu {
   background: #cdd0de;
-  border-radius: 3px;
+  border-radius: 0px;
   display: block;
   white-space: nowrap;
   height: 25px;
@@ -3409,7 +3409,7 @@ body.hc-nav-open {
 }
 .contentTree .controls button {
   background: #cbbfc1;
-  border-radius: 15px;
+  border-radius: 0px;
   height: 35px;
   padding: 0 30px 0 45px;
   margin: 10px;
@@ -3506,7 +3506,7 @@ body.hc-nav-open {
   cursor: pointer;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 2px;
+  border-radius: 0px;
 }
 
 /*modal*/
@@ -3527,7 +3527,7 @@ body.hc-nav-open {
 .modal .modal-footer button {
   background: #cbbfc1;
   border: 0;
-  border-radius: 15px;
+  border-radius: 0px;
   padding: 5px 20px 5px 45px;
   color: #333;
   margin: 8px;
@@ -3769,13 +3769,13 @@ body {
   background: #e4e4e4;
 }
 .main-content .contentDetail .action-bar ul li:first-child {
-  border-radius: 6px;
+  border-radius: 0px;
   margin-left: 14px;
 }
 
 .main-content .contentDetail .action-bar ul li {
   margin-right: 10px;
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 0px 15px;
 }
 
@@ -3909,8 +3909,8 @@ body {
   padding-bottom: 2px;
 }
 .page-item:last-child .page-link {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .main-content
   .contentDetail
@@ -3919,8 +3919,8 @@ body {
   .pagination
   li:first-child
   a {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 .form-control,
 button.btn {
@@ -3930,7 +3930,7 @@ button.btn {
   height: 23px;
   padding: 0 6px;
   border: 1px solid #ced4da;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 .main-content .contentDetail .form-group select {
   background-position: calc(100% - 10px) calc(1em + -4px),
@@ -3946,7 +3946,7 @@ button.btn {
   height: 23px;
   width: 23px;
   border: 1px solid #ced4da;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 .main-content
@@ -4003,7 +4003,7 @@ button.btn {
 }
 .main-content .contentDetail .inputFile .uploadfile span {
   background: #861b1b;
-  border-radius: 3px;
+  border-radius: 0px;
   padding: 5px 10px;
   font-size: 1em;
 }
@@ -4023,7 +4023,7 @@ button.btn {
 .main-content .contentDetail .contentBlog .btnSearch.dsvb button,
 .main-content .contentDetail .group-btn button {
   background: #861b1b;
-  border-radius: 3px;
+  border-radius: 0px;
   height: auto;
   padding: 5px 10px 5px 30px;
   color: #fff;
@@ -4118,7 +4118,7 @@ table th img {
   width: auto;
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 2px;
+  border-radius: 0px;
   min-width: 90px;
   font-size: 1em;
 }
@@ -4172,7 +4172,7 @@ label.btn {
 }
 .modal .modal-footer button {
   background: #861b1b;
-  border-radius: 3px;
+  border-radius: 0px;
   height: auto;
   padding: 5px 10px 5px 10px;
   color: #fff;
@@ -4230,7 +4230,7 @@ label.btn {
   vertical-align: middle;
   width: 19px;
   height: 19px;
-  border-radius: 4px;
+  border-radius: 0px;
   margin-right: 5px;
 }
 .checkbox-item label input[type='checkbox'] + *::before {
@@ -4411,7 +4411,7 @@ label.btn {
   margin-top: 0;
 }
 .header .notification > ul > li .hasChildNoti {
-  border-radius: 5px;
+  border-radius: 0px;
   overflow: hidden;
 }
 .header .notification > ul > li .hasChildNoti ul {
@@ -4465,7 +4465,7 @@ label.btn {
   padding: 2px 3px;
   line-height: 1;
   height: auto;
-  border-radius: 4px;
+  border-radius: 0px;
   left: 0;
   top: -10px;
 }
@@ -4596,7 +4596,7 @@ th.dow {
 }
 td.day:hover {
   background-color: #fef001;
-  border-radius: 6px;
+  border-radius: 0px;
   cursor: pointer;
 }
 
@@ -4759,7 +4759,7 @@ tree-viewport {
   vertical-align: middle;
   width: 17px;
   height: 17px;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #707070;
 }
 .main-content
@@ -5006,14 +5006,14 @@ th .icon {
 }
 .main-content .contentDetail .contentBlog .btnSearch button {
   background: #861b1b;
-  border-radius: 3px;
+  border-radius: 0px;
   height: auto;
   padding: 3px 10px;
   color: #fff;
 }
 .main-content .contentDetail .contentBlog .btnSearch button {
   background: #861b1b;
-  border-radius: 3px;
+  border-radius: 0px;
   height: auto;
   padding: 3px 10px;
   color: #fff;
@@ -5028,7 +5028,7 @@ th .icon {
 }
 .main-content .contentDetail .action-bar ul li:first-child,
 .main-content .contentDetail .action-bar ul li {
-  border-radius: 3px;
+  border-radius: 0px;
 }
 .main-content .contentDetail .contentBlog .searchForm {
   margin-top: -10px;
@@ -5061,7 +5061,7 @@ option {
 .main-content .contentDetail .table tbody tr td .description .show-more {
   color: #444;
   background: #e4e4e4;
-  border-radius: 3px;
+  border-radius: 0px;
   width: auto;
   padding: 3px 5px 3px 5px;
   line-height: 1;
@@ -5112,8 +5112,8 @@ option {
 }
 .input-group-append .btn,
 .input-group-prepend .btn {
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
 }
 .main-content .contentDetail .table tbody tr td .icon {
   font-size: 14px;
@@ -5227,7 +5227,7 @@ option {
     position: relative;
     background: #fff;
     padding: 20px;
-    border-radius: 6px;
+    border-radius: 0px;
     box-shadow: 0px 1px 5px 3px rgb(0 0 0 / 16%);
   }
   .fix_height {
@@ -5364,7 +5364,7 @@ input + .input-group-btn .btn {
 }
 .input-group-btn button.btn {
   border: solid 1px #ccc;
-  border-radius: 3px;
+  border-radius: 0px;
   height: 100%;
   line-height: 1;
   padding: 0 4px;
@@ -5450,7 +5450,7 @@ input + .input-group-btn .btn {
 }
 .modal-body .action-bar ul li:first-child,
 .action-bar ul li {
-  border-radius: 3px;
+  border-radius: 0px;
 }
 .modal-body .action-bar ul li,
 .main-content .contentDetail .action-bar ul li {
@@ -5506,7 +5506,7 @@ input + .input-group-btn .btn {
   vertical-align: middle;
   width: 19px;
   height: 19px;
-  border-radius: 4px;
+  border-radius: 0px;
   margin-right: 5px;
 }
 
@@ -5676,7 +5676,7 @@ input + .input-group-btn .btn {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
+  border-radius: 0px;
   color: #861b1b;
   font-size: 36px;
 }
@@ -5716,7 +5716,7 @@ input + .input-group-btn .btn {
   text-transform: none;
 }
 .modal-confirm .modal-content {
-  border-radius: 6px !important;
+  border-radius: 0px;
   border: none;
 }
 .modal-confirm .modal-body {
@@ -5782,7 +5782,7 @@ h5.title_modal2 {
 .anhchuky {
   position: relative;
   border: solid 1px #e4e4e4;
-  border-radius: 3px;
+  border-radius: 0px;
   background: #fff;
 }
 .anhchuky .group-btn .btn {
@@ -5899,7 +5899,7 @@ button.btn.xam {
   padding: 0px 5px;
   background-color: #f2f2f2;
   margin-left: 5px;
-  border-radius: 3px;
+  border-radius: 0px;
   color: #797979;
 }
 .modal-body .action-content > .row > .col-lg-12 > div {

@@ -2,26 +2,6 @@
   <div class="tab-content tab-menu" id="myTabContent">
     <div class="d-flex justify-content-between header-tab" id="banhanh">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
-          <i class="fa fa-arrow-circle-left"></i>
-        </a>
-        <!-- <nz-breadcrumb>
-          <nz-breadcrumb-item>
-            <a routerLink="kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc">Giao chỉ tiêu kế hoạch đầu năm</a>
-          </nz-breadcrumb-item>
-          <nz-breadcrumb-item
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH ? '' : 'last-breadcrumb'">
-            {{lastBreadcrumb}}</nz-breadcrumb-item>
-          <nz-breadcrumb-item
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH || thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET"
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.LANH_DAO_DUYET ? 'last-breadcrumb' : ''">Dự
-            thảo
-          </nz-breadcrumb-item>
-          <nz-breadcrumb-item
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH ? 'last-breadcrumb' : ''"
-            *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.BAN_HANH">Ban hành
-          </nz-breadcrumb-item>
-        </nz-breadcrumb> -->
       </div>
       <div class="canphai phai">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
@@ -49,10 +29,9 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()"
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()"
           *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0">
-          <i class="icon htvbdh_tcdt_delete"></i>
-          <span>Hủy bỏ</span>
+          <span>Quay về</span>
         </a>
       </div>
     </div>
@@ -150,7 +129,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
-                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
                   [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
                   (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
                 </multiple-tag>
@@ -281,7 +260,7 @@
       </div>
       <!-- </nz-card> -->
       <div class="tab__container">
-        <nz-tabset nzType="card" class="tab__container tab-tt-chi-tieu-level-0">
+        <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
           <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
           </nz-tab>
           <nz-tab [nzTitle]="'Kế hoạch muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)">
@@ -293,21 +272,21 @@
         <div id="table-luong-thuc"
           [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered class="table__body"
-            [nzFrontPagination]="false" [nzShowPagination]="false">
+            [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
             <thead>
               <tr>
-                <th rowspan="4" class="text-center">STT</th>
-                <th rowspan="4" class="text-center">
+                <th rowspan="4" class="text-center" width="40px">STT</th>
+                <th rowspan="4" class="text-center" width="330px">
                   {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}</th>
-                <th colspan="8" class="text-center">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                <th colspan="3" class="text-center">Nhập trong năm (2)</th>
-                <th colspan="8" class="text-center">Xuất trong năm (3)</th>
-                <th colspan="3" class="text-center">Tồn kho cuối năm (4)
+                <th colspan="8" class="text-center" width="1200px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                <th colspan="3" class="text-center" width="400px">Nhập trong năm (2)</th>
+                <th colspan="8" class="text-center" width="1200px">Xuất trong năm (3)</th>
+                <th colspan="3" class="text-center" width="400px">Tồn kho cuối năm (4)
                   <br>
                   ( 31/12/{{yearNow}})
                 </th>
                 <!-- <th rowspan="4">Trạng thái</th> -->
-                <th rowspan="4" *ngIf="disableBanHanh()" class="text-center">Hành động</th>
+                <th rowspan="4" *ngIf="disableBanHanh()" class="text-right" width="90px" nzRight>Hành động</th>
               </tr>
               <tr>
                 <th rowspan="3" class="text-center">
@@ -440,7 +419,7 @@
                 <td class="text-right">{{calculatortkcnTongThocCreate()}}</td>
                 <td class="text-right">{{calculatortkcnTongGaoCreate()}}</td>
                 <!-- <td class="background-last-row"></td> -->
-                <td class="background-last-row" *ngIf="disableBanHanh()">
+                <td class="background-last-row text-right" *ngIf="disableBanHanh()" nzRight>
                   <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -507,7 +486,8 @@
                   <td class="text-right">{{data.tkcnTongGao | number: '1.0-1'}}
                   </td>
                   <!-- <td>{{ convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 ">
+                  <td *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0 " class="text-right"
+                    nzRight>
                     <a (click)="startEdit(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -597,7 +577,7 @@
                     {{calculatortkcnTongGao(i)}}
                   </td>
                   <!-- <td></td> -->
-                  <td>
+                  <td class="text-right" nzRight>
                     <a (click)="saveEdit(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -699,11 +679,11 @@
                 </td>
                 <!-- <td class="background-last-row"></td> -->
                 <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td>
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></td>
               </tr>
             </tbody>
           </nz-table>
-          <div class="tab-content tab-menu">
+          <div class="tab-content tab-menu" *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
             <div class="tab-pane fade show active justify-content-between">
               <div class="trai">
               </div>
@@ -722,23 +702,25 @@
         <div id="table-muoi"
           [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <nz-table #groupingTableMuoi [nzData]="dsMuoiClone" nzBordered class="table__body" [nzFrontPagination]="false"
-            [nzShowPagination]="false">
+            [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
             <thead>
               <tr>
-                <th rowspan="3" class="text-center">STT</th>
-                <th rowspan="3" class="text-center">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                <th rowspan="3" class="text-center" width="40px">STT</th>
+                <th rowspan="3" class="text-center" width="330px">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI
+                  CỤC KHU VỰC'}}
                 </th>
-                <th colspan="4" class="text-center">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                <th class="text-center">Nhập trong năm (2)</th>
-                <th colspan="4 " class="text-center">Xuất trong năm (3)</th>
-                <th class="text-center">Tồn kho cuối năm (4)
+                <th colspan="4" class="text-center" width="480px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                <th class="text-center" width="150px">Nhập trong năm (2)</th>
+                <th colspan="4 " class="text-center" width="480px">Xuất trong năm (3)</th>
+                <th class="text-center" width="150px">Tồn kho cuối năm (4)
                   <br>
                   ( 31/12/{{yearNow}})
                 </th>
                 <!-- <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">Trạng thái</th> -->
                 <th rowspan="3" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" class="text-center">Hành động</th>
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" class="text-right" width="90px" nzRight>
+                  Hành động</th>
               </tr>
               <tr>
                 <th rowspan="2" class="text-center">
@@ -823,7 +805,7 @@
                 <!-- <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI"></td> -->
                 <td *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI">
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" class="text-right" nzRight>
                   <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -860,7 +842,7 @@
                   <td class="text-right">{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
                   <!-- <td *ngIf="disableBanHanh()">{{
                     convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-                  <td *ngIf="disableBanHanh()">
+                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
                     <a (click)="startEditMuoi(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -907,7 +889,7 @@
                   </td>
                   <td class="text-right">{{calculatortkcnTongSoMuoi(i)}}</td>
                   <!-- <td *ngIf="disableBanHanh()"></td> -->
-                  <td *ngIf="disableBanHanh()">
+                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
                     <a (click)="saveEditMuoi(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -971,11 +953,11 @@
                   '1.0-1'}}
                 </td>
                 <!-- <td class="background-last-row" *ngIf="disableBanHanh()"></td> -->
-                <td class="background-last-row" *ngIf="disableBanHanh()"></td>
+                <td class="background-last-row" *ngIf="disableBanHanh()" nzRight></td>
               </tr>
             </tbody>
           </nz-table>
-          <div class="tab-content tab-menu">
+          <div class="tab-content tab-menu" *ngIf="thongTinChiTieuKeHoachNam?.khMuoiDuTru?.length > 0">
             <div class="tab-pane fade show active justify-content-between">
               <div class="trai">
               </div>
@@ -994,19 +976,20 @@
         <div id="table-vat-tu"
           [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <nz-table #groupingTableVatTu [nzData]="dsVatTuClone" nzBordered class="table__body"
-            [nzFrontPagination]="false" [nzShowPagination]="false">
+            [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
             <thead>
               <tr>
-                <th rowspan="3" class="text-center">STT</th>
-                <th rowspan="3" class="text-center">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                <th rowspan="3" class="text-center" width="40px">STT</th>
+                <th rowspan="3" class="text-center" width="330px">{{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI
+                  CỤC KHU VỰC'}}
                 </th>
-                <th rowspan="3" class="text-center">Mã hàng</th>
-                <th rowspan="3" class="text-center">Ký hiệu</th>
-                <th rowspan="3" class="text-center">Tên hàng</th>
-                <th rowspan="3" class="text-center">Chủng loại hàng</th>
-                <th rowspan="3" class="text-center">ĐƠN VỊ TÍNH</th>
-                <th colspan="6" class="text-center">CHỈ TIÊU NHẬP TRONG NĂM KẾ HOẠCH NĂM</th>
-                <th rowspan="3" *ngIf="disableBanHanh()" class="text-center">HÀNH ĐỘNG</th>
+                <th rowspan="3" class="text-center" width="330px">Mã hàng</th>
+                <th rowspan="3" class="text-center" width="330px">Ký hiệu</th>
+                <th rowspan="3" class="text-center" width="330px">Tên hàng</th>
+                <th rowspan="3" class="text-center" width="330px">Chủng loại hàng</th>
+                <th rowspan="3" class="text-center" width="330px">ĐƠN VỊ TÍNH</th>
+                <th colspan="6" class="text-center" width="800px">CHỈ TIÊU NHẬP TRONG NĂM KẾ HOẠCH NĂM</th>
+                <th rowspan="3" *ngIf="disableBanHanh()" class="text-right" width="90px" nzRight>HÀNH ĐỘNG</th>
               </tr>
               <tr>
                 <th rowspan="2" class="text-center">
@@ -1112,7 +1095,7 @@
                     [(ngModel)]="keHoachVatTuCreate.vatTuThietBi[0].nhapTrongNam"
                     (input)="calculatorTongChiTieuNtn()" />
                 </td>
-                <td *ngIf="disableBanHanh()">
+                <td *ngIf="disableBanHanh()" class="text-right" nzRight>
                   <a class="save" (click)="themMoiVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -1136,7 +1119,7 @@
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[1]?.soLuong | number: '1.0-1'}}</td>
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.cacNamTruoc[2]?.soLuong | number: '1.0-1'}}</td>
                   <td class="text-right">{{dataVatTu.vatTuThietBi[0]?.nhapTrongNam | number: '1.0-1'}}</td>
-                  <td *ngIf="disableBanHanh()">
+                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
                     <a (click)="startEditVatTu(i)">
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -1165,7 +1148,7 @@
                     <input class="w-120" nz-input nzSize="small" appNumberOnly
                       [(ngModel)]="dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam" />
                   </td>
-                  <td *ngIf="disableBanHanh()">
+                  <td *ngIf="disableBanHanh()" class="text-right" nzRight>
                     <a (click)="saveEditVatTu(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -1211,12 +1194,12 @@
                   0 |
                   number: '1.0-1'}}
                 </td>
-                <td class="background-last-row" *ngIf="disableBanHanh()">
+                <td class="background-last-row" *ngIf="disableBanHanh()" nzRight>
                 </td>
               </tr>
             </tbody>
           </nz-table>
-          <div class="tab-content tab-menu">
+          <div class="tab-content tab-menu" *ngIf="thongTinChiTieuKeHoachNam?.khVatTu.length > 0">
             <div class="tab-pane fade show active justify-content-between">
               <div class="trai">
               </div>

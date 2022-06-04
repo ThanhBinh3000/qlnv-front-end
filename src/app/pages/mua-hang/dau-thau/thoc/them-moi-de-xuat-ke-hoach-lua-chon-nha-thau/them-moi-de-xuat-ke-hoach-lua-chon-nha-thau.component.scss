@@ -52,8 +52,8 @@
       }
       .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab,
       .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
-        border-top-left-radius: 4px !important;
-        border-top-right-radius: 4px !important;
+        border-top-left-radius: 0px !important;
+        border-top-right-radius: 0px !important;
       }
       .ant-tabs-tab-btn {
         color: unset !important;
@@ -78,7 +78,7 @@
         margin: 0px 0px 0px 0px;
         padding: 0 16px 16px 16px;
         border: solid 1px #4e5484 !important;
-        border-radius: 8px;
+        border-radius: 0px;
         margin-bottom: 24px;
       }
       .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {

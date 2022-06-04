@@ -34,7 +34,7 @@
     }
     .card-tree {
       padding-top: 24px;
-      border-radius: 8px;
+      border-radius: 0px;
       cursor: pointer;
       border-color: #4e5484;
       background: #f8fefe;
@@ -142,5 +142,24 @@
   .card-tree .icon {
     font-size: 42px;
     color: #4e5484;
+  }
+  .nav-tabs .nav-link.active,
+  .nav-tabs .nav-link:hover {
+    .title-menu-2 {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 12px;
+      color: #353a64;
+    }
+  }
+  .title-menu-2 {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 12px;
+    color: #ffffff;
+  }
+  .nav-tabs .nav-link i,
+  .nav-tabs .nav-link .icon {
+    font-size: 14px;
   }
 }
