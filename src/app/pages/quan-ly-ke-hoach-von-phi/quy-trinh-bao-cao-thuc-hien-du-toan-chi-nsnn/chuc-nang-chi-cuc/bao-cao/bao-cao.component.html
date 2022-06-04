@@ -82,7 +82,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Chấp nhận</span>
         </a>
-        <a class="btn btn-main" (click)="doCopy()" [hidden]="statusBtnCopy">
+        <a class="btn btn-main" (click)="doShowDialogCopy()" [hidden]="statusBtnCopy">
           <i nz-icon nzType="copy" nzTheme="outline"></i>
           <span>Copy</span>
         </a>
@@ -160,7 +160,7 @@
             </tr>
           </tbody>
         </nz-table>
-        <div class="container" [hidden]="statusBtnLD">
+        <!-- <div class="container" [hidden]="statusBtnLD">
           <div class="row justify-content-md-center">
             <div class="col-md-auto" style="display: flex;">
               <input class="search__input" nz-input />
@@ -169,7 +169,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
       </nz-card>
 
       <!-- Action Table danh sách phụ lục -->
@@ -482,7 +482,7 @@
                   {{ getChiMuc(editCache[item.id].data.stt) }}
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn đơn vị - nội dung"
+                  <nz-select nzShowSearch nzAllowClear class="my-ant" nzPlaceHolder="Chọn đơn vị - nội dung" [class]="editCache[item.id].data.maNdung ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maNdung">
                     <nz-option *ngFor="let itemDetail of item.lstKm" [nzValue]="itemDetail.id"
                       [nzLabel]="itemDetail.tenDm">
@@ -969,7 +969,7 @@
               <ng-template #editTemplate>
                 <td>{{ i + 1 }}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[data.id].data.maNdung ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[data.id].data.maNdung">
                     <nz-option *ngFor="let item of noiDungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
@@ -1514,13 +1514,13 @@
               <ng-template #editTemplate>
                 <td>{{ i + 1 }}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[data.id].data.maDan ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[data.id].data.maDan">
                     <nz-option *ngFor="let item of maDans" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[data.id].data.ddiemXdung ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[data.id].data.ddiemXdung">
                     <nz-option *ngFor="let item of ddiemXdungs" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>

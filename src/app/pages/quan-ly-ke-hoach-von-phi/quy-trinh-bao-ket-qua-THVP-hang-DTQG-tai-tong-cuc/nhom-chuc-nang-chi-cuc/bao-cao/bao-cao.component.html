@@ -84,7 +84,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Chấp nhận</span>
         </a>
-        <a class="btn btn-main" (click)="doCopy()" [hidden]="statusBtnCopy">
+        <a class="btn btn-main" (click)="doShowDialogCopy()" [hidden]="statusBtnCopy">
           <i nz-icon nzType="copy" nzTheme="outline"></i>
           <span>Copy</span>
         </a>
@@ -162,7 +162,7 @@
             </tr>
           </tbody>
         </nz-table>
-        <div class="container" [hidden]="statusBtnLD">
+        <!-- <div class="container" [hidden]="statusBtnLD">
           <div class="row justify-content-md-center">
             <div class="col-md-auto" style="display: flex;">
               <input class="search__input" nz-input />
@@ -171,7 +171,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
       </nz-card>
 
       <!-- Action Table danh sách phụ lục -->
@@ -374,21 +374,20 @@
               <ng-template #editTemplate01>
                 <td>{{ i+1}}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư, hàng hóa"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư, hàng hóa" [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maVtu">
                     <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maDviTinh">
                     <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                     </nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soQd">
-                  </nz-input-number>
+                  <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soQd"/>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.khSoLuong"
@@ -497,13 +496,13 @@
               <ng-template #editTemplate02>
                 <td>{{ i+1 }}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maVtu">
                     <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maDviTinh">
                     <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                     </nz-option>
@@ -739,13 +738,13 @@
               <ng-template #editTemplate1>
                 <td>{{ i+1}}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maVtu">
                     <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maDviTinh">
                     <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                     </nz-option>
@@ -869,13 +868,13 @@
               <ng-template #editTemplate2>
                 <td>{{ i+1}}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maVtu">
                     <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maDviTinh">
                     <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                     </nz-option>
@@ -999,13 +998,13 @@
               <ng-template #editTemplate3>
                 <td>{{ i+1}}</td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung" [class]="editCache[item.id].data.maVtu ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maVtu">
                     <nz-option *ngFor="let item of listVattu" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
                   </nz-select>
                 </td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đơn vị tính" [class]="editCache[item.id].data.maDviTinh ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maDviTinh">
                     <nz-option *ngFor="let item of listDonvitinh" [nzValue]="item.id" [nzLabel]="item.tenDviTinh">
                     </nz-option>
@@ -1288,7 +1287,7 @@
               <ng-template #editTemplate4ax>
                 <td></td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [class]="editCache[item.id].data.maNdungChi ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maNdungChi">
                     <nz-option *ngFor="let item of item.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
@@ -1591,7 +1590,7 @@
               <ng-template #editTemplate4ax>
                 <td></td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [class]="editCache[item.id].data.maNdungChi ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maNdungChi">
                     <nz-option *ngFor="let item of item.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
@@ -1894,7 +1893,7 @@
               <ng-template #editTemplate4ax>
                 <td></td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [class]="editCache[item.id].data.maNdungChi ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maNdungChi">
                     <nz-option *ngFor="let item of item.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
@@ -2196,7 +2195,7 @@
               <ng-template #editTemplate4ax>
                 <td></td>
                 <td>
-                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch"
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại kế hoạch" [class]="editCache[item.id].data.maNdungChi ? '' : 'input-error-validate' "
                     [(ngModel)]="editCache[item.id].data.maNdungChi">
                     <nz-option *ngFor="let item of item.lstKm" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>

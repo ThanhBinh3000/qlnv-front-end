@@ -6,6 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogBaoCaoCopyComponent } from 'src/app/components/dialog/dialog-bao-cao-copy/dialog-bao-cao-copy.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemPhuLucComponent } from 'src/app/components/dialog/dialog-lua-chon-them-phu-luc/dialog-lua-chon-them-phu-luc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -39,8 +40,8 @@ export class ItemData {
 export class ItemDanhSach {
   id!: any;
   maBcao!: String;
-  namBcao!: Number;
-  thangBcao!: Number;
+  namBcao!: number;
+  thangBcao!: number;
   trangThai!: string;
   ngayTao!: string;
   nguoiTao!: string;
@@ -81,23 +82,16 @@ export class BaoCaoComponent implements OnInit {
   @Input() idDialog: any;
   soLaMa: any = SOLAMA;
   baoCao: ItemDanhSach = new ItemDanhSach();
-  totalElements = 0;
-  totalPages = 0;
+
   id!: any;                                   // id truyen tu router
   loaiBaoCao!: any;                           // loai bao cao (thang/nam)
   trangThaiChiTiet!: any;
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
-  loaiBaoCaos: any = [];                          // danh muc loai bao cao
-
+  loaiBaoCaos: any = [];                      // danh muc loai bao cao
   userInfo: any;
   noiDungs: any = [];                         // danh muc noi dung
-  donVis: any = [];                            // danh muc don vi
-  donViTiens: any = DON_VI_TIEN;                        // danh muc don vi tien
-  lstFiles: any = [];                          // list File de day vao api
+  donVis: any = [];                           // danh muc don vi
+  donViTiens: any = DON_VI_TIEN;              // danh muc don vi tien
+  lstFiles: any = [];                         // list File de day vao api
   status: boolean = false;                    // trang thai an/ hien cua trang thai
   maDonViTao!: any;                           // ma don vi tao
 
@@ -106,8 +100,6 @@ export class BaoCaoComponent implements OnInit {
   newDate = new Date();                       //
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
   listIdDelete: any = [];                     // list id delete
-
-
 
   maDans: any = [];
   ddiemXdungs: any = [];
@@ -139,7 +131,6 @@ export class BaoCaoComponent implements OnInit {
   tab = TAB_SELECTED;
   lstKhoanMuc: any[] = KHOAN_MUC;
   nguoiBcaos: any[] = LISTCANBO;
-  nguoiBcao: string;
   constructor(
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -155,7 +146,6 @@ export class BaoCaoComponent implements OnInit {
 
   ) {
   }
-  listOfData: any[] = [];
 
   async ngOnInit() {
     this.id = this.routerActive.snapshot.paramMap.get('id');
@@ -300,8 +290,6 @@ export class BaoCaoComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }
     );
-
-
     this.getStatusButton();
     this.spinner.hide();
   }
@@ -460,16 +448,6 @@ export class BaoCaoComponent implements OnInit {
       }
     );
     this.spinner.hide();
-  }
-
-  //doi so trang
-  onPageIndexChange(page) {
-    this.pages.page = page;
-  }
-
-  //doi so luong phan tu tren 1 trang
-  onPageSizeChange(size) {
-    this.pages.size = size;
   }
 
   // chuc nang check role
@@ -813,10 +791,10 @@ export class BaoCaoComponent implements OnInit {
     if (this.tabSelected == TAB_SELECTED.phuLuc1 && !this.danhSachChiTietPhuLucTemp[index].maNdung) {
       this.deleteLine(id);
       return;
-    }else if(this.tabSelected == TAB_SELECTED.phuLuc2 && !this.danhSachChiTietPhuLucTemp[index].maNdung){
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc2 && !this.danhSachChiTietPhuLucTemp[index].maNdung) {
       this.deleteById(id);
       return;
-    }else if(this.tabSelected == TAB_SELECTED.phuLuc3 && !this.danhSachChiTietPhuLucTemp[index].maDan){
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc3 && !this.danhSachChiTietPhuLucTemp[index].maDan) {
       this.deleteById(id);
       return;
     }
@@ -828,15 +806,25 @@ export class BaoCaoComponent implements OnInit {
   }
 
   // luu thay doi
-  // saveEdit(id: string): void {
-  //   this.editCache[id].data.checked = this.danhSachChiTietPhuLucTemp.find(item => item.id == id).checked; // set checked editCache = checked lstCtietBcaos
-  //   const index = this.danhSachChiTietPhuLucTemp.findIndex(item => item.id == id);   // lay vi tri hang minh sua
-  //   Object.assign(this.danhSachChiTietPhuLucTemp[index], this.editCache[id].data); // set lai data cua lstCtietBcaos[index] = this.editCache[id].data
-  //   this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
-  // }
-
-  // luu thay doi
   saveEdit(id: string): void {
+    if (this.tabSelected == TAB_SELECTED.phuLuc1) {
+      if (!this.editCache[id].data.maNdung) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
+        return;
+      }
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
+      if (!this.editCache[id].data.maNdung) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
+        return;
+      }
+      return;
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
+      if (!this.editCache[id].data.maDan || !this.editCache[id].data.ddiemXdung) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.FINISH_FORM);
+        return;
+      }
+    }
+
     this.editCache[id].data.checked = this.danhSachChiTietPhuLucTemp.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietPhuLucTemp
     if (this.lstKhoanMuc.findIndex(e => e.idCha == this.editCache[id].data.maNdung) != -1) {
       this.editCache[id].data.status = true;
@@ -1190,6 +1178,10 @@ export class BaoCaoComponent implements OnInit {
     let file: any = this.fileDetail;
     if (file) {
       baoCaoTemp.congVan = await this.uploadFile(file);
+    }
+    if (!baoCaoTemp.congVan) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
     }
 
     let checkMoneyRange = true;
@@ -1624,7 +1616,30 @@ export class BaoCaoComponent implements OnInit {
 
   }
 
-  async doCopy() {
+  doShowDialogCopy() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Copy Báo Cáo',
+      nzContent: DialogBaoCaoCopyComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        maPhanBcao: '0',
+        maLoaiBcao: this.baoCao.maLoaiBcao,
+        namBcao: this.baoCao.namBcao,
+        dotBcao: null,
+        thangBcao: this.baoCao.thangBcao,
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (response) => {
+      if (response) {
+        this.doCopy(response);
+      }
+    });
+  }
+
+  async doCopy(response) {
     this.spinner.show();
     let maBaoCao = await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
       (data) => {
@@ -1648,7 +1663,14 @@ export class BaoCaoComponent implements OnInit {
     // set ma don vi tien trong list chinh = ma don vi tien vua chon tai man hinh
     this.baoCao?.lstBcaos.find(item => { if (item.maLoai == this.tabSelected) { item.maDviTien = this.maDviTien, item.thuyetMinh = this.thuyetMinh } });
     let baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
-
+    baoCaoTemp.congVan = null;
+    // set nambao,dot bao cao tu dialog gui ve
+    baoCaoTemp.namBcao = response.namBcao;
+    baoCaoTemp.thangBcao = response.thangBcao;
+    if (response.loaiCopy == 'D') {
+      //xoa lst don vi truc thuoc theo lua chon tu dialog
+      baoCaoTemp.lstBcaoDviTrucThuocs = [];
+    }
     let checkMoneyRange = true;
     // replace nhung ban ghi dc them moi id thanh null
     baoCaoTemp?.lstBcaos?.filter(item => {

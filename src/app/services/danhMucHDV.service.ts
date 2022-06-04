@@ -340,6 +340,7 @@ export class DanhMucHDVService extends BaseService {
   dMVatTu(): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + "/qlnv-category/dmuc-khoachvon/147",
+      // this.urlDefault + "/qlnv-category/dmuc-khoachvon/147",
       {
         "paggingReq": {
           "limit": 1000,
