@@ -61,7 +61,7 @@
         </div>
       </nz-card>
       <div class="tab-giao-chi-tieu">
-        <nz-tabset nzType="card" class="tab-level-2">
+        <nz-tabset nzType="card" class="tab-level-3">
           <nz-tab [nzTitle]="title_1">
             <ng-template #title_1>
               Tất cả
@@ -80,7 +80,7 @@
                   <th width="175px">Năm kế hoạch</th>
                   <th width="" class="text-center">Trích yếu</th>
                   <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
@@ -105,7 +105,7 @@
                   <td>{{ data.namKeHoach }}</td>
                   <td class="text-center">{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
@@ -154,7 +154,7 @@
                   <th width="175px">Năm kế hoạch</th>
                   <th width="" class="text-center">Trích yếu</th>
                   <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
@@ -179,7 +179,7 @@
                   <td>{{ data.namKeHoach }}</td>
                   <td class="text-center">{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
                       <i class=" icon htvbdh_eye"></i>
                     </a>
@@ -228,7 +228,7 @@
                   <th width="175px">Năm kế hoạch</th>
                   <th width="" class="text-center">Trích yếu</th>
                   <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
@@ -253,7 +253,7 @@
                   <td>{{ data.namKeHoach }}</td>
                   <td class="text-center">{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
@@ -286,17 +286,17 @@
           </nz-tab>
         </nz-tabset>
         <div class="action-giao-chi-tieu">
-          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
+          <button type="button" class="btn btn-do" (click)="exportData()">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
           </button>
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportData()">
-            <i class="fa fa-trash-o do"></i>
-            <span>Xóa</span>
+          <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
@@ -306,4 +306,8 @@
       </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="selectedId" (showListEvent)="showList()">
+  </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
 </div>

@@ -26,15 +26,6 @@ import {
   styleUrls: ['./chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
 })
 export class ChiTieuKeHoachNamComponent implements OnInit {
-  listRouter: any[] = [
-    { title: "Kế hoạch và vốn DTQG", url: "", isCheckRole: false, isLast: false },
-    { title: "Cục", url: "", isCheckRole: true, isLast: false },
-    { title: "Giao kế hoạch và dự toán", url: "", isCheckRole: false, isLast: false },
-    { title: "Giao kế hoạch và vốn đầu năm", url: "", isCheckRole: false, isLast: false },
-    { title: "Quyết định", url: "", isCheckRole: false, isLast: false },
-    { title: "Chi thường xuyên của BTC giao TCDT", url: "", isCheckRole: false, isLast: true },
-  ]
-
   searchValue = '';
   searchFilter = {
     soQD: '',
@@ -116,13 +107,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   redirectThongTinChiTieuKeHoachNam(id: number) {
-    // this.router.navigate([
-    //   `/${MAIN_ROUTE_KE_HOACH}/${CHI_TIEU_KE_HOACH_NAM}/${THONG_TIN_CHI_TIEU_KE_HOACH_NAM}`,
-    //   id,
-    // ]);
     this.selectedId = id;
     this.isDetail = true;
   }
+
   showList() {
     this.isDetail = false;
   }
