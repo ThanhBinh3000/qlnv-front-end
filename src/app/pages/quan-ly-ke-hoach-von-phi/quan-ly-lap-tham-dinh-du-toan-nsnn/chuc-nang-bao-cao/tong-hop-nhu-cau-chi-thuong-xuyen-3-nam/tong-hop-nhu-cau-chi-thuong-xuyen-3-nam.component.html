@@ -75,25 +75,60 @@
             <th [hidden]="status"></th>
             <th [hidden]="status"></th>
         </tr>
-        <!-- <tr>
+        <tr>
             <th></th>
-            <th>Tổng Nhu cầu</th>
+            <th>TỔNG NHU CẦU</th>
+            <th>{{total.thNamHienHanhN1}}</th>
+            <th>{{total.tranChiN}}</th>
+            <th>{{total.ncauChiN}}</th>
+            <th>{{total.clechTranChiVsNcauChiN}}</th>
+            <th>{{total.tranChiN1}}</th>
+            <th>{{total.ncauChiN1}}</th>
+            <th>{{total.clechTranChiVsNcauChiN1}}</th>
+            <th>{{total.tranChiN2}}</th>
+            <th>{{total.ncauChiN2}}</th>
+            <th>{{total.clechTranChiVsNcauChiN2}}</th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+        </tr>
+        <tr>
             <th></th>
-            <th>{{tongNamHH}}</th>
-            <th>{{tongTChi1}}</th>
-            <th>{{tongNhuCau1}}</th>
-            <th>{{tongChenhLech1}}</th>
-            <th>{{tongTChi2}}</th>
-            <th>{{tongNhuCau2}}</th>
-            <th>{{tongChenhLech2}}</th>
-            <th>{{tongTChi3}}</th>
-            <th>{{tongNhuCau3}}</th>
-            <th>{{tongChenhLech3}}</th>
+            <th>Trong đó - Chi thường xuyên cơ sở</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th [hidden]="status"></th>
             <th [hidden]="status"></th>
             <th [hidden]="status"></th>
             <th [hidden]="status"></th>
-        </tr> -->
+        </tr>
+        <tr>
+            <th></th>
+            <th>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
+        </tr>
     </thead>
     <tbody>
         <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -122,7 +157,9 @@
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    <ng-container *ngIf="!getLowStatus(data.stt)">
+                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status">
                     <i class="fa fa-plus" (click)="addLine(data.id)"></i>

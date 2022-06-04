@@ -29,12 +29,22 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
         maDviNhan: "",
         trangThai: "",
         maPa: "",
-        maBcao: "",
+        loaiDuAn: ""
     };
     //danh muc
     danhSachBaoCao: any = [];
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO;
+    loaiDuAns: any[] = [
+      {
+        id: '1',
+        tenDm: 'Giao dự toán'
+      },
+      {
+        id: '2',
+        tenDm: 'Giao, diều chỉnh dự toán'
+      }
+    ];
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -125,7 +135,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             str: null,
-            maBcao: this.searchFilter.maBcao,
+            loaiDuAn: this.searchFilter.loaiDuAn,
             trangThai: this.searchFilter.trangThai,
             paggingReq: {
                 limit: this.pages.size,

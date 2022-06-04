@@ -15,4 +15,5 @@ export const MESSAGEVALIDATE = {
     SAVEREPORT: 'Vui lòng lưu cáo cáo trước khi lưu phụ lục' ,
     WARNING_FINISH_INPUT: 'Vui lòng hoàn tất nhập liệu trước khi thực hiện trình duyệt' ,
     DOCUMENTARY: 'Vui lòng đính kèm file công văn' ,
+    ERROR_DATA: "Vui lòng nhập đúng dữ liệu trong bảng",
   };

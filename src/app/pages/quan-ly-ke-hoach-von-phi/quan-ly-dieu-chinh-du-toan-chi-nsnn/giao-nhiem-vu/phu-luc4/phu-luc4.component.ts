@@ -135,10 +135,12 @@ export class PhuLuc4Component implements OnInit {
         ncauKphi: divMoney(item.ncauKphi, this.maDviTien),
       })
     })
-    if (!this.lstCtietBcao && !this.lstCtietBcao[0]?.stt){
-      this.sortWithoutIndex();
-    } else {
-        this.sortByIndex();
+    if (this.lstCtietBcao.length > 0){
+      if (!this.lstCtietBcao[0].stt){
+          this.sortWithoutIndex();
+      } else {
+          this.sortByIndex();
+      }
     }
     this.updateEditCache();
     await this.danhMucService.dMDonVi().toPromise().then(
