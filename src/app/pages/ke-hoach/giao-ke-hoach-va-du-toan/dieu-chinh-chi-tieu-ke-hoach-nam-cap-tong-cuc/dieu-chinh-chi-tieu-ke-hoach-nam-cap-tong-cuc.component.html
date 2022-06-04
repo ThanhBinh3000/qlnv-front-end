@@ -1,7 +1,7 @@
 <div class="contentBor chi-tieu__body" *ngIf="!isDetail">
   <div class="contentDetail">
     <div class="main-content">
-      <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+      <nz-card class="mt16 flex-card p-lr16">
         <div class="search__body" nz-row [nzGutter]="[18, 12]">
           <div nz-col nzSpan="3">
             <label class="search__label">Năm kế hoạch</label>
@@ -62,11 +62,11 @@
           </button>
         </div>
       </nz-card>
-      <div class="tab-dc-giao-chi-tieu">
+      <div class="tab-giao-chi-tieu">
         <nz-tabset nzType="card" class="tab-level-3">
           <nz-tab [nzTitle]="'Tất cả (125)'">
-            <nz-table #basicTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false">
+            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered>
               <thead>
                 <tr>
                   <th width="45px">
@@ -76,21 +76,21 @@
                   <th>Số QĐ điều chỉnh/TB từ chối</th>
                   <th>Đơn vị</th>
                   <th>Ngày ký</th>
-                  <th class="text-center">Trích yếu</th>
+                  <th>Trích yếu</th>
                   <th>Số QĐ giao chỉ tiêu</th>
                   <th>Năm kế hoạch</th>
-                  <th class="text-center">Số VB đề xuất điều chỉnh</th>
-                  <th class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th>Số VB đề xuất điều chỉnh</th>
+                  <th>Trạng thái</th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
-                <!-- <tr class="first-row">
+                <tr>
                   <th></th>
                   <th></th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -98,7 +98,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -106,7 +106,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -114,7 +114,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -122,7 +122,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -130,7 +130,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -138,7 +138,7 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
@@ -146,14 +146,14 @@
                   </th>
                   <th>
                     <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input placeholder="Tìm kiếm" class="w-120" />
+                      <input type="text" nz-input placeholder="Tìm kiếm" />
                     </nz-input-group>
                     <ng-template #suffixTemplateInfo>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
                   </th>
                   <th></th>
-                </tr> -->
+                </tr>
                 <tr *ngFor="let data of basicTable.data; let i = index">
                   <th width="45px">
                     <label nz-checkbox></label>
@@ -167,7 +167,7 @@
                   <td>{{ data.namKeHoach }}</td>
                   <td>{{ data.lyDoTuChoi }}</td>
                   <td>{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
@@ -211,10 +211,10 @@
                   <th width="175px">Ngày ký</th>
                   <th width="175px">Số QĐ giao chỉ tiêu KH năm</th>
                   <th width="175px">Năm kế hoạch</th>
-                  <th width="" class="text-center">Trích yếu</th>
-                  <th width="175px" class="text-center">Lý do từ chối</th>
-                  <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th width="">Trích yếu</th>
+                  <th width="175px">Lý do từ chối</th>
+                  <th width="175px">Trạng thái</th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
@@ -230,7 +230,7 @@
                   <td>{{ data.trichYeu }}</td>
                   <td>{{ data.lyDoTuChoi }}</td>
                   <td>{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
@@ -274,10 +274,10 @@
                   <th width="175px">Ngày ký</th>
                   <th width="175px">Số QĐ giao chỉ tiêu KH năm</th>
                   <th width="175px">Năm kế hoạch</th>
-                  <th width="" class="text-center">Trích yếu</th>
-                  <th width="175px" class="text-center">Lý do từ chối</th>
-                  <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-center"></th>
+                  <th width="">Trích yếu</th>
+                  <th width="175px">Lý do từ chối</th>
+                  <th width="175px">Trạng thái</th>
+                  <th width="130px" class="text-right"></th>
                 </tr>
               </thead>
               <tbody>
@@ -293,7 +293,7 @@
                   <td>{{ data.trichYeu }}</td>
                   <td>{{ data.lyDoTuChoi }}</td>
                   <td>{{ data.trangThaiDuyet }}</td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <a (click)="redirectToChiTiet(true, data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
@@ -325,7 +325,7 @@
             </div>
           </nz-tab>
         </nz-tabset>
-        <div class="action-dc-giao-chi-tieu">
+        <div class="action-giao-chi-tieu">
           <button type="button" class="btn btn-main" (click)="redirectToChiTiet(true, 0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>

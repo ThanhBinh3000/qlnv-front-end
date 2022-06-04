@@ -38,7 +38,7 @@
     </div>
   </div>
 </nz-affix>
-<div class="contentBor chi-tieu__body dieu-chinh__body">
+<div class="contentBor chi-tieu__body dieu-chinh__body de-xuat">
   <div class="contentDetail">
     <div class="main-content main-ke-hoach">
       <div class="thong-tin-chi-tieu">
@@ -103,7 +103,7 @@
         </form>
       </div>
       <div class="tab__container" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
-        <nz-tabset nzType="card" class="tab__container">
+        <nz-tabset nzType="card" class="tab__container tab-level-3 tab-level-3-specical">
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData(tab.luongThuc)">
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData(tab.muoi)"></nz-tab>
