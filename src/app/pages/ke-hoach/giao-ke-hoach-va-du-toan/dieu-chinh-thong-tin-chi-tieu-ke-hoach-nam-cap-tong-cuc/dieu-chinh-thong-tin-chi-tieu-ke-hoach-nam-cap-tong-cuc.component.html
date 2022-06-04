@@ -113,15 +113,15 @@
         <div [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-luong-thuc-tong-hop">
             <nz-table #groupingTableThocSau [nzData]="dataLuongThuc" nzBordered [nzFrontPagination]="false"
-              [nzShowPagination]="false" class="table__body" [nzScroll]="{ x: '1100px' }">
+              [nzShowPagination]="false" class="table__body" [nzScroll]="{ x: '1700px' }">
               <thead>
                 <tr>
                   <th rowspan="4" width="40px">STT</th>
                   <th rowspan="4" width="300px">{{titleTable}}</th>
-                  <th colspan="8" width="400px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                  <th colspan="8" width="1200px">Nhập trong năm (2)</th>
-                  <th colspan="21" width="3000px">Xuất trong năm (3)</th>
-                  <th colspan="3" width="300px">Tồn kho cuối năm (4)
+                  <th colspan="8" width="800px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                  <th colspan="8" width="1000px">Nhập trong năm (2)</th>
+                  <th colspan="21" width="2600px">Xuất trong năm (3)</th>
+                  <th colspan="3" width="400px">Tồn kho cuối năm (4)
                     <br>
                     ( 31/12/{{yearNow}})
                   </th>
@@ -790,17 +790,17 @@
         <div [ngClass]="tabSelected == tab.muoi ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-muoi-tong-hop">
             <nz-table #groupingTableMuoiSau [nzData]="dataMuoi" nzBordered [nzFrontPagination]="false"
-              [nzShowPagination]="false" class="table__body">
+              [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
               <thead>
                 <tr>
                   <th rowspan="4" width="40px">STT</th>
-                  <th rowspan="4" width="300px">{{titleTable}}</th>
-                  <th colspan="4" width="300px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
-                  <th colspan="3" width="450px">Nhập trong năm (2)</th>
+                  <th rowspan="4" width="330px">{{titleTable}}</th>
+                  <th colspan="4" width="480px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
+                  <th colspan="3" width="400px">Nhập trong năm (2)</th>
                   <th colspan="11" width="1500px">Xuất trong năm (3)</th>
-                  <th rowspan="4" class="text-center">Tồn kho cuối năm (4) <br> ( 31/12/{{yearNow}})
+                  <th rowspan="4" class="text-center" width="300px">Tồn kho cuối năm (4) <br> ( 31/12/{{yearNow}})
                   </th>
-                  <th rowspan="4" width="90px" nzRight>Hành động</th>
+                  <th rowspan="4" width="90px" class="text-right" nzRight>Hành động</th>
                 </tr>
                 <tr>
                   <th rowspan="3">
@@ -927,7 +927,7 @@
                   <td>{{keHoachMuoiCreate.tkcnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                   <td
                     *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
-                    nzRight>
+                    class="text-right" nzRight>
                     <a class="save" (click)="themMoiKHMuoi()" [ngClass]="{'isDisabled': !isAddMuoi}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
@@ -989,7 +989,7 @@
                     <td>{{dataMuoi.tkcnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
                     <td
                       *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
-                      nzRight>
+                      class="text-right" nzRight>
                       <a (click)="editRowMuoi(dataMuoi.donViId)">
                         <i class="fa fa-pencil"></i>
                       </a>
@@ -1076,7 +1076,7 @@
                       <td>0</td>
                     </ng-container>
                     <td>{{editMuoiCache[dataMuoi.donViId].data.tkcnTongSoMuoi ?? 0 | number: '1.0-1'}}</td>
-                    <td nzRight>
+                    <td class="text-right" nzRight>
                       <a (click)="saveEditMuoi(dataMuoi.donViId)" class="save">
                         <i class="fa fa-save"></i>
                       </a>
@@ -1152,21 +1152,22 @@
         <div [ngClass]="tabSelected == tab.vatTu ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-vat-tu-tong-hop">
             <nz-table #groupingTableVatTuSau [nzData]="dataVatTu" nzBordered [nzFrontPagination]="false"
-              [nzShowPagination]="false" class="table__body">
+              [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
               <thead>
                 <tr>
-                  <th rowspan="3">STT</th>
-                  <th rowspan="3">{{titleTable}}</th>
-                  <th rowspan="3">MÃ HÀNG</th>
-                  <th rowspan="3">KÝ HIỆU</th>
-                  <th rowspan="3">TÊN HÀNG</th>
-                  <th rowspan="3">CHỦNG LOẠI HÀNG</th>
-                  <th rowspan="3">ĐƠN VỊ TÍNH</th>
-                  <th colspan="6">CHỈ TIÊU NHẬP NĂM TRƯỚC ĐIỀU CHỈNH</th>
-                  <th rowspan="3">Điều chỉnh tăng giảm</th>
-                  <th colspan="6">CHỈ TIÊU NHẬP SAU ĐIỀU CHỈNH</th>
+                  <th rowspan="3" width="40px">STT</th>
+                  <th rowspan="3" width="330px">{{titleTable}}</th>
+                  <th rowspan="3" width="330px">MÃ HÀNG</th>
+                  <th rowspan="3" width="330px">KÝ HIỆU</th>
+                  <th rowspan="3" width="330px">TÊN HÀNG</th>
+                  <th rowspan="3" width="330px">CHỦNG LOẠI HÀNG</th>
+                  <th rowspan="3" width="330px">ĐƠN VỊ TÍNH</th>
+                  <th colspan="6" width="800px">CHỈ TIÊU NHẬP NĂM TRƯỚC ĐIỀU CHỈNH</th>
+                  <th rowspan="3" width="330px">Điều chỉnh tăng giảm</th>
+                  <th colspan="6" width="800px">CHỈ TIÊU NHẬP SAU ĐIỀU CHỈNH</th>
                   <th rowspan="3"
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                    width="90px" class="text-right" nzRight>
                     HÀNH ĐỘNG</th>
                 </tr>
                 <tr>
@@ -1290,7 +1291,8 @@
                   </ng-container>
                   <td>{{keHoachVatTuCreate.vatTuThietBi[0].sdcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
                   <td
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                    class="text-right" nzRight>
                     <a class="save" (click)="themMoiKHVatTu()" [ngClass]="{'isDisabled': !isAddVatTu}">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
@@ -1340,7 +1342,8 @@
                     </ng-container>
                     <td>{{itemVatTu.vatTuThietBi[0].sdcNhapTrongNam ?? 0 | number: '1.0-1'}}</td>
                     <td
-                      *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'">
+                      *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                      class="text-right" nzRight>
                       <a
                         (click)="editRowVatTu(itemVatTu.donViId, itemVatTu.vatTuThietBi[0].vatTuChaId, itemVatTu.vatTuThietBi[0].vatTuId)">
                         <i class="fa fa-pencil"></i>
@@ -1474,7 +1477,7 @@
                     <td>{{editVatTuCache[itemVatTu.donViId + '-' + itemVatTu.vatTuThietBi[0].vatTuChaId + '-' +
                       itemVatTu.vatTuThietBi[0].vatTuId].data.vatTuThietBi[0].sdcNhapTrongNam ?? 0 | number: '1.0-1'}}
                     </td>
-                    <td>
+                    <td class="text-right" nzRight>
                       <a (click)="saveEditVatTu(itemVatTu.donViId, itemVatTu.vatTuThietBi[0].vatTuChaId, itemVatTu.vatTuThietBi[0].vatTuId)"
                         class="save">
                         <i class="fa fa-save"></i>
@@ -1524,7 +1527,7 @@
                     : 0 | number: '1.0-1'}}</td>
                   <td class="background-last-row">{{ tableExist ? reduceRowData(0, 19, 4, ',' , 'table-vat-tu-tong-hop')
                     : 0 | number: '1.0-1' }}</td>
-                  <td class="background-last-row"></td>
+                  <td class="background-last-row" nzRight></td>
                 </tr>
               </tbody>
             </nz-table>
@@ -1547,21 +1550,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="tep_dieu_chinh" (click)="downloadTemplate()">
-          <i class="icon htvbdh_tcdt_tep"></i>
-          <span>biểu mẫu nhập dữ liệu Lương thực.xlsx</span>
-        </div> -->
         <div class="action">
-          <!-- <button type="button" class="btn btn-main" (click)="themMoi()"
-            *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button> -->
-          <!-- <button type="button" class="btn btn-sub" (click)="selectFile('file-import-data')"
-            *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == '03')">
-            <i class="icon htvbdh_tcdt_import"></i>
-            <span>Import</span>
-          </button> -->
           <input type="file" id="file-import-data" class="file-not-show" (change)="importFileData($event)" />
           <button type="button" class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
