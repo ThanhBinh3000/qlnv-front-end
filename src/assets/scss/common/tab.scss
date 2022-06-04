@@ -7,15 +7,15 @@
     margin-top: 11px !important;
   }
   nz-tabset.ant-tabs.ant-tabs-card.ant-tabs-top.ant-tabs-default {
-    border-radius: 0px 0px 6px 6px !important;
+    border-radius: 0px !important;
   }
   .ant-tabs-content-holder {
     border: none !important;
   }
   .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab,
   .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
   }
   .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     color: #4e5484 !important;
@@ -45,7 +45,7 @@
     margin: 0px 0px 0px 0px;
     padding: 0 16px 16px 16px;
     border: solid 1px #4e5484 !important;
-    border-radius: 8px;
+    border-radius: 0px;
     margin-bottom: 24px;
   }
   .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
@@ -79,7 +79,7 @@
       border-top: 1px solid #4e5484;
       background: #edffff;
       color: #0064b1 !important;
-      border-bottom-left-radius: 6px;
+      border-bottom-left-radius: 0px;
     }
 
     .item-url-click-center {
@@ -94,7 +94,7 @@
       border-top: 1px solid #4e5484;
       background: #edffff;
       color: #0064b1 !important;
-      border-bottom-right-radius: 6px;
+      border-bottom-right-radius: 0px;
     }
   }
 }

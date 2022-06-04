@@ -2,9 +2,9 @@
   <div class="tab-content tab-menu" id="myTabContent">
     <div class="d-flex justify-content-between header-tab" id="banhanh">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
+        <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
           <i class="fa fa-arrow-circle-left"></i>
-        </a>
+        </a> -->
         <!-- <nz-breadcrumb>
           <nz-breadcrumb-item>
             <a routerLink="kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc">Giao chỉ tiêu kế hoạch đầu năm</a>
@@ -49,10 +49,10 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()"
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()"
           *ngIf="thongTinChiTieuKeHoachNam.trangThai === globals.prop.DU_THAO || id===0">
-          <i class="icon htvbdh_tcdt_delete"></i>
-          <span>Hủy bỏ</span>
+          <!-- <i class="icon htvbdh_tcdt_delete"></i> -->
+          <span>Quay về</span>
         </a>
       </div>
     </div>
@@ -150,7 +150,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Căn cứ
               </nz-form-label>
               <nz-form-control [nzErrorTip]="namKeHoachError">
-                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="htvbdh_chuyen-vao-thu-vien"
+                <multiple-tag buttonName="Chọn file" placeHolder="Chọn căn cứ" icon="icon htvbdh_tcdt_tep"
                   [data]="canCuList" [trangThai]="thongTinChiTieuKeHoachNam.trangThai" type="file"
                   (selectDataEvent)="openFileCanCu($event)" (removeDataEvent)="deleteCanCuTag($event)">
                 </multiple-tag>

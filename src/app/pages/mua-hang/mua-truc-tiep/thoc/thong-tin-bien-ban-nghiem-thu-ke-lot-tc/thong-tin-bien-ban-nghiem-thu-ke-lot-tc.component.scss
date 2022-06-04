@@ -6,7 +6,7 @@
       box-shadow: unset;
       margin-bottom: 0px !important;
       margin-top: 11px !important;
-      border-radius: 6px;
+      border-radius: 0px;
     }
     .table__body {
       overflow: scroll;
@@ -58,8 +58,8 @@
     float: right;
     line-height: 24px;
     text-align: center;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
   .tep {
     cursor: pointer;
@@ -87,8 +87,8 @@
     border: solid 1px #f0f0f0;
     border-top: 0;
     background: #fff;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
   .ant-tabs-content-holder {
     border-bottom: 0;

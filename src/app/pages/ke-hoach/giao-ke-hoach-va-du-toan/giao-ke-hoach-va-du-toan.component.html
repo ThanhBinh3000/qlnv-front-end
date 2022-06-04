@@ -4,7 +4,11 @@
       <nz-tabset nzType="card" class="tab-level-0">
         <nz-tab [nzTitle]="'Giao kế hoạch và vốn đầu năm'">
           <nz-tabset nzType="card" class="mt-16 tab-level-1">
-            <nz-tab [nzTitle]="'Quyết định (10)'">
+            <nz-tab [nzTitle]="title_QD">
+              <ng-template #title_QD>
+                Quyết định
+                (<span class="number-title-tab">10</span>)
+              </ng-template>
               <nz-tabset nzType="card" class="tab-level-2">
                 <nz-tab [nzTitle]="'TTCP'">
                   <nz-card class="mt16 flex-card p-lr16">
@@ -30,7 +34,7 @@
                     </div>
                     <div class="cangiua group-button-search">
                       <button nz-button class="search__button--clear" (click)="clearFilter()">
-                        <i nz-icon nzType="close"></i>
+                        <i class="icon  htvbdh_nhap-lai1"></i>
                         Xóa điều kiện
                       </button>
                       <button nz-button class="search__button--search" (click)="search()">
@@ -133,10 +137,18 @@
                 </nz-tab>
               </nz-tabset>
             </nz-tab>
-            <nz-tab [nzTitle]="'Chỉ tiêu kế hoạch (3)'">
+            <nz-tab [nzTitle]="title_chi_tieu_kh">
+              <ng-template #title_chi_tieu_kh>
+                Chỉ tiêu kế hoạch
+                (<span class="number-title-tab">3</span>)
+              </ng-template>
               <app-chi-tieu-ke-hoach-nam-cap-tong-cuc></app-chi-tieu-ke-hoach-nam-cap-tong-cuc>
             </nz-tab>
-            <nz-tab [nzTitle]="'Điều chỉnh chỉ tiêu KH (3)'" class="vat-tu__container">
+            <nz-tab [nzTitle]="title_dc_chi_tieu_kh" class="vat-tu__container">
+              <ng-template #title_dc_chi_tieu_kh>
+                Điều chỉnh chỉ tiêu KH
+                (<span class="number-title-tab">3</span>)
+              </ng-template>
               <nz-tabset nzType="card" class="tab-level-2">
                 <nz-tab [nzTitle]="'Đề xuất điều chỉnh chỉ tiêu KH'">
                   <app-de-xuat-dieu-chinh></app-de-xuat-dieu-chinh>
@@ -147,8 +159,11 @@
                 </nz-tab>
               </nz-tabset>
             </nz-tab>
-            <nz-tab [nzTitle]="'Dự toán NSNN (4)'" class="vat-tu__container">
-
+            <nz-tab [nzTitle]="title_du_toan_nsnn" class="vat-tu__container">
+              <ng-template #title_du_toan_nsnn>
+                Dự toán NSNN
+                (<span class="number-title-tab">4</span>)
+              </ng-template>
             </nz-tab>
           </nz-tabset>
         </nz-tab>

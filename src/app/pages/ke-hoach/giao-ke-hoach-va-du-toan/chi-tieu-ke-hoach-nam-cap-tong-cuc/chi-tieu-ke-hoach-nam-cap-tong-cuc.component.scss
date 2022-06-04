@@ -1,40 +1,78 @@
-::ng-deep {
-  .tab-chi-tieu-level-0 {
-    margin-left: 16px;
-    margin-right: 16px;
-    margin-top: 16px !important;
-    .pagination-card li:first-child {
-      left: 10px;
-    }
-    .ant-tabs-nav {
-      background: #fff;
-      .ant-tabs-nav-wrap {
-        background: #fff !important;
-        margin-left: 16px;
-        .ant-tabs-tab {
-          background-color: #fff;
-          border-width: 1px 1px 0px 1px;
-          border-style: solid;
-          border-color: #f3f3f3;
-        }
-        .ant-tabs-tab-active::before {
-          height: 0;
-        }
-        .ant-tabs-tab.ant-tabs-tab-active {
-          background-color: #fff !important;
-          .ant-tabs-tab-btn {
-            font-weight: 500;
-          }
-        }
-      }
-    }
+.action-top {
+  padding-right: 50px;
+}
+.chi-tieu__body {
+  .flex-card.ant-card {
+    border: 1px solid #ececec !important;
+    background: transparent;
+    box-shadow: unset;
+    margin-bottom: 0px !important;
+    margin-top: 11px !important;
+    border-radius: 0px;
   }
+}
+.trai {
+  display: flex;
+  align-items: center;
+}
+.last-breadcrumb {
+  color: #4e5484 !important;
+  font-weight: 400;
+  font-size: 12px;
+}
+.chi-tiet {
+  padding: 16px;
+}
+
+::ng-deep {
+  // .tab-chi-tieu-level-0 {
+  //   margin: 0px 16px !important;
+  //   .tab-content {
+  //     margin: 0px 16px;
+  //   }
+  //   .nowrap.ant-table-wrapper {
+  //     margin: 16px 16px 0px 16px !important;
+  //   }
+  //   margin-left: 16px;
+  //   margin-right: 16px;
+  //   margin-top: 16px !important;
+  //   .pagination-card li:first-child {
+  //     left: 44px;
+  //   }
+  //   .ant-tabs-nav {
+  //     background: #fff;
+  //     .ant-tabs-nav-wrap {
+  //       background: #fff !important;
+  //       .ant-tabs-tab {
+  //         background-color: #fff !important;
+  //         border-width: 1px 1px 0px 1px;
+  //         border-style: solid;
+  //         border-color: #f3f3f3;
+  //       }
+  //       .ant-tabs-tab-active::before {
+  //         height: 0;
+  //       }
+  //       .ant-tabs-tab.ant-tabs-tab-active {
+  //         background-color: #fff !important;
+  //         .ant-tabs-tab-btn {
+  //           font-weight: 500;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   .tab-giao-chi-tieu {
     position: relative;
+    .ant-tabs-content-holder {
+      border: 1px solid #f3f3f3 !important;
+    }
+    .tab-menu.tab-content {
+      margin: 0px 16px;
+    }
   }
   .action-giao-chi-tieu {
     position: absolute;
     top: 0px;
-    right: 0px;
+    right: 16px;
   }
 }

@@ -53,8 +53,8 @@
       }
       .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab,
       .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
-        border-top-left-radius: 4px !important;
-        border-top-right-radius: 4px !important;
+        border-top-left-radius: 0px !important;
+        border-top-right-radius: 0px !important;
       }
       .ant-tabs-tab-btn {
         color: unset !important;
@@ -79,7 +79,7 @@
         margin: 0px 0px 0px 0px;
         padding: 0 16px 16px 16px;
         border: solid 1px #4e5484 !important;
-        border-radius: 8px;
+        border-radius: 0px;
         margin-bottom: 24px;
       }
       .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
@@ -113,7 +113,7 @@
   .group-infonation {
     border: 1px solid #f1f1f1;
     box-sizing: border-box;
-    border-radius: 6px;
+    border-radius: 0px;
     padding: 12px;
   }
   .left-group-info {
@@ -130,7 +130,7 @@
   }
   .thong-tin-chi-tieu {
     border: 1px solid #e0e0e0;
-    border-radius: 4px;
+    border-radius: 0px;
     padding: 16px;
     .title-chi-tieu {
       display: flex;
@@ -140,7 +140,7 @@
         font-weight: 500;
         font-size: 13px;
         padding: 4px;
-        border-radius: 5px;
+        border-radius: 0px;
         border: 1px solid #eaeaea;
         text-transform: uppercase;
         margin-right: 8px;
@@ -151,7 +151,7 @@
         font-weight: 500;
         font-size: 13px;
         padding: 4px;
-        border-radius: 5px;
+        border-radius: 0px;
         border: 1px solid #24e837;
         text-transform: uppercase;
         margin-right: 8px;
@@ -169,7 +169,7 @@
   .download-file {
     background: #e3f9f9;
     border: 0.5px solid #4e5484;
-    border-radius: 4px;
+    border-radius: 0px;
     color: #4e5484;
     margin-left: 16px;
   }
