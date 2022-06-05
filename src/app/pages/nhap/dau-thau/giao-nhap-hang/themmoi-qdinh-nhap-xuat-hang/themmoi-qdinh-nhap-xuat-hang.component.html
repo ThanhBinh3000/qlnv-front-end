@@ -3,7 +3,7 @@
     <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
       aria-labelledby="banhanh-tab">
       <div class="trai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectQdNhapXuat()">
+        <!-- <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectQdNhapXuat()">
           <i class="fa fa-arrow-circle-left"></i>
         </a>
         <nz-breadcrumb>
@@ -13,7 +13,7 @@
           <nz-breadcrumb-item> {{loaiStr}} </nz-breadcrumb-item>
           <nz-breadcrumb-item> Cục </nz-breadcrumb-item>
           <nz-breadcrumb-item class="last-breadcrumb">{{ isChiTiet ? 'Chi tiết' : 'Dự thảo'}} </nz-breadcrumb-item>
-        </nz-breadcrumb>
+        </nz-breadcrumb> -->
       </div>
       <div class="canphai phai" *ngIf="!isChiTiet">
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()" *ngIf="disableBanHanh()"
@@ -46,7 +46,7 @@
           || quyetDinhNhapXuat.trangThai == globals.prop.DU_THAO_TRINH_DUYET
           || quyetDinhNhapXuat.trangThai == globals.prop.LANH_DAO_DUYET">
           <i class="icon htvbdh_tcdt_delete"></i>
-          <span>Hủy bỏ</span>
+          <span>Quay về</span>
         </a>
       </div>
     </div>

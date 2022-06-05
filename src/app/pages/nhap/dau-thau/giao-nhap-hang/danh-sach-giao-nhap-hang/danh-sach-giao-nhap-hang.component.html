@@ -1,4 +1,4 @@
-<div *ngIf="userService.isChiCuc() || userService.isCuc() ">
+<div *ngIf="!isDetail">
   <div class="luong-thuc__danh-sach">
     <div class="contentBor chi-tieu__body">
       <div class="contentDetail">
@@ -74,7 +74,7 @@
                           *ngIf="userService.isCuc() && (data.trangThai=='00' || data.trangThai=='03')">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="redirectToChiTiet(data.id)">
+                        <a (click)="redirectToThongTin(data.id)">
                           <span class="icon htvbdh_eye"></span>
                         </a>
                         <a (click)="chiTietQuyetDinh(true, data.id)" *ngIf="userService.isChiCuc()">
@@ -117,7 +117,7 @@
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
               </button>
-              <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
+              <button type="button" class="btn btn-main" (click)="redirectToThongTin(0)" *ngIf="userService.isCuc()">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm mới</span>
               </button>
@@ -127,4 +127,8 @@
       </div>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()">
+  </app-themmoi-qdinh-nhap-xuat-hang>
 </div>

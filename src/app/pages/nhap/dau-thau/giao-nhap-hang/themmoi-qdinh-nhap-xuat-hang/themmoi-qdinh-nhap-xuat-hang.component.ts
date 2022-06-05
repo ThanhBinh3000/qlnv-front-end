@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder, FormGroup,
   Validators
@@ -31,12 +31,14 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss'],
 })
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   formData: FormGroup;
   chiTietQDGiaoNhapXuatHang: any = [];
   taiLieuDinhKemList: any[] = [];
   datePickerConfig = DATEPICKER_CONFIG;
-  id: number;
   type: string = '';
   quyetDinhNhapXuat: QuyetDinhNhapXuat = new QuyetDinhNhapXuat();
   dataQDNhapXuat;
@@ -677,18 +679,19 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   huyBo() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hủy bỏ các thao tác đang làm?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.redirectQdNhapXuat();
-      },
-    });
+    // this.modal.confirm({
+    //   nzClosable: false,
+    //   nzTitle: 'Xác nhận',
+    //   nzContent: 'Bạn có chắc chắn muốn hủy bỏ các thao tác đang làm?',
+    //   nzOkText: 'Đồng ý',
+    //   nzCancelText: 'Không',
+    //   nzOkDanger: true,
+    //   nzWidth: 310,
+    //   nzOnOk: () => {
+    //     this.redirectQdNhapXuat();
+    //   },
+    // });
+    this.showListEvent.emit();
   }
   disabledDate = (current: Date): boolean =>
     differenceInCalendarDays(current, this.today) > 0;
