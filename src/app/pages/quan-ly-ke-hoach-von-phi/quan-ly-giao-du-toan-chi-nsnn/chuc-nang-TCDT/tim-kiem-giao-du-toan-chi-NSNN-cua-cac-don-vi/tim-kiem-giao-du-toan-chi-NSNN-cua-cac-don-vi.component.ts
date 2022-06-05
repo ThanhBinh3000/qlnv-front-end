@@ -37,6 +37,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     searchFilter = {
         maPhanGiao: '2',
         maLoai: '1',
+        loaiTimKiem: '0',
         namGiao: null,
         ngayTaoTu: "",
         ngayTaoDen: "",

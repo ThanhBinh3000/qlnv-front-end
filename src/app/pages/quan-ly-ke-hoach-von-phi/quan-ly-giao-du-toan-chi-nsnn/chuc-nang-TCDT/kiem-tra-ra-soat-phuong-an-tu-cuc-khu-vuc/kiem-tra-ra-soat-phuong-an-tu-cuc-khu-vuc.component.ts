@@ -12,16 +12,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
 // loai trang thai kiem tra
-export const TRANG_THAI_KIEM_TRA_BAO_CAO_GIAO= [
+export const TRANG_THAI_GIAO_DU_TOAN = [
   {
-      id: '9',
-      ten: 'Tiếp nhận'
+      id: '1',
+      tenDm: "Chưa nhận",
   },
   {
-      id: '7',
-      ten: 'Chưa nhận'
+      id: '2',
+      tenDm: "Đã nhận",
   },
-
 ]
 @Component({
   selector: 'app-kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc',
@@ -33,12 +32,12 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   listBcaoKqua:any []=[];
-  trangThais: any = TRANG_THAI_KIEM_TRA_BAO_CAO_GIAO;                          // danh muc loai bao cao
+  trangThais: any = TRANG_THAI_GIAO_DU_TOAN;                          // danh muc loai bao cao
   trangThai!:string;
   searchFilter = {
-    loaiTimKiem: "1",
     maPhanGiao: '2',
-    maLoai: '2',
+    maLoai: '1',
+    loaiTimKiem: "1",
     maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
@@ -106,7 +105,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{
-      this.searchFilter.trangThais = [Utils.TT_BC_7,Utils.TT_BC_9]
+      this.searchFilter.trangThais = ['1', '2']
     }
     await this.quanLyVonPhiService.timBaoCaoGiao1(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
@@ -154,44 +153,11 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   public getStatusName1(id: string) {
     let statusName;
     switch (id) {
-        case Utils.TT_BC_0:
-            statusName = "Đã xóa";
-            break;
         case Utils.TT_BC_1:
-            statusName = "Đang soạn"
+            statusName = "Chưa nhận"
             break;
         case Utils.TT_BC_2:
-            statusName = "Trình duyệt"
-            break;
-        case Utils.TT_BC_3:
-            statusName = "Trưởng BP từ chối"
-            break;
-        case Utils.TT_BC_4:
-            statusName = "Trưởng BP duyệt"
-            break;
-        case Utils.TT_BC_5:
-            statusName = "Lãnh đạo từ chối"
-            break;
-        case Utils.TT_BC_6:
-            statusName = "Lãnh đạo duyệt"
-            break;
-        case Utils.TT_BC_7:
-            statusName = "chưa nhận"
-            break;
-        case Utils.TT_BC_8:
-            statusName = "Từ chối"
-            break;
-        case Utils.TT_BC_9:
-            statusName = "Tiếp nhận"
-            break;
-        case Utils.TT_BC_10:
-            statusName = "Điều chỉnh theo số kiểm tra"
-            break;
-        case Utils.TT_BC_11:
-            statusName = "Đã giao"
-            break;
-        case Utils.TT_BC_KT:
-            statusName = "Chưa có"
+            statusName = "Đã nhận"
             break;
         default:
             statusName = id;
@@ -200,17 +166,9 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     return statusName;
 }
 
-xemChiTiet(id: string, maLoaiDan: string) {
-  if(maLoaiDan == "1"){
+  xemChiTiet(id: string) {
     this.router.navigate([
-        '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id ,
+        '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
     ])
-  }else if(maLoaiDan == "2"){
-    this.router.navigate([
-        '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + id ,
-    ])
-  }else{
-    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
   }
-}
 }
