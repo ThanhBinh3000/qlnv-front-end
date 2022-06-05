@@ -44,8 +44,8 @@ export class QuanLyVonPhiService extends BaseService {
   //search list bao cao giao du toan chi
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
-      'http://192.168.1.103:8094/giao_du_toan/danh-sach',
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
+      // 'http://192.168.1.103:8094/giao_du_toan/danh-sach',
       request,
     );
   }
