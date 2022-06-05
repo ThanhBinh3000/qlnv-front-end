@@ -31,7 +31,6 @@
               <th nzWidth="60px">STT</th>
               <th nzWidth="300px">Đơn vị</th>
               <th nzWidth="130px">Mã phương án</th>
-              <th nzWidth="100px">Ngày giao</th>
               <th nzWidth="100px">Năm dự toán</th>
               <th nzWidth="150px" class="text-center">Trạng thái</th>
               <th></th>
@@ -41,9 +40,8 @@
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
               <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a (click)="xemChiTiet(item.id)">{{ item.maBcao }}</a></td>
-              <td>{{item.ngayPheDuyet}}</td>
-              <td>{{item.namBcao}}</td>
+              <td>{{ item.maPa }}</td>
+              <td>{{item.namPa}}</td>
               <td class="text-center">
                 {{getStatusName(item.trangThai)}}
               </td>
@@ -51,10 +49,7 @@
                 <button type="button" class="btn btn-main" *ngIf="item.trangThai == '-1'">
                   <span>Thông báo đến đơn vị cấp dưới</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
-                  <span>Phê duyệt</span>
-                </button>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id, item.maLoaiDan)">
                   <span>Xem</span>
                 </button>
               </td>

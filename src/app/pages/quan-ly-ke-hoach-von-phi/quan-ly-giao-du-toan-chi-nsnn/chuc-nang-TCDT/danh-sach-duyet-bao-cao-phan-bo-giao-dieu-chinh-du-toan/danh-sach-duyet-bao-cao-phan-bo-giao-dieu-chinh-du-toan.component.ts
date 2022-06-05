@@ -176,7 +176,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     let lstTrangThai = [];
     if (!this.searchFilter.trangThai) {
       if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
-        lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
+        lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT];
       } else if (this.userInfo?.roles[0].code == Utils.NHAN_VIEN) {
         lstTrangThai = [Utils.TT_BC_2];
       } else {
@@ -246,10 +246,18 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.searchFilter.trangThai = null
   }
 
-  xemChiTiet(id: string) {
-    this.router.navigate([
-      '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/bao-cao/' + id,
-    ])
+  xemChiTiet(id: string, maLoaiDan: string) {
+    if(maLoaiDan == "1"){
+      this.router.navigate([
+          '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id ,
+      ])
+    }else if(maLoaiDan == "2"){
+      this.router.navigate([
+          '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + id ,
+      ])
+    }else{
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    }
   }
 
   getStatusName(trangThai: string) {
