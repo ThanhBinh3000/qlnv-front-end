@@ -16,7 +16,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
+import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { UserLogin } from 'src/app/models/userlogin';
 import { GAO, MUOI, NHAP_MAIN_ROUTE, NHAP_THEO_KE_HOACH, NHAP_THEO_PHUONG_THUC_DAU_THAU, THOC } from 'src/app/pages/nhap/nhap.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
@@ -25,7 +25,6 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhap
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { DetailQuyetDinhNhapXuat } from './../../../../../../models/QuyetDinhNhapXuat';
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',

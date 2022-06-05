@@ -1,37 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
-import {
-  LOAI_HANG_DTQG,
-  LOAI_QUYET_DINH,
-  PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
+import { LOAI_HANG_DTQG, LOAI_QUYET_DINH, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import {
-  GAO,
-  MUOI,
-  NHAP_MAIN_ROUTE,
-  NHAP_THEO_KE_HOACH,
-  NHAP_THEO_PHUONG_THUC_DAU_THAU,
-  THOC,
-} from '../../../nhap/nhap.constant';
-import { convertTenVthh } from 'src/app/shared/commonFunction';
 import { UserService } from 'src/app/services/user.service';
+import { convertTenVthh, convertTrangThai } from 'src/app/shared/commonFunction';
+import dayjs from 'dayjs';
 
 @Component({
-  selector: 'nhap-theo-phuong-thuc-dau-thau',
-  templateUrl: './nhap-theo-phuong-thuc-dau-thau.component.html',
-  styleUrls: ['./nhap-theo-phuong-thuc-dau-thau.component.scss'],
+  selector: 'app-giao-nhap-hang',
+  templateUrl: './giao-nhap-hang.component.html',
+  styleUrls: ['./giao-nhap-hang.component.scss']
 })
-export class NhapTheoPhuongThucDauThauComponent implements OnInit {
+export class GiaoNhapHangComponent implements OnInit {
+  @Input()
+  typeVthh: string;
+
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -64,11 +54,11 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
     noiDungCongVan: ''
   };
   listNam: any[] = [];
-  loaiVthh: string = '';
   routerUrl: string;
 
   maVthh: string;
   routerVthh: string;
+  loaiVthh: string = '';
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -83,7 +73,6 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.routerUrl = this.router.url;
     this.getTitleVthh();
     this.spinner.show();
     try {
@@ -117,21 +106,17 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   getTitleVthh() {
-    this.loaiVthh = convertTenVthh(this.route.snapshot.paramMap.get('type'));
-    this.router.navigate([
-      '/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/' +
-      this.route.snapshot.paramMap.get('type'),
-    ]);
-    if (this.router.url.indexOf("/thoc") != -1) {
+    this.loaiVthh = convertTenVthh(this.typeVthh);
+    if (this.typeVthh == 'thoc') {
       this.maVthh = "0101";
       this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao") != -1) {
+    } else if (this.typeVthh == 'gao') {
       this.maVthh = "0102";
       this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi") != -1) {
+    } else if (this.typeVthh == 'muoi') {
       this.maVthh = "04";
       this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu") != -1) {
+    } else if (this.typeVthh == 'vat-tu') {
       this.maVthh = null;
       this.routerVthh = 'vat-tu';
     }
@@ -166,10 +151,10 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   redirectToThongTin(id: number) {
-    this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${this.routerVthh}/thong-tin`, id]);
+
   }
   redirectToChiTiet(id: number) {
-    this.router.navigate([`/${NHAP_MAIN_ROUTE}/${NHAP_THEO_KE_HOACH}/${NHAP_THEO_PHUONG_THUC_DAU_THAU}/${this.routerVthh}/xem-chi-tiet`, id]);
+
   }
 
   clearFilter() {
@@ -365,9 +350,6 @@ export class NhapTheoPhuongThucDauThauComponent implements OnInit {
   }
 
   chiTietQuyetDinh(isView: boolean, id: number) {
-    this.router.navigate([
-      `/nhap/nhap-theo-ke-hoach/nhap-theo-phuong-thuc-dau-thau/${this.routerVthh}/chi-tiet/${id}/bien-ban`,
-    ]);
-  }
 
+  }
 }

@@ -1,1 +1,104 @@
-<router-outlet></router-outlet>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <div class="main-content tab-menu-new">
+            <nz-tabset nzType="card" class="tab-level-0">
+                <nz-tab [nzTitle]="'QĐ giao nhiệm vụ nhập hàng'">
+                    <nz-tabset nzType="card" class="mt-16 tab-level-1">
+                        <nz-tab [nzTitle]="title_tat_ca">
+                            <ng-template #title_tat_ca>
+                                Tất cả
+                                (<span class="number-title-tab">10</span>)
+                            </ng-template>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_thoc">
+                            <ng-template #title_thoc>
+                                Thóc
+                                (<span class="number-title-tab">3</span>)
+                            </ng-template>
+                            <app-giao-nhap-hang typeVthh="thoc"></app-giao-nhap-hang>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_gao" class="vat-tu__container">
+                            <ng-template #title_gao>
+                                Gạo
+                                (<span class="number-title-tab">3</span>)
+                            </ng-template>
+                            <app-giao-nhap-hang typeVthh="gao"></app-giao-nhap-hang>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_muoi" class="vat-tu__container">
+                            <ng-template #title_muoi>
+                                Muối
+                                (<span class="number-title-tab">4</span>)
+                            </ng-template>
+                            <app-giao-nhap-hang typeVthh="muoi"></app-giao-nhap-hang>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_vat_tu" class="vat-tu__container">
+                            <ng-template #title_vat_tu>
+                                Vật tư, thiết bị
+                                (<span class="number-title-tab">4</span>)
+                            </ng-template>
+                            <app-giao-nhap-hang typeVthh="vat-tu"></app-giao-nhap-hang>
+                        </nz-tab>
+                    </nz-tabset>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Kiểm tra chất lượng'">
+                    <nz-tabset nzType="card" class="mt-16 tab-level-1">
+                        <nz-tab [nzTitle]="title_tat_ca">
+                            <ng-template #title_tat_ca>
+                                Tất cả
+                                (<span class="number-title-tab">10</span>)
+                            </ng-template>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_thoc">
+                            <ng-template #title_thoc>
+                                Thóc
+                                (<span class="number-title-tab">3</span>)
+                            </ng-template>
+                            <!-- <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong> -->
+                            <nz-tabset nzType="card" class="mt-16 tab-level-2">
+                                <nz-tab [nzTitle]="'Phiếu kiểm tra chất lượng'">
+                                    <app-lap-bien-ban-nghiem-thu-bao-quan></app-lap-bien-ban-nghiem-thu-bao-quan>
+                                </nz-tab>
+                                <nz-tab [nzTitle]="'Biên bản nghiệm thu bảo quản lần đầu'">
+                                    <app-lap-bien-ban-nghiem-thu-bao-quan></app-lap-bien-ban-nghiem-thu-bao-quan>
+                                </nz-tab>
+                                <nz-tab [nzTitle]="'Biên bản lấy mẫu'">
+                                    <app-lap-bien-ban-nghiem-thu-bao-quan></app-lap-bien-ban-nghiem-thu-bao-quan>
+                                </nz-tab>
+                                <nz-tab [nzTitle]="'Biên bản bàn giao mẫu'">
+                                    <app-lap-bien-ban-nghiem-thu-bao-quan></app-lap-bien-ban-nghiem-thu-bao-quan>
+                                </nz-tab>
+                                <nz-tab [nzTitle]="'Lập và ký phiếu kiểm nghiệm chất lượng'">
+                                    <app-lap-bien-ban-nghiem-thu-bao-quan></app-lap-bien-ban-nghiem-thu-bao-quan>
+                                </nz-tab>
+                            </nz-tabset>
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_gao" class="vat-tu__container">
+                            <ng-template #title_gao>
+                                Gạo
+                                (<span class="number-title-tab">3</span>)
+                            </ng-template>
+
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_muoi" class="vat-tu__container">
+                            <ng-template #title_muoi>
+                                Muối
+                                (<span class="number-title-tab">4</span>)
+                            </ng-template>
+
+                        </nz-tab>
+                        <nz-tab [nzTitle]="title_vat_tu" class="vat-tu__container">
+                            <ng-template #title_vat_tu>
+                                Vật tư, thiết bị
+                                (<span class="number-title-tab">4</span>)
+                            </ng-template>
+
+                        </nz-tab>
+                    </nz-tabset>
+                </nz-tab>
+                <nz-tab [nzTitle]="'Nhập kho'" class="vat-tu__container">
+                </nz-tab>
+            </nz-tabset>
+
+        </div>
+    </div>
+</div>
