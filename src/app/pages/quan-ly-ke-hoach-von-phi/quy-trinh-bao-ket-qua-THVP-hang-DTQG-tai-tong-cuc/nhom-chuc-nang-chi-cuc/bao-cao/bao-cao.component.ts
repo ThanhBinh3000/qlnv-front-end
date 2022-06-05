@@ -716,8 +716,6 @@ export class BaoCaoComponent implements OnInit {
       // bm 02
       case BAO_CAO_NHAP_HANG_DTQG:
         this.lstCTietBaoCaoTemp?.filter(data => {
-
-
           if (data.maVtuHeader == '1') {
             this.lstCtietBcao021.push(data);
           } else {
@@ -1790,7 +1788,6 @@ export class BaoCaoComponent implements OnInit {
   }
 
   addLine02(idx: any, loaiList: any): void {
-
     var loaiDonVi;
     var parentID: any;
     if (loaiList == '1') {
@@ -1911,7 +1908,6 @@ export class BaoCaoComponent implements OnInit {
   }
 
   async saveMau02() {
-
     this.lstCTietBaoCaoTemp = [];
     await this.lstCtietBcao021.forEach(e => {
       this.lstCTietBaoCaoTemp.push(e);
