@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach">
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
@@ -40,13 +40,13 @@
             </div>
           </div>
           <div class="cangiua group-button-search">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
             <button nz-button class="search__button--search" (click)="search()">
               <i nz-icon nzType="search"></i>
               Tìm kiếm
-            </button>
-            <button nz-button class="search__button--clear" (click)="clearFilter()">
-              <i nz-icon nzType="close"></i>
-              Xóa điều kiện
             </button>
           </div>
         </nz-card>
@@ -77,11 +77,11 @@
                   <td>{{data.maKho}}</td>
                   <td>{{data.maLo}}</td>
                   <td>{{data.tenTrangThai}}</td>
-                  <td>
-                    <a (click)="redirectToChiTiet(false,data.id)">
+                  <td class="text-right">
+                    <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="redirectToChiTiet(true, data.id)">
+                    <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
                     <a (click)="xoaItem(data)">
@@ -93,7 +93,7 @@
             </nz-table>
           </nz-card>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false,0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -106,4 +106,8 @@
       </div>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <them-moi-bien-ban-lay-mau [id]="selectedId" (showListEvent)="showList()">
+  </them-moi-bien-ban-lay-mau>
 </div>

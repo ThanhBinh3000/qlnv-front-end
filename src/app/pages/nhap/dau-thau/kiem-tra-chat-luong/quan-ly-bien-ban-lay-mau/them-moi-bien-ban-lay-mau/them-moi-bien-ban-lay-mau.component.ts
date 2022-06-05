@@ -1,7 +1,4 @@
-import { UserService } from './../../../../../../../../services/user.service';
-import { MESSAGE } from './../../../../../../../../constants/message';
-import { BienBanLayMau } from './../../../../../../../../models/BienBanLayMau';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,6 +16,9 @@ import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
+import { UserService } from 'src/app/services/user.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -26,8 +26,10 @@ import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
   styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
 })
 export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   bienBanLayMau: BienBanLayMau;
-  id: number;
   routerUrl: string;
   userInfo: UserLogin;
   detail: any = {};
@@ -338,13 +340,14 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     });
   }
   redirectBienBanLayMau() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    // if (this.router.url && this.router.url != null) {
+    //   let index = this.router.url.indexOf("/thong-tin/");
+    //   if (index != -1) {
+    //     let url = this.router.url.substring(0, index);
+    //     this.router.navigate([url]);
+    //   }
+    // }
+    this.showListEvent.emit();
   };
 
   async getHopDong(id) {
@@ -425,6 +428,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       trangThai === this.globals.prop.LANH_DAO_DUYET ||
       trangThai === this.globals.prop.TU_CHOI ||
       trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      || !trangThai
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.BAN_HANH) {

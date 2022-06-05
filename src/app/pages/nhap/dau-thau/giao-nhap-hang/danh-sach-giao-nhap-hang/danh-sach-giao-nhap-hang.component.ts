@@ -59,7 +59,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   maVthh: string;
   routerVthh: string;
   loaiVthh: string = '';
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -151,12 +152,15 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   redirectToThongTin(id: number) {
-
+    this.selectedId = id;
+    this.isDetail = true;
   }
   redirectToChiTiet(id: number) {
 
   }
-
+  showList() {
+    this.isDetail = false;
+  }
   clearFilter() {
     this.searchFilter = {
       soQD: '',
