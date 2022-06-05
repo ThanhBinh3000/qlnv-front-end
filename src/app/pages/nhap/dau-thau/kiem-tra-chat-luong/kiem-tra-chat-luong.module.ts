@@ -15,10 +15,11 @@ import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-t
     KiemTraChatLuongComponent,
     LapBienBanNghiemThuBaoQuanComponent,
     ThongTinBienBanNghiemThuBaoQuanComponent,
+    ThongTinBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
     QuanLyBienBanBanGiaoMauComponent,
-    QuanLyPhieuKiemNghiemChatLuongThocComponent
+    QuanLyPhieuKiemNghiemChatLuongThocComponent,
   ],
   imports: [
     CommonModule,
