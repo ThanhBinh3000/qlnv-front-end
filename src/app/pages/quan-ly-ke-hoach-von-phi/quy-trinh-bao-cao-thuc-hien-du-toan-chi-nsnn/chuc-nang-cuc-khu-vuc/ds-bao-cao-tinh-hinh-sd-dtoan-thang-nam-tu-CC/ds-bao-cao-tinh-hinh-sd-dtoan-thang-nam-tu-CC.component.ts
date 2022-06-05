@@ -61,7 +61,7 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
   ngOnInit(): void {
     let date = new Date();
     this.searchFilter.namBcao = date.getFullYear();
-    this.searchFilter.thangBcao = date.getMonth()+1;
+    this.searchFilter.thangBcao = date.getMonth();
     this.trangThai = '7';
     this.searchFilter.maLoaiBcao='526';
     this.onSubmit();
