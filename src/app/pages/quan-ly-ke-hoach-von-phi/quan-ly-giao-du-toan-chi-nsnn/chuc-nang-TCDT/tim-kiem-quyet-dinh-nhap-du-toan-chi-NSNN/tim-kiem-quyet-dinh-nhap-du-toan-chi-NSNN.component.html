@@ -28,25 +28,25 @@
 			<nz-card nzTitle="THÔNG TIN TÌM KIẾM" class="mt16 flex-card p-lr16">
 				<div class="search__body" nz-row [nzGutter]="[18, 12]">
 					<div nz-col nzSpan="6">
-						<label class="search__label">Năm</label>
+						<label class="search__label">Năm phương án</label>
 						<nz-input-number [nzSize]="'small'"
-							[class]="searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999 || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
-							[(ngModel)]="searchFilter.nam"></nz-input-number>
+							[class]="searchFilter.namPa >= 1000 &&  searchFilter.namPa <= 2999 || !searchFilter.namPa && this.searchFilter.namPa !== 0 ?'' : 'input-error-validate'"
+							[(ngModel)]="searchFilter.namPa"></nz-input-number>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập từ</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Đến ngày</label>
-						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.denNgay" nzFormat="dd/MM/yyyy">
+						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
 						</nz-date-picker>
 					</div>
           <div nz-col nzSpan="6">
-						<label class="search__label">Số quyết định</label>
-						<input nz-input class="search__input" [(ngModel)]="searchFilter.soQd"
-						[class]="!searchFilter.soQd ?'input-error-validate' : ''"/>
+						<label class="search__label">mã phương án</label>
+						<input nz-input class="search__input" [(ngModel)]="searchFilter.maPa"
+						[class]="!searchFilter.maPa ?'input-error-validate' : ''"/>
 					</div>
 				</div>
 			</nz-card>
@@ -61,9 +61,9 @@
 					<thead>
 						<tr>
 							<th width="60px">STT</th>
-							<th width="150px">Số QĐ</th>
-							<th width="150px">Ngày lập</th>
-							<th width="150px">Năm</th>
+							<th width="150px">Mã phương án</th>
+							<th width="150px">Ngày tạo</th>
+							<th width="150px">Năm phương án</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -71,14 +71,14 @@
 							<td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
 							<td>
 								<a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-									{{ item.soQd}}
+									{{ item.maPa}}
 								</a>
 							</td>
 							<td>
 								{{item.ngayTao}}
 							</td>
 							<td>
-								{{item.nam}}
+								{{item.namPa}}
 							</td>
 						</tr>
 					</tbody>

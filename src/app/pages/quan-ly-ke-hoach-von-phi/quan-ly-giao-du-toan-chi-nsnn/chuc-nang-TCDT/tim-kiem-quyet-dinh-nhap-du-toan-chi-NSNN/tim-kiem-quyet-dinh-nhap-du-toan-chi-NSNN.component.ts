@@ -21,10 +21,17 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
-    nam: null,
-    tuNgay: "",
-    denNgay: "",
-    soQd: "",
+    maPhanGiao: '1',
+    maLoai: '2',
+    namPa: null,
+    ngayTaoTu: "",
+    ngayTaoDen: "",
+    maPa: "",
+    trangThais: ["1"],
+    paggingReq: {
+      limit: 10,
+      page: 1
+    },
   };
   //danh muc
   danhSachQuyetDinh: any = [];
@@ -65,25 +72,17 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (this.searchFilter.nam || this.searchFilter.nam === 0) {
-      if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000) {
+    if (this.searchFilter.namPa || this.searchFilter.namPa === 0) {
+      if (this.searchFilter.namPa >= 3000 || this.searchFilter.namPa < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
         return;
       }
     }
-    let requestReport = {
-      soQd: this.searchFilter.soQd,
-      nam: this.searchFilter.nam,
-      ngayTaoDen: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
-      ngayTaoTu: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
-      str: null,
-      paggingReq: {
-        limit: this.pages.size,
-        page: this.pages.page,
-      }
-    };
+    let searchFilterTemp = Object.assign({}, this.searchFilter);
+        searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+        searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
     this.spinner.show();
-    await this.quanLyVonPhiService.timBaoCaoGiao1(requestReport).toPromise().then(
+    await this.quanLyVonPhiService.timBaoCaoGiao1(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachQuyetDinh = data.data.content;
@@ -106,13 +105,13 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
     this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
     this.onSubmit();
   }
 

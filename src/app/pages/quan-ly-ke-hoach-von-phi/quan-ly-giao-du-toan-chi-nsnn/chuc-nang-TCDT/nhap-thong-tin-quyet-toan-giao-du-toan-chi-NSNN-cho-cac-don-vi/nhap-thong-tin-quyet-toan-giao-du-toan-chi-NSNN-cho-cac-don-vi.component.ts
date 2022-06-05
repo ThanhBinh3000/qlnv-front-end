@@ -100,19 +100,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
 
         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
         this.namGiao = this.newDate.getFullYear();
-        this.quanLyVonPhiService.maGiao().toPromise().then(
-          (res) => {
-              if (res.statusCode == 0) {
-                  this.maGiao = res.data;
-              } else {
-                  this.notification.error(MESSAGE.ERROR, res?.msg);
-              }
-          },
-          (err) => {
-              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          },
-        );
-        this.quanLyVonPhiService.maGiao().toPromise().then(
+        this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
           (res) => {
               if (res.statusCode == 0) {
                   this.maGiao = res.data;
