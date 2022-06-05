@@ -7,6 +7,7 @@ import { DauThauComponent } from './dau-thau.component';
 import { GiaoNhapHangComponent } from './giao-nhap-hang/giao-nhap-hang.component';
 import { ThemmoiQdinhNhapXuatHangComponent } from './giao-nhap-hang/themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
 import { LapBienBanNghiemThuBaoQuanComponent } from './kiem-tra-chat-luong/lap-bien-ban-nghiem-thu-bao-quan/lap-bien-ban-nghiem-thu-bao-quan.component';
 import { ThongTinBienBanNghiemThuBaoQuanComponent } from './kiem-tra-chat-luong/lap-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan.component';
 import { ChiTietDonViThucHienQuyetDinhComponent } from './luong-thuc/chi-tiet-don-vi-thuc-hien-quyet-dinh/chi-tiet-don-vi-thuc-hien-quyet-dinh.component';
@@ -39,15 +40,16 @@ import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-
     ThemMoPhieuKiemNghiemChatLuongComponent,
     GiaoNhapHangComponent,
     ThemmoiQdinhNhapXuatHangComponent,
-    KiemTraChatLuongComponent,
-    LapBienBanNghiemThuBaoQuanComponent,
-    ThongTinBienBanNghiemThuBaoQuanComponent,
+    // KiemTraChatLuongComponent,
+    // LapBienBanNghiemThuBaoQuanComponent,
+    // ThongTinBienBanNghiemThuBaoQuanComponent,
   ],
   imports: [
     CommonModule,
     DauThauRoutingModule,
     ComponentsModule,
     DirectivesModule,
+    KiemTraChatLuongModule
   ],
 })
 export class DauThauModule { }
