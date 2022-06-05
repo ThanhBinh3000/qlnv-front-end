@@ -1,8 +1,8 @@
-<div class="luong-thuc__danh-sach">
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="TÌM KIẾM" class="mt16 flex-card p-lr16">
+        <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
             <div nz-col nzSpan="6">
               <label class="search__label">Số phiếu kiểm nghiệm</label>
@@ -40,13 +40,13 @@
             </div>
           </div>
           <div class="cangiua group-button-search">
-            <button nz-button class="search__button--search">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" (click)="search()">
               <i nz-icon nzType="search"></i>
               Tìm kiếm
-            </button>
-            <button nz-button class="search__button--clear">
-              <i nz-icon nzType="close"></i>
-              Xóa điều kiện
             </button>
           </div>
         </nz-card>
@@ -81,10 +81,10 @@
                   <td>{{ data.tenNganLo }}</td>
                   <td>{{ data.tenTrangThai }}</td>
                   <td class="text-center">
-                    <a (click)="redirectToChiTiet(false, data.id)">
+                    <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="redirectToChiTiet(true, data.id)">
+                    <a (click)="redirectToChiTiet(data.id)">
                       <i class="fa fa-eye"></i>
                     </a>
                     <a (click)="xoaItem(data)">
@@ -96,7 +96,7 @@
             </nz-table>
           </nz-card>
           <ng-template #tableCard1>
-            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false,0)">
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -109,4 +109,8 @@
       </div>
     </div>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <them-moi-phieu-kiem-nghiem-chat-luong-thoc [id]="selectedId" (showListEvent)="showList()">
+  </them-moi-phieu-kiem-nghiem-chat-luong-thoc>
 </div>

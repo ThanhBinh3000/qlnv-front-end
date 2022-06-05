@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import dayjs from 'dayjs';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import { Globals } from 'src/app/shared/globals';
-import { MESSAGE } from './../../../../../../../../constants/message';
-import { BienBanLayMau } from './../../../../../../../../models/BienBanLayMau';
-import { UserService } from './../../../../../../../../services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import dayjs from 'dayjs';
+import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
+import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
+import { BienBanLayMau } from 'src/app/models/BienBanLayMau';
+import { UserService } from 'src/app/services/user.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'them-moi-bien-ban-ban-giao-mau',
@@ -22,8 +26,10 @@ import { UserService } from './../../../../../../../../services/user.service';
   styleUrls: ['./them-moi-bien-ban-ban-giao-mau.component.scss'],
 })
 export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   bienBanLayMau: BienBanLayMau;
-  id: number;
   routerUrl: string;
   userInfo: UserLogin;
   detail: any = {};
@@ -334,13 +340,14 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
     });
   }
   redirectBienBanLayMau() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    // if (this.router.url && this.router.url != null) {
+    //   let index = this.router.url.indexOf("/thong-tin/");
+    //   if (index != -1) {
+    //     let url = this.router.url.substring(0, index);
+    //     this.router.navigate([url]);
+    //   }
+    // }
+    this.showListEvent.emit();
   };
 
   async getHopDong(id) {
@@ -421,6 +428,7 @@ export class ThemMoiBienBanBanGiaoMauComponent implements OnInit {
       trangThai === this.globals.prop.LANH_DAO_DUYET ||
       trangThai === this.globals.prop.TU_CHOI ||
       trangThai === this.globals.prop.DU_THAO_TRINH_DUYET
+      || !trangThai
     ) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === this.globals.prop.BAN_HANH) {

@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -14,8 +14,8 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { Globals } from 'src/app/shared/globals';
-import { MESSAGE } from './../../../../../../../../constants/message';
-import { UserService } from './../../../../../../../../services/user.service';
+import { UserService } from 'src/app/services/user.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'them-moi-phieu-kiem-nghiem-chat-luong-thoc',
@@ -23,9 +23,11 @@ import { UserService } from './../../../../../../../../services/user.service';
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong-thoc.component.scss'],
 })
 export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   idNhapHang: number = 0;
 
   loaiVthh: string;
@@ -502,13 +504,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongThocComponent implements OnInit {
   }
 
   redirectPhieuKiemNghiemChatLuongHang() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    // if (this.router.url && this.router.url != null) {
+    //   let index = this.router.url.indexOf("/thong-tin/");
+    //   if (index != -1) {
+    //     let url = this.router.url.substring(0, index);
+    //     this.router.navigate([url]);
+    //   }
+    // }
+    this.showListEvent.emit();
   }
   themmoi() {
     if (!this.ketQuaKiemNghiemHangCreate.tenCtieu) {

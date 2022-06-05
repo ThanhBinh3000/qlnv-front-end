@@ -46,7 +46,8 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -174,15 +175,20 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       },
     });
   }
-  redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id]);
-    }
+  redirectToChiTiet(id: number) {
+    // if (!isView) {
+    //   let urlChiTiet = this.router.url + '/thong-tin'
+    //   this.router.navigate([urlChiTiet, id]);
+    // }
+    // else {
+    //   let urlChiTiet = this.router.url + '/xem-chi-tiet'
+    //   this.router.navigate([urlChiTiet, id]);
+    // }
+    this.selectedId = id;
+    this.isDetail = true;
+  }
+  showList() {
+    this.isDetail = false;
   }
   async loadDiemKho() {
     let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
