@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -22,9 +22,14 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./them-moi-phieu-kiem-tra-chat-luong-hang.component.scss'],
 })
 export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
+  @Input() id: number;
+  @Input() isView: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
   viewChiTiet: boolean = false;
@@ -62,7 +67,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     try {
       this.getTitleVthh();
       this.checkIsView();
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDonVi = this.userInfo.MA_DVI;
       this.detail.trangThai = "00";
@@ -453,13 +457,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    this.showListEvent.emit();
   }
 
   themBienBanNgiemThuKeLot() {

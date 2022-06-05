@@ -1905,6 +1905,14 @@ td.action.ant-table-cell {
 .title-chi-tieu {
   display: flex;
   align-items: center;
+  padding-left: 10px;
+
+  .title-form {
+    font-size: 16px;
+    color: #444444;
+    font-style: normal;
+    font-weight: 500;
+  }
 
   .du-thao-va-lanh-dao-duyet {
     color: #ff4d4f;

@@ -45,6 +45,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   routerVthh: string;
 
   userInfo: UserLogin;
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isView: boolean = false;
+
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -200,14 +204,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id,]);
-    }
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   export() {

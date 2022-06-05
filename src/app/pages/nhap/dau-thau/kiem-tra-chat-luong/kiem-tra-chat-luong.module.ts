@@ -9,14 +9,15 @@ import { QuanLyPhieuKiemNghiemChatLuongThocComponent } from './quan-ly-phieu-kie
 import { QuanLyBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/quan-ly-bien-ban-ban-giao-mau.component';
 import { QuanLyBienBanLayMauComponent } from './quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
+import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
 
 @NgModule({
   declarations: [
     KiemTraChatLuongComponent,
     LapBienBanNghiemThuBaoQuanComponent,
     ThongTinBienBanNghiemThuBaoQuanComponent,
-    ThongTinBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
+    ThemMoiPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
     QuanLyBienBanBanGiaoMauComponent,
     QuanLyPhieuKiemNghiemChatLuongThocComponent,

@@ -520,13 +520,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    this.showListEvent.emit();
   }
 
   async save(isOther: boolean) {
