@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -19,6 +19,7 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
   styleUrls: ['./lap-bien-ban-nghiem-thu-bao-quan.component.scss']
 })
 export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
+  @Input() typeVthh: string;
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -48,6 +49,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
+
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isView: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -357,13 +362,12 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id,]);
-    }
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 }

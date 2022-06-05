@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { DauThauRoutingModule } from './dau-thau-routing.module';
 import { DauThauComponent } from './dau-thau.component';
 import { GiaoNhapHangComponent } from './giao-nhap-hang/giao-nhap-hang.component';
+import { GiaoNhapHangModule } from './giao-nhap-hang/giao-nhap-hang.module';
 import { ThemmoiQdinhNhapXuatHangComponent } from './giao-nhap-hang/themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
@@ -38,18 +39,14 @@ import { ThongTinKeHoachLuaChonNhaThauVatTuComponent } from './vat-tu/thong-tin-
     ThemMoiBienBanNghiemThuKeLotComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoPhieuKiemNghiemChatLuongComponent,
-    GiaoNhapHangComponent,
-    ThemmoiQdinhNhapXuatHangComponent,
-    // KiemTraChatLuongComponent,
-    // LapBienBanNghiemThuBaoQuanComponent,
-    // ThongTinBienBanNghiemThuBaoQuanComponent,
   ],
   imports: [
     CommonModule,
     DauThauRoutingModule,
     ComponentsModule,
     DirectivesModule,
-    KiemTraChatLuongModule
+    KiemTraChatLuongModule,
+    GiaoNhapHangModule,
   ],
 })
 export class DauThauModule { }

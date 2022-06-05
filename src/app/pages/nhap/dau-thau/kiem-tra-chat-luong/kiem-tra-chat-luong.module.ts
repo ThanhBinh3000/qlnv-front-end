@@ -18,6 +18,7 @@ import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-m
     KiemTraChatLuongComponent,
     LapBienBanNghiemThuBaoQuanComponent,
     ThongTinBienBanNghiemThuBaoQuanComponent,
+    ThongTinBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
     QuanLyBienBanBanGiaoMauComponent,

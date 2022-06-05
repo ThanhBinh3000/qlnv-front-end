@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-kiem-tra-chat-luong',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./kiem-tra-chat-luong.component.scss']
 })
 export class KiemTraChatLuongComponent implements OnInit {
+  @Input() typeVthh: string;
 
   constructor() { }
 

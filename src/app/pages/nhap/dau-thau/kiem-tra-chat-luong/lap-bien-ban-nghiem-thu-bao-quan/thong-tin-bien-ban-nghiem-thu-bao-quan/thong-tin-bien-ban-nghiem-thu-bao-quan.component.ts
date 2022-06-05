@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -27,13 +27,18 @@ import * as dayjs from 'dayjs';
   styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan.component.scss']
 })
 export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
+  @Input() id: number;
+  @Input() isView: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
 
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   idNhapHang: number = 0;
   viewChiTiet: boolean = false;
 
@@ -73,7 +78,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.checkIsView();
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       this.detail.maDvi = this.userInfo.MA_DVI;
       await Promise.all([

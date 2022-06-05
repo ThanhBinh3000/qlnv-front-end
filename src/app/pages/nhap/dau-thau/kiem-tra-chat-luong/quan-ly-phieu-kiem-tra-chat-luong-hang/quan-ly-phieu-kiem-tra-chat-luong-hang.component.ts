@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,6 +19,8 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
   styleUrls: ['./quan-ly-phieu-kiem-tra-chat-luong-hang.component.scss'],
 })
 export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
+  @Input() typeVthh: string;
+
   searchFilter = {
     soPhieu: '',
     ngayTongHop: '',
