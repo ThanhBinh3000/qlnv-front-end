@@ -339,7 +339,7 @@ export class DanhMucHDVService extends BaseService {
   // danh muc vat tu
   dMVatTu(): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + "/qlnv-category/dmuc-khoachvon/147",
+      this.urlDefault + "/qlnv-category/dm-hang/danh-sach",
       // this.urlDefault + "/qlnv-category/dmuc-khoachvon/147",
       {
         "paggingReq": {

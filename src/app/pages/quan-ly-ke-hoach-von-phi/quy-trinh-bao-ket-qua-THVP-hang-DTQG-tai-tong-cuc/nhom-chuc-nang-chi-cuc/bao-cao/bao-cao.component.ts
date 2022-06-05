@@ -290,6 +290,7 @@ export class BaoCaoComponent implements OnInit {
   lstIdDeleteMau04bx: string = '';
   lstIdDeleteMau05: string = '';
   nguoiBcaos: any[] = LISTCANBO;
+  lstVatTuFull = [];
 
   async ngOnInit() {
     this.cols = 3;
@@ -401,15 +402,17 @@ export class BaoCaoComponent implements OnInit {
       }
     }
     //lấy danh sách vật tư
-    this.danhMucService.dMVatTu().subscribe(res => {
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.listVattu = res.data?.content;
+        this.listVattu = res.data;
+        debugger
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.addListVatTu(this.listVattu);
     //danh sách đơn vị tính (đơn vị đo lường )
     this.quanLyVonPhiService.dmDonvitinh().toPromise().then(
       (data) => {
@@ -438,6 +441,15 @@ export class BaoCaoComponent implements OnInit {
       })
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  addListVatTu(listVattu) {
+    listVattu.forEach(item => {
+      this.lstVatTuFull.push(item);
+      if(item.child){
+        this.addListVatTu(item.child);
+      }
+    });
   }
 
   //nhóm các nút chức năng --báo cáo-----
@@ -739,13 +751,13 @@ export class BaoCaoComponent implements OnInit {
           let e = this.lstCTietBaoCaoTemp[0];
           e.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
+              this.lstVatTuFull.forEach((vt) => {
                 if (vt.id == el.maVtu) {
                   let objTrongdot = {
                     id: el.id,
                     maVtu: vt.id,
                     loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
+                    colName: vt.ten,
                     sl: el.sl,
                     col: el.col,
                   };
@@ -770,13 +782,13 @@ export class BaoCaoComponent implements OnInit {
           let e1 = this.lstCTietBaoCaoTemp[0];
           e1.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
+              this.lstVatTuFull.forEach((vt) => {
                 if (vt.id == el.maVtu) {
                   let objTrongdot = {
                     id: el.id,
                     maVtu: vt.id,
                     loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
+                    colName: vt.ten,
                     sl: el.sl,
                     col: el.col,
                   };
@@ -801,13 +813,13 @@ export class BaoCaoComponent implements OnInit {
           let e2 = this.lstCTietBaoCaoTemp[0];
           e2.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
+              this.lstVatTuFull.forEach((vt) => {
                 if (vt.id == el.maVtu) {
                   let objTrongdot = {
                     id: el.id,
                     maVtu: vt.id,
                     loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
+                    colName: vt.ten,
                     sl: el.sl,
                     col: el.col,
                   };
@@ -832,13 +844,13 @@ export class BaoCaoComponent implements OnInit {
           let e3 = this.lstCTietBaoCaoTemp[0];
           e3.listCtiet.forEach((el) => {
             if (el.loaiMatHang == 0) {
-              this.listVattu.forEach((vt) => {
+              this.lstVatTuFull.forEach((vt) => {
                 if (vt.id == el.maVtu) {
                   let objTrongdot = {
                     id: el.id,
                     maVtu: vt.id,
                     loaiMatHang: el.loaiMatHang,
-                    colName: vt.tenDm,
+                    colName: vt.ten,
                     sl: el.sl,
                     col: el.col,
                   };
@@ -2182,7 +2194,7 @@ export class BaoCaoComponent implements OnInit {
           this.listColTemp = this.listColTrongDot4ax;
           return;
         }
-        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
+        colname = this.lstVatTuFull.find((item) => item.id == this.idVatTu).ten;
         let objTrongdot = {
           id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
@@ -2249,7 +2261,7 @@ export class BaoCaoComponent implements OnInit {
           this.listColTemp = this.listColTrongDot4an;
           return;
         }
-        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
+        colname = this.lstVatTuFull.find((item) => item.id == this.idVatTu).ten;
         let objTrongdot = {
           id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
@@ -2319,7 +2331,7 @@ export class BaoCaoComponent implements OnInit {
           this.listColTemp = this.listColTrongDot4bx;
           return;
         }
-        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
+        colname = this.lstVatTuFull.find((item) => item.id == this.idVatTu).ten;
         let objTrongdot = {
           id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,
@@ -2389,7 +2401,7 @@ export class BaoCaoComponent implements OnInit {
           this.listColTemp = this.listColTrongDot05;
           return;
         }
-        colname = this.listVattu.find((item) => item.id == this.idVatTu).tenDm;
+        colname = this.lstVatTuFull.find((item) => item.id == this.idVatTu).ten;
         let objTrongdot = {
           id: uuid.v4() + 'FE',
           maVtu: this.idVatTu,

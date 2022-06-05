@@ -188,7 +188,7 @@ export class GhiNhanTtNopTienVonBanHangComponent implements OnInit {
           this.danhMucService.dMVatTu().toPromise().then(
                (data) => {
                     if (data.statusCode == 0) {
-                         this.vatTus = data.data?.content;
+                         this.vatTus = data.data;
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }
