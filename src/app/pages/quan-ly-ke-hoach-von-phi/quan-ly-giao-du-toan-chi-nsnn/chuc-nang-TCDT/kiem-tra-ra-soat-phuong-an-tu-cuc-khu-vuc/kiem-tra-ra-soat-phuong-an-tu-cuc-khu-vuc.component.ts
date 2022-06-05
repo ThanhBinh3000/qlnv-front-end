@@ -9,8 +9,19 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 
-
+// loai trang thai kiem tra
+export const TRANG_THAI_GIAO_DU_TOAN = [
+  {
+      id: '1',
+      tenDm: "Chưa nhận",
+  },
+  {
+      id: '2',
+      tenDm: "Đã nhận",
+  },
+]
 @Component({
   selector: 'app-kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc',
   templateUrl: './kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc.component.html',
@@ -21,9 +32,12 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   listBcaoKqua:any []=[];
-  trangThais: any = TRANG_THAI_KIEM_TRA_BAO_CAO;                          // danh muc loai bao cao
+  trangThais: any = TRANG_THAI_GIAO_DU_TOAN;                          // danh muc loai bao cao
   trangThai!:string;
   searchFilter = {
+    maPhanGiao: '2',
+    maLoai: '1',
+    loaiTimKiem: "1",
     maDvi:'',
     ngayTaoTu:'',
     ngayTaoDen:'',
@@ -39,8 +53,6 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     },
     str: '',
     donVi:'',
-    maPhanBcao:'0',
-    loaiTimKiem:'1',
   };
 
   donViTaos: any = [];
@@ -93,7 +105,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     if(this.trangThai){
       this.searchFilter.trangThais.push(this.trangThai)
     }else{
-      this.searchFilter.trangThais = [Utils.TT_BC_KT,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+      this.searchFilter.trangThais = ['1', '2']
     }
     await this.quanLyVonPhiService.timBaoCaoGiao1(this.searchFilter).toPromise().then(res => {
       if(res.statusCode==0){
@@ -132,13 +144,31 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     this.location.back();
   }
 
-  // lay ten trang thai ban ghi
   getStatusName(id) {
-    const utils = new Utils();
-    return utils.getStatusName(id);
+
+    return this.getStatusName1(id);
   }
 
-  xemChiTiet(id:any){
+  // lay ten trang thai theo ma trang thai
+  public getStatusName1(id: string) {
+    let statusName;
+    switch (id) {
+        case Utils.TT_BC_1:
+            statusName = "Chưa nhận"
+            break;
+        case Utils.TT_BC_2:
+            statusName = "Đã nhận"
+            break;
+        default:
+            statusName = id;
+            break;
+    }
+    return statusName;
+}
 
+  xemChiTiet(id: string) {
+    this.router.navigate([
+        '/qlkh-von-phi/quan-ly-giao-du-toan-chi-nsnn/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
+    ])
   }
 }
