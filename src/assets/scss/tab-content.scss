@@ -105,6 +105,10 @@
                         .tab-giao-chi-tieu {
                             padding: 10px;
                         }
+
+                        .tab-padding-10 {
+                            padding: 10px;
+                        }
                     }
                 }
 
@@ -334,4 +338,14 @@
     .tab-level-3.mr-10 {
         margin: 10px !important;
     }
+
+    .card-table {
+        border: none !important;
+
+        .ant-card-body {
+            border: none !important;
+            padding: 0px !important;
+        }
+    }
+
 }

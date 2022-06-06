@@ -21,6 +21,7 @@ export class KeHoachLuachonNhathauComponent implements OnInit {
 
   isTongCuc: boolean = false;
   isCuc: boolean = false;
+
   ngOnInit(): void {
     this.isTongCuc = this.userService.isTongCuc();
     this.isCuc = this.userService.isCuc();

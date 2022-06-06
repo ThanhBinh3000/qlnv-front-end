@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DATEPICKER_CONFIG, LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +23,7 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
   styleUrls: ['./tong-hop-khlcnt.component.scss']
 })
 export class TongHopKhlcntComponent implements OnInit {
+  @Input() loaiVthh: string;
 
   constructor(
     private router: Router,
@@ -35,24 +36,20 @@ export class TongHopKhlcntComponent implements OnInit {
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
   tabSelected: string = 'phuong-an-tong-hop';
-  searchValue = '';
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   danhMucDonVi: any;
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
   searchFilter = {
     soQdinh: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
-    loaiVthh: ''
+    loaiVthh: '',
+    trichYeu: ''
   };
 
   dataTable: any[] = [];
@@ -60,19 +57,13 @@ export class TongHopKhlcntComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
-  lastBreadcrumb: string;
   userInfo: UserLogin;
-  datePickerConfig = DATEPICKER_CONFIG;
-  listVthh: any[] = [];
 
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -80,6 +71,7 @@ export class TongHopKhlcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
+      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
       await this.search();
       this.spinner.hide();
     }
@@ -88,11 +80,6 @@ export class TongHopKhlcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
   async search() {
@@ -181,14 +168,19 @@ export class TongHopKhlcntComponent implements OnInit {
     }
   }
 
+  showList() {
+    this.isDetail = false;
+    this.search();
+  }
+
   themMoi() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop/them-moi']);
+    this.isDetail = true;
+    this.selectedId = null;
   }
 
   redirectToChiTiet(id?) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/tong-hop/chi-tiet', id]);
+    this.isDetail = true;
+    this.selectedId = id;
   }
 
   calendarData(list, column) {
@@ -205,12 +197,6 @@ export class TongHopKhlcntComponent implements OnInit {
     return tongSL;
   }
 
-  calendarTongTien(list) {
-    if (list.length > 0) {
-      console.log(list);
-    }
-    return 0;
-  }
 
   getTenDviTable(maDvi: string) {
     let donVi = this.danhMucDonVi?.filter(item => item.maDvi == maDvi);
@@ -218,10 +204,11 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   clearFilter() {
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.ngayTongHop = null;
+    this.searchFilter.trichYeu = null;
+    this.searchFilter.soQdinh = null;
+    this.search();
   }
 
   xoaItem(item: any) {

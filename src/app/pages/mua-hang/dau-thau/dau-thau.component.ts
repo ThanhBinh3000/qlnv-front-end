@@ -22,6 +22,8 @@ export class DauThauComponent implements OnInit {
     });
   }
 
+  tabSelected = 'tat-ca';
+
   referTab(event) {
     let loatVthh = this.router.url.split('/')[4];
     this.router.navigate(['/mua-hang/dau-thau/' + event.url + '/' + loatVthh]);

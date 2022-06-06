@@ -1965,6 +1965,19 @@ i.icon.htvbdh_luu1 {
   // padding-top: 12px;
 }
 
+.group-button-search-center {
+  align-items: flex-end;
+  padding: 5px 0px !important;
+
+  button.ant-btn {
+    margin-left: 10px;
+  }
+
+  &>div {
+    padding: 0;
+  }
+}
+
 .first-last-row-table {
   text-align: center;
 }

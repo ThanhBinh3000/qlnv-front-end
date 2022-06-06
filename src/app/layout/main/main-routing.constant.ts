@@ -29,10 +29,10 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
   },
-  {
-    title: 'Nhập khác',
-    route: `${MAIN_ROUTES.nhapKhac}`,
-  },
+  // {
+  //   title: 'Nhập khác',
+  //   route: `${MAIN_ROUTES.nhapKhac}`,
+  // },
   {
     title: 'Lưu kho & QL chất lượng',
     route: MAIN_ROUTES.luuKho,
@@ -45,10 +45,10 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
   },
-  {
-    title: 'Xuất khác',
-    route: MAIN_ROUTES.xuatKhac,
-  },
+  // {
+  //   title: 'Xuất khác',
+  //   route: MAIN_ROUTES.xuatKhac,
+  // },
   {
     title: 'QL Định mức nhập, xuất, bảo quản',
     route: MAIN_ROUTES.dinhMucNhapXuat,

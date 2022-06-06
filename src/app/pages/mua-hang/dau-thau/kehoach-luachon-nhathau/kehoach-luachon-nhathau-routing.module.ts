@@ -6,24 +6,13 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmo
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'thoc',
+    redirectTo: '',
     pathMatch: 'full',
   },
   {
-    path: ':type',
+    path: '',
     component: KeHoachLuachonNhathauComponent,
   },
-  {
-    path: ':type',
-    loadChildren: () =>
-          import('../../../mua-hang/dau-thau/kehoach-luachon-nhathau/tong-cuc/tong-cuc.module').then((m) => m.TongCucModule),
-  },
-  {
-    path: ':type',
-    loadChildren: () =>
-          import('../../../mua-hang/dau-thau/kehoach-luachon-nhathau/cuc/cuc.module').then((m) => m.CucModule),
-  }
-  
 ];
 
 @NgModule({
