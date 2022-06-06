@@ -25,7 +25,7 @@
 
     .tab-menu.tab-content .justify-content-between.active {
         display: flex;
-        background: #f2f2f2;
+        background: #f8f8f8;
     }
 
     .tab-menu {
@@ -205,6 +205,8 @@
         }
 
         .tab-level-3 {
+            margin: 0 !important;
+
             .ant-tabs-content-holder {
                 overflow-y: auto;
                 max-height: calc(100vh - 330px);
@@ -268,6 +270,14 @@
                             color: #000000;
                         }
                     }
+
+                    .ant-tabs-tab-btn {
+                        font-weight: 400;
+                        font-size: 13px !important;
+                        line-height: 15px;
+                        color: #828282;
+                    }
+
                 }
             }
         }
@@ -293,6 +303,7 @@
     .chi-tiet {
         .main-content {
             padding-top: 10px;
+            padding-bottom: 10px;
             overflow-x: hidden;
             overflow-y: auto;
             height: calc(100vh - 245px);
@@ -302,6 +313,15 @@
                     border: 0;
                 }
             }
+
+            .tab__luong-thuc {
+                position: relative;
+                margin: 0 10px;
+            }
         }
+    }
+
+    .tab-level-3.mr-10 {
+        margin: 10px !important;
     }
 }

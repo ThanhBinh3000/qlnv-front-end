@@ -1,0 +1,113 @@
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail">
+  <div class="contentBor chi-tieu__body">
+    <div class="contentDetail">
+      <div class="main-content">
+        <nz-card class="mt16 flex-card p-lr16">
+          <div class="search__body" nz-row [nzGutter]="[18, 12]">
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số biên bản</label>
+              <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBiebBan" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngày lấy mẫu</label>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
+              </nz-range-picker>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Số hợp đồng</label>
+              <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Điểm kho</label>
+              <nz-select [(ngModel)]="diemKho" (ngModelChange)="changeDiemKho()">
+                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDiemkho" [nzLabel]="item.diemkho">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Nhà kho</label>
+              <nz-select [(ngModel)]="nhaKho">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maNhakho" [nzLabel]="item.nhaKho">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="8">
+              <label class="search__label">Ngăn/lô bảo quản</label>
+              <nz-select [(ngModel)]="nganLo">
+                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maNganlo" [nzLabel]="item.nganLoBaoQuan">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="cangiua group-button-search">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
+              <i class="icon  htvbdh_nhap-lai1"></i>
+              Xóa điều kiện
+            </button>
+            <button nz-button class="search__button--search" (click)="search()">
+              <i nz-icon nzType="search"></i>
+              Tìm kiếm
+            </button>
+          </div>
+        </nz-card>
+        <div class="tab__luong-thuc mt-16">
+          <nz-card nzTitle="DANH SÁCH PHIẾU NHẬP KHO" class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+              <thead>
+                <tr>
+                  <th width="60px">STT</th>
+                  <th width="931px">Số biên bản</th>
+                  <th width="161px">Ngày lấy mẫu</th>
+                  <th width="203px">Số hợp đồng</th>
+                  <th width="295px">Điểm kho</th>
+                  <th width="295px">Nhà kho</th>
+                  <th width="295px">Ngăn/lô</th>
+                  <th width="295px">Trạng thái</th>
+                  <th width="295px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data; let i = index">
+                  <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                  <td>{{data.soBban}}</td>
+                  <td>{{data.ngayLayMau}}</td>
+                  <td>{{data.soHd}}</td>
+                  <td>{{data.maKho}}</td>
+                  <td>{{data.maKho}}</td>
+                  <td>{{data.maLo}}</td>
+                  <td>{{data.tenTrangThai}}</td>
+                  <td class="text-right">
+                    <a (click)="redirectToChiTiet(data.id)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="redirectToChiTiet(data.id)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <a (click)="xoaItem(data)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+          <ng-template #tableCard1>
+            <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+            <button type="button" class="btn btn-sub">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <them-moi-bien-ban-lay-mau [id]="selectedId" (showListEvent)="showList()">
+  </them-moi-bien-ban-lay-mau>
+</div>

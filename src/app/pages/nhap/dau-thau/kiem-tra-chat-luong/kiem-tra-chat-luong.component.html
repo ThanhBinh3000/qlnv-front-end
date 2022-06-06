@@ -1,0 +1,27 @@
+<nz-tabset nzType="card" class="mt-16 tab-level-2">
+  <nz-tab [nzTitle]="'Phiếu kiểm tra chất lượng'">
+    <ng-template nz-tab>
+      <quan-ly-phieu-kiem-tra-chat-luong-hang [typeVthh]="typeVthh"></quan-ly-phieu-kiem-tra-chat-luong-hang>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản nghiệm thu bảo quản lần đầu'">
+    <ng-template nz-tab>
+      <app-lap-bien-ban-nghiem-thu-bao-quan [typeVthh]="typeVthh"></app-lap-bien-ban-nghiem-thu-bao-quan>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản lấy mẫu'">
+    <ng-template nz-tab>
+      <quan-ly-bien-ban-lay-mau></quan-ly-bien-ban-lay-mau>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Biên bản bàn giao mẫu'">
+    <ng-template nz-tab>
+      <quan-ly-bien-ban-ban-giao-mau></quan-ly-bien-ban-ban-giao-mau>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'Lập và ký phiếu kiểm nghiệm chất lượng'">
+    <ng-template nz-tab>
+      <quan-ly-phieu-kiem-nghiem-chat-luong-thoc></quan-ly-phieu-kiem-nghiem-chat-luong-thoc>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

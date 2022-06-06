@@ -467,8 +467,8 @@ $navbar-collapse-shadow: 0px 8px 9px rgb(0 0 0 / 20%);
 }
 
 .ant-card-body .nowrap.ant-table-wrapper {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: -10px;
+  margin-right: -10px;
   max-width: unset;
 
   .ant-table table {
@@ -1905,6 +1905,14 @@ td.action.ant-table-cell {
 .title-chi-tieu {
   display: flex;
   align-items: center;
+  padding-left: 10px;
+
+  .title-form {
+    font-size: 16px;
+    color: #444444;
+    font-style: normal;
+    font-weight: 500;
+  }
 
   .du-thao-va-lanh-dao-duyet {
     color: #ff4d4f;
