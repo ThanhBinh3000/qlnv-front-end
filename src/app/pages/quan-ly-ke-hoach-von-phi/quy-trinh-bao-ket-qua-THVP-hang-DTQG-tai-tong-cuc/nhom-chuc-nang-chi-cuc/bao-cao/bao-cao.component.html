@@ -329,7 +329,7 @@
               <td></td>
               <td [hidden]="status"></td>
               <td [hidden]="status"></td>
-              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine02(1,'1')"></i></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine02(1,'21')"></i></td>
               <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao021; let i = index">
@@ -358,13 +358,13 @@
                 <td>{{item.thTtien}}</td>
                 <td>{{item.ghiChu}}</td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'1')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'21')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit02(item.id,'1')"></i>
+                  <i class="fa fa-pencil" (click)="startEdit02(item.id,'21')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine02(i+1,'1')"></i>
+                  <i class="fa fa-plus" (click)="addLine02(i+1,'21')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -391,12 +391,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.khSoLuong"
-                    (ngModelChange)="changeModel02(item.id,'1')">
+                    (ngModelChange)="changeModel02(item.id,'21')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
-                    (ngModelChange)="changeModel02(item.id,'1')">
+                    (ngModelChange)="changeModel02(item.id,'21')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -405,12 +405,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.thSoLuong"
-                    (ngModelChange)="changeModel02(item.id,'1')">
+                    (ngModelChange)="changeModel02(item.id,'21')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
-                    (ngModelChange)="changeModel02(item.id,'1')">
+                    (ngModelChange)="changeModel02(item.id,'21')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -421,15 +421,15 @@
                   <input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'1')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'21')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit02(item.id,'1')" class="save" style="margin-right:15px">Lưu</a>
+                  <a (click)="saveEdit02(item.id,'21')" class="save" style="margin-right:15px">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                    (nzOnConfirm)="cancelEdit02(item.id,'1')" class="save">Hủy</a>
+                    (nzOnConfirm)="cancelEdit02(item.id,'21')" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine02(i+1,'1')"></i>
+                  <i class="fa fa-plus" (click)="addLine02(i+1,'21')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -451,7 +451,7 @@
               <td></td>
               <td [hidden]="status"></td>
               <td [hidden]="status"></td>
-              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine02(1,'2')"></i></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine02(1,'22')"></i></td>
               <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao022; let i = index">
@@ -480,13 +480,13 @@
                 <td>{{item.thTtien}}</td>
                 <td>{{item.ghiChu}}</td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'2')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'22')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit02(item.id,'2')"></i>
+                  <i class="fa fa-pencil" (click)="startEdit02(item.id,'22')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine02(i+1,'2')"></i>
+                  <i class="fa fa-plus" (click)="addLine02(i+1,'22')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -513,12 +513,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.khSoLuong"
-                    (ngModelChange)="changeModel02(item.id,'2')">
+                    (ngModelChange)="changeModel02(item.id,'22')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.khGiaMuaTd"
-                    (ngModelChange)="changeModel02(item.id,'2')">
+                    (ngModelChange)="changeModel02(item.id,'22')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -527,12 +527,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.thSoLuong"
-                    (ngModelChange)="changeModel02(item.id,'2')">
+                    (ngModelChange)="changeModel02(item.id,'22')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.thGiaMuaTd"
-                    (ngModelChange)="changeModel02(item.id,'2')">
+                    (ngModelChange)="changeModel02(item.id,'22')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -543,15 +543,15 @@
                   <input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'2')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById02(item.id,'22')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit02(item.id,'2')" class="save" style="margin-right:15px">Lưu</a>
+                  <a (click)="saveEdit02(item.id,'22')" class="save" style="margin-right:15px">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                    (nzOnConfirm)="cancelEdit02(item.id,'2')" class="save">Hủy</a>
+                    (nzOnConfirm)="cancelEdit02(item.id,'22')" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine02(i+1,'2')"></i>
+                  <i class="fa fa-plus" (click)="addLine02(i+1,'22')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -692,7 +692,7 @@
               <td></td>
               <td [hidden]="status"></td>
               <td [hidden]="status"></td>
-              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'1')"></i></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'31')"></i></td>
               <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao031; let i = index">
@@ -722,13 +722,13 @@
                 <td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
                 <td>{{item.ghiChu}}</td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'1')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'31')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'1')"></i>
+                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'31')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'1')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'31')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -756,12 +756,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongTte"
-                    (ngModelChange)="changeModel03(item.id,'1')">
+                    (ngModelChange)="changeModel03(item.id,'31')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'1')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'31')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -770,17 +770,17 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'1')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'31')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.ttGiaHtoan"
-                    disabled (ngModelChange)="changeModel03(item.id,'1')">
+                    disabled (ngModelChange)="changeModel03(item.id,'31')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'1')">
+                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'31')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -791,15 +791,15 @@
                   <input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'1')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'31')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit03(item.id,'1')" class="save" style="margin-right:15px">Lưu</a>
+                  <a (click)="saveEdit03(item.id,'31')" class="save" style="margin-right:15px">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                    (nzOnConfirm)="cancelEdit03(item.id,'1')" class="save">Hủy</a>
+                    (nzOnConfirm)="cancelEdit03(item.id,'31')" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'1')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'31')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -822,7 +822,7 @@
               <td></td>
               <td [hidden]="status"></td>
               <td [hidden]="status"></td>
-              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'2')"></i></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'32')"></i></td>
               <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao032; let i = index">
@@ -852,13 +852,13 @@
                 <td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
                 <td>{{item.ghiChu}}</td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'2')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'32')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'2')"></i>
+                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'32')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'2')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'32')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -886,12 +886,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongTte"
-                    (ngModelChange)="changeModel03(item.id,'2')">
+                    (ngModelChange)="changeModel03(item.id,'32')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'2')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'32')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -900,17 +900,17 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'2')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'32')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.ttGiaHtoan"
-                    disabled (ngModelChange)="changeModel03(item.id,'2')">
+                    disabled (ngModelChange)="changeModel03(item.id,'32')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'2')">
+                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'32')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -921,15 +921,15 @@
                   <input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'2')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'32')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit03(item.id,'2')" class="save" style="margin-right:15px">Lưu</a>
+                  <a (click)="saveEdit03(item.id,'32')" class="save" style="margin-right:15px">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                    (nzOnConfirm)="cancelEdit03(item.id,'2')" class="save">Hủy</a>
+                    (nzOnConfirm)="cancelEdit03(item.id,'32')" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'2')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'32')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -952,7 +952,7 @@
               <td></td>
               <td [hidden]="status"></td>
               <td [hidden]="status"></td>
-              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'3')"></i></td>
+              <td [hidden]="status"><i class="fa fa-plus" (click)="addLine03(1,'33')"></i></td>
               <td [hidden]="status"></td>
             </tr>
             <tr *ngFor="let item of lstCtietBcao033; let i = index">
@@ -982,13 +982,13 @@
                 <td>{{item.ttClechGiaTteVaGiaHtoan}}</td>
                 <td>{{item.ghiChu}}</td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'3')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'33')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'3')"></i>
+                  <i class="fa fa-pencil" (click)="startEdit03(item.id,'33')"></i>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'3')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'33')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
@@ -1016,12 +1016,12 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.soLuongTte"
-                    (ngModelChange)="changeModel03(item.id,'3')">
+                    (ngModelChange)="changeModel03(item.id,'33')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'3')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaKhoach" (ngModelChange)="changeModel03(item.id,'33')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -1030,17 +1030,17 @@
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'3')">
+                    [(ngModel)]="editCache[item.id].data.dgGiaBanTte" (ngModelChange)="changeModel03(item.id,'33')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[item.id].data.ttGiaHtoan"
-                    disabled (ngModelChange)="changeModel03(item.id,'3')">
+                    disabled (ngModelChange)="changeModel03(item.id,'33')">
                   </nz-input-number>
                 </td>
                 <td>
                   <nz-input-number class="search__input" nzSize="small"
-                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'3')">
+                    [(ngModel)]="editCache[item.id].data.ttGiaBanTte" disabled (ngModelChange)="changeModel03(item.id,'33')">
                   </nz-input-number>
                 </td>
                 <td>
@@ -1051,15 +1051,15 @@
                   <input class="search__input" nz-input [(ngModel)]="editCache[item.id].data.ghiChu" />
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'3')"></i>
+                  <i class="fa fa-trash-o do" (click)="deleteById03(item.id,'33')"></i>
                 </td>
                 <td>
-                  <a (click)="saveEdit03(item.id,'3')" class="save" style="margin-right:15px">Lưu</a>
+                  <a (click)="saveEdit03(item.id,'33')" class="save" style="margin-right:15px">Lưu</a>
                   <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                    (nzOnConfirm)="cancelEdit03(item.id,'3')" class="save">Hủy</a>
+                    (nzOnConfirm)="cancelEdit03(item.id,'33')" class="save">Hủy</a>
                 </td>
                 <td [hidden]="status">
-                  <i class="fa fa-plus" (click)="addLine03(i+1,'3')"></i>
+                  <i class="fa fa-plus" (click)="addLine03(i+1,'33')"></i>
                 </td>
                 <td [hidden]="status">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
