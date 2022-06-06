@@ -4,9 +4,9 @@ import {MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG,MAIN_ROUTE_QUA
 export const QUAN_LY_THONG_TIN_QUYET_TOAN_LIST: QuanLyThongTinQuyetToan[] = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh sách tổng hợp số liệu quyết toán',
-    description: 'Danh sách tổng hợp số liệu quyết toán',
-    url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/danh-sach-tong-hop-so-lieu-quyet-toan`,
+    title: 'Quản lý quyết toán vốn, phí hàng DTQG.',
+    description: 'Quản lý quyết toán vốn, phí hàng DTQG.',
+    url: `/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN_VON_PHI_HANG_DTQG}/${MAIN_ROUTE_QUAN_LY_THONG_TIN_QUYET_TOAN}/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG`,
   },
   {
     icon: 'htvbdh_tcdt_icon-common',

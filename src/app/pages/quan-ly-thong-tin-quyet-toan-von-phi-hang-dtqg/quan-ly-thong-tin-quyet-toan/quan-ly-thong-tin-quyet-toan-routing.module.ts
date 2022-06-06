@@ -8,46 +8,11 @@ const routes: Routes = [
     component: QuanLyThongTinQuyetToanComponent,
   },
   {
-    path: 'danh-sach-tong-hop-so-lieu-quyet-toan',
+    path: 'danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG',
     loadChildren: () =>
       import(
-        './danh-sach-tong-hop-so-lieu-quyet-toan/danh-sach-tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.DanhSachTongHopSoLieuQuyetToanModule),
-  },
-  {
-    path: 'danh-sach-dieu-chinh-so-lieu-sau-quyet-toan',
-    loadChildren: () =>
-      import(
-        './danh-sach-dieu-chinh-so-lieu-sau-quyet-toan/danh-sach-dieu-chinh-so-lieu-sau-quyet-toan.module'
-      ).then((m) => m.DanhSachDieuChinhSoLieuSauQuyetToanModule),
-  },
-  {
-    path: 'tong-hop-so-lieu-quyet-toan',
-    loadChildren: () =>
-      import(
-        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.TongHopSoLieuQuyetToanModule),
-  },
-  {
-    path: 'tong-hop-so-lieu-quyet-toan/:id',
-    loadChildren: () =>
-      import(
-        './tong-hop-so-lieu-quyet-toan/tong-hop-so-lieu-quyet-toan.module'
-      ).then((m) => m.TongHopSoLieuQuyetToanModule),
-  },
-  {
-    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
-      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
-  },
-  {
-    path: 'dieu-chinh-so-lieu-quyet-toan-von-mua-hang-dtqg/:id',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG/dieu-chinh-so-lieu-quyet-toan-von-mua-hang-DTQG.module'
-      ).then((m) => m.DieuChinhSoLieuQuyetToanVonMuaHangDTQGModule),
+        './danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.module'
+      ).then((m) => m.DanhSachBaoCaoQuyetToanVonPhiHangDTQGModule),
   },
 ];
 
