@@ -301,6 +301,16 @@
     }
 
     .chi-tiet {
+        .dieu-chinh-button {
+            position: absolute;
+            top: 55px;
+            right: 25px;
+
+            .tab-menu.tab-content {
+                border-bottom: none !important;
+            }
+        }
+
         .main-content {
             padding-top: 10px;
             padding-bottom: 10px;

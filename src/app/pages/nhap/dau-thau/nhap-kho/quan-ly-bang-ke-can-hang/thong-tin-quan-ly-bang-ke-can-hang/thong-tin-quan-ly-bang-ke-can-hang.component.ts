@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -26,13 +26,18 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./thong-tin-quan-ly-bang-ke-can-hang.component.scss'],
 })
 export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
+  @Input() id: number;
+  @Input() isView: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
 
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   idNhapHang: number = 0;
   viewChiTiet: boolean = false;
 
@@ -77,7 +82,6 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
       this.checkIsView();
       this.detail.trangThai = "00";
       this.userInfo = this.userService.getUserLogin();
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.detail.ngayTao = dayjs().format("YYYY-MM-DD");
       await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -600,13 +604,7 @@ export class ThongTinQuanLyBangKeCanHangComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    this.showListEvent.emit();
   }
 
   async save(isOther: boolean) {

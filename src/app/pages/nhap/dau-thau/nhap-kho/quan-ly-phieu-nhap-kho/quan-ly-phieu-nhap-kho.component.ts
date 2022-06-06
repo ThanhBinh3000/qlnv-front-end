@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -22,6 +22,8 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
   styleUrls: ['./quan-ly-phieu-nhap-kho.component.scss'],
 })
 export class QuanLyPhieuNhapKhoComponent implements OnInit {
+  @Input() typeVthh: string;
+
   searchFilter = {
     soPhieu: '',
     ngayNhapKho: '',
@@ -49,6 +51,10 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  isView: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -171,14 +177,13 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id,]);
-    }
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   async changePageIndex(event) {

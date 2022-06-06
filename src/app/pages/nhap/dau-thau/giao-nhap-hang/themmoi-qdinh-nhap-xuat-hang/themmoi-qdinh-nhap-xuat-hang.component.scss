@@ -24,5 +24,20 @@
     .header-table-nvnh {
       height: 163px;
     }
+
+    .main-content {
+      padding-top: 0;
+      margin-top: 10px;
+    }
+  }
+
+  .nhap-xuat-hang {
+    position: absolute;
+    top: 30px;
+    right: 0px;
+
+    .tab-menu.tab-content {
+      border-bottom: none !important;
+    }
   }
 }

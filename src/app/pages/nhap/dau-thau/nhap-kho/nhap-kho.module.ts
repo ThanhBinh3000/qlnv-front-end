@@ -6,13 +6,21 @@ import { ChucNangNhapKhoComponent } from './chuc-nang-nhap-kho/chuc-nang-nhap-kh
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { QuanLyPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/quan-ly-phieu-nhap-day-kho.component';
+import { QuanLyPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/quan-ly-phieu-nhap-kho.component';
+import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-phieu-nhap-kho/them-moi-phieu-nhap-kho.component';
+import { QuanLyBangKeCanHangComponent } from './quan-ly-bang-ke-can-hang/quan-ly-bang-ke-can-hang.component';
+import { ThongTinQuanLyBangKeCanHangComponent } from './quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang/thong-tin-quan-ly-bang-ke-can-hang.component';
 
 @NgModule({
   declarations: [
     NhapKhoComponent,
     ChucNangNhapKhoComponent,
     QuanLyPhieuNhapDayKhoComponent,
-    ThemMoiPhieuNhapDayKhoComponent
+    ThemMoiPhieuNhapDayKhoComponent,
+    QuanLyPhieuNhapKhoComponent,
+    ThemMoiPhieuNhapKhoComponent,
+    QuanLyBangKeCanHangComponent,
+    ThongTinQuanLyBangKeCanHangComponent,
   ],
   imports: [
     CommonModule,
@@ -22,7 +30,9 @@ import { QuanLyPhieuNhapDayKhoComponent } from './quan-ly-phieu-nhap-day-kho/qua
   exports: [
     NhapKhoComponent,
     ChucNangNhapKhoComponent,
-    QuanLyPhieuNhapDayKhoComponent
+    QuanLyPhieuNhapDayKhoComponent,
+    QuanLyPhieuNhapKhoComponent,
+    QuanLyBangKeCanHangComponent,
   ]
 })
 export class NhapKhoModule { }

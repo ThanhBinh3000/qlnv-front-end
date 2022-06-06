@@ -1,12 +1,12 @@
 <nz-tabset nzType="card" class="mt-16 tab-level-2">
   <nz-tab [nzTitle]="'Phiếu nhập kho'">
     <ng-template nz-tab>
-
+      <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Bảng kê cân hàng'">
     <ng-template nz-tab>
-
+      <quan-ly-bang-ke-can-hang [typeVthh]="typeVthh"></quan-ly-bang-ke-can-hang>
     </ng-template>
   </nz-tab>
   <nz-tab [nzTitle]="'Biên bản nhập đầy kho'">

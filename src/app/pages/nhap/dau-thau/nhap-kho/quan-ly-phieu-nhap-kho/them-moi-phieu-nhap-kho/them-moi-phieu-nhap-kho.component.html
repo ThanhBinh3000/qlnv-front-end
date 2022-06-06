@@ -1,10 +1,9 @@
 <div class="luong-thuc__danh-sach">
-  <nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <nz-affix class="menu-lv3 dieu-chinh-button" [nzOffsetTop]="43">
     <div class="tab-content tab-menu" id="myTabContent">
       <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
         aria-labelledby="banhanh-tab">
         <div class="trai">
-          <div class="title-form-chi-tiet">Phiếu nhập kho</div>
         </div>
         <div class="canphai phai" *ngIf="!viewChiTiet">
           <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
@@ -39,7 +38,11 @@
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
       <div class="main-content">
-        <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
+        <div class="title-chi-tieu">
+          <!-- <span [ngClass]="thongTinTrangThai(detail.trangThai)">{{detail.tenTrangThai}}</span> -->
+          <span class="title-form">Phiếu nhập kho</span>
+        </div>
+        <nz-card nzTitle="" class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="8">
               <nz-form-item>
@@ -192,7 +195,7 @@
             </div>
           </div>
         </nz-card>
-        <div class="mt-16 flex-card p-lr16">
+        <div class="flex-card p-lr16">
           <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
             [nzData]="detail?.hangHoaList">
             <thead>
@@ -206,7 +209,7 @@
                 <th colSpan="2" class="text-center">Số lượng</th>
                 <th rowSpan="2" class="text-center">ĐƠN GIÁ<br /> (3)</th>
                 <th rowSpan="2" class="text-center">Thành tiền<br />(4) = (2) x (3)</th>
-                <th rowSpan="2" width="140px" class="text-center" *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
+                <th rowSpan="2" width="140px" class="text-right" *ngIf="!(detail.trangThai != '00' || viewChiTiet)">
                   HÀNH ĐỘNG</th>
               </tr>
               <tr>

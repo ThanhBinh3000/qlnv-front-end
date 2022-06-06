@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -24,9 +24,14 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./them-moi-phieu-nhap-kho.component.scss'],
 })
 export class ThemMoiPhieuNhapKhoComponent implements OnInit {
+  @Input() id: number;
+  @Input() isView: boolean;
+  @Input() typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   idNhapHang: number = 0;
   detailGiaoNhap: any = {};
   viewChiTiet: boolean = false;
@@ -68,7 +73,6 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
       this.checkIsView();
       this.create.dvt = "Tấn";
       this.detail.trangThai = "00";
-      this.id = +this.routerActive.snapshot.paramMap.get('id');
       this.userInfo = this.userService.getUserLogin();
       await this.loadChiTiet(this.id);
       this.detail.maDvi = this.userInfo.MA_DVI;
@@ -554,13 +558,7 @@ export class ThemMoiPhieuNhapKhoComponent implements OnInit {
   }
 
   back() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    this.showListEvent.emit();
   }
 
   async save(isOther: boolean) {
