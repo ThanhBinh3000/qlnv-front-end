@@ -14,6 +14,20 @@ const routes: Routes = [
         './danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG/danh-sach-bao-cao-quyet-toan-von-phi-hang-DTQG.module'
       ).then((m) => m.DanhSachBaoCaoQuyetToanVonPhiHangDTQGModule),
   },
+  {
+    path: 'them-moi-bao-cao-quyet-toan',
+    loadChildren: () =>
+      import(
+        './them-moi-bao-cao-quyet-toan/them-moi-bao-cao-quyet-toan.module'
+      ).then((m) => m.ThemMoiBaoCaoQuyetToanModule),
+  },
+  {
+    path: 'them-moi-bao-cao-quyet-toan/:id',
+    loadChildren: () =>
+      import(
+        './them-moi-bao-cao-quyet-toan/them-moi-bao-cao-quyet-toan.module'
+      ).then((m) => m.ThemMoiBaoCaoQuyetToanModule),
+  },
 ];
 
 @NgModule({
