@@ -1,30 +1,47 @@
-<!-- 
-<div class="tab-menu row">
-  <div class="tab-item col-6" [ngClass]="selectedTab == 'tong-hop' ? 'active-tab-menu' : ''"
-    (click)="selectTabMenu('tong-hop','Tổng hợp kế hoạch lựa chọn nhà thầu')">
-    <div class="content-tab-item">
-      Tổng hợp kế hoạch lựa chọn nhà thầu
-    </div>
-  </div>
-  <div class="tab-item col-6" [ngClass]="selectedTab == 'phe-duyet' ? 'active-tab-menu' : ''"
-    (click)="selectTabMenu('phe-duyet','Quyết định phê duyệt kế hoạch lựa chọn nhà thầu')">
-    <div class="content-tab-item">
-      Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
-    </div>
-  </div>
-</div> -->
-<nz-tabset nzType="card" class="tab-level-1">
-  <nz-tab *ngFor="let tab of listVthh" [nzTitle]="titleTemplate" nzType="card" (nzClick)="referTabLv1(tab)">
-    <ng-template #titleTemplate>
-      {{ tab.text }}
+<nz-tabset nzType="card" class="mt-16 tab-level-1">
+  <!-- <nz-tab [nzTitle]="title_tat_ca">
+    <ng-template #title_tat_ca>
+      Tất cả
+      (<span class="number-title-tab">10</span>)
+    </ng-template>
+    <ng-template nz-tab>
+      <app-main-tong-cuc loaiVthh=""></app-main-tong-cuc>
+    </ng-template>
+  </nz-tab> -->
+  <nz-tab [nzTitle]="title_thoc">
+    <ng-template #title_thoc>
+      Thóc
+      <!-- (<span class="number-title-tab">3</span>) -->
+    </ng-template>
+    <ng-template nz-tab>
+      <app-main-tong-cuc loaiVthh="thoc"></app-main-tong-cuc>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_gao">
+    <ng-template #title_gao>
+      Gạo
+      <!-- (<span class="number-title-tab">3</span>) -->
+    </ng-template>
+    <ng-template nz-tab>
+      <app-main-tong-cuc loaiVthh="gao"></app-main-tong-cuc>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_muoi">
+    <ng-template #title_muoi>
+      Muối
+      <!-- (<span class="number-title-tab">4</span>) -->
+    </ng-template>
+    <ng-template nz-tab>
+      <app-main-tong-cuc loaiVthh="muoi"></app-main-tong-cuc>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="title_vat_tu">
+    <ng-template #title_vat_tu>
+      Vật tư, thiết bị
+      <!-- (<span class="number-title-tab">4</span>) -->
+    </ng-template>
+    <ng-template nz-tab>
+      <app-main-tong-cuc loaiVthh="vat-tu"></app-main-tong-cuc>
     </ng-template>
   </nz-tab>
 </nz-tabset>
-<nz-tabset nzType="card" class="tab-level-2">
-  <nz-tab *ngFor="let tab of tabMenu" [nzTitle]="titleTemplate" nzType="card" (nzClick)="referTabLv2(tab)">
-    <ng-template #titleTemplate>
-      {{ tab.text }}
-    </ng-template>
-  </nz-tab>
-</nz-tabset>
-<router-outlet></router-outlet>

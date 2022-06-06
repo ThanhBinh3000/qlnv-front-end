@@ -39,8 +39,8 @@
         <div class="tab-padding-10">
           <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="tableCard1">
             <nz-tab class="tt-chung__container" [nzTitle]="'Danh sách đề xuất lựa chọn nhà thầu'">
-              <nz-table #basicTable class="nowrap mt-16 table__container-tt" [nzData]="dataTable"
-                [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+              <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
                 <thead>
                   <tr>
                     <th width="60px" class="text-center">STT</th>
@@ -116,7 +116,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <!-- <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()">
-  </app-themmoi-qdinh-nhap-xuat-hang> -->
-  <app-themmoi-kehoach-lcnt [id]="selectedId" (showListEvent)="showList()"></app-themmoi-kehoach-lcnt>
+  <app-themmoi-kehoach-lcnt [id]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  </app-themmoi-kehoach-lcnt>
 </div>

@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { KehoachLuachonNhathauRoutingModule } from './kehoach-luachon-nhathau-routing.module';
 import { MainModule } from 'src/app/layout/main/main.module';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
+import { MainTongCucComponent } from './tong-cuc/main-tong-cuc/main-tong-cuc.component';
+import { DauThauModule } from '../dau-thau.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmo
     CommonModule,
     KehoachLuachonNhathauRoutingModule,
     ComponentsModule,
-    MainModule
+    MainModule,
+    DauThauModule
   ]
 })
 export class KehoachLuachonNhathauModule { }

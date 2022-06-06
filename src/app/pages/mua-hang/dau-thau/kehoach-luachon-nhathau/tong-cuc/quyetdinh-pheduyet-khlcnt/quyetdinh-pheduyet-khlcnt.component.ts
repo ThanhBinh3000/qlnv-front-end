@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -24,6 +24,7 @@ import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT
 })
 export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
   searchFilter = {
     soQd: null,
@@ -34,6 +35,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     ngayQd: null,
     namKhoach: null,
     trangThai: null,
+    veViec: null
   };
   listVthh: any;
   listNam: any[] = [];

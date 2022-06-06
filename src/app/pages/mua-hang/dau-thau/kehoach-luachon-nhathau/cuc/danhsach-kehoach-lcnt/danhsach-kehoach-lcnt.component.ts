@@ -54,13 +54,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
 
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
-  lastBreadcrumb: string;
   userInfo: UserLogin;
-  datePickerConfig = DATEPICKER_CONFIG;
   selectedId: number = 0;
 
   async ngOnInit() {
@@ -145,10 +139,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   themMoi() {
     this.isDetail = true;
+    this.selectedId = null;
   }
 
   showList() {
     this.isDetail = false;
+    this.search()
   }
 
   detail(data?) {

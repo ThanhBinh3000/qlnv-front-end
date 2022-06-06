@@ -49,7 +49,10 @@ interface ItemData {
 })
 export class ThemmoiKehoachLcntComponent implements OnInit {
   @Input()
-  typeVthh: string;
+  loaiVthh: string;
+  @Input()
+  id: number;
+
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -73,8 +76,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   iconButtonDuyet: string = '';
   danhMucDonVi: any;
   ktDiemKho: any;
-
-  id: number;
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
@@ -121,7 +122,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     private helperService: HelperService,
     private donviService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private observableService: ObservableService,
   ) {
     this.formData = this.fb.group(
       {
@@ -187,7 +187,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = this.userInfo.MA_TR;
-    this.id = +this.routerActive.snapshot.paramMap.get('id');
+    console.log(this.id, this.loaiVthh);
+
+
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,

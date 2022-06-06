@@ -18,6 +18,7 @@ import { DanhsachKehoachLcntComponent } from './kehoach-luachon-nhathau/cuc/danh
 import { ThemmoiPhuonganKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/phuong-an-khlcnt/themmoi-phuongan-khlcnt/themmoi-phuongan-khlcnt.component';
 import { ThemmoiQuyetdinhKhlcntComponent } from './kehoach-luachon-nhathau/tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/themmoi-quyetdinh-khlcnt.component';
 import { ThemmoiKehoachLcntComponent } from './kehoach-luachon-nhathau/cuc/danhsach-kehoach-lcnt/themmoi-kehoach-lcnt/themmoi-kehoach-lcnt.component';
+import { MainTongCucComponent } from './kehoach-luachon-nhathau/tong-cuc/main-tong-cuc/main-tong-cuc.component';
 
 
 @NgModule({
@@ -37,11 +38,13 @@ import { ThemmoiKehoachLcntComponent } from './kehoach-luachon-nhathau/cuc/danhs
     ThemmoiKehoachLcntComponent,
     DanhsachKehoachLcntComponent,
     ThemmoiPhuonganKhlcntComponent,
-    ThemmoiQuyetdinhKhlcntComponent
+    ThemmoiQuyetdinhKhlcntComponent,
+    MainTongCucComponent,
+    ThemmoiTonghopKhlcntComponent
   ],
   imports: [
-    CommonModule, 
-    DauThauRoutingModule, 
+    CommonModule,
+    DauThauRoutingModule,
     ComponentsModule],
 })
 export class DauThauModule { }
