@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,8 +7,11 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-
-
+import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM } from 'src/app/Utility/utils';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ComponentsModule } from 'src/app/components/components.module';
 @Component({
   selector: 'app-ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam',
   templateUrl: './ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam.component.html',
@@ -17,185 +20,159 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
-  @ViewChild('nzTreeComponent', { static: false })
-  nzTreeComponent!: NzTreeComponent;
-  detailDonVi: FormGroup;
-  danhSachBaoCao: any = [];
   totalElements = 0;
   totalPages = 0;
   errorMessage = "";
-  url!: string;
+  url: any = '/bao-cao/';
 
-  // phan cu cua teca
-  visible = false;
-  nodes: any = [];
-  nodeDetail: any;
-  listDonViDuoi = [];
-  cureentNodeParent: any = [];
-  datasNguoiDung: any = [];
-  nodeSelected: any = [];
-  listHTDV: any = [];
-  listKPB: any = [];
-  noParent = true;
-  searchValue = '';
-
-
-  listBcaoKqua:any []=[];
-  lenght:any=0;
+  trangThais: any = TRANG_THAI_TIM_KIEM;
+  trangThai!:string;
+  listBcaoKqua: any[] = [];
+  lenght: any = 0;
 
 
   searchFilter = {
-    maDvi:'235',
-    ngayTaoTu:'',
-    ngayTaoDen:'',
-    trangThai:'',
-    maBcao:'',
-    maLoaiBcao:'',
-    namBcao:'',
-    thangBCao: '',
-    dotBcao:'',
+    maPhanBcao: '0',
+    maDvi: '',
+    ngayTaoTu: '',
+    ngayTaoDen: '',
+    trangThais: [],
+    maBcao: '',
+    maLoaiBcao: '',
+    namBcao: null,
+    thangBcao: null,
+    dotBcao: '',
     paggingReq: {
-      limit: 20,
+      limit: 10,
       page: 1
     },
     str: "",
+    loaiTimKiem:'0',
   };
 
-
-  pages = {
-    size: 10,
-    page: 1,
-  }
   donViTaos: any = [];
-  baoCaos: any = [];
+  baoCaos: any = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
-    private notifi:NzNotificationService,
+    private notification: NzNotificationService,
+    private location: Location,
+    private spinner: NgxSpinnerService,
   ) {
   }
 
   ngOnInit(): void {
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
-      data => {
-        console.log(data);
-        if (data.statusCode == 0) {
-          this.baoCaos = data.data?.content;
-          this.notifi.success(MESSAGE.SUCCESS, data?.msg);
-        } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
+    let date = new Date();
+    this.searchFilter.ngayTaoDen = date.toDateString();
+    this.searchFilter.namBcao = date.getFullYear();
+    this.searchFilter.thangBcao = date.getMonth();
+    date.setMonth(date.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = date.toDateString();
+    this.trangThai = '1';
+    this.searchFilter.maLoaiBcao='526';
+    this.onSubmit();
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donViTaos = data.data;
-          this.notifi.success(MESSAGE.SUCCESS, data?.msg);
         } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
       },
       err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
   }
 
   // lay ten don vi tao
-  getUnitName(dvitao:any){
+  getUnitName(dvitao: any) {
     return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
   }
 
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
+  async onSubmit() {
+    this.spinner.show();
+    let searchFilterTemp = Object.assign({},this.searchFilter);
+    searchFilterTemp.trangThais= [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
+    if(this.trangThai){
+      searchFilterTemp.trangThais.push(this.trangThai)
+    }else{
+      searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
+    }
+    await this.quanLyVonPhiService.timBaoCao(searchFilterTemp).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listBcaoKqua = res.data.content;
+        this.listBcaoKqua.forEach(e => {
+          e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
+          e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
+          e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
+          e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
+          e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+        })
+        this.totalElements = res.data.totalElements;
+        this.totalPages = res.data.totalPages;
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.spinner.hide();
   }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
-  }
-
-
-  timkiem(){
-    console.log(this.searchFilter);
-    if(this.searchFilter.maLoaiBcao==''){
-      this.notifi.error('Tìm kiếm','Bạn chưa chọn loại báo cáo!');
+  themMoi() {
+    if (!this.searchFilter.namBcao || !this.searchFilter.maLoaiBcao || (!this.searchFilter.thangBcao && this.searchFilter.maLoaiBcao == '526')) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    this.searchFilter.maLoaiBcao='91';
-    this.quanLyVonPhiService.timkiemdanhsachketquathuchienvonphi(this.searchFilter).subscribe(res => {
-      if(res.statusCode==0){
-
-        this.notifi.success(MESSAGE.SUCCESS, res?.msg);
-        this.listBcaoKqua = res.data.content;
-        if(this.listBcaoKqua.length!=0){
-          this.lenght = this.listBcaoKqua.length;
-        }
-      }else{
-        this.notifi.error(MESSAGE.ERROR, res?.msg);
-      }
-      console.log(res);
-    },err =>{
-      this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    })
-  }
-
-
-  //set url khi
-  setUrl(lbaocao:any) {
-    console.log(lbaocao)
-    switch (lbaocao) {
-      case 526:
-        this.url = '/bao-cao/'
-        break;
-      case 521:
-        this.url = '/ds-chi-tiet-nhap-lieu-bao-cao/'
-        break;
-      case 407:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau02/'
-        break;
-      case 408:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau03/'
-        break;
-      case 409:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04a/'
-        break;
-      case 410:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau04b/'
-        break;
-      case 411:
-        this.url = '/lap-bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg-tai-chi-cuc-mau05/'
-        break;
-      default:
-        this.url = null;
-        break;
+    if (this.searchFilter.namBcao >= 3000 || this.searchFilter.namBcao < 1000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
     }
-   console.log(lbaocao);
 
+    this.router.navigate(["/qlkh-von-phi/quy-trinh-bc-thuc-hien-du-toan-chi-nsnn/" + this.url + '/' + this.searchFilter.maLoaiBcao + '/' + (this.searchFilter.maLoaiBcao == '526' ? this.searchFilter.thangBcao : '0') + '/' + this.searchFilter.namBcao])
   }
 
   //doi so trang
   onPageIndexChange(page) {
-    this.pages.page = page;
+    this.searchFilter.paggingReq.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
-    this.pages.size = size;
+    this.searchFilter.paggingReq.limit = size;
+    this.onSubmit();
   }
 
+  close() {
+    this.location.back();
+  }
+
+  deleteReport(id) {
+		if (id) {
+			this.quanLyVonPhiService.xoaBaoCao(id).toPromise().then(async res => {
+				if (res.statusCode == 0) {
+					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.onSubmit();
+        } else {
+					this.notification.error(MESSAGE.ERROR, res?.msg);
+				}
+			}, err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			})
+		} else {
+			this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
+		}
+	}
+
+  // lay ten trang thai ban ghi
+  getStatusName(id) {
+    const utils = new Utils();
+    return utils.getStatusName(id);
+  }
 }

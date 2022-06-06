@@ -29,7 +29,7 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
               </button>
-              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
+              <button type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectChiTieuKeHoachNam()">
                 <i nz-icon nzType="close"></i>
                 <span>Đóng</span>
               </button>
@@ -64,15 +64,15 @@
                        <nz-descriptions-item nzTitle="Đơn vị lập">
                          {{getUnitName()}}
                        </nz-descriptions-item>
-                      
+
                        <nz-descriptions-item nzTitle="Quyết định số">
                          <input class="search__input" nz-input [(ngModel)]="soQd" />
                        </nz-descriptions-item>
                        <nz-descriptions-item nzTitle="Ngày quyết định">
                          <nz-date-picker class="search__input" [(ngModel)]="ngayQd"></nz-date-picker>
                        </nz-descriptions-item>
-                       
-                    </nz-descriptions> 
+
+                    </nz-descriptions>
                  </div>
             </nz-card>
             <div class="tab__container">
@@ -84,7 +84,7 @@
                                       <i class="fa fa-trash-o"></i>
                                       <span>Xóa</span>
                                  </button>
-                                 <button type="button" class="btn btn-main" (click)="addLine(lstCTietBCao.length)" [hidden]="status">
+                                 <button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)" [hidden]="status">
                                    <i class="icon htvbdh_dau-cong"></i>
                                    <span>Thêm</span>
                                  </button>
@@ -120,7 +120,7 @@
                                      </tr>
                                 </thead>
                                 <tbody>
-                                     <tr *ngFor="let data of lstCTietBCao; let i = index">
+                                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                                              <td>{{i+1}}</td>
                                              <td>
@@ -154,7 +154,7 @@
                                                   <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                                   (ngModelChange)="updateSingleChecked()"></label>
                                                 </td>
-                                        </ng-container> 
+                                        </ng-container>
                                         <ng-template #editTemplate>
                                              <td>{{i + 1}}</td>
                                              <td>
@@ -200,7 +200,7 @@
                                                 </td>
                                                 <td>
                                                   <a  class="save" (click)="saveEdit(data.id)">Save</a>
-                                                  <a nz-popconfirm nzPopconfirmTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.id)"
+                                                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
                                                     class="save">Cancel</a>
                                                 </td>
                                                 <td [hidden]="status">
@@ -210,9 +210,9 @@
                                                   <label nz-checkbox  [nzValue]="data.id" [(ngModel)]="data.checked"
                                                   (ngModelChange)="updateSingleChecked()"></label>
                                                 </td>
-                                        </ng-template>  
+                                        </ng-template>
                                      </tr>
-                                     <tr *ngIf="lstCTietBCao.length!=0">
+                                     <tr *ngIf="lstCtietBcao.length!=0">
                                         <td></td>
                                         <td>Tổng</td>
                                         <td>{{tongctmtVonCap}}</td>
@@ -249,7 +249,7 @@
                                 </div>
                            </div>
 
-                           <nz-table [nzData]="lstCTietBCao" nzBordered class="table__body" style="width: 600px">
+                           <nz-table [nzData]="lstCtietBcao" nzBordered class="table__body" style="width: 600px">
                                 <thead>
                                      <tr>
                                           <th nzWidth="50">STT</th>

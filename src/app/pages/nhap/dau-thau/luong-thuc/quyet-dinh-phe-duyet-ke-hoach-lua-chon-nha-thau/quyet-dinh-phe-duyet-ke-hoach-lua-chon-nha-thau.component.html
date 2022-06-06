@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div class="contentBor luong-dau-thau-gao__body" *ngIf="!visibleTab">
+<div class="contentBor luong-dau-thau-gao__body">
   <div class="contentDetail">
     <div class="main-content">
       <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
@@ -100,7 +98,8 @@
         <nz-tabset nzType="card" class="tab__container mt-16">
           <nz-tab [nzTitle]="'Danh sách QĐ phê duyệt KH LCNT'" class="tt-chung__container"
             (nzClick)="selectTabData('phuong-an-phe-duyet')">
-            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable">
+            <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
               <thead>
                 <tr>
                   <th width="60px">STT</th>
@@ -165,7 +164,8 @@
           </nz-tab>
           <nz-tab [nzTitle]="'Danh sách phương án KHLCNT chưa được duyệt'" class="tt-chung__container"
             (nzClick)="selectTabData('phuong-an-chua-phe-duyet')">
-            <nz-table #basicTableNo class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableNo">
+            <nz-table #basicTableNo class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTableNo"
+              [nzFrontPagination]="false" [nzShowPagination]="false">
               <thead>
                 <tr>
                   <th width="60px">STT</th>

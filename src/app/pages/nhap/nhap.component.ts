@@ -3,8 +3,9 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { NHAP_ROUTE_LIST } from './nhap.constant';
 @Component({
   selector: 'app-nhap',
@@ -14,9 +15,17 @@ import { NHAP_ROUTE_LIST } from './nhap.constant';
 export class NhapComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
-  constructor() {}
+  routerUrl: string = "";
 
-  ngOnInit(): void {}
+  constructor(
+    private router: Router,
+  ) { }
+
+  ngOnInit(): void {
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
+  }
 
   ngAfterViewInit() {
     if (
@@ -28,6 +37,15 @@ export class NhapComponent implements OnInit, AfterViewInit {
     } else {
       this.myTab.nativeElement.className = 'nav nav-tabs';
     }
+  }
+
+  updateCssOverlay() {
+    setTimeout(() => {
+      let child = document.getElementsByClassName('dau-thau-tab');
+      if (child && child.length > 0) {
+        child[0].parentElement.classList.add('left-0');
+      }
+    }, 200);
   }
 
   endSlide() {

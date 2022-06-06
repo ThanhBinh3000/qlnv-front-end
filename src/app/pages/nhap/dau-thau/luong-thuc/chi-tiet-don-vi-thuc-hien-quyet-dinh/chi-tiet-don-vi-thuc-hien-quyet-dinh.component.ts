@@ -41,7 +41,7 @@ export class ChiTietDonViThucHienQuyetDinhComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private notification: NzNotificationService,
     private router: Router,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -51,7 +51,7 @@ export class ChiTietDonViThucHienQuyetDinhComponent implements OnInit {
       });
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
-      if (res.msg == 'Thành công') {
+      if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
             ...res.data[i],
@@ -155,7 +155,7 @@ export class ChiTietDonViThucHienQuyetDinhComponent implements OnInit {
     };
     this.totalRecord = 10;
     let res = await this.danhSachDauThauService.timKiem(body);
-    if (res.msg == 'Thành công') {
+    if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -200,7 +200,7 @@ export class ChiTietDonViThucHienQuyetDinhComponent implements OnInit {
     }
   }
 
-  xoaItem(item: any) {}
+  xoaItem(item: any) { }
   back() {
     this.router.navigate([
       '/nhap/dau-thau/quyet-dinh-giao-nhiem-vu-nhap-hang/thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang',

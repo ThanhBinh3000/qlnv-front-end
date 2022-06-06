@@ -28,7 +28,7 @@ export class DanhSachCapVonComponent implements OnInit {
      noiLap!: string;
      noiCap!: string;
 
-     lstCTietBCao: any = [];              // list chi tiet bao cao
+     lstCtietBcao: any = [];              // list chi tiet bao cao
 
      userInfo: any;
      errorMessage!: String;                      //
@@ -64,8 +64,8 @@ export class DanhSachCapVonComponent implements OnInit {
           let userInfo: any = await this.getUserInfo(userName); //get user info
 
           const utils = new Utils();
-          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.id);
-          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.id);
+          this.statusBtnDuyet = utils.getRoleTBP('2', 2, userInfo?.roles[0]?.code);
+          this.statusBtnPheDuyet = utils.getRoleLD('4', 2, userInfo?.roles[0]?.code);
           this.statusBtnTuChoi = (this.statusBtnDuyet && this.statusBtnPheDuyet);
           this.statusBtnTaoMoi = !this.statusBtnTuChoi;
 
@@ -154,7 +154,7 @@ export class DanhSachCapVonComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          //this.chiTietBcaos = data.data;
-                         this.lstCTietBCao = data.data.lstCTietBCao;
+                         this.lstCtietBcao = data.data.lstCtietBcao;
                     } else {
                          this.errorMessage = "Có lỗi trong quá trình vấn tin!";
                     }

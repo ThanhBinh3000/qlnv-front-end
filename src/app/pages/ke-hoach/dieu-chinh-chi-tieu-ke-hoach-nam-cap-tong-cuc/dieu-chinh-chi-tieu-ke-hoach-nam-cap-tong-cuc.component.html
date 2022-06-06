@@ -6,7 +6,8 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Số QĐ</label>
             <nz-input-group nzAddOnAfter=" /QĐ-TCDT ">
-              <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" />
+              <nz-input-number [(ngModel)]="searchFilter.soQD" [nzMin]="1" [nzStep]="1" [nzSize]="'small'">
+              </nz-input-number>
             </nz-input-group>
           </div>
           <div nz-col nzSpan="6">
@@ -45,7 +46,8 @@
       </nz-card>
       <nz-card nzTitle="Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao" [nzExtra]="tableCard1"
         class="mt16 flex-card p-lr16">
-        <nz-table #basicTable class="nowrap" [nzData]="dataTable">
+        <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
           <thead>
             <tr>
               <th width="60px">STT</th>
@@ -66,7 +68,7 @@
               <th width="45px">
                 <label nz-checkbox></label>
               </th>
-              <td>{{ data.soQD }}</td>
+              <td>{{ data.soQuyetDinh }}</td>
               <td>{{ data.ngayKy }}</td>
               <td>{{ data.namKeHoach }}</td>
               <td>{{ data.trichYeu }}</td>
@@ -75,7 +77,7 @@
                 <a (click)="redirectToChiTiet(data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                <a *ngIf="data.trangThai != '02'" (click)="xoaItem(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>

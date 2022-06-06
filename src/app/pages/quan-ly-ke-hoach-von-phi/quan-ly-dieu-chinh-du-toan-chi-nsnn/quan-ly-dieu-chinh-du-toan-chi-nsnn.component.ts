@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN_LIST } from './quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
+import { QUAN_LY_DIEU_CHINH_DU_TOAN_NSNN_LIST } from './quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 interface DataItem {
   name: string;
   age: number;
@@ -33,7 +33,7 @@ export class QuanLyDieuChinhDuToanChiNSNNComponent implements OnInit {
   detailDonVi: FormGroup;
   noParent = true;
   searchValue = '';
-  QuanLyDieuChinhDuToanChiNSNNList = QUAN_LY_DIEU_CHINH_DU_TOAN_CHI_NSNN_LIST;
+  QuanLyDieuChinhDuToanChiNSNNList = QUAN_LY_DIEU_CHINH_DU_TOAN_NSNN_LIST;
   searchFilter = {
     soDeXuat: '',
   };

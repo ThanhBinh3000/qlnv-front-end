@@ -149,3 +149,14 @@ export const STATUS_TYPE_CHECK = {
   PHEDUYET: 3,
   TUCHOI: 4,
 };
+
+export const LOAI_QUYET_DINH = {
+  NHAP: '00',
+  XUAT: '01'
+}
+
+export const LOAI_HANG_DTQG = {
+  GAO: '00',
+  THOC: '01',
+  MUOI: '02'
+}

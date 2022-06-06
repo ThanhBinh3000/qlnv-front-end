@@ -1,16 +1,15 @@
-import { saveAs } from 'file-saver';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
-import * as XLSX from 'xlsx';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -102,7 +101,6 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async search() {
-    this.dataTable = [];
     let param = {
       pageSize: this.pageSize,
       pageNumber: this.page,
@@ -116,13 +114,10 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         ? dayjs(this.startValue).format('YYYY-MM-DD')
         : null,
     }
-    this.totalRecord = 0;
     let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(param);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
-      }
+      this.dataTable = data.content;
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -158,12 +153,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    if (status == '01') {
-      return "Đã duyệt";
-    }
-    else {
-      return "Chưa duyệt";
-    }
+    return convertTrangThai(status);
   }
 
   xoaItem(item: any) {
@@ -196,7 +186,20 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList().subscribe(
+        let body = {
+          pageSize: null,
+          pageNumber: null,
+          soQD: this.searchFilter.soQD,
+          namKeHoach: this.searchFilter.namKeHoach,
+          trichYeu: this.searchFilter.trichYeu,
+          ngayKyDenNgay: this.endValue
+            ? dayjs(this.endValue).format('YYYY-MM-DD')
+            : null,
+          ngayKyTuNgay: this.startValue
+            ? dayjs(this.startValue).format('YYYY-MM-DD')
+            : null,
+        }
+        this.quyetDinhDieuChinhChiTieuKeHoachNamService.exportList(body).subscribe(
           blob => saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx')
         );
         this.spinner.hide();

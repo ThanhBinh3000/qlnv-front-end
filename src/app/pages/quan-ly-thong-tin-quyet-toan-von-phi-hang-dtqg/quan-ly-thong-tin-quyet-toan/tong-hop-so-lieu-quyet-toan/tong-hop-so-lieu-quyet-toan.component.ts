@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as fileSaver from 'file-saver';
@@ -41,14 +41,14 @@ export class ItemData {
 })
 
 export class TongHopSoLieuQuyetToanComponent implements OnInit {
-     
-     
+
+
      noiDungs: any = [];
      loaiChis: any = [];
      khoanChis: any = [];
      phanBos: any = [];
      donVis: any = [];
-     lstCTietBCao: ItemData[] = [];              // list chi tiet bao cao
+     lstCtietBcao: ItemData[] = [];              // list chi tiet bao cao
      userInfo: any;
      errorMessage!: String;                      //
      id!: any;                                   // id truyen tu router
@@ -129,6 +129,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           private danhMucService: DanhMucHDVService,
           private tonghopSolieuQtoan: QuanLyThongTinQuyetToanVonPhiHangDTQGService,
           private notification :NzNotificationService,
+          private location: Location
      ) {
           this.ngayNhap = this.datePipe.transform(this.newDate, 'dd-MM-yyyy',)
      }
@@ -150,15 +151,15 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           }
 
           const utils = new Utils();
-          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
-          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.id);
+          this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnGuiDVCT = utils.getRoleGuiDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
+          this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, 2, userInfo?.roles[0]?.code);
 
-          
+
           //lay danh sach danh muc don vi
           this.danhMucService.dMDonVi().toPromise().then(
                (data) => {
@@ -201,22 +202,22 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
 
      // xoa
      xoa() {
-          this.lstCTietBCao = [];
+          this.lstCtietBcao = [];
           this.lstFile = [];
           this.listFile = []
      }
 
      // luu
      async luu() {
-          this.lstCTietBCao.forEach(e => {
+          this.lstCtietBcao.forEach(e => {
                if(typeof e.id !='number'){
                     e.id = null;
                }
           })
 
-          this.lstCTietBCao.filter(item => {
+          this.lstCtietBcao.filter(item => {
                if (!item.id) {
-                    item.id = uuid.v4();
+                    item.id = uuid.v4()+'FE';
                }
           });
           this.updateEditCache();
@@ -226,8 +227,8 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           }
 
           // replace nhung ban ghi dc them moi id thanh null
-          this.lstCTietBCao.filter(item => {
-               if (typeof item.id != "number") {
+          this.lstCtietBcao.filter(item => {
+               if (item.id?.length == 38) {
                     item.id = null;
                }
           })
@@ -237,7 +238,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                fileDinhKems: listFile,
                listIdDeletes:this.listIdDelete,
                listIdFiles:'',
-               lstCtiet: this.lstCTietBCao,
+               lstCtiet: this.lstCtietBcao,
                maDvi: this.maDonViTao,
                ngayQuyetDinh: this.ngayQd,
                soQd: this.soQd,
@@ -253,14 +254,14 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          }else{
                               this.notification.error(MESSAGE.ERROR, data?.msg);
                          }
-                         
+
                     },
                     (err) => {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                     })
           } else {
                this.tonghopSolieuQtoan.capnhattonghopsolieuquyettoanvonmuahangDTQG(request).subscribe(res => {
-                    
+
                          if(res.statusCode==0){
                               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                          }else{
@@ -270,13 +271,13 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                })
           }
-          this.lstCTietBCao.filter(item => {
+          this.lstCtietBcao.filter(item => {
                if (!item.id) {
-                    item.id = uuid.v4();
+                    item.id = uuid.v4()+'FE';
                }
           });
           this.updateEditCache();
-          
+
           this.spinner.hide();
      }
 
@@ -308,11 +309,11 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                (data) => {
                     if (data.statusCode == 0) {
                          console.log(data);
-                         this.lstCTietBCao = data.data.lstCtiet;
+                         this.lstCtietBcao = data.data.lstCtiet;
                          this.tongcol();
                          this.updateEditCache();
                          this.lstFile = data.data.lstFile;
-                         
+
                          // set thong tin chung bao cao
                          this.ngayNhap = this.datePipe.transform( data.data.ngayTao,'dd/MM/yyyy');
                          this.nguoiNhap = data.data.nguoiTao;
@@ -334,7 +335,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                          this.lstFile.filter(item => {
                               this.listIdFiles += item.id + ",";
                          })
-                         
+
                     } else {
                          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     }
@@ -371,7 +372,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      // them dong moi
      addLine(id: number): void {
           let item: ItemData = {
-               id: uuid.v4(),
+               id: uuid.v4()+'FE',
                stt: '',
                ctmtTong: 0,
                ctmtVonCap: 0,
@@ -391,7 +392,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
                checked!: false,
           }
 
-          this.lstCTietBCao.splice(id, 0, item);
+          this.lstCtietBcao.splice(id, 0, item);
           this.editCache[item.id] = {
                edit: true,
                data: { ...item }
@@ -400,8 +401,8 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
 
      // xoa dong
      deleteById(id: any): void {
-          this.lstCTietBCao = this.lstCTietBCao.filter(item => item.id != id)
-          if (typeof id == "number") {
+          this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+          if (id?.length == 36) {
                this.listIdDelete += id + ",";
           }
      }
@@ -409,13 +410,13 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      // xóa với checkbox
      deleteSelected() {
           // add list delete id
-          this.lstCTietBCao.filter(item => {
-               if (item.checked == true && typeof item.id == "number") {
+          this.lstCtietBcao.filter(item => {
+               if (item.checked == true && item?.id?.length == 36) {
                     this.listIdDelete += item.id + ","
                }
           })
           // delete object have checked = true
-          this.lstCTietBCao = this.lstCTietBCao.filter(item => item.checked != true)
+          this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
           this.allChecked = false;
      }
 
@@ -443,13 +444,13 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      // click o checkbox all
      updateAllChecked(): void {
           this.indeterminate = false;                               // thuoc tinh su kien o checkbox all
-          if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
-               this.lstCTietBCao = this.lstCTietBCao.map(item => ({
+          if (this.allChecked) {                                    // checkboxall == true thi set lai lstCtietBcao.checked = true
+               this.lstCtietBcao = this.lstCtietBcao.map(item => ({
                     ...item,
                     checked: true
                }));
           } else {
-               this.lstCTietBCao = this.lstCTietBCao.map(item => ({    // checkboxall == false thi set lai lstCTietBCao.checked = false
+               this.lstCtietBcao = this.lstCtietBcao.map(item => ({    // checkboxall == false thi set lai lstCtietBcao.checked = false
                     ...item,
                     checked: false
                }));
@@ -458,10 +459,10 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
 
      // click o checkbox single
      updateSingleChecked(): void {
-          if (this.lstCTietBCao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
+          if (this.lstCtietBcao.every(item => !item.checked)) {           // tat ca o checkbox deu = false thi set o checkbox all = false
                this.allChecked = false;
                this.indeterminate = false;
-          } else if (this.lstCTietBCao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+          } else if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
                this.allChecked = true;
                this.indeterminate = false;
           } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
@@ -470,7 +471,8 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      }
 
      redirectChiTieuKeHoachNam() {
-          this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          // this.router.navigate(['/kehoach/chi-tieu-ke-hoach-nam-cap-tong-cuc']);
+          this.location.back()
      }
 
      // lay ten trang thai
@@ -491,25 +493,25 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
 
      // huy thay doi
      cancelEdit(id: string): void {
-          const index = this.lstCTietBCao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
+          const index = this.lstCtietBcao.findIndex(item => item.id === id);  // lay vi tri hang minh sua
           this.editCache[id] = {
-               data: { ...this.lstCTietBCao[index] },
+               data: { ...this.lstCtietBcao[index] },
                edit: false
           };
      }
 
      // luu thay doi
      saveEdit(id: string): void {
-          this.editCache[id].data.checked = this.lstCTietBCao.find(item => item.id === id).checked; // set checked editCache = checked lstCTietBCao
-          const index = this.lstCTietBCao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
-          Object.assign(this.lstCTietBCao[index], this.editCache[id].data); // set lai data cua lstCTietBCao[index] = this.editCache[id].data
+          this.editCache[id].data.checked = this.lstCtietBcao.find(item => item.id === id).checked; // set checked editCache = checked lstCtietBcao
+          const index = this.lstCtietBcao.findIndex(item => item.id === id);   // lay vi tri hang minh sua
+          Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
           this.editCache[id].edit = false;  // CHUYEN VE DANG TEXT
           this.tongcol();
      }
 
-     // gan editCache.data == lstCTietBCao
+     // gan editCache.data == lstCtietBcao
      updateEditCache(): void {
-          this.lstCTietBCao.forEach(item => {
+          this.lstCtietBcao.forEach(item => {
                this.editCache[item.id] = {
                     edit: false,
                     data: { ...item }
@@ -518,14 +520,14 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
      }
 
 
-   
-     
-     
+
+
+
      tinhtong(id:any){
           this.editCache[id].data.ctmtTong = this.editCache[id].data.ctmtVonCap + this.editCache[id].data.ctmtVonUng;
           this.editCache[id].data.ctmgTong = this.editCache[id].data.ctmgVonCap + this.editCache[id].data.ctmgVonUng;
           this.editCache[id].data.tcvmltTong = this.editCache[id].data.tcvmltVonCap + this.editCache[id].data.tcvmltVonUng;
-     
+
           this.tongcol()
 
      }
@@ -553,7 +555,7 @@ export class TongHopSoLieuQuyetToanComponent implements OnInit {
           this.tongtcvmltVonCap=0;
           this.tongtcvmltVonUng=0;
           this.tongtcvmltTong=0;
-          this.lstCTietBCao.forEach(e =>{
+          this.lstCtietBcao.forEach(e =>{
                this.tongctmtVonCap +=e.ctmtVonCap;
                this.tongctmtVonUng +=e.ctmtVonUng;
                this.tongctmtTong +=e.ctmtTong;

@@ -1,6 +1,4 @@
-<dau-thau-tab [isVisible]="visibleTab" [selectedIndex]="0" (isVisibleChange)="isVisibleChangeTab$.next($event)">
-</dau-thau-tab>
-<div *ngIf="!visibleTab">
+<div>
   <nz-affix class="menu-lv3" [nzOffsetTop]="43">
     <div class="contentBor chi-tieu__body">
       <div class="contentDetail">
@@ -92,7 +90,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Phương án trình tổng cục </nz-form-label>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhuongAnTrinhTongCuc()">
-                  <input nz-input [(ngModel)]="selectedPhuongAn.id" [readonly]="true" />
+                  <input nz-input [(ngModel)]="selectedPhuongAn.soPhAn" [readonly]="true" />
                 </nz-input-group>
               </nz-form-item>
             </div>
@@ -203,7 +201,8 @@
             </nz-tab>
             <nz-tab [nzTitle]="'Thông tin chi tiết đề xuất của CỤC DTNN KV'" class="ds-goi-thau__container">
               <nz-card class="mt16 flex-card p-lr16">
-                <nz-table #editRowTable nzBordered [nzData]="chiTiet?.children1">
+                <nz-table #editRowTable nzBordered [nzData]="chiTiet?.children1" [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th [width]="35">STT</th>
