@@ -1,29 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { GiaoKeHoachVaDuToanComponent } from './giao-ke-hoach-va-du-toan.component';
 import { GiaoKeHoachVaDuToanRoutingModule } from './giao-ke-hoach-va-du-toan-routing.module';
-import { ChiTieuKeHoachNamComponent } from './chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { DeXuatDieuChinhComponent } from './de-xuat-dieu-chinh/de-xuat-dieu-chinh.component';
-import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { ThongTinChiTieuKeHoachNamComponent } from './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { ThongTinDeXuatDieuChinhComponent } from './thong-tin-de-xuat-dieu-chinh/thong-tin-de-xuat-dieu-chinh.component';
+import { GiaoKeHoachVaDuToanComponent } from './giao-ke-hoach-va-du-toan.component';
+import { KeHoachVonDauNamModule } from './ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module';
+import { KeHoachVonMuaBuModule } from './ke-hoach-von-mua-bu/ke-hoach-von-mua-bu.module';
+import { KeHoachXuatModule } from './ke-hoach-xuat/ke-hoach-xuat.module';
 
 @NgModule({
   declarations: [
     GiaoKeHoachVaDuToanComponent,
-    ChiTieuKeHoachNamComponent,
-    DieuChinhChiTieuKeHoachNamComponent,
-    DeXuatDieuChinhComponent,
-    DieuChinhThongTinChiTieuKeHoachNamComponent,
-    ThongTinChiTieuKeHoachNamComponent,
-    ThongTinDeXuatDieuChinhComponent,
   ],
   imports: [
     CommonModule,
     GiaoKeHoachVaDuToanRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    KeHoachVonDauNamModule,
+    KeHoachVonMuaBuModule,
+    KeHoachXuatModule,
   ],
 })
 export class GiaoKeHoachVaDuToanModule { }

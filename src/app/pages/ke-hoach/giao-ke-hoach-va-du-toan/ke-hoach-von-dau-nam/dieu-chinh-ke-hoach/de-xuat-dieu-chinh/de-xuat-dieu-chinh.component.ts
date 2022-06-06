@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -7,26 +6,19 @@ import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
+import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import {
-  DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
-  DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM,
-  MAIN_ROUTE_KE_HOACH,
-} from './../../ke-hoach.constant';
 
 @Component({
-  selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-  templateUrl: './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
-  styleUrls: ['./dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.scss'],
+  selector: 'app-de-xuat-dieu-chinh',
+  templateUrl: './de-xuat-dieu-chinh.component.html',
+  styleUrls: ['./de-xuat-dieu-chinh.component.scss'],
 })
-export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
+export class DeXuatDieuChinhComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
 
   namKeHoach: number = null;
@@ -38,9 +30,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   endValue: Date | null = null;
   startValueDc: Date | null = null;
   endValueDc: Date | null = null;
-
   ngayKy: any;
-  ngayKyDc: any;
+  ngayKyDC: any;
 
   listNam: any[] = [];
   page: number = 1;
@@ -54,49 +45,38 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   selectedDonVi: any = {};
 
   lastBreadcrumb: string;
-  userInfo: UserLogin;
-
-  titleCard: string = '';
 
   isDetail: boolean = false;
   selectedId: number = 0;
-  isView: boolean = false;
 
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
-    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
+    private deXuatDieuChinhService: DeXuatDieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     private donViService: DonviService,
-    private userService: UserService,
-    public globals: Globals,
+    public userService: UserService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.userInfo = this.userService.getUserLogin();
-
       if (this.userService.isTongCuc()) {
         this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
-        this.titleCard =
-          'Danh sách điều chỉnh chỉ tiêu kế hoạch năm tổng cục giao';
       } else if (this.userService.isChiCuc()) {
         this.lastBreadcrumb = LEVEL.CHI_CUC_SHOW;
       } else if (this.userService.isCuc()) {
         this.lastBreadcrumb = LEVEL.CUC_SHOW;
-        this.titleCard = 'Danh sách điều chỉnh chỉ tiêu kế hoạch năm cục giao';
       }
       let dayNow = dayjs().get('year');
-      // this.namKeHoach = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayNow - i,
           text: dayNow - i,
         });
       }
-      await Promise.all([this.loadDonVi(), this.search()]);
+      await Promise.all([this.search()]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -106,59 +86,25 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async loadDonVi() {
-    if (this.lastBreadcrumb == LEVEL.TONG_CUC_SHOW) {
-      if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
-        const res = await this.donViService.layTatCaDonVi();
-        this.optionsDonVi = [];
-        if (res.msg == MESSAGE.SUCCESS) {
-          for (let i = 0; i < res.data.length; i++) {
-            if (this.userInfo.MA_DVI === res.data[i].maDvi) {
-              this.inputDonVi = res.data[i].tenDvi;
-              this.selectedDonVi = res.data[i];
-              break;
-            }
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      } else {
-        const res = await this.donViService.layDonViCon();
-        this.optionsDonVi = [];
-        if (res.msg == MESSAGE.SUCCESS) {
-          for (let i = 0; i < res.data.length; i++) {
-            const item = {
-              ...res.data[i],
-              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-            };
-            this.optionsDonVi.push(item);
-          }
-          this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
+    const res = await this.donViService.layTatCaDonVi();
+    this.optionsDonVi = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      for (let i = 0; i < res.data.length; i++) {
+        const item = {
+          ...res.data[i],
+          labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+        };
+        this.optionsDonVi.push(item);
       }
-    } else if (this.lastBreadcrumb == LEVEL.CUC_SHOW) {
-      const res = await this.donViService.layDonViCon();
-      this.optionsDonVi = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
-        }
-        this.optionsDonViShow = cloneDeep(this.optionsDonVi);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   onInputDonVi(e: Event): void {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
-      this.optionsDonViShow = cloneDeep(this.optionsDonVi);
+      this.optionsDonViShow = [];
     } else {
       this.optionsDonViShow = this.optionsDonVi.filter(
         (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -209,10 +155,9 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(isView, id) {
+  redirectToChiTiet(id) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isView = isView;
   }
 
   showList() {
@@ -229,6 +174,8 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
     this.endValue = null;
     this.startValueDc = null;
     this.endValueDc = null;
+    this.ngayKy = null;
+    this.ngayKyDC = null;
     this.inputDonVi = '';
     this.selectedDonVi = {};
   }
@@ -238,24 +185,24 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       pageSize: this.pageSize,
       pageNumber: this.page,
       namKeHoach: this.namKeHoach,
-      soQD: this.soQDDieuChinh,
-      trichYeu: this.trichYeuDieuChinh,
-      ngayKyDenNgay: this.endValueDc
-        ? dayjs(this.endValueDc).format('YYYY-MM-DD')
+      soVanBan: this.soQDDieuChinh,
+      trichYeuDx: this.trichYeuDieuChinh,
+      ngayKyDenNgayDx: this.ngayKyDC && this.ngayKyDC.length > 1
+        ? dayjs(this.ngayKyDC[1]).format('YYYY-MM-DD')
         : null,
-      ngayKyTuNgay: this.startValueDc
-        ? dayjs(this.startValueDc).format('YYYY-MM-DD')
+      ngayKyTuNgayDx: this.ngayKyDC && this.ngayKyDC.length > 0
+        ? dayjs(this.ngayKyDC[0]).format('YYYY-MM-DD')
         : null,
-      soCT: this.soQDGiao,
-      trichYeuCT: this.trichYeuGiao,
-      ngayKyDenNgayCT: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
+      soQuyetDinh: this.soQDGiao,
+      trichYeuQd: this.trichYeuGiao,
+      ngayKyDenNgayQd: this.ngayKy && this.ngayKy.length > 1
+        ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
         : null,
-      ngayKyTuNgayCT: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
+      ngayKyTuNgayQd: this.ngayKy && this.ngayKy.length > 0
+        ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
         : null,
     };
-    let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(
+    let res = await this.deXuatDieuChinhService.timKiem(
       param,
     );
     if (res.msg == MESSAGE.SUCCESS) {
@@ -309,7 +256,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhDieuChinhChiTieuKeHoachNamService
+          this.deXuatDieuChinhService
             .deleteData(item.id)
             .then(async () => {
               await this.search();
@@ -331,20 +278,28 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         let body = {
           pageSize: null,
           pageNumber: null,
-          soQD: this.soQDGiao,
           namKeHoach: this.namKeHoach,
-          trichYeu: this.trichYeuGiao,
-          ngayKyDenNgay: this.endValue
-            ? dayjs(this.endValue).format('YYYY-MM-DD')
+          soVanBan: this.soQDDieuChinh,
+          trichYeuDx: this.trichYeuDieuChinh,
+          ngayKyDenNgayDx: this.ngayKyDC && this.ngayKyDC.length > 1
+            ? dayjs(this.ngayKyDC[1]).format('YYYY-MM-DD')
             : null,
-          ngayKyTuNgay: this.startValue
-            ? dayjs(this.startValue).format('YYYY-MM-DD')
+          ngayKyTuNgayDx: this.ngayKyDC && this.ngayKyDC.length > 0
+            ? dayjs(this.ngayKyDC[0]).format('YYYY-MM-DD')
+            : null,
+          soQuyetDinh: this.soQDGiao,
+          trichYeuQd: this.trichYeuGiao,
+          ngayKyDenNgayQd: this.ngayKy && this.ngayKy.length > 1
+            ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          ngayKyTuNgayQd: this.ngayKy && this.ngayKy.length > 0
+            ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
             : null,
         };
-        this.quyetDinhDieuChinhChiTieuKeHoachNamService
+        this.deXuatDieuChinhService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-dieu-chinh-chi-tieu-ke-hoach-nam.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-dieu-chinh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -353,9 +308,5 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
-  }
-
-  deleteSelect() {
-
   }
 }

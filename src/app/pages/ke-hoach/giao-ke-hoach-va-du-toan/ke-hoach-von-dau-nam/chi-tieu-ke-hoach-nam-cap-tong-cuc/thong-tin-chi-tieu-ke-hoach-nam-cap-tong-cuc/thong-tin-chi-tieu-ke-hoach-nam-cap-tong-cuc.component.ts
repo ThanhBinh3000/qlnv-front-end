@@ -18,30 +18,25 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogThemThongTinMuoiComponent } from 'src/app/components/dialog/dialog-them-thong-tin-muoi/dialog-them-thong-tin-muoi.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
+import { DialogThongTinLuongThucComponent } from 'src/app/components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { LEVEL } from 'src/app/constants/config';
+import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { ItemDetail } from 'src/app/models/ItemDetail';
 import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
 import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
+import { KeHoachVatTu, VatTuThietBi } from 'src/app/models/KeHoachVatTu';
+import { ThongTinChiTieuKeHoachNam } from 'src/app/models/ThongTinChiTieuKHNam';
 import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
-import { DialogThongTinLuongThucComponent } from '../../../../components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
-import { LEVEL_USER, PAGE_SIZE_DEFAULT } from '../../../../constants/config';
-import { FileDinhKem } from '../../../../models/FileDinhKem';
-import { KeHoachVatTu, VatTuThietBi } from '../../../../models/KeHoachVatTu';
-import { ThongTinChiTieuKeHoachNam } from '../../../../models/ThongTinChiTieuKHNam';
-import { DanhMucService } from '../../../../services/danhmuc.service';
-import { UploadFileService } from '../../../../services/uploaFile.service';
-import { Globals } from '../../../../shared/globals';
-import {
-  CHI_TIEU_KE_HOACH_NAM,
-  MAIN_ROUTE_KE_HOACH
-} from '../../ke-hoach.constant';
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',

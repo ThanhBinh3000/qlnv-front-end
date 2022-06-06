@@ -30,13 +30,9 @@ import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import * as XLSX from 'xlsx';
-import { Globals } from './../../../../shared/globals';
-import {
-  DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM,
-  MAIN_ROUTE_KE_HOACH
-} from './../../ke-hoach.constant';
 import { TAB_SELECTED } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam.constant';
 
 @Component({
