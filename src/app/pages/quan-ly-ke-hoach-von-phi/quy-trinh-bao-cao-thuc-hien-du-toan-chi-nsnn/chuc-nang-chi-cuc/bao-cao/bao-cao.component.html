@@ -243,7 +243,7 @@
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0">
+        <ng-container *ngIf="danhSachChiTietPhuLucTemp?.length == 0 && tabSelected != '1'">
           <button type="button" class="btn btn-main" (click)="addLine(null,'1111')" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
