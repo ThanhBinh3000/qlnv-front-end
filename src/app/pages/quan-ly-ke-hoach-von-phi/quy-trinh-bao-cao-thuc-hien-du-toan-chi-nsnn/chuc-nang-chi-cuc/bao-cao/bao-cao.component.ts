@@ -21,7 +21,7 @@ import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 // import { KHOAN_MUC } from '../../../quan-ly-dieu-chinh-du-toan-chi-nsnn/quan-ly-dieu-chinh-du-toan-chi-nsnn.constant';
 import { SOLAMA } from '../../../quy-trinh-bao-ket-qua-THVP-hang-DTQG-tai-tong-cuc/nhom-chuc-nang-chi-cuc/bao-cao/bao-cao.constant';
-import { LISTCANBO, NOI_DUNG, NOI_DUNG_PL2, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
+import { LISTCANBO, MA_DU_AN, NOI_DUNG, NOI_DUNG_PL2, PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
 export class ItemData {
   id!: any;
   maLoai!: string;
@@ -69,7 +69,7 @@ export class ItemDanhSach {
 
 export class ItemDataPL1 {
   id = null;
-  maVtuHeader = null;
+  header = null;
   stt = '0';
   checked = false;
   lstKm: any[] = [];
@@ -121,7 +121,7 @@ export class ItemDataPL1 {
 
 export class ItemDataPL2 {
   id = null;
-  maVtuHeader = null;
+  header = null;
   stt = '0';
   checked = false;
   lstKm: any[] = [];
@@ -151,7 +151,7 @@ export class ItemDataPL2 {
 
 export class ItemDataPL3 {
   id = null;
-  maVtuHeader = null;
+  header = null;
   stt = '0';
   checked = false;
   lstKm: any[] = [];
@@ -229,11 +229,9 @@ export class BaoCaoComponent implements OnInit {
   danhSachChiTietPhuLuc12Temp: ItemDataPL1[] = [];
 
 
-
   id!: any;                                   // id truyen tu router
   loaiBaoCao!: any;                           // loai bao cao (thang/nam)
   trangThaiChiTiet!: any;
-  loaiBaoCaos: any = [];                      // danh muc loai bao cao
   userInfo: any;
   noiDungs: any = NOI_DUNG;                   // danh muc noi dung
   noiDungPL2s: any = NOI_DUNG_PL2;             // danh muc noi dung PL2
@@ -249,7 +247,7 @@ export class BaoCaoComponent implements OnInit {
   listFile: File[] = [];                      // list file chua ten va id de hien tai o input
   listIdDelete: any = [];                     // list id delete
 
-  maDans: any = [];
+  maDans: any = MA_DU_AN;
   ddiemXdungs: any = [];
 
   statusBtnDel: boolean = true;                       // trang thai an/hien nut xoa
@@ -371,22 +369,6 @@ export class BaoCaoComponent implements OnInit {
       })
     }
 
-
-
-    //lay danh sach loai bao cao
-    this.danhMuc.dMLoaiBaoCaoThucHienDuToanChi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.loaiBaoCaos = data.data?.content;
-        } else {
-          this.notifi.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notifi.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
     //get danh muc noi dung
     // this.danhMucService.dMNoiDung().toPromise().then(
     //   (data) => {
@@ -400,18 +382,19 @@ export class BaoCaoComponent implements OnInit {
     //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
     //   }
     // );
-    this.danhMucService.dMKhoiDuAn().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.maDans = data.data?.content;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+
+    // this.danhMucService.dMKhoiDuAn().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode == 0) {
+    //       this.maDans = data.data?.content;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //   }
+    // );
     this.danhMucService.dMDiaDiemXayDung().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -668,10 +651,9 @@ export class BaoCaoComponent implements OnInit {
   // update all
   updateAllCheckedTemp(): void {
     let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
-    debugger
     idPhuLuc.forEach(phuLuc => {
-      let hunghixhix = this.getPhuLuc(phuLuc);
-      hunghixhix.filter(item => item.checked = this.allCheckedTemp);
+      let phuLucTemp = this.getPhuLuc(phuLuc);
+      phuLucTemp.filter(item => item.checked = this.allCheckedTemp);
     })
     this.indeterminateTemp = false;                               // thuoc tinh su kien o checkbox all
   }
@@ -723,15 +705,14 @@ export class BaoCaoComponent implements OnInit {
 
   // doi tab
   changeTab(maPhuLuc, trangThaiChiTiet) {
-
-    let checkSaveEdit;
+    this.savePhuLuc1(); // add cac danh sach phu luc 1 con vao danhSachChiTietPhuLucTemp
+    debugger
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-
     //check xem tat ca cac dong du lieu da luu chua?
-    //chua luu thi bao loi, luu roi thi cho di
+    let checkSaveEdit;
     this.danhSachChiTietPhuLucTemp.filter(element => {
       if (this.editCache[element.id].edit == true) {
         checkSaveEdit = false
@@ -750,12 +731,35 @@ export class BaoCaoComponent implements OnInit {
     this.danhSachChiTietPhuLucTemp = lstBcaosTemp?.lstCtietBcaos || [];
     this.maDviTien = lstBcaosTemp?.maDviTien;
     this.thuyetMinh = lstBcaosTemp?.thuyetMinh;
-    this.listIdDelete = []
     this.trangThaiChiTiet = trangThaiChiTiet;
-    if (maPhuLuc == PHULUCLIST[0].maPhuLuc) {
-      this.sortByIndex();
+    this.resetList();
+    switch (maPhuLuc) {
+      //phu luc 1
+      case PHULUCLIST[0].maPhuLuc:
+        this.danhSachChiTietPhuLucTemp?.filter(async data => {
+          if (data.header == '11') {
+            await this.danhSachChiTietPhuLuc11Temp.push(data);
+          } else if (data.header == '12') {
+            await this.danhSachChiTietPhuLuc12Temp.push(data);
+          }
+        });
+        this.updateEditCache('11');
+        this.updateEditCache('12');
+        break;
+
+      //phu luc 2
+      case PHULUCLIST[1].maPhuLuc:
+        this.updateEditCache('1111');
+        break;
+      //phu luc 3
+      case PHULUCLIST[2].maPhuLuc:
+        this.updateEditCache('1111');
+        break;
+      default:
+        break;
     }
-    this.updateEditCache('1111');
+
+    this.sortByIndex();
     this.getStatusButtonOk();
   }
 
@@ -952,12 +956,14 @@ export class BaoCaoComponent implements OnInit {
 
   //luu chi tiet phu luc
   async saveAppendix(maChucNang: string) {
+    await this.savePhuLuc1(); // add cac danh sach phu luc 1 con vao danhSachChiTietPhuLucTemp
+
     let baoCaoChiTiet = this.baoCao?.lstBcaos.find(item => item.maLoai == this.tabSelected);
     let baoCaoChiTietTemp = JSON.parse(JSON.stringify(baoCaoChiTiet));
 
     baoCaoChiTietTemp.lstCtietBcaos = JSON.parse(JSON.stringify(this.danhSachChiTietPhuLucTemp));
     baoCaoChiTietTemp.maDviTien = this.maDviTien, baoCaoChiTietTemp.thuyetMinh = this.thuyetMinh;
-    baoCaoChiTietTemp.lstIdDeletes = this.listIdDelete;
+    // baoCaoChiTietTemp.lstIdDeletes = this.listIdDelete;
 
     let checkMoneyRange = true;
     let checkPersonReport = true;
@@ -1836,11 +1842,11 @@ export class BaoCaoComponent implements OnInit {
   }
   //tìm vị trí cần để thêm mới
   findVt(str: string, phuLuc): number {
-    let hunghixhix = this.getPhuLuc(phuLuc)
-    var start: number = hunghixhix.findIndex(e => e.stt == str);
+    let phuLucTemp = this.getPhuLuc(phuLuc)
+    var start: number = phuLucTemp.findIndex(e => e.stt == str);
     var index: number = start;
-    for (var i = start + 1; i < hunghixhix.length; i++) {
-      if (hunghixhix[i].stt.startsWith(str)) {
+    for (var i = start + 1; i < phuLucTemp.length; i++) {
+      if (phuLucTemp[i].stt.startsWith(str)) {
         index = i;
       }
     }
@@ -1848,27 +1854,27 @@ export class BaoCaoComponent implements OnInit {
   }
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
   replaceIndex(lstIndex: number[], heSo: number, phuLuc: string) {
-    let hunghixhix = this.getPhuLuc(phuLuc);
+    let phuLucTemp = this.getPhuLuc(phuLuc);
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
-      var str = this.getHead(hunghixhix[item].stt) + "." + (this.getTail(hunghixhix[item].stt) + heSo).toString();
-      var nho = hunghixhix[item].stt;
-      hunghixhix.forEach(item => {
+      var str = this.getHead(phuLucTemp[item].stt) + "." + (this.getTail(phuLucTemp[item].stt) + heSo).toString();
+      var nho = phuLucTemp[item].stt;
+      phuLucTemp.forEach(item => {
         item.stt = item.stt.replace(nho, str);
       })
     })
   }
   //thêm ngang cấp
   addSame(id: any, initItem, phuLuc: string) {
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    var index: number = hunghixhix.findIndex(e => e.id == id); // vi tri hien tai
-    var head: string = this.getHead(hunghixhix[index].stt); // lay phan dau cua so tt
-    var tail: number = this.getTail(hunghixhix[index].stt); // lay phan duoi cua so tt
-    var ind: number = this.findVt(hunghixhix[index].stt, phuLuc); // vi tri can duoc them
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    var index: number = phuLucTemp.findIndex(e => e.id == id); // vi tri hien tai
+    var head: string = this.getHead(phuLucTemp[index].stt); // lay phan dau cua so tt
+    var tail: number = this.getTail(phuLucTemp[index].stt); // lay phan duoi cua so tt
+    var ind: number = this.findVt(phuLucTemp[index].stt, phuLuc); // vi tri can duoc them
     // tim cac vi tri can thay doi lai stt
     let lstIndex: number[] = [];
-    for (var i = hunghixhix.length - 1; i > ind; i--) {
-      if (this.getHead(hunghixhix[i].stt) == head) {
+    for (var i = phuLucTemp.length - 1; i > ind; i--) {
+      if (this.getHead(phuLucTemp[i].stt) == head) {
         lstIndex.push(i);
       }
     }
@@ -1879,7 +1885,7 @@ export class BaoCaoComponent implements OnInit {
         ...initItem,
         stt: head + "." + (tail + 1).toString(),
       }
-      hunghixhix.splice(ind + 1, 0, item);
+      phuLucTemp.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -1890,7 +1896,7 @@ export class BaoCaoComponent implements OnInit {
         id: uuid.v4() + "FE",
         stt: head + "." + (tail + 1).toString(),
       }
-      hunghixhix.splice(ind + 1, 0, item);
+      phuLucTemp.splice(ind + 1, 0, item);
       this.editCache[item.id] = {
         edit: true,
         data: { ...item }
@@ -1900,8 +1906,8 @@ export class BaoCaoComponent implements OnInit {
 
   // gan editCache.data == lstCtietBcao
   updateEditCache(phuLuc: string): void {
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    hunghixhix.forEach(item => {
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    phuLucTemp.forEach(item => {
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -1913,17 +1919,17 @@ export class BaoCaoComponent implements OnInit {
   //thêm cấp thấp hơn
   addLow(id: any, initItem, phuLuc: string) {
 
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    var data = hunghixhix.find(e => e.id == id);
-    var index: number = hunghixhix.findIndex(e => e.id == id); // vi tri hien tai
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    var data = phuLucTemp.find(e => e.id == id);
+    var index: number = phuLucTemp.findIndex(e => e.id == id); // vi tri hien tai
     var stt: string;
-    if (hunghixhix.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
+    if (phuLucTemp.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
       stt = data.stt + '.1';
     } else {
       index = this.findVt(data.stt, phuLuc);
-      for (var i = hunghixhix.length - 1; i >= 0; i--) {
-        if (this.getHead(hunghixhix[i].stt) == data.stt) {
-          stt = data.stt + '.' + (this.getTail(hunghixhix[i].stt) + 1).toString();
+      for (var i = phuLucTemp.length - 1; i >= 0; i--) {
+        if (this.getHead(phuLucTemp[i].stt) == data.stt) {
+          stt = data.stt + '.' + (this.getTail(phuLucTemp[i].stt) + 1).toString();
           break;
         }
       }
@@ -1935,7 +1941,7 @@ export class BaoCaoComponent implements OnInit {
         ...initItem,
         stt: stt,
       }
-      hunghixhix.splice(index + 1, 0, item);
+      phuLucTemp.splice(index + 1, 0, item);
       this.editCache[item.id] = {
         edit: false,
         data: { ...item }
@@ -1946,7 +1952,7 @@ export class BaoCaoComponent implements OnInit {
         id: uuid.v4() + "FE",
         stt: stt,
       }
-      hunghixhix.splice(index + 1, 0, item);
+      phuLucTemp.splice(index + 1, 0, item);
       this.editCache[item.id] = {
         edit: true,
         data: { ...item }
@@ -1955,20 +1961,19 @@ export class BaoCaoComponent implements OnInit {
   }
   //xóa dòng
   deleteLine(id: any, phuLuc: string) {
-
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    var index: number = hunghixhix.findIndex(e => e.id == id); // vi tri hien tai
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    var index: number = phuLucTemp.findIndex(e => e.id == id); // vi tri hien tai
     // khong tim thay thi out ra
     if (index == -1) return;
-    var nho: string = hunghixhix[index].stt;
-    var head: string = this.getHead(hunghixhix[index].stt); // lay phan dau cua so tt
+    var nho: string = phuLucTemp[index].stt;
+    var head: string = this.getHead(phuLucTemp[index].stt); // lay phan dau cua so tt
     //xóa phần tử và con của nó
-    hunghixhix = hunghixhix.filter(e => !e.stt.startsWith(nho));
-    this.setPhuLuc(hunghixhix, phuLuc);
+    phuLucTemp = phuLucTemp.filter(e => !e.stt.startsWith(nho));
+    this.setPhuLuc(phuLucTemp, phuLuc);
     //update lại số thức tự cho các phần tử cần thiết
     let lstIndex: number[] = [];
-    for (var i = hunghixhix.length - 1; i >= index; i--) {
-      if (this.getHead(hunghixhix[i].stt) == head) {
+    for (var i = phuLucTemp.length - 1; i >= index; i--) {
+      if (this.getHead(phuLucTemp[i].stt) == head) {
         lstIndex.push(i);
       }
     }
@@ -1985,23 +1990,23 @@ export class BaoCaoComponent implements OnInit {
 
   // huy thay doi
   cancelEdit(id: string, phuLuc: string): void {
-    let hunghixhix = this.getPhuLuc(phuLuc);
+    let phuLucTemp = this.getPhuLuc(phuLuc);
     // lay vi tri hang minh sua
-    const index = hunghixhix.findIndex(item => item.id == id);
+    const index = phuLucTemp.findIndex(item => item.id == id);
     // xoa dong neu truoc do chua co du lieu
-    if (this.tabSelected == TAB_SELECTED.phuLuc1 && !hunghixhix[index].maNdung) {
+    if (this.tabSelected == TAB_SELECTED.phuLuc1 && !phuLucTemp[index].maNdung) {
       this.deleteLine(id, phuLuc);
       return;
-    } else if (this.tabSelected == TAB_SELECTED.phuLuc2 && !hunghixhix[index].maNdung) {
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc2 && !phuLucTemp[index].maNdung) {
       this.deleteLine(id, phuLuc);
       return;
-    } else if (this.tabSelected == TAB_SELECTED.phuLuc3 && !hunghixhix[index].maDan) {
+    } else if (this.tabSelected == TAB_SELECTED.phuLuc3 && !phuLucTemp[index].maDan) {
       this.deleteLine(id, phuLuc);
       return;
     }
     //return du lieu
     this.editCache[id] = {
-      data: { ...hunghixhix[index] },
+      data: { ...phuLucTemp[index] },
       edit: false
     };
   }
@@ -2025,46 +2030,47 @@ export class BaoCaoComponent implements OnInit {
         return;
       }
     }
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    
-debugger
-    this.editCache[id].data.checked = hunghixhix.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietPhuLucTemp
-    const index = hunghixhix.findIndex(item => item.id == id); // lay vi tri hang minh sua
-    Object.assign(hunghixhix[index], this.editCache[id].data); // set lai data cua danhSachChiTietPhuLucTemp[index] = this.editCache[id].data
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+
+    debugger
+    this.editCache[id].data.checked = phuLucTemp.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietPhuLucTemp
+    const index = phuLucTemp.findIndex(item => item.id == id); // lay vi tri hang minh sua
+    Object.assign(phuLucTemp[index], this.editCache[id].data); // set lai data cua danhSachChiTietPhuLucTemp[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
   }
 
   updateChecked(id: any, phuLuc: string) {
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    var data = hunghixhix.find(e => e.id == id);
+    debugger
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    var data = phuLucTemp.find(e => e.id == id);
     //đặt các phần tử con có cùng trạng thái với nó
-    hunghixhix.forEach(item => {
+    phuLucTemp.forEach(item => {
       if (item.stt.startsWith(data.stt)) {
         item.checked = data.checked;
       }
     })
     //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-    var index: number = hunghixhix.findIndex(e => e.stt == this.getHead(data.stt));
+    var index: number = phuLucTemp.findIndex(e => e.stt == this.getHead(data.stt));
     if (index == -1) {
       this.allChecked = this.checkAllChild('0', phuLuc);
     } else {
-      var nho: boolean = hunghixhix[index].checked;
-      while (nho != this.checkAllChild(hunghixhix[index].stt, phuLuc)) {
-        hunghixhix[index].checked = !nho;
-        index = hunghixhix.findIndex(e => e.stt == this.getHead(hunghixhix[index].stt));
+      var nho: boolean = phuLucTemp[index].checked;
+      while (nho != this.checkAllChild(phuLucTemp[index].stt, phuLuc)) {
+        phuLucTemp[index].checked = !nho;
+        index = phuLucTemp.findIndex(e => e.stt == this.getHead(phuLucTemp[index].stt));
         if (index == -1) {
           this.allChecked = !nho;
           break;
         }
-        nho = hunghixhix[index].checked;
+        nho = phuLucTemp[index].checked;
       }
     }
   }
   //kiểm tra các phần tử con có cùng được đánh dấu hay ko
   checkAllChild(str: string, phuLuc: string): boolean {
-    let hunghixhix = this.getPhuLuc(phuLuc);
+    let phuLucTemp = this.getPhuLuc(phuLuc);
     var nho: boolean = true;
-    hunghixhix.forEach(item => {
+    phuLucTemp.forEach(item => {
       if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
         nho = item.checked;
       }
@@ -2084,15 +2090,15 @@ debugger
   deleteAllChecked() {
     let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
     idPhuLuc.forEach(phuLuc => {
-      let hunghixhix = this.getPhuLuc(phuLuc);
+      let phuLucTemp = this.getPhuLuc(phuLuc);
       var lstId: any[] = [];
-      hunghixhix.forEach(item => {
+      phuLucTemp.forEach(item => {
         if (item.checked) {
           lstId.push(item.id);
         }
       })
       lstId.forEach(item => {
-        if (hunghixhix.findIndex(e => e.id == item) != -1) {
+        if (phuLucTemp.findIndex(e => e.id == item) != -1) {
           this.deleteLine(item, phuLuc);
         }
       })
@@ -2101,13 +2107,13 @@ debugger
 
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: any, phuLuc: string) {
-    let hunghixhix;
+    let phuLucTemp;
     if (phuLuc == '11') {
-      hunghixhix = this.danhSachChiTietPhuLuc11Temp;
+      phuLucTemp = this.danhSachChiTietPhuLuc11Temp;
     } else if (phuLuc == '12') {
-      hunghixhix = this.danhSachChiTietPhuLuc12Temp;
+      phuLucTemp = this.danhSachChiTietPhuLuc12Temp;
     } else {
-      hunghixhix = this.danhSachChiTietPhuLucTemp;
+      phuLucTemp = this.danhSachChiTietPhuLucTemp;
     }
     let item;
     if (initItem?.id) {
@@ -2122,7 +2128,7 @@ debugger
         stt: "0.1",
       }
     }
-    hunghixhix.push(item);
+    phuLucTemp.push(item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
@@ -2130,39 +2136,51 @@ debugger
   }
 
   sortByIndex() {
-    this.setDetail();
-    this.danhSachChiTietPhuLucTemp.sort((item1, item2) => {
-      if (item1.level > item2.level) {
-        return 1;
-      }
-      if (item1.level < item2.level) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-        return 1;
-      }
-      return 0;
-    });
-    var lstTemp: any[] = [];
-    this.danhSachChiTietPhuLucTemp.forEach(item => {
-      var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-      if (index == -1) {
-        lstTemp.splice(0, 0, item);
-      } else {
-        lstTemp.splice(index + 1, 0, item);
-      }
+    let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
+    idPhuLuc.forEach(async phuLuc => {
+      await this.setDetail(phuLuc);
+      let phuLucTemp = this.getPhuLuc(phuLuc);
+      phuLucTemp.sort((item1, item2) => {
+        if (item1.level > item2.level) {
+          return 1;
+        }
+        if (item1.level < item2.level) {
+          return -1;
+        }
+        if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+          return -1;
+        }
+        if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+          return 1;
+        }
+        return 0;
+      });
+      var lstTemp: any[] = [];
+      phuLucTemp.forEach(item => {
+        var index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+        if (index == -1) {
+          lstTemp.splice(0, 0, item);
+        } else {
+          lstTemp.splice(index + 1, 0, item);
+        }
+      })
+      phuLucTemp = lstTemp;
+      this.setPhuLuc(phuLucTemp, phuLuc);
     })
-
-    this.danhSachChiTietPhuLucTemp = lstTemp;
   }
 
-  setDetail() {
-    this.danhSachChiTietPhuLucTemp.forEach(item => {
-      item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
+  setDetail(phuLuc) {
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    phuLucTemp.forEach(item => {
+      if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
+        item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
+      } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
+        item.level = this.noiDungPL2s.find(e => e.id == item.maNdung)?.level;
+      } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
+        item.level = this.maDans.find(e => e.id == item.maDan)?.level;
+      }
     })
+    this.setPhuLuc(phuLucTemp, phuLuc);
   }
 
   getIdCha(maKM: any) {
@@ -2170,138 +2188,60 @@ debugger
   }
 
   sortWithoutIndex() {
-    this.setDetail();
-    var level = 0;
-    var danhSachChiTietPhuLucTempTemp: any[] = this.danhSachChiTietPhuLucTemp;
-    this.danhSachChiTietPhuLucTemp = [];
-    var data = danhSachChiTietPhuLucTempTemp.find(e => e.level == 0);
-    this.addFirst(data, '1111');
-    danhSachChiTietPhuLucTempTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.id != data.id);
-    var lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
-    while (lstTemp.length != 0 || level == 0) {
-      lstTemp.forEach(item => {
-        let idCha = this.getIdCha(item.maNdung);
-        var index: number = this.danhSachChiTietPhuLucTemp.findIndex(e => e.maNdung == idCha);
-        if (index != -1) {
-          this.addLow(this.danhSachChiTietPhuLucTemp[index].id, item, '1111');
-        } else {
-          index = this.danhSachChiTietPhuLucTemp.findIndex(e => this.getIdCha(e.maNdung) == idCha);
-          this.addSame(this.danhSachChiTietPhuLucTemp[index].id, item, '1111');
-        }
-      })
-      level += 1;
-      lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
-    }
+    let idPhuLuc = PHULUCLIST.find(item => item.maPhuLuc == this.tabSelected)?.lstId;
+    idPhuLuc.forEach(async phuLuc => {
+      await this.setDetail(phuLuc);
+      let phuLucTemp = this.getPhuLuc(phuLuc);
+      this.setDetail(phuLuc);
+      var level = 0;
+      var danhSachChiTietPhuLucTempTemp: any[] = phuLucTemp;
+      phuLucTemp = [];
+      var data = danhSachChiTietPhuLucTempTemp.find(e => e.level == 0);
+      this.addFirst(data, phuLuc);
+      danhSachChiTietPhuLucTempTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.id != data.id);
+      var lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
+      while (lstTemp.length != 0 || level == 0) {
+        lstTemp.forEach(item => {
+          let idCha = this.getIdCha(item.maNdung);
+          var index: number = phuLucTemp.findIndex(e => e.maNdung == idCha);
+          if (index != -1) {
+            this.addLow(phuLucTemp[index].id, item, phuLuc);
+          } else {
+            index = phuLucTemp.findIndex(e => this.getIdCha(e.maNdung) == idCha);
+            this.addSame(phuLucTemp[index].id, item, phuLuc);
+          }
+        })
+        level += 1;
+        lstTemp = danhSachChiTietPhuLucTempTemp.filter(e => e.level == level);
+      }
+    })
   }
 
-  // // them dong moi
-  // addLine(id: number): void {
-  //   let item;
-  //   if (this.tabSelected == TAB_SELECTED.phuLuc1) {
-  //     item = {
-  //       id: uuid.v4() + 'FE',
-  //       checked: false,
-  //     }
-  //   } else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
-  //     item = {
-  //       id: uuid.v4() + 'FE',
-  //       dtoanSdungNamTcong: 0,
-  //       dtoanSdungNamNguonNsnn: 0,
-  //       dtoanSdungNamNguonSn: 0,
-  //       dtoanSdungNamNguonQuy: 0,
-  //       giaiNganThangTcong: 0,
-  //       giaiNganThangTcongTle: 0,
-  //       giaiNganThangNguonNsnn: 0,
-  //       giaiNganThangNguonNsnnTl: 0,
-  //       giaiNganThangNguonSn: 0,
-  //       giaiNganThangNguonSnTle: 0,
-  //       giaiNganThangNguonQuy: 0,
-  //       giaiNganThangNguonQuyTle: 0,
-  //       luyKeGiaiNganTcong: 0,
-  //       luyKeGiaiNganTcongTle: 0,
-  //       luyKeGiaiNganNguonNsnn: 0,
-  //       luyKeGiaiNganNguonNsnnTl: 0,
-  //       luyKeGiaiNganNguonSn: 0,
-  //       luyKeGiaiNganNguonSnTle: 0,
-  //       luyKeGiaiNganNguonQuy: 0,
-  //       luyKeGiaiNganNguonQuyTle: 0,
-  //       checked: false,
-  //     }
-  //   } else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
-  //     item = {
-  //       id: uuid.v4() + 'FE',
-  //       luyKeVonTso: 0,
-  //       luyKeVonNsnn: 0,
-  //       luyKeVonDt: 0,
-  //       luyKeVonThue: 0,
-  //       luyKeVonScl: 0,
-  //       luyKeGiaiNganHetNamTso: 0,
-  //       luyKeGiaiNganHetNamNsnnTso: 0,
-  //       luyKeGiaiNganHetNamNsnnKhNamTruoc: 0,
-  //       khoachVonNamTruocKeoDaiTso: 0,
-  //       khoachVonNamTruocKeoDaiDtpt: 0,
-  //       khoachVonNamTruocKeoDaiVonKhac: 0,
-  //       khoachNamVonTso: 0,
-  //       khoachNamVonNsnn: 0,
-  //       khoachNamVonDt: 0,
-  //       khoachNamVonThue: 0,
-  //       khoachNamVonScl: 0,
-  //       kluongThienTso: 0,
-  //       kluongThienThangBcao: 0,
-  //       giaiNganTso: 0,
-  //       giaiNganTsoTle: 0,
-  //       giaiNganNsnn: 0,
-  //       giaiNganNsnnVonDt: 0,
-  //       giaiNganNsnnVonThue: 0,
-  //       giaiNganNsnnVonScl: 0,
-  //       giaiNganNsnnTle: 0,
-  //       giaiNganNsnnTleVonDt: 0,
-  //       giaiNganNsnnTleVonThue: 0,
-  //       giaiNganNsnnTleVonScl: 0,
-  //       luyKeGiaiNganDauNamTso: 0,
-  //       luyKeGiaiNganDauNamTsoTle: 0,
-  //       luyKeGiaiNganDauNamNsnn: 0,
-  //       luyKeGiaiNganDauNamNsnnVonDt: 0,
-  //       luyKeGiaiNganDauNamNsnnVonThue: 0,
-  //       luyKeGiaiNganDauNamNsnnVonScl: 0,
-  //       luyKeGiaiNganDauNamNsnnTle: 0,
-  //       luyKeGiaiNganDauNamNsnnTleVonDt: 0,
-  //       luyKeGiaiNganDauNamNsnnTleVonThu: 0,
-  //       luyKeGiaiNganDauNamNsnnTleVonScl: 0,
-  //       checked: false,
-  //     }
-  //   }
-  //   this.danhSachChiTietPhuLucTemp.splice(id, 0, item);
-  //   this.editCache[item.id] = {
-  //     edit: true,
-  //     data: { ...item }
-  //   };
-  // }
   addLine(id: any, phuLuc) {
-    let hunghixhix = this.getPhuLuc(phuLuc);
+    let phuLucTemp = this.getPhuLuc(phuLuc);
     let dataPL;                 // du lieu default phu luc
     let lstKmTemp;              // list khoan muc chinh
     var maKm;                   // ma khoan muc
-  
+
     if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
       dataPL = new ItemDataPL1();
       lstKmTemp = this.noiDungs;
-      maKm = hunghixhix.find(e => e.id == id)?.maNdung;
+      maKm = phuLucTemp.find(e => e.id == id)?.maNdung;
     } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
       dataPL = new ItemDataPL2();
       lstKmTemp = this.noiDungPL2s;
-      maKm = hunghixhix.find(e => e.id == id)?.maNdung;
+      maKm = phuLucTemp.find(e => e.id == id)?.maNdung;
     } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
       dataPL = new ItemDataPL3();
       lstKmTemp = this.maDans;
-      maKm = hunghixhix.find(e => e.id == id)?.maDan;
+      maKm = phuLucTemp.find(e => e.id == id)?.maDan;
     }
-
+    dataPL.header = phuLuc;
     let obj = {
       maKhoanMuc: maKm,
       lstKhoanMuc: lstKmTemp,
     }
-    
+
 
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách nội dung',
@@ -2318,11 +2258,11 @@ debugger
       if (res) {
         var index: number;
         if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
-          index = hunghixhix.findIndex(e => e.maNdung == res.maKhoanMuc);
+          index = phuLucTemp.findIndex(e => e.maNdung == res.maKhoanMuc);
         } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
-          index = hunghixhix.findIndex(e => e.maNdung == res.maKhoanMuc);
+          index = phuLucTemp.findIndex(e => e.maNdung == res.maKhoanMuc);
         } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
-          index = hunghixhix.findIndex(e => e.maDan == res.maKhoanMuc);
+          index = phuLucTemp.findIndex(e => e.maDan == res.maKhoanMuc);
         }
         if (index == -1) {
           let data: any = {
@@ -2331,18 +2271,18 @@ debugger
             maDan: res.maKhoanMuc,
             level: lstKmTemp.find(e => e.id == maKm)?.level,
           };
-          if (hunghixhix.length == 0) {
+          if (phuLucTemp.length == 0) {
             this.addFirst(data, phuLuc);
           } else {
             this.addSame(id, data, phuLuc);
           }
         }
         if (PHULUCLIST[0].maPhuLuc == this.tabSelected) {
-          id = hunghixhix.find(e => e.maNdung == res.maKhoanMuc)?.id;
+          id = phuLucTemp.find(e => e.maNdung == res.maKhoanMuc)?.id;
         } else if (PHULUCLIST[1].maPhuLuc == this.tabSelected) {
-          id = hunghixhix.find(e => e.maNdung == res.maKhoanMuc)?.id;
+          id = phuLucTemp.find(e => e.maNdung == res.maKhoanMuc)?.id;
         } else if (PHULUCLIST[2].maPhuLuc == this.tabSelected) {
-          id = hunghixhix.find(e => e.maDan == res.maKhoanMuc)?.id;
+          id = phuLucTemp.find(e => e.maDan == res.maKhoanMuc)?.id;
         }
         res.lstKhoanMuc.forEach(item => {
           var data: any = {
@@ -2359,8 +2299,8 @@ debugger
   }
 
   getLowStatus(str: string, phuLuc: string) {
-    let hunghixhix = this.getPhuLuc(phuLuc);
-    var index: number = hunghixhix.findIndex(e => this.getHead(e.stt) == str);
+    let phuLucTemp = this.getPhuLuc(phuLuc);
+    var index: number = phuLucTemp.findIndex(e => this.getHead(e.stt) == str);
     if (index == -1) {
       return false;
     }
@@ -2385,5 +2325,22 @@ debugger
     } else {
       this.danhSachChiTietPhuLucTemp = listPhuLuc;
     }
+  }
+
+  async savePhuLuc1() {
+    if (this.tabSelected == PHULUCLIST[0].maPhuLuc) {
+      this.danhSachChiTietPhuLucTemp = [];
+      await this.danhSachChiTietPhuLuc11Temp.forEach(e => {
+        this.danhSachChiTietPhuLucTemp.push(e);
+      })
+      await this.danhSachChiTietPhuLuc12Temp.forEach(e => {
+        this.danhSachChiTietPhuLucTemp.push(e);
+      })
+    }
+  }
+
+  resetList() {
+    this.danhSachChiTietPhuLuc11Temp = [];
+    this.danhSachChiTietPhuLuc12Temp = [];
   }
 }
