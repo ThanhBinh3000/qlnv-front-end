@@ -30,12 +30,10 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()" *ngIf="bienBanLayMau.trangThai === globals.prop.DU_THAO || id===0 
-            || bienBanLayMau.trangThai == globals.prop.TU_CHOI 
-            || bienBanLayMau.trangThai == globals.prop.DU_THAO_TRINH_DUYET
-            || bienBanLayMau.trangThai == globals.prop.LANH_DAO_DUYET">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectBienBanLayMau()"
+            *ngIf="bienBanLayMau.trangThai === globals.prop.DU_THAO || id===0">
             <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Hủy bỏ</span>
+            <span>Quay về</span>
           </a>
         </div>
       </div>
@@ -45,8 +43,8 @@
     <div class="contentDetail">
       <div class="main-content">
         <div class="title-chi-tieu">
-          <!-- <span [ngClass]="thongTinTrangThai(bienBanLayMau.trangThai)">{{bienBanLayMau.tenTrangThai}}</span> -->
-          <span class="title-form">biên bản lấy mẫu hàng gạo để kiểm tra các chỉ tiêu kỹ thuật</span>
+          <!-- <span [ngClass]="thongTinTrangThai(bienBanLayMau.trangThai)">{{bienBanLayMau.tenTrangThai ? bienBanLayMau.tenTrangThai : 'SOẠN THẢO'}}</span> -->
+          <span class="title-form">Biên bản lấy mẫu hàng kiểm tra</span>
         </div>
         <nz-card nzTitle="" class="flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">

@@ -34,12 +34,9 @@
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
           </a>
-          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="huyBo()" *ngIf="bienBanNhapDayKho.trangThai === globals.prop.DU_THAO || id===0 
-            || bienBanNhapDayKho.trangThai == globals.prop.TU_CHOI 
-            || bienBanNhapDayKho.trangThai == globals.prop.DU_THAO_TRINH_DUYET
-            || bienBanNhapDayKho.trangThai == globals.prop.LANH_DAO_DUYET">
+          <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="redirectbienBanNhapDayKho()">
             <i class="icon htvbdh_tcdt_delete"></i>
-            <span>Hủy bỏ</span>
+            <span>Quay về</span>
           </a>
         </div>
       </div>
