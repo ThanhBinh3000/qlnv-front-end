@@ -17,7 +17,7 @@
           <div nz-col nzSpan="6">
             <label class="search__label">Trạng thái</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
-              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten"></nz-option>
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -31,7 +31,6 @@
               <th nzWidth="60px">STT</th>
               <th nzWidth="300px">Đơn vị</th>
               <th nzWidth="130px">Mã phương án</th>
-              <th nzWidth="100px">Ngày giao</th>
               <th nzWidth="100px">Năm dự toán</th>
               <th nzWidth="150px" class="text-center">Trạng thái</th>
               <th></th>
@@ -40,23 +39,23 @@
           <tbody>
             <tr *ngFor="let item of basicTable.data; let i = index">
               <td>{{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}</td>
-              <td>{{getUnitName(item.maDvi)}}</td>
-              <td><a (click)="xemChiTiet(item.id)">{{ item.maBcao }}</a></td>
-              <td>{{item.ngayPheDuyet}}</td>
-              <td>{{item.namBcao}}</td>
+              <td>{{getUnitName(item.maDviNhan)}}</td>
+              <td>{{ item.maPa }}</td>
+              <td>{{item.namPa}}</td>
               <td class="text-center">
                 {{getStatusName(item.trangThai)}}
               </td>
               <td>
-                <button type="button" class="btn btn-main" *ngIf="item.trangThai == '-1'">
+                <ng-container *ngIf="item.trangThai == '1'; else xem">
+                <button type="button" class="btn btn-main" >
                   <span>Thông báo đến đơn vị cấp dưới</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)" *ngIf="item.trangThai == '2' || item.trangThai == '4'">
-                  <span>Phê duyệt</span>
-                </button>
+              </ng-container>
+              <ng-template #xem>
                 <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
                   <span>Xem</span>
                 </button>
+              </ng-template>
               </td>
             </tr>
           </tbody>

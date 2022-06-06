@@ -26,21 +26,6 @@
       top: 0;
     }
   }
-  .tep_sqd{
-    cursor: pointer;
-    //position: absolute;
-    top: 4px;
-    height: 20px;
-    left: 695px;
-    color: #2196f3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    span {
-      margin-left: 5px;
-    }
-  }
 
 }
 
@@ -67,4 +52,10 @@
   span {
     margin-left: 5px;
   }
+}
+
+
+.contentTemplate_chonpa{
+  display: flex;
+  flex-direction: column;
 }
