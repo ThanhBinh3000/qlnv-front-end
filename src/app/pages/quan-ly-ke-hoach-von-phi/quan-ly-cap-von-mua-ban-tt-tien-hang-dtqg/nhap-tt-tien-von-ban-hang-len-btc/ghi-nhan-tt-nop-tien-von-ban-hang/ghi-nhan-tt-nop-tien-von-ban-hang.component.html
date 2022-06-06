@@ -117,7 +117,7 @@
                                                   <td>
                                                        <div *ngFor="let item of vatTus">
                                                             <div *ngIf="item.id == data.maVtu">
-                                                                 {{item.tenDm}}
+                                                                 {{item.ten}}
                                                             </div>
                                                        </div>
                                                   </td>
@@ -158,7 +158,7 @@
                                                             nzPlaceHolder="Chọn mặt hàng"
                                                             [(ngModel)]="editCache[data.id].data.maVtu">
                                                             <nz-option *ngFor="let item of vatTus" [nzValue]="item.id"
-                                                                 [nzLabel]="item.tenDm"></nz-option>
+                                                                 [nzLabel]="item.ten"></nz-option>
                                                        </nz-select>
                                                   </td>
                                                   <td>
