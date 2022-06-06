@@ -13,10 +13,12 @@ import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-t
 import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
 import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau.component';
 import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
+import { ChucNangKiemTraComponent } from './chuc-nang-kiem-tra/chuc-nang-kiem-tra.component';
 
 @NgModule({
   declarations: [
     KiemTraChatLuongComponent,
+    ChucNangKiemTraComponent,
     LapBienBanNghiemThuBaoQuanComponent,
     ThongTinBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
@@ -35,6 +37,7 @@ import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-
   ],
   exports: [
     KiemTraChatLuongComponent,
+    ChucNangKiemTraComponent,
     LapBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
