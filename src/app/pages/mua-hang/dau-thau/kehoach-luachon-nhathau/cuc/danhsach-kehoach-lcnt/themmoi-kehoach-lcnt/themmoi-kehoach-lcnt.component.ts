@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
@@ -48,6 +48,11 @@ interface ItemData {
   styleUrls: ['./themmoi-kehoach-lcnt.component.scss']
 })
 export class ThemmoiKehoachLcntComponent implements OnInit {
+  @Input()
+  typeVthh: string;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   searchValue = '';
   searchFilter = {
     soDeXuat: '',
@@ -244,18 +249,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         maDvi: this.userInfo.MA_DVI
       }
     )
-    this.fileDinhKem = dataDetail.children
-    this.listOfData = dataDetail?.children2 ?? [];
-    this.editCache = {};
-    this.listOfData?.forEach((value, index) => {
-      this.editCache[index] = {
-        edit: false,
-        data: { ...value }
-      };
-    })
+    if (dataDetail) {
+      this.fileDinhKem = dataDetail.children
+      this.listOfData = dataDetail?.children2 ?? [];
+      this.editCache = {};
+      this.listOfData?.forEach((value, index) => {
+        this.editCache[index] = {
+          edit: false,
+          data: { ...value }
+        };
+      })
+      this.bindingCanCu(dataDetail.children3);
+    }
     this.setTitle();
     this.getNameDanhSachDvi(this.formThongTinChung.get('tenDvi').value);
-    this.bindingCanCu(dataDetail.children3);
   }
 
   bindingCanCu(data) {
@@ -689,19 +696,20 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
 
   quayLai() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn quay lại ?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        let loatVthh = this.router.url.split('/')[4]
-        this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
-      },
-    });
+    // this.modal.confirm({
+    //   nzClosable: false,
+    //   nzTitle: 'Xác nhận',
+    //   nzContent: 'Bạn có chắc chắn muốn quay lại ?',
+    //   nzOkText: 'Đồng ý',
+    //   nzCancelText: 'Không',
+    //   nzOkDanger: true,
+    //   nzWidth: 350,
+    //   nzOnOk: async () => {
+    //     let loatVthh = this.router.url.split('/')[4]
+    //     this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/danh-sach']);
+    //   },
+    // });
+    this.showListEvent.emit();
   }
 
   async guiDuyet() {

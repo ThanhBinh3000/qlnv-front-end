@@ -13,7 +13,7 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmo
   imports: [
     CommonModule,
     KehoachLuachonNhathauRoutingModule,
-    ComponentsModule, 
+    ComponentsModule,
     MainModule
   ]
 })

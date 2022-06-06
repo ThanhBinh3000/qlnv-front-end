@@ -285,7 +285,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         hthucLcnt: dataDetail.hthucLcnt,
         nguonVon: dataDetail.nguonVon,
         tgianTbao: [dataDetail.tuTgianTbao, dataDetail.denTgianTbao],
-        tgianPhatHanh: [dataDetail.tuTgianTbao, dataDetail.denTgianTbao],
+        tgianPhatHanh: [dataDetail.tuTgianPhanh, dataDetail.denTgianPhanh],
         tgianDongthau: [dataDetail.tuTgianDthau, dataDetail.denTgianDthau],
         tgianMoThau: [dataDetail.tuTgianMthau, dataDetail.denTgianMthau],
         tgianNhapHang: [dataDetail.tuTgianNhang, dataDetail.denTgianNhang],

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -33,21 +33,20 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     private route: ActivatedRoute,
     private helperService: HelperService
   ) {
-    router.events.subscribe((val) => {
-      this.getTitleVthh();
-    })
+
   }
-  tabSelected: string = 'phuong-an-tong-hop';
-  searchValue = '';
-  visibleTab: boolean = false;
+  @Input()
+  loaiVthh: string;
+
+  isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  // loaiVthh: string = ''
   searchFilter = {
     soDx: '',
     namKh: dayjs().get('year'),
     ngayTongHop: '',
-    loaiVthh: ''
+    loaiVthh: '',
+    trichYeu: ''
   };
   listVthh: any[] = [];
   dataTable: any[] = [];
@@ -62,11 +61,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
+  selectedId: number = 0;
 
   async ngOnInit() {
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -75,6 +74,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
+      this.searchFilter.loaiVthh = convertVthhToId(this.loaiVthh);
       await this.search();
     }
     catch (e) {
@@ -82,12 +82,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
-    this.search();
   }
 
   async search() {
@@ -102,6 +96,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
+      trichYeu: this.searchFilter.trichYeu,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -149,24 +144,23 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   themMoi() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/them-moi']);
+    this.isDetail = true;
+  }
+
+  showList() {
+    this.isDetail = false;
   }
 
   detail(data?) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/chi-tiet', data.id]);
-  }
-
-  edit(data?) {
-    let loatVthh = this.router.url.split('/')[4]
-    this.router.navigate(['/mua-hang/dau-thau/kehoach-luachon-nhathau/' + loatVthh + '/chinh-sua', data.id]);
+    this.selectedId = data.id;
+    this.isDetail = true;
   }
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
+    this.searchFilter.trichYeu = null;
     this.search();
   }
 
