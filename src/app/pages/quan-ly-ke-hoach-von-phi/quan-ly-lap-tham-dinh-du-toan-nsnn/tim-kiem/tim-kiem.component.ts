@@ -31,7 +31,40 @@ export class TimKiemComponent implements OnInit {
 	};
 	//danh muc
 	danhSachBaoCao: any[] = [];
-	trangThais: any[] = TRANG_THAI_TIM_KIEM;
+	trangThais: any[] = [
+		{
+			id: Utils.TT_BC_1,
+			tenDm: "Đang soạn",
+		},
+		{
+			id: Utils.TT_BC_2,
+			tenDm: "Trình duyệt",
+		},
+		{
+			id: Utils.TT_BC_3,
+			tenDm: "Trưởng BP từ chối",
+		},
+		{
+			id: Utils.TT_BC_4,
+			tenDm: "Trưởng BP chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_5,
+			tenDm: "Lãnh đạo từ chối",
+		},
+		{
+			id: Utils.TT_BC_7,
+			tenDm: "Lãnh đạo chấp nhận",
+		},
+		{
+			id: Utils.TT_BC_8,
+			tenDm: "Từ chối",
+		},
+		{
+			id: Utils.TT_BC_9,
+			tenDm: "Tiếp nhận",
+		},
+	];
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;

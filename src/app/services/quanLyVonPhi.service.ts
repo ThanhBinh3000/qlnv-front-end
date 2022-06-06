@@ -100,8 +100,8 @@ export class QuanLyVonPhiService extends BaseService {
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
-      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/' + id,
-      'http://192.168.1.111:8094/lap-tham-dinh/chi-tiet/' + id,
+      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/' + id,
+      // 'http://192.168.1.111:8094/lap-tham-dinh/chi-tiet/' + id,
     );
   }
 
@@ -167,8 +167,8 @@ export class QuanLyVonPhiService extends BaseService {
   // trinh duyet
   trinhDuyetService(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/them-moi',
-      // 'http://192.168.1.111:8094/lap-tham-dinh/them-moi',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/them-moi',
+      'http://192.168.1.111:8094/lap-tham-dinh/them-moi',
       request,
     );
   }

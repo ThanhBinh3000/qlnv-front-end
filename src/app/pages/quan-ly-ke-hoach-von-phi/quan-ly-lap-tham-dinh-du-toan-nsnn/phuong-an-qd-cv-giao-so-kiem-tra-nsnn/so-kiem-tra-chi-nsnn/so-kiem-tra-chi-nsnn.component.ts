@@ -158,8 +158,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     }
 
     redirectkehoachvonphi() {
-        // this.route.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn']);
-        this.location.back()
+        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-so-kiem-tra-chi-nsnn']);
     }
 
     

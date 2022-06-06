@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, divMoney, DON_VI_TIEN, KHOAN_MUC, LA_MA, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
@@ -48,7 +48,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
-    qdTrungThau: string;
+    canCuGia: string = Utils.QD_DON_GIA;
     loaiDn: string;
     congVan: ItemCongVan;
     ngayTao: string;
@@ -65,6 +65,9 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     donVis: any[] = [];
+    vatTus: any[] = [];
+    loaiDns: any[] = LOAI_DE_NGHI;
+    canCuGias: any[] = CAN_CU_GIA;
     dviTinhs: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
@@ -134,6 +137,8 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
     async ngOnInit() {
         //lay id cua ban ghi
         this.id = this.routerActive.snapshot.paramMap.get('id');
+        this.loaiDn = this.routerActive.snapshot.paramMap.get('loaiDn');
+        this.qdChiTieu = this.routerActive.snapshot.paramMap.get('qdChiTieu');
         //lay thong tin user
         let userName = this.userService.getUserName();
         await this.getUserInfo(userName);
@@ -170,9 +175,33 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                 },
             );
         }
+        await this.danhMuc.dMDviTinh().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.dviTinhs = res.data?.content;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            },
+        );
+
+        await this.danhMuc.dMVatTu().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.vatTus = res.data?.content;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            },
+        );
         this.getStatusButton();
         this.spinner.hide();
-
     }
 
     redirectkehoachvonphi() {
@@ -311,7 +340,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
                     })
                     this.maDeNghi = data.data.maDeNghi;
                     this.qdChiTieu = data.data.qdChiTieu;
-                    this.qdTrungThau = data.data.qdTrungThau;
+                    this.canCuGia = data.data.canCuGia;
                     this.loaiDn = data.data.loaiDn;
                     this.congVan = data.data.congVan;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);

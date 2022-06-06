@@ -44,7 +44,32 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     danhSachBaoCao: any = [];
     donViTaos: any[] = [];
     donVis: any[] = [];
-    trangThais: any = TRANG_THAI_TIM_KIEM;
+    trangThais: any[] = [
+        {
+            id: Utils.TT_BC_1,
+            tenDm: "Đang soạn",
+        },
+        {
+            id: Utils.TT_BC_2,
+            tenDm: "Trình duyệt",
+        },
+        {
+            id: Utils.TT_BC_3,
+            tenDm: "Trưởng BP từ chối",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Trưởng BP chấp nhận",
+        },
+        {
+            id: Utils.TT_BC_5,
+            tenDm: "Lãnh đạo từ chối",
+        },
+        {
+            id: Utils.TT_BC_6,
+            tenDm: "Lãnh đạo chấp nhận",
+        },
+    ];
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -112,20 +137,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
-    }
-
-    redirectThongTinTimKiem() {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            0,
-        ]);
-    }
-
-    redirectSuaThongTinTimKiem(id) {
-        this.router.navigate([
-            '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-            id,
-        ]);
     }
 
     //download file về máy tính

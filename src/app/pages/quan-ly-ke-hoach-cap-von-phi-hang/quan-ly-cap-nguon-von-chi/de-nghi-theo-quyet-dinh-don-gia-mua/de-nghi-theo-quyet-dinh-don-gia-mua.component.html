@@ -65,7 +65,7 @@
 						<tr>
 							<th>Mã đề nghị</th>
 							<th>Quyết định chỉ tiêu</th>
-							<th>Quyết định trúng thầu</th>
+							<th>Căn cứ giá</th>
 							<th>Loại đề nghị</th>
 							<th>Công văn</th>
 							<th>Ngày lập</th>
@@ -78,8 +78,20 @@
 						<tr>
 							<td>{{maDeNghi}}</td>
 							<td>{{qdChiTieu}}</td>
-							<td>{{qdTrungThau}}</td>
-							<td>{{loaiDn}}</td>
+							<td>
+								<ng-container *ngFor="let item of canCuGias">
+									<ng-container *ngIf="canCuGia == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
+							<td>
+								<ng-container *ngFor="let item of loaiDns">
+									<ng-container *ngIf="loaiDn == item.id">
+										{{item.tenDm}}
+									</ng-container>
+								</ng-container>
+							</td>
 							<td>
 								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
 									<button nz-button>

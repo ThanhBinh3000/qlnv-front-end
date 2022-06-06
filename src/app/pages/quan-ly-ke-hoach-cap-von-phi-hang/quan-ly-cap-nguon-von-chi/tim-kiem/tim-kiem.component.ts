@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from '../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 
@@ -22,27 +22,31 @@ export class TimKiemComponent implements OnInit {
 	//thong tin tim kiem
 	searchFilter = {
 		maDn: null,
-        trangThai: "",
-        tuNgay: "",
-        denNgay: "",
-        qdChiTieu: "",
-        qdTrungThau: "",
-        qdDonGiaMua: "",
-        loaiDn: "",
-        maDviTao: "",
-        loaiTimKiem: "0",
+		trangThai: "",
+		tuNgay: "",
+		denNgay: "",
+		qdChiTieu: "",
+		canCuGia: "",
+		loaiDn: "",
+		maDviTao: "",
+		loaiTimKiem: "0",
 	};
+	capDvi: string;
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = TRANG_THAI_TIM_KIEM;
-	loaiDns: any[] = [];
+	donVis: any[] = [];
+	loaiDns: any[] = LOAI_DE_NGHI;
+	canCuGias: any[] = CAN_CU_GIA;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
-	pages = {                           
+	pages = {
 		size: 10,
 		page: 1,
 	}
+	//trangThai
+	statusBtnNew: boolean = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -60,8 +64,29 @@ export class TimKiemComponent implements OnInit {
 		let userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 
-		this.searchFilter.maDviTao = this.userInfo?.dvql;	
-		this.onSubmit();	
+		await this.danhMuc.dMDonVi().toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.donVis = data.data;
+					this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+				}
+			},
+			err => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+			}
+		);
+
+		if (this.capDvi == Utils.TONG_CUC) {
+			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
+			this.searchFilter.loaiDn = Utils.MUA_VTU;
+		} else {
+			this.loaiDns = this.loaiDns.filter(e => e != Utils.MUA_VTU);
+		}
+
+		this.searchFilter.maDviTao = this.userInfo?.dvql;
+		this.onSubmit();
 	}
 
 	//get user info
@@ -97,8 +122,9 @@ export class TimKiemComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
+		this.statusBtnNew = true;
 		let trangThais = [];
-		if (this.searchFilter.trangThai){
+		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
 		}
 		let requestReport = {
@@ -106,10 +132,9 @@ export class TimKiemComponent implements OnInit {
 			maDvi: this.searchFilter.maDviTao,
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
 			ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
-            qdChiTieu: this.searchFilter.qdChiTieu,
-            qdTrungThau: this.searchFilter.qdTrungThau,
-            qdDonGiaMua: this.searchFilter.qdDonGiaMua,
-            loaiDn: this.searchFilter.loaiDn,
+			qdChiTieu: this.searchFilter.qdChiTieu,
+			canCuGia: this.searchFilter.canCuGia,
+			loaiDn: this.searchFilter.loaiDn,
 			paggingReq: {
 				limit: this.pages.size,
 				page: this.pages.page,
@@ -150,19 +175,35 @@ export class TimKiemComponent implements OnInit {
 		this.pages.size = size;
 		this.onSubmit();
 	}
-	xoaDieuKien() {
-		this.searchFilter.maDn =  null
-        this.searchFilter.trangThai = null
-        this.searchFilter.tuNgay = null
-        this.searchFilter.denNgay = null
-        this.searchFilter.qdChiTieu = null
-        this.searchFilter.qdTrungThau = null
-        this.searchFilter.qdDonGiaMua = null
-        this.searchFilter.loaiDn = null
-	}
+	// xoaDieuKien() {
+	// 	this.searchFilter.maDn =  null
+	//     this.searchFilter.trangThai = null
+	//     this.searchFilter.tuNgay = null
+	//     this.searchFilter.denNgay = null
+	//     this.searchFilter.qdChiTieu = null
+	//     this.searchFilter.qdTrungThau = null
+	//     this.searchFilter.qdDonGiaMua = null
+	//     this.searchFilter.loaiDn = null
+	// }
 
 	taoMoi() {
-		
+		this.statusBtnNew = false;
+		if (!this.searchFilter.qdChiTieu ||
+			!this.searchFilter.canCuGia ||
+			!this.searchFilter.loaiDn) {
+			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+			return;
+		}
+		if (this.searchFilter.canCuGia == Utils.HD_TRUNG_THAU) {
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-trung-thau/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+			])
+		}
+		else {
+			this.router.navigate([
+				'qlcap-von-phi-hang/quan-ly-cap-nguon-von-chi/de-nghi-theo-quyet-dinh-don-gia-mua/' + this.searchFilter.loaiDn + '/' + this.searchFilter.qdChiTieu,
+			])
+		}
 	}
 
 	xemChiTiet(id: string) {
@@ -171,14 +212,14 @@ export class TimKiemComponent implements OnInit {
 		])
 	}
 
-	getStatusName(trangThai: string){
+	getStatusName(trangThai: string) {
 		return this.trangThais.find(e => e.id == trangThai).tenDm;
 	}
 
-	xoaBaoCao(id: any){
+	xoaBaoCao(id: any) {
 		this.quanLyVonPhiService.xoaBaoCaoLapThamDinh(id).toPromise().then(
 			data => {
-				if (data.statusCode == 0){
+				if (data.statusCode == 0) {
 					this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 					this.onSubmit();
 				} else {
@@ -191,10 +232,10 @@ export class TimKiemComponent implements OnInit {
 		)
 	}
 
-	checkDeleteReport(item: any): boolean{
+	checkDeleteReport(item: any): boolean {
 		var check: boolean;
 		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-		this.userInfo?.username == item.nguoiTao){
+			this.userInfo?.username == item.nguoiTao) {
 			check = true;
 		} else {
 			check = false;

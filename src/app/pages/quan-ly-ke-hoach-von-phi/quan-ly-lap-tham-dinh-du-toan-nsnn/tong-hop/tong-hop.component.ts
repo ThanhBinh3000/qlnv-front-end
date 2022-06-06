@@ -37,6 +37,8 @@ export class TongHopComponent implements OnInit {
 		page: 1,
 	}
 
+	statusBtnValidate: boolean = true;
+
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private danhMuc: DanhMucHDVService,
@@ -88,6 +90,7 @@ export class TongHopComponent implements OnInit {
 
 	//search list bao cao theo tieu chi
 	async onSubmit() {
+		this.statusBtnValidate = true;
 		if (this.namHienTai >= 3000 || this.namHienTai < 1000) {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
 			return;
@@ -133,6 +136,7 @@ export class TongHopComponent implements OnInit {
 	}
 
 	tongHop() {
+		this.statusBtnValidate = false;
 		if (!this.namHienTai) {
 			this.notification.warning(MESSAGE.ERROR, MESSAGEVALIDATE.NOTEMPTYS);
 			return;

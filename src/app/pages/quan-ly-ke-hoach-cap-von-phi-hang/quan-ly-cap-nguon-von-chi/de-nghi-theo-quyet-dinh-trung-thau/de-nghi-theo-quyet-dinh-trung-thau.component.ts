@@ -33,7 +33,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     //thong tin chung bao cao
     maDeNghi: string;
     qdChiTieu: string;
-    qdTrungThau: string;
+    canCuGia: string;
     loaiDn: string;
     congVan: ItemCongVan;
     ngayTao: string;
@@ -49,6 +49,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     //danh muc
     lstCtietBcao: any[] = [];
     donVis: any[] = [];
+    canCuGias: any[] = [];
     dviTinhs: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
     lstFiles: any[] = []; //show file ra man hinh
@@ -285,8 +286,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
                     this.id = data.data.id;
                     this.lstCtietBcao = data.data.listCtiet;
                     this.maDeNghi = data.data.maDeNghi;
-                    this.qdChiTieu = data.data.qdChiTieu;
-                    this.qdTrungThau = data.data.qdTrungThau;
+                    this.canCuGia = data.data.canCuGia;
                     this.loaiDn = data.data.loaiDn;
                     this.congVan = data.data.congVan;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);

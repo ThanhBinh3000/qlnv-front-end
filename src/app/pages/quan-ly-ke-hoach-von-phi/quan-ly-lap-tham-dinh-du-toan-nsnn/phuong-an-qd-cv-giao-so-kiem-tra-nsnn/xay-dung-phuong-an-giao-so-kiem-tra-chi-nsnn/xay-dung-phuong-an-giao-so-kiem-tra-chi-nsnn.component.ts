@@ -82,28 +82,28 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     checkGiao: boolean = true;
     listId: string = '';
     lstFiles: any[] = []; //show file ra man hinh
-	//file
-	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
-	fileList: NzUploadFile[] = [];
-	fileDetail: NzUploadFile;
-	//beforeUpload: any;
-	listIdFilesDelete: any = [];                        // id file luc call chi tiet
+    //file
+    listFile: File[] = [];                      // list file chua ten va id de hien tai o input
+    fileList: NzUploadFile[] = [];
+    fileDetail: NzUploadFile;
+    //beforeUpload: any;
+    listIdFilesDelete: any = [];                        // id file luc call chi tiet
 
     // before uploaf file
-	beforeUpload = (file: NzUploadFile): boolean => {
-		this.fileList = this.fileList.concat(file);
-		return false;
-	};
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
+        return false;
+    };
 
     // them file vao danh sach
-	handleUpload(): void {
-		this.fileList.forEach((file: any) => {
-			const id = file?.lastModified.toString();
-			this.lstFiles.push({ id: id, fileName: file?.name });
-			this.listFile.push(file);
-		});
-		this.fileList = [];
-	}
+    handleUpload(): void {
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
+        });
+        this.fileList = [];
+    }
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -159,7 +159,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-            
+
             this.namPa = this.newDate.getFullYear();
         }
 
@@ -226,55 +226,55 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     //upload file
-	async uploadFile(file: File) {
-		// day file len server
-		const upfile: FormData = new FormData();
-		upfile.append('file', file);
-		upfile.append('folder', this.maDonViTao + '/' + this.maPa);
-		let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
-			(data) => {
-				let objfile = {
-					fileName: data.filename,
-					fileSize: data.size,
-					fileUrl: data.url,
-				}
-				return objfile;
-			},
-			err => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			},
-		);
-		return temp;
-	}
+    async uploadFile(file: File) {
+        // day file len server
+        const upfile: FormData = new FormData();
+        upfile.append('file', file);
+        upfile.append('folder', this.maDonViTao + '/' + this.maPa);
+        let temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+            (data) => {
+                let objfile = {
+                    fileName: data.filename,
+                    fileSize: data.size,
+                    fileUrl: data.url,
+                }
+                return objfile;
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        return temp;
+    }
 
-	// xoa file trong bang file
-	deleteFile(id: string): void {
-		this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
-		this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-		this.listIdFilesDelete.push(id);
-	}
+    // xoa file trong bang file
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdFilesDelete.push(id);
+    }
 
-	//download file về máy tính
-	async downloadFile(id: string) {
-		let file!: File;
-		file = this.listFile.find(element => element?.lastModified.toString() == id);
-		if (!file) {
-			let fileAttach = this.lstFiles.find(element => element?.id == id);
-			if (fileAttach) {
-				await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-					(data) => {
-						fileSaver.saveAs(data, fileAttach.fileName);
-					},
-					err => {
-						this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-					},
-				);
-			}
-		} else {
-			const blob = new Blob([file], { type: "application/octet-stream" });
-			fileSaver.saveAs(blob, file.name);
-		}
-	}
+    //download file về máy tính
+    async downloadFile(id: string) {
+        let file!: File;
+        file = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            let fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    }
 
 
     //download file về máy tính
@@ -449,15 +449,15 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         });
         //get list file url
-		let listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+        let listFile: any = [];
+        for (const iterator of this.listFile) {
+            listFile.push(await this.uploadFile(iterator));
+        }
         // gui du lieu trinh duyet len server
         let request = {
             id: this.id,
             fileDinhKems: this.lstFiles,
-			listIdDeleteFiles: this.listIdFilesDelete,  
+            listIdDeleteFiles: this.listIdFilesDelete,
             listCtiet: lstCtietBcaoTemp,
             maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
@@ -469,44 +469,21 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             maGiao: this.maGiao,
         };
         this.spinner.show();
-        if (!this.id) {
-            this.quanLyVonPhiService.themMoiPhuongAn(request).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        if (!this.id) {
-                            this.router.navigate([
-                                '/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn/' + data.data.id,
-                            ])
-                        }
-                        else {
-                            await this.getDetailReport();
-                            this.getStatusButton();
-                        }
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        } else {
-            this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                        await this.getDetailReport();
-                        this.getStatusButton();
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        }
+
+        this.quanLyVonPhiService.capnhatPhuongAn(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    await this.getDetailReport();
+                    this.getStatusButton();
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
         this.spinner.hide();
     }
 
@@ -536,7 +513,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
             })
         } else {
             this.lstTtCtiet.forEach(item => {
-                if (item.trangThai == "0"){
+                if (item.trangThai == "0") {
                     let lstCtiet: any[] = [];
                     this.lstCtietBcao.forEach(data => {
                         lstCtiet.push({
@@ -571,7 +548,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.GIAO_SO_TRAN_CHI_TOAN_BO);
                         this.lstTtCtiet.forEach(item => {
-                            if (item.trangThai == "0"){
+                            if (item.trangThai == "0") {
                                 item.trangThai = "1";
                             }
                         })

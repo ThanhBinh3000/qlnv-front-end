@@ -269,8 +269,7 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
 
     dong() {
-        // this.router.navigate(['/'])
-        this.location.back()
+        this.router.navigate(['/qlkh-von-phi/quan-ly-lap-tham-dinh-du-toan-nsnn/tim-kiem-phuong-an-qd-cv-giao-so-kiem-tra-nsnn/1']);
     }
 
 }
