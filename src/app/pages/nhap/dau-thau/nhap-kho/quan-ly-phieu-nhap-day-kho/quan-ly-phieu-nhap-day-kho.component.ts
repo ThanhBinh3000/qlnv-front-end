@@ -45,7 +45,8 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
+  isDetail: boolean = false;
+  selectedId: number = 0;
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
@@ -271,17 +272,22 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if (!isView) {
-      let urlChiTiet = this.router.url + '/thong-tin'
-      this.router.navigate([urlChiTiet, id,]);
-    }
-    else {
-      let urlChiTiet = this.router.url + '/xem-chi-tiet'
-      this.router.navigate([urlChiTiet, id,]);
-    }
+    // if (!isView) {
+    //   let urlChiTiet = this.router.url + '/thong-tin'
+    //   this.router.navigate([urlChiTiet, id,]);
+    // }
+    // else {
+    //   let urlChiTiet = this.router.url + '/xem-chi-tiet'
+    //   this.router.navigate([urlChiTiet, id,]);
+    // }
+    this.selectedId = id;
+    this.isDetail = true;
   }
 
   export() {
 
+  }
+  showList() {
+    this.isDetail = false;
   }
 }

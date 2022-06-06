@@ -1,5 +1,4 @@
-import { BienBanNhapDayKho, DetailBienBanNhapDayKho } from './../../../../../../../../models/BienBanNhapDayKho';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -8,6 +7,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { BienBanNhapDayKho, DetailBienBanNhapDayKho } from 'src/app/models/BienBanNhapDayKho';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -24,9 +24,11 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./them-moi-phieu-nhap-day-kho.component.scss'],
 })
 export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
+  @Input() id: number;
+  @Output()
+  showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
   detail: any = {};
-  id: number = 0;
   idNhapHang: number = 0;
 
   loaiVthh: string;
@@ -229,13 +231,14 @@ export class ThemMoiPhieuNhapDayKhoComponent implements OnInit {
   }
 
   redirectbienBanNhapDayKho() {
-    if (this.router.url && this.router.url != null) {
-      let index = this.router.url.indexOf("/thong-tin/");
-      if (index != -1) {
-        let url = this.router.url.substring(0, index);
-        this.router.navigate([url]);
-      }
-    }
+    // if (this.router.url && this.router.url != null) {
+    //   let index = this.router.url.indexOf("/thong-tin/");
+    //   if (index != -1) {
+    //     let url = this.router.url.substring(0, index);
+    //     this.router.navigate([url]);
+    //   }
+    // }
+    this.showListEvent.emit();
   }
   disableBanHanh(): boolean {
     return (
